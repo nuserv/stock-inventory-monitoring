@@ -1,8 +1,7 @@
 name: Publish to docker
 
 on:    
-  release:
-      types: [published]
+  push
 
 jobs:
   build:
@@ -15,7 +14,7 @@ jobs:
       with:
         name: nuserv/stock-inventory-monitoring/tim:latest
         username: ${{ github.actor }}
-        password: ${{ secrets.TOKEN }}
+        password: 8da33e7da3161892d2212c230f1f19bdd7a3e9d9
         registry: docker.pkg.github.com
     - uses: actions/checkout@master
     - name: Publish to Registry (Version Release)
@@ -23,6 +22,6 @@ jobs:
       with:
         name: nuserv/stock-inventory-monitoring/tim
         username: ${{ github.actor }}
-        password: ${{ secrets.TOKEN }}
+        password: 8da33e7da3161892d2212c230f1f19bdd7a3e9d9
         registry: docker.pkg.github.com
         tag_names: true
