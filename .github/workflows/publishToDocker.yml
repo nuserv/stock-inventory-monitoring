@@ -1,7 +1,8 @@
 name: Publish to docker
 
 on:    
-  push
+  release:
+      types: [published]
 
 jobs:
   build:
