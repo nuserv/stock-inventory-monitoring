@@ -11,7 +11,7 @@ RUN apt-get purge apache2 apache* -y
 WORKDIR /home/
 COPY . .
 RUN composer install
-RUN php artisan key:generate
+#RUN php artisan key:generate
 RUN chmod 777 -R .
 EXPOSE 8001
 CMD php artisan serve --host 0.0.0.0 --port 8001
