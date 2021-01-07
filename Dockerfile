@@ -11,7 +11,6 @@ RUN apt-get purge apache2 apache* -y
 WORKDIR /home/
 COPY . .
 RUN composer install
-RUN mv Docker/config.env .env
 RUN php artisan key:generate
 RUN chmod 777 -R .
 EXPOSE 8001
