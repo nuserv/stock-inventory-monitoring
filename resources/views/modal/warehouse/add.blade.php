@@ -9,7 +9,7 @@
             <div class="modal-body" id="reqfield">
                 <div class="row no-margin" id="row1">
                     <div class="col-md-2 form-group">
-                        <select id="addcategory1" class="form-control category" row_count="1">
+                        <select id="category1" class="form-control category" row_count="1">
                             <option selected disabled>select category</option>
                             @foreach ($categories as $category)
                             <option value="{{ $category->id }}">{{ strtoupper($category->category) }}</option>

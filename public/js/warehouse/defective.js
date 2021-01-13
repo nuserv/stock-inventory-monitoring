@@ -83,7 +83,7 @@ $(document).on("click", "#defectiveTable tr", function() {
     } else if (trdata.status == 'For repair' && $('#level').val() == 'Repair') {
         $('#submit_Btn').val('Repaired');
         $('#submit_Btn').show();
-    } else if (trdata.status == 'Repaired') {
+    } else if (trdata.status == 'Repaired' && $('#level').val() != 'Repair') {
         $('#submit_Btn').val('Add to stock');
         $('#submit_Btn').show();
     } else {
@@ -118,11 +118,9 @@ $(document).on('click', '#submit_Btn', function() {
                 status: status
             },
             success: function(data) {
-                interval = setInterval(function() {
-                    table.draw();
-                }, 30000);
-                table.draw();
-                $('#returnModal .close').click();
+                setTimeout(function(){// wait for 5 secs(2)
+                    location.reload(); // then reload the page.(3)
+                }, 1000);
             },
             error: function(data) {
                 alert(data.responseText);
@@ -144,11 +142,9 @@ $(document).on('click', '#submit_Btn', function() {
                 status: status
             },
             success: function(data) {
-                interval = setInterval(function() {
-                    table.draw();
-                }, 30000);
-                table.draw();
-                $('#returnModal .close').click();
+                setTimeout(function(){// wait for 5 secs(2)
+                    location.reload(); // then reload the page.(3)
+                }, 1000); 
             },
             error: function(data) {
                 alert(data.responseText);
@@ -171,11 +167,9 @@ $(document).on('click', '#submit_Btn', function() {
                 status: status
             },
             success: function() {
-                interval = setInterval(function() {
-                    table.draw();
-                }, 30000);
-                table.draw();
-                $('#returnModal .close').click();
+                setTimeout(function(){// wait for 5 secs(2)
+                    location.reload(); // then reload the page.(3)
+                }, 1000); 
             },
             error: function(data) {
                 alert(data.responseText);
@@ -212,11 +206,9 @@ $(document).on('click', '#unrepair_Btn', function() {
             status: status
         },
         success: function(data) {
-            interval = setInterval(function() {
-                table.draw();
-            }, 30000);
-            table.draw();
-            $('#returnModal .close').click();
+            setTimeout(function(){// wait for 5 secs(2)
+                location.reload(); // then reload the page.(3)
+            }, 1000);
         },
         error: function(data) {
             alert(data.responseText);

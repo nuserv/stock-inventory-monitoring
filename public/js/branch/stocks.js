@@ -380,8 +380,9 @@ $(document).on("click", "#def_Btn", function () {
             item: data[0].item
         },
         success: function(){
-            table.draw();
-            $("#stockModal .close").click();
+            setTimeout(function(){// wait for 5 secs(2)
+                location.reload(); // then reload the page.(3)
+            }, 1000);
         },
         error: function (data) {
             alert(data.responseText);

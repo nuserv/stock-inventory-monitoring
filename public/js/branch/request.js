@@ -186,8 +186,9 @@ $(document).on('click', '#del_Btn', function(){
             reqno : reqno                     
         },
         success: function(){
-            table.draw();
-            $("#requestModal .close").click();
+            setTimeout(function(){// wait for 5 secs(2)
+                location.reload(); // then reload the page.(3)
+            }, 1000);
         },
         error: function (data) {
             alert(data.responseText);
@@ -224,8 +225,9 @@ $(document).on('click', '#rec_Btn', function(){
                 sched: sched
             },
             success: function(){
-                table.draw();
-                $("#requestModal .close").click();
+                setTimeout(function(){// wait for 5 secs(2)
+                    location.reload(); // then reload the page.(3)
+                }, 1000);
             },
             error: function (data) {
                 alert(data.responseText);
