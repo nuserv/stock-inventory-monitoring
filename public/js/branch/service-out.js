@@ -1,6 +1,8 @@
 var replaceTable;
 var repdata;
 var outsub = 0;
+var r = 1;
+var y = 1;
 $(document).on('click', '.replacement', function(){
     $("#outOptionModal .close").click();
     $('#replacementModal').modal({backdrop: 'static', keyboard: false});
@@ -27,11 +29,6 @@ $(document).on('change', '.replacementdesc', function(){
     });
 });
 
-$(document).on('click', '.service-unit', function(){
-    $("#outOptionModal .close").click();
-    $('#service-unitModal').modal({backdrop: 'static', keyboard: false});
-});
-
 $(document).on('click', '.out_sub_Btn', function(){
     if (outsub > 0) {
         return false;
@@ -40,6 +37,8 @@ $(document).on('click', '.out_sub_Btn', function(){
     var item = "";
     var check = 1;
     if ($('#customer-id').val() != "") {
+        $('#service-unitModal').modal('toggle');
+        $('#loading').show();
         for(var q=1;q<=y;q++){
             if ($('#outrow'+q).is(":visible")) {
                 if ($('.out_add_item[btn_id=\''+q+'\']').val() == 'Remove') {
@@ -76,7 +75,7 @@ $(document).on('click', '.out_sub_Btn', function(){
         return false;
     }
     if (check > 1) {
-        window.location.href = 'stocks';
+        window.location.href = 'service-unit';
     }
 });
 
@@ -85,6 +84,7 @@ $(document).on('change', '.outdesc', function(){
     var id = $(this).val();
     var stockCount = 0;
     var serialOp = " ";
+    
     for(var i=1;i<=y;i++){
         if (i != count ) {
             if ($('#outdesc'+i).val() == $(this).val()) {
@@ -92,70 +92,83 @@ $(document).on('change', '.outdesc', function(){
             }
         }
     }
-    $.ajax({
-        type:'get',
-        url:'getstock',
-        data:{'id':id},
-        async: false,
-        success:function(data)
-        {
-            if (data != "") {
-                $('#outstock' + count).val(data[0].stock - stockCount);
-                $('#outstock' + count).css('color', 'black');
-                $('#outstock' + count).css("border", "");
-                if ($('#outstock' + count).val() <= 0) {
+    $('#service-unitModal').modal('toggle');
+    $('#loading').show();
+    Promise.all([ajaxCall1(), ajaxCall2()]).then(() => { // try removing ajax 1 or replacing with ajax2
+        for(var i=1;i<=y;i++){
+            if ($('#outdesc'+i).val() == $(this).val()) {
+                rmserial = $('#outserial'+i).val();
+                $("#outserial"+count+" option[value=\'"+rmserial+"\']").remove();
+            }
+        }
+        $('#service-unitModal').modal('toggle');
+        $('#loading').hide();
+    });
+    
+    function ajaxCall1() {
+        return $.ajax({
+            type:'get',
+            url:'getstock',
+            data:{'id':id},
+            success:function(data)
+            {
+                if (data != "") {
+                    $('#outstock' + count).val(data[0].stock - stockCount);
+                    $('#outstock' + count).css('color', 'black');
+                    $('#outstock' + count).css("border", "");
+                    if ($('#outstock' + count).val() <= 0) {
+                        $('#outstock' + count).css('color', 'red');
+                        $('#outstock' + count).css("border", "5px solid red");
+                    }
+                }else{
+                    $('#outstock' + count).val('0');
                     $('#outstock' + count).css('color', 'red');
                     $('#outstock' + count).css("border", "5px solid red");
                 }
-            }else{
-                $('#outstock' + count).val('0');
-                $('#outstock' + count).css('color', 'red');
-                $('#outstock' + count).css("border", "5px solid red");
-            }
-        },
-    });
-
-    $.ajax({
-        type:'get',
-        url:'getserials',
-        data:{'id':id},
-        async: false,
-        success:function(data)
-        {
-            serialOp+='<option selected value="select" disabled>select serial</option>';
-            for(var i=0;i<data.length;i++){
-                serialOp+='<option value="'+data[i].serial+'">'+data[i].serial+'</option>';
-            }
-            $("#outserial" + count).find('option').remove().end().append(serialOp);
-        },
-    });
-    for(var i=1;i<=y;i++){
-        if ($('#outdesc'+i).val() == $(this).val()) {
-            rmserial = $('#outserial'+i).val();
-            $("#outserial"+count+" option[value=\'"+rmserial+"\']").remove();
-        }
+            },
+        });
     }
+    function ajaxCall2() {
+        return $.ajax({
+            type:'get',
+            url:'getserials',
+            data:{'id':id},
+            success:function(data)
+            {
+                serialOp+='<option selected value="select" disabled>select serial</option>';
+                for(var i=0;i<data.length;i++){
+                    serialOp+='<option value="'+data[i].serial+'">'+data[i].serial+'</option>';
+                }
+                $("#outserial" + count).find('option').remove().end().append(serialOp);
+            },
+        });
+    }
+    
 });
 
 $(document).on('change', '.outcategory', function(){
     var descOp = " ";
     var count = $(this).attr('row_count');
     var id = $(this).val();
+    $('#service-unitModal').modal('toggle');
+    $('#loading').show();
     $.ajax({
         type:'get',
         url:'itemcode',
         data:{'id':id},
-        async: false,
         success:function(data)
         {
-            descOp+='<option selected value="select" disabled>select description</option>';
+            descOp+='<option selected value="select" disabled>select item description</option>';
             for(var i=0;i<data.length;i++){
                 descOp+='<option value="'+data[i].id+'">'+data[i].item.toUpperCase()+'</option>';
             }
             $("#outdesc" + count).find('option').remove().end().append(descOp);
+            $('#loading').hide();
+            $('#service-unitModal').modal('toggle');
         },
     });
-    $('#outdesc' + count).val('select description');
+    $('#outdesc' + count).val('select item description');
+
 });
 
 $(document).on('change', '.outitem', function(){
@@ -383,4 +396,56 @@ $(document).on('keyup', '#replacementcustomer', function(){
         },
     });
     
+});
+
+$(document).on('keyup', '#client', function(){
+    var id = $(this).val();
+    var op = " ";
+    $('#customer').val('');
+    $("#customer-name").find('option').remove();
+    $.ajax({
+        type:'get',
+        url:'client-autocomplete',
+        data:{
+            'id':id
+        },
+        success:function(data)
+        {
+            op+=' ';
+            for(var i=0;i<data.length;i++){
+                op+='<option data-value="'+data[i].id+'" value="'+data[i].customer.toUpperCase()+'"></option>';
+            }
+            $("#client-name").find('option').remove().end().append(op);
+            
+            $('#client-id').val($('#client-name [value="'+$('#client').val()+'"]').data('value'));
+        },
+    });
+});
+
+$(document).on('keyup', '#customer', function(){
+    var id = $(this).val();
+    var op = " ";
+    if ($('#client-id').val()) {
+        var client = $('#client-id').val();
+    }else{
+        alert("Incomplete Client Name!");
+        return false;
+    }
+    $.ajax({
+        type:'get',
+        url:'customer-autocomplete',
+        data:{
+            'id':id,
+            'client':client
+        },
+        success:function(data)
+        {
+            op+=' ';
+            for(var i=0;i<data.length;i++){
+                op+='<option data-value="'+data[i].id+'" value="'+data[i].customer_branch.toUpperCase()+'"></option>';
+            }
+            $("#customer-name").find('option').remove().end().append(op);
+            $('#customer-id').val($('#customer-name [value="'+$('#customer').val()+'"]').data('value'));
+        },
+    });
 });

@@ -14,6 +14,7 @@ use App\Item;
 use App\Stock;
 use App\Branch;
 use App\User;
+use App\Initial;
 use App\UserLog;
 use Mail;
 use Auth;
@@ -41,6 +42,41 @@ class StockRequestController extends Controller
     public function getItemCode(Request $request){
         $data = Item::select('id', 'item')->where('category_id', $request->id)->get();
         return response()->json($data);
+    }
+
+    public function getCode(Request $request){
+        /*$data = Item::select('id', 'item')->where('category_id', $request->id)->get();
+        return response()->json($data);*/
+
+        $initials = Initial::where('branch_id', auth()->user()->branch->id)
+            ->join('items', 'items_id', '=', 'items.id')
+            ->where('category_id', $request->id)
+            ->get();
+        //dd($initials);
+        $icode = [];
+        $itm =[];
+        foreach ($initials as $initial) {
+            //dd($initial->qty);
+            $itemcode = Stock::select('items_id as id', 'item')->where('stocks.status', 'in')
+                ->where('branch_id', auth()->user()->branch->id)
+                ->where('items_id', $initial->items_id)
+                ->join('items', 'items.id', '=', 'items_id')
+                ->first();
+            //dd($itemcode);
+            $count = Stock::where('stocks.status', 'in')
+                ->where('branch_id', auth()->user()->branch->id)
+                ->where('items_id', $initial->items_id)
+                ->count();
+            //dd($count);
+            //dd($count < $initial->qty);
+            if ($count < $initial->qty ) {
+                if(!in_array($itemcode, $icode)){
+                    array_push($icode, $itemcode);
+                    //dd($icode);
+                }
+            }
+        }
+        return response()->json($icode);
     }
 
     public function getCatReq(Request $request){
@@ -258,7 +294,7 @@ class StockRequestController extends Controller
             Mail::send('mail', ['reqitem' => $reqitem, 'reqno' => $request->reqno, 'branch'=>auth()->user()->branch->branch],function( $message) use ($allemails){ 
                 $message->to('gerard.mallari@gmail.com', 'Gerald Mallari')->subject 
                     (auth()->user()->branch->branch); 
-                $message->from('ideaservmailer@gmail.com', 'NO REPLY'); 
+                $message->from('no-reply@ideaserv.com.ph', 'NO REPLY'); 
                 $message->cc($allemails); 
             });
 
@@ -270,7 +306,6 @@ class StockRequestController extends Controller
             $reqitem = new RequestedItem;
             $reqitem->request_no = $request->reqno;
             $reqitem->items_id = $request->item;
-            $reqitem->purpose = $request->purpose;
             $reqitem->quantity = $request->qty;
             $data = $reqitem->save();
         }
@@ -359,7 +394,7 @@ class StockRequestController extends Controller
             Mail::send('sched', ['prepitem' => $prepitem, 'sched'=>$request->datesched,'reqno' => $request->reqno,'branch' =>$branch],function( $message) use ($branch, $email){ 
                 $message->to($email, $branch->head)->subject 
                     (auth()->user()->branch->branch); 
-                $message->from('ideaservmailer@gmail.com', 'NO REPLY - Warehouse'); 
+                $message->from('no-reply@ideaserv.com.ph', 'NO REPLY - Warehouse'); 
                 $message->cc(['emorej046@gmail.com', 'gerard.mallari@gmail.com']); 
             });
 

@@ -39,9 +39,6 @@
                     <div class="col-md-2 form-group">
                         <select id="category1" class="form-control category" row_count="1" style="color: black;">
                             <option selected disabled>select category</option>
-                            @foreach ($categories as $category)
-                            <option value="{{ $category->id }}">{{ $category->category }}</option>
-                            @endforeach
                         </select>
                     </div>
                     <div class="col-md-2 form-group">
@@ -54,15 +51,7 @@
                             <option selected disabled>select description</option>
                         </select>
                     </div>
-                    <div class="col-md-2 form-group">
-                        <select id="purpose1" class="form-control purpose" row_count="1" style="color: black;">
-                            <option selected disabled>select purpose</option>
-                            <option value="1">Service Unit</option>
-                            <option value="2">Replacement</option>
-                            <option value="3">Stock</option>
-                        </select>
-                    </div>
-                    <div class="col-md-2 form-group">
+                    <div class="col-md-3 form-group text-center">
                         <input type="number" class="form-control" min="0" name="qty1" id="qty1" placeholder="0" style="color:black; width: 6em" disabled>
                     </div>
                     <div class="col-md-1 form-group">

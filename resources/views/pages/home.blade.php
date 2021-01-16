@@ -89,7 +89,7 @@
                     <input type="text" class="form-control filter-input fl-3" data-column="3" />
                 </td>
                 <td>
-                    <input type="text" class="form-control filter-input fl-3" data-column="4" />
+                    <input type="text" class="form-control filter-input fl-4" data-column="4" />
                 </td>
             </tr>
             <tr>

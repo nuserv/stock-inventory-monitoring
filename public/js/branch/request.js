@@ -18,7 +18,8 @@ $(document).ready(function()
     $('table.requestTable').DataTable({ 
         "dom": 'lrtip',
         "language": {
-            "emptyTable": " "
+            "emptyTable": " ",
+            "processing": '<i class="fa fa-spinner fa-spin fa-3x fa-fw"></i><span class="sr-only">Searching...</span>'
         },
         processing: true,
         serverSide: true,
@@ -30,6 +31,8 @@ $(document).ready(function()
             { data: 'status', name:'status', "width": "14%"}
         ]
     });
+
+    
 
     interval = setInterval(function(){
         table.draw();
@@ -238,41 +241,50 @@ $(document).on('click', '#rec_Btn', function(){
 
 $(document).on('click', '#reqBtn', function(){
     clearInterval(interval);
+    
     $.ajax({
         type:'get',
         url:'gen',
-        async: false,
         success:function(result)
         {
             $('#sreqno').val(result);
         },
     });
-    $('#sendrequestModal').modal({backdrop: 'static', keyboard: false});
-
+    $('#loading').show()
+    var catop;
+    $.ajax({
+        type:'get',
+        url:'checkStock',
+        success:function(data)
+        {
+            catop+='<option selected value="select" disabled>select category</option>';
+            for(var i=0;i<data.length;i++){
+                catop+='<option value="'+data[i].id+'">'+data[i].category.toUpperCase()+'</option>';
+            }
+            $("#category1").find('option').remove().end().append(catop);
+            $('#sendrequestModal').modal({backdrop: 'static', keyboard: false});
+            $('#loading').hide()
+        },
+    });
 });
 
 $(document).on('click', '.add_item', function(){
     var rowcount = $(this).attr('btn_id');
     if ($(this).val() == 'Add Item') {
         if($('#qty'+rowcount).val() != 0){
-            if($('#purpose'+rowcount).val()){
-                if($('#item'+rowcount).val()){
-                    y++;
-                    add++;
-                    var additem = '<div class="row no-margin" id="row'+y+'"><div class="col-md-2 form-group"><select id="category'+y+'" style="color: black;" class="form-control category" row_count="'+y+'"></select></div><div class="col-md-2 form-group"><select id="item'+y+'" style="color: black;" class="form-control item" row_count="'+y+'"><option selected disabled>select item code</option></select></div><div class="col-md-3 form-group"><select id="desc'+y+'" class="form-control desc" style="color: black;" row_count="'+y+'"><option selected disabled>select description</option></select></div><div class="col-md-2 form-group"><select id="purpose'+y+'" class="form-control purpose" style="color: black;" row_count="'+y+'"><option selected disabled>select purpose</option><option value="1">Service Unit</option><option value="2">Replacement</option><option value="3">Stock</option></select></div><div class="col-md-2 form-group"><input type="number" min="0" class="form-control" style="color: black; width: 6em" name="qty'+y+'" id="qty'+y+'" placeholder="0" disabled></div><div class="col-md-1 form-group"><input type="button" class="add_item btn btn-xs btn-primary" btn_id="'+y+'" value="Add Item"></div></div>'
-                    $(this).val('Remove');
-                    $('#category'+ rowcount).prop('disabled', true);
-                    $('#item'+ rowcount).prop('disabled', true);
-                    $('#desc'+ rowcount).prop('disabled', true);
-                    $('#qty'+ rowcount).prop('disabled', true);
-                    $('#purpose'+ rowcount).prop('disabled', true);
-                    $('#reqfield').append(additem);
-                    $('#category'+ rowcount).find('option').clone().appendTo('#category'+y);
-                }else{
-                    alert("Please Select Item!");
-                }
+            if($('#item'+rowcount).val()){
+                y++;
+                add++;
+                var additem = '<div class="row no-margin" id="row'+y+'"><div class="col-md-2 form-group"><select id="category'+y+'" style="color: black;" class="form-control category" row_count="'+y+'"></select></div><div class="col-md-2 form-group"><select id="item'+y+'" style="color: black;" class="form-control item" row_count="'+y+'"><option selected disabled>select item code</option></select></div><div class="col-md-3 form-group"><select id="desc'+y+'" class="form-control desc" style="color: black;" row_count="'+y+'"><option selected disabled>select description</option></select></div><div class="col-md-3 form-group"><input type="number" min="0" class="form-control" style="color: black; width: 6em" name="qty'+y+'" id="qty'+y+'" placeholder="0" disabled></div><div class="col-md-1 form-group"><input type="button" class="add_item btn btn-xs btn-primary" btn_id="'+y+'" value="Add Item"></div></div>'
+                $(this).val('Remove');
+                $('#category'+ rowcount).prop('disabled', true);
+                $('#item'+ rowcount).prop('disabled', true);
+                $('#desc'+ rowcount).prop('disabled', true);
+                $('#qty'+ rowcount).prop('disabled', true);
+                $('#reqfield').append(additem);
+                $('#category'+ rowcount).find('option').clone().appendTo('#category'+y);
             }else{
-                alert("Please Select Purpose!");
+                alert("Please Select Item!");
             }
         }else{
             alert("Invalid Quantity value!");
@@ -283,12 +295,10 @@ $(document).on('click', '.add_item', function(){
         $('#item'+rowcount).val('select item code');
         $('#desc'+rowcount).val('select description');
         $('#serial'+rowcount).val('select serial');
-        $('#purpose'+rowcount).val('select purpose');
         $('#category'+rowcount).prop('disabled', false);
         $('#item'+rowcount).prop('disabled', false);
         $('#desc'+rowcount).prop('disabled', false);
         $('#serial'+rowcount).prop('disabled', false);
-        $('#purpose'+ rowcount).prop('disabled', false);
         $('#row'+rowcount).hide();
         $(this).val('Add Item');
     }
@@ -299,12 +309,12 @@ $(document).on('click', '.send_sub_Btn', function(){
         alert('Please add item/s.');
         return false;
     }
-    var cat = "";
     var item = "";
-    var desc = "";
     var qty = "";
     var stat = "notok";
     var reqno = $('#sreqno').val();
+    $('#sendrequestModal').modal('toggle');
+    $('#loading').show();
     for(var q=1;q<=y;q++){
         if ($('#row'+q).is(":visible")) {
             if ($('.add_item[btn_id=\''+q+'\']').val() == 'Remove') {
@@ -313,7 +323,6 @@ $(document).on('click', '.send_sub_Btn', function(){
                 item = $('#item'+q).val();
                 desc = $('#desc'+q).val();
                 qty = $('#qty'+q).val();
-                purpose = $('#purpose'+q).val();
                 $.ajax({
                     url: 'storerequest',
                     headers: {
@@ -324,7 +333,6 @@ $(document).on('click', '.send_sub_Btn', function(){
                     data: {
                         reqno : reqno,
                         item: item,
-                        purpose: purpose,
                         qty: qty,
                         stat: stat                           
                     },
@@ -359,6 +367,7 @@ $(document).on('change', '.desc', function(){
     var count = $(this).attr('row_count');
     var id = $(this).val();
     $('#item' + count).val(id);
+    $('#qty'+count).val('0');
     $('#qty'+count).prop('disabled', false);
 });
 
@@ -367,6 +376,7 @@ $(document).on('change', '.item', function(){
     var id = $(this).val();
     $('#desc' + count).val(id);
     $('#qty'+count).prop('disabled', false);
+    $('#qty'+count).val('0');
 });
 
 $(document).on('change', '.category', function(){
@@ -375,9 +385,11 @@ $(document).on('change', '.category', function(){
     var count = $(this).attr('row_count');
     var id = $(this).val();
     $('#stock' + count).val('Stock');
+    $('#sendrequestModal').modal('toggle');
+    $('#loading').show();
     $.ajax({
         type:'get',
-        url:'itemcode',
+        url:'getcode',
         data:{'id':id},
         success:function(data)
         {
@@ -389,13 +401,14 @@ $(document).on('change', '.category', function(){
             }
             $("#item" + count).find('option').remove().end().append(codeOp);
             $("#desc" + count).find('option').remove().end().append(descOp);
+            $('#loading').hide();
+            $('#sendrequestModal').modal('toggle');
         },
     });
     
     $('#item' + count).val('select item code');
     $('#desc' + count).val('select description');
-    $('#item' + count).css("border", "");
-    
+    $('#qty'+count).val('0');
 });
 
 $(document).on('click', '.close', function(){

@@ -6,18 +6,16 @@
                 <button class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
+                <button class="in-close" data-dismiss="modal" aria-label="Close" hidden>
             </div>
             <div class="modal-body">
                 <div class="container">
                     <div class="row justify-content-center">
-                        <div class="col-md-5 form-group">
+                        <div class="col-md-5 form-group def">
                             <input type="button" class="btn btn-primary defective" value="DEFECTIVE">
                         </div>
-                        <div class="col-md-4 form-group">
+                        <div class="col-md-4 form-group gud">
                             <input type="button" class="btn btn-primary good" value="GOOD">
-                        </div>
-                        <div class="col-md-3 form-group">
-                            <input type="button" class="btn btn-primary pull-out" value="PULL-OUT">
                         </div>
                     </div>
                 </div>

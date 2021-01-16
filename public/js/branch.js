@@ -27,7 +27,8 @@ var aa = 0;
         $('table.branchTable').DataTable({ 
             "dom": 'lrtip',
             "language": {
-                "emptyTable": " "
+                "emptyTable": " ",
+                "processing": '<i class="fa fa-spinner fa-spin fa-3x fa-fw"></i><span class="sr-only">Searching...</span>'
             },
             processing: true,
             serverSide: true,
@@ -64,7 +65,8 @@ var aa = 0;
             $('table.catbranchDetails').DataTable({ 
                 "dom": 'rtip',
                 "language": {
-                    "emptyTable": " "
+                    "emptyTable": " ",
+                    "processing": '<i class="fa fa-spinner fa-spin fa-3x fa-fw"></i><span class="sr-only">Searching...</span>'
                 },
                 "pageLength": 15,
                 "order": [[ 1, "asc" ]],
@@ -258,7 +260,8 @@ var aa = 0;
                 $('table.branchDetails').DataTable({ 
                     "dom": 'rtip',
                     "language": {
-                        "emptyTable": " "
+                        "emptyTable": " ",
+                        "processing": '<i class="fa fa-spinner fa-spin fa-3x fa-fw"></i><span class="sr-only">Searching...</span>'
                     },
                     "pageLength": 5,
                     "order": [[ 1, "asc" ]],
@@ -293,7 +296,8 @@ var aa = 0;
             $('table.catbranchDetails').DataTable({ 
                 "dom": 'rtip',
                 "language": {
-                    "emptyTable": " "
+                    "emptyTable": " ",
+                    "processing": '<i class="fa fa-spinner fa-spin fa-3x fa-fw"></i><span class="sr-only">Searching...</span>'
                 },
                 "pageLength": 10,
                 "order": [[ 1, "asc" ]],

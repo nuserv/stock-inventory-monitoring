@@ -296,58 +296,6 @@ $(document).on('click', '.cancel', function(){
     window.location.href = 'stocks';
 });
 
-$(document).on('keyup', '#client', function(){
-    var id = $(this).val();
-    var op = " ";
-    $('#customer').val('');
-    $("#customer-name").find('option').remove();
-    $.ajax({
-        type:'get',
-        url:'client-autocomplete',
-        data:{
-            'id':id
-        },
-        success:function(data)
-        {
-            op+=' ';
-            for(var i=0;i<data.length;i++){
-                op+='<option data-value="'+data[i].id+'" value="'+data[i].customer.toUpperCase()+'"></option>';
-            }
-            $("#client-name").find('option').remove().end().append(op);
-            
-            $('#client-id').val($('#client-name [value="'+$('#client').val()+'"]').data('value'));
-        },
-    });
-});
-
-$(document).on('keyup', '#customer', function(){
-    var id = $(this).val();
-    var op = " ";
-    if ($('#client-id').val()) {
-        var client = $('#client-id').val();
-    }else{
-        alert("Incomplete Client Name!");
-        return false;
-    }
-    $.ajax({
-        type:'get',
-        url:'customer-autocomplete',
-        data:{
-            'id':id,
-            'client':client
-        },
-        success:function(data)
-        {
-            op+=' ';
-            for(var i=0;i<data.length;i++){
-                op+='<option data-value="'+data[i].id+'" value="'+data[i].customer_branch.toUpperCase()+'"></option>';
-            }
-            $("#customer-name").find('option').remove().end().append(op);
-            $('#customer-id').val($('#customer-name [value="'+$('#customer').val()+'"]').data('value'));
-        },
-    });
-});
-
 $('table.stockDetails').DataTable().on('select', function () {
     var rowselected = stock.rows( { selected: true } ).data();
     //console.log(rowselected[0]);

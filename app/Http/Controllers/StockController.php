@@ -14,6 +14,7 @@ use App\Pullout;
 use App\Loan;
 use App\Branch;
 use App\User;
+use App\Initial;
 use Mail;
 use App\Defective;
 use App\UserLog;
@@ -126,10 +127,11 @@ class StockController extends Controller
     public function service()
     {
         $title = "Service Unit";
+        $categories = Category::all();
         if (auth()->user()->hasrole('Administrator')) {
             return redirect('/');
         }
-        return view('pages.service-unit', compact('title'));
+        return view('pages.service-unit', compact('title', 'categories'));
     }
 
     public function serviceUnit()
@@ -170,6 +172,11 @@ class StockController extends Controller
                 ->join('customers', 'customer_id', '=', 'customers.id')
                 ->first();
             return ucwords(strtolower($client->customer.' - '.$client->customer_branch));
+        })
+
+        ->addColumn('serviceby', function (Stock $request){
+            $user = User::select('name', 'lastname')->where('id', $request->user_id)->first();
+            return ucwords(strtolower($user->name.' '.$user->lastname));
         })
 
         ->make(true);
@@ -238,6 +245,28 @@ class StockController extends Controller
                 ->groupBy('items_id')->get();
             return DataTables::of($stock)->make(true);
         }
+    }
+
+    public function checkStocks(Request $request)
+    {
+        $initials = Initial::where('branch_id', auth()->user()->branch->id)->get();
+        $cat = [];
+        $categ =[];
+        foreach ($initials as $initial) {
+            $category = Stock::select('category_id as id', 'category')->where('stocks.status', 'in')
+                ->where('branch_id', auth()->user()->branch->id)
+                ->where('items_id', $initial->items_id)
+                ->join('categories', 'categories.id', '=', 'category_id')->first();
+            $count = Stock::where('stocks.status', 'in')
+                ->where('branch_id', auth()->user()->branch->id)
+                ->where('items_id', $initial->items_id)->count();
+            if ($count < $initial->qty ) {
+                if(!in_array($category, $cat)){
+                    array_push($cat, $category);
+                }
+            }
+        }
+        return response()->json($cat);
     }
 
     public function addItem(Request $request)
@@ -401,7 +430,7 @@ class StockController extends Controller
         Mail::send('loan', ['reqitem'=>$item->item, 'branch'=>$branch],function( $message) use ($allemails, $branch){ 
             $message->to($branch->email, $branch->head)->subject 
                 (auth()->user()->branch->branch); 
-            $message->from('ideaservmailer@gmail.com', 'NO REPLY - '.auth()->user()->branch->branch); 
+            $message->from('no-reply@ideaserv.com.ph', 'NO REPLY - '.auth()->user()->branch->branch); 
             $message->cc($allemails); 
         });
         $log = new UserLog;

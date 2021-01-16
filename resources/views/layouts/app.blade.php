@@ -21,10 +21,25 @@
             @endauth
             <link rel="icon" href="{{asset('favicon.ico')}}" type="image/x-icon" />
             <link rel="shortcut icon" href="{{asset('favicon.ico')}}" type="image/x-icon" />
-            
+            <style>
+                #loading {
+                    display: none;
+                    position: absolute;
+                    top: 0;
+                    left: 0;
+                    z-index: 100;
+                    width: 100vw;
+                    height: 100vh;
+                    background-color: rgba(192, 192, 192, 0.5);
+                    background-image: url("{{asset('loading2.gif')}}");
+                    background-repeat: no-repeat;
+                    background-position: center;
+                    }
+            </style>
         </head>
         
         <body>
+        <div id="loading"><p>searching</p></div>
             @include('inc.header')
             @include('inc.navbar')
             @if(!Auth::guest())
@@ -68,6 +83,14 @@
                 @endif
             @endif
 
+            @if(Request::is('service-unit'))
+                @if(!auth()->user()->hasAnyrole('Administrator', 'Encoder'))
+                    @include('modal.branch.in')
+                    @include('modal.branch.out')
+                    @include('modal.branch.in-option')
+                @endif
+            @endif
+
             @if(Request::is('stocks'))
                 @if(auth()->user()->hasAnyrole('Administrator', 'Encoder'))
                     @include('modal.warehouse.add')
@@ -77,7 +100,6 @@
                 @else
                     @include('modal.branch.import')
                     @include('modal.branch.add')
-                    @include('modal.branch.out')
                     @include('modal.branch.pull-out')
                     @include('modal.branch.out-option')
                     @include('modal.branch.in-option')
@@ -149,7 +171,6 @@
                 @else
                     <script src="{{asset('min/?f=js/branch/stocks.js')}}"></script>
                     <script src="{{asset('min/?f=js/branch/service-in.js')}}"></script>
-                    <script src="{{asset('min/?f=js/branch/service-out.js')}}"></script>
                 @endif
                 @if(auth()->user()->hasrole('Head'))
                     <script src="{{asset('min/?f=js/branch/addstock.js')}}"></script>
@@ -159,6 +180,7 @@
 
             @if(Request::is('service-unit'))
                 <script src="{{asset('min/?f=js/branch/service-unit.js')}}"></script>
+                <script src="{{asset('min/?f=js/branch/service-out.js')}}"></script>
             @endif
 
             @if(Request::is('print/*'))

@@ -26,7 +26,8 @@ $(document).ready(function()
     $('table.branchTable').DataTable({ 
         "dom": 'lrtip',
         "language": {
-            "emptyTable": " "
+            "emptyTable": " ",
+            "processing": '<i class="fa fa-spinner fa-spin fa-3x fa-fw"></i><span class="sr-only">Searching...</span>'
         },
         processing: true,
         serverSide: true,
@@ -63,7 +64,8 @@ $(document).ready(function()
         $('table.catbranchDetails').DataTable({ 
             "dom": 'rtip',
             "language": {
-                "emptyTable": " "
+                "emptyTable": " ",
+                "processing": '<i class="fa fa-spinner fa-spin fa-3x fa-fw"></i><span class="sr-only">Searching...</span>'
             },
             "pageLength": 15,
             "order": [[ 1, "asc" ]],
@@ -264,7 +266,8 @@ $(document).on('click', '#catbranchDetails tr', function(){
         $('table.branchDetails').DataTable({ 
             "dom": 'rtip',
             "language": {
-                "emptyTable": " "
+                "emptyTable": " ",
+                "processing": '<i class="fa fa-spinner fa-spin fa-3x fa-fw"></i><span class="sr-only">Searching...</span>'
             },
             "pageLength": 5,
             "order": [[ 1, "asc" ]],
@@ -309,7 +312,8 @@ $(document).on('click', '#catBtn', function(){
     $('table.catbranchDetails').DataTable({ 
         "dom": 'rtip',
         "language": {
-            "emptyTable": " "
+            "emptyTable": " ",
+            "processing": '<i class="fa fa-spinner fa-spin fa-3x fa-fw"></i><span class="sr-only">Searching...</span>'
         },
         "pageLength": 10,
         "order": [[ 1, "asc" ]],
@@ -357,7 +361,7 @@ $(document).on('click', '#updateBtn', function(){
                 "dom": 'rtip',
                 "language": {
                     "emptyTable": " ",
-                    "processing": "Updating. Please wait.."
+                    "processing": '<i class="fa fa-spinner fa-spin fa-3x fa-fw"></i><span class="sr-only">Updating please wait.</span>'
                 },
                 "pageLength": 5,
                 "order": [[ 1, "asc" ]],
