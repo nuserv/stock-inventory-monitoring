@@ -3,10 +3,6 @@ var repdata;
 var outsub = 0;
 var r = 1;
 var y = 1;
-$(document).on('click', '.replacement', function(){
-    $("#outOptionModal .close").click();
-    $('#replacementModal').modal({backdrop: 'static', keyboard: false});
-});
 
 $(document).on('change', '.replacementdesc', function(){
     var count = $(this).attr('row_count');
@@ -213,10 +209,6 @@ $(document).on('click', '.out_add_item', function(){
     }
 });
 
-$(document).on('click', '.replacement', function(){
-    $("#outOptionModal .close").click();
-    $('#replacementModal').modal({backdrop: 'static', keyboard: false});
-});
 
 $(document).on('click', '.replacement_next_Btn', function(){
     if ($('#replacementcustomer-id').val()) {

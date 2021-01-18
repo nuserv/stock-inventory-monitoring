@@ -88,6 +88,7 @@
                     @include('modal.branch.in')
                     @include('modal.branch.out')
                     @include('modal.branch.in-option')
+                    @include('modal.branch.service-in')
                 @endif
             @endif
 
@@ -101,7 +102,6 @@
                     @include('modal.branch.import')
                     @include('modal.branch.add')
                     @include('modal.branch.pull-out')
-                    @include('modal.branch.out-option')
                     @include('modal.branch.in-option')
                     @include('modal.branch.good')
                     @include('modal.branch.replacement')

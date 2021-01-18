@@ -174,6 +174,22 @@ class StockController extends Controller
             return ucwords(strtolower($client->customer.' - '.$client->customer_branch));
         })
 
+        ->addColumn('client_name', function (Stock $request){
+            $client = CustomerBranch::select('customer_branch', 'customers.customer')
+                ->where('customer_branches.id', $request->customer_branches_id)
+                ->join('customers', 'customer_id', '=', 'customers.id')
+                ->first();
+            return ucwords(strtolower($client->customer));
+        })
+
+        ->addColumn('customer_name', function (Stock $request){
+            $client = CustomerBranch::select('customer_branch', 'customers.customer')
+                ->where('customer_branches.id', $request->customer_branches_id)
+                ->join('customers', 'customer_id', '=', 'customers.id')
+                ->first();
+            return ucwords(strtolower($client->customer_branch));
+        })
+
         ->addColumn('serviceby', function (Stock $request){
             $user = User::select('name', 'lastname')->where('id', $request->user_id)->first();
             return ucwords(strtolower($user->name.' '.$user->lastname));
@@ -280,7 +296,7 @@ class StockController extends Controller
 
     public function servicein(Request $request)
     {
-        $stock = Stock::where('id', $request->serial)->first();
+        $stock = Stock::where('id', $request->id)->first();
         $item = Item::where('id', $stock->items_id)->first();
         $customer = CustomerBranch::where('id', $stock->customer_branches_id)->first();
 
@@ -595,28 +611,23 @@ class StockController extends Controller
 
     public function update(Request $request)
     {
-        $update = Stock::where('id', $request->item)->first();
+        $update = Stock::where('id', $request->id)->first();
         $update->status = 'replacement';
-        $update->customer_branches_id = $request->custid;
         $update->user_id = auth()->user()->id;
         $update->save();
-        $pullout = Pullout::where('id', $request->repdata)->first();
-        $item = Item::where('id', $pullout->items_id)->first();
+        $item = Item::where('id', $update->items_id)->first();
         $defective = new Defective;
         $defective->branch_id = auth()->user()->branch->id;
         $defective->user_id = auth()->user()->branch->id;
-        $defective->category_id = $pullout->category_id;
-        $defective->items_id = $pullout->items_id;
-        $defective->serial = $pullout->serial;
+        $defective->category_id = $update->category_id;
+        $defective->items_id = $update->items_id;
+        $defective->serial = $request->serial;
         $defective->status = 'For return';
         $defective->save();
         $log = new UserLog;
-        $log->activity = "Replaced $item->item(S/N: $pullout->serial)." ;
+        $log->activity = "Replaced $item->item(S/N: $request->serial)." ;
         $log->user_id = auth()->user()->id;
-        $log->save();
-        $pullout->status = 'replaced';
-        $pullout->user_id = auth()->user()->id;
-        $data = $pullout->save();
+        $data = $log->save();
         return response()->json($data);
     }
 }
