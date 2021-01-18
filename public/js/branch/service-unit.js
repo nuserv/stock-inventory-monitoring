@@ -22,7 +22,10 @@ $(document).ready(function()
             { data: 'description', name:'description'},
             { data: 'serial', name:'serial'},
             { data: 'serviceby', name:'serviceby'}
-        ]
+        ],
+        select: {
+            style: 'single'
+        }
     });
 });
 

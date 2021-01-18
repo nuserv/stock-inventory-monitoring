@@ -50,13 +50,9 @@
     </div>
 </div>
 <div class="d-flex">
-    @if(auth()->user()->hasAnyRole('Head', 'Tech'))
-    <input type="button" id="in_Btn" class="btn btn-xs btn-primary" value="SERVICE IN">&nbsp;
-    <input type="button" id="out_Btn" class="btn btn-xs btn-primary" value="SERVICE OUT">&nbsp;
-    @endif
     @if(auth()->user()->hasAnyrole('Administrator|Head'))
-    <input type="button" id="importBtn" class="btn btn-xs btn-primary ml-auto" value="IMPORT">&nbsp;
-    <input type="button" id="addStockBtn" class="btn btn-xs btn-primary" value="ADD STOCK">
+        <input type="button" id="importBtn" class="btn btn-xs btn-primary ml-auto" value="IMPORT">&nbsp;
+        <input type="button" id="addStockBtn" class="btn btn-xs btn-primary" value="ADD STOCK">
     @endif
 </div>
 @endsection

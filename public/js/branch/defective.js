@@ -1,5 +1,4 @@
 var table;
-var interval = null;
 var sub = 0;
 $(document).ready(function()
 {
@@ -7,10 +6,22 @@ $(document).ready(function()
     $('table.defectiveTable').DataTable({ 
         "dom": 'lrtip',
         processing: true,
-        serverSide: true,
+        serverSide: false,
+        destroy: true,
+        searching: false,
         "language": {
-            "emptyTable": "No item/s for return"
+            "emptyTable": "No item/s for return",
+            "info": "\"Showing _START_ to _END_ of _TOTAL_ Defectives\" &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;",
+            select: {
+                rows: {
+                    _: "You have selected %d Defective Units",
+                    0: "Select Defective Units to Return",
+                    1: "Only 1 Defective Unit Selected"
+                }
+            }
         },
+        "pageLength": 2,
+        
         ajax: {
             url: 'return-table',
             error: function(data) {
@@ -25,12 +36,12 @@ $(document).ready(function()
             { data: 'item', name:'item'},
             { data: 'serial', name:'serial'},
             { data: 'status', name:'status'}
-        ]
+        ],
+        select: {
+            style: 'multi',
+            
+        }
     });
-
-    interval = setInterval(function(){
-        table.draw();
-    }, 30000);
 
     $('#search-ic').on("click", function () { 
         for ( var i=0 ; i<=5 ; i++ ) {
@@ -50,9 +61,21 @@ $(document).ready(function()
             .draw();
     });
 
+
 });
 
-$(document).on("click", "#defectiveTable tr", function () {
+$('table.defectiveTable').DataTable().on('select', function () {
+    
+    var rowselected = table.rows( { selected: true } ).data();
+    console.log(rowselected);
+    /*if(rowselected.length > 0){
+        $('#rec_Btn').prop('disabled', false);
+    }*/
+});
+
+
+/*$(document).on("click", "#defectiveTable tr", function () {
+    
     var trdata = table.row(this).data();
     clearInterval(interval);
     $('#branch_id').val(trdata.branchid);
@@ -75,7 +98,7 @@ $(document).on("click", "#defectiveTable tr", function () {
             return String.fromCharCode(dec || +('0x' + hex))
         })
     }
-});
+});*/
 
 $(document).on('click', '#submit_Btn', function(){
     if (sub > 0) {
