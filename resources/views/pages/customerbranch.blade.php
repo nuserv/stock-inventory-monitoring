@@ -8,7 +8,7 @@
     <input type="text" hidden id="name" value="{{ $customer }}">
 </div>
 <div class="table-responsive">
-    <table class="table customerbranchTable" id="customerbranchTable">
+    <table class="table customerbranchTable" id="customerbranchTable" style="font-size:80%">
         <thead class="thead-dark">
             <tr class="tbsearch" style="display:none">
                 <td>

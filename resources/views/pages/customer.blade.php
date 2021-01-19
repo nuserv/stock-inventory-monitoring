@@ -5,7 +5,7 @@
     <b>SEARCH&nbsp;&nbsp;</b><a href="#" id="search-ic"><i class="fa fa-lg fa-search" aria-hidden="true"></i></a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 </div>
 <div class="table-responsive">
-    <table class="table customerTable" id="customerTable">
+    <table class="table customerTable" id="customerTable" style="font-size:80%">
         <thead class="thead-dark">
             <tr class="tbsearch" style="display:none">
                 <td>

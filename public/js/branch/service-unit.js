@@ -97,6 +97,7 @@ $(document).on('change', '#intype', function(){
         $('#inserial').hide();
         $('#instatus').prop('disabled', true);
         $('#instatus').hide();
+        $('#instatus').val('select item status');
         $('#repstatus').show();
         status = '';
         desc = '';

@@ -1,7 +1,6 @@
 var r = 1;
 var y = 1;
 var c = 1;
-var interval = null;
 var bID;
 var sub = 0;
 var save = 0;
@@ -804,5 +803,4 @@ $(document).on('click', '#resched_btn', function(){
             alert(data.responseText);
         }
     });
-    
 });

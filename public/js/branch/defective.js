@@ -65,7 +65,14 @@ $(document).ready(function()
 });
 
 $('table.defectiveTable').DataTable().on('select', function () {
-    
+    var rowselected = table.rows( { selected: true } ).data();
+    console.log(rowselected);
+    /*if(rowselected.length > 0){
+        $('#rec_Btn').prop('disabled', false);
+    }*/
+});
+
+$('table.defectiveTable').DataTable().on('deselect', function () {
     var rowselected = table.rows( { selected: true } ).data();
     console.log(rowselected);
     /*if(rowselected.length > 0){

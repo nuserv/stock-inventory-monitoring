@@ -1,5 +1,4 @@
 var y = 1;
-var interval = null;
 var table;
 var schedtable;
 var dtdata;
@@ -32,14 +31,7 @@ $(document).ready(function()
         ]
     });
 
-    
-
-    interval = setInterval(function(){
-        table.draw();
-    }, 30000);
-
     $('#requestTable tbody').on('click', 'tr', function () { 
-        clearInterval(interval);
         var trdata = table.row(this).data();
         dtdata = table.row(this).data();;
         $('#date').val(trdata.created_at);
@@ -412,10 +404,7 @@ $(document).on('change', '.category', function(){
 });
 
 $(document).on('click', '.close', function(){
-    table.draw();
-    interval = setInterval(function(){
-        table.draw();
-    }, 30000);
+    window.location.href = 'request';
 });
 
 $(document).on('click', '.cancel', function(){

@@ -3,7 +3,7 @@
 @section('content')
 
 <div class="table">
-    <table class="table requestTable" id="requestTable">
+    <table class="table requestTable" id="requestTable" style="font-size:80%">
         <thead class="thead-dark">
             <tr>
                 @if(auth()->user()->hasAnyrole('Administrator', 'Encoder', 'Viewer'))

@@ -72,7 +72,7 @@
                     </div>
                     <div class="col-md-3 form-group">
                         <select id="instatus" class="form-control intype" style="color: black;" disabled>
-                            <option selected disabled>select service type</option>
+                            <option selected disabled>select item status</option>
                             <option value="good">good</option>
                             <option value="defective">defective</option>
                         </select>
