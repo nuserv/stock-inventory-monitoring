@@ -44,6 +44,7 @@ Route::put('cbranch_update', 'CustomerController@branchupdate');
 
 Route::put('return-update', 'DefectiveController@update')->name('return.update');
 Route::get('return-table', 'DefectiveController@table')->name('return.table');
+Route::get('printtable', 'DefectiveController@printtable')->name('return.print');
 Route::get('return', 'DefectiveController@index')->name('return.index');
 
 Route::put('loandelete', 'LoanController@destroy')->name('loans.stock.delete');
@@ -124,5 +125,7 @@ Route::get('logout', '\App\Http\Controllers\Auth\LoginController@logout');
 Route::get('print/{id}', 'HomeController@print')->name('branch.print');
 Route::get('getprint/{id}', 'HomeController@getprint')->name('getprint');
 Route::get('initial/{id}', 'HomeController@initial');
+Route::get('defective/print', 'HomeController@printDefective')->name('defective.print');
+
 
 Route::get('convert', 'HomeController@convert');

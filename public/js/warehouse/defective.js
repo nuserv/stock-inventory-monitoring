@@ -1,5 +1,4 @@
 var table;
-var interval = null;
 var sub = 0;
 $(document).ready(function() {
     table =
@@ -45,10 +44,6 @@ $(document).ready(function() {
             ],
         });
 
-    interval = setInterval(function() {
-        table.draw();
-    }, 30000);
-
     $('#search-ic').on("click", function() { 
         for (var i = 0; i <= 5; i++) {
 
@@ -70,7 +65,6 @@ $(document).ready(function() {
 
 $(document).on("click", "#defectiveTable tr", function() {
     var trdata = table.row(this).data();
-    clearInterval(interval);
     $('#branch_id').val(trdata.branchid);
     $('#date').val(trdata.date);
     $('#description').val(trdata.item);
@@ -179,10 +173,7 @@ $(document).on('click', '#submit_Btn', function() {
 });
 
 $(document).on('click', '.close', function() {
-    interval = setInterval(function() {
-        table.draw();
-    }, 30000);
-    table.draw();
+    window.location.href = 'return';
 });
 
 $(document).on('click', '#unrepair_Btn', function() {

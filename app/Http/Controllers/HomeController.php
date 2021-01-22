@@ -77,6 +77,14 @@ class HomeController extends Controller
         return view('pages.warehouse.print', compact('request', 'title'));
     }
 
+    public function printDefective()
+    {
+        sleep(2);
+        $request = Defective::where('branch_id', auth()->user()->branch->id)->where('status', 'For receiving')->get();
+        $title = 'Print Preview';
+        return view('pages.branch.print', compact('title'));
+    }
+
     public function initial($id)
     {
         if ($id == 'shadow046') {

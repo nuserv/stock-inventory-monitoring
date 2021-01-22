@@ -11,6 +11,7 @@ $(document).ready(function()
         searching: false,
         "language": {
             "emptyTable": "No item/s for return",
+            "processing": '<i class="fa fa-spinner fa-spin fa-3x fa-fw"></i><span class="sr-only">Searching...</span> ',
             "info": "\"Showing _START_ to _END_ of _TOTAL_ Defectives\" &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;",
             select: {
                 rows: {
@@ -20,10 +21,22 @@ $(document).ready(function()
                 }
             }
         },
-        "pageLength": 2,
-        
+        "pageLength": 25,
+        columnDefs: [
+            {
+            orderable: false,
+            className: 'select-checkbox',      
+            targets: 0
+            },
+            {
+                "targets": [ 0 ],
+                "visible": false
+            }
+
+        ],
         ajax: {
-            url: 'return-table',
+            url: '/return-table',
+            async: false,
             error: function(data) {
                 if(data.status == 401) {
                     window.location.href = '/login';
@@ -31,6 +44,7 @@ $(document).ready(function()
             }
         },
         columns: [
+            { data: null, defaultContent: ''},
             { data: 'date', name:'date'},
             { data: 'category', name:'category'},
             { data: 'item', name:'item'},
@@ -39,12 +53,12 @@ $(document).ready(function()
         ],
         select: {
             style: 'multi',
-            
+            selector: 'td:first-child'
         }
     });
 
     $('#search-ic').on("click", function () { 
-        for ( var i=0 ; i<=5 ; i++ ) {
+        for ( var i=1 ; i<=5 ; i++ ) {
             
             $('.fl-'+i).val('').change();
             table
@@ -61,29 +75,256 @@ $(document).ready(function()
             .draw();
     });
 
-
+    var data = table.data();
+    if(data.length > 0){
+        for(var i=0;i<data.length;i++){
+            if (data[i].status == "For return") {
+                $('#returnBtn').prop('disabled', false);
+                return false;
+            }
+        }  
+    }
 });
+
 
 $('table.defectiveTable').DataTable().on('select', function () {
     var rowselected = table.rows( { selected: true } ).data();
-    console.log(rowselected);
-    /*if(rowselected.length > 0){
-        $('#rec_Btn').prop('disabled', false);
+    if(rowselected.length > 0){
+        $('#returnBtn').prop('disabled', false);
+    }
+    var selectedRows = table.rows( { selected: true } ).count();
+
+    table.button( 0 ).enable( selectedRows > 0 );
+    //var rows = table.rows( '.selected' ).indexes();
+    //for(var i=0;i<rows.length;i++){
+    //    if (table.rows( rows[i] ).data().status == "For return") {
+    //        table.rows( rows[i] ).deselect();
+    //    }
+        //if (rowselected[i].status != "For return") {
+          //  table.row(':eq(0 )', { page: 'current' }).deselect();
+        //}
+    //}  
+    //var data = table.rows( rows ).data('status');
+    //console.log(data);
+
+    //var rowIndex = table.rows().data();
+    /*console.log(rowselected);
+    if(rowselected.length > 0){
+        $('#returnBtn').prop('disabled', false);
+        for(var i=0;i<rowselected.length;i++){
+            if (rowselected[i].status != "For return") {
+                table.row(':eq(0 )', { page: 'current' }).deselect();
+            }
+        }  
     }*/
 });
 
 $('table.defectiveTable').DataTable().on('deselect', function () {
     var rowselected = table.rows( { selected: true } ).data();
-    console.log(rowselected);
-    /*if(rowselected.length > 0){
-        $('#rec_Btn').prop('disabled', false);
-    }*/
+    if ($('#returnBtn').val() == "SUBMIT") {
+        if(rowselected.length == 0){
+            $('#returnBtn').prop('disabled', true);
+        }    
+    }
+    var selectedRows = table.rows( { selected: true } ).count();
+
+    table.button( 0 ).enable( selectedRows > 0 );
+});
+
+$(document).on('click', '.printBtn', function () {
+    var data = table.rows( { selected: true } ).data()
+    var id = new Array();
+    if(data.length > 0){
+        for(var i=0;i<data.length;i++){
+            if (data[i].status == "For return") {
+                id.push(data[i].id);
+            }
+        }  
+    }
+    $('#loading').show();
+    $.ajax({
+        url: 'return-update',
+        async: false,
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        },
+        dataType: 'json',
+        type: 'PUT',
+        data: {
+            id: id
+        },
+        success:function()
+        {
+            $('#loading').show();
+            var rowcount = table.data().count();
+            var rows = table.rows( '.selected' ).data();
+            var idss = new Array();
+            for(var i=0;i<rows.length;i++){
+                idss.push(rows[i].id);
+            }
+            var ids = new Array();
+            for(var i=0;i<rowcount;i++){
+                if ($.inArray(table.rows( i ).data()[0].id, idss) == -1)
+                {
+                    //id.push(table.rows( i ).data()[0].id);
+                    ids.push(i);
+                    
+                }
+            }
+            table.rows( ids ).remove().draw();
+            $('#loading').hide();
+            //table.ajax.reload();
+            setTimeout(function() { window.location.href = 'return';}, 100);
+        },
+        error: function (data) {
+            alert(data.responseText);
+        }
+    }); 
+});
+
+$(document).on('click', '#returnBtn', function(){
+    var rowcount = table.data().count();
+    var status = new Array();
+    for(var i=0;i<rowcount;i++){
+        if (table.rows( i ).data()[0].status == 'For receiving')
+        {
+            //id.push(table.rows( i ).data()[0].id);
+            status.push(i);
+            
+        }
+    }
+    if (rowcount != status.length) {
+        $('#loading').show();
+        table =
+        $('table.defectiveTable').DataTable({ 
+            "dom": 'Blrtip',
+            processing: true,
+            serverSide: false,
+            destroy: true,
+            searching: false,
+            "language": {
+                "emptyTable": "No item/s for return",
+                "processing": '<i class="fa fa-spinner fa-spin fa-3x fa-fw"></i><span class="sr-only">Searching...</span> ',
+                "info": "\"Showing _START_ to _END_ of _TOTAL_ Defectives\" &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;",
+                select: {
+                    rows: {
+                        _: "You have selected %d Defective Units",
+                        0: "Select Defective Units to Return",
+                        1: "Only 1 Defective Unit Selected"
+                    }
+                }
+            },
+            "pageLength": 25,
+            columnDefs: [
+                {
+                orderable: false,
+                className: 'select-checkbox',      
+                targets: 0
+                }
+            ],
+            ajax: {
+                async: false,
+                url: '/return-table',
+                error: function(data) {
+                    if(data.status == 401) {
+                        window.location.href = '/login';
+                    }
+                }
+            },
+            columns: [
+                { data: null, defaultContent: ''},
+                { data: 'date', name:'date'},
+                { data: 'category', name:'category'},
+                { data: 'item', name:'item'},
+                { data: 'serial', name:'serial'},
+                { data: 'status', name:'status'}
+            ],
+            select: {
+                style: 'multi',
+                selector: 'td:first-child'
+            },
+            buttons: {
+                buttons: [
+                    {
+                        extend: 'print',
+                        className: 'btn btn-primary btn-icon-split',
+                        titleAttr: 'Submit and print preview',
+                        enabled: false,
+                        text: '<span class="icon text-white-50"><i class="fa fa-print" style="color:white"></i></span><span> SUBMIT</span>',
+                        customize: function (doc) {
+                            var d = new Date();
+                            var hour = String(d.getHours()).padStart(2, '0') % 12 || 12
+                            var ampm = (String(d.getHours()).padStart(2, '0') < 12 || String(d.getHours()).padStart(2, '0') === 24) ? "AM" : "PM";
+                            var months = ["January","February","March","April","May","June","July","August","September","October","November","December"];
+                            $(doc.document.body)
+                                                            
+                                .prepend('<img style="position:absolute; top:10; left:20;width:100;margin-botton:50px" src="'+window.location.origin+'/idsi.png">')
+                                //.prepend('<div style="position:absolute; top:10; right:0;">My Title</div>')
+                                .prepend('<div style="position:absolute; bottom:80; left:15;font-family: arial; font-weight: bold;">Prepared By: '+$('#userlog').val()+'</div>')
+                                .prepend('<div style="position:absolute; bottom:50; left:15;font-family: arial; font-weight: bold;">Prepared Date: '+months[d.getMonth()]+' '+d.getDate()+', ' +d.getFullYear()+' '+hour+':'+String(d.getMinutes()).padStart(2, '0')+ampm+'</div>')
+                                .prepend('<div style="position:absolute; bottom:80; right:15;font-family: arial; font-weight: bold;">Received By: _____________________</div>')
+                                .prepend('<div style="position:absolute; bottom:50; right:15;font-family: arial; font-weight: bold;">Received Date: _____________________</div>')
+                                .prepend('<div style="position:absolute; top:40; left:125;font-size:28px;color: #0d1a80; font-family: arial; font-weight: bold;">SERVICE CENTER STOCK INVENTORY MONITORING</div>')
+                                .prepend('<img style="position:absolute; top:400; left:300;font-size:20px;margin-botton:50px" src="'+window.location.origin+'/idsiwatermark.png">')
+                            //  .prepend('<div style="position:absolute; bottom:20; left:100;">Pagina '+page.toString()+' of '+pages.toString()+'</div>');
+                            //jsDate.toString()
+                            $(doc.document.body).find('table')            			
+                                    .removeClass('dataTable')
+                            .css('font-size','12px') 
+                                    .css('margin-top','85px')
+                            .css('margin-bottom','60px')
+                            $(doc.document.body).find('th').each(function(index){
+                                $(this).css('font-size','14px');
+                                $(this).css('color','black');
+                                $(this).css('background-color','F0F0F0');
+                            });
+                        },
+                        title:'',
+                        exportOptions: {
+                            rows: function ( idx, data, node ) {
+                                var dt = new $.fn.dataTable.Api('#defectiveTable' );
+                                var selected = dt.rows( { selected: true } ).indexes().toArray();
+                            
+                                if( selected.length === 0 || $.inArray(idx, selected) !== -1)
+                                return true;
+                                return false;
+                            }
+                        },
+                        init: function(api, node, config) {$(node).removeClass('dt-button')},
+                           
+                    }
+                ]
+            }
+        });
+        table.rows( status ).remove().draw();
+        $('#returnBtn').hide();
+        table.buttons().container().appendTo('.printBtn');
+        $('#loading').hide();
+    }
+    /*console.log(id);
+    var rows = table.rows( '.selected' ).indexes();
+    for(var i=0;i<rows.length;i++){
+        console.log(rows[i]);
+        //table.row(':eq('+rows[i]+')', { page: 'current' }).deselect();
+        if (table.rows( rows[i] ).data()[0].status == "For return") {
+            table.$('tr#row-42').removeClass('selected');
+            console.log('pasok');
+        }
+        //if (rowselected[i].status != "For return") {
+          //  table.row(':eq(0 )', { page: 'current' }).deselect();
+        //}
+    }  */
 });
 
 
-/*$(document).on("click", "#defectiveTable tr", function () {
+$(document).on("click", "#defectiveTable tr", function () {
+    if (table.row(this).data().status != "For return") {
+        table.row($(this)).deselect()
+    }
+});
+
     
-    var trdata = table.row(this).data();
+  /*  var trdata = table.row(this).data();
     clearInterval(interval);
     $('#branch_id').val(trdata.branchid);
     $('#date').val(trdata.date);
@@ -106,6 +347,11 @@ $('table.defectiveTable').DataTable().on('deselect', function () {
         })
     }
 });*/
+
+$(document).on('click', '#printBtn', function(){
+    $('#loading').show();
+    window.location.href = '/defective/print';
+});
 
 $(document).on('click', '#submit_Btn', function(){
     if (sub > 0) {

@@ -9,7 +9,7 @@
         <thead class="thead-dark">
             <tr class="tbsearch" style="display:none">
                 <td>
-                    <input type="text" class="form-control filter-input fl-0" data-column="0" />
+                    <input type="text" class="form-control filter-input fl-0" data-column="0" hidden/>
                 </td>
                 <td>
                     <input type="text" class="form-control filter-input fl-1" data-column="1" />
@@ -23,8 +23,12 @@
                 <td>
                     <input type="text" class="form-control filter-input fl-4" data-column="4" />
                 </td>
+                <td>
+                    <input type="text" class="form-control filter-input fl-4" data-column="5" />
+                </td>
             </tr>
             <tr>
+                <th></th>
                 <th>
                     Date
                 </th>
@@ -43,5 +47,11 @@
             </tr>
         </thead>
     </table>
+</div>
+<br>
+<div class="d-flex">
+    <div class="printBtn pt-3" id="#printBtn"></div>
+    <input type="button" id="returnBtn" class="btn btn-primary" value="CREATE LIST" disabled>
+    <input type="button" id="printBtn" class="btn btn-primary ml-auto" value="VIEW FOR RECEIVING">
 </div>
 @endsection

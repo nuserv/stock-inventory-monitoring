@@ -32,6 +32,25 @@ class DefectiveController extends Controller
         }
     }
 
+    public function printtable()
+    {
+        $defective = Defective::select('defectives.updated_at', 'defectives.category_id', 'branch_id as branchid', 'defectives.id as id', 'items.item', 'items.id as itemid', 'defectives.serial', 'defectives.status')
+            ->where('branch_id', auth()->user()->branch->id)
+            ->join('items', 'defectives.items_id', '=', 'items.id')
+            ->where('status', 'For receiving')
+            ->get();
+        
+        return DataTables::of($defective)
+        ->addColumn('date', function (Defective $data){
+            return $data->updated_at->toFormattedDateString().' '.$data->updated_at->toTimeString();
+        })
+        ->addColumn('category', function (Defective $data){
+            $cat = Category::where('id', $data->category_id)->first();
+            return $cat->category;
+        })
+        ->make(true);
+    }
+
     public function table()
     {
         $defective = Defective::select('defectives.updated_at', 'defectives.category_id', 'branch_id as branchid', 'defectives.id as id', 'items.item', 'items.id as itemid', 'defectives.serial', 'defectives.status')
@@ -99,26 +118,28 @@ class DefectiveController extends Controller
 
     public function update(Request $request)
     {
+
         if (auth()->user()->branch->branch != 'Warehouse') {
-
-            $updates = Defective::where('branch_id', auth()->user()->branch->id)
-                ->where('id', $request->id)
-                ->where('status', 'For return')
-                ->first();
-            $updates->status = 'For receiving';
-            $updates->user_id = auth()->user()->id;
-
-
-            $items = Item::where('id', $updates->items_id)->first();
             $branch = Branch::where('id', auth()->user()->branch->id)->first();
+            foreach ($request->id as $id) {
+                $updates = Defective::where('branch_id', auth()->user()->branch->id)
+                    ->where('id', $id)
+                    ->where('status', 'For return')
+                    ->first();
+                $updates->status = 'For receiving';
+                $updates->user_id = auth()->user()->id;
+
+                $items = Item::where('id', $updates->items_id)->first();
+                
+                $log = new UserLog;
+                $log->activity = "Return defective $items->item(S/N: $updates->serial) to warehouse." ;
+                $log->user_id = auth()->user()->id;
+                $log->save();
+
+                $updates->save();
+            }
             
-            $log = new UserLog;
-            $log->activity = "Return defective $items->item(S/N: $updates->serial) to warehouse." ;
-            $log->user_id = auth()->user()->id;
-            $log->save();
-            
-            $data = $updates->save();
-            return response()->json($data);
+            return response()->json($updates);
 
         }else{
             if ($request->status == 'Received') {
