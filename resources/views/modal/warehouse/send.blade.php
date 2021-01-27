@@ -37,7 +37,6 @@
                                 <input type="text" style="color: black" class="form-control form-control-sm " name="name" id="sname" value="{{ auth()->user()->name }}" disabled>
                             </div>
                         </div>
-
                     </div>
                     <div class="row no-margin">
                         <div class="col-md-6 form-group row">
@@ -47,37 +46,24 @@
                             </div>
                         </div>
                     </div>
-                    <div>
-                        <h5 class="modal-title w-100 text-center">REQUEST DETAILS</h5>
-                    </div>
-                    <table class="table sendDetails" style="height: 150px;width:100%">
-                        <thead class="thead-dark">
-                            <th>Item Code</th>
-                            <th>Description</th>
-                            <th>Qty</th>
-                            <th>Purpose</th>
-                            <th>Stock Available</th>
-                        </thead>
-                    </table>
-                    <div id="prepitem">
-                        <h5 class="modal-title w-100 text-center">PREPARED ITEMS</h5>
-                    </div>
-                    <div id="preptable">
-                        <table class="table prepDetails" id="prepDetails" style="width:100%">
-                            <thead class="thead-dark">
-                                <th>Item Code</th>
-                                <th>Description</th>
-                                <th>Serial</th>
-                            </thead>
-                        </table>
-                    </div>
+                </form>
+                <div>
+                    <h5 class="modal-title w-100 text-center">REQUEST DETAILS</h5>
+                </div>
+                <table class="table sendDetails" style="height: 150px;width:100%">
+                    <thead class="thead-dark">
+                        <th>Item Code</th>
+                        <th>Description</th>
+                        <th>Qty</th>
+                        <th>Stock Available</th>
+                    </thead>
+                </table>
             </div>
-
             <div class="modal-header">
                 <h6 class="modal-title w-100 text-center">ENTER ITEM HERE</h6>
             </div>
             <div class="modal-body" id="reqfield">
-                <div class="row no-margin" id="row1">
+                <!--div class="row no-margin" id="row1">
                     <div class="col-md-2 form-group">
                         <select id="category1" style="color: black" class="form-control category" row_count="1">
                             <option selected disabled>select category</option>
@@ -103,12 +89,12 @@
                     <div class="col-md-1 form-group">
                         <input type="button" class="add_item btn btn-xs btn-primary" btn_id="1" value="Add Item">
                     </div>
-                </div>
+                </div-->
             </div>
             <hr>
             <div class="modal-footer">
-                <input type="button" class="btn btn-primary save_Btn" id="save_Btn" class="button" value="Save Only">
-                <input type="button" class="btn btn-primary sub_Btn" id="sub_Btn" class="button" value="Submit Now">
+                <input type="button" class="btn btn-primary save_Btn" id="save_Btn" class="button" value="Save Only" hidden>
+                <input type="button" class="btn btn-primary sub_Btn" id="sub_Btn" class="button" value="Submit" disabled>
             </div>
         </div>
     </div>

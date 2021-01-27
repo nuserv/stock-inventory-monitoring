@@ -443,12 +443,12 @@ class StockController extends Controller
         }
         $allemails = array_diff($allemails, array($branch->email));
 
-        Mail::send('loan', ['reqitem'=>$item->item, 'branch'=>$branch],function( $message) use ($allemails, $branch){ 
+        /*Mail::send('loan', ['reqitem'=>$item->item, 'branch'=>$branch],function( $message) use ($allemails, $branch){ 
             $message->to($branch->email, $branch->head)->subject 
                 (auth()->user()->branch->branch); 
             $message->from('no-reply@ideaserv.com.ph', 'NO REPLY - '.auth()->user()->branch->branch); 
             $message->cc($allemails); 
-        });
+        });*/
         $log = new UserLog;
         $log->activity = "Request $item->item to $branch->branch." ;
         $log->user_id = auth()->user()->id;

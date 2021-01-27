@@ -62,6 +62,9 @@
                             <option selected disabled>select description</option>
                         </select>
                     </div>
+                    <div class="col-md-3 form-group">
+                        <input type="button" class="btn btn-primary serial_sub_Btn" id="serial_sub_Btn" reqno="0" class="button" value="Submit">
+                    </div>
                 </div>
             </div>
             <div class="modal-footer">

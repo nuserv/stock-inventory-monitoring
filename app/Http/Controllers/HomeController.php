@@ -213,11 +213,12 @@ class HomeController extends Controller
         return view('pages.service-units', compact('users'));
     }
 
-    public function getprint($id)
+    public function getprint(Request $request, $id)
     {
-        $request = StockRequest::where('request_no', $id)->first();
+        $stock = StockRequest::where('request_no', $id)->first();
         $prepared = PreparedItem::where('request_no', $id)
-            ->where('branch_id', $request->branch_id)
+            ->where('branch_id', $stock->branch_id)
+            ->where('schedule', $request->schedule)
             ->join('items', 'items_id', '=', 'items.id')
             ->get();
 

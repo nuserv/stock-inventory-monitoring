@@ -110,12 +110,12 @@ class LoanController extends Controller
             $allemails[]=$email->email;
         }
         $allemails = array_diff($allemails, array($branch->email));
-        Mail::send('approved', ['reqitem'=>$item->item, 'serial'=>$stock->serial, 'branch'=>$branch],function( $message) use ($allemails, $branch){ 
+        /*Mail::send('approved', ['reqitem'=>$item->item, 'serial'=>$stock->serial, 'branch'=>$branch],function( $message) use ($allemails, $branch){ 
             $message->to($branch->email, $branch->head)->subject 
                 (auth()->user()->branch->branch); 
             $message->from('no-reply@ideaserv.com.ph', 'NO REPLY - '.auth()->user()->branch->branch); 
             $message->cc($allemails); 
-        });
+        });*/
         $data = $add->save();
 
         return response()->json($data);

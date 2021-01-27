@@ -60,12 +60,12 @@
                         <th>Item Code</th>
                         <th>Description</th>
                         <th>Qty</th>
-                        <th>Purpose</th>
                     </thead>
                 </table>
                 <br>
                 <table class="table schedDetails" id="schedDetails" style="width:100%">
                     <thead class="thead-dark">
+                        <th>Delivery Schedule</th>
                         <th>Item Code</th>
                         <th>Description</th>
                         <th>Serial</th>

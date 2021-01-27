@@ -166,6 +166,23 @@ class StockRequestController extends Controller
         ->make(true);
     }   
 
+    public function getReqDetails(Request $request)
+    {
+        return response()->json(RequestedItem::whereNot('status', 'delivered')->where('request_no', $request->reqno)->get());
+    }
+    
+    public function updateRequestDetails(Request $request, $id)
+    {
+        RequestedItem::where('request_no', $id)->where('items_id', $request->item)->decrement('quantity', 1);
+        $updated = RequestedItem::where('request_no', $id)->where('items_id', $request->item)->first();
+        if ($updated->quantity == 0) {
+            $data = $updated->delete();
+            return response()->json($data);
+        }else{
+            return response()->json(true);
+        }
+
+    }
     public function getRequestDetails(Request $request, $id)
     {
         return DataTables::of(RequestedItem::where('request_no', $id)->get())
@@ -181,36 +198,37 @@ class StockRequestController extends Controller
                 ->where('items_id',$RequestedItem->items->id)
                 ->groupBy('items_id')
                 ->first();
-            
-            return strtoupper($data->stock);
-        })
-
-        ->addColumn('purpose', function (RequestedItem $RequestedItem){
-
-            if ($RequestedItem->purpose == "3") {
-                return 'STOCK';
-            }elseif ($RequestedItem->purpose == "2") {
-                return 'REPLACEMENT';
-            }elseif ($RequestedItem->purpose == "1") {
-                return 'SERVICE UNIT';
+            if (!$data) {
+                $stock = 0;
+            }else{
+                $stock = $data->stock;
             }
-
+            return strtoupper($stock);
         })
+
         ->make(true);
     }   
+
+    public function pcount(Request $request)
+    {
+        $stock = StockRequest::where('request_no', $request->reqno)
+                ->first();
+        return response()->json($stock);
+        
+    }
 
     public function getRequests()
     {
         $user = auth()->user()->branch->id;
         if (auth()->user()->branch->branch != 'Warehouse'){
-            $stock = StockRequest::wherein('status',  ['0', '1', '4', '5'])
+            $stock = StockRequest::wherein('status',  ['0', '1', '4', '5', '8'])
                 ->where('branch_id', $user)
                 ->get();
         }else if(auth()->user()->hasRole('Viewer')){
-            $stock = StockRequest::wherein('status',  ['0', '1', '4', '5', '6'])
+            $stock = StockRequest::wherein('status',  ['0', '1', '4', '5', '6', '8'])
                 ->get();
         }else{
-            $stock = StockRequest::wherein('status',  ['0', '1', '4', '5'])
+            $stock = StockRequest::wherein('status',  ['0', '1', '4', '5', '8'])
                 ->get();
         }
         
@@ -233,6 +251,8 @@ class StockRequestController extends Controller
                 return 'RESCHEDULED';
             }else if ($request->status == 6){
                 return 'UNRESOLVED';
+            }else if ($request->status == 8){
+                return 'PARTIAL';
             }
         })
 
@@ -255,6 +275,10 @@ class StockRequestController extends Controller
 
         ->addColumn('area', function (StockRequest $request){
             return strtoupper($request->area->area);
+        })
+
+        ->addColumn('pending', function (StockRequest $request){
+            return strtoupper($request->pending);
         })
 
         ->make(true);
@@ -291,12 +315,12 @@ class StockRequestController extends Controller
                 $allemails[]=$email->email;
             }
 
-            Mail::send('mail', ['reqitem' => $reqitem, 'reqno' => $request->reqno, 'branch'=>auth()->user()->branch->branch],function( $message) use ($allemails){ 
+            /*Mail::send('mail', ['reqitem' => $reqitem, 'reqno' => $request->reqno, 'branch'=>auth()->user()->branch->branch],function( $message) use ($allemails){ 
                 $message->to('gerard.mallari@gmail.com', 'Gerald Mallari')->subject 
                     (auth()->user()->branch->branch); 
                 $message->from('no-reply@ideaserv.com.ph', 'NO REPLY'); 
                 $message->cc($allemails); 
-            });
+            });*/
 
             $data = $log->save();
 
@@ -361,7 +385,11 @@ class StockRequestController extends Controller
             ->first();
         if ($preparedItem) {
             $reqno = StockRequest::where('request_no', $request->reqno)->first();
-            $reqno->status = 4;
+            if ($reqno->status == 8) {
+                $request->status;
+            }else{
+                $reqno->status = 4;
+            }
             $reqno->save();
             $data = '1';
         }else{
@@ -380,7 +408,6 @@ class StockRequestController extends Controller
             $reqno->status = $request->status;
             $reqno->schedule = $request->datesched;
             $reqno->save();
-            sleep(2);
             $prepitem = PreparedItem::select('items.item', 'serial', 'branch_id')
                 ->where('request_no', $request->reqno)
                 ->join('items', 'items.id', '=', 'prepared_items.items_id')
@@ -391,14 +418,14 @@ class StockRequestController extends Controller
 
             $branch = Branch::where('id', $request->branchid)->first();
             $email = $branch->email;
-            Mail::send('sched', ['prepitem' => $prepitem, 'sched'=>$request->datesched,'reqno' => $request->reqno,'branch' =>$branch],function( $message) use ($branch, $email){ 
+            /*Mail::send('sched', ['prepitem' => $prepitem, 'sched'=>$request->datesched,'reqno' => $request->reqno,'branch' =>$branch],function( $message) use ($branch, $email){ 
                 $message->to($email, $branch->head)->subject 
                     (auth()->user()->branch->branch); 
                 $message->from('no-reply@ideaserv.com.ph', 'NO REPLY - Warehouse'); 
                 $message->cc(['emorej046@gmail.com', 'gerard.mallari@gmail.com']); 
-            });
+            });*/
 
-            $data = "true";
+            $data = true;
         }else if($request->stat == 'resched'){
             if ($request->status == '5') {
                 $reqno = StockRequest::where('request_no', $request->reqno)->first();
@@ -429,8 +456,9 @@ class StockRequestController extends Controller
             $prep->request_no = $request->reqno;
             $prep->serial = $request->serial;
             $prep->branch_id = $request->branchid;
+            $prep->schedule = $request->datesched;
             $prep->save();
-            sleep(2);
+            //sleep(2);
             $log = new UserLog;
             $log->activity = "Schedule $scheditem->item(S/N: $request->serial) with Request no. $request->reqno ";
             $log->user_id = auth()->user()->id;

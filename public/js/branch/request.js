@@ -16,6 +16,7 @@ $(document).ready(function()
     table =
     $('table.requestTable').DataTable({ 
         "dom": 'lrtip',
+        "pageLength": 25,
         "language": {
             "emptyTable": " ",
             "processing": '<i class="fa fa-spinner fa-spin fa-3x fa-fw"></i><span class="sr-only">Searching...</span>'
@@ -61,13 +62,12 @@ $(document).ready(function()
                 columns: [
                     { data: 'items_id', name:'items_id'},
                     { data: 'item_name', name:'item_name'},
-                    { data: 'quantity', name:'quantity'},
-                    { data: 'purpose', name:'purpose'}
+                    { data: 'quantity', name:'quantity'}
                 ]
             });
         }else if(trdata.status == 'SCHEDULED'){
             $('table.requestDetails').hide();
-            $('.sched').show();
+            $('.sched').hide();
             $('table.schedDetails').show();
             $('#sched').val(trdata.sched);
             $('#del_Btn').hide();
@@ -85,6 +85,7 @@ $(document).ready(function()
                 ajax: "/send/"+trdata.request_no,
                 
                 columns: [
+                    { data: 'schedule', name:'schedule'},
                     { data: 'items_id', name:'items_id'},
                     { data: 'item_name', name:'item_name'},
                     { data: 'serial', name:'serial'}
@@ -95,7 +96,7 @@ $(document).ready(function()
             });
         }else if(trdata.status == 'INCOMPLETE'){
             $('table.requestDetails').hide();
-            $('.sched').show();
+            $('.sched').hide();
             $('table.schedDetails').show();
             $('#sched').val(trdata.sched);
             $('#del_Btn').hide();
@@ -113,6 +114,7 @@ $(document).ready(function()
                 ajax: "/send/"+trdata.request_no,
                 
                 columns: [
+                    { data: 'schedule', name:'schedule'},
                     { data: 'items_id', name:'items_id'},
                     { data: 'item_name', name:'item_name'},
                     { data: 'serial', name:'serial'}
@@ -123,7 +125,7 @@ $(document).ready(function()
             });
         }else if(trdata.status == 'RESCHEDULED'){
             $('table.requestDetails').hide();
-            $('.sched').show();
+            $('.sched').hide();
             $('table.schedDetails').show();
             $('#sched').val(trdata.sched);
             $('#del_Btn').hide();
@@ -141,6 +143,36 @@ $(document).ready(function()
                 ajax: "/send/"+trdata.request_no,
                 
                 columns: [
+                    { data: 'schedule', name:'schedule'},
+                    { data: 'items_id', name:'items_id'},
+                    { data: 'item_name', name:'item_name'},
+                    { data: 'serial', name:'serial'}
+                ],
+                select: {
+                    style: 'multi'
+                }
+            });
+        }else if(trdata.status == 'PARTIAL'){
+            $('table.requestDetails').hide();
+            $('.sched').hide();
+            $('table.schedDetails').show();
+            $('#sched').val(trdata.sched);
+            $('#del_Btn').hide();
+            $('#rec_Btn').show();
+            $('#msg').show();
+            $('#rec_Btn').prop('disabled', true);
+            schedtable = 
+            $('table.schedDetails').DataTable({ 
+                "dom": 'lrtp',
+                "language": {
+                    "emptyTable": " "
+                },
+                processing: true,
+                serverSide: true,
+                ajax: "/send/"+trdata.request_no,
+                
+                columns: [
+                    { data: 'schedule', name:'schedule'},
                     { data: 'items_id', name:'items_id'},
                     { data: 'item_name', name:'item_name'},
                     { data: 'serial', name:'serial'}
@@ -170,6 +202,7 @@ $(document).ready(function()
 
 $(document).on('click', '#del_Btn', function(){
     var reqno = $(this).attr('reqno');
+    $('#loading').show();
     $.ajax({
         url: 'remove',
         headers: {
@@ -194,10 +227,13 @@ $(document).on('click', '#del_Btn', function(){
 $(document).on('click', '#rec_Btn', function(){
     var reqno = $('#reqno').val();
     var sched = $('#sched').val();
+    $('#loading').show();
     if(dtdata.status == "SCHEDULED"){
         var status = "2";
     }else if(dtdata.status == "RESCHEDULED"){
         var status = "7";
+    }else if(dtdata.status == "PARTIAL"){
+        var status = "8";
     }
     var datas = schedtable.rows( { selected: true } ).data();
     var id = [];
@@ -232,7 +268,6 @@ $(document).on('click', '#rec_Btn', function(){
 });
 
 $(document).on('click', '#reqBtn', function(){
-    clearInterval(interval);
     
     $.ajax({
         type:'get',

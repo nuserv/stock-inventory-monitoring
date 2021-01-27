@@ -102,10 +102,14 @@ Route::get('read/{id}', 'StockRequestController@read')->name('stock.read');
 Route::delete('delete/{id}', 'StockRequestController@destroy')->name('stock.delete');
 Route::get('send/{id}', 'StockRequestController@getsendDetails')->name('stock.send');
 Route::get('requests/{id}', 'StockRequestController@getRequestDetails')->name('get.reqdetails');
+Route::get('getrequests', 'StockRequestController@getReqDetails')->name('get.req');
 Route::get('prep/{id}', 'StockRequestController@prepitemdetails')->name('get.prepdetails');
 Route::get('requests', 'StockRequestController@getRequests')->name('get.requests');
+Route::get('pcount', 'StockRequestController@pcount')->name('get.pcount');
 Route::get('request', 'StockRequestController@index')->name('stock.index');
 Route::get('view', 'StockRequestController@view')->name('stock.view');
+Route::put('update/{id}', 'StockRequestController@updateRequestDetails')->name('update.reqdetails');
+
 
 Route::get('users', 'UserController@getUsers')->name('get.users');
 Route::get('user', 'UserController@index')->name('user.index');

@@ -1,7 +1,6 @@
 @extends('layouts.app')
 
 @section('content')
-
 <div class="row no-margin">
     <div class="col-md-6 form-group row">
         <label class="col-md-5 col-form-label text-md-right">Date requested:</label>
@@ -40,7 +39,7 @@
     <div class="col-md-6 form-group row sched">
         <label class="col-md-4 col-form-label text-md-right">Schedule on:</label>
         <div class="col-md-8">
-            <input type="text" class="form-control form-control-sm " id="sched" value="{{ $request->schedule }}" disabled>
+            <input type="text" style="color: black" class="form-control form-control-sm datepicker" value="{{$request->schedule}}" name="datesched" id="datesched" readonly="readonlyy" autocomplete="off">
         </div>
     </div>
 </div>
@@ -50,6 +49,7 @@
 <div>
     <table class="table itemDetails">
         <thead class="thead-dark">
+            <th>Delivery Schedule</th>
             <th>Item Code</th>
             <th>Description</th>
             <th>Serial</th>
@@ -57,5 +57,5 @@
     </table>
 </div>
 <hr>
-<input type="button" id="printBtn" class="btn btn-primary" value="PRINT" onclick="window.print();">
+<div class="panel-heading" role="tab" id="heading-all-data-table"></div>
 @endsection
