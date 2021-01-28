@@ -47,11 +47,6 @@
                 <hr>
                 <div class="row no-margin" id="loanrow1">
                     <div class="col-md-5 form-group">
-                        <select id="loandesc1" class="form-control loandesc" row_count="1">
-                            <option selected disabled>select description</option>
-                        </select>
-                    </div>
-                    <div class="col-md-5 form-group">
                         <select id="loanserial1" class="form-control loanserial" row_count="1">
                             <option selected disabled>select serial</option>
                         </select>

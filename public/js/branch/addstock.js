@@ -3,6 +3,7 @@ $(document).on('click', '.sub_Btn', function(){
     var cat = "";
     var item = "";
     var check = 1;
+    $('#loading').show();
     for(var q=1;q<=y;q++){
         if ($('#row'+q).is(":visible")) {
             if ($('.add_item[btn_id=\''+q+'\']').val() == 'Remove') {

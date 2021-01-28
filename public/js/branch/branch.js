@@ -139,7 +139,8 @@ $(document).ready(function()
 
     $('#branchForm').on('submit', function(e){
         e.preventDefault();
-        editBtn = $('#editBtn').val();;
+        editBtn = $('#editBtn').val();
+        $('#loading').show();
         if(editBtn == 'Edit'){
             var myid = $('#myid').val();
             $.ajax({

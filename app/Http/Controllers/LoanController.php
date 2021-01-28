@@ -85,7 +85,7 @@ class LoanController extends Controller
         $stock = Stock::where('id', $request->item)->first();
         $item = Item::where('id', $stock->items_id)->first();
 
-        $update = Stock::where('id', $request->item)->where('branch_id', auth()->user()->branch->id)->first();
+        $update = Stock::where('id', $request->item)->where('status', 'in')->where('branch_id', auth()->user()->branch->id)->first();
         $update->status = 'loan'.$request->id;
         $update->id_branch = $request->branch;
         $update->user_id = auth()->user()->id;

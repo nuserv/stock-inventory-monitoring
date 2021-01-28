@@ -433,6 +433,7 @@ class StockController extends Controller
         $loan->to_branch_id = $request->branchid;
         $loan->items_id = $request->itemid;
         $loan->status = 'pending';
+        $loan->request_no = $request->reqno;
         $emails = User::select('email')
             ->where('branch_id', $request->branchid)
             ->get();

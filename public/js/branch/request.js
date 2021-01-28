@@ -18,7 +18,7 @@ $(document).ready(function()
         "dom": 'lrtip',
         "pageLength": 25,
         "language": {
-            "emptyTable": " ",
+            "emptyTable": 'No stock request found.',
             "processing": '<i class="fa fa-spinner fa-spin fa-3x fa-fw"></i><span class="sr-only">Searching...</span>'
         },
         processing: true,

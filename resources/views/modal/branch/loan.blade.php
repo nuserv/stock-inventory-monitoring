@@ -63,12 +63,12 @@
                         </select>
                     </div>
                     <div class="col-md-3 form-group">
-                        <input type="button" class="btn btn-primary serial_sub_Btn" id="serial_sub_Btn" reqno="0" class="button" value="Submit">
+                        <input type="button" class="btn btn-primary add_item" id="add_item1" btn_id="1"class="button" value="Add Item">
                     </div>
                 </div>
             </div>
             <div class="modal-footer">
-                <input type="button" class="btn btn-primary serial_sub_Btn" id="serial_sub_Btn" reqno="0" class="button" value="Submit">
+                <input type="button" class="btn btn-primary serial_sub_Btn" id="loan_sub_Btn" reqno="0" class="button" value="Submit">
             </div>
         </div>
     </div>

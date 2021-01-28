@@ -1,8 +1,0 @@
-/*columnDefs: [{
-            orderable: false,
-            className: 'select-checkbox',      
-            targets: 0
-        }],*/
-
-            //selector: 'td:first-child'
-            //{ data: null, defaultContent: ''},

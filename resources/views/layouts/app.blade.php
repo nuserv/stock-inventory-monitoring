@@ -40,9 +40,9 @@
                     }
             </style>
         </head>
-        
+    
         <body>
-        <div id="loading"><p>searching</p></div>
+        <div id="loading"></div>
             @include('inc.header')
             @include('inc.navbar')
             @if(!Auth::guest())
