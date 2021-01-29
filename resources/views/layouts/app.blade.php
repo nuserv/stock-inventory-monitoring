@@ -34,7 +34,7 @@
                     width: 100vw;
                     height: 100vh;
                     background-color: rgba(192, 192, 192, 0.5);
-                    background-image: url("{{asset('loading2.gif')}}");
+                    background-image: url("{{asset('loading.gif')}}");
                     background-repeat: no-repeat;
                     background-position: center;
                     }

@@ -277,15 +277,16 @@ $(document).on('click', '#reqBtn', function(){
             $('#sreqno').val(result);
         },
     });
-    $('#loading').show()
     var catop;
+    $('#loading').show()
     $.ajax({
         type:'get',
         url:'checkStock',
         success:function(data)
         {
             catop+='<option selected value="select" disabled>select category</option>';
-            for(var i=0;i<data.length;i++){
+            console.log(data);
+            for(var i=0;i<=data.length;i++){
                 catop+='<option value="'+data[i].id+'">'+data[i].category.toUpperCase()+'</option>';
             }
             $("#category1").find('option').remove().end().append(catop);
