@@ -269,14 +269,14 @@ class StockController extends Controller
         $cat = [];
         $categ =[];
         foreach ($initials as $initial) {
-            $category = Stock::select('category_id as id', 'category')->where('stocks.status', 'in')
-                ->where('branch_id', auth()->user()->branch->id)
-                ->where('items_id', $initial->items_id)
-                ->join('categories', 'categories.id', '=', 'category_id')->first();
             $count = Stock::where('stocks.status', 'in')
                 ->where('branch_id', auth()->user()->branch->id)
                 ->where('items_id', $initial->items_id)->count();
             if ($count < $initial->qty ) {
+                $category = Stock::select('category_id as id', 'category')->where('stocks.status', 'in')
+                ->where('branch_id', auth()->user()->branch->id)
+                ->where('items_id', $initial->items_id)
+                ->join('categories', 'categories.id', '=', 'category_id')->first();
                 if(!in_array($category, $cat)){
                     array_push($cat, $category);
                 }

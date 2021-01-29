@@ -279,16 +279,14 @@ $(document).on('click', '#reqBtn', function(){
     });
     $('#loading').show()
     var catop;
-    $('#loading').show()
     $.ajax({
         type:'get',
         url:'checkStock',
         success:function(data)
         {
             catop+='<option selected value="select" disabled>select category</option>';
-            console.log(data);
-            for(var i=0;i<=data.length;i++){
-                catop+='<option value="'+data[i].id+'">'+data[i].category.toUpperCase()+'</option>';
+            for(var i=0;i<data.length;i++){
+            catop+='<option value="'+data[i].id+'">'+data[i].category.toUpperCase()+'</option>';
             }
             $("#category1").find('option').remove().end().append(catop);
             $('#sendrequestModal').modal({backdrop: 'static', keyboard: false});
