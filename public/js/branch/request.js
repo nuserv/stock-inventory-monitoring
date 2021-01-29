@@ -277,6 +277,7 @@ $(document).on('click', '#reqBtn', function(){
             $('#sreqno').val(result);
         },
     });
+    $('#loading').show()
     var catop;
     $('#loading').show()
     $.ajax({
