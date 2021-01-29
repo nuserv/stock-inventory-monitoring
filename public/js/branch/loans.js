@@ -6,7 +6,6 @@ var add = 0;
 var reqno;
 $(document).ready(function()
 {
-    $('#loading').show();
     table =
     $('table.loanTable').DataTable({ 
         "dom": 'rt',
