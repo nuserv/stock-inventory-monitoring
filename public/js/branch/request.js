@@ -412,8 +412,6 @@ $(document).on('change', '.category', function(){
     var count = $(this).attr('row_count');
     var id = $(this).val();
     $('#stock' + count).val('Stock');
-    $('#sendrequestModal').modal('toggle');
-    $('#loading').show();
     $.ajax({
         type:'get',
         url:'getcode',
@@ -428,8 +426,6 @@ $(document).on('change', '.category', function(){
             }
             $("#item" + count).find('option').remove().end().append(codeOp);
             $("#desc" + count).find('option').remove().end().append(descOp);
-            $('#loading').hide();
-            $('#sendrequestModal').modal('toggle');
         },
     });
     
