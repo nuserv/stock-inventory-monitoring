@@ -8,7 +8,7 @@ $(document).ready(function()
         destroy: true,
         searching: false,
         "language": {
-            "emptyTable": "No item/s for return",
+            "emptyTable": "No item/s for return found!",
             "processing": '<i class="fa fa-spinner fa-spin fa-3x fa-fw"></i><span class="sr-only">Searching...</span> ',
         },
         "pageLength": 25,

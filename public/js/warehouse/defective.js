@@ -5,7 +5,7 @@ $(document).ready(function() {
         $('table.defectiveTable').DataTable({ 
             "dom": 'lrtip',
             "language": {
-                "emptyTable": " "
+                "emptyTable": "No defective unit found!"
             },
             processing: true,
             serverSide: true,
@@ -94,6 +94,7 @@ $(document).on('click', '#submit_Btn', function() {
     if (sub > 0) {
         return false;
     }
+    $('#loading').show();
     var branch = $('#branch_id').val();
     var id = $('#myid').val();
     var status = $('#submit_Btn').val();
@@ -112,9 +113,7 @@ $(document).on('click', '#submit_Btn', function() {
                 status: status
             },
             success: function(data) {
-                setTimeout(function(){// wait for 5 secs(2)
-                    location.reload(); // then reload the page.(3)
-                }, 1000);
+                location.reload();
             },
             error: function(data) {
                 alert(data.responseText);
@@ -136,9 +135,7 @@ $(document).on('click', '#submit_Btn', function() {
                 status: status
             },
             success: function(data) {
-                setTimeout(function(){// wait for 5 secs(2)
-                    location.reload(); // then reload the page.(3)
-                }, 1000); 
+                location.reload();
             },
             error: function(data) {
                 alert(data.responseText);
@@ -161,9 +158,7 @@ $(document).on('click', '#submit_Btn', function() {
                 status: status
             },
             success: function() {
-                setTimeout(function(){// wait for 5 secs(2)
-                    location.reload(); // then reload the page.(3)
-                }, 1000); 
+                location.reload();
             },
             error: function(data) {
                 alert(data.responseText);
@@ -180,6 +175,7 @@ $(document).on('click', '#unrepair_Btn', function() {
     if (sub > 0) {
         return false;
     }
+    $('#loading').show();
     var branch = $('#branch_id').val();
     var id = $('#myid').val();
     var status = 'unrepairable';
@@ -197,9 +193,7 @@ $(document).on('click', '#unrepair_Btn', function() {
             status: status
         },
         success: function(data) {
-            setTimeout(function(){// wait for 5 secs(2)
-                location.reload(); // then reload the page.(3)
-            }, 1000);
+            location.reload();
         },
         error: function(data) {
             alert(data.responseText);

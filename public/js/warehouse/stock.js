@@ -13,7 +13,7 @@ $(document).ready(function()
     $('table.catTable').DataTable({ 
         "dom": 'lrtip',
         "language": {
-            "emptyTable": " "
+            "emptyTable": "No stock found!"
         },
         "pageLength": 50,
         processing: true,

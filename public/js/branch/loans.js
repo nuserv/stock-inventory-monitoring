@@ -12,7 +12,7 @@ $(document).ready(function()
         processing: true,
         serverSide: true,
         "language": {
-                "emptyTable": " "
+            "emptyTable": "No loan request found!"
             },
         ajax: {
             url: 'loanstable',
@@ -358,6 +358,8 @@ $(document).on('click', '.add_item', function(){
         if($('#loanreqdesc'+rowcount).val()){
             y++;
             add++;
+            $('#loanbranch').prop('disabled', true);
+            $('#loan_sub_Btn').prop('disabled', false);
             var additem = '<div class="row no-margin" id="outrow'+y+'"><div class="col-md-2 form-group"><select id="loanreqcategory'+y+'" class="form-control loancategory" row_count="'+y+'" style="color: black;"></select></div><div class="col-md-3 form-group"><select id="loanreqdesc'+y+'" class="form-control loandesc" row_count="'+y+'" style="color: black;"><option selected disabled>select description</option></select></div><div class="col-md-3 form-group"><input type="button" class="btn btn-primary add_item" id="add_item'+y+'" btn_id="'+y+'"class="button" value="Add Item"></div></div>';
             $(this).val('Remove');
             $('#loanreqcategory'+ rowcount).prop('disabled', true);
@@ -369,6 +371,9 @@ $(document).on('click', '.add_item', function(){
         }
     }else{
         add--;
+        if (add == 0) {
+            $('#loan_sub_Btn').prop('disabled', true);
+        }
         $('#loanreqcategory'+rowcount).val('select category');
         $('#loanreqdesc'+rowcount).val('select description');
         $('#loanreqcategory'+rowcount).prop('disabled', false);

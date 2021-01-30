@@ -10,7 +10,7 @@ $(document).ready(function()
         destroy: true,
         searching: false,
         "language": {
-            "emptyTable": "No item/s for return",
+            "emptyTable": "No item/s for return found!",
             "processing": '<i class="fa fa-spinner fa-spin fa-3x fa-fw"></i><span class="sr-only">Searching...</span> ',
             "info": "\"Showing _START_ to _END_ of _TOTAL_ Defectives\" &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;",
             select: {
@@ -95,28 +95,6 @@ $('table.defectiveTable').DataTable().on('select', function () {
     var selectedRows = table.rows( { selected: true } ).count();
 
     table.button( 0 ).enable( selectedRows > 0 );
-    //var rows = table.rows( '.selected' ).indexes();
-    //for(var i=0;i<rows.length;i++){
-    //    if (table.rows( rows[i] ).data().status == "For return") {
-    //        table.rows( rows[i] ).deselect();
-    //    }
-        //if (rowselected[i].status != "For return") {
-          //  table.row(':eq(0 )', { page: 'current' }).deselect();
-        //}
-    //}  
-    //var data = table.rows( rows ).data('status');
-    //console.log(data);
-
-    //var rowIndex = table.rows().data();
-    /*console.log(rowselected);
-    if(rowselected.length > 0){
-        $('#returnBtn').prop('disabled', false);
-        for(var i=0;i<rowselected.length;i++){
-            if (rowselected[i].status != "For return") {
-                table.row(':eq(0 )', { page: 'current' }).deselect();
-            }
-        }  
-    }*/
 });
 
 $('table.defectiveTable').DataTable().on('deselect', function () {
@@ -166,14 +144,12 @@ $(document).on('click', '.printBtn', function () {
             for(var i=0;i<rowcount;i++){
                 if ($.inArray(table.rows( i ).data()[0].id, idss) == -1)
                 {
-                    //id.push(table.rows( i ).data()[0].id);
                     ids.push(i);
                     
                 }
             }
             table.rows( ids ).remove().draw();
             $('#loading').hide();
-            //table.ajax.reload();
             setTimeout(function() { window.location.href = 'return';}, 100);
         },
         error: function (data) {
@@ -188,9 +164,7 @@ $(document).on('click', '#returnBtn', function(){
     for(var i=0;i<rowcount;i++){
         if (table.rows( i ).data()[0].status == 'For receiving')
         {
-            //id.push(table.rows( i ).data()[0].id);
             status.push(i);
-            
         }
     }
     if (rowcount != status.length) {
@@ -257,17 +231,13 @@ $(document).on('click', '#returnBtn', function(){
                             var ampm = (String(d.getHours()).padStart(2, '0') < 12 || String(d.getHours()).padStart(2, '0') === 24) ? "AM" : "PM";
                             var months = ["January","February","March","April","May","June","July","August","September","October","November","December"];
                             $(doc.document.body)
-                                                            
                                 .prepend('<img style="position:absolute; top:10; left:20;width:100;margin-botton:50px" src="'+window.location.origin+'/idsi.png">')
-                                //.prepend('<div style="position:absolute; top:10; right:0;">My Title</div>')
                                 .prepend('<div style="position:absolute; bottom:80; left:15;font-family: arial; font-weight: bold;">Prepared By: '+$('#userlog').val()+'</div>')
                                 .prepend('<div style="position:absolute; bottom:50; left:15;font-family: arial; font-weight: bold;">Prepared Date: '+months[d.getMonth()]+' '+d.getDate()+', ' +d.getFullYear()+' '+hour+':'+String(d.getMinutes()).padStart(2, '0')+ampm+'</div>')
                                 .prepend('<div style="position:absolute; bottom:80; right:15;font-family: arial; font-weight: bold;">Received By: _____________________</div>')
                                 .prepend('<div style="position:absolute; bottom:50; right:15;font-family: arial; font-weight: bold;">Received Date: _____________________</div>')
                                 .prepend('<div style="position:absolute; top:40; left:125;font-size:28px;color: #0d1a80; font-family: arial; font-weight: bold;">SERVICE CENTER STOCK INVENTORY MONITORING</div>')
                                 .prepend('<img style="position:absolute; top:400; left:300;font-size:20px;margin-botton:50px" src="'+window.location.origin+'/idsiwatermark.png">')
-                            //  .prepend('<div style="position:absolute; bottom:20; left:100;">Pagina '+page.toString()+' of '+pages.toString()+'</div>');
-                            //jsDate.toString()
                             $(doc.document.body).find('table')            			
                                     .removeClass('dataTable')
                             .css('font-size','12px') 
@@ -281,7 +251,7 @@ $(document).on('click', '#returnBtn', function(){
                         },
                         title:'',
                         exportOptions: {
-                            rows: function ( idx, data, node ) {
+                            rows: function (idx) {
                                 var dt = new $.fn.dataTable.Api('#defectiveTable' );
                                 var selected = dt.rows( { selected: true } ).indexes().toArray();
                             
@@ -290,7 +260,7 @@ $(document).on('click', '#returnBtn', function(){
                                 return false;
                             }
                         },
-                        init: function(api, node, config) {$(node).removeClass('dt-button')},
+                        init: function(node) {$(node).removeClass('dt-button')},
                            
                     }
                 ]
@@ -301,19 +271,6 @@ $(document).on('click', '#returnBtn', function(){
         table.buttons().container().appendTo('.printBtn');
         $('#loading').hide();
     }
-    /*console.log(id);
-    var rows = table.rows( '.selected' ).indexes();
-    for(var i=0;i<rows.length;i++){
-        console.log(rows[i]);
-        //table.row(':eq('+rows[i]+')', { page: 'current' }).deselect();
-        if (table.rows( rows[i] ).data()[0].status == "For return") {
-            table.$('tr#row-42').removeClass('selected');
-            console.log('pasok');
-        }
-        //if (rowselected[i].status != "For return") {
-          //  table.row(':eq(0 )', { page: 'current' }).deselect();
-        //}
-    }  */
 });
 
 
@@ -322,31 +279,6 @@ $(document).on("click", "#defectiveTable tr", function () {
         table.row($(this)).deselect()
     }
 });
-
-    
-  /*  var trdata = table.row(this).data();
-    clearInterval(interval);
-    $('#branch_id').val(trdata.branchid);
-    $('#date').val(trdata.date);
-    $('#description').val(convert(trdata.item));
-    $('#status').val(trdata.status);
-    $('#myid').val(trdata.id);
-    $('#serial').val(trdata.serial);
-    $('#return_id').val(trdata.itemid);
-    if (trdata.status == 'For return') {
-        $('#submit_Btn').show();
-    }else{
-        $('#submit_Btn').hide();
-    }
-
-    $('#returnModal').modal({backdrop: 'static', keyboard: false});
-
-    function convert (string) {
-        return string.replace(/&#(?:x([\da-f]+)|(\d+));/ig, function (_, hex, dec) {
-            return String.fromCharCode(dec || +('0x' + hex))
-        })
-    }
-});*/
 
 $(document).on('click', '#printBtn', function(){
     $('#loading').show();

@@ -40,7 +40,7 @@ $(document).ready(function()
         "dom": 'lrtip',
         "pageLength": 50,
         "language": {
-            "emptyTable": " "
+            "emptyTable": "No stock request found!"
         },
         "order": [[ 5, 'asc'], [ 0, 'desc']],
         "columnDefs": [

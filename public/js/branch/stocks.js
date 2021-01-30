@@ -15,7 +15,7 @@ $(document).ready(function()
     $('table.catTable').DataTable({ 
         "dom": 'lrtip',
         "language": {
-            "emptyTable": " "
+            "emptyTable": "No stock found!"
         },
         "pageLength": 50,
         processing: true,
@@ -314,6 +314,7 @@ $('table.stockDetails').DataTable().on('deselect', function () {
 
 $(document).on("click", "#def_Btn", function () {
     var data = stock.rows( { selected: true } ).data();
+    $('#loading').show();
     $.ajax({
         url: 'def',
         headers: {
@@ -328,9 +329,7 @@ $(document).on("click", "#def_Btn", function () {
             item: data[0].item
         },
         success: function(){
-            setTimeout(function(){// wait for 5 secs(2)
-                location.reload(); // then reload the page.(3)
-            }, 1000);
+            location.reload(); 
         },
         error: function (data) {
             alert(data.responseText);
