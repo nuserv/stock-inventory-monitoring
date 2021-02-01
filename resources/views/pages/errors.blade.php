@@ -59,6 +59,7 @@
                 <div class="code">
                     <p style="font-size: 75%;">{{(new \Jenssegers\Agent\Agent())->isMobile() ? 'Mobile':(new \Jenssegers\Agent\Agent())->device()}} browser is not supported.</p>
                     <p style="font-size: 75%;">Use or download Google Chrome on your desktop to access this site.</p>
+                    <a href="#"><img src="{{asset('idsi.png')}}" height="100"></a>
                 </div>
             @endif
         </div>
