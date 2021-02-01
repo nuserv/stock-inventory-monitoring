@@ -92,6 +92,29 @@ $(document).ready(function()
             $('#sched').val('');
             $('#printBtn').hide();
             $('#save_Btn').show();
+        }else if(trdata.status == 'UNRESOLVED'){
+            $('#printBtn').show();
+            $('table.requestDetails').hide();
+            $('table.schedDetails').show();
+            $('table.schedDetails').DataTable({ 
+                "dom": 'rt',
+                "language": {
+                    "emptyTable": " "
+                },
+                processing: true,
+                serverSide: true,
+                ajax: "/send/"+trdata.request_no,
+                columnDefs: [
+                    {"className": "dt-center", "targets": "_all"}
+                ],
+                columns: [
+                    { data: 'items_id', name:'items_id'},
+                    { data: 'item_name', name:'item_name'},
+                    { data: 'serial', name:'serial'}
+                ]
+            });
+            $('#unresolveBtn').hide();
+            $('#prcBtn').hide();
         }else if(trdata.status == 'PARTIAL'){
             $('#prcBtn').show();
             $('.sched').hide();

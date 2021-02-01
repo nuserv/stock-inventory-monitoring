@@ -146,9 +146,7 @@ $(document).on("click", "#submit_Btn", function () {
             },
             success:function()
             {
-                table.draw();
-                $("#loansModal .close").click();
-
+                window.location.reload();
             },
             error: function (data) {
                 alert(data.responseText);
@@ -193,8 +191,7 @@ $(document).on("click", "#received_Btn", function () {
             },
             success:function()
             {
-                table.draw();
-                $("#loansModal .close").click();
+                window.location.reload();
             },
             error: function (data) {
                 alert(data.responseText);
@@ -220,9 +217,7 @@ $(document).on("click", "#del_Btn", function () {
         },
         success:function()
         {
-            
-            table.draw();
-            $("#loansModal .close").click();
+            window.location.reload();
         },
         error: function (data) {
             alert(data.responseText);
@@ -327,7 +322,7 @@ $(document).on('click', '#loan_sub_Btn', function(){
                     },
                     success:function()
                     {
-                        window.location.href = 'loans';
+                        window.location.reload();
                     },
                     error: function (data) {
                         alert(data.responseText);

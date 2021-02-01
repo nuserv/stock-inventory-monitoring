@@ -228,7 +228,7 @@ class StockRequestController extends Controller
             $stock = StockRequest::wherein('status',  ['0', '1', '4', '5', '6', '8'])
                 ->get();
         }else{
-            $stock = StockRequest::wherein('status',  ['0', '1', '4', '5', '8'])
+            $stock = StockRequest::wherein('status',  ['0', '1', '4', '5', '6', '8'])
                 ->get();
         }
         

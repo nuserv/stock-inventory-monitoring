@@ -88,8 +88,6 @@ $(document).on('change', '.outdesc', function(){
             }
         }
     }
-    $('#service-unitModal').modal('toggle');
-    $('#loading').show();
     Promise.all([ajaxCall1(), ajaxCall2()]).then(() => { // try removing ajax 1 or replacing with ajax2
         for(var i=1;i<=y;i++){
             if ($('#outdesc'+i).val() == $(this).val()) {
@@ -97,8 +95,6 @@ $(document).on('change', '.outdesc', function(){
                 $("#outserial"+count+" option[value=\'"+rmserial+"\']").remove();
             }
         }
-        $('#service-unitModal').modal('toggle');
-        $('#loading').hide();
     });
     
     function ajaxCall1() {
@@ -146,8 +142,6 @@ $(document).on('change', '.outcategory', function(){
     var descOp = " ";
     var count = $(this).attr('row_count');
     var id = $(this).val();
-    $('#service-unitModal').modal('toggle');
-    $('#loading').show();
     $.ajax({
         type:'get',
         url:'itemcode',
@@ -159,8 +153,6 @@ $(document).on('change', '.outcategory', function(){
                 descOp+='<option value="'+data[i].id+'">'+data[i].item.toUpperCase()+'</option>';
             }
             $("#outdesc" + count).find('option').remove().end().append(descOp);
-            $('#loading').hide();
-            $('#service-unitModal').modal('toggle');
         },
     });
     $('#outdesc' + count).val('select item description');
