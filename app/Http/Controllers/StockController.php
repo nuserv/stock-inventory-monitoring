@@ -266,8 +266,7 @@ class StockController extends Controller
     public function checkStocks(Request $request)
     {
         $initials = Initial::where('branch_id', auth()->user()->branch->id)->get();
-        $cat = [];
-        $categ =[];
+        $cat = array();
         foreach ($initials as $initial) {
             $count = Stock::where('stocks.status', 'in')
                 ->where('branch_id', auth()->user()->branch->id)
@@ -282,7 +281,7 @@ class StockController extends Controller
                 }
             }
         }
-        return response()->json($cat);
+        return response()->json(array_filter($cat));
     }
 
     public function addItem(Request $request)
