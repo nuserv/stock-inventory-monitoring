@@ -140,7 +140,7 @@ class StockRequestController extends Controller
 
     }
 
-    public function generateBarcodeNumber() {
+    public function generateRandomNumber() {
         $random = mt_rand(1, 999); 
         $today = Carbon::now()->format('d-m-Y');
         $number = $today.'-'.$random;

@@ -38,7 +38,7 @@
             </div>
             @if(auth()->user()->branch->branch != 'Warehouse');
             <div class="col-sm-2">
-                <a href="{{ route('stock.service-unit')}}">
+                <a href="{{ route('index.service-unit')}}">
                     <div class="card bg-card">
                         <div class="card-body text-center">
                             <p class="card-text">SERVICE UNIT</p>

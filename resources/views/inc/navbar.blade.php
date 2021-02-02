@@ -45,7 +45,7 @@
                 @endrole
                 @if(auth()->user()->branch->branch != 'Warehouse')
                     <li class="nav-item">
-                        <a class="nav-link {{ Request::is('service-unit') ? 'active' : '' }}" href="{{ route('stock.service-unit') }}">Service IN / OUT</a>
+                        <a class="nav-link {{ Request::is('service-unit') ? 'active' : '' }}" href="{{ route('index.service-unit') }}">Service IN / OUT</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link {{ Request::is('loans') ? 'active' : '' }}" href="{{ route('loans') }}">Loans</a>
