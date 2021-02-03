@@ -85,7 +85,7 @@ Route::post('additem', 'StockController@addItem')->middleware('ajax');
 Route::post('addcategory', 'StockController@addCategory')->middleware('ajax');
 Route::post('store', 'StockController@store')->middleware('ajax');
 Route::get('viewStock', 'StockController@viewStocks')->middleware('ajax');
-Route::get('checkStock', 'StockController@checkStocks');//->middleware('ajax');
+Route::get('checkStock', 'StockController@checkStocks')->middleware('ajax');
 Route::get('show', 'StockController@show')->middleware('ajax');
 Route::get('stocks', 'StockController@index')->name('stocks.index');
 Route::delete('def', 'StockController@def')->middleware('ajax');
