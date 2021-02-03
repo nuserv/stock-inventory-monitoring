@@ -273,17 +273,23 @@ $(document).on('click', '#reqBtn', function(){
             $('#sreqno').val(result);
         },
     });
-    $('#loading').show()
+    //$('#loading').show()
     var catop;
     $.ajax({
         type:'get',
         url:'checkStock',
         success:function(data)
         {
+            var category = $.map(data, function(value, index) {
+                return [value];
+            });
             catop+='<option selected value="select" disabled>select category</option>';
-            for(var i=0;i<data.length;i++){
+            /*for(var i=0;i<data.length;i++){
             catop+='<option value="'+data[i].id+'">'+data[i].category.toUpperCase()+'</option>';
-            }
+            }*/
+            category.forEach(value => {
+                catop+='<option value="'+value.id+'">'+value.category.toUpperCase()+'</option>';
+            });
             $("#category1").find('option').remove().end().append(catop);
             $('#sendrequestModal').modal({backdrop: 'static', keyboard: false});
             $('#loading').hide()
