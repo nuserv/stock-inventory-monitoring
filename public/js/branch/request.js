@@ -161,26 +161,52 @@ $(document).ready(function()
             $('#rec_Btn').show();
             $('#msg').show();
             $('#rec_Btn').prop('disabled', true);
-            schedtable = 
-            $('table.schedDetails').DataTable({ 
-                "dom": 'lrtp',
-                "language": {
-                    "emptyTable": " "
-                },
-                processing: true,
-                serverSide: true,
-                ajax: "/send/"+trdata.request_no,
-                
-                columns: [
-                    { data: 'schedule', name:'schedule'},
-                    { data: 'items_id', name:'items_id'},
-                    { data: 'item_name', name:'item_name'},
-                    { data: 'serial', name:'serial'}
-                ],
-                select: {
-                    style: 'multi'
+            Promise.all([ajaxCall1()]).then(() => { // try removing ajax 1 or replacing with ajax2
+                if (schedtable.data().count() == 0) {
+                    $('.sched').hide();
+                    $('#msg').hide();
+                    $('table.schedDetails').hide();
+                    $('table.requestDetails').show();
+                    $('table.requestDetails').DataTable({ 
+                        "dom": 'lrtip',
+                        "language": {
+                            "emptyTable": " "
+                        },
+                        processing: true,
+                        serverSide: true,
+                        ajax: "/requests/"+trdata.request_no,
+                        columns: [
+                            { data: 'items_id', name:'items_id'},
+                            { data: 'item_name', name:'item_name'},
+                            { data: 'quantity', name:'quantity'}
+                        ]
+                    });
+                    $('#rec_Btn').hide();
                 }
             });
+
+            function ajaxCall1() {
+                return schedtable = 
+                $('table.schedDetails').DataTable({ 
+                    "dom": 'lrtp',
+                    "language": {
+                        "emptyTable": " "
+                    },
+                    processing: true,
+                    serverSide: true,
+                    ajax: "/send/"+trdata.request_no,
+                    
+                    columns: [
+                        { data: 'schedule', name:'schedule'},
+                        { data: 'items_id', name:'items_id'},
+                        { data: 'item_name', name:'item_name'},
+                        { data: 'serial', name:'serial'}
+                    ],
+                    select: {
+                        style: 'multi'
+                    }
+                });
+            }
         }
         $('#requestModal').modal('show');
     });
@@ -420,12 +446,15 @@ $(document).on('change', '.category', function(){
         data:{'id':id},
         success:function(data)
         {
+            var itemcode = $.map(data, function(value, index) {
+                return [value];
+            });
             codeOp+='<option selected value="select" disabled>select item code</option>';
             descOp+='<option selected value="select" disabled>select description</option>';
-            for(var i=0;i<data.length;i++){
-                codeOp+='<option value="'+data[i].id+'">'+data[i].id+'</option>';
-                descOp+='<option value="'+data[i].id+'">'+data[i].item.toUpperCase()+'</option>';
-            }
+            itemcode.forEach(value => {
+                codeOp+='<option value="'+value.id+'">'+value.id+'</option>';
+                descOp+='<option value="'+value.id+'">'+value.item.toUpperCase()+'</option>';
+            });
             $("#item" + count).find('option').remove().end().append(codeOp);
             $("#desc" + count).find('option').remove().end().append(descOp);
         },

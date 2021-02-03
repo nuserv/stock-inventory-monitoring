@@ -56,10 +56,13 @@ $(document).on('click', function (e)
                 async: false,
                 success:function(data)
                 {
+                    var branch = $.map(data, function(value, index) {
+                        return [value];
+                    });
                     op+='<option selected disabled>select branch</option>';
-                    for(var i=0;i<data.length;i++){
-                        op+='<option value="'+data[i].id+'">'+data[i].branch+'</option>';
-                    }
+                    branch.forEach(value => {
+                        op+='<option value="'+value.id+'">'+value.branch+'</option>';
+                    });
                     $('#branch').find('option').remove().end().append(op);
                     $('#branch').val(trdata.branch_id);
                 },
@@ -113,10 +116,13 @@ $(document).on('click', function (e)
                 data:{'id':area},
                 success:function(data)
                 {
+                    var branch = $.map(data, function(value, index) {
+                        return [value];
+                    });
                     op+='<option selected disabled>select branch</option>';
-                    for(var i=0;i<data.length;i++){
-                        op+='<option value="'+data[i].id+'">'+data[i].branch+'</option>';
-                    }
+                    branch.forEach(value => {
+                        op+='<option value="'+value.id+'">'+value.branch+'</option>';
+                    });
                     $('#branch').find('option').remove().end().append(op);
                     if (data.length == 1) {
                         $('#branch').val('1');

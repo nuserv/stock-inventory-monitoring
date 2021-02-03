@@ -55,10 +55,13 @@ $(document).on("click", "#sUnitTable tr", function () {
         data:{'id':trdata.category_id},
         success:function(data)
         {
+            var itemcode = $.map(data, function(value, index) {
+                return [value];
+            });
             itemop+='<option selected value="select" disabled>select item description</option>';
-            for(var i=0;i<data.length;i++){
-                itemop+='<option value="'+data[i].id+'">'+data[i].item.toUpperCase()+'</option>';
-            }
+            itemcode.forEach(value => {
+                itemop+='<option value="'+value.id+'">'+value.item.toUpperCase()+'</option>';
+            });
             $("#repdesc").find('option').remove().end().append(itemop);
         },
     });

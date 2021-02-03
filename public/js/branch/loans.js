@@ -57,10 +57,13 @@ $(document).on("click", "#loanTable tr", function () {
             async: false,
             success:function(data)
             {
+                var serial = $.map(data, function(value, index) {
+                    return [value];
+                });
                 serialOp+='<option selected value="select" disabled>select serial</option>';
-                for(var i=0;i<data.length;i++){
-                    serialOp+='<option value="'+data[i].id+'">'+data[i].serial+'</option>';
-                }
+                serial.forEach(value => {
+                    serialOp+='<option value="'+value.id+'">'+value.serial+'</option>';
+                });
                 $("#loanserial1").find('option').remove().end().append(serialOp);
             },
             error: function (data) {
@@ -235,10 +238,13 @@ $(document).on('change', '#loandesc1', function(){
             async: false,
             success:function(data)
             {
+                var serial = $.map(data, function(value, index) {
+                    return [value];
+                });
                 serialOp+='<option selected value="select" disabled>select serial</option>';
-                for(var i=0;i<data.length;i++){
-                    serialOp+='<option value="'+data[i].id+'">'+data[i].serial+'</option>';
-                }
+                serial.forEach(value => {
+                    serialOp+='<option value="'+value.id+'">'+value.serial+'</option>';
+                });
                 $("#loanserial1").find('option').remove().end().append(serialOp);
             },
             error: function (data) {
@@ -261,10 +267,13 @@ $(document).on('change', '#loanbranch', function(){
         data:{'id':id},
         success:function(data)
         {
+            var category = $.map(data, function(value, index) {
+                return [value];
+            });
             catOp+='<option selected value="select" disabled>select category</option>';
-            for(var i=0;i<data.length;i++){
-                catOp+='<option value="'+data[i].category_id+'">'+data[i].category.toUpperCase()+'</option>';
-            }
+            category.forEach(value => {
+                catOp+='<option value="'+value.category_id+'">'+value.category.toUpperCase()+'</option>';
+            });
             $("#loanreqcategory1").find('option').remove().end().append(catOp);
             $("#loanreqdesc1").find('option').remove().end().append(itemOp);
         },
@@ -289,10 +298,13 @@ $(document).on('change', '.loancategory', function(){
         },
         success:function(data)
         {
+            var itemid = $.map(data, function(value, index) {
+                return [value];
+            });
             itemOp+='<option selected value="select" disabled>select description</option>';
-            for(var i=0;i<data.length;i++){
-                itemOp+='<option value="'+data[i].items_id+'">'+data[i].item.toUpperCase()+'</option>';
-            }
+            itemid.forEach(value => {
+                itemOp+='<option value="'+value.items_id+'">'+value.item.toUpperCase()+'</option>';
+            });
             $('#loanreqdesc'+rowcount).find('option').remove().end().append(itemOp);
             itemOp = " ";
         },

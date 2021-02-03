@@ -16,10 +16,13 @@ $(document).on('change', '.replacementdesc', function(){
         async: false,
         success:function(data)
         {
+            var serial = $.map(data, function(value, index) {
+                return [value];
+            });
             serialOp+='<option selected value="select" disabled>select serial</option>';
-            for(var i=0;i<data.length;i++){
-                serialOp+='<option value="'+data[i].serial+'">'+data[i].serial+'</option>';
-            }
+            serial.forEach(value => {
+                serialOp+='<option value="'+value.serial+'">'+value.serial+'</option>';
+            });
             $("#replacementserial" + count).find('option').remove().end().append(serialOp);
         },
     });
@@ -127,10 +130,13 @@ $(document).on('change', '.outdesc', function(){
             data:{'id':id},
             success:function(data)
             {
+                var serial = $.map(data, function(value, index) {
+                    return [value];
+                });
                 serialOp+='<option selected value="select" disabled>select serial</option>';
-                for(var i=0;i<data.length;i++){
-                    serialOp+='<option value="'+data[i].serial+'">'+data[i].serial+'</option>';
-                }
+                serial.forEach(value => {
+                    serialOp+='<option value="'+value.serial+'">'+value.serial+'</option>';
+                });
                 $("#outserial" + count).find('option').remove().end().append(serialOp);
             },
         });
@@ -148,10 +154,13 @@ $(document).on('change', '.outcategory', function(){
         data:{'id':id},
         success:function(data)
         {
+            var itemcode = $.map(data, function(value, index) {
+                return [value];
+            });
             descOp+='<option selected value="select" disabled>select item description</option>';
-            for(var i=0;i<data.length;i++){
-                descOp+='<option value="'+data[i].id+'">'+data[i].item.toUpperCase()+'</option>';
-            }
+            itemcode.forEach(value => {
+                descOp+='<option value="'+value.id+'">'+value.item.toUpperCase()+'</option>';
+            });
             $("#outdesc" + count).find('option').remove().end().append(descOp);
         },
     });
@@ -268,10 +277,13 @@ $(document).on("click", "#replacementDetails tr", function () {
         data:{'id':catid},
         success:function(data)
         {
+            var itemcode = $.map(data, function(value, index) {
+                return [value];
+            });
             repOp+='<option selected value="select" disabled>select description</option>';
-            for(var i=0;i<data.length;i++){
-                repOp+='<option value="'+data[i].id+'">'+data[i].item.toUpperCase()+'</option>';
-            }
+            itemcode.forEach(value => {
+                repOp+='<option value="'+value.id+'">'+value.item.toUpperCase()+'</option>';
+            });
             $("#repdesc1").find('option').remove().end().append(repOp);
         },
     });
@@ -287,10 +299,13 @@ $(document).on('change', '#repdesc1', function(){
         async: false,
         success:function(data)
         {
+            var serial = $.map(data, function(value, index) {
+                return [value];
+            });
             serialOp+='<option selected value="select" disabled>select serial</option>';
-            for(var i=0;i<data.length;i++){
-                serialOp+='<option value="'+data[i].id+'">'+data[i].serial+'</option>';
-            }
+            serial.forEach(value => {
+                serialOp+='<option value="'+value.id+'">'+value.serial+'</option>';
+            });
             $("#repserial1").find('option').remove().end().append(serialOp);
         },
     });
@@ -341,10 +356,13 @@ $(document).on('keyup', '#replacementclient', function(){
         },
         success:function(data)
         {
+            var itemcode = $.map(data, function(value, index) {
+                return [value];
+            });
             op+=' ';
-            for(var i=0;i<data.length;i++){
-                op+='<option data-value="'+data[i].customer_id+'" value="'+data[i].customer.toUpperCase()+'"></option>'; 
-            }
+            itemcode.forEach(value => {
+                op+='<option data-value="'+value.customer_id+'" value="'+value.customer.toUpperCase()+'"></option>'; 
+            });
             $("#replacementclient-name").find('option').remove().end().append(op);
             
             $('#replacementclient-id').val($('#replacementclient-name [value="'+$('#replacementclient').val()+'"]').data('value'));
@@ -371,10 +389,13 @@ $(document).on('keyup', '#replacementcustomer', function(){
         },
         success:function(data)
         {
+            var itemcode = $.map(data, function(value, index) {
+                return [value];
+            });
             op+=' ';
-            for(var i=0;i<data.length;i++){
-                op+='<option data-value="'+data[i].customer_branch_id+'" value="'+data[i].customer_branch.toUpperCase()+'"></option>';
-            }
+            itemcode.forEach(value => {
+                op+='<option data-value="'+value.customer_branch_id+'" value="'+value.customer_branch.toUpperCase()+'"></option>';
+            });
             $("#replacementcustomer-name").find('option').remove().end().append(op);
             $('#replacementcustomer-id').val($('#replacementcustomer-name [value="'+$('#replacementcustomer').val()+'"]').data('value'));
         },
@@ -395,10 +416,13 @@ $(document).on('keyup', '#client', function(){
         },
         success:function(data)
         {
+            var customer = $.map(data, function(value, index) {
+                return [value];
+            });
             op+=' ';
-            for(var i=0;i<data.length;i++){
-                op+='<option data-value="'+data[i].id+'" value="'+data[i].customer.toUpperCase()+'"></option>';
-            }
+            customer.forEach(value => {
+                op+='<option data-value="'+value.id+'" value="'+value.customer.toUpperCase()+'"></option>';
+            });
             $("#client-name").find('option').remove().end().append(op);
             
             $('#client-id').val($('#client-name [value="'+$('#client').val()+'"]').data('value'));
@@ -424,10 +448,13 @@ $(document).on('keyup', '#customer', function(){
         },
         success:function(data)
         {
+            var customer = $.map(data, function(value, index) {
+                return [value];
+            });
             op+=' ';
-            for(var i=0;i<data.length;i++){
-                op+='<option data-value="'+data[i].id+'" value="'+data[i].customer_branch.toUpperCase()+'"></option>';
-            }
+            customer.forEach(value => {
+                op+='<option data-value="'+value.id+'" value="'+value.customer_branch.toUpperCase()+'"></option>';
+            });
             $("#customer-name").find('option').remove().end().append(op);
             $('#customer-id').val($('#customer-name [value="'+$('#customer').val()+'"]').data('value'));
         },

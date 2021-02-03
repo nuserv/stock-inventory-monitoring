@@ -677,12 +677,15 @@ $(document).on('change', '.category', function(){
         async: false,
         success:function(data)
         {
+            var itemcode = $.map(data, function(value, index) {
+                return [value];
+            });
             codeOp+='<option selected value="select" disabled>select item code</option>';
             descOp+='<option selected value="select" disabled>select description</option>';
-            for(var i=0;i<data.length;i++){
-                codeOp+='<option value="'+data[i].id+'">'+data[i].id+'</option>';
-                descOp+='<option value="'+data[i].id+'">'+data[i].item.toUpperCase()+'</option>';
-            }
+            itemcode.forEach(value => {
+                codeOp+='<option value="'+value.id+'">'+value.id+'</option>';
+                descOp+='<option value="'+value.id+'">'+value.item.toUpperCase()+'</option>';
+            });
             $("#item" + count).find('option').remove().end().append(codeOp);
             $("#desc" + count).find('option').remove().end().append(descOp);
         },
