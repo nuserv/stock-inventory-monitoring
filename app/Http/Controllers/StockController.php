@@ -252,7 +252,7 @@ class StockController extends Controller
             return DataTables::of($stock)->make(true);
 
         }else{
-            $stock = Stock::select('categories.category', 'stocks.items_id as items_id', 'items.item as description', \DB::raw('SUM(CASE WHEN status = \'in\' THEN 1 ELSE 0 END) as quantity'))
+            $stock = Stock::select('UOM','categories.category', 'stocks.items_id as items_id', 'items.item as description', \DB::raw('SUM(CASE WHEN status = \'in\' THEN 1 ELSE 0 END) as quantity'))
                 ->where('stocks.status', 'in')
                 ->where('branch_id', auth()->user()->branch->id)
                 ->where('categories.id', $request->category)
@@ -290,7 +290,16 @@ class StockController extends Controller
         $add->category_id = $request->cat;
         $add->item = ucfirst($request->item);
         $data = $add->save();
+        $branches = Branch::all();
+        foreach ($branches as $branchs) {
+            $initial = new Initial;
+            $initial->items_id = $add->id;
+            $initial->branch_id = $branchs->id;
+            $initial->qty = 3;
+            $initial->save();
+        }
         return response()->json($data);
+
     }
 
     public function servicein(Request $request)
@@ -481,17 +490,19 @@ class StockController extends Controller
     {
         $item = Item::where('id', $request->item)->first();
         if (auth()->user()->branch->branch == 'Warehouse') {
-            $add = new Warehouse;
-            $add->category_id = $request->cat;
-            $add->items_id = $request->item;
-            $add->status = 'in';
-            $add->serial = '-';
-            $add->user_id = auth()->user()->id;
-            $log = new UserLog;
-            $log->activity = "Add $item->item to stocks." ;
-            $log->user_id = auth()->user()->id;
-            $log->save();
-            $data = $add->save();
+            for ($i=1; $i <= $request->qty ; $i++) { 
+                $add = new Warehouse;
+                $add->category_id = $request->cat;
+                $add->items_id = $request->item;
+                $add->status = 'in';
+                $add->serial = '-';
+                $add->user_id = auth()->user()->id;
+                $log = new UserLog;
+                $log->activity = "Add $item->item to stocks." ;
+                $log->user_id = auth()->user()->id;
+                $log->save();
+                $data = $add->save();
+            }
         }else{
             $add = new Stock;
             $add->category_id = $request->cat;
@@ -566,6 +577,13 @@ class StockController extends Controller
         return redirect()->route('stocks.index');
     }
 
+    public function uom(Request $request)
+    {
+        $uom = Item::select('UOM')->where('id', $request->id)->first();
+        return response()->json($uom->UOM);
+
+    }
+
     public function show(Request $request)
     {
         if ($request->data != 0) {
@@ -581,9 +599,10 @@ class StockController extends Controller
 
         }else{
 
-            $stock = Warehouse::select('category_id','items_id', \DB::raw('SUM(CASE WHEN status = \'in\' THEN 1 ELSE 0 END) as stock'))
+            $stock = Warehouse::select('items.UOM', 'warehouses.category_id','items_id', \DB::raw('SUM(CASE WHEN status = \'in\' THEN 1 ELSE 0 END) as stock'))
                 ->where('status', 'in')
-                ->where('category_id', $request->category)
+                ->where('warehouses.category_id', $request->category)
+                ->join('items', 'items_id', '=', 'items.id')
                 ->groupBy('items_id')->get();
             return DataTables::of($stock)
             

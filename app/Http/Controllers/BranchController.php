@@ -124,14 +124,14 @@ class BranchController extends Controller
                         $avail = Warehouse::where('status', 'in')
                             ->where('items_id', $item->id)
                             ->count();
+                        
                     }else{
                         $avail = Stock::where('status', 'in')
                             ->where('branch_id', $id)
                             ->where('items_id', $item->id)
                             ->count();
                     }
-                    
-                    return $avail;
+                    return $avail.' '.$item->UOM;
                 })
 
                 ->addColumn('stock_out', function ($item) use ($id){
@@ -144,7 +144,7 @@ class BranchController extends Controller
                             ->where('items_id', $item->id)
                             ->count();
                     }
-                    return $stock_out;
+                    return $stock_out.' '.$item->UOM;
     
                 })
 
@@ -154,10 +154,8 @@ class BranchController extends Controller
                         ->where('items_id', $item->id)
                         ->where('branch_id', $id)
                         ->first();
-                    return $ini->qty;
+                    return $ini->qty.' '.$item->UOM;
                 })
-                
-                    
                 ->make(true);
         }
     }

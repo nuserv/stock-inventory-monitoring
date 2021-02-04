@@ -20,6 +20,14 @@
                     <div class="col-md-4">
                         <input type="text" id="item-desc1" class="form-control" row_count="1" placeholder="Item Description">
                     </div>
+                    <div class="col-md-2">
+                        <select id="itemuom1" class="form-control item-uom" row_count="1">
+                            <option selected disabled>select uom</option>
+                            <option value="Meter">Meter</option>
+                            <option value="Unit">Unit</option>
+                            <option value="Pcs">Pcs</option>
+                        </select>
+                    </div>
                     <div class="col-md-1 form-group">
                         <input type="button" class="add_item-desc btn btn-xs btn-primary" btn_id="1" value="Add">
                     </div>

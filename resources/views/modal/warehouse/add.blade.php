@@ -26,6 +26,12 @@
                             <option selected disabled>select description</option>
                         </select>
                     </div>
+                    <div class="col-md-1 form-group text-center">
+                        <input type="number" class="form-control" min="0" name="qty1" id="qty1" placeholder="0" style="color:black; width: 6em">
+                    </div>
+                    <div class="col-md-2 form-group text-center">
+                        <input type="text" class="form-control" name="uom1" id="uom1" style="color:black;"readonly>
+                    </div>
                     <div class="col-md-1 form-group">
                         <input type="button" class="add_item btn btn-xs btn-primary" btn_id="1" value="Add Item">
                     </div>
@@ -36,7 +42,7 @@
                 <input type="button" id="addCatBtn" class="btn btn-xs btn-primary" value="Add Category">
                 <input type="button" id="addCodeBtn" class="btn btn-xs btn-primary mr-auto" value="Add Item Code">
                 <input type="button" class="btn btn-primary cancel" value="Cancel">
-                <input type="button" class="btn btn-primary sub_Btn" id="sub_Btn" class="button" value="Submit">
+                <input type="button" class="btn btn-primary sub_Btn" id="sub_Btn" class="button" value="Submit" disabled>
             </div>
         </div>
     </div>

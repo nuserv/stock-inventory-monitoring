@@ -600,7 +600,7 @@ $(document).on('click', '.add_item', function(){
             if($('#item'+rowcount).val()){
                 y++;
                 add++;
-                var additem = '<div class="row no-margin" id="row'+y+'"><div class="col-md-2 form-group"><select id="category'+y+'" style="color: black;" class="form-control category" row_count="'+y+'"></select></div><div class="col-md-2 form-group"><select id="item'+y+'" style="color: black;" class="form-control item" row_count="'+y+'"><option selected disabled>select item code</option></select></div><div class="col-md-3 form-group"><select id="desc'+y+'" class="form-control desc" style="color: black;" row_count="'+y+'"><option selected disabled>select description</option></select></div><div class="col-md-3 form-group"><input type="number" min="0" class="form-control" style="color: black; width: 6em" name="qty'+y+'" id="qty'+y+'" placeholder="0" disabled></div><div class="col-md-1 form-group"><input type="button" class="add_item btn btn-xs btn-primary" btn_id="'+y+'" value="Add Item"></div></div>'
+                var additem = '<div class="row no-margin" id="row'+y+'"><div class="col-md-2 form-group"><select id="category'+y+'" style="color: black;" class="form-control category" row_count="'+y+'"></select></div><div class="col-md-2 form-group"><select id="item'+y+'" style="color: black;" class="form-control item" row_count="'+y+'"><option selected disabled>select item code</option></select></div><div class="col-md-3 form-group"><select id="desc'+y+'" class="form-control desc" style="color: black;" row_count="'+y+'"><option selected disabled>select description</option></select></div><div class="col-md-1 form-group"><input type="number" min="0" class="form-control" style="color: black; width: 6em" name="qty'+y+'" id="qty'+y+'" placeholder="0" disabled></div><div class="col-md-2 form-group text-center"><input type="text" class="form-control" name="uom'+y+'" id="uom'+y+'" style="color:black;"readonly></div><div class="col-md-1 form-group"><input type="button" class="add_item btn btn-xs btn-primary" btn_id="'+y+'" value="Add Item"></div></div>'
                 $(this).val('Remove');
                 $('#category'+ rowcount).prop('disabled', true);
                 $('#item'+ rowcount).prop('disabled', true);
@@ -694,6 +694,18 @@ $(document).on('change', '.desc', function(){
     $('#item' + count).val(id);
     $('#qty'+count).val('0');
     $('#qty'+count).prop('disabled', false);
+    $.ajax({
+        type:'get',
+        url:'uom',
+        data:{
+            id: id
+        },
+        success:function(data)
+        {
+            console.log(data);
+            $('#uom'+count).val(data);
+        },
+    });
 });
 
 $(document).on('change', '.item', function(){
@@ -702,6 +714,18 @@ $(document).on('change', '.item', function(){
     $('#desc' + count).val(id);
     $('#qty'+count).prop('disabled', false);
     $('#qty'+count).val('0');
+    $.ajax({
+        type:'get',
+        url:'uom',
+        data:{
+            id: id
+        },
+        success:function(data)
+        {
+            console.log(data);
+            $('#uom'+count).val(data);
+        },
+    });
 });
 
 $(document).on('change', '.category', function(){

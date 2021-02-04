@@ -83,11 +83,12 @@ Route::post('pull-out', 'StockController@pullOut')->middleware('ajax');
 Route::post('upload', 'StockController@import')->name('stocks.upload');
 Route::post('additem', 'StockController@addItem')->middleware('ajax');
 Route::post('addcategory', 'StockController@addCategory')->middleware('ajax');
-Route::post('store', 'StockController@store')->middleware('ajax');
+Route::post('store', 'StockController@store');//->middleware('ajax');
 Route::get('viewStock', 'StockController@viewStocks')->middleware('ajax');
 Route::get('checkStock', 'StockController@checkStocks')->middleware('ajax');
-Route::get('show', 'StockController@show')->middleware('ajax');
+Route::get('show', 'StockController@show');//->middleware('ajax');
 Route::get('stocks', 'StockController@index')->name('stocks.index');
+Route::get('uom', 'StockController@uom')->middleware('ajax');
 Route::delete('def', 'StockController@def')->middleware('ajax');
 
 
@@ -121,7 +122,7 @@ Route::get('getBranchName', 'UserController@getBranchName')->middleware('ajax');
 Route::post('user_add', 'UserController@store')->middleware('ajax');
 Route::put('user_update/{id}', 'UserController@update')->middleware('ajax');
 
-Route::get('stocks/{id}', 'BranchController@getStocks')->middleware('ajax');
+Route::get('stocks/{id}', 'BranchController@getStocks');//->middleware('ajax');
 Route::get('branches', 'BranchController@getBranches')->middleware('ajax');
 Route::get('branch', 'BranchController@index')->name('branch.index');
 Route::post('branch_add', 'BranchController@store')->middleware('ajax');

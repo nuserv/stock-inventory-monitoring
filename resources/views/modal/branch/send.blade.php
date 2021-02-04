@@ -51,8 +51,11 @@
                             <option selected disabled>select description</option>
                         </select>
                     </div>
-                    <div class="col-md-3 form-group text-center">
+                    <div class="col-md-1 form-group text-center">
                         <input type="number" class="form-control" min="0" name="qty1" id="qty1" placeholder="0" style="color:black; width: 6em" disabled>
+                    </div>
+                    <div class="col-md-2 form-group text-center">
+                        <input type="text" class="form-control" name="uom1" id="uom1" style="color:black;"readonly>
                     </div>
                     <div class="col-md-1 form-group">
                         <input type="button" class="add_item btn btn-xs btn-primary" btn_id="1" value="Add Item">

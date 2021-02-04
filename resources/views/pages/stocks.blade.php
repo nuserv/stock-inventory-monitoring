@@ -44,6 +44,9 @@
                     <th>
                         Quantity
                     </th>
+                    <th>
+                        UOM
+                    </th>
                 </tr>
             </thead>
         </table>

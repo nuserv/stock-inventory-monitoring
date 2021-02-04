@@ -88,7 +88,9 @@ $(document).on("click", "#catTable tr", function () {
         },
         columns: [
             { data: 'description', name:'description'},
-            { data: 'quantity', name:'quantity'}
+            { data: 'quantity', name:'quantity'},
+            { data: 'UOM', name:'UOM'}
+
         ]
     });
 
