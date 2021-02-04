@@ -87,7 +87,7 @@
                 <input type="button" class="btn btn-primary mr-auto" id="prcBtn" class="button" value="Proceed" disabled>
                 <input type="button" id="printBtn" class="btn btn-primary mr-auto" value="PRINT">
                 <input type="button" id="unresolveBtn" class="btn btn-primary mr-auto" value="UNRESOLVE">
-                <input type="button" class="btn btn-primary" data-dismiss="modal" value="Close">
+                <input type="button" class="btn btn-primary" data-dismiss="modal" value="CLOSE">
             </div>
             @endif
         </div>

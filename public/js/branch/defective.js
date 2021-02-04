@@ -218,10 +218,15 @@ $(document).on('click', '#returnBtn', function(){
                 selector: 'td:first-child'
             },
             buttons: {
+                dom: {
+                    button: {
+                        className: 'btn btn-primary' //Primary class for all buttons
+                    }
+                },
                 buttons: [
                     {
                         extend: 'print',
-                        className: 'btn btn-primary btn-icon-split',
+                        className: 'btn btn-primary',
                         titleAttr: 'Submit and print preview',
                         enabled: false,
                         text: '<span class="icon text-white-50"><i class="fa fa-print" style="color:white"></i></span><span> SUBMIT</span>',
@@ -261,7 +266,6 @@ $(document).on('click', '#returnBtn', function(){
                             }
                         },
                         init: function(node) {$(node).removeClass('dt-button')},
-                           
                     }
                 ]
             }

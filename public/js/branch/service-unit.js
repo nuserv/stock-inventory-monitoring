@@ -133,6 +133,7 @@ $(document).on('click', '.in_sub_Btn', function(){
                     dataType: 'json',
                     type: 'PUT',
                     data: {
+                        stat: 'sunit',
                         id: $('#indescid').val(),
                         serial: $('#inserial').val(),
                         status: status
@@ -156,7 +157,9 @@ $(document).on('click', '.in_sub_Btn', function(){
                     type: 'PUT',
                     async: false,
                     data: {
-                        id: $('#repdesc').val(),
+                        stat: 'replace',
+                        id: $('#indescid').val(),
+                        ids: $('#repdesc').val(),
                         serial: $('#repserial').val(),
                         status: 'defective',
                     },

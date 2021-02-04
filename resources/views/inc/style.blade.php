@@ -58,6 +58,14 @@
     button[type=button], button[type=submit], button[type=reset], input[type=button], input[type=submit], input[type=reset] {
         background-color: #0d1a80;
     }
+    .buttons-print {
+                    background-color: #0d1a80;
+                    color: white;
+                }
+                .dt-button {
+                    background-color: #0d1a80;
+                    color: white;
+                }
     .bg-card {
         background-color: #0d1a80;
     }

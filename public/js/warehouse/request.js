@@ -94,7 +94,9 @@ $(document).ready(function()
             $('#save_Btn').show();
         }else if(trdata.status == 'UNRESOLVED'){
             $('#printBtn').show();
+            $('#printBtn').val('PRINT');
             $('table.requestDetails').hide();
+            $('table.schedDetails').dataTable().fnDestroy();
             $('table.schedDetails').show();
             $('table.schedDetails').DataTable({ 
                 "dom": 'rt',
@@ -141,126 +143,324 @@ $(document).ready(function()
             $('table.schedDetails').hide();
             $('#unresolveBtn').hide();
             $('table.requestDetails').show();
-            requestdetails = 
-            $('table.requestDetails').DataTable({ 
-                "dom": 'lrtip',
-                "language": {
-                    "emptyTable": " "
-                },
-                processing: true,
-                serverSide: false,
-                ajax: "/requests/"+trdata.request_no,
-                columns: [
-                    { data: 'items_id', name:'items_id'},
-                    { data: 'item_name', name:'item_name'},
-                    { data: 'quantity', name:'quantity'},
-                    { data: 'stock', name:'stock'}
-                ],
-                select: {
-                    style: 'multi'
+            Promise.all([pendingrequest()]).then(() => { 
+                if (requestdetails.data().count() <= 10) {
+                    $('table.requestDetails').dataTable().fnDestroy();
+                    requestdetails = 
+                    $('table.requestDetails').DataTable({ 
+                        "dom": 'rt',
+                        "language": {
+                            "emptyTable": " "
+                        },
+                        processing: true,
+                        serverSide: false,
+                        ajax: "/requests/"+trdata.request_no,
+                        columns: [
+                            { data: 'items_id', name:'items_id'},
+                            { data: 'item_name', name:'item_name'},
+                            { data: 'quantity', name:'quantity'},
+                            { data: 'stock', name:'stock'}
+                        ],
+                        select: {
+                            style: 'multi'
+                        }
+                    });
+                }else if (requestdetails.data().count() > 10) {
+                    $('table.requestDetails').dataTable().fnDestroy();
+                    requestdetails = 
+                    $('table.requestDetails').DataTable({ 
+                        "dom": 'lrtp',
+                        "language": {
+                            "emptyTable": " "
+                        },
+                        processing: true,
+                        serverSide: false,
+                        ajax: "/requests/"+trdata.request_no,
+                        columns: [
+                            { data: 'items_id', name:'items_id'},
+                            { data: 'item_name', name:'item_name'},
+                            { data: 'quantity', name:'quantity'},
+                            { data: 'stock', name:'stock'}
+                        ],
+                        select: {
+                            style: 'multi'
+                        }
+                    });
                 }
             });
+            function pendingrequest() {
+                return requestdetails = 
+                $('table.requestDetails').DataTable({ 
+                    "dom": 'lrtip',
+                    "language": {
+                        "emptyTable": " "
+                    },
+                    processing: true,
+                    serverSide: false,
+                    ajax: "/requests/"+trdata.request_no,
+                    columns: [
+                        { data: 'items_id', name:'items_id'},
+                        { data: 'item_name', name:'item_name'},
+                        { data: 'quantity', name:'quantity'},
+                        { data: 'stock', name:'stock'}
+                    ],
+                    select: {
+                        style: 'multi'
+                    }
+                });
+            }
         }else if (trdata.status == 'PARTIAL') {
             $('#printBtn').hide();
             $('table.schedDetails').hide();
             $('#unresolveBtn').hide();
             $('table.requestDetails').show();
-            requestdetails = $('table.requestDetails').DataTable({ 
-                "dom": 'rt',
-                "language": {
-                    "emptyTable": " "
-                },
-                processing: true,
-                serverSide: true,
-                ajax: "/requests/"+trdata.request_no,
-                columns: [
-                    { data: 'items_id', name:'items_id'},
-                    { data: 'item_name', name:'item_name'},
-                    { data: 'quantity', name:'quantity'},
-                    { data: 'stock', name:'stock'}
-                ],
-                select: {
-                    style: 'multi'
+            Promise.all([partialrequest()]).then(() => { 
+                if (requestdetails.data().count() <= 10) {
+                    $('table.requestDetails').dataTable().fnDestroy();
+                    requestdetails = 
+                    $('table.requestDetails').DataTable({ 
+                        "dom": 'rt',
+                        "language": {
+                            "emptyTable": " "
+                        },
+                        processing: true,
+                        serverSide: true,
+                        ajax: "/requests/"+trdata.request_no,
+                        columns: [
+                            { data: 'items_id', name:'items_id'},
+                            { data: 'item_name', name:'item_name'},
+                            { data: 'quantity', name:'quantity'},
+                            { data: 'stock', name:'stock'}
+                        ],
+                        select: {
+                            style: 'multi'
+                        }
+                    });
+                }else if (requestdetails.data().count() > 10) {
+                    $('table.requestDetails').dataTable().fnDestroy();
+                    requestdetails = 
+                    $('table.requestDetails').DataTable({ 
+                        "dom": 'lrtp',
+                        "language": {
+                            "emptyTable": " "
+                        },
+                        processing: true,
+                        serverSide: true,
+                        ajax: "/requests/"+trdata.request_no,
+                        columns: [
+                            { data: 'items_id', name:'items_id'},
+                            { data: 'item_name', name:'item_name'},
+                            { data: 'quantity', name:'quantity'},
+                            { data: 'stock', name:'stock'}
+                        ],
+                        select: {
+                            style: 'multi'
+                        }
+                    });
                 }
             });
-            /*$.ajax({
-                url: 'pcount',
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                },
-                dataType: 'json',
-                type: 'GET',
-                data: {
-                    reqno: trdata.request_no
-                },
-                success:function(data)
-                {
-                    pcount = data.pending;
-                },
-                error: function (data) {
-                    alert(data.responseText);
-                    return false;
-                }
-            });*/
-
+            function partialrequest() {
+                return requestdetails = 
+                $('table.requestDetails').DataTable({ 
+                    "dom": 'lrtp',
+                    "language": {
+                        "emptyTable": " "
+                    },
+                    processing: true,
+                    serverSide: true,
+                    ajax: "/requests/"+trdata.request_no,
+                    columns: [
+                        { data: 'items_id', name:'items_id'},
+                        { data: 'item_name', name:'item_name'},
+                        { data: 'quantity', name:'quantity'},
+                        { data: 'stock', name:'stock'}
+                    ],
+                    select: {
+                        style: 'multi'
+                    }
+                });
+            }
         }else if(trdata.status == 'SCHEDULED'){
             $('#printBtn').show();
             $('table.requestDetails').hide();
             $('#unresolveBtn').hide();
             $('table.schedDetails').show();
-            $('table.schedDetails').DataTable({ 
-                "dom": 'rt',
-                "language": {
-                    "emptyTable": " "
-                },
-                processing: true,
-                serverSide: true,
-                ajax: "/send/"+trdata.request_no,
-                columns: [
-                    { data: 'items_id', name:'items_id'},
-                    { data: 'item_name', name:'item_name'},
-                    { data: 'serial', name:'serial'}
-                ]
+            Promise.all([schedrequest()]).then(() => {
+                if (scheddetails.data().count() <= 10) {
+                    $('table.schedDetails').dataTable().fnDestroy();
+                    scheddetails =
+                    $('table.schedDetails').DataTable({ 
+                        "dom": 'rt',
+                        "language": {
+                            "emptyTable": " "
+                        },
+                        processing: true,
+                        serverSide: true,
+                        ajax: "/send/"+trdata.request_no,
+                        columns: [
+                            { data: 'items_id', name:'items_id'},
+                            { data: 'item_name', name:'item_name'},
+                            { data: 'serial', name:'serial'}
+                        ]
+                    });
+                }else if (scheddetails.data().count() > 10) {
+                    $('table.schedDetails').dataTable().fnDestroy();
+                    scheddetails =
+                    $('table.schedDetails').DataTable({ 
+                        "dom": 'lrtp',
+                        "language": {
+                            "emptyTable": " "
+                        },
+                        processing: true,
+                        serverSide: true,
+                        ajax: "/send/"+trdata.request_no,
+                        columns: [
+                            { data: 'items_id', name:'items_id'},
+                            { data: 'item_name', name:'item_name'},
+                            { data: 'serial', name:'serial'}
+                        ]
+                    });
+                }
             });
+
+            function schedrequest() {
+                return scheddetails =
+                $('table.schedDetails').DataTable({ 
+                    "dom": 'lrtp',
+                    "language": {
+                        "emptyTable": " "
+                    },
+                    processing: true,
+                    serverSide: true,
+                    ajax: "/send/"+trdata.request_no,
+                    columns: [
+                        { data: 'items_id', name:'items_id'},
+                        { data: 'item_name', name:'item_name'},
+                        { data: 'serial', name:'serial'}
+                    ]
+                });
+            }
         }else if(trdata.status == 'RESCHEDULED'){
             $('#printBtn').show();
             $('table.requestDetails').hide();
             $('#unresolveBtn').hide();
             $('table.schedDetails').show();
-            $('table.schedDetails').DataTable({ 
-                "dom": 'rt',
-                "language": {
-                    "emptyTable": " "
-                },
-                processing: true,
-                serverSide: true,
-                ajax: "/send/"+trdata.request_no,
-                columns: [
-                    { data: 'items_id', name:'items_id'},
-                    { data: 'item_name', name:'item_name'},
-                    { data: 'serial', name:'serial'}
-                ]
+            Promise.all([reschedrequest()]).then(() => {
+                if (scheddetails.data().count() <= 10) {
+                    $('table.schedDetails').dataTable().fnDestroy();
+                    scheddetails =
+                    $('table.schedDetails').DataTable({ 
+                        "dom": 'rt',
+                        "language": {
+                            "emptyTable": " "
+                        },
+                        processing: true,
+                        serverSide: true,
+                        ajax: "/send/"+trdata.request_no,
+                        columns: [
+                            { data: 'items_id', name:'items_id'},
+                            { data: 'item_name', name:'item_name'},
+                            { data: 'serial', name:'serial'}
+                        ]
+                    });
+                }else if (scheddetails.data().count() > 10) {
+                    $('table.schedDetails').dataTable().fnDestroy();
+                    scheddetails =
+                    $('table.schedDetails').DataTable({ 
+                        "dom": 'lrtp',
+                        "language": {
+                            "emptyTable": " "
+                        },
+                        processing: true,
+                        serverSide: true,
+                        ajax: "/send/"+trdata.request_no,
+                        columns: [
+                            { data: 'items_id', name:'items_id'},
+                            { data: 'item_name', name:'item_name'},
+                            { data: 'serial', name:'serial'}
+                        ]
+                    });
+                }
             });
+
+            function reschedrequest() {
+                return scheddetails =
+                $('table.schedDetails').DataTable({ 
+                    "dom": 'lrtp',
+                    "language": {
+                        "emptyTable": " "
+                    },
+                    processing: true,
+                    serverSide: true,
+                    ajax: "/send/"+trdata.request_no,
+                    columns: [
+                        { data: 'items_id', name:'items_id'},
+                        { data: 'item_name', name:'item_name'},
+                        { data: 'serial', name:'serial'}
+                    ]
+                });
+            }
         }else if(trdata.status == 'INCOMPLETE'){
             $('#printBtn').show();
             $('#printBtn').val("RESOLVE");
             $('#unresolveBtn').show();
             $('table.requestDetails').hide();
             $('table.schedDetails').show();
-            $('table.schedDetails').DataTable({ 
-                "dom": 'rt',
-                "language": {
-                    "emptyTable": " "
-                },
-                processing: true,
-                serverSide: true,
-                ajax: "/send/"+trdata.request_no,
-                columns: [
-                    { data: 'items_id', name:'items_id'},
-                    { data: 'item_name', name:'item_name'},
-                    { data: 'serial', name:'serial'}
-                ]
+            Promise.all([incompleterequest()]).then(() => {
+                if (scheddetails.data().count() <= 10) {
+                    $('table.schedDetails').dataTable().fnDestroy();
+                    scheddetails =
+                    $('table.schedDetails').DataTable({ 
+                        "dom": 'rt',
+                        "language": {
+                            "emptyTable": " "
+                        },
+                        processing: true,
+                        serverSide: true,
+                        ajax: "/send/"+trdata.request_no,
+                        columns: [
+                            { data: 'items_id', name:'items_id'},
+                            { data: 'item_name', name:'item_name'},
+                            { data: 'serial', name:'serial'}
+                        ]
+                    });
+                }else if (scheddetails.data().count() > 10) {
+                    $('table.schedDetails').dataTable().fnDestroy();
+                    scheddetails =
+                    $('table.schedDetails').DataTable({ 
+                        "dom": 'lrtp',
+                        "language": {
+                            "emptyTable": " "
+                        },
+                        processing: true,
+                        serverSide: true,
+                        ajax: "/send/"+trdata.request_no,
+                        columns: [
+                            { data: 'items_id', name:'items_id'},
+                            { data: 'item_name', name:'item_name'},
+                            { data: 'serial', name:'serial'}
+                        ]
+                    });
+                }
             });
+
+            function incompleterequest() {
+                return scheddetails =
+                $('table.schedDetails').DataTable({ 
+                    "dom": 'lrtp',
+                    "language": {
+                        "emptyTable": " "
+                    },
+                    processing: true,
+                    serverSide: true,
+                    ajax: "/send/"+trdata.request_no,
+                    columns: [
+                        { data: 'items_id', name:'items_id'},
+                        { data: 'item_name', name:'item_name'},
+                        { data: 'serial', name:'serial'}
+                    ]
+                });
+            }
         }
         
         $('#requestModal').modal('show');

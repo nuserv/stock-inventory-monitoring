@@ -611,23 +611,45 @@ class StockController extends Controller
 
     public function update(Request $request)
     {
-        $update = Stock::where('id', $request->id)->first();
-        $update->status = 'replacement';
-        $update->user_id = auth()->user()->id;
-        $update->save();
-        $item = Item::where('id', $update->items_id)->first();
-        $defective = new Defective;
-        $defective->branch_id = auth()->user()->branch->id;
-        $defective->user_id = auth()->user()->branch->id;
-        $defective->category_id = $update->category_id;
-        $defective->items_id = $update->items_id;
-        $defective->serial = $request->serial;
-        $defective->status = 'For return';
-        $defective->save();
-        $log = new UserLog;
-        $log->activity = "Replaced $item->item(S/N: $request->serial)." ;
-        $log->user_id = auth()->user()->id;
-        $data = $log->save();
-        return response()->json($data);
+        if ($request->stat == 'sunit') {
+            $update = Stock::where('id', $request->id)->first();
+            $update->status = $request->status;
+            $update->user_id = auth()->user()->id;
+            $update->save();
+            $item = Item::where('id', $update->items_id)->first();
+            $defective = new Defective;
+            $defective->branch_id = auth()->user()->branch->id;
+            $defective->user_id = auth()->user()->branch->id;
+            $defective->category_id = $update->category_id;
+            $defective->items_id = $update->items_id;
+            $defective->serial = $request->serial;
+            $defective->status = 'For return';
+            $defective->save();
+            $log = new UserLog;
+            $log->activity = "Replaced $item->item(S/N: $request->serial)." ;
+            $log->user_id = auth()->user()->id;
+            $data = $log->save();
+            return response()->json($data);
+        }else if ($request->stat == 'replace') {
+            $update = Stock::where('id', $request->id)->first();
+            $update->status = 'replacement';
+            $update->user_id = auth()->user()->id;
+            $update->save();
+            $item = Item::where('id', $update->items_id)->first();
+            $defective = new Defective;
+            $defective->branch_id = auth()->user()->branch->id;
+            $defective->user_id = auth()->user()->branch->id;
+            $defective->category_id = $update->category_id;
+            $defective->items_id = $request->ids;
+            $defective->serial = $request->serial;
+            $defective->status = 'For return';
+            $defective->save();
+            $log = new UserLog;
+            $log->activity = "Replaced $item->item(S/N: $request->serial)." ;
+            $log->user_id = auth()->user()->id;
+            $data = $log->save();
+            return response()->json($data);
+        }
+        
     }
 }

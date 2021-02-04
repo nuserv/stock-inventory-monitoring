@@ -36,7 +36,7 @@
                     </div>
                 </a>
             </div>
-            @if(auth()->user()->branch->branch != 'Warehouse');
+            @if(auth()->user()->branch->branch != 'Warehouse')
             <div class="col-sm-2">
                 <a href="{{ route('index.service-unit')}}">
                     <div class="card bg-card">
@@ -51,7 +51,7 @@
                 <a href="{{ url('loans') }}">
                     <div class="card @if($loans > 0)bg-card-red @else bg-card @endif">
                         <div class="card-body text-center">
-                            <p class="card-text">Loan Request</p>
+                            <p class="card-text">LOAN REQUEST</p>
                             <p class="card-text">{{ $loans }}</p>
                         </div>
                     </div>

@@ -4,6 +4,7 @@ var schedtable;
 var dtdata;
 var sub = 0;
 var add = 0;
+var pendingreq;
 $(document).ready(function()
 {
     var d = new Date();
@@ -51,124 +52,12 @@ $(document).ready(function()
             $('#msg').hide();
             $('#rec_Btn').hide();
             $('#del_Btn').attr('reqno', trdata.request_no);
-            $('table.requestDetails').DataTable({ 
-                "dom": 'lrtip',
-                "language": {
-                    "emptyTable": " "
-                },
-                processing: true,
-                serverSide: true,
-                ajax: "/requests/"+trdata.request_no,
-                columns: [
-                    { data: 'items_id', name:'items_id'},
-                    { data: 'item_name', name:'item_name'},
-                    { data: 'quantity', name:'quantity'}
-                ]
-            });
-        }else if(trdata.status == 'SCHEDULED'){
-            $('table.requestDetails').hide();
-            $('.sched').hide();
-            $('table.schedDetails').show();
-            $('#sched').val(trdata.sched);
-            $('#del_Btn').hide();
-            $('#rec_Btn').show();
-            $('#msg').show();
-            $('#rec_Btn').prop('disabled', true);
-            schedtable = 
-            $('table.schedDetails').DataTable({ 
-                "dom": 'lrtp',
-                "language": {
-                    "emptyTable": " "
-                },
-                processing: true,
-                serverSide: true,
-                ajax: "/send/"+trdata.request_no,
-                
-                columns: [
-                    { data: 'schedule', name:'schedule'},
-                    { data: 'items_id', name:'items_id'},
-                    { data: 'item_name', name:'item_name'},
-                    { data: 'serial', name:'serial'}
-                ],
-                select: {
-                    style: 'multi'
-                }
-            });
-        }else if(trdata.status == 'INCOMPLETE'){
-            $('table.requestDetails').hide();
-            $('.sched').hide();
-            $('table.schedDetails').show();
-            $('#sched').val(trdata.sched);
-            $('#del_Btn').hide();
-            $('#rec_Btn').show();
-            $('#msg').show();
-            $('#rec_Btn').prop('disabled', true);
-            schedtable = 
-            $('table.schedDetails').DataTable({ 
-                "dom": 'lrtp',
-                "language": {
-                    "emptyTable": " "
-                },
-                processing: true,
-                serverSide: true,
-                ajax: "/send/"+trdata.request_no,
-                
-                columns: [
-                    { data: 'schedule', name:'schedule'},
-                    { data: 'items_id', name:'items_id'},
-                    { data: 'item_name', name:'item_name'},
-                    { data: 'serial', name:'serial'}
-                ],
-                select: {
-                    style: 'multi'
-                }
-            });
-        }else if(trdata.status == 'RESCHEDULED'){
-            $('table.requestDetails').hide();
-            $('.sched').hide();
-            $('table.schedDetails').show();
-            $('#sched').val(trdata.sched);
-            $('#del_Btn').hide();
-            $('#rec_Btn').show();
-            $('#msg').show();
-            $('#rec_Btn').prop('disabled', true);
-            schedtable = 
-            $('table.schedDetails').DataTable({ 
-                "dom": 'lrtp',
-                "language": {
-                    "emptyTable": " "
-                },
-                processing: true,
-                serverSide: true,
-                ajax: "/send/"+trdata.request_no,
-                
-                columns: [
-                    { data: 'schedule', name:'schedule'},
-                    { data: 'items_id', name:'items_id'},
-                    { data: 'item_name', name:'item_name'},
-                    { data: 'serial', name:'serial'}
-                ],
-                select: {
-                    style: 'multi'
-                }
-            });
-        }else if(trdata.status == 'PARTIAL'){
-            $('table.requestDetails').hide();
-            $('.sched').hide();
-            $('table.schedDetails').show();
-            $('#sched').val(trdata.sched);
-            $('#del_Btn').hide();
-            $('#rec_Btn').show();
-            $('#msg').show();
-            $('#rec_Btn').prop('disabled', true);
-            Promise.all([ajaxCall1()]).then(() => { // try removing ajax 1 or replacing with ajax2
-                if (schedtable.data().count() == 0) {
-                    $('.sched').hide();
-                    $('#msg').hide();
-                    $('table.schedDetails').hide();
-                    $('table.requestDetails').show();
+            Promise.all([pendingrequest()]).then(() => { 
+                if (pendingreq.data().count() <= 10) {
+                    $('table.requestDetails').dataTable().fnDestroy();
+                    pendingreq = 
                     $('table.requestDetails').DataTable({ 
-                        "dom": 'lrtip',
+                        "dom": 'rt',
                         "language": {
                             "emptyTable": " "
                         },
@@ -181,14 +70,395 @@ $(document).ready(function()
                             { data: 'quantity', name:'quantity'}
                         ]
                     });
-                    $('#rec_Btn').hide();
+                }else if (pendingreq.data().count() > 10) {
+                    $('table.requestDetails').dataTable().fnDestroy();
+                    pendingreq = 
+                    $('table.requestDetails').DataTable({ 
+                        "dom": 'lrtp',
+                        "language": {
+                            "emptyTable": " "
+                        },
+                        processing: true,
+                        serverSide: true,
+                        ajax: "/requests/"+trdata.request_no,
+                        columns: [
+                            { data: 'items_id', name:'items_id'},
+                            { data: 'item_name', name:'item_name'},
+                            { data: 'quantity', name:'quantity'}
+                        ]
+                    });
                 }
             });
-
-            function ajaxCall1() {
+            function pendingrequest() {
+                return pendingreq = 
+                $('table.requestDetails').DataTable({ 
+                    "dom": 'lrtp',
+                    "language": {
+                        "emptyTable": " "
+                    },
+                    processing: true,
+                    serverSide: true,
+                    ajax: "/requests/"+trdata.request_no,
+                    columns: [
+                        { data: 'items_id', name:'items_id'},
+                        { data: 'item_name', name:'item_name'},
+                        { data: 'quantity', name:'quantity'}
+                    ]
+                });
+            }
+        }else if(trdata.status == 'SCHEDULED'){
+            $('table.requestDetails').hide();
+            $('.sched').hide();
+            $('table.schedDetails').show();
+            $('#sched').val(trdata.sched);
+            $('#del_Btn').hide();
+            $('#rec_Btn').show();
+            $('#msg').show();
+            $('#rec_Btn').prop('disabled', true);
+            Promise.all([sched()]).then(() => { 
+                if (schedtable.data().count() <= 10) {
+                    $('table.schedDetails').dataTable().fnDestroy();
+                    schedtable = 
+                    $('table.schedDetails').DataTable({ 
+                        "dom": 'rt',
+                        "language": {
+                            "emptyTable": " "
+                        },
+                        processing: true,
+                        serverSide: true,
+                        ajax: "/send/"+trdata.request_no,
+                        
+                        columns: [
+                            { data: 'schedule', name:'schedule'},
+                            { data: 'items_id', name:'items_id'},
+                            { data: 'item_name', name:'item_name'},
+                            { data: 'serial', name:'serial'}
+                        ],
+                        select: {
+                            style: 'multi'
+                        }
+                    });
+                }else if (schedtable.data().count() > 10) {
+                    $('table.schedDetails').dataTable().fnDestroy();
+                    schedtable = 
+                    $('table.schedDetails').DataTable({ 
+                        "dom": 'lrtp',
+                        "language": {
+                            "emptyTable": " "
+                        },
+                        processing: true,
+                        serverSide: true,
+                        ajax: "/send/"+trdata.request_no,
+                        
+                        columns: [
+                            { data: 'schedule', name:'schedule'},
+                            { data: 'items_id', name:'items_id'},
+                            { data: 'item_name', name:'item_name'},
+                            { data: 'serial', name:'serial'}
+                        ],
+                        select: {
+                            style: 'multi'
+                        }
+                    });
+                }
+            });
+            function sched() {
                 return schedtable = 
                 $('table.schedDetails').DataTable({ 
                     "dom": 'lrtp',
+                    "language": {
+                        "emptyTable": " "
+                    },
+                    processing: true,
+                    serverSide: true,
+                    ajax: "/send/"+trdata.request_no,
+                    
+                    columns: [
+                        { data: 'schedule', name:'schedule'},
+                        { data: 'items_id', name:'items_id'},
+                        { data: 'item_name', name:'item_name'},
+                        { data: 'serial', name:'serial'}
+                    ],
+                    select: {
+                        style: 'multi'
+                    }
+                });
+            }
+        }else if(trdata.status == 'INCOMPLETE'){
+            $('table.requestDetails').hide();
+            $('.sched').hide();
+            $('table.schedDetails').show();
+            $('#sched').val(trdata.sched);
+            $('#del_Btn').hide();
+            $('#rec_Btn').show();
+            $('#msg').show();
+            $('#rec_Btn').prop('disabled', true);
+            Promise.all([incompleteschedtable()]).then(() => { 
+                if (schedtable.data().count() <= 10) {
+                    $('table.schedDetails').dataTable().fnDestroy();
+                    schedtable = 
+                    $('table.schedDetails').DataTable({ 
+                        "dom": 'rt',
+                        "language": {
+                            "emptyTable": " "
+                        },
+                        processing: true,
+                        serverSide: true,
+                        ajax: "/send/"+trdata.request_no,
+                        
+                        columns: [
+                            { data: 'schedule', name:'schedule'},
+                            { data: 'items_id', name:'items_id'},
+                            { data: 'item_name', name:'item_name'},
+                            { data: 'serial', name:'serial'}
+                        ],
+                        select: {
+                            style: 'multi'
+                        }
+                    });
+                }else if (schedtable.data().count() > 10) {
+                    $('table.schedDetails').dataTable().fnDestroy();
+                    schedtable = 
+                    $('table.schedDetails').DataTable({ 
+                        "dom": 'lrtp',
+                        "language": {
+                            "emptyTable": " "
+                        },
+                        processing: true,
+                        serverSide: true,
+                        ajax: "/send/"+trdata.request_no,
+                        
+                        columns: [
+                            { data: 'schedule', name:'schedule'},
+                            { data: 'items_id', name:'items_id'},
+                            { data: 'item_name', name:'item_name'},
+                            { data: 'serial', name:'serial'}
+                        ],
+                        select: {
+                            style: 'multi'
+                        }
+                    });
+                }
+            });
+            function incompleteschedtable() {
+                return schedtable = 
+                $('table.schedDetails').DataTable({ 
+                    "dom": 'lrtp',
+                    "language": {
+                        "emptyTable": " "
+                    },
+                    processing: true,
+                    serverSide: true,
+                    ajax: "/send/"+trdata.request_no,
+                    
+                    columns: [
+                        { data: 'schedule', name:'schedule'},
+                        { data: 'items_id', name:'items_id'},
+                        { data: 'item_name', name:'item_name'},
+                        { data: 'serial', name:'serial'}
+                    ],
+                    select: {
+                        style: 'multi'
+                    }
+                });
+            }
+        }else if(trdata.status == 'RESCHEDULED'){
+            $('table.requestDetails').hide();
+            $('.sched').hide();
+            $('table.schedDetails').show();
+            $('#sched').val(trdata.sched);
+            $('#del_Btn').hide();
+            $('#rec_Btn').show();
+            $('#msg').show();
+            $('#rec_Btn').prop('disabled', true);
+            Promise.all([rescheduleschedtable()]).then(() => { 
+                if (schedtable.data().count() <= 10) {
+                    $('table.schedDetails').dataTable().fnDestroy();
+                    schedtable = 
+                    $('table.schedDetails').DataTable({ 
+                        "dom": 'rt',
+                        "language": {
+                            "emptyTable": " "
+                        },
+                        processing: true,
+                        serverSide: true,
+                        ajax: "/send/"+trdata.request_no,
+                        
+                        columns: [
+                            { data: 'schedule', name:'schedule'},
+                            { data: 'items_id', name:'items_id'},
+                            { data: 'item_name', name:'item_name'},
+                            { data: 'serial', name:'serial'}
+                        ],
+                        select: {
+                            style: 'multi'
+                        }
+                    });
+                }else if (schedtable.data().count() > 10) {
+                    $('table.schedDetails').dataTable().fnDestroy();
+                    schedtable = 
+                    $('table.schedDetails').DataTable({ 
+                        "dom": 'lrtp',
+                        "language": {
+                            "emptyTable": " "
+                        },
+                        processing: true,
+                        serverSide: true,
+                        ajax: "/send/"+trdata.request_no,
+                        
+                        columns: [
+                            { data: 'schedule', name:'schedule'},
+                            { data: 'items_id', name:'items_id'},
+                            { data: 'item_name', name:'item_name'},
+                            { data: 'serial', name:'serial'}
+                        ],
+                        select: {
+                            style: 'multi'
+                        }
+                    });
+                }
+            });
+            function rescheduleschedtable() {
+                return schedtable = 
+                $('table.schedDetails').DataTable({ 
+                    "dom": 'lrtp',
+                    "language": {
+                        "emptyTable": " "
+                    },
+                    processing: true,
+                    serverSide: true,
+                    ajax: "/send/"+trdata.request_no,
+                    
+                    columns: [
+                        { data: 'schedule', name:'schedule'},
+                        { data: 'items_id', name:'items_id'},
+                        { data: 'item_name', name:'item_name'},
+                        { data: 'serial', name:'serial'}
+                    ],
+                    select: {
+                        style: 'multi'
+                    }
+                });
+            }
+        }else if(trdata.status == 'PARTIAL'){
+            $('table.requestDetails').hide();
+            $('table.schedDetails').show();
+            $('.sched').hide();
+            $('#sched').val(trdata.sched);
+            $('#del_Btn').hide();
+            $('#rec_Btn').show();
+            $('#msg').show();
+            $('#rec_Btn').prop('disabled', true);
+            Promise.all([partialschedtable()]).then(() => { 
+                if (schedtable.data().count() == 0) {
+                    $('.sched').hide();
+                    $('#msg').hide();
+                    $('table.schedDetails').dataTable().fnDestroy();
+                    $('table.schedDetails').hide();
+                    $('table.requestDetails').show();
+                    Promise.all([partialrequesttable()]).then(() => {
+                        if (requesttable.data().count() <= 10) {
+                            $('table.requestDetails').dataTable().fnDestroy();
+                            requesttable = $('table.requestDetails').DataTable({ 
+                                "dom": 'rt',
+                                "language": {
+                                    "emptyTable": " "
+                                },
+                                processing: true,
+                                serverSide: true,
+                                ajax: "/requests/"+trdata.request_no,
+                                columns: [
+                                    { data: 'items_id', name:'items_id'},
+                                    { data: 'item_name', name:'item_name'},
+                                    { data: 'quantity', name:'quantity'}
+                                ]
+                            });
+                        }else if (requesttable.data().count() > 10){
+                            $('table.requestDetails').dataTable().fnDestroy();
+                            requesttable = $('table.requestDetails').DataTable({ 
+                                "dom": 'lrtip',
+                                "language": {
+                                    "emptyTable": " "
+                                },
+                                processing: true,
+                                serverSide: true,
+                                ajax: "/requests/"+trdata.request_no,
+                                columns: [
+                                    { data: 'items_id', name:'items_id'},
+                                    { data: 'item_name', name:'item_name'},
+                                    { data: 'quantity', name:'quantity'}
+                                ]
+                            });
+                        }
+                    });
+                    function partialrequesttable() {
+                        return requesttable = $('table.requestDetails').DataTable({ 
+                            "dom": 'lrtip',
+                            "language": {
+                                "emptyTable": " "
+                            },
+                            processing: true,
+                            serverSide: true,
+                            ajax: "/requests/"+trdata.request_no,
+                            columns: [
+                                { data: 'items_id', name:'items_id'},
+                                { data: 'item_name', name:'item_name'},
+                                { data: 'quantity', name:'quantity'}
+                            ]
+                        });
+                    }
+                    $('#rec_Btn').hide();
+                }else if (schedtable.data().count() <= 10) {
+                    $('table.schedDetails').dataTable().fnDestroy();
+                    schedtable = 
+                    $('table.schedDetails').DataTable({ 
+                        "dom": 'rt',
+                        "language": {
+                            "emptyTable": " "
+                        },
+                        processing: true,
+                        serverSide: true,
+                        ajax: "/send/"+trdata.request_no,
+                        
+                        columns: [
+                            { data: 'schedule', name:'schedule'},
+                            { data: 'items_id', name:'items_id'},
+                            { data: 'item_name', name:'item_name'},
+                            { data: 'serial', name:'serial'}
+                        ],
+                        select: {
+                            style: 'multi'
+                        }
+                    });
+                }else if (schedtable.data().count() > 10) {
+                    $('table.schedDetails').dataTable().fnDestroy();
+                    schedtable = 
+                    $('table.schedDetails').DataTable({ 
+                        "dom": 'lrtip',
+                        "language": {
+                            "emptyTable": " "
+                        },
+                        processing: true,
+                        serverSide: true,
+                        ajax: "/send/"+trdata.request_no,
+                        
+                        columns: [
+                            { data: 'schedule', name:'schedule'},
+                            { data: 'items_id', name:'items_id'},
+                            { data: 'item_name', name:'item_name'},
+                            { data: 'serial', name:'serial'}
+                        ],
+                        select: {
+                            style: 'multi'
+                        }
+                    });
+                }
+            });
+
+            function partialschedtable() {
+                return schedtable = 
+                $('table.schedDetails').DataTable({ 
+                    "dom": 'lrtip',
                     "language": {
                         "emptyTable": " "
                     },
@@ -299,7 +569,7 @@ $(document).on('click', '#reqBtn', function(){
             $('#sreqno').val(result);
         },
     });
-    //$('#loading').show()
+    $('#loading').show()
     var catop;
     $.ajax({
         type:'get',
