@@ -289,6 +289,7 @@ class StockController extends Controller
         $add = new Item;
         $add->category_id = $request->cat;
         $add->item = ucfirst($request->item);
+        $add->UOM = ucfirst($request->uom);
         $data = $add->save();
         $branches = Branch::all();
         foreach ($branches as $branchs) {
