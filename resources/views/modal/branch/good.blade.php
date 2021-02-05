@@ -10,7 +10,7 @@
             <div class="modal-body" id="service-unitfield">
                 <div class="row no-margin" id="goodrow1">
                     <div class="col-md-3 form-group">
-                        <select id="goodcustomer1" class="form-control goodcustomer" row_count="1">
+                        <select id="goodcustomer1" class="form-control goodcustomer" row_count="1" style="color: black">
                             <option selected disabled>select customer</option>
                             @foreach ($customers as $customer)
                             <option value="{{ $customer->customer_branches_id }}">{{ strtoupper($customer->customer_branch) }}</option>
@@ -18,22 +18,22 @@
                         </select>
                     </div>
                     <div class="col-md-2 form-group">
-                        <select id="goodcategory1" class="form-control goodcategory" row_count="1">
+                        <select id="goodcategory1" class="form-control goodcategory" row_count="1" style="color: black">
                             <option selected disabled>select category</option>
                         </select>
                     </div>
                     <div class="col-md-3 form-group">
-                        <select id="gooddesc1" class="form-control gooddesc" row_count="1">
-                            <option selected disabled>select description</option>
+                        <select id="gooddesc1" class="form-control gooddesc" row_count="1" style="color: black">
+                            <option selected disabled>select item description</option>
                         </select>
                     </div>
                     <div class="col-md-2 form-group">
-                        <select id="goodserial1" class="form-control goodserial" row_count="1">
+                        <select id="goodserial1" class="form-control goodserial" row_count="1" style="color: black">
                             <option selected disabled>select serial</option>
                         </select>
                     </div>
                     <div class="col-md-1 form-group">
-                        <input type="button" class="good_add_item btn btn-xs btn-primary" btn_id="1" value="Add Item">
+                        <input type="button" class="good_add_item btn btn-xs btn-primary" btn_id="1" value="Add Item" style="color: black">
                     </div>
                 </div>
             </div>

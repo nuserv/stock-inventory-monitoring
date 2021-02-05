@@ -56,7 +56,7 @@
                     <div class="row no-margin" id="goodrow1">
                         <div class="col-md-5 form-group">
                             <select id="repdesc1" class="form-control repdesc" row_count="1">
-                                <option selected disabled>select description</option>
+                                <option selected disabled>select item description</option>
                             </select>
                         </div>
                         <div class="col-md-5 form-group">

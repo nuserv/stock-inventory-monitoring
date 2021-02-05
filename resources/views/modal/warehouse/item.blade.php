@@ -10,7 +10,7 @@
             <div class="modal-body" id="itemfield">
                 <div class="row no-margin" id="itemrow1">
                     <div class="col-md-4 form-group">
-                        <select id="itemcat1" class="form-control item-category" row_count="1">
+                        <select id="itemcat1" class="form-control item-category" row_count="1" style="color: black">
                             <option selected disabled>select category</option>
                             @foreach ($categories as $category)
                             <option value="{{ $category->id }}">{{ $category->category }}</option>
@@ -18,14 +18,14 @@
                         </select>
                     </div>
                     <div class="col-md-4">
-                        <input type="text" id="item-desc1" class="form-control" row_count="1" placeholder="Item Description">
+                        <input type="text" id="item-desc1" style="color: black" class="form-control" row_count="1" placeholder="Item Description" autocomplete="off">
                     </div>
                     <div class="col-md-2">
-                        <select id="itemuom1" class="form-control item-uom" row_count="1">
+                        <select id="itemuom1" class="form-control item-uom" row_count="1" style="color: black">
                             <option selected disabled>select uom</option>
                             <option value="Meter">Meter</option>
                             <option value="Unit">Unit</option>
-                            <option value="Pcs">Pcs</option>
+                            <option value="Pc">Pc</option>
                         </select>
                     </div>
                     <div class="col-md-1 form-group">

@@ -24,7 +24,7 @@
                     </div>
                     <div class="col-md-3 form-group">
                         <select id="gooddesc1" class="form-control gooddesc" row_count="1">
-                            <option selected disabled>select description</option>
+                            <option selected disabled>select item description</option>
                         </select>
                     </div>
                     <div class="col-md-2 form-group">

@@ -8,7 +8,6 @@ $(document).on('change', '.replacementdesc', function(){
     var count = $(this).attr('row_count');
     var id = $(this).val();
     var serialOp = " ";
-    $('#replacementserial'+count).val('select serial');
     $.ajax({
         type:'get',
         url:'getserials',
@@ -19,7 +18,7 @@ $(document).on('change', '.replacementdesc', function(){
             var serial = $.map(data, function(value, index) {
                 return [value];
             });
-            serialOp+='<option selected value="select" disabled>select serial</option>';
+            serialOp+='<option selected disabled>select serial</option>';
             serial.forEach(value => {
                 serialOp+='<option value="'+value.serial+'">'+value.serial+'</option>';
             });
@@ -133,7 +132,7 @@ $(document).on('change', '.outdesc', function(){
                 var serial = $.map(data, function(value, index) {
                     return [value];
                 });
-                serialOp+='<option selected value="select" disabled>select serial</option>';
+                serialOp+='<option selected disabled>select serial</option>';
                 serial.forEach(value => {
                     serialOp+='<option value="'+value.serial+'">'+value.serial+'</option>';
                 });
@@ -157,15 +156,13 @@ $(document).on('change', '.outcategory', function(){
             var itemcode = $.map(data, function(value, index) {
                 return [value];
             });
-            descOp+='<option selected value="select" disabled>select item description</option>';
+            descOp+='<option selected disabled>select item description</option>';
             itemcode.forEach(value => {
                 descOp+='<option value="'+value.id+'">'+value.item.toUpperCase()+'</option>';
             });
             $("#outdesc" + count).find('option').remove().end().append(descOp);
         },
     });
-    $('#outdesc' + count).val('select item description');
-
 });
 
 $(document).on('change', '.outitem', function(){
@@ -179,7 +176,7 @@ $(document).on('click', '.out_add_item', function(){
     if ($(this).val() == 'Add Item') {
         if($('#outcategory'+ rowcount).val() && $('#outdesc'+ rowcount).val() && $('#outserial'+ rowcount).val()) {
             y++;
-            var additem = '<div class="row no-margin" id="outrow'+y+'"><div class="col-md-2 form-group"><select style="color:black" id="outcategory'+y+'" class="form-control outcategory" row_count="'+y+'"></select></div><div class="col-md-3 form-group"><select style="color:black" id="outdesc'+y+'" class="form-control outdesc" row_count="'+y+'"><option selected disabled>select description</option></select></div><div class="col-md-2 form-group"><select id="outserial'+y+'" class="form-control outserial" row_count="'+y+'" style="color: black;"><option selected disabled>select serial</option></select></div><div class="col-md-1 form-group"><input type="number" class="form-control" min="0" name="outstock'+y+'" id="outstock'+y+'" placeholder="0" style="color:black; width: 6em" disabled></div><div class="col-md-1 form-group"><input type="button" class="out_add_item btn btn-xs btn-primary" btn_id="'+y+'" value="Add Item"></div></div>';
+            var additem = '<div class="row no-margin" id="outrow'+y+'"><div class="col-md-2 form-group"><select style="color:black" id="outcategory'+y+'" class="form-control outcategory" row_count="'+y+'"></select></div><div class="col-md-3 form-group"><select style="color:black" id="outdesc'+y+'" class="form-control outdesc" row_count="'+y+'"><option selected disabled>select item description</option></select></div><div class="col-md-2 form-group"><select id="outserial'+y+'" class="form-control outserial" row_count="'+y+'" style="color: black;"><option selected disabled>select serial</option></select></div><div class="col-md-1 form-group"><input type="number" class="form-control" min="0" name="outstock'+y+'" id="outstock'+y+'" placeholder="0" style="color:black; width: 6em" disabled></div><div class="col-md-1 form-group"><input type="button" class="out_add_item btn btn-xs btn-primary" btn_id="'+y+'" value="Add Item"></div></div>';
             $(this).val('Remove');
             $('#outcategory'+ rowcount).prop('disabled', true);
             $('#outdesc'+ rowcount).prop('disabled', true);
@@ -193,13 +190,13 @@ $(document).on('click', '.out_add_item', function(){
     }else{
         if (r == 20) {
             y++;
-            var additem = '<div class="row no-margin" id="outrow'+y+'"><div class="col-md-2 form-group"><select id="outcategory'+y+'" class="form-control outcategory" row_count="'+y+'"></select></div><div class="col-md-3 form-group"><select id="outdesc'+y+'" class="form-control outdesc" row_count="'+y+'"><option selected disabled>select description</option></select></div><div class="col-md-2 form-group"><select id="outserial'+y+'" class="form-control outserial" row_count="'+y+'" style="color: black;"><option selected disabled>select serial</option></select></div><div class="col-md-1 form-group"><input type="number" class="form-control" min="0" name="outstock'+y+'" id="outstock'+y+'" placeholder="0" style="color:black; width: 6em" disabled></div><div class="col-md-1 form-group"><input type="button" class="out_add_item btn btn-xs btn-primary" btn_id="'+y+'" value="Add Item"></div></div>';
+            var additem = '<div class="row no-margin" id="outrow'+y+'"><div class="col-md-2 form-group"><select id="outcategory'+y+'" class="form-control outcategory" row_count="'+y+'"></select></div><div class="col-md-3 form-group"><select id="outdesc'+y+'" class="form-control outdesc" row_count="'+y+'"><option selected disabled>select item description</option></select></div><div class="col-md-2 form-group"><select id="outserial'+y+'" class="form-control outserial" row_count="'+y+'" style="color: black;"><option selected disabled>select serial</option></select></div><div class="col-md-1 form-group"><input type="number" class="form-control" min="0" name="outstock'+y+'" id="outstock'+y+'" placeholder="0" style="color:black; width: 6em" disabled></div><div class="col-md-1 form-group"><input type="button" class="out_add_item btn btn-xs btn-primary" btn_id="'+y+'" value="Add Item"></div></div>';
             $('#outfield').append(additem);
             $('#outcategory'+ rowcount).find('option').clone().appendTo('#outcategory'+y);
             r++;
         }
         $('#outcategory'+rowcount).val('select category');
-        $('#outdesc'+rowcount).val('select description');
+        $('#outdesc'+rowcount).val('select item description');
         $('#outserial'+rowcount).val('select serial');
         $('#outcategory'+rowcount).prop('disabled', false);
         $('#outdesc'+rowcount).prop('disabled', false);
@@ -280,7 +277,7 @@ $(document).on("click", "#replacementDetails tr", function () {
             var itemcode = $.map(data, function(value, index) {
                 return [value];
             });
-            repOp+='<option selected value="select" disabled>select description</option>';
+            repOp+='<option selected disabled>select item description</option>';
             itemcode.forEach(value => {
                 repOp+='<option value="'+value.id+'">'+value.item.toUpperCase()+'</option>';
             });
@@ -302,7 +299,7 @@ $(document).on('change', '#repdesc1', function(){
             var serial = $.map(data, function(value, index) {
                 return [value];
             });
-            serialOp+='<option selected value="select" disabled>select serial</option>';
+            serialOp+='<option selected disabled>select serial</option>';
             serial.forEach(value => {
                 serialOp+='<option value="'+value.id+'">'+value.serial+'</option>';
             });

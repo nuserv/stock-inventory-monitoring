@@ -60,7 +60,7 @@ $(document).on("click", "#loanTable tr", function () {
                 var serial = $.map(data, function(value, index) {
                     return [value];
                 });
-                serialOp+='<option selected value="select" disabled>select serial</option>';
+                serialOp+='<option selected disabled>select serial</option>';
                 serial.forEach(value => {
                     serialOp+='<option value="'+value.id+'">'+value.serial+'</option>';
                 });
@@ -241,7 +241,7 @@ $(document).on('change', '#loandesc1', function(){
                 var serial = $.map(data, function(value, index) {
                     return [value];
                 });
-                serialOp+='<option selected value="select" disabled>select serial</option>';
+                serialOp+='<option selected disabled>select serial</option>';
                 serial.forEach(value => {
                     serialOp+='<option value="'+value.id+'">'+value.serial+'</option>';
                 });
@@ -259,7 +259,7 @@ $(document).on('click', '.cancel', function(){
 
 $(document).on('change', '#loanbranch', function(){
     var id = $(this).val();
-    var itemOp ='<option selected value="select" disabled>select description</option>';
+    var itemOp ='<option selected disabled>select item description</option>';
     var catOp = " ";
     $.ajax({
         type:'get',
@@ -270,7 +270,7 @@ $(document).on('change', '#loanbranch', function(){
             var category = $.map(data, function(value, index) {
                 return [value];
             });
-            catOp+='<option selected value="select" disabled>select category</option>';
+            catOp+='<option selected disabled>select category</option>';
             category.forEach(value => {
                 catOp+='<option value="'+value.category_id+'">'+value.category.toUpperCase()+'</option>';
             });
@@ -301,7 +301,7 @@ $(document).on('change', '.loancategory', function(){
             var itemid = $.map(data, function(value, index) {
                 return [value];
             });
-            itemOp+='<option selected value="select" disabled>select description</option>';
+            itemOp+='<option selected disabled>select item description</option>';
             itemid.forEach(value => {
                 itemOp+='<option value="'+value.items_id+'">'+value.item.toUpperCase()+'</option>';
             });
@@ -367,7 +367,7 @@ $(document).on('click', '.add_item', function(){
             add++;
             $('#loanbranch').prop('disabled', true);
             $('#loan_sub_Btn').prop('disabled', false);
-            var additem = '<div class="row no-margin" id="outrow'+y+'"><div class="col-md-2 form-group"><select id="loanreqcategory'+y+'" class="form-control loancategory" row_count="'+y+'" style="color: black;"></select></div><div class="col-md-3 form-group"><select id="loanreqdesc'+y+'" class="form-control loandesc" row_count="'+y+'" style="color: black;"><option selected disabled>select description</option></select></div><div class="col-md-3 form-group"><input type="button" class="btn btn-primary add_item" id="add_item'+y+'" btn_id="'+y+'"class="button" value="Add Item"></div></div>';
+            var additem = '<div class="row no-margin" id="outrow'+y+'"><div class="col-md-2 form-group"><select id="loanreqcategory'+y+'" class="form-control loancategory" row_count="'+y+'" style="color: black;"></select></div><div class="col-md-3 form-group"><select id="loanreqdesc'+y+'" class="form-control loandesc" row_count="'+y+'" style="color: black;"><option selected disabled>select item description</option></select></div><div class="col-md-3 form-group"><input type="button" class="btn btn-primary add_item" id="add_item'+y+'" btn_id="'+y+'"class="button" value="Add Item"></div></div>';
             $(this).val('Remove');
             $('#loanreqcategory'+ rowcount).prop('disabled', true);
             $('#loanreqdesc'+ rowcount).prop('disabled', true);
@@ -382,7 +382,7 @@ $(document).on('click', '.add_item', function(){
             $('#loan_sub_Btn').prop('disabled', true);
         }
         $('#loanreqcategory'+rowcount).val('select category');
-        $('#loanreqdesc'+rowcount).val('select description');
+        $('#loanreqdesc'+rowcount).val('select item description');
         $('#loanreqcategory'+rowcount).prop('disabled', false);
         $('#loanreqdesc'+rowcount).prop('disabled', false);
         $('#outrow'+rowcount).hide();

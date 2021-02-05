@@ -38,6 +38,9 @@
                     background-repeat: no-repeat;
                     background-position: center;
                     }
+                input, select, textarea{
+                    color: black;
+                }
             </style>
         </head>
     

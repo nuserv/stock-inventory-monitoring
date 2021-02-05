@@ -33,14 +33,13 @@ $(document).on('change', '.goodcategory', function(){
             var category = $.map(data, function(value, index) {
                 return [value];
             });
-            catOp+='<option selected value="select" disabled>select description</option>';
+            catOp+='<option selected disabled>select item description</option>';
             category.forEach(value => {
                 catOp+='<option value="'+value.items_id+'">'+value.item.toUpperCase()+'</option>';
             });
             $("#gooddesc" + count).find('option').remove().end().append(catOp);
         },
     });
-    $('#gooddesc' + count).val('select description');
 });
 
 $(document).on('change', '.goodcustomer', function(){
@@ -57,14 +56,13 @@ $(document).on('change', '.goodcustomer', function(){
             var category = $.map(data, function(value, index) {
                 return [value];
             });
-            custOp+='<option selected value="select" disabled>select category</option>';
+            custOp+='<option selected disabled>select category</option>';
             category.forEach(value => {
                 custOp+='<option value="'+value.category_id+'">'+value.category.toUpperCase()+'</option>';
             });
             $("#goodcategory" + count).find('option').remove().end().append(custOp);
         },
     });
-    $('#goodcategory' + count).val('select category');
 });
 
 $(document).on('change', '.gooddesc', function(){
@@ -87,14 +85,13 @@ $(document).on('change', '.gooddesc', function(){
             var itemcode = $.map(data, function(value, index) {
                 return [value];
             });
-            serialOp+='<option selected value="select" disabled>select serial</option>';
+            serialOp+='<option selected disabled>select serial</option>';
             itemcode.forEach(value => {
                 serialOp+='<option value="'+value.id+'">'+value.serial.toUpperCase()+'</option>';
             });
             $("#goodserial" + count).find('option').remove().end().append(serialOp);
         },
     });
-    $('#goodserial' + count).val('select serial');
 });
 
 $(document).on('click', '.pout_add_item', function(){
@@ -102,7 +99,7 @@ $(document).on('click', '.pout_add_item', function(){
     if ($(this).val() == 'Add Item') {
         if($('#poutcategory'+ rowcount).val() && $('#poutdesc'+ rowcount).val() && $('#poutserial'+ rowcount).val()) {
             y++;
-            var additem = '<div class="row no-margin" id="poutrow'+y+'"><div class="col-md-2 form-group"><select id="poutcategory'+y+'" class="form-control poutcategory" row_count="'+y+'" style="color: black;"><option selected disabled>select category</option></select></div><div class="col-md-3 form-group"><select id="poutdesc'+y+'" class="form-control poutdesc" row_count="'+y+'" style="color: black;"><option selected disabled>select description</option></select></div><div class="col-md-2 form-group"><input type="text" id="poutserial'+y+'" class="form-control poutserial" row_count="'+y+'" style="color: black;" value="N/A"></div><div class="col-md-1 form-group"><input type="button" class="pout_add_item btn btn-xs btn-primary" btn_id="'+y+'" value="Add Item"></div></div>';
+            var additem = '<div class="row no-margin" id="poutrow'+y+'"><div class="col-md-2 form-group"><select id="poutcategory'+y+'" class="form-control poutcategory" row_count="'+y+'" style="color: black;"><option selected disabled>select category</option></select></div><div class="col-md-3 form-group"><select id="poutdesc'+y+'" class="form-control poutdesc" row_count="'+y+'" style="color: black;"><option selected disabled>select item description</option></select></div><div class="col-md-2 form-group"><input type="text" id="poutserial'+y+'" class="form-control poutserial" row_count="'+y+'" style="color: black;" value="N/A"></div><div class="col-md-1 form-group"><input type="button" class="pout_add_item btn btn-xs btn-primary" btn_id="'+y+'" value="Add Item"></div></div>';
             $(this).val('Remove');
             $('#poutcategory'+ rowcount).prop('disabled', true);
             $('#poutdesc'+ rowcount).prop('disabled', true);
@@ -116,13 +113,13 @@ $(document).on('click', '.pout_add_item', function(){
     }else{
         if (r == 20) {
             y++;
-            var additem = '<div class="row no-margin" id="poutrow'+y+'"><div class="col-md-2 form-group"><select id="poutcategory'+y+'" class="form-control poutcategory" row_count="'+y+'" style="color: black;"><option selected disabled>select category</option></select></div><div class="col-md-3 form-group"><select id="poutdesc'+y+'" class="form-control poutdesc" row_count="'+y+'" style="color: black;"><option selected disabled>select description</option></select></div><div class="col-md-2 form-group"><input type="text" id="poutserial'+y+'" class="form-control poutserial" row_count="'+y+'" style="color: black;" value="N/A"></div><div class="col-md-1 form-group"><input type="button" class="pout_add_item btn btn-xs btn-primary" btn_id="'+y+'" value="Add Item"></div></div>';
+            var additem = '<div class="row no-margin" id="poutrow'+y+'"><div class="col-md-2 form-group"><select id="poutcategory'+y+'" class="form-control poutcategory" row_count="'+y+'" style="color: black;"><option selected disabled>select category</option></select></div><div class="col-md-3 form-group"><select id="poutdesc'+y+'" class="form-control poutdesc" row_count="'+y+'" style="color: black;"><option selected disabled>select item description</option></select></div><div class="col-md-2 form-group"><input type="text" id="poutserial'+y+'" class="form-control poutserial" row_count="'+y+'" style="color: black;" value="N/A"></div><div class="col-md-1 form-group"><input type="button" class="pout_add_item btn btn-xs btn-primary" btn_id="'+y+'" value="Add Item"></div></div>';
             $('#poutfield').append(additem);
             $('#poutcategory'+ rowcount).find('option').clone().appendTo('#poutcategory'+y);
             r++;
         }
         $('#poutcategory'+rowcount).val('select category');
-        $('#poutdesc'+rowcount).val('select description');
+        $('#poutdesc'+rowcount).val('select item description');
         $('#poutserial'+rowcount).val('input serial');
         $('#poutcategory'+rowcount).prop('disabled', false);
         $('#poutdesc'+rowcount).prop('disabled', false);
@@ -188,7 +185,7 @@ $(document).on('click', '.good_add_item', function(){
     if ($(this).val() == 'Add Item') {
         if($('#goodserial'+ rowcount).val()){
             y++;
-            var additem = '<div class="row no-margin" id="goodrow'+y+'"><div class="col-md-3 form-group"><select id="goodcustomer'+y+'" class="form-control goodcustomer" row_count="'+y+'"><option selected disabled>select customer</option></select></div><div class="col-md-2 form-group"><select id="goodcategory'+y+'" class="form-control goodcategory" row_count="'+y+'"><option selected disabled>select category</option></select></div><div class="col-md-3 form-group"><select id="gooddesc'+y+'" class="form-control gooddesc" row_count="'+y+'"><option selected disabled>select description</option></select></div><div class="col-md-2 form-group"><select id="goodserial'+y+'" class="form-control goodserial" row_count="'+y+'"><option selected disabled>select serial</option></select></div><div class="col-md-1 form-group"><input type="button" class="good_add_item btn btn-xs btn-primary" btn_id="'+y+'" value="Add Item"></div></div>'
+            var additem = '<div class="row no-margin" id="goodrow'+y+'"><div class="col-md-3 form-group"><select id="goodcustomer'+y+'" class="form-control goodcustomer" row_count="'+y+'"><option selected disabled>select customer</option></select></div><div class="col-md-2 form-group"><select id="goodcategory'+y+'" class="form-control goodcategory" row_count="'+y+'"><option selected disabled>select category</option></select></div><div class="col-md-3 form-group"><select id="gooddesc'+y+'" class="form-control gooddesc" row_count="'+y+'"><option selected disabled>select item description</option></select></div><div class="col-md-2 form-group"><select id="goodserial'+y+'" class="form-control goodserial" row_count="'+y+'"><option selected disabled>select serial</option></select></div><div class="col-md-1 form-group"><input type="button" class="good_add_item btn btn-xs btn-primary" btn_id="'+y+'" value="Add Item"></div></div>'
             $(this).val('Remove');
             $('#goodcustomer'+ rowcount).prop('disabled', true);
             $('#goodcategory'+ rowcount).prop('disabled', true);
@@ -203,7 +200,7 @@ $(document).on('click', '.good_add_item', function(){
     }else{
         if (b == 10) {
             y++;
-            var additem = '<div class="row no-margin" id="goodrow'+y+'"><div class="col-md-3 form-group"><select id="goodcustomer'+y+'" class="form-control goodcustomer" row_count="'+y+'"><option selected disabled>select customer</option></select></div><div class="col-md-2 form-group"><select id="goodcategory'+y+'" class="form-control goodcategory" row_count="'+y+'"><option selected disabled>select category</option></select></div><div class="col-md-3 form-group"><select id="gooddesc'+y+'" class="form-control gooddesc" row_count="'+y+'"><option selected disabled>select description</option></select></div><div class="col-md-2 form-group"><select id="goodserial'+y+'" class="form-control goodserial" row_count="'+y+'"><option selected disabled>select serial</option></select></div><div class="col-md-1 form-group"><input type="button" class="good_add_item btn btn-xs btn-primary" btn_id="'+y+'" value="Add Item"></div></div>'
+            var additem = '<div class="row no-margin" id="goodrow'+y+'"><div class="col-md-3 form-group"><select id="goodcustomer'+y+'" class="form-control goodcustomer" row_count="'+y+'"><option selected disabled>select customer</option></select></div><div class="col-md-2 form-group"><select id="goodcategory'+y+'" class="form-control goodcategory" row_count="'+y+'"><option selected disabled>select category</option></select></div><div class="col-md-3 form-group"><select id="gooddesc'+y+'" class="form-control gooddesc" row_count="'+y+'"><option selected disabled>select item description</option></select></div><div class="col-md-2 form-group"><select id="goodserial'+y+'" class="form-control goodserial" row_count="'+y+'"><option selected disabled>select serial</option></select></div><div class="col-md-1 form-group"><input type="button" class="good_add_item btn btn-xs btn-primary" btn_id="'+y+'" value="Add Item"></div></div>'
             $('#service-unitfield').append(additem);
             $('#goodcustomer'+ rowcount).find('option').clone().appendTo('#goodcustomer'+y);
             b++;
@@ -329,12 +326,11 @@ $(document).on('change', '.poutcategory', function(){
             var itemcode = $.map(data, function(value, index) {
                 return [value];
             });
-            descOp+='<option selected value="select" disabled>select description</option>';
+            descOp+='<option selected disabled>select item description</option>';
             itemcode.forEach(value => {
                 descOp+='<option value="'+value.id+'">'+value.item.toUpperCase()+'</option>';
             });
             $("#poutdesc" + count).find('option').remove().end().append(descOp);
         },
     });
-    $('#poutdesc' + count).val('select description');
 });

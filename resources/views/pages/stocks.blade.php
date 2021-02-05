@@ -53,8 +53,12 @@
     </div>
 </div>
 <div class="d-flex">
+    @if(auth()->user()->hasAnyrole('Administrator'))
+        <input type="button" id="addCatBtn" class="btn btn-xs btn-primary" value="Add Category">&nbsp;&nbsp;
+        <input type="button" id="addCodeBtn" class="btn btn-xs btn-primary" value="Add Item Code">
+    @endif
     @if(auth()->user()->hasAnyrole('Administrator|Head'))
-        <input type="button" id="importBtn" class="btn btn-xs btn-primary ml-auto" value="IMPORT">&nbsp;
+        <input type="button" id="importBtn" class="btn btn-xs btn-primary ml-auto" value="IMPORT">&nbsp;&nbsp;
         <input type="button" id="addStockBtn" class="btn btn-xs btn-primary" value="ADD STOCK">
     @endif
 </div>

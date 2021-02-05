@@ -77,7 +77,7 @@
                     </div>
                     <div class="col-md-3 form-group">
                         <select id="desc1" style="color: black" class="form-control desc" row_count="1">
-                            <option selected disabled>select description</option>
+                            <option selected disabled>select item description</option>
                         </select>
                     </div>
                     <div class="col-md-2 form-group">

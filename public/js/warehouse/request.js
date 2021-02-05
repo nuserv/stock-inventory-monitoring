@@ -565,7 +565,7 @@ $(document).on('click', '#prcBtn', function(){
         if (rowselected[i].quantity <= rowselected[i].stock) {
             for(var e=0;e<rowselected[i].quantity;e++){
                 w++;
-                var additem = '<div class="row no-margin" id="row'+w+'"><div class="col-md-2 form-group"><select id="item'+w+'" class="form-control item" row_count="'+w+'" style="color:black"><option selected disabled>select item code</option><option value="'+rowselected[i].items_id+'">'+rowselected[i].items_id+'</option></select></div><div class="col-md-3 form-group"><select id="desc'+w+'" class="form-control desc" row_count="'+w+'" style="color:black"><option selected disabled>select description</option><option value="'+rowselected[i].items_id+'">'+rowselected[i].item_name+'</option></select></div><div class="col-md-2 form-group"><input type="text" class="form-control serial" row_count="'+w+'" id="serial'+w+'" placeholder="input serial" style="color:black" autocomplete="off" onkeypress="return event.charCode != 32"></div></div>'
+                var additem = '<div class="row no-margin" id="row'+w+'"><div class="col-md-2 form-group"><select id="item'+w+'" class="form-control item" row_count="'+w+'" style="color:black"><option selected disabled>select item code</option><option value="'+rowselected[i].items_id+'">'+rowselected[i].items_id+'</option></select></div><div class="col-md-3 form-group"><select id="desc'+w+'" class="form-control desc" row_count="'+w+'" style="color:black"><option selected disabled>select item description</option><option value="'+rowselected[i].items_id+'">'+rowselected[i].item_name+'</option></select></div><div class="col-md-2 form-group"><input type="text" class="form-control serial" row_count="'+w+'" id="serial'+w+'" placeholder="input serial" style="color:black" autocomplete="off" onkeypress="return event.charCode != 32"></div></div>'
                 $('#reqfield').append(additem);
                 $('#item'+w).val(rowselected[i].items_id);
                 $('#desc'+w).val(rowselected[i].items_id);
@@ -573,7 +573,7 @@ $(document).on('click', '#prcBtn', function(){
         }else if(rowselected[i].quantity > rowselected[i].stock){
             for(var e=0;e<rowselected[i].stock;e++){
                 w++;
-                var additem = '<div class="row no-margin" id="row'+w+'"><div class="col-md-2 form-group"><select id="item'+w+'" class="form-control item" row_count="'+w+'" style="color:black"><option selected disabled>select item code</option><option value="'+rowselected[i].items_id+'">'+rowselected[i].items_id+'</option></select></div><div class="col-md-3 form-group"><select id="desc'+w+'" class="form-control desc" row_count="'+w+'" style="color:black"><option selected disabled>select description</option><option value="'+rowselected[i].items_id+'">'+rowselected[i].item_name+'</option></select></div><div class="col-md-2 form-group"><input type="text" class="form-control serial" row_count="'+w+'" id="serial'+w+'" placeholder="input serial" style="color:black" autocomplete="off" onkeypress="return event.charCode != 32"></div></div>'
+                var additem = '<div class="row no-margin" id="row'+w+'"><div class="col-md-2 form-group"><select id="item'+w+'" class="form-control item" row_count="'+w+'" style="color:black"><option selected disabled>select item code</option><option value="'+rowselected[i].items_id+'">'+rowselected[i].items_id+'</option></select></div><div class="col-md-3 form-group"><select id="desc'+w+'" class="form-control desc" row_count="'+w+'" style="color:black"><option selected disabled>select item description</option><option value="'+rowselected[i].items_id+'">'+rowselected[i].item_name+'</option></select></div><div class="col-md-2 form-group"><input type="text" class="form-control serial" row_count="'+w+'" id="serial'+w+'" placeholder="input serial" style="color:black" autocomplete="off" onkeypress="return event.charCode != 32"></div></div>'
                 $('#reqfield').append(additem);
                 $('#item'+w).val(rowselected[i].items_id);
                 $('#desc'+w).val(rowselected[i].items_id);
@@ -601,7 +601,7 @@ $(document).on('click', '#prcBtn', function(){
             if (pcount != 0) {
                 for(var x=0;x<pcount;x++){
                     w++;
-                    var additem = '<div class="row no-margin" id="row'+w+'"><div class="col-md-2 form-group"><select id="category'+w+'" class="form-control category" row_count="'+w+'" style="color:black"></select></div><div class="col-md-2 form-group"><select id="item'+w+'" class="form-control item" row_count="'+w+'" style="color:black"><option selected disabled>select item code</option></select></div><div class="col-md-3 form-group"><select id="desc'+w+'" class="form-control desc" row_count="'+w+'" style="color:black"><option selected disabled>select description</option></select></div><div class="col-md-2 form-group"><input type="text" class="form-control serial" row_count="'+w+'" name="serial1" id="serial'+w+'" placeholder="input serial" style="color:black" autocomplete="off"></div><div class="col-md-1 form-group"><input type="button" class="add_item btn btn-xs btn-primary" btn_id="'+w+'" value="Add Item"></div></div>'
+                    var additem = '<div class="row no-margin" id="row'+w+'"><div class="col-md-2 form-group"><select id="category'+w+'" class="form-control category" row_count="'+w+'" style="color:black"></select></div><div class="col-md-2 form-group"><select id="item'+w+'" class="form-control item" row_count="'+w+'" style="color:black"><option selected disabled>select item code</option></select></div><div class="col-md-3 form-group"><select id="desc'+w+'" class="form-control desc" row_count="'+w+'" style="color:black"><option selected disabled>select item description</option></select></div><div class="col-md-2 form-group"><input type="text" class="form-control serial" row_count="'+w+'" name="serial1" id="serial'+w+'" placeholder="input serial" style="color:black" autocomplete="off"></div><div class="col-md-1 form-group"><input type="button" class="add_item btn btn-xs btn-primary" btn_id="'+w+'" value="Add Item"></div></div>'
                     $('#reqfield').append(additem);
                     var catop = " ";
                     $.ajax({
@@ -617,7 +617,7 @@ $(document).on('click', '#prcBtn', function(){
                         },
                         success:function(data)
                         {
-                            catop+='<option selected value="select" disabled>select category</option>';
+                            catop+='<option selected disabled>select category</option>';
                             for(var i=0;i<data.length;i++){
                                 catop+='<option value="'+data[i].id+'">'+data[i].category+'</option>';
                             }
@@ -632,7 +632,7 @@ $(document).on('click', '#prcBtn', function(){
                 for(var v=0;v<data.length;v++){
                     for(var x=0;x<data[v].quantity;x++){
                         w++;
-                        var additem = '<div class="row no-margin" id="row'+w+'"><div class="col-md-2 form-group"><select id="category'+w+'" class="form-control category" row_count="'+w+'" style="color:black"></select></div><div class="col-md-2 form-group"><select id="item'+w+'" class="form-control item" row_count="'+w+'" style="color:black"><option selected disabled>select item code</option></select></div><div class="col-md-3 form-group"><select id="desc'+w+'" class="form-control desc" row_count="'+w+'" style="color:black"><option selected disabled>select description</option></select></div><div class="col-md-2 form-group"><input type="text" class="form-control serial" row_count="'+w+'" name="serial'+w+'" id="serial'+w+'" placeholder="input serial" style="color:black" autocomplete="off"></div><div class="col-md-1 form-group"><input type="button" class="add_item btn btn-xs btn-primary" btn_id="'+w+'" value="Add Item"></div></div>'
+                        var additem = '<div class="row no-margin" id="row'+w+'"><div class="col-md-2 form-group"><select id="category'+w+'" class="form-control category" row_count="'+w+'" style="color:black"></select></div><div class="col-md-2 form-group"><select id="item'+w+'" class="form-control item" row_count="'+w+'" style="color:black"><option selected disabled>select item code</option></select></div><div class="col-md-3 form-group"><select id="desc'+w+'" class="form-control desc" row_count="'+w+'" style="color:black"><option selected disabled>select item description</option></select></div><div class="col-md-2 form-group"><input type="text" class="form-control serial" row_count="'+w+'" name="serial'+w+'" id="serial'+w+'" placeholder="input serial" style="color:black" autocomplete="off"></div><div class="col-md-1 form-group"><input type="button" class="add_item btn btn-xs btn-primary" btn_id="'+w+'" value="Add Item"></div></div>'
                         $('#reqfield').append(additem);
                         var catop = " ";
                         $.ajax({
@@ -648,7 +648,7 @@ $(document).on('click', '#prcBtn', function(){
                             },
                             success:function(data)
                             {
-                                catop+='<option selected value="select" disabled>select category</option>';
+                                catop+='<option selected disabled>select category</option>';
                                 for(var i=0;i<data.length;i++){
                                     catop+='<option value="'+data[i].id+'">'+data[i].category+'</option>';
                                 }
@@ -880,8 +880,8 @@ $(document).on('change', '.category', function(){
             var itemcode = $.map(data, function(value, index) {
                 return [value];
             });
-            codeOp+='<option selected value="select" disabled>select item code</option>';
-            descOp+='<option selected value="select" disabled>select description</option>';
+            codeOp+='<option selected disabled>select item code</option>';
+            descOp+='<option selected disabled>select item description</option>';
             itemcode.forEach(value => {
                 codeOp+='<option value="'+value.id+'">'+value.id+'</option>';
                 descOp+='<option value="'+value.id+'">'+value.item.toUpperCase()+'</option>';
@@ -890,8 +890,6 @@ $(document).on('change', '.category', function(){
             $("#desc" + count).find('option').remove().end().append(descOp);
         },
     });
-    $('#item' + count).val('select');
-    $('#desc' + count).val('select');
 });
 
 $(document).on('click', '.cancel', function(){

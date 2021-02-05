@@ -58,7 +58,7 @@ $(document).on("click", "#sUnitTable tr", function () {
             var itemcode = $.map(data, function(value, index) {
                 return [value];
             });
-            itemop+='<option selected value="select" disabled>select item description</option>';
+            itemop+='<option selected disabled>select item description</option>';
             itemcode.forEach(value => {
                 itemop+='<option value="'+value.id+'">'+value.item.toUpperCase()+'</option>';
             });

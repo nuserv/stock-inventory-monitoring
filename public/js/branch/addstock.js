@@ -48,8 +48,8 @@ $(document).on('change', '.category', function(){
             var itemcode = $.map(data, function(value, index) {
                 return [value];
             });
-            codeOp+='<option selected value="select" disabled>select item code</option>';
-            descOp+='<option selected value="select" disabled>select description</option>';
+            codeOp+='<option selected disabled>select item code</option>';
+            descOp+='<option selected disabled>select item description</option>';
             itemcode.forEach(value => {
                 codeOp+='<option value="'+value.id+'">'+value.id+'</option>';
                 descOp+='<option value="'+value.id+'">'+value.item.toUpperCase()+'</option>';
@@ -58,8 +58,7 @@ $(document).on('change', '.category', function(){
             $("#desc" + count).find('option').remove().end().append(descOp);
         },
     });
-    $('#item' + count).val('select itemcode');
-    $('#desc' + count).val('select description');
+    
 });
 
 $(document).on('change', '.item', function(){

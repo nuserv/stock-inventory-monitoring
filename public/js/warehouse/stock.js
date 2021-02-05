@@ -78,6 +78,9 @@ $(document).on("click", "#catTable tr", function () {
             "data": {
                 "data": 0,
                 "category": catdata.category_id 
+            },
+            error: function (data) {
+                alert(data.responseText);
             }
         },
         columns: [
@@ -146,8 +149,8 @@ $(document).on('change', '.category', function(){
             var itemcode = $.map(data, function(value, index) {
                 return [value];
             });
-            codeOp+='<option selected value="select" disabled>select item code</option>';
-            descOp+='<option selected value="select" disabled>select description</option>';
+            codeOp+='<option selected disabled>select item code</option>';
+            descOp+='<option selected disabled>select item description</option>';
             itemcode.forEach(value => {
                 codeOp+='<option value="'+value.id+'">'+value.id+'</option>';
                 descOp+='<option value="'+value.id+'">'+value.item.toUpperCase()+'</option>';
@@ -156,8 +159,7 @@ $(document).on('change', '.category', function(){
             $("#desc" + count).find('option').remove().end().append(descOp);
         },
     });
-    $('#item' + count).val('select itemcode');
-    $('#desc' + count).val('select description');
+    
 });
 
 $(document).on('click', '.add_item', function(){
@@ -168,7 +170,7 @@ $(document).on('click', '.add_item', function(){
         if($('#category'+ rowcount).val() && $('#item'+ rowcount).val() && $('#desc'+ rowcount).val() && $('#qty'+ rowcount).val() && $('#qty'+ rowcount).val() != 0 ) {
             y++;
             $('#sub_Btn').prop('disabled', false);
-            var additem = '<div class="row no-margin" id="row'+y+'"><div class="col-md-2 form-group"><select id="category'+y+'" class="form-control category" row_count="'+y+'"></select></div><div class="col-md-2 form-group"><select id="item'+y+'" class="form-control item" row_count="'+y+'"><option selected disabled>select item code</option></select></div><div class="col-md-3 form-group"><select id="desc'+y+'" class="form-control desc" row_count="'+y+'"><option selected disabled>select description</option></select></div><div class="col-md-1 form-group text-center"><input type="number" class="form-control" min="0" name="qty'+y+'" id="qty'+y+'" placeholder="0" style="color:black; width: 6em"></div><div class="col-md-2 form-group text-center"><input type="text" class="form-control" name="uom'+y+'" id="uom'+y+'" style="color:black;"readonly></div><div class="col-md-1 form-group"><input type="button" class="add_item btn btn-xs btn-primary" btn_id="'+y+'" value="Add Item"></div></div>'
+            var additem = '<div class="row no-margin" id="row'+y+'"><div class="col-md-2 form-group"><select id="category'+y+'" class="form-control category" row_count="'+y+'"></select></div><div class="col-md-2 form-group"><select id="item'+y+'" class="form-control item" row_count="'+y+'"><option selected disabled>select item code</option></select></div><div class="col-md-3 form-group"><select id="desc'+y+'" class="form-control desc" row_count="'+y+'"><option selected disabled>select item description</option></select></div><div class="col-md-1 form-group text-center"><input type="number" class="form-control" min="0" name="qty'+y+'" id="qty'+y+'" placeholder="0" style="color:black; width: 6em"></div><div class="col-md-2 form-group text-center"><input type="text" class="form-control" name="uom'+y+'" id="uom'+y+'" style="color:black;"readonly></div><div class="col-md-1 form-group"><input type="button" class="add_item btn btn-xs btn-primary" btn_id="'+y+'" value="Add Item"></div></div>'
             $(this).val('Remove');
             $('#category'+ rowcount).prop('disabled', true);
             $('#item'+ rowcount).prop('disabled', true);
@@ -185,14 +187,14 @@ $(document).on('click', '.add_item', function(){
     }else{
         if (r == 20) {
             y++;
-            var additem = '<div class="row no-margin" id="row'+y+'"><div class="col-md-2 form-group"><select id="category'+y+'" class="form-control category" row_count="'+y+'"></select></div><div class="col-md-2 form-group"><select id="item'+y+'" class="form-control item" row_count="'+y+'"><option selected disabled>select item code</option></select></div><div class="col-md-3 form-group"><select id="desc'+y+'" class="form-control desc" row_count="'+y+'"><option selected disabled>select description</option></select></div><div class="col-md-1 form-group text-center"><input type="number" class="form-control" min="0" name="qty'+y+'" id="qty'+y+'" placeholder="0" style="color:black; width: 6em"></div><div class="col-md-2 form-group text-center"><input type="text" class="form-control" name="uom'+y+'" id="uom'+y+'" style="color:black;"readonly></div><div class="col-md-1 form-group"><input type="button" class="add_item btn btn-xs btn-primary" btn_id="'+y+'" value="Add Item"></div></div>'
+            var additem = '<div class="row no-margin" id="row'+y+'"><div class="col-md-2 form-group"><select id="category'+y+'" class="form-control category" row_count="'+y+'"></select></div><div class="col-md-2 form-group"><select id="item'+y+'" class="form-control item" row_count="'+y+'"><option selected disabled>select item code</option></select></div><div class="col-md-3 form-group"><select id="desc'+y+'" class="form-control desc" row_count="'+y+'"><option selected disabled>select item description</option></select></div><div class="col-md-1 form-group text-center"><input type="number" class="form-control" min="0" name="qty'+y+'" id="qty'+y+'" placeholder="0" style="color:black; width: 6em"></div><div class="col-md-2 form-group text-center"><input type="text" class="form-control" name="uom'+y+'" id="uom'+y+'" style="color:black;"readonly></div><div class="col-md-1 form-group"><input type="button" class="add_item btn btn-xs btn-primary" btn_id="'+y+'" value="Add Item"></div></div>'
             $('#reqfield').append(additem);
             $('#category'+ rowcount).find('option').clone().appendTo('#category'+y);
             r++;
         }
         $('#category'+rowcount).val('select category');
         $('#item'+rowcount).val('select item code');
-        $('#desc'+rowcount).val('select description');
+        $('#desc'+rowcount).val('select item description');
         $('#category'+rowcount).prop('disabled', false);
         $('#item'+rowcount).prop('disabled', false);
         $('#desc'+rowcount).prop('disabled', false);
@@ -291,7 +293,7 @@ $(document).on('click', '.add_item-desc', function(){
         if($('#item-desc'+ rowcount).val() && $('#itemcat'+ rowcount).val() && $('#itemuom'+rowcount).val()){
         console.log(2);
         y++;
-            var additem = '<div class="row no-margin" id="itemrow'+y+'"><div class="col-md-4 form-group"><select id="itemcat'+y+'" class="form-control item-category" row_count="'+y+'"></select></div><div class="col-md-4"><input type="text" id="item-desc'+y+'" class="form-control" row_count="'+y+'" placeholder="Item Description"></div><div class="col-md-2"><select id="itemuom'+y+'" class="form-control item-uom" row_count="'+y+'"><option selected disabled>select uom</option><option value="Meter">Meter</option><option value="Unit">Unit</option><option value="Pcs">Pcs</option></select></div><div class="col-md-1 form-group"><input type="button" class="add_item-desc btn btn-xs btn-primary" btn_id="'+y+'" value="Add"></div></div>'
+            var additem = '<div class="row no-margin" id="itemrow'+y+'"><div class="col-md-4 form-group"><select id="itemcat'+y+'" class="form-control item-category" row_count="'+y+'"></select></div><div class="col-md-4"><input type="text" id="item-desc'+y+'" class="form-control" row_count="'+y+'" placeholder="Item Description"></div><div class="col-md-2"><select id="itemuom'+y+'" class="form-control item-uom" row_count="'+y+'"><option selected disabled>select uom</option><option value="Meter">Meter</option><option value="Unit">Unit</option><option value="Pc">Pc</option></select></div><div class="col-md-1 form-group"><input type="button" class="add_item-desc btn btn-xs btn-primary" btn_id="'+y+'" value="Add"></div></div>'
             $(this).val('Remove');
             $('#item-desc'+ rowcount).prop('disabled', true);
             $('#itemcat'+ rowcount).prop('disabled', true);
@@ -306,7 +308,7 @@ $(document).on('click', '.add_item-desc', function(){
     }else{
         if (b == 10) {
             y++;
-            var additem = '<div class="row no-margin" id="itemrow'+y+'"><div class="col-md-4 form-group"><select id="itemcat'+y+'" class="form-control item-category" row_count="'+y+'"></select></div><div class="col-md-4"><input type="text" id="item-desc'+y+'" class="form-control" row_count="'+y+'" placeholder="Item Description"></div><div class="col-md-2"><select id="itemuom'+y+'" class="form-control item-uom" row_count="'+y+'"><option selected disabled>select uom</option><option value="Meter">Meter</option><option value="Unit">Unit</option><option value="Pcs">Pcs</option></select></div><div class="col-md-1 form-group"><input type="button" class="add_item-desc btn btn-xs btn-primary" btn_id="'+y+'" value="Add"></div></div>'
+            var additem = '<div class="row no-margin" id="itemrow'+y+'"><div class="col-md-4 form-group"><select id="itemcat'+y+'" class="form-control item-category" row_count="'+y+'"></select></div><div class="col-md-4"><input type="text" id="item-desc'+y+'" class="form-control" row_count="'+y+'" placeholder="Item Description"></div><div class="col-md-2"><select id="itemuom'+y+'" class="form-control item-uom" row_count="'+y+'"><option selected disabled>select uom</option><option value="Meter">Meter</option><option value="Unit">Unit</option><option value="Pc">Pc</option></select></div><div class="col-md-1 form-group"><input type="button" class="add_item-desc btn btn-xs btn-primary" btn_id="'+y+'" value="Add"></div></div>'
             $('#itemfield').append(additem);
             $('#itemcat'+ rowcount).find('option').clone().appendTo('#itemcat'+y);
             b++;

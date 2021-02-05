@@ -579,7 +579,7 @@ $(document).on('click', '#reqBtn', function(){
             var category = $.map(data, function(value, index) {
                 return [value];
             });
-            catop+='<option selected value="select" disabled>select category</option>';
+            catop+='<option selected disabled>select category</option>';
             /*for(var i=0;i<data.length;i++){
             catop+='<option value="'+data[i].id+'">'+data[i].category.toUpperCase()+'</option>';
             }*/
@@ -600,7 +600,7 @@ $(document).on('click', '.add_item', function(){
             if($('#item'+rowcount).val()){
                 y++;
                 add++;
-                var additem = '<div class="row no-margin" id="row'+y+'"><div class="col-md-2 form-group"><select id="category'+y+'" style="color: black;" class="form-control category" row_count="'+y+'"></select></div><div class="col-md-2 form-group"><select id="item'+y+'" style="color: black;" class="form-control item" row_count="'+y+'"><option selected disabled>select item code</option></select></div><div class="col-md-3 form-group"><select id="desc'+y+'" class="form-control desc" style="color: black;" row_count="'+y+'"><option selected disabled>select description</option></select></div><div class="col-md-1 form-group"><input type="number" min="0" class="form-control" style="color: black; width: 6em" name="qty'+y+'" id="qty'+y+'" placeholder="0" disabled></div><div class="col-md-2 form-group text-center"><input type="text" class="form-control" name="uom'+y+'" id="uom'+y+'" style="color:black;"readonly></div><div class="col-md-1 form-group"><input type="button" class="add_item btn btn-xs btn-primary" btn_id="'+y+'" value="Add Item"></div></div>'
+                var additem = '<div class="row no-margin" id="row'+y+'"><div class="col-md-2 form-group"><select id="category'+y+'" style="color: black;" class="form-control category" row_count="'+y+'"></select></div><div class="col-md-2 form-group"><select id="item'+y+'" style="color: black;" class="form-control item" row_count="'+y+'"><option selected disabled>select item code</option></select></div><div class="col-md-3 form-group"><select id="desc'+y+'" class="form-control desc" style="color: black;" row_count="'+y+'"><option selected disabled>select item description</option></select></div><div class="col-md-1 form-group"><input type="number" min="0" class="form-control" style="color: black; width: 6em" name="qty'+y+'" id="qty'+y+'" placeholder="0" disabled></div><div class="col-md-2 form-group text-center"><input type="text" class="form-control" name="uom'+y+'" id="uom'+y+'" style="color:black;"readonly></div><div class="col-md-1 form-group"><input type="button" class="add_item btn btn-xs btn-primary" btn_id="'+y+'" value="Add Item"></div></div>'
                 $(this).val('Remove');
                 $('#category'+ rowcount).prop('disabled', true);
                 $('#item'+ rowcount).prop('disabled', true);
@@ -618,7 +618,7 @@ $(document).on('click', '.add_item', function(){
         add--;
         $('#category'+rowcount).val('select category');
         $('#item'+rowcount).val('select item code');
-        $('#desc'+rowcount).val('select description');
+        $('#desc'+rowcount).val('select item description');
         $('#serial'+rowcount).val('select serial');
         $('#category'+rowcount).prop('disabled', false);
         $('#item'+rowcount).prop('disabled', false);
@@ -743,8 +743,8 @@ $(document).on('change', '.category', function(){
             var itemcode = $.map(data, function(value, index) {
                 return [value];
             });
-            codeOp+='<option selected value="select" disabled>select item code</option>';
-            descOp+='<option selected value="select" disabled>select description</option>';
+            codeOp+='<option selected disabled>select item code</option>';
+            descOp+='<option selected disabled>select item description</option>';
             itemcode.forEach(value => {
                 codeOp+='<option value="'+value.id+'">'+value.id+'</option>';
                 descOp+='<option value="'+value.id+'">'+value.item.toUpperCase()+'</option>';
@@ -754,8 +754,6 @@ $(document).on('change', '.category', function(){
         },
     });
     
-    $('#item' + count).val('select item code');
-    $('#desc' + count).val('select description');
     $('#qty'+count).val('0');
 });
 
