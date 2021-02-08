@@ -1,7 +1,18 @@
 @extends('layouts.app')
 
 @section('content')
-
+@if (session('status'))
+    <div class="alert alert-success" role="alert">
+            {{ session('status') }}
+    </div>
+@endif
+@if ($errors->any())
+    <div class="alert alert-danger" role="alert">
+            @foreach ( $errors->all() as $error )
+                - {{$error}} not found. Import data failed<br>
+            @endforeach
+    </div>
+@endif
 </div>
 <div id="itemsearch">
     <input type="hidden" id="check" value="{{ $customers }}" />

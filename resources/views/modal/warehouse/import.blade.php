@@ -7,11 +7,13 @@
 
                 </button>
             </div>
-            <div class="modal-body" id="catfield">
-                <div class="row no-margin" id="catrow1">
-                    <form action="{{ route('stocks.upload') }}" method="post" enctype="multipart/form-data">
+            <div class="modal-body" id="import">
+                <div class="row no-margin" id="importrow">
+                    
+                    <form action="warehouse/import" method="post" enctype="multipart/form-data">
+                        @csrf
                         <div class="col-md-11 form-group">
-                            <input type="file" name="upload-file" class="form-control">
+                            <input type="file" name="upload" class="form-control" />
                         </div>
                         <div class="col-md-1 form-group">
                             <input type="submit" class="btn btn-xs btn-primary" value="Upload" name="submit">

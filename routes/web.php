@@ -91,6 +91,9 @@ Route::get('stocks', 'StockController@index')->name('stocks.index');
 Route::get('uom', 'StockController@uom')->middleware('ajax');
 Route::delete('def', 'StockController@def')->middleware('ajax');
 
+Route::post('/branch/import', 'ImportController@branchstore');
+Route::post('/warehouse/import', 'ImportController@warestore');
+
 
 Route::POST('storerreceived', 'StockRequestController@received')->middleware('ajax');
 Route::get('gen', 'StockRequestController@generateRandomNumber')->middleware('ajax');
