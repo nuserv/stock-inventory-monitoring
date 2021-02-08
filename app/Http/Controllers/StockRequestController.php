@@ -57,11 +57,6 @@ class StockRequestController extends Controller
         $itm =[];
         foreach ($initials as $initial) {
             //dd($initial->qty);
-            $itemcode = Stock::select('items_id as id', 'item')->where('stocks.status', 'in')
-                ->where('branch_id', auth()->user()->branch->id)
-                ->where('items_id', $initial->items_id)
-                ->join('items', 'items.id', '=', 'items_id')
-                ->first();
             //dd($itemcode);
             $count = Stock::where('stocks.status', 'in')
                 ->where('branch_id', auth()->user()->branch->id)
@@ -69,14 +64,22 @@ class StockRequestController extends Controller
                 ->count();
             //dd($count);
             //dd($count < $initial->qty);
-            if ($count < $initial->qty ) {
+            if ($count < $initial->qty) {
+                $itemcode = Item::select('id', 'item')->where('id', $initial->items_id)->first();
+                /*$itemcode = Stock::select('items_id as id', 'item')->where('stocks.status', 'in')
+                ->where('branch_id', auth()->user()->branch->id)
+                ->where('items_id', $initial->items_id)
+                ->join('items', 'items.id', '=', 'items_id')
+                ->first();*/
                 if(!in_array($itemcode, $icode)){
                     array_push($icode, $itemcode);
                     //dd($icode);
                 }
             }
         }
-        return response()->json($icode);
+
+        //dd($icode);
+        return response()->json(array_filter($icode));
     }
 
     public function getCatReq(Request $request){

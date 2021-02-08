@@ -271,11 +271,15 @@ class StockController extends Controller
             $count = Stock::where('stocks.status', 'in')
                 ->where('branch_id', auth()->user()->branch->id)
                 ->where('items_id', $initial->items_id)->count();
-            if ($count < $initial->qty ) {
-                $category = Stock::select('category_id as id', 'category')->where('stocks.status', 'in')
+            if ($count < $initial->qty) {
+                $category = Item::select('items.category_id as id', 'categories.category')
+                    ->where('items.id', $initial->items_id)
+                    ->join('categories', 'categories.id', '=', 'category_id')
+                    ->first();
+                /*$category = Stock::select('category_id as id', 'category')->where('stocks.status', 'in')
                 ->where('branch_id', auth()->user()->branch->id)
                 ->where('items_id', $initial->items_id)
-                ->join('categories', 'categories.id', '=', 'category_id')->first();
+                ->join('categories', 'categories.id', '=', 'category_id')->first();*/
                 if(!in_array($category, $cat)){
                     array_push($cat, $category);
                 }
@@ -290,14 +294,14 @@ class StockController extends Controller
         $add->category_id = $request->cat;
         $add->item = ucfirst($request->item);
         $add->UOM = ucfirst($request->uom);
-        $data = $add->save();
+        $add->save();
         $branches = Branch::all();
         foreach ($branches as $branchs) {
             $initial = new Initial;
             $initial->items_id = $add->id;
             $initial->branch_id = $branchs->id;
             $initial->qty = 1;
-            $initial->save();
+            $data = $initial->save();
         }
         return response()->json($data);
 
