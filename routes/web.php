@@ -108,8 +108,8 @@ Route::get('itemcode', 'StockRequestController@getItemCode')->middleware('ajax')
 Route::get('getcode', 'StockRequestController@getCode');//->middleware('ajax');
 //Route::get('read/{id}', 'StockRequestController@read')->name('stock.read');
 Route::delete('delete/{id}', 'StockRequestController@destroy')->middleware('ajax');
-Route::get('send/{id}', 'StockRequestController@getsendDetails')->middleware('ajax');
-Route::get('requests/{id}', 'StockRequestController@getRequestDetails')->middleware('ajax');
+Route::get('send/{id}', 'StockRequestController@getsendDetails');//->middleware('ajax');
+Route::get('requests/{id}', 'StockRequestController@getRequestDetails');//->middleware('ajax');
 Route::get('getrequests', 'StockRequestController@getReqDetails')->middleware('ajax');
 Route::get('prep/{id}', 'StockRequestController@prepitemdetails')->middleware('ajax');
 Route::get('requests', 'StockRequestController@getRequests')->middleware('ajax');

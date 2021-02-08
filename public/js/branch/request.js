@@ -52,7 +52,7 @@ $(document).ready(function()
             $('#msg').hide();
             $('#rec_Btn').hide();
             $('#del_Btn').attr('reqno', trdata.request_no);
-            Promise.all([pendingrequest()]).then(() => { 
+            Promise.all(pendingrequest()).then(() => { 
                 if (pendingreq.data().count() <= 10) {
                     $('table.requestDetails').dataTable().fnDestroy();
                     pendingreq = 
@@ -115,7 +115,7 @@ $(document).ready(function()
             $('#rec_Btn').show();
             $('#msg').show();
             $('#rec_Btn').prop('disabled', true);
-            Promise.all([sched()]).then(() => { 
+            Promise.all(sched()).then(() => { 
                 if (schedtable.data().count() <= 10) {
                     $('table.schedDetails').dataTable().fnDestroy();
                     schedtable = 
@@ -193,7 +193,7 @@ $(document).ready(function()
             $('#rec_Btn').show();
             $('#msg').show();
             $('#rec_Btn').prop('disabled', true);
-            Promise.all([incompleteschedtable()]).then(() => { 
+            Promise.all(incompleteschedtable()).then(() => { 
                 if (schedtable.data().count() <= 10) {
                     $('table.schedDetails').dataTable().fnDestroy();
                     schedtable = 
@@ -271,7 +271,7 @@ $(document).ready(function()
             $('#rec_Btn').show();
             $('#msg').show();
             $('#rec_Btn').prop('disabled', true);
-            Promise.all([rescheduleschedtable()]).then(() => { 
+            Promise.all(rescheduleschedtable()).then(() => { 
                 if (schedtable.data().count() <= 10) {
                     $('table.schedDetails').dataTable().fnDestroy();
                     schedtable = 
@@ -349,14 +349,14 @@ $(document).ready(function()
             $('#rec_Btn').show();
             $('#msg').show();
             $('#rec_Btn').prop('disabled', true);
-            Promise.all([partialschedtable()]).then(() => { 
+            Promise.all(partialschedtable()).then(() => {
                 if (schedtable.data().count() == 0) {
                     $('.sched').hide();
                     $('#msg').hide();
                     $('table.schedDetails').dataTable().fnDestroy();
                     $('table.schedDetails').hide();
                     $('table.requestDetails').show();
-                    Promise.all([partialrequesttable()]).then(() => {
+                    Promise.all(partialrequesttable()).then(() => {
                         if (requesttable.data().count() <= 10) {
                             $('table.requestDetails').dataTable().fnDestroy();
                             requesttable = $('table.requestDetails').DataTable({ 
