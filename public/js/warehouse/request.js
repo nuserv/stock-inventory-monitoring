@@ -144,7 +144,7 @@ $(document).ready(function()
             $('#unresolveBtn').hide();
             $('table.requestDetails').show();
             var pendreq;
-            Promise.all(pendingrequest()).then(() => { 
+            Promise.all([pendingrequest()]).then(() => { 
                 if (pendreq <= 10) {
                     $('table.requestDetails').dataTable().fnDestroy();
                     requestdetails = 
@@ -205,7 +205,7 @@ $(document).ready(function()
             $('#unresolveBtn').hide();
             $('table.requestDetails').show();
             var partreq;
-            Promise.all(partialrequest()).then(() => { 
+            Promise.all([partialrequest()]).then(() => { 
                 if (partreq <= 10) {
                     $('table.requestDetails').dataTable().fnDestroy();
                     requestdetails = 
@@ -257,6 +257,7 @@ $(document).ready(function()
                     success:function(data)
                     {
                         partreq = data.data.length;
+                        console.log(partreq);
                     },
                 });
             }
@@ -266,7 +267,7 @@ $(document).ready(function()
             $('#unresolveBtn').hide();
             $('table.schedDetails').show();
             var schedreq;
-            Promise.all(schedrequest()).then(() => {
+            Promise.all([schedrequest()]).then(() => {
                 if (schedreq <= 10) {
                     $('table.schedDetails').dataTable().fnDestroy();
                     scheddetails =
@@ -320,7 +321,7 @@ $(document).ready(function()
             $('#unresolveBtn').hide();
             $('table.schedDetails').show();
             var resched;
-            Promise.all(reschedrequest()).then(() => {
+            Promise.all([reschedrequest()]).then(() => {
                 if (resched <= 10) {
                     $('table.schedDetails').dataTable().fnDestroy();
                     scheddetails =
@@ -375,7 +376,7 @@ $(document).ready(function()
             $('table.requestDetails').hide();
             $('table.schedDetails').show();
             var incomp;
-            Promise.all(incompleterequest()).then(() => {
+            Promise.all([incompleterequest()]).then(() => {
                 if (incomp <= 10) {
                     $('table.schedDetails').dataTable().fnDestroy();
                     scheddetails =
