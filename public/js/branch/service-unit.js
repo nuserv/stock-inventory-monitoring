@@ -90,7 +90,7 @@ $(document).on('change', '#intype', function(){
 
     }else if ($(this).val() == 'replacement') {
         $('#indesc').hide();
-        $('#repdesc').val('select');
+        $('#repdesc').val('select item description');
         $('#repdesc').show();
         $('#repdesc').prop('disabled', false);
         $('#inserial').prop('disabled', true);
