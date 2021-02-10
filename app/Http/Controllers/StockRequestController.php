@@ -125,9 +125,31 @@ class StockRequestController extends Controller
         return response()->json($data);
     }
 
+    public function getcon(Request $request){
+        
+        $data = PreparedItem::select('id')->where('request_no', $request->reqno)->where('items_id', $request->itemsid)->get();
+        return response()->json($data);
+    }
+
     public function getsendDetails(Request $request, $id){
 
-        return DataTables::of(PreparedItem::where('request_no', $id)->get())
+        $consumable = PreparedItem::select('uom', 'prepared_items.id as id', 'items_id', 'request_no', 'serial', 'schedule')
+            ->where('request_no', $id)
+            ->whereNotin('uom', ['Unit'])
+            ->join('items', 'items.id', '=', 'items_id')
+            ->selectRaw('count(items_id) as quantity')
+            ->groupBy('items_id')
+            ->get();
+        $unit = PreparedItem::select('uom', 'prepared_items.id as id', 'items_id', 'request_no', 'serial', 'schedule')
+            ->where('request_no', $id)
+            ->whereNotin('uom', ['Pc', 'Meter'])
+            ->join('items', 'items.id', '=', 'items_id')
+            ->selectRaw('count(prepared_items.id) as quantity')
+            ->groupBy('prepared_items.id')
+            ->get();
+        $result = $unit->merge($consumable);
+
+        return DataTables::of($result)
 
         ->addColumn('item_name', function (PreparedItem $PreparedItem){
 
@@ -137,6 +159,15 @@ class StockRequestController extends Controller
         ->addColumn('serial', function (PreparedItem $PreparedItem){
 
             return strtoupper($PreparedItem->serial);
+        })
+
+        ->addColumn('quantity', function (PreparedItem $PreparedItem){
+
+            if ($PreparedItem->quantity != 1) {
+                return $PreparedItem->quantity.' - '.$PreparedItem->items->UOM.'s';
+            }else{
+                return $PreparedItem->quantity.' - '.$PreparedItem->items->UOM;
+            }
         })
 
         ->make(true);
@@ -208,8 +239,11 @@ class StockRequestController extends Controller
 
         ->addColumn('qty', function (RequestedItem $RequestedItem){
 
-            $uom = Item::select('UOM as uom')->where('id', $RequestedItem->items->id)->first();
-            return $RequestedItem->quantity. ' ' .$uom->uom;
+            if ($RequestedItem->quantity != 1) {
+                return $RequestedItem->quantity. ' ' .$RequestedItem->items->UOM.'s';
+            }else{
+                return $RequestedItem->quantity. ' ' .$RequestedItem->items->UOM;
+            }
         })
 
         ->addColumn('stock', function (RequestedItem $RequestedItem){
@@ -238,7 +272,11 @@ class StockRequestController extends Controller
             }else{
                 $stock = $data->stock;
             }
-            return $stock. ' ' . $uom->uom;
+            if ($stock != 1) {
+                return $stock. ' ' . $uom->uom.'s';
+            }else{
+                return $stock. ' ' . $uom->uom;
+            }
         })
 
         ->make(true);
@@ -421,7 +459,7 @@ class StockRequestController extends Controller
         if ($preparedItem) {
             $reqno = StockRequest::where('request_no', $request->reqno)->first();
             if ($reqno->status == 8) {
-                $request->status;
+                $reqno->status = $request->status;
             }else{
                 $reqno->status = 4;
             }

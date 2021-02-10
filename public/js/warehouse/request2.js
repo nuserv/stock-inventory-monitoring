@@ -1,7 +1,7 @@
 $(document).on('click', '.sub_Btn', function(){
     if ($('#datesched').val()) {
-        //$('#sendModal').toggle();
-        //$('#loading').show();
+        $('#sendModal').toggle();
+        $('#loading').show();
         pending = 0;
         for(var q=1;q<=w;q++){
             if (q<=w) {
@@ -136,7 +136,7 @@ $(document).on('click', '.sub_Btn', function(){
                     success:function()
                     {
                         console.log('success');
-                        //return window.location.href = '/print/'+$('#sreqno').val();
+                        return window.location.href = '/print/'+$('#sreqno').val();
                     },
                     error: function (data) {
                         alert(data.responseText);

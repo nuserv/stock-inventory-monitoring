@@ -114,6 +114,7 @@ $(document).ready(function()
                 columns: [
                     { data: 'items_id', name:'items_id'},
                     { data: 'item_name', name:'item_name'},
+                    { data: 'qty', name:'qty'},
                     { data: 'serial', name:'serial'}
                 ]
             });
@@ -284,6 +285,7 @@ $(document).ready(function()
                         columns: [
                             { data: 'items_id', name:'items_id'},
                             { data: 'item_name', name:'item_name'},
+                            { data: 'quantity', name:'quantity'},
                             { data: 'serial', name:'serial'}
                         ]
                     });
@@ -301,6 +303,7 @@ $(document).ready(function()
                         columns: [
                             { data: 'items_id', name:'items_id'},
                             { data: 'item_name', name:'item_name'},
+                            { data: 'quantity', name:'quantity'},
                             { data: 'serial', name:'serial'}
                         ]
                     });
@@ -338,6 +341,7 @@ $(document).ready(function()
                         columns: [
                             { data: 'items_id', name:'items_id'},
                             { data: 'item_name', name:'item_name'},
+                            { data: 'quantity', name:'quantity'},
                             { data: 'serial', name:'serial'}
                         ]
                     });
@@ -355,6 +359,7 @@ $(document).ready(function()
                         columns: [
                             { data: 'items_id', name:'items_id'},
                             { data: 'item_name', name:'item_name'},
+                            { data: 'quantity', name:'quantity'},
                             { data: 'serial', name:'serial'}
                         ]
                     });
@@ -393,6 +398,7 @@ $(document).ready(function()
                         columns: [
                             { data: 'items_id', name:'items_id'},
                             { data: 'item_name', name:'item_name'},
+                            { data: 'quantity', name:'quantity'},
                             { data: 'serial', name:'serial'}
                         ]
                     });
@@ -410,6 +416,7 @@ $(document).ready(function()
                         columns: [
                             { data: 'items_id', name:'items_id'},
                             { data: 'item_name', name:'item_name'},
+                            { data: 'quantity', name:'quantity'},
                             { data: 'serial', name:'serial'}
                         ]
                     });
@@ -513,8 +520,8 @@ $(document).on('click', '#prcBtn', function(){
         columns: [
             { data: 'items_id', name:'items_id'},
             { data: 'item_name', name:'item_name'},
-            { data: 'quantity', name:'quantity'},
-            { data: 'stock', name:'stock'}
+            { data: 'qty', name:'qty'},
+            { data: 'stockuom', name:'stockuom'}
         ]
     });
     var rowselected = requestdetails.rows( { selected: true } ).data();

@@ -4,6 +4,8 @@ var schedtable;
 var dtdata;
 var sub = 0;
 var add = 0;
+var test = 0;
+var datalength = 0;
 var pendingreq;
 $(document).ready(function()
 {
@@ -68,7 +70,7 @@ $(document).ready(function()
                         columns: [
                             { data: 'items_id', name:'items_id'},
                             { data: 'item_name', name:'item_name'},
-                            { data: 'quantity', name:'quantity'}
+                            { data: 'qty', name:'qty'}
                         ]
                     });
                 }else if (penreq > 10) {
@@ -85,7 +87,7 @@ $(document).ready(function()
                         columns: [
                             { data: 'items_id', name:'items_id'},
                             { data: 'item_name', name:'item_name'},
-                            { data: 'quantity', name:'quantity'}
+                            { data: 'qty', name:'qty'}
                         ]
                     });
                 }
@@ -127,6 +129,7 @@ $(document).ready(function()
                             { data: 'schedule', name:'schedule'},
                             { data: 'items_id', name:'items_id'},
                             { data: 'item_name', name:'item_name'},
+                            { data: 'quantity', name:'quantity'},
                             { data: 'serial', name:'serial'}
                         ],
                         select: {
@@ -149,6 +152,7 @@ $(document).ready(function()
                             { data: 'schedule', name:'schedule'},
                             { data: 'items_id', name:'items_id'},
                             { data: 'item_name', name:'item_name'},
+                            { data: 'quantity', name:'quantity'},
                             { data: 'serial', name:'serial'}
                         ],
                         select: {
@@ -194,6 +198,7 @@ $(document).ready(function()
                             { data: 'schedule', name:'schedule'},
                             { data: 'items_id', name:'items_id'},
                             { data: 'item_name', name:'item_name'},
+                            { data: 'quantity', name:'quantity'},
                             { data: 'serial', name:'serial'}
                         ],
                         select: {
@@ -216,6 +221,7 @@ $(document).ready(function()
                             { data: 'schedule', name:'schedule'},
                             { data: 'items_id', name:'items_id'},
                             { data: 'item_name', name:'item_name'},
+                            { data: 'quantity', name:'quantity'},
                             { data: 'serial', name:'serial'}
                         ],
                         select: {
@@ -261,6 +267,7 @@ $(document).ready(function()
                             { data: 'schedule', name:'schedule'},
                             { data: 'items_id', name:'items_id'},
                             { data: 'item_name', name:'item_name'},
+                            { data: 'quantity', name:'quantity'},
                             { data: 'serial', name:'serial'}
                         ],
                         select: {
@@ -283,6 +290,7 @@ $(document).ready(function()
                             { data: 'schedule', name:'schedule'},
                             { data: 'items_id', name:'items_id'},
                             { data: 'item_name', name:'item_name'},
+                            { data: 'quantity', name:'quantity'},
                             { data: 'serial', name:'serial'}
                         ],
                         select: {
@@ -300,27 +308,6 @@ $(document).ready(function()
                         resched = data.data.length;
                     },
                 });
-                
-                /*schedtable = 
-                $('table.schedDetails').DataTable({ 
-                    "dom": 'lrtp',
-                    "language": {
-                        "emptyTable": " "
-                    },
-                    processing: true,
-                    serverSide: true,
-                    ajax: "/send/"+trdata.request_no,
-                    
-                    columns: [
-                        { data: 'schedule', name:'schedule'},
-                        { data: 'items_id', name:'items_id'},
-                        { data: 'item_name', name:'item_name'},
-                        { data: 'serial', name:'serial'}
-                    ],
-                    select: {
-                        style: 'multi'
-                    }
-                });*/
             }
         }else if(trdata.status == 'PARTIAL'){
             $('table.requestDetails').hide();
@@ -354,7 +341,7 @@ $(document).ready(function()
                                 columns: [
                                     { data: 'items_id', name:'items_id'},
                                     { data: 'item_name', name:'item_name'},
-                                    { data: 'quantity', name:'quantity'}
+                                    { data: 'qty', name:'qty'}
                                 ]
                             });
                         }else if (requestdet > 10){
@@ -370,7 +357,7 @@ $(document).ready(function()
                                 columns: [
                                     { data: 'items_id', name:'items_id'},
                                     { data: 'item_name', name:'item_name'},
-                                    { data: 'quantity', name:'quantity'}
+                                    { data: 'qty', name:'qty'}
                                 ]
                             });
                         }
@@ -418,6 +405,7 @@ $(document).ready(function()
                             { data: 'schedule', name:'schedule'},
                             { data: 'items_id', name:'items_id'},
                             { data: 'item_name', name:'item_name'},
+                            { data: 'quantity', name:'quantity'},
                             { data: 'serial', name:'serial'}
                         ],
                         select: {
@@ -441,6 +429,7 @@ $(document).ready(function()
                             { data: 'schedule', name:'schedule'},
                             { data: 'items_id', name:'items_id'},
                             { data: 'item_name', name:'item_name'},
+                            { data: 'quantity', name:'quantity'},
                             { data: 'serial', name:'serial'}
                         ],
                         select: {
@@ -536,30 +525,91 @@ $(document).on('click', '#rec_Btn', function(){
     var datas = schedtable.rows( { selected: true } ).data();
     var id = [];
     if(datas.length > 0){
+        datalength = datas.length;
+        datalength--;
+        console.log(datalength+'-'+datas.length);
         for(var i=0;i<datas.length;i++){
-            id.push(datas[i].id);
-        }    
-        $.ajax({
-            url: 'storerreceived',
-            headers: {
-                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-            },
-            dataType: 'json',
-            type: 'POST',
-            async: false,
-            data: {
-                reqno : reqno,
-                id: id,
-                status: status,
-                sched: sched
-            },
-            success: function(){
-                location.reload();
-            },
-            error: function (data) {
-                alert(data.responseText);
+            test = i;
+            if (datas[i].uom == 'Unit' ) {
+                console.log('Unit'+i+datas[i].uom);
+                id.push(datas[i].id);
+                if (test == datalength) {
+                    console.log('tapos'+i+datalength);
+                    console.log(id+'dos');
+                    $.ajax({
+                        url: 'storerreceived',
+                        headers: {
+                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                        },
+                        dataType: 'json',
+                        type: 'POST',
+                        data: {
+                            reqno : reqno,
+                            id: id,
+                            status: status,
+                            sched: sched
+                        },
+                        success: function(){
+                            location.reload();
+                        },
+                        error: function (data) {
+                            alert(data.responseText);
+                        }
+                    });
+                }
+            }else if(datas[i].uom != 'Unit'){
+                var itemsid = datas[i].items_id;
+                console.log('consum'+i+datas[i].uom);
+                $.ajax({
+                    type:'get',
+                    url: 'getcon',
+                    dataType: 'json',
+                    data: {
+                        reqno : reqno,
+                        itemsid: itemsid                        
+                    },
+                    success:function(data)
+                    {
+                        console.log(data);
+                        data.forEach(value => {
+                            id.push(value.id);
+                        });
+                        console.log(id);
+                        if (test == datalength) {
+                            console.log('tapos'+i+'-'+datalength);
+                            console.log(id+'una');
+                            $.ajax({
+                                url: 'storerreceived',
+                                headers: {
+                                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                                },
+                                dataType: 'json',
+                                type: 'POST',
+                                data: {
+                                    reqno : reqno,
+                                    id: id,
+                                    status: status,
+                                    sched: sched
+                                },
+                                success: function(){
+                                    location.reload();
+                                },
+                                error: function (data) {
+                                    alert(data.responseText);
+                                }
+                            });
+                        }
+
+                    },
+                    error: function (data) {
+                        console.log(data.responseText);
+                        alert(data.responseText);
+                    }
+
+                });
             }
-        });
+            
+        }    
     }
 });
 
@@ -755,6 +805,14 @@ $(document).on('change', '.category', function(){
             });
             $("#item" + count).find('option').remove().end().append(codeOp);
             $("#desc" + count).find('option').remove().end().append(descOp);
+            itemcode.forEach(value => {
+                for(var g=1;g<=count;g++){
+                    if (value.id == $("#item" + g).val()) {
+                        $('#item'+count+' option[value='+value.id+']').remove()
+                        $('#desc'+count+' option[value='+value.id+']').remove()
+                    }
+                }
+            });
         },
     });
     
