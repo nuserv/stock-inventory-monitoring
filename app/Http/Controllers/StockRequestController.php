@@ -173,6 +173,11 @@ class StockRequestController extends Controller
     {
         return response()->json(RequestedItem::whereNot('status', 'delivered')->where('request_no', $request->reqno)->get());
     }
+
+    public function getuomq(Request $request)
+    {
+        return response()->json(RequestedItem::select('quantity', 'id')->where('request_no', $request->reqno)->where('items_id', $request->itemid)->first());
+    }
     
     public function updateRequestDetails(Request $request, $id)
     {
@@ -195,6 +200,18 @@ class StockRequestController extends Controller
             return strtoupper($RequestedItem->items->item);
         })
 
+        ->addColumn('uom', function (RequestedItem $RequestedItem){
+
+            $uom = Item::select('UOM as uom')->where('id', $RequestedItem->items->id)->first();
+            return $uom->uom;
+        })
+
+        ->addColumn('qty', function (RequestedItem $RequestedItem){
+
+            $uom = Item::select('UOM as uom')->where('id', $RequestedItem->items->id)->first();
+            return $RequestedItem->quantity. ' ' .$uom->uom;
+        })
+
         ->addColumn('stock', function (RequestedItem $RequestedItem){
             $data = Warehouse::select(\DB::raw('SUM(CASE WHEN status = \'in\' THEN 1 ELSE 0 END) as stock'))
                 ->where('status', 'in')
@@ -206,7 +223,22 @@ class StockRequestController extends Controller
             }else{
                 $stock = $data->stock;
             }
-            return strtoupper($stock);
+            return $stock;
+        })
+
+        ->addColumn('stockuom', function (RequestedItem $RequestedItem){
+            $uom = Item::select('UOM as uom')->where('id', $RequestedItem->items->id)->first();
+            $data = Warehouse::select(\DB::raw('SUM(CASE WHEN status = \'in\' THEN 1 ELSE 0 END) as stock'))
+                ->where('status', 'in')
+                ->where('items_id',$RequestedItem->items->id)
+                ->groupBy('items_id')
+                ->first();
+            if (!$data) {
+                $stock = 0;
+            }else{
+                $stock = $data->stock;
+            }
+            return $stock. ' ' . $uom->uom;
         })
 
         ->make(true);

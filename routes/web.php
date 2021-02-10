@@ -106,6 +106,7 @@ Route::get('getstock', 'StockRequestController@getStock')->middleware('ajax');
 Route::get('getserials', 'StockRequestController@getSerials')->middleware('ajax');
 Route::get('itemcode', 'StockRequestController@getItemCode')->middleware('ajax');
 Route::get('getcode', 'StockRequestController@getCode');//->middleware('ajax');
+Route::get('getuomq', 'StockRequestController@getuomq');//->middleware('ajax');
 //Route::get('read/{id}', 'StockRequestController@read')->name('stock.read');
 Route::delete('delete/{id}', 'StockRequestController@destroy')->middleware('ajax');
 Route::get('send/{id}', 'StockRequestController@getsendDetails');//->middleware('ajax');

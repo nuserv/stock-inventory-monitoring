@@ -2,6 +2,8 @@ var r = 1;
 var y = 1;
 var c = 1;
 var w = 0;
+var uomcount = 0;
+var uomarray = new Array();
 var bID;
 var sub = 0;
 var save = 0;
@@ -159,8 +161,8 @@ $(document).ready(function()
                         columns: [
                             { data: 'items_id', name:'items_id'},
                             { data: 'item_name', name:'item_name'},
-                            { data: 'quantity', name:'quantity'},
-                            { data: 'stock', name:'stock'}
+                            { data: 'qty', name:'qty'},
+                            { data: 'stockuom', name:'stockuom'}
                         ],
                         select: {
                             style: 'multi'
@@ -180,8 +182,8 @@ $(document).ready(function()
                         columns: [
                             { data: 'items_id', name:'items_id'},
                             { data: 'item_name', name:'item_name'},
-                            { data: 'quantity', name:'quantity'},
-                            { data: 'stock', name:'stock'}
+                            { data: 'qty', name:'qty'},
+                            { data: 'stockuom', name:'stockuom'}
                         ],
                         select: {
                             style: 'multi'
@@ -220,8 +222,8 @@ $(document).ready(function()
                         columns: [
                             { data: 'items_id', name:'items_id'},
                             { data: 'item_name', name:'item_name'},
-                            { data: 'quantity', name:'quantity'},
-                            { data: 'stock', name:'stock'}
+                            { data: 'qty', name:'qty'},
+                            { data: 'stockuom', name:'stockuom'}
                         ],
                         select: {
                             style: 'multi'
@@ -241,8 +243,8 @@ $(document).ready(function()
                         columns: [
                             { data: 'items_id', name:'items_id'},
                             { data: 'item_name', name:'item_name'},
-                            { data: 'quantity', name:'quantity'},
-                            { data: 'stock', name:'stock'}
+                            { data: 'qty', name:'qty'},
+                            { data: 'stockuom', name:'stockuom'}
                         ],
                         select: {
                             style: 'multi'
@@ -525,398 +527,43 @@ $(document).on('click', '#prcBtn', function(){
     }
  
     for(var i=0;i<rowcount;i++){
-        if (rowselected[i].quantity <= rowselected[i].stock) {
-            for(var e=0;e<rowselected[i].quantity;e++){
-                w++;
-                var additem = '<div class="row no-margin" id="row'+w+'"><div class="col-md-2 form-group"><select id="item'+w+'" class="form-control item" row_count="'+w+'" style="color:black"><option selected disabled>select item code</option><option value="'+rowselected[i].items_id+'">'+rowselected[i].items_id+'</option></select></div><div class="col-md-3 form-group"><select id="desc'+w+'" class="form-control desc" row_count="'+w+'" style="color:black"><option selected disabled>select item description</option><option value="'+rowselected[i].items_id+'">'+rowselected[i].item_name+'</option></select></div><div class="col-md-2 form-group"><input type="text" class="form-control serial" row_count="'+w+'" id="serial'+w+'" placeholder="input serial" style="color:black" autocomplete="off" onkeypress="return event.charCode != 32"></div></div>'
-                $('#reqfield').append(additem);
-                $('#item'+w).val(rowselected[i].items_id);
-                $('#desc'+w).val(rowselected[i].items_id);
+        if (rowselected[i].uom == 'Unit') {
+            if (rowselected[i].quantity <= rowselected[i].stock) {
+                for(var e=0;e<rowselected[i].quantity;e++){
+                    w++;
+                    var additem = '<div class="row no-margin" id="row'+w+'"><div class="col-md-2 form-group"><select id="item'+w+'" class="form-control item" row_count="'+w+'" style="color:black"><option selected disabled>select item code</option><option value="'+rowselected[i].items_id+'">'+rowselected[i].items_id+'</option></select></div><div class="col-md-3 form-group"><select id="desc'+w+'" class="form-control desc" row_count="'+w+'" style="color:black"><option selected disabled>select item description</option><option value="'+rowselected[i].items_id+'">'+rowselected[i].item_name+'</option></select></div><div class="col-md-2 form-group"><input type="text" class="form-control serial" row_count="'+w+'" id="serial'+w+'" placeholder="input serial" style="color:black" autocomplete="off" onkeypress="return event.charCode != 32"></div></div>'
+                    $('#reqfield').append(additem);
+                    $('#item'+w).val(rowselected[i].items_id);
+                    $('#desc'+w).val(rowselected[i].items_id);
+                }
+            }else if(rowselected[i].quantity > rowselected[i].stock){
+                for(var e=0;e<rowselected[i].stock;e++){
+                    w++;
+                    var additem = '<div class="row no-margin" id="row'+w+'"><div class="col-md-2 form-group"><select id="item'+w+'" class="form-control item" row_count="'+w+'" style="color:black"><option selected disabled>select item code</option><option value="'+rowselected[i].items_id+'">'+rowselected[i].items_id+'</option></select></div><div class="col-md-3 form-group"><select id="desc'+w+'" class="form-control desc" row_count="'+w+'" style="color:black"><option selected disabled>select item description</option><option value="'+rowselected[i].items_id+'">'+rowselected[i].item_name+'</option></select></div><div class="col-md-2 form-group"><input type="text" class="form-control serial" row_count="'+w+'" id="serial'+w+'" placeholder="input serial" style="color:black" autocomplete="off" onkeypress="return event.charCode != 32"></div></div>'
+                    $('#reqfield').append(additem);
+                    $('#item'+w).val(rowselected[i].items_id);
+                    $('#desc'+w).val(rowselected[i].items_id);
+                }
             }
-        }else if(rowselected[i].quantity > rowselected[i].stock){
-            for(var e=0;e<rowselected[i].stock;e++){
-                w++;
-                var additem = '<div class="row no-margin" id="row'+w+'"><div class="col-md-2 form-group"><select id="item'+w+'" class="form-control item" row_count="'+w+'" style="color:black"><option selected disabled>select item code</option><option value="'+rowselected[i].items_id+'">'+rowselected[i].items_id+'</option></select></div><div class="col-md-3 form-group"><select id="desc'+w+'" class="form-control desc" row_count="'+w+'" style="color:black"><option selected disabled>select item description</option><option value="'+rowselected[i].items_id+'">'+rowselected[i].item_name+'</option></select></div><div class="col-md-2 form-group"><input type="text" class="form-control serial" row_count="'+w+'" id="serial'+w+'" placeholder="input serial" style="color:black" autocomplete="off" onkeypress="return event.charCode != 32"></div></div>'
-                $('#reqfield').append(additem);
-                $('#item'+w).val(rowselected[i].items_id);
-                $('#desc'+w).val(rowselected[i].items_id);
+        }else{
+            if (rowselected[i].quantity <= rowselected[i].stock) {
+                var maxqty = rowselected[i].quantity;
+            }else{
+                var maxqty = rowselected[i].stock;
             }
+            w++;
+            uomcount = w;
+            uomarray.push(w);
+            var additem = '<div class="row no-margin" id="row'+w+'"><div class="col-md-2 form-group"><select id="item'+w+'" class="form-control item" row_count="'+w+'" style="color:black"><option selected disabled>select item code</option><option value="'+rowselected[i].items_id+'">'+rowselected[i].items_id+'</option></select></div><div class="col-md-3 form-group"><select id="desc'+w+'" class="form-control desc" row_count="'+w+'" style="color:black"><option selected disabled>select item description</option><option value="'+rowselected[i].items_id+'">'+rowselected[i].item_name+'</option></select></div><div class="col-md-2 form-group"><input type="text" class="form-control inputqty" row_count="'+w+'" id="inputqty'+w+'" maxlength="2" min="0" max="'+maxqty+'" value="0" style="color:black" onkeypress="return event.charCode >= 48 && event.charCode <= 57" onkeyup=imposeMinMax(this)></div><div class="col-md-2 form-group"><input type="text" class="form-control uom" row_count="'+w+'" id="uom'+w+'" value="'+rowselected[i].uom+'" style="color:black" autocomplete="off" disabled></div></div>'
+            $('#reqfield').append(additem);
+            $('#item'+w).val(rowselected[i].items_id);
+            $('#desc'+w).val(rowselected[i].items_id);
         }
     }
     $('#loading').hide();
     console.log('my'+w);
     $('#sendModal').modal('show');
 
-    /*$('table.prepDetails').dataTable().fnDestroy();
-    $.ajax({
-        url: "/getrequests/",
-        headers: {
-            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-        },
-        type: 'get',
-        dataType: 'json',
-        async:false,
-        data: {
-            reqno: $('#reqno').val(),
-        },
-        success:function(data)
-        {
-            if (pcount != 0) {
-                for(var x=0;x<pcount;x++){
-                    w++;
-                    var additem = '<div class="row no-margin" id="row'+w+'"><div class="col-md-2 form-group"><select id="category'+w+'" class="form-control category" row_count="'+w+'" style="color:black"></select></div><div class="col-md-2 form-group"><select id="item'+w+'" class="form-control item" row_count="'+w+'" style="color:black"><option selected disabled>select item code</option></select></div><div class="col-md-3 form-group"><select id="desc'+w+'" class="form-control desc" row_count="'+w+'" style="color:black"><option selected disabled>select item description</option></select></div><div class="col-md-2 form-group"><input type="text" class="form-control serial" row_count="'+w+'" name="serial1" id="serial'+w+'" placeholder="input serial" style="color:black" autocomplete="off"></div><div class="col-md-1 form-group"><input type="button" class="add_item btn btn-xs btn-primary" btn_id="'+w+'" value="Add Item"></div></div>'
-                    $('#reqfield').append(additem);
-                    var catop = " ";
-                    $.ajax({
-                        url: 'getcatreq',
-                        headers: {
-                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                        },
-                        dataType: 'json',
-                        type: 'get',
-                        async: false,
-                        data: {
-                            reqno: $('#reqno').val(),
-                        },
-                        success:function(data)
-                        {
-                            catop+='<option selected disabled>select category</option>';
-                            for(var i=0;i<data.length;i++){
-                                catop+='<option value="'+data[i].id+'">'+data[i].category+'</option>';
-                            }
-                            $("#category"+w).find('option').remove().end().append(catop);
-                        },
-                        error: function (data) {
-                            alert(data.responseText);
-                        }
-                    });
-                }
-            }else{
-                for(var v=0;v<data.length;v++){
-                    for(var x=0;x<data[v].quantity;x++){
-                        w++;
-                        var additem = '<div class="row no-margin" id="row'+w+'"><div class="col-md-2 form-group"><select id="category'+w+'" class="form-control category" row_count="'+w+'" style="color:black"></select></div><div class="col-md-2 form-group"><select id="item'+w+'" class="form-control item" row_count="'+w+'" style="color:black"><option selected disabled>select item code</option></select></div><div class="col-md-3 form-group"><select id="desc'+w+'" class="form-control desc" row_count="'+w+'" style="color:black"><option selected disabled>select item description</option></select></div><div class="col-md-2 form-group"><input type="text" class="form-control serial" row_count="'+w+'" name="serial'+w+'" id="serial'+w+'" placeholder="input serial" style="color:black" autocomplete="off"></div><div class="col-md-1 form-group"><input type="button" class="add_item btn btn-xs btn-primary" btn_id="'+w+'" value="Add Item"></div></div>'
-                        $('#reqfield').append(additem);
-                        var catop = " ";
-                        $.ajax({
-                            url: 'getcatreq',
-                            headers: {
-                                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                            },
-                            dataType: 'json',
-                            type: 'get',
-                            async: false,
-                            data: {
-                                reqno: $('#reqno').val(),
-                            },
-                            success:function(data)
-                            {
-                                catop+='<option selected disabled>select category</option>';
-                                for(var i=0;i<data.length;i++){
-                                    catop+='<option value="'+data[i].id+'">'+data[i].category+'</option>';
-                                }
-                                $("#category"+w).find('option').remove().end().append(catop);
-                            },
-                            error: function (data) {
-                                alert(data.responseText);
-                            }
-                        });
-                    }
-                }
-            }
-        },
-        error: function (data) {
-            alert(data.responseText);
-        }
-    });*/
 });
 
 
-$(document).on('click', '.sub_Btn', function(){
-    if ($('#datesched').val()) {
-        $('#sendModal').toggle();
-        $('#loading').show();
-        for(var q=1;q<=w;q++){
-            if ($('#serial'+q).val()) {
-                $.ajax({
-                    url: 'update',
-                    headers: {
-                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                    },
-                    dataType: 'json',
-                    type: 'PUT',
-                    data: {
-                        item: $('#item'+q).val(),
-                        serial: $('#serial'+q).val(),
-                        reqno: $('#sreqno').val(),
-                        branchid: bID,
-                        datesched: $('#datesched').val(),
-                        stat: "notok"
-                    },
-                    error: function (data) {
-                        alert(data.responseText);
-                        return false;
-                    }
-                });
-                $.ajax({
-                    url: 'update/'+$('#sreqno').val(),
-                    headers: {
-                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                    },
-                    dataType: 'json',
-                    type: 'PUT',
-                    data: {
-                        item: $('#item'+q).val(),
-                    },
-                    error: function (data) {
-                        alert(data.responseText);
-                        return false;
-                    }
-                });
-            }
-        }
-
-        if (pending != 0) {
-            var status = '8';
-        }else{
-            if (requestgo == true) {
-                var status = '1';
-            }else{
-                var status = '8';
-            }
-        }
-
-        $.ajax({
-            url: 'update',
-            headers: {
-                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-            },
-            type: 'PUT',
-            data: { 
-                reqno: $('#sreqno').val(),
-                datesched: $('#datesched').val(),
-                stat: "ok",
-                branchid: bID,
-                status: status
-            },
-            dataType: 'json',
-            success:function()
-            {
-                console.log('success');
-                return window.location.href = '/print/'+$('#sreqno').val();
-            },
-            error: function (data) {
-                alert(data.responseText);
-                return false;
-            }
-        });
-    }else{
-        alert("Please select schedule date!");
-    }
-
-    
-    //var self = $(clicked_element);
-    /*for(var i = 0; i <= 10; i++)
-    {
-        var random_string = generateRandomString(4);
-        console.log(random_string);
-    }
-    function generateRandomString(string_length)
-    {
-        var characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-        var string = 'HPH1005';
-        
-
-        for(var i = 0; i <= string_length; i++)
-        {
-            var rand = Math.round(Math.random() * (characters.length - 1));
-            var character = characters.substr(rand, 1);
-            string = string+character;
-        }
-
-        return string;
-    }*/
-});
-
-$(document).on('keyup', '.serial', function () {
-    pending = 0;
-    for(q=1;q<=w;q++){
-        if (!$('#serial'+q).val()) {
-            pending++;
-            $('#sub_Btn').prop('disabled', true);
-            check = false;
-            if (pending != w) {
-                check = true;
-                $('#sub_Btn').prop('disabled', false);
-            }
-        }
-        if (w == 1 && !$('#serial'+q).val()) {
-            $('#sub_Btn').prop('disabled', true);
-        }else if (w == 1 && $('#serial'+q).val()){
-            $('#sub_Btn').prop('disabled', false);
-        }
-    }
-});
-
-$(document).on('click', '#save_Btn', function(){
-    if (c == 1) {
-        alert('Add Item/s');
-        return false;
-    }
-    if (save > 0) {
-        return false;
-    }
-    var item = "";
-    var reqno = $('#sreqno').val();
-    var check = 1;
-    var q;
-    for(q=1;q<=y;q++){
-        if ($('#row'+q).is(":visible")) {
-            save++;
-            if ($('.add_item[btn_id=\''+q+'\']').val() == 'Remove') {
-                check++;
-                cat = $('#category'+q).val();
-                item = $('#item'+q).val();
-                desc = $('#desc'+q).val();
-                serial = $('#serial'+q).val();
-                branchid = bID;
-                $.ajax({
-                    url: 'update',
-                    headers: {
-                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                    },
-                    dataType: 'json',
-                    type: 'PUT',
-                    async: false,
-                    data: {
-                        item: item,
-                        serial: serial,
-                        reqno: reqno,
-                        branchid: branchid
-                    },
-                    success:function()
-                    {
-                    },
-                    error: function (data) {
-                        alert(data.responseText);
-                        return false;
-                    }
-                });
-            }
-        }
-        if (q == y) {
-            if (check > 1) {
-                window.location.href = '/request';
-            }
-        }
-    }
-    
-});
-
-
-$(document).on('change', '.desc', function(){
-    
-    var count = $(this).attr('row_count');
-    var id = $(this).val();
-    $('#item' + count).val(id);
-});
-
-$(document).on('change', '.item', function(){
-    var count = $(this).attr('row_count');
-    var id = $(this).val();
-    $('#desc' + count).val(id);
-});
-
-$(document).on('change', '.category', function(){
-    var codeOp = " ";
-    var descOp = " ";
-    var count = $(this).attr('row_count');
-    var id = $(this).val();
-    
-    $.ajax({
-        type:'get',
-        url:'itemcode',
-        data:{'id':id},
-        async: false,
-        success:function(data)
-        {
-            var itemcode = $.map(data, function(value, index) {
-                return [value];
-            });
-            codeOp+='<option selected disabled>select item code</option>';
-            descOp+='<option selected disabled>select item description</option>';
-            itemcode.forEach(value => {
-                codeOp+='<option value="'+value.id+'">'+value.id+'</option>';
-                descOp+='<option value="'+value.id+'">'+value.item.toUpperCase()+'</option>';
-            });
-            $("#item" + count).find('option').remove().end().append(codeOp);
-            $("#desc" + count).find('option').remove().end().append(descOp);
-        },
-    });
-});
-
-$(document).on('click', '.cancel', function(){
-    window.location.href = 'request';
-});
-
-$(document).on('click', '#printBtn', function(){
-    if ($('#printBtn').val() == "PRINT") {
-        window.location.href = '/print/'+$('#reqno').val();
-    }else if($('#printBtn').val() == "RESOLVE"){
-        $('#reschedModal').modal('show');
-    }
-});
-
-$(document).on('click', '#unresolveBtn', function(){
-    var status = "6";
-    var reqno = $('#reqno').val();
-    var stat = "resched";
-    $.ajax({
-        url: 'update',
-        headers: {
-            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-        },
-        type: 'PUT',
-        data: { 
-            reqno: reqno,
-            stat: stat,
-            status: status
-        },
-        dataType: 'json',
-        success:function()
-        {
-            window.location.href = '/print/'+$('#reqno').val();
-        },
-        error: function (data) {
-            alert(data.responseText);
-        }
-    });
-});
-
-$(document).on('click', '#resched_btn', function(){
-    var datesched = $('#resched').val();
-    var reqno = $('#reqno').val();
-    var stat = "resched";
-    var status = "5";
-    $.ajax({
-        url: 'update',
-        headers: {
-            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-        },
-        type: 'PUT',
-        data: { 
-            reqno: reqno,
-            datesched: datesched,
-            stat: stat,
-            status: status
-        },
-        dataType: 'json',
-        success:function()
-        {
-            window.location.href = '/print/'+$('#reqno').val();
-        },
-        error: function (data) {
-            alert(data.responseText);
-        }
-    });
-});

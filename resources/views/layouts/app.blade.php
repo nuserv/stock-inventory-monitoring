@@ -168,6 +168,7 @@
             @if(Request::is('request'))
                 @if(auth()->user()->hasAnyrole('Administrator', 'Encoder'))
                     <script src="{{asset('min/?f=js/warehouse/request.js')}}"></script>
+                    <script src="{{asset('min/?f=js/warehouse/request2.js')}}"></script>
                 @endif
                 @if(auth()->user()->hasrole('Viewer'))
                     <script src="{{asset('min/?f=js/request.js')}}"></script>
