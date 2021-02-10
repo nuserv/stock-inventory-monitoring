@@ -216,13 +216,39 @@ class HomeController extends Controller
     public function getprint(Request $request, $id)
     {
         $stock = StockRequest::where('request_no', $id)->first();
-        $prepared = PreparedItem::where('request_no', $id)
-            ->where('branch_id', $stock->branch_id)
-            ->where('schedule', $request->schedule)
-            ->join('items', 'items_id', '=', 'items.id')
-            ->get();
 
-        return DataTables::of($prepared)->make(true);
+        $consumable = PreparedItem::select('item', 'uom', 'prepared_items.id as id', 'items_id', 'request_no', 'serial', 'schedule')
+            ->where('branch_id', $stock->branch_id)
+            ->where('request_no', $id)
+            ->where('schedule', $request->schedule)
+            ->whereNotin('uom', ['Unit'])
+            ->join('items', 'items.id', '=', 'items_id')
+            ->selectRaw('count(items_id) as quantity')
+            ->groupBy('items_id')
+            ->get();
+        $unit = PreparedItem::select('item', 'uom', 'prepared_items.id as id', 'items_id', 'request_no', 'serial', 'schedule')
+            ->where('branch_id', $stock->branch_id)
+            ->where('request_no', $id)
+            ->where('schedule', $request->schedule)
+            ->whereNotin('uom', ['Pc', 'Meter'])
+            ->join('items', 'items.id', '=', 'items_id')
+            ->selectRaw('count(prepared_items.id) as quantity')
+            ->groupBy('prepared_items.id')
+            ->get();
+        $result = $unit->merge($consumable);
+
+        return DataTables::of($result)
+        
+        ->addColumn('quantity', function (PreparedItem $PreparedItem){
+
+            if ($PreparedItem->quantity != 1) {
+                return $PreparedItem->quantity.' - '.$PreparedItem->items->UOM.'s';
+            }else{
+                return $PreparedItem->quantity.' - '.$PreparedItem->items->UOM;
+            }
+        })
+
+        ->make(true);
     }
 
     public function save(Request $request){

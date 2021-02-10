@@ -52,6 +52,7 @@
             <th>Delivery Schedule</th>
             <th>Item Code</th>
             <th>Description</th>
+            <th>Qty - UOM</th>
             <th>Serial</th>
         </thead>
     </table>
