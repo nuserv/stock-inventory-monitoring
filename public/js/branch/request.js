@@ -524,18 +524,24 @@ $(document).on('click', '#rec_Btn', function(){
     }
     var datas = schedtable.rows( { selected: true } ).data();
     var id = [];
+    var eachcount = 0;
     if(datas.length > 0){
         datalength = datas.length;
         datalength--;
         console.log(datalength+'-'+datas.length);
-        for(var i=0;i<datas.length;i++){
-            test = i;
-            if (datas[i].uom == 'Unit' ) {
-                console.log('Unit'+i+datas[i].uom);
-                id.push(datas[i].id);
-                if (test == datalength) {
-                    console.log('tapos'+i+datalength);
-                    console.log(id+'dos');
+        var mydata = $.map(datas, function(value, index) {
+            return [value];
+        });
+        mydata.forEach(value => {
+        //for(var i=0;i<datas.length;i++){
+            //test = i;
+            eachcount++;
+            if (value.uom == 'Unit' ) {
+                console.log('Unit'+i+value.uom);
+                id.push(value.id);
+                if (eachcount == datas.length) {
+                    console.log('tapos'+eachcount);
+                    console.log(id+'dos'+datas.length);
                     $.ajax({
                         url: 'storerreceived',
                         headers: {
@@ -557,13 +563,14 @@ $(document).on('click', '#rec_Btn', function(){
                         }
                     });
                 }
-            }else if(datas[i].uom != 'Unit'){
-                var itemsid = datas[i].items_id;
-                console.log('consum'+i+datas[i].uom);
+            }else if(value.uom != 'Unit'){
+                var itemsid = value.items_id;
+                console.log('consum'+eachcount+value.uom);
                 $.ajax({
                     type:'get',
                     url: 'getcon',
                     dataType: 'json',
+                    async: false,
                     data: {
                         reqno : reqno,
                         itemsid: itemsid                        
@@ -571,12 +578,12 @@ $(document).on('click', '#rec_Btn', function(){
                     success:function(data)
                     {
                         console.log(data);
-                        data.forEach(value => {
-                            id.push(value.id);
+                        data.forEach(valv => {
+                            id.push(valv.id);
                         });
                         console.log(id);
-                        if (test == datalength) {
-                            console.log('tapos'+i+'-'+datalength);
+                        if (eachcount == datas.length) {
+                            console.log('tapos'+eachcount+'-'+datas.length);
                             console.log(id+'una');
                             $.ajax({
                                 url: 'storerreceived',
@@ -599,17 +606,15 @@ $(document).on('click', '#rec_Btn', function(){
                                 }
                             });
                         }
-
                     },
                     error: function (data) {
                         console.log(data.responseText);
                         alert(data.responseText);
                     }
-
                 });
             }
             
-        }    
+        });    
     }
 });
 
