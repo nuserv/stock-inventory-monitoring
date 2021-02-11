@@ -82,6 +82,7 @@ $(document).on("click", "#defectiveTable tr", function() {
         $('#submit_Btn').show();
     } else {
         $('#submit_Btn').hide();
+        $('#unrepair_Btn').hide();
     }
 
     $('#returnModal').modal({
