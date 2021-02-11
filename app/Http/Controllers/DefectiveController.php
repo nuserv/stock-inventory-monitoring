@@ -20,7 +20,6 @@ class DefectiveController extends Controller
     {
         $this->middleware('auth');
     }
-    
     public function index()
     {
         $title = 'Defective Unit/Parts';
@@ -31,7 +30,6 @@ class DefectiveController extends Controller
             return view('pages.warehouse.return', compact('users', 'title'));
         }
     }
-
     public function printtable()
     {
         $defective = Defective::select('defectives.updated_at', 'defectives.category_id', 'branch_id as branchid', 'defectives.id as id', 'items.item', 'items.id as itemid', 'defectives.serial', 'defectives.status')
@@ -39,7 +37,6 @@ class DefectiveController extends Controller
             ->join('items', 'defectives.items_id', '=', 'items.id')
             ->where('status', 'For receiving')
             ->get();
-        
         return DataTables::of($defective)
         ->addColumn('date', function (Defective $data){
             return $data->updated_at->toFormattedDateString().' '.$data->updated_at->toTimeString();
@@ -50,7 +47,6 @@ class DefectiveController extends Controller
         })
         ->make(true);
     }
-
     public function table()
     {
         $defective = Defective::select('defectives.updated_at', 'defectives.category_id', 'branch_id as branchid', 'defectives.id as id', 'items.item', 'items.id as itemid', 'defectives.serial', 'defectives.status')
@@ -58,19 +54,16 @@ class DefectiveController extends Controller
             ->join('items', 'defectives.items_id', '=', 'items.id')
             ->wherein('status', ['For return', 'For receiving'])
             ->get();
-            
         $waredef =Defective::select('branches.branch', 'defectives.category_id', 'branches.id as branchid', 'defectives.updated_at', 'defectives.id as id', 'items.item', 'items.id as itemid', 'defectives.serial', 'defectives.status')
             ->wherein('defectives.status', ['For receiving', 'Repaired', 'For Repair'])
             ->join('items', 'defectives.items_id', '=', 'items.id')
             ->join('branches', 'defectives.branch_id', '=', 'branches.id')
             ->get();
-
         $repair = Defective::select('branches.branch', 'defectives.category_id', 'branches.id as branchid', 'defectives.updated_at', 'defectives.id as id', 'items.item', 'items.id as itemid', 'defectives.serial', 'defectives.status')
             ->wherein('defectives.status', ['For repair', 'Repaired'])
             ->join('items', 'defectives.items_id', '=', 'items.id')
             ->join('branches', 'defectives.branch_id', '=', 'branches.id')
             ->get();
-        
         if (auth()->user()->branch->branch == 'Warehouse' && !auth()->user()->hasrole('Repair')) {
             $data = $waredef;
         }else if (auth()->user()->branch->branch == 'Warehouse' && auth()->user()->hasrole('Repair')){
@@ -78,22 +71,16 @@ class DefectiveController extends Controller
         }else{
             $data = $defective;
         }
-
         return DataTables::of($data)
-        
         ->addColumn('date', function (Defective $data){
             return $data->updated_at->toFormattedDateString().' '.$data->updated_at->toTimeString();
         })
-
         ->addColumn('category', function (Defective $data){
             $cat = Category::where('id', $data->category_id)->first();
             return $cat->category;
         })
-
-
         ->make(true);
     }
-
     public function unrepairable()
     {
         $repair = Defective::select('branches.branch', 'defectives.category_id', 'branches.id as branchid', 'defectives.updated_at', 'defectives.id as id', 'items.item', 'items.id as itemid', 'defectives.serial', 'defectives.status')
@@ -101,24 +88,18 @@ class DefectiveController extends Controller
             ->join('items', 'defectives.items_id', '=', 'items.id')
             ->join('branches', 'defectives.branch_id', '=', 'branches.id')
             ->get();
-        
         return DataTables::of($repair)
-        
         ->addColumn('date', function (Defective $data){
             return $data->updated_at->toFormattedDateString().' '.$data->updated_at->toTimeString();
         })
-
         ->addColumn('category', function (Defective $data){
             $cat = Category::where('id', $data->category_id)->first();
             return $cat->category;
         })
-        
         ->make(true);
     }
-
     public function update(Request $request)
     {
-
         if (auth()->user()->branch->branch != 'Warehouse') {
             $branch = Branch::where('id', auth()->user()->branch->id)->first();
             foreach ($request->id as $id) {
@@ -128,19 +109,14 @@ class DefectiveController extends Controller
                     ->first();
                 $updates->status = 'For receiving';
                 $updates->user_id = auth()->user()->id;
-
                 $items = Item::where('id', $updates->items_id)->first();
-                
                 $log = new UserLog;
                 $log->activity = "Return defective $items->item(S/N: $updates->serial) to warehouse." ;
                 $log->user_id = auth()->user()->id;
                 $log->save();
-
                 $updates->save();
             }
-            
             return response()->json($updates);
-
         }else{
             if ($request->status == 'Received') {
                 $update = Defective::where('id', $request->id)
@@ -149,7 +125,6 @@ class DefectiveController extends Controller
                     ->first();
                 $item = Item::where('id', $update->items_id)->first();
                 $branch = Branch::where('id', $update->branch_id)->first();
-
                 $log = new UserLog;
                 $log->activity = "Received defective $item->item($update->serial) from $branch->branch." ;
                 $log->user_id = auth()->user()->id;
@@ -158,9 +133,7 @@ class DefectiveController extends Controller
                 $update->user_id = auth()->user()->id;
                 $data = $update->save();
                 return response()->json($data);
-
             }
-
             if ($request->status == 'Repaired') {
                 $repaired = Defective::where('id', $request->id)
                     ->where('branch_id', $request->branch)
@@ -168,20 +141,15 @@ class DefectiveController extends Controller
                     ->first();
                 $repaired->status = "Repaired";
                 $repaired->save();
-
                 $item = Item::where('id', $repaired->items_id)->first();
                 $cat = Category::where('id', $item->category_id)->first();
-
                 $log = new UserLog;
                 $log->activity = "Repaired $item->item($repaired->serial) and send to Warehouse." ;
                 $log->user_id = auth()->user()->id;
                 $repaired->save();
-
                 $data = $log->save();
                 return response()->json($data);
-
             }
-
             if ($request->status == 'warehouse') {
                 $pending = Defective::where('id', $request->id)
                     ->where('branch_id', $request->branch)
@@ -194,22 +162,16 @@ class DefectiveController extends Controller
                 $stock->serial = '-';
                 $stock->status = 'in';
                 $stock->save();
-
                 $pending->status = "warehouse";
-
                 $item = Item::where('id', $pending->items_id)->first();
                 $cat = Category::where('id', $item->category_id)->first();
-
                 $log = new UserLog;
                 $log->activity = "Add $item->item($pending->serial) from Repair to Stock." ;
                 $log->user_id = auth()->user()->id;
                 $pending->save();
-
                 $data = $log->save();
                 return response()->json($data);
-
             }
-
             if ($request->status == 'unrepairable') {
                 $unreapairable = Defective::where('id', $request->id)
                     ->where('branch_id', $request->branch)
@@ -217,15 +179,12 @@ class DefectiveController extends Controller
                     ->first();
                 $unreapairable->status = "unrepairable";
                 $unreapairable->save();
-
                 $item = Item::where('id', $unreapairable->items_id)->first();
                 $cat = Category::where('id', $item->category_id)->first();
-
                 $log = new UserLog;
                 $log->activity = "Marked $item->item($unreapairable->serial) as unreapairabled." ;
                 $log->user_id = auth()->user()->id;
                 $unreapairable->save();
-
                 $data = $log->save();
                 return response()->json($data);
             }

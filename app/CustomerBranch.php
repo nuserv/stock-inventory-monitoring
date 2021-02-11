@@ -8,7 +8,6 @@ class CustomerBranch extends Model
 {
 
     protected $guarded = [];
-
     public function customers()
     {
         return $this->belongsTo(Customer::class);

@@ -31,7 +31,6 @@ $(document).ready(function()
         ]
     });
 });
-
 $(document).on("click", "#loanTable tr", function () {
     var trdata = table.row(this).data();
     var id = trdata.id;
@@ -45,7 +44,6 @@ $(document).on("click", "#loanTable tr", function () {
     $('#myid').val(trdata.id);
     $('#branch_id').val(trdata.branchid);
     $('#branch').val(trdata.branch);
-    
     if (trdata.stat == 'IN-BOUND') {
         $('#serials').hide();
         $('#received_Btn').hide();
@@ -70,7 +68,6 @@ $(document).on("click", "#loanTable tr", function () {
                 alert(data.responseText);
             }
         });
-
         if (trdata.status != 'pending') {
             $('#submit_Btn').hide();
             $('#loanrow1').hide();
@@ -110,7 +107,6 @@ $(document).on("click", "#loanTable tr", function () {
     }
     $('#loansModal').modal({backdrop: 'static', keyboard: false});
 });
-
 $(document).on("click", "#submit_Btn", function () {
     var id = $('#myid').val();
     var item = $('#loanserial1').val();
@@ -134,7 +130,6 @@ $(document).on("click", "#submit_Btn", function () {
                 alert(data.responseText);
             }
         });
-
         $.ajax({
             url: 'loansapproved',
             headers: {
@@ -158,7 +153,6 @@ $(document).on("click", "#submit_Btn", function () {
     }
     
 });
-
 $(document).on("click", "#received_Btn", function () {
     var id = $('#myid').val();
     var branch = $('#branch_id').val();
@@ -179,7 +173,6 @@ $(document).on("click", "#received_Btn", function () {
                 alert(data.responseText);
             }
         });
-
         $.ajax({
             url: 'loansapproved',
             headers: {
@@ -190,7 +183,6 @@ $(document).on("click", "#received_Btn", function () {
             data: {
                 id: id,
                 status: status
-
             },
             success:function()
             {
@@ -201,9 +193,7 @@ $(document).on("click", "#received_Btn", function () {
             }
         });
     }
-    
 });
-
 $(document).on("click", "#del_Btn", function () {
     var id = $('#myid').val();
     var status = 'deleted';
@@ -227,32 +217,30 @@ $(document).on("click", "#del_Btn", function () {
         }
     });
 });
-
 $(document).on('change', '#loandesc1', function(){
     var id = $(this).val();
     var serialOp = " ";
     $.ajax({
-            type:'get',
-            url:'getserials',
-            data:{'id':id},
-            async: false,
-            success:function(data)
-            {
-                var serial = $.map(data, function(value, index) {
-                    return [value];
-                });
-                serialOp+='<option selected disabled>select serial</option>';
-                serial.forEach(value => {
-                    serialOp+='<option value="'+value.id+'">'+value.serial+'</option>';
-                });
-                $("#loanserial1").find('option').remove().end().append(serialOp);
-            },
-            error: function (data) {
-                alert(data.responseText);
-            }
-        });
+        type:'get',
+        url:'getserials',
+        data:{'id':id},
+        async: false,
+        success:function(data)
+        {
+            var serial = $.map(data, function(value, index) {
+                return [value];
+            });
+            serialOp+='<option selected disabled>select serial</option>';
+            serial.forEach(value => {
+                serialOp+='<option value="'+value.id+'">'+value.serial+'</option>';
+            });
+            $("#loanserial1").find('option').remove().end().append(serialOp);
+        },
+        error: function (data) {
+            alert(data.responseText);
+        }
+    });
 });
-
 $(document).on('click', '.cancel', function(){
     window.location.href = 'loans';
 });
@@ -281,9 +269,7 @@ $(document).on('change', '#loanbranch', function(){
             alert(data.responseText);
         }
     });
-
 });
-
 $(document).on('change', '.loancategory', function(){
     var catid = $(this).val();
     var branchid = $('#loanbranch').val();
@@ -313,7 +299,6 @@ $(document).on('change', '.loancategory', function(){
         }
     });
 });
-
 $(document).on('click', '#loan_sub_Btn', function(){
     if (add > 0) {
         for(var i=1;i<=y;i++){
@@ -342,11 +327,8 @@ $(document).on('click', '#loan_sub_Btn', function(){
                 });
             }
         }
-    }else{
-
     }
 });
-
 $(document).on('click', '#loan_Btn', function(){
     $.ajax({
         type:'get',
@@ -358,7 +340,6 @@ $(document).on('click', '#loan_Btn', function(){
     });
     $('#loanModal').modal({backdrop: 'static', keyboard: false});
 });
-
 $(document).on('click', '.add_item', function(){
     var rowcount = $(this).attr('btn_id');
     if ($(this).val() == 'Add Item') {

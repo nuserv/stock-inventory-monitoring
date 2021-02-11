@@ -23,13 +23,11 @@ class BranchController extends Controller
     {
         $this->middleware('auth');
     }
-
     public function index()
     {
         if (auth()->user()->hasanyrole('Repair')) {
             return redirect('/');
         }
-
         $branch = Branch::all()->sortBy('branch');
         $areas = Area::all();
         $title = 'Offices';
@@ -45,7 +43,6 @@ class BranchController extends Controller
 
     public function getStocks(Request $request, $id)
     {
-
         $details = DB::table('items')
             ->select(
                 'stocks.id',
@@ -64,20 +61,13 @@ class BranchController extends Controller
                 (
                     'SUM(CASE WHEN initials.qty = \'0\' THEN 0 ELSE initials.qty END) as initial'
                 )
-                #DB::raw
-                #(
-                #    'SUM(CASE WHEN stocks.status = \'in\' THEN 1 ELSE 0 END) + SUM(CASE WHEN stocks.status = \'service unit\' THEN 1 ELSE 0 END) as stock'
-                #)
             )
             ->join('stocks', 'stocks.items_id', '=', 'items.id')
             ->join('initials', 'initials.items_id', '=', 'items.id')
             ->where('stocks.branch_id', $id)
             ->groupBy('stocks.items_id')
             ->get();
-            
         if ($request->data != 1) {
-            
-            
             return DataTables::of(Category::all())
             ->addColumn('stock_out', function ($category) use ($id){
                     
@@ -90,11 +80,8 @@ class BranchController extends Controller
                         ->count();
                 }
                 return $stock_out;
-
             })
-
             ->addColumn('available', function ($category) use ($id){
-                    
                 if (auth()->user()->branch->id == 1 && $id == 1) {
                     $avail = Warehouse::where('status', 'in')
                         ->where('category_id', $category->id)
@@ -105,61 +92,46 @@ class BranchController extends Controller
                         ->where('category_id', $category->id)
                         ->count();
                 }
-                
                 return $avail;
             })
-
-            
             ->make(true);
-
         }else{ 
-        
             $stock = Item::where('category_id', $request->category)->get();
-
-
             return DataTables::of($stock)
-                ->addColumn('available', function ($item) use ($id){
-                        
-                    if (auth()->user()->branch->id == 1 && $id == 1) {
-                        $avail = Warehouse::where('status', 'in')
-                            ->where('items_id', $item->id)
-                            ->count();
-                        
-                    }else{
-                        $avail = Stock::where('status', 'in')
-                            ->where('branch_id', $id)
-                            ->where('items_id', $item->id)
-                            ->count();
-                    }
-                    return $avail.' '.$item->UOM;
-                })
-
-                ->addColumn('stock_out', function ($item) use ($id){
-                    
-                    if (auth()->user()->branch->id == 1 && $id == 1) {
-                        $stock_out = 0;
-                    }else{
-                        $stock_out = Stock::where('status', 'service unit')
-                            ->where('branch_id', $id)
-                            ->where('items_id', $item->id)
-                            ->count();
-                    }
-                    return $stock_out.' '.$item->UOM;
-    
-                })
-
-                ->addColumn('initial', function ($item) use ($id){
-
-                    $ini = Initial::select('qty')
+            ->addColumn('available', function ($item) use ($id){
+                if (auth()->user()->branch->id == 1 && $id == 1) {
+                    $avail = Warehouse::where('status', 'in')
                         ->where('items_id', $item->id)
+                        ->count();
+                }else{
+                    $avail = Stock::where('status', 'in')
                         ->where('branch_id', $id)
-                        ->first();
-                    return $ini->qty.' '.$item->UOM;
-                })
-                ->make(true);
+                        ->where('items_id', $item->id)
+                        ->count();
+                }
+                return $avail.' '.$item->UOM;
+            })
+            ->addColumn('stock_out', function ($item) use ($id){
+                if (auth()->user()->branch->id == 1 && $id == 1) {
+                    $stock_out = 0;
+                }else{
+                    $stock_out = Stock::where('status', 'service unit')
+                        ->where('branch_id', $id)
+                        ->where('items_id', $item->id)
+                        ->count();
+                }
+                return $stock_out.' '.$item->UOM;
+            })
+            ->addColumn('initial', function ($item) use ($id){
+                $ini = Initial::select('qty')
+                    ->where('items_id', $item->id)
+                    ->where('branch_id', $id)
+                    ->first();
+                return $ini->qty.' '.$item->UOM;
+            })
+            ->make(true);
         }
     }
-
     public function getBranches()
     {
         if (auth()->user()->hasrole('Administrator')) {
@@ -196,7 +168,6 @@ class BranchController extends Controller
         })
         ->make(true);
     }
-
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
@@ -208,12 +179,9 @@ class BranchController extends Controller
             'mobile' => ['required', 'string', 'min:8', 'max:255'],
             'status' => ['required', 'string', 'min:1', 'max:255'],
         ]);
-
         if ($validator->passes()) {
             $items = Item::all();
-
             $branch = new Branch;
-
             $branch->branch = ucwords(strtolower($request->input('branch_name')));
             $branch->email = strtolower($request->input('email'));
             $branch->address = $request->input('address');
@@ -234,7 +202,6 @@ class BranchController extends Controller
         }
         return response()->json(['error'=>$validator->errors()->all()]);
     }
-
     public function initial(Request $request)
     {
         $initial = Initial::where('items_id', $request->itemid)
@@ -242,10 +209,8 @@ class BranchController extends Controller
             ->first();
         $initial->qty = $request->qty;
         $data = $initial->save();
-
         return response()->json($data);
     }
-
     public function update(Request $request, $id)
     {
         $validator = Validator::make($request->all(), [
@@ -257,11 +222,8 @@ class BranchController extends Controller
             'mobile' => ['required', 'string', 'min:8', 'max:255'],
             'status' => ['required', 'string', 'min:1', 'max:255'],
         ]);
-
         if ($validator->passes()) {
-
             $branch = Branch::find($id);
-
             $branch->branch = ucwords(strtolower($request->input('branch_name')));
             $branch->email = $request->input('email');
             $branch->address = $request->input('address');
@@ -269,12 +231,9 @@ class BranchController extends Controller
             $branch->head = ucwords(strtolower($request->input('contact_person')));
             $branch->phone = $request->input('mobile');
             $branch->status = $request->input('status');
-
             $data = $branch->save();
-
             return response()->json($data);
         }
         return response()->json(['error'=>$validator->errors()->all()]);
     }
-
 }

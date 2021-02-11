@@ -32,7 +32,6 @@ $(document).ready(function()
                 "targets": [ 0 ],
                 "visible": false
             }
-
         ],
         ajax: {
             url: '/return-table',
@@ -56,7 +55,6 @@ $(document).ready(function()
             selector: 'td:first-child'
         }
     });
-
     $('#search-ic').on("click", function () { 
         for ( var i=1 ; i<=5 ; i++ ) {
             
@@ -66,15 +64,12 @@ $(document).ready(function()
             .draw();
         }
         $('.tbsearch').toggle();
-        
     });
-
     $('.filter-input').keyup(function() { 
         table.column( $(this).data('column'))
             .search( $(this).val())
             .draw();
     });
-
     var data = table.data();
     if(data.length > 0){
         for(var i=0;i<data.length;i++){
@@ -85,8 +80,6 @@ $(document).ready(function()
         }  
     }
 });
-
-
 $('table.defectiveTable').DataTable().on('select', function () {
     var rowselected = table.rows( { selected: true } ).data();
     if(rowselected.length > 0){
@@ -96,7 +89,6 @@ $('table.defectiveTable').DataTable().on('select', function () {
 
     table.button( 0 ).enable( selectedRows > 0 );
 });
-
 $('table.defectiveTable').DataTable().on('deselect', function () {
     var rowselected = table.rows( { selected: true } ).data();
     if ($('#returnBtn').val() == "SUBMIT") {
@@ -105,10 +97,8 @@ $('table.defectiveTable').DataTable().on('deselect', function () {
         }    
     }
     var selectedRows = table.rows( { selected: true } ).count();
-
     table.button( 0 ).enable( selectedRows > 0 );
 });
-
 $(document).on('click', '.printBtn', function () {
     var data = table.rows( { selected: true } ).data()
     var id = new Array();
@@ -157,7 +147,6 @@ $(document).on('click', '.printBtn', function () {
         }
     }); 
 });
-
 $(document).on('click', '#returnBtn', function(){
     var rowcount = table.data().count();
     var status = new Array();
@@ -276,19 +265,15 @@ $(document).on('click', '#returnBtn', function(){
         $('#loading').hide();
     }
 });
-
-
 $(document).on("click", "#defectiveTable tr", function () {
     if (table.row(this).data().status != "For return") {
         table.row($(this)).deselect()
     }
 });
-
 $(document).on('click', '#printBtn', function(){
     $('#loading').show();
     window.location.href = '/defective/print';
 });
-
 $(document).on('click', '#submit_Btn', function(){
     if (sub > 0) {
         return false;
@@ -324,11 +309,9 @@ $(document).on('click', '#submit_Btn', function(){
         }
     });
 });
-
 $(document).on('click', '.cancel', function(){
     window.location.href = 'return';
 });
-
 $(document).on('click', '.close', function(){
     table.draw();
     interval = setInterval(function(){

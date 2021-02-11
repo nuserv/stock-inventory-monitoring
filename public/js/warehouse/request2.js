@@ -58,10 +58,8 @@ $(document).on('click', '.sub_Btn', function(){
                         },
                         success:function(data)
                         {
-                            console.log('dito');
                             if( ins < data.quantity){
                                 pending++;
-                                console.log('im '+pending);
                             }
                         },
                         error: function (data) {
@@ -108,7 +106,6 @@ $(document).on('click', '.sub_Btn', function(){
                 }
             }
             if (q == w) {
-                console.log('this ' +pending);
                 if (pending != 0) {
                     var status = '8';
                 }else{
@@ -118,7 +115,6 @@ $(document).on('click', '.sub_Btn', function(){
                         var status = '8';
                     }
                 }
-                console.log(status);
                 $.ajax({
                     url: 'update',
                     headers: {
@@ -135,7 +131,6 @@ $(document).on('click', '.sub_Btn', function(){
                     dataType: 'json',
                     success:function()
                     {
-                        console.log('success');
                         return window.location.href = '/print/'+$('#sreqno').val();
                     },
                     error: function (data) {
@@ -183,7 +178,6 @@ $(document).on('keyup', '.serial', function () {
                     {
                         if( ins < data.quantity){
                             pending++;
-                            console.log('me'+pending);
                         }
                     },
                     error: function (data) {
@@ -412,7 +406,6 @@ function imposeMinMax(el){
                     {
                         if( ins < data.quantity){
                             pending++;
-                            console.log('me'+pending);
                         }
                     },
                     error: function (data) {

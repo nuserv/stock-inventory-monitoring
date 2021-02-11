@@ -7,9 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class StockRequest extends Model
 {
     protected $guarded = [];
-
     protected $table = 'requests';
-
     public function user()
     {
         return $this->belongsTo(User::class);
@@ -18,12 +16,10 @@ class StockRequest extends Model
     {
         return $this->belongsTo(Branch::class);
     }
-
     public function area()
     {
         return $this->belongsTo(Area::class);
     }
-
     public function RequestedItems()
     {
         return $this->hasMany(RequestedItem::class);

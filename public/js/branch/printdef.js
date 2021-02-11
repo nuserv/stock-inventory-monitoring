@@ -87,7 +87,6 @@ $(document).ready(function()
                             return true;
 
                             return false;
-                            
                         }
                     },
                     init: function(api, node, config) {$(node).removeClass('dt-button')}    
@@ -95,33 +94,26 @@ $(document).ready(function()
             ]
         }
     });
-
     table.on( 'select deselect', function () {
         var selectedRows = table.rows( { selected: true } ).count();
  
         table.button( 0 ).enable( selectedRows > 0 );
-    } );
-
+    });
     table.buttons().container().appendTo('div.panel-heading');
 });
-
 $('table.defectiveTable').DataTable().on('select', function () {
     var rowselected = table.rows( { selected: true } ).data();
     if(rowselected.length > 0){
         $('#printBtn').prop('disabled', false);
     }
 });
-
 $('table.defectiveTable').DataTable().on('deselect', function () {
     var rowselected = table.rows( { selected: true } ).data();
     if(rowselected.length == 0){
         $('#printBtn').prop('disabled', true);
     }
 });
-
 $(document).on('click', '#printBtn', function(){
-    //table.rows( { selected: true } ).data()
-    //table.row('.selected').remove().draw( false );
     $('#loading').show();
     var rowcount = table.data().count();
     var rows = table.rows( '.selected' ).data();
@@ -133,9 +125,7 @@ $(document).on('click', '#printBtn', function(){
     for(var i=0;i<rowcount;i++){
         if ($.inArray(table.rows( i ).data()[0].id, id) == -1)
         {
-            //id.push(table.rows( i ).data()[0].id);
             ids.push(i);
-            
         }
     }
     table.rows( ids ).remove().draw();

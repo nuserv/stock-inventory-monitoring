@@ -109,7 +109,6 @@ $(document).on('change', '.item', function(){
         },
         success:function(data)
         {
-            console.log(data);
             $('#uom'+count).val(data);
         },
     });
@@ -127,7 +126,6 @@ $(document).on('change', '.desc', function(){
         },
         success:function(data)
         {
-            console.log(data);
             $('#uom'+count).val(data);
         },
     });
@@ -163,10 +161,8 @@ $(document).on('change', '.category', function(){
 });
 
 $(document).on('click', '.add_item', function(){
-    console.log('test1');
     var rowcount = $(this).attr('btn_id');
     if ($(this).val() == 'Add Item') {
-        console.log('test1');
         if($('#category'+ rowcount).val() && $('#item'+ rowcount).val() && $('#desc'+ rowcount).val() && $('#qty'+ rowcount).val() && $('#qty'+ rowcount).val() != 0 ) {
             y++;
             $('#sub_Btn').prop('disabled', false);
@@ -289,9 +285,7 @@ $(document).on('click', '.add_cat', function(){
 $(document).on('click', '.add_item-desc', function(){
     var rowcount = $(this).attr('btn_id');
     if ($(this).val() == 'Add') {
-        console.log(1);
         if($('#item-desc'+ rowcount).val() && $('#itemcat'+ rowcount).val() && $('#itemuom'+rowcount).val()){
-        console.log(2);
         y++;
             var additem = '<div class="row no-margin" id="itemrow'+y+'"><div class="col-md-4 form-group"><select id="itemcat'+y+'" class="form-control item-category" row_count="'+y+'"></select></div><div class="col-md-4"><input type="text" id="item-desc'+y+'" class="form-control" row_count="'+y+'" placeholder="Item Description"></div><div class="col-md-2"><select id="itemuom'+y+'" class="form-control item-uom" row_count="'+y+'"><option selected disabled>select uom</option><option value="Meter">Meter</option><option value="Unit">Unit</option><option value="Pc">Pc</option></select></div><div class="col-md-1 form-group"><input type="button" class="add_item-desc btn btn-xs btn-primary" btn_id="'+y+'" value="Add"></div></div>'
             $(this).val('Remove');
@@ -299,7 +293,6 @@ $(document).on('click', '.add_item-desc', function(){
             $('#itemcat'+ rowcount).prop('disabled', true);
             $('#itemuom'+ rowcount).prop('disabled', true);
             if (b < 10 ) {
-        console.log(3);
         $('#itemfield').append(additem);
                 $('#itemcat'+ rowcount).find('option').clone().appendTo('#itemcat'+y);
                 b++;

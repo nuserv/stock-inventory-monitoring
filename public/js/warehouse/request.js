@@ -260,7 +260,6 @@ $(document).ready(function()
                     success:function(data)
                     {
                         partreq = data.data.length;
-                        console.log(partreq);
                     },
                 });
             }
@@ -568,7 +567,6 @@ $(document).on('click', '#prcBtn', function(){
         }
     }
     $('#loading').hide();
-    console.log('my'+w);
     $('#sendModal').modal('show');
 
 });

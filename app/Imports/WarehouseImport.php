@@ -15,7 +15,6 @@ class WarehouseImport implements ToModel, WithStartRow
     public function model(array $row)
     {
     }
-
     public function startRow(): int
     {
         return 2;

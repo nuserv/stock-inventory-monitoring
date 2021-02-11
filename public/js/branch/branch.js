@@ -17,11 +17,9 @@ $(document).on('click', function (e)
         }
     });
 });
-
 $(document).ready(function()
 {
     $('#saveBtn').hide();
-
     var table =
     $('table.branchTable').DataTable({ 
         "dom": 'lrtip',
@@ -42,7 +40,6 @@ $(document).ready(function()
             { data: 'address', name:'address', "width": "14%"}
         ]
     });
-
     $('#branchTable tbody').on('click', 'tr', function () { 
         var dtdata = $('#branchTable tbody tr:eq(0)').data();
         var trdata = table.row(this).data();
@@ -102,7 +99,6 @@ $(document).ready(function()
         $('#saveBtn').hide();
         $('#branchModal').modal('show');
     });
-
     $('#addBtn').on('click', function(){ 
         $('#branchModal').modal('show');
         $('#branch_name').val('');
@@ -124,7 +120,6 @@ $(document).ready(function()
         $('#saveBtn').show();
         $('#table').hide();
     });
-
     $('#editBtn').on('click', function(){
         $('#branch_name').prop('disabled', false);
         $('#address').prop('disabled', false);
@@ -136,7 +131,6 @@ $(document).ready(function()
         $('#editBtn').hide();
         $('#saveBtn').show();
     });
-
     $('#branchForm').on('submit', function(e){
         e.preventDefault();
         editBtn = $('#editBtn').val();
@@ -181,13 +175,11 @@ $(document).ready(function()
             });
         }
     });
-
     $('#filter').popover({ 
         html: true,
         sanitize: false,
         title: 'Filter Columns &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;',
     });
-
     $('#filter').on("click", function () { 
         for ( var i=1 ; i<=6 ; i++ ) {
             if (table.column( i ).visible()){
@@ -198,7 +190,6 @@ $(document).ready(function()
             }
         }
     });
-
     $('body').on('click', '.branchColumnCb', function(){ 
         var column = table.column( $(this).attr('data-column') );
         var colnum = $(this).attr('data-column');
@@ -207,41 +198,32 @@ $(document).ready(function()
             .columns(colnum).search( '' )
             .draw();
         column.visible( ! column.visible() );
-        
     });
-
     $('#search-ic').on("click", function () { 
         for ( var i=0 ; i<=6 ; i++ ) {
-            
             $('.fl-'+i).val('').change();
             table
             .columns(i).search( '' )
             .draw();
         }
         $('.tbsearch').toggle();
-        
     });
-
     $('.filter-input').keyup(function() { 
         table.column( $(this).data('column'))
             .search( $(this).val())
             .draw();
     });
-
     $('.mfilter-input').keyup(function() { 
         stockTable.column($(this).data('column'))
             .search($(this).val())
             .draw();
     });
-
     $('.cfilter-input').on('keyup', function() { 
         catstockTable.column($(this).data('column'))
             .search($(this).val())
             .draw();
     });
-
 });
-
 $(document).on('click', '#catbranchDetails tr', function(){
     var trdata = catstockTable.row(this).data();
     categid = trdata.id;
@@ -277,7 +259,6 @@ $(document).on('click', '#catbranchDetails tr', function(){
         $('#branchDetails').show();
         $('#catBtn').show();
 });
-
 $(document).on('click', '#branchDetails tr', function(){
     var trdata = stockTable.row(this).data();
     $('#head4').text(trdata.item);
@@ -285,9 +266,7 @@ $(document).on('click', '#branchDetails tr', function(){
     $('#iniitemid').val(trdata.items_id);
     $('#inibranchid').val(trdata.branch_id);
     $('#updateModal').modal({backdrop: 'static', keyboard: false});
-    
 });
-
 $(document).on('click', '#catBtn', function(){
     $('#catBtn').hide();
     $('table.branchDetails').dataTable().fnDestroy();
@@ -322,9 +301,7 @@ $(document).on('click', '#catBtn', function(){
     });
     $('#cattable').show();
     $('#catbranchDetails').show();
-
 });
-
 $(document).on('click', '#updateBtn', function(){
     var itemid = $('#iniitemid').val();
     var branchid = $('#inibranchid').val();

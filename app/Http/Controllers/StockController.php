@@ -26,13 +26,11 @@ class StockController extends Controller
     {
         $this->middleware('auth');
     }
-
     public function index()
     {
         if (auth()->user()->hasanyrole('Viewer', 'Repair')) {
             return redirect('/');
         }
-
         $title = 'Stocks';
         $categories = Category::all();
         $service_units = Stock::where('branch_id', auth()->user()->branch->id)
@@ -51,7 +49,6 @@ class StockController extends Controller
             ->get();
         return view('pages.stocks', compact('categories', 'service_units', 'customers', 'branches', 'title'));
     }
-
     public function category(Request $request){
         $cat = Stock::where('branch_id', auth()->user()->branch->id)
             ->where('stocks.status', 'service unit')
@@ -62,7 +59,6 @@ class StockController extends Controller
             ->get();
         return response()->json($cat);
     }
-
     public function bcategory(Request $request){
         $cat = Stock::select('stocks.category_id', 'categories.category')
             ->where('stocks.branch_id', $request->id)
@@ -72,7 +68,6 @@ class StockController extends Controller
             ->get();
         return response()->json($cat);
     }
-
     public function bitem(Request $request){
         $item = Stock::select('stocks.items_id', 'items.item')
             ->where('stocks.branch_id', $request->branchid)
@@ -83,7 +78,6 @@ class StockController extends Controller
             ->get();
         return response()->json($item);
     }
-
     public function bserial($id){
         $serial = Stock::select('items.item', 'stocks.*')
             ->where('stocks.branch_id', auth()->user()->branch->id)
@@ -91,11 +85,8 @@ class StockController extends Controller
             ->where('stocks.status', 'in')
             ->join('items', 'stocks.items_id', '=', 'items.id')
             ->get();
-
         return DataTables::of($serial)->make(true);
-
     }
-
     public function description(Request $request){
         $desc = Stock::where('branch_id', auth()->user()->branch->id)
             ->where('stocks.status', 'service unit')
@@ -108,7 +99,6 @@ class StockController extends Controller
             ->get();
         return response()->json($desc);
     }
-
     public function serial(Request $request){
         $serial = Stock::select('stocks.serial', 'stocks.id')
             ->where('branch_id', auth()->user()->branch->id)
@@ -123,7 +113,6 @@ class StockController extends Controller
             ->get();
         return response()->json($serial);
     }
-
     public function service()
     {
         $title = "Service Unit";
@@ -133,39 +122,29 @@ class StockController extends Controller
         }
         return view('pages.service-unit', compact('title', 'categories'));
     }
-
     public function serviceUnit()
     {
         $stock = Stock::where('status', 'service unit')
                     ->where('branch_id', auth()->user()->branch->id)
                     ->get();
-
         return DataTables::of($stock)
-
         ->addColumn('date', function (Stock $request){
-
             return $request->updated_at->toFormattedDateString().' '.$request->updated_at->toTimeString();
         })
-       
         ->addColumn('items_id', function (Stock $request){
             return $request->items_id;
         })
-
         ->addColumn('category', function (Stock $request){
             $cat = Category::find($request->category_id);
             return strtoupper($cat->category);
         })
-
         ->addColumn('description', function (Stock $request){
             $item = Item::where('id', $request->items_id)->first();
-
             return strtoupper($item->item);
         })
-
         ->addColumn('serial', function (Stock $request){
             return strtoupper($request->serial);
         })
-
         ->addColumn('client', function (Stock $request){
             $client = CustomerBranch::select('customer_branch', 'customers.customer')
                 ->where('customer_branches.id', $request->customer_branches_id)
@@ -173,7 +152,6 @@ class StockController extends Controller
                 ->first();
             return ucwords(strtolower($client->customer.' - '.$client->customer_branch));
         })
-
         ->addColumn('client_name', function (Stock $request){
             $client = CustomerBranch::select('customer_branch', 'customers.customer')
                 ->where('customer_branches.id', $request->customer_branches_id)
@@ -181,7 +159,6 @@ class StockController extends Controller
                 ->first();
             return ucwords(strtolower($client->customer));
         })
-
         ->addColumn('customer_name', function (Stock $request){
             $client = CustomerBranch::select('customer_branch', 'customers.customer')
                 ->where('customer_branches.id', $request->customer_branches_id)
@@ -189,15 +166,12 @@ class StockController extends Controller
                 ->first();
             return ucwords(strtolower($client->customer_branch));
         })
-
         ->addColumn('serviceby', function (Stock $request){
             $user = User::select('name', 'lastname')->where('id', $request->user_id)->first();
             return ucwords(strtolower($user->name.' '.$user->lastname));
         })
-
         ->make(true);
     }
-
     public function autocompleteCustomer(Request $request)
     {
         $customer = CustomerBranch::where("customer_branch", "LIKE", "%{$request->id}%")
@@ -206,7 +180,6 @@ class StockController extends Controller
             ->get();
         return response()->json($customer);
     }
-
     public function autocompleteClient(Request $request)
     {
         $client = Customer::where("customer", "LIKE", "%{$request->id}%")
@@ -214,7 +187,6 @@ class StockController extends Controller
             ->get();
         return response()->json($client);
     }
-
     public function pautocompleteCustomer(Request $request)
     {
         $pcustomer = Pullout::select('pullouts.customer_branch_id', 'pullouts.customer_id', 'customer_branches.customer_branch')
@@ -227,7 +199,6 @@ class StockController extends Controller
             ->get();
         return response()->json($pcustomer);
     }
-
     public function pautocompleteClient(Request $request)
     {
         $pclient = Pullout::select('pullouts.customer_id', 'customers.customer')
@@ -239,7 +210,6 @@ class StockController extends Controller
             ->get();
         return response()->json($pclient);
     }
-
     public function viewStocks(Request $request)
     {
         if ($request->data != 0) {
@@ -250,7 +220,6 @@ class StockController extends Controller
                 ->groupBy('category')
                 ->get();
             return DataTables::of($stock)->make(true);
-
         }else{
             $stock = Stock::select('UOM','categories.category', 'stocks.items_id as items_id', 'items.item as description', \DB::raw('SUM(CASE WHEN status = \'in\' THEN 1 ELSE 0 END) as quantity'))
                 ->where('stocks.status', 'in')
@@ -262,7 +231,6 @@ class StockController extends Controller
             return DataTables::of($stock)->make(true);
         }
     }
-
     public function checkStocks(Request $request)
     {
         $initials = Initial::where('branch_id', auth()->user()->branch->id)->get();
@@ -276,10 +244,6 @@ class StockController extends Controller
                     ->where('items.id', $initial->items_id)
                     ->join('categories', 'categories.id', '=', 'category_id')
                     ->first();
-                /*$category = Stock::select('category_id as id', 'category')->where('stocks.status', 'in')
-                ->where('branch_id', auth()->user()->branch->id)
-                ->where('items_id', $initial->items_id)
-                ->join('categories', 'categories.id', '=', 'category_id')->first();*/
                 if(!in_array($category, $cat)){
                     array_push($cat, $category);
                 }
@@ -287,7 +251,6 @@ class StockController extends Controller
         }
         return response()->json(array_filter($cat));
     }
-
     public function addItem(Request $request)
     {
         $add = new Item;
@@ -304,15 +267,12 @@ class StockController extends Controller
             $data = $initial->save();
         }
         return response()->json($data);
-
     }
-
     public function servicein(Request $request)
     {
         $stock = Stock::where('id', $request->id)->first();
         $item = Item::where('id', $stock->items_id)->first();
         $customer = CustomerBranch::where('id', $stock->customer_branches_id)->first();
-
         if ($request->status == 'defective') {
             $defective = new Defective;
             $defective->branch_id = auth()->user()->branch->id;
@@ -332,21 +292,17 @@ class StockController extends Controller
             $log->user_id = auth()->user()->id;
             $log->save();
         }
-
         $stock->status = $request->status;
         $stock->user_id = auth()->user()->id;
         $data = $stock->save();
         return response()->json($data);
     }
-
     public function addCategory(Request $request){
-
         $add = new Category;
         $add->category = ucfirst($request->cat);
         $data = $add->save();
         return response()->json($data);
     }
-
     public function pulldetails(Request $request, $id)
     {   
         $pullouts = Pullout::select('categories.category', 'items.item', 'pullouts.category_id', 'pullouts.created_at', 'pullouts.id', 'pullouts.items_id', 'pullouts.serial')
@@ -357,31 +313,24 @@ class StockController extends Controller
                 ->join('items', 'pullouts.items_id', '=', 'items.id')
                 ->get();
         return DataTables::of($pullouts)
-
         ->addColumn('date', function (Pullout $pullout){
             return $pullout->created_at->toFormattedDateString().' '.$pullout->created_at->toTimeString();
         })
-
         ->make(true);
     }
-
     public function pulldetails1(Request $request, $id)
     {   
-
         $pullouts = Pullout::select('categories.category', 'items.item', 'pullouts.category_id', 'pullouts.created_at', 'pullouts.id', 'pullouts.items_id', 'pullouts.serial')
                 ->where('pullouts.id', $id)
                 ->join('categories', 'pullouts.category_id', '=', 'categories.id')
                 ->join('items', 'pullouts.items_id', '=', 'items.id')
                 ->get();
         return DataTables::of($pullouts)
-
         ->addColumn('date', function (Pullout $pullout){
             return $pullout->created_at->toFormattedDateString().' '.$pullout->created_at->toTimeString();
         })
-
         ->make(true);
     }
-
     public function pullItemCode(Request $request)
     {
         $pullout = Pullout::select('pullouts.items_id', 'items.item')
@@ -393,7 +342,6 @@ class StockController extends Controller
             ->get();
         return response()->json($pullout);
     }
-
     public function pullOut(Request $request)
     {
         $item = Item::where('id', $request->item)->first();
@@ -414,8 +362,6 @@ class StockController extends Controller
         $data = $pullout->save();
         return response()->json($data);
     }
-
-
     public function def(Request $request)
     {
         $def = Stock::where('id', $request->id)->where('serial', $request->serial)->where('status', 'in')->first();
@@ -435,7 +381,6 @@ class StockController extends Controller
         $data = $def->save();
         return response()->json($data);
     }
-
     public function loan(Request $request)
     {
         $item = Item::where('id', $request->itemid)->first();
@@ -456,7 +401,6 @@ class StockController extends Controller
             $allemails[]=$email->email;
         }
         $allemails = array_diff($allemails, array($branch->email));
-
         /*Mail::send('loan', ['reqitem'=>$item->item, 'branch'=>$branch],function( $message) use ($allemails, $branch){ 
             $message->to($branch->email, $branch->head)->subject 
                 (auth()->user()->branch->branch); 
@@ -470,7 +414,6 @@ class StockController extends Controller
         $data = $loan->save();
         return response()->json($data);
     }
-
     public function serviceOut(Request $request)
     {
         $stock = Stock::where('items_id', $request->item)
@@ -490,7 +433,6 @@ class StockController extends Controller
         $data = $stock->save();
         return response()->json($data);
     }
-
     public function store(Request $request)
     {
         $item = Item::where('id', $request->item)->first();
@@ -524,7 +466,6 @@ class StockController extends Controller
         }
         return response()->json($data);
     }
-
     public function import(Request $request)
     {
         //get file
@@ -540,16 +481,13 @@ class StockController extends Controller
             $lheader = strtolower($value);
             array_push($escapedHeader, $lheader);
         }
-
         //looping throu other columns
         $notfound=[];
         $duplicate=[];
         $dup = false;
         while ($columns = fgetcsv($file)) {
-
             $item = Item::where('item', $columns[0])->first();
             $serial = $columns[1];
-
             if ($columns[1] == "") {
                 $serial = 'N/A';
             }else{
@@ -581,14 +519,11 @@ class StockController extends Controller
         }
         return redirect()->route('stocks.index');
     }
-
     public function uom(Request $request)
     {
         $uom = Item::select('UOM')->where('id', $request->id)->first();
         return response()->json($uom->UOM);
-
     }
-
     public function show(Request $request)
     {
         if ($request->data != 0) {
@@ -597,42 +532,31 @@ class StockController extends Controller
                 ->join('categories', 'categories.id', '=', 'category_id')
                 ->groupBy('category')
                 ->get();
-            
-            return Datatables::of($stock)
-            
-            ->make(true);
-
+            return Datatables::of($stock)->make(true);
         }else{
-
             $stock = Warehouse::select('items.UOM', 'warehouses.category_id','items_id', \DB::raw('SUM(CASE WHEN status = \'in\' THEN 1 ELSE 0 END) as stock'))
                 ->where('status', 'in')
                 ->where('warehouses.category_id', $request->category)
                 ->join('items', 'items_id', '=', 'items.id')
                 ->groupBy('items_id')->get();
             return DataTables::of($stock)
-            
             ->addColumn('items_id', function (Warehouse $request){
                 return $request->items_id;
             })
-
             ->addColumn('category', function (Warehouse $request){
                 $cat = Category::find($request->category_id);
                 return $cat->category;
             })
-
             ->addColumn('description', function (Warehouse $request){
                 $item = Item::where('id', $request->items_id)->first();
                 return $item->item;
             })
-
             ->addColumn('quantity', function (Warehouse $request){
                 return $request->stock;
             })
-
             ->make(true);
         }
     }
-
     public function update(Request $request)
     {
         if ($request->stat == 'sunit') {
@@ -674,6 +598,5 @@ class StockController extends Controller
             $data = $log->save();
             return response()->json($data);
         }
-        
     }
 }

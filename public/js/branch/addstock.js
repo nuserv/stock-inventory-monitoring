@@ -32,13 +32,11 @@ $(document).on('click', '.sub_Btn', function(){
         window.location.href = 'stocks';
     }
 });
-
 $(document).on('change', '.category', function(){
     var codeOp = " ";
     var descOp = " ";
     var count = $(this).attr('row_count');
     var id = $(this).val();
-    
     $.ajax({
         type:'get',
         url:'itemcode',
@@ -58,15 +56,12 @@ $(document).on('change', '.category', function(){
             $("#desc" + count).find('option').remove().end().append(descOp);
         },
     });
-    
 });
-
 $(document).on('change', '.item', function(){
     var count = $(this).attr('row_count');
     var id = $(this).val();        
     $('#desc' + count).val(id);
 });
-
 $(document).on('change', '.desc', function(){
     var count = $(this).attr('row_count');
     var id = $(this).val();

@@ -300,7 +300,6 @@ $(document).on('click', '.cancel', function(){
 
 $('table.stockDetails').DataTable().on('select', function () {
     var rowselected = stock.rows( { selected: true } ).data();
-    //console.log(rowselected[0]);
     if(rowselected.length > 0){
         $('#def_Btn').prop('disabled', false);
     }
@@ -308,7 +307,6 @@ $('table.stockDetails').DataTable().on('select', function () {
 
 $('table.stockDetails').DataTable().on('deselect', function () {
     var rowselected = stock.rows( { selected: true } ).data();
-    //console.log(rowselected[0]);
     if(rowselected.length == 0){
         $('#def_Btn').prop('disabled', true);
     }

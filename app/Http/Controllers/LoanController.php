@@ -14,12 +14,10 @@ use App\User;
 use Mail;
 class LoanController extends Controller
 {
-
     public function __construct()
     {
         $this->middleware('auth');
     }
-
     public function index()
     {
         if (auth()->user()->hasrole('Administrator')) {
@@ -29,10 +27,8 @@ class LoanController extends Controller
         $branches = Branch::where('area_id', auth()->user()->area->id)
             ->where('id', '!=', auth()->user()->branch->id)
             ->get();
-
         return view('pages.loan', compact('branches', 'title'));
     }
-
     public function getItemCode(Request $request)
     {
         $cat = Item::select('category_id')
@@ -43,7 +39,6 @@ class LoanController extends Controller
             ->get();
         return response()->json($items);
     }
-
     public function table(Request $request)
     {
         $myloans = Loan::select('loans.id', 'loans.items_id', 'loans.to_branch_id', 'loans.from_branch_id', 'branches.id as branchid', 'branches.branch', 'loans.updated_at', 'items.item', 'loans.status', 'loans.updated_at')
@@ -60,37 +55,29 @@ class LoanController extends Controller
             ->join('branches', 'loans.from_branch_id', '=', 'branches.id')
             ->join('items', 'loans.items_id', '=', 'items.id')
             ->get();
-
         $merge = $loans->merge($myloans);
         return Datatables::of($merge)
-
         ->addColumn('date', function (Loan $request){
-
             return $request->updated_at->toFormattedDateString().' '.$request->updated_at->toTimeString();
         })
-
         ->addColumn('stat', function (Loan $request){
-            
             if ($request->to_branch_id == auth()->user()->branch->id) {
                 return 'IN-BOUND';
             }else{
                 return 'OUT-BOUND';
             }
         })
-
         ->make(true);
     }
     public function stock(Request $request)
     {
         $stock = Stock::where('id', $request->item)->first();
         $item = Item::where('id', $stock->items_id)->first();
-
         $update = Stock::where('id', $request->item)->where('status', 'in')->where('branch_id', auth()->user()->branch->id)->first();
         $update->status = 'loan'.$request->id;
         $update->id_branch = $request->branch;
         $update->user_id = auth()->user()->id;
         $update->save();
-
         $add = new Stock;
         $add->category_id = $item->category_id;
         $add->branch_id = $request->branch;
@@ -99,7 +86,6 @@ class LoanController extends Controller
         $add->serial = $stock->serial;
         $add->status = $request->id;
         $add->id_branch = auth()->user()->branch->id;
-
         $branch = Branch::where('id', $request->branch)->first();
         $emails = User::select('email')
             ->where('branch_id', $request->branch)
@@ -117,7 +103,6 @@ class LoanController extends Controller
             $message->cc($allemails); 
         });*/
         $data = $add->save();
-
         return response()->json($data);
     }
 
@@ -162,7 +147,6 @@ class LoanController extends Controller
         $data = $loan->save();
         return response()->json($data);
     }
-
     public function destroy(Request $request)
     {
         $delete = Loan::where('id', $request->id)->first();

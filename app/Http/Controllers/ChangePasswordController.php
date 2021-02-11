@@ -15,13 +15,11 @@ class ChangePasswordController extends Controller
     {
         $this->middleware('auth');
     }
-    
     public function index()
     {
         $title = 'Change password';
         return view('changePassword', compact('title'));
     }
-
     public function store(Request $request)
     {
         $request->validate([
@@ -29,7 +27,6 @@ class ChangePasswordController extends Controller
             'new_password' => ['required'],
             'new_confirm_password' => ['same:new_password'],
         ]);
-   
         User::find(auth()->user()->id)->update(['password'=> Hash::make($request->new_password)]);
         return redirect()->back()->with('success', 'Password change successfully.');
     }

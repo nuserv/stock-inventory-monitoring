@@ -12,7 +12,6 @@ class Warehouse extends Model
     {
         return $this->hasmany(PreparedItem::class);
     }
-
     public function Items()
     {
         return $this->hasmany(Item::class);

@@ -24,64 +24,43 @@ class StockRequestController extends Controller
     {
         $this->middleware('auth');
     }
-    
     public function index()
     {
         if (auth()->user()->hasanyrole('Repair')) {
             return redirect('/');
         }
         $title = 'Stock Request';
-
         $stocks = Warehouse::select('items_id', 'serial', \DB::raw('SUM(CASE WHEN status = \'in\' THEN 1 ELSE 0 END) as stock'))
             ->where('status', 'in')
             ->groupBy('items_id')->get();
         $categories = Category::all();
         return view('pages.stock-request', compact('stocks', 'categories', 'title'));
     }
-
     public function getItemCode(Request $request){
         $data = Item::select('id', 'item')->where('category_id', $request->id)->get();
         return response()->json($data);
     }
-
     public function getCode(Request $request){
-        /*$data = Item::select('id', 'item')->where('category_id', $request->id)->get();
-        return response()->json($data);*/
-
         $initials = Initial::where('branch_id', auth()->user()->branch->id)
             ->join('items', 'items_id', '=', 'items.id')
             ->where('category_id', $request->id)
             ->get();
-        //dd($initials);
         $icode = [];
         $itm =[];
         foreach ($initials as $initial) {
-            //dd($initial->qty);
-            //dd($itemcode);
             $count = Stock::where('stocks.status', 'in')
                 ->where('branch_id', auth()->user()->branch->id)
                 ->where('items_id', $initial->items_id)
                 ->count();
-            //dd($count);
-            //dd($count < $initial->qty);
             if ($count < $initial->qty) {
                 $itemcode = Item::select('id', 'item')->where('id', $initial->items_id)->first();
-                /*$itemcode = Stock::select('items_id as id', 'item')->where('stocks.status', 'in')
-                ->where('branch_id', auth()->user()->branch->id)
-                ->where('items_id', $initial->items_id)
-                ->join('items', 'items.id', '=', 'items_id')
-                ->first();*/
                 if(!in_array($itemcode, $icode)){
                     array_push($icode, $itemcode);
-                    //dd($icode);
                 }
             }
         }
-
-        //dd($icode);
         return response()->json(array_filter($icode));
     }
-
     public function getCatReq(Request $request){
         $catreqs = RequestedItem::select('categories.category', 'categories.id')
             ->where('request_no', $request->reqno)
@@ -90,7 +69,6 @@ class StockRequestController extends Controller
             ->get();
         return response()->json($catreqs);
     }
-
     public function getStock(Request $request){
         if (auth()->user()->branch->branch == 'Warehouse') {
             $data = Warehouse::select(\DB::raw('SUM(CASE WHEN status = \'in\' THEN 1 ELSE 0 END) as stock'))
@@ -108,7 +86,6 @@ class StockRequestController extends Controller
         }
         return response()->json($data);
     }
-
     public function getSerials(Request $request){
         if (auth()->user()->branch->branch == 'Warehouse') {
             $data = Warehouse::select('items_id', 'serial')
@@ -124,15 +101,11 @@ class StockRequestController extends Controller
         }
         return response()->json($data);
     }
-
     public function getcon(Request $request){
-        
         $data = PreparedItem::select('id')->where('request_no', $request->reqno)->where('items_id', $request->itemsid)->get();
         return response()->json($data);
     }
-
     public function getsendDetails(Request $request, $id){
-
         $consumable = PreparedItem::select('uom', 'prepared_items.id as id', 'items_id', 'request_no', 'serial', 'schedule')
             ->where('request_no', $id)
             ->whereNotin('uom', ['Unit'])
@@ -148,32 +121,22 @@ class StockRequestController extends Controller
             ->groupBy('prepared_items.id')
             ->get();
         $result = $unit->merge($consumable);
-
         return DataTables::of($result)
-
         ->addColumn('item_name', function (PreparedItem $PreparedItem){
-
             return strtoupper($PreparedItem->items->item);
         })
-
         ->addColumn('serial', function (PreparedItem $PreparedItem){
-
             return strtoupper($PreparedItem->serial);
         })
-
         ->addColumn('quantity', function (PreparedItem $PreparedItem){
-
             if ($PreparedItem->quantity != 1) {
                 return $PreparedItem->quantity.' - '.$PreparedItem->items->UOM.'s';
             }else{
                 return $PreparedItem->quantity.' - '.$PreparedItem->items->UOM;
             }
         })
-
         ->make(true);
-
     }
-
     public function generateRandomNumber() {
         $random = mt_rand(1, 999); 
         $today = Carbon::now()->format('d-m-Y');
@@ -183,33 +146,26 @@ class StockRequestController extends Controller
         }
         return response()->json($number);
     }
-    
     public function barcodeNumberExists($number) {
         return StockRequest::where('request_no', $number)->exists();
     }
-
     public function prepitemdetails(Request $request, $id)
     {
         return DataTables::of(PreparedItem::where('request_no', $id)->get())
-
         ->addColumn('item_name', function ($PreparedItem){
 
             return strtoupper($PreparedItem->items->item);
         })
-
         ->make(true);
     }   
-
     public function getReqDetails(Request $request)
     {
         return response()->json(RequestedItem::whereNot('status', 'delivered')->where('request_no', $request->reqno)->get());
     }
-
     public function getuomq(Request $request)
     {
         return response()->json(RequestedItem::select('quantity', 'id')->where('request_no', $request->reqno)->where('items_id', $request->itemid)->first());
     }
-    
     public function updateRequestDetails(Request $request, $id)
     {
         RequestedItem::where('request_no', $id)->where('items_id', $request->item)->decrement('quantity', 1);
@@ -220,32 +176,24 @@ class StockRequestController extends Controller
         }else{
             return response()->json(true);
         }
-
     }
     public function getRequestDetails(Request $request, $id)
     {
         return DataTables::of(RequestedItem::where('request_no', $id)->get())
-
         ->addColumn('item_name', function (RequestedItem $RequestedItem){
-
             return strtoupper($RequestedItem->items->item);
         })
-
         ->addColumn('uom', function (RequestedItem $RequestedItem){
-
             $uom = Item::select('UOM as uom')->where('id', $RequestedItem->items->id)->first();
             return $uom->uom;
         })
-
         ->addColumn('qty', function (RequestedItem $RequestedItem){
-
             if ($RequestedItem->quantity != 1) {
                 return $RequestedItem->quantity. ' ' .$RequestedItem->items->UOM.'s';
             }else{
                 return $RequestedItem->quantity. ' ' .$RequestedItem->items->UOM;
             }
         })
-
         ->addColumn('stock', function (RequestedItem $RequestedItem){
             $data = Warehouse::select(\DB::raw('SUM(CASE WHEN status = \'in\' THEN 1 ELSE 0 END) as stock'))
                 ->where('status', 'in')
@@ -259,7 +207,6 @@ class StockRequestController extends Controller
             }
             return $stock;
         })
-
         ->addColumn('stockuom', function (RequestedItem $RequestedItem){
             $uom = Item::select('UOM as uom')->where('id', $RequestedItem->items->id)->first();
             $data = Warehouse::select(\DB::raw('SUM(CASE WHEN status = \'in\' THEN 1 ELSE 0 END) as stock'))
@@ -278,18 +225,14 @@ class StockRequestController extends Controller
                 return $stock. ' ' . $uom->uom;
             }
         })
-
         ->make(true);
     }   
-
     public function pcount(Request $request)
     {
         $stock = StockRequest::where('request_no', $request->reqno)
                 ->first();
         return response()->json($stock);
-        
     }
-
     public function getRequests()
     {
         $user = auth()->user()->branch->id;
@@ -304,16 +247,13 @@ class StockRequestController extends Controller
             $stock = StockRequest::wherein('status',  ['0', '1', '4', '5', '6', '8'])
                 ->get();
         }
-        
         return DataTables::of($stock)
         ->setRowData([
             'data-id' => '{{ $request_no }}',
             'data-status' => '{{ $status }}',
             'data-user' => '{{ $user_id }}',
         ])
-
         ->addColumn('status', function (StockRequest $request){
-
             if ($request->status == 0) {
                 return 'PENDING';
             }else if ($request->status == 1){
@@ -328,35 +268,26 @@ class StockRequestController extends Controller
                 return 'PARTIAL';
             }
         })
-
         ->addColumn('sched', function (StockRequest $request){
             return $request->schedule;
         })
-
         ->addColumn('created_at', function (StockRequest $request){
-            
             return $request->created_at->toFormattedDateString().' '.$request->created_at->toTimeString();
         })
-
         ->addColumn('reqBy', function (StockRequest $request){
             return strtoupper($request->user->name);
         })
-
         ->addColumn('branch', function (StockRequest $request){
             return strtoupper($request->branch->branch);
         })
-
         ->addColumn('area', function (StockRequest $request){
             return strtoupper($request->area->area);
         })
-
         ->addColumn('pending', function (StockRequest $request){
             return strtoupper($request->pending);
         })
-
         ->make(true);
     }
-
     public function store(Request $request)
     {
         if ($request->stat == 'ok') {
@@ -369,14 +300,12 @@ class StockRequestController extends Controller
             $log = new UserLog;
             $log->activity = "Create Stock Request no. $request->reqno";
             $log->user_id = auth()->user()->id;
-            
             $reqno->save();
             sleep(1);
             $reqitem = RequestedItem::select('items.item', 'quantity')
                 ->where('request_no', $request->reqno)
                 ->join('items', 'items.id', '=', 'requested_items.items_id')
                 ->get();
-            
             $cc = User::select('email')
                 ->where('branch_id', '1')
                 ->join('model_has_roles', 'model_id', '=', 'users.id')
@@ -387,18 +316,14 @@ class StockRequestController extends Controller
             foreach ($cc as $email) {
                 $allemails[]=$email->email;
             }
-
             /*Mail::send('mail', ['reqitem' => $reqitem, 'reqno' => $request->reqno, 'branch'=>auth()->user()->branch->branch],function( $message) use ($allemails){ 
                 $message->to('gerard.mallari@gmail.com', 'Gerald Mallari')->subject 
                     (auth()->user()->branch->branch); 
                 $message->from('no-reply@ideaserv.com.ph', 'NO REPLY'); 
                 $message->cc($allemails); 
             });*/
-
             $data = $log->save();
-
         }
-
         if ($request->stat == 'notok') {
             $reqitem = new RequestedItem;
             $reqitem->request_no = $request->reqno;
@@ -420,9 +345,7 @@ class StockRequestController extends Controller
         }else{
             $data = '0';
         }
-
         return response()->json($data);
-
     }
     public function received(Request $request)
     {
@@ -472,11 +395,9 @@ class StockRequestController extends Controller
         }
         return response()->json($data);
     }
-
     public function update(Request $request)
     {
         if ($request->stat == 'ok') {
-
             $reqno = StockRequest::where('request_no', $request->reqno)->first();
             $reqno->status = $request->status;
             $reqno->schedule = $request->datesched;
@@ -488,7 +409,6 @@ class StockRequestController extends Controller
             $reqbranch = PreparedItem::select('branch_id')
                 ->where('request_no', $request->reqno)
                 ->first();
-
             $branch = Branch::where('id', $request->branchid)->first();
             $email = $branch->email;
             /*Mail::send('sched', ['prepitem' => $prepitem, 'sched'=>$request->datesched,'reqno' => $request->reqno,'branch' =>$branch],function( $message) use ($branch, $email){ 
@@ -497,7 +417,6 @@ class StockRequestController extends Controller
                 $message->from('no-reply@ideaserv.com.ph', 'NO REPLY - Warehouse'); 
                 $message->cc(['emorej046@gmail.com', 'gerard.mallari@gmail.com']); 
             });*/
-
             $data = true;
         }else if($request->stat == 'resched'){
             if ($request->status == '5') {
@@ -510,7 +429,6 @@ class StockRequestController extends Controller
                 $reqno->status = $request->status;
                 $data = $reqno->save();
             }
-            
         }else{
             $item = Warehouse::where('status', 'in')
                 ->where('items_id', $request->item)
@@ -521,7 +439,6 @@ class StockRequestController extends Controller
             $item->schedule = $request->datesched;
             $item->user_id = auth()->user()->id;
             $item->save();
-
             $scheditem = Item::where('id', $request->item)->first();
             $sched = StockRequest::where('request_no', $request->reqno)->first();
             $prep = new PreparedItem;
@@ -531,7 +448,6 @@ class StockRequestController extends Controller
             $prep->branch_id = $request->branchid;
             $prep->schedule = $request->datesched;
             $prep->save();
-            //sleep(2);
             $log = new UserLog;
             $log->activity = "Schedule $scheditem->item(S/N: $request->serial) with Request no. $request->reqno ";
             $log->user_id = auth()->user()->id;
@@ -539,7 +455,6 @@ class StockRequestController extends Controller
         }
         return response()->json($data);
     }
-
     public function dest(Request $request)
     {
         $delete = StockRequest::where('request_no', $request->reqno)->where('status', '0')->first();

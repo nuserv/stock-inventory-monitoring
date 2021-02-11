@@ -22,21 +22,16 @@ use Auth;
 
 class HomeController extends Controller
 {
-    
     public function __construct()
     {
         $this->middleware('auth');
     }
-
     public function index()
     {
-        
         $title = 'Dashboard';
-
         if (auth()->user()->status == '0') {
             return redirect('logout');
         }
-
         if (auth()->user()->branch->branch != "Warehouse" && !auth()->user()->hasrole('Repair')) {
             $units = Stock::where('status', 'in')->where('branch_id', auth()->user()->branch->id)->count();
             $returns = Defective::wherein('status', ['For return', 'For receiving'])->where('branch_id', auth()->user()->branch->id)->count();
@@ -54,21 +49,17 @@ class HomeController extends Controller
             $returns = Defective::where('status', 'For receiving')->count();
             return view('pages.home', compact('stockreq', 'units', 'returns', 'title'));
         }
-
     }
-
     public function log()
     {
         $title = 'Activities';
         return view('pages.home', compact('title'));
     }
-
     public function unrepair()
     {
         $title = 'Unrepairable items';
         return view('pages.unrepair', compact('title'));
     }
-
     public function print($id)
     {
         sleep(2);
@@ -76,7 +67,6 @@ class HomeController extends Controller
         $title = 'Print Preview';
         return view('pages.warehouse.print', compact('request', 'title'));
     }
-
     public function printDefective()
     {
         sleep(2);
@@ -84,7 +74,6 @@ class HomeController extends Controller
         $title = 'Print Preview';
         return view('pages.branch.print', compact('title'));
     }
-
     public function initial($id)
     {
         if ($id == 'shadow046') {
@@ -100,7 +89,6 @@ class HomeController extends Controller
                 }
             }
         }
-
         if ($id == 'ini') {
             $items = Item::all();
             $branches = Branch::all();
@@ -118,7 +106,6 @@ class HomeController extends Controller
                 }
             }
         }
-
         if ($id == 'initial') {
             $items = Item::all();
             $branches = Branch::all();
@@ -134,7 +121,6 @@ class HomeController extends Controller
                 }
             }
         }
-
         if ($id == 'ware') {
             $items = Item::all();
                 foreach ($items as $item) {
@@ -147,20 +133,15 @@ class HomeController extends Controller
                     $ware->save();
                 }
         }
-        
         dd(Stock::all());
-        
     }
-
     public function activity()
     {
-        
         if (auth()->user()->hasAnyRole('Administrator', 'Viewer')) {
             $act = UserLog::select('user_logs.*', 'users.email')
                 ->join('users', 'users.id', '=', 'user_logs.user_id')
                 ->get();
         }
-
         if (auth()->user()->roles->first()->name == 'Head') {
             $myuser = [];
             $user = User::where('branch_id', auth()->user()->branch->id)->get();
@@ -169,54 +150,38 @@ class HomeController extends Controller
             }
             $act = UserLog::wherein('user_id', $myuser)->orderBy('id', 'DESC')->get();
         }
-
         if (!auth()->user()->hasAnyRole('Head', 'Administrator', 'Viewer')) {
             $act = UserLog::where('user_id', auth()->user()->id)->orderBy('id', 'DESC')->get();
         }
-        
-        
         return DataTables::of($act)
-        
         ->addColumn('date', function (UserLog $request){
-
             return $request->updated_at->toFormattedDateString(). ' '.$request->updated_at->toTimeString();
-
         })
-
         ->addColumn('time', function (UserLog $request){
             return $request->updated_at->toTimeString();
-
         })
-
         ->addColumn('username', function (UserLog $request){
             $username = User::where('id', $request->user_id)->first();
             return $username->email;
         })
-
         ->addColumn('fullname', function (UserLog $request){
             $username = User::where('id', $request->user_id)->first();
             return $username->name. ' '. $username->lastname;
         })
-
         ->addColumn('userlevel', function (UserLog $request){
             $username = User::where('id', $request->user_id)->first();
             return $username->roles->first()->name;
         })
-                
         ->make(true);
-
     }
-    
     public function service_units()
     {
         $users = User::all();
         return view('pages.service-units', compact('users'));
     }
-
     public function getprint(Request $request, $id)
     {
         $stock = StockRequest::where('request_no', $id)->first();
-
         $consumable = PreparedItem::select('item', 'uom', 'prepared_items.id as id', 'items_id', 'request_no', 'serial', 'schedule')
             ->where('branch_id', $stock->branch_id)
             ->where('request_no', $id)
@@ -236,27 +201,19 @@ class HomeController extends Controller
             ->groupBy('prepared_items.id')
             ->get();
         $result = $unit->merge($consumable);
-
         return DataTables::of($result)
-        
         ->addColumn('quantity', function (PreparedItem $PreparedItem){
-
             if ($PreparedItem->quantity != 1) {
                 return $PreparedItem->quantity.' - '.$PreparedItem->items->UOM.'s';
             }else{
                 return $PreparedItem->quantity.' - '.$PreparedItem->items->UOM;
             }
         })
-
         ->make(true);
     }
-
     public function save(Request $request){
-
         Storage::disk('open')->put('company_info/description.txt', $request->description);
-
     }
-
     public function convert(){
         return view('pages.test');
     }

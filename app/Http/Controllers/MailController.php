@@ -10,7 +10,6 @@ use App\Http\Controllers\Controller;
 class MailController extends Controller {
    public function basic_email() {
       $name = array('name'=>"Virat Gandhi");
-   
       /*Mail::send(['text'=>'mail'], $name, function($message) {
          $message->to('jerome.lopez.ge2018@gmail.com', 'Tutorials Point')->subject
             ('Laravel Basic Testing Mail');

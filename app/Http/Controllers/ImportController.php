@@ -21,7 +21,6 @@ class ImportController extends Controller
         $itemswitherror = [];
         foreach ($data[0] as $key => $value) {
             $items = Item::where('item', $value[0])->first();
-            //dd($data[0]);
             if ($items) {
                 $add = new Stock;
                 $add->user_id = auth()->user()->id;
@@ -46,7 +45,6 @@ class ImportController extends Controller
             return back()->withStatus('Excel File Imported Successfully');
         }
     }
-
     public function warestore(Request $request)
     {
         $file = $request->file('upload');
@@ -59,7 +57,6 @@ class ImportController extends Controller
             if ($items) {
                 if ($value[1] || $value[1] != 0) {
                     for ($i=1; $i <= $value[1]; $i++) { 
-                        //dd($items->category_id);
                         $add = new Warehouse;
                         $add->user_id = auth()->user()->id;
                         $add->category_id = $items->category_id;
@@ -79,6 +76,5 @@ class ImportController extends Controller
         }else{
             return back()->withStatus('Excel File Imported Successfully');
         }
-        
     }
 }

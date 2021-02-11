@@ -5,7 +5,6 @@ var dtdata;
 var sub = 0;
 var add = 0;
 var test = 0;
-var datalength = 0;
 var pendingreq;
 $(document).ready(function()
 {
@@ -15,7 +14,6 @@ $(document).ready(function()
     var months = ["January","February","March","April","May","June","July","August","September","October","November","December"];
     $('#date').val(months[d.getMonth()]+' '+d.getDate()+', ' +d.getFullYear()+' '+hour+':'+String(d.getMinutes()).padStart(2, '0')+ampm);
     $('#sdate').val(months[d.getMonth()]+' '+d.getDate()+', ' +d.getFullYear()+' '+hour+':'+String(d.getMinutes()).padStart(2, '0')+ampm);
-
     table =
     $('table.requestTable').DataTable({ 
         "dom": 'lrtip',
@@ -34,7 +32,6 @@ $(document).ready(function()
             { data: 'status', name:'status', "width": "14%"}
         ]
     });
-
     $('#requestTable tbody').on('click', 'tr', function () { 
         var trdata = table.row(this).data();
         dtdata = table.row(this).data();;
@@ -45,7 +42,6 @@ $(document).ready(function()
         $('#area').val(trdata.area);
         $('table.requestDetails').dataTable().fnDestroy();
         $('table.schedDetails').dataTable().fnDestroy();
-
         if (trdata.status == 'PENDING') {
             $('table.schedDetails').hide();
             $('table.requestDetails').show();
@@ -147,7 +143,6 @@ $(document).ready(function()
                         processing: true,
                         serverSide: true,
                         ajax: "/send/"+trdata.request_no,
-                        
                         columns: [
                             { data: 'schedule', name:'schedule'},
                             { data: 'items_id', name:'items_id'},
@@ -285,7 +280,6 @@ $(document).ready(function()
                         processing: true,
                         serverSide: true,
                         ajax: "/send/"+trdata.request_no,
-                        
                         columns: [
                             { data: 'schedule', name:'schedule'},
                             { data: 'items_id', name:'items_id'},
@@ -371,25 +365,9 @@ $(document).ready(function()
                                 requestdet = data.data.length;
                             },
                         });
-                        
-                        /*requesttable = $('table.requestDetails').DataTable({ 
-                            "dom": 'lrtip',
-                            "language": {
-                                "emptyTable": " "
-                            },
-                            processing: true,
-                            serverSide: true,
-                            ajax: "/requests/"+trdata.request_no,
-                            columns: [
-                                { data: 'items_id', name:'items_id'},
-                                { data: 'item_name', name:'item_name'},
-                                { data: 'quantity', name:'quantity'}
-                            ]
-                        });*/
                     }
                     $('#rec_Btn').hide();
                 }else if (partial <= 10) {
-                    console.log(partial);
                     $('table.schedDetails').dataTable().fnDestroy();
                     schedtable = 
                     $('table.schedDetails').DataTable({ 
@@ -400,7 +378,6 @@ $(document).ready(function()
                         processing: true,
                         serverSide: true,
                         ajax: "/send/"+trdata.request_no,
-                        
                         columns: [
                             { data: 'schedule', name:'schedule'},
                             { data: 'items_id', name:'items_id'},
@@ -413,7 +390,6 @@ $(document).ready(function()
                         }
                     });
                 }else if (partial > 10) {
-                    console.log(partial);
                     $('table.schedDetails').dataTable().fnDestroy();
                     schedtable = 
                     $('table.schedDetails').DataTable({ 
@@ -438,9 +414,7 @@ $(document).ready(function()
                     });
                 }
             });
-
             function partialschedtable() {
-                
                 return $.ajax({
                     type:'get',
                     url: "/send/"+trdata.request_no,
@@ -449,31 +423,10 @@ $(document).ready(function()
                         partial = data.data.length;
                     },
                 });
-                /*schedtable = 
-                $('table.schedDetails').DataTable({ 
-                    "dom": 'lrtip',
-                    "language": {
-                        "emptyTable": " "
-                    },
-                    processing: true,
-                    serverSide: true,
-                    ajax: "/send/"+trclick,
-                    
-                    columns: [
-                        { data: 'schedule', name:'schedule'},
-                        { data: 'items_id', name:'items_id'},
-                        { data: 'item_name', name:'item_name'},
-                        { data: 'serial', name:'serial'}
-                    ],
-                    select: {
-                        style: 'multi'
-                    }
-                });*/
             }
         }
         $('#requestModal').modal('show');
     });
-
     $('table.schedDetails').DataTable().on('select', function () {
         var rowselected = schedtable.rows( { selected: true } ).data();
         if(rowselected.length > 0){
@@ -486,7 +439,6 @@ $(document).ready(function()
             $('#rec_Btn').prop('disabled', true);
         }
     });
-    
 });
 
 $(document).on('click', '#del_Btn', function(){
@@ -510,7 +462,6 @@ $(document).on('click', '#del_Btn', function(){
         }
     });
 });
-
 $(document).on('click', '#rec_Btn', function(){
     var reqno = $('#reqno').val();
     var sched = $('#sched').val();
@@ -526,22 +477,14 @@ $(document).on('click', '#rec_Btn', function(){
     var id = [];
     var eachcount = 0;
     if(datas.length > 0){
-        datalength = datas.length;
-        datalength--;
-        console.log(datalength+'-'+datas.length);
         var mydata = $.map(datas, function(value, index) {
             return [value];
         });
         mydata.forEach(value => {
-        //for(var i=0;i<datas.length;i++){
-            //test = i;
             eachcount++;
             if (value.uom == 'Unit' ) {
-                console.log('Unit'+i+value.uom);
                 id.push(value.id);
                 if (eachcount == datas.length) {
-                    console.log('tapos'+eachcount);
-                    console.log(id+'dos'+datas.length);
                     $.ajax({
                         url: 'storerreceived',
                         headers: {
@@ -565,7 +508,6 @@ $(document).on('click', '#rec_Btn', function(){
                 }
             }else if(value.uom != 'Unit'){
                 var itemsid = value.items_id;
-                console.log('consum'+eachcount+value.uom);
                 $.ajax({
                     type:'get',
                     url: 'getcon',
@@ -577,14 +519,10 @@ $(document).on('click', '#rec_Btn', function(){
                     },
                     success:function(data)
                     {
-                        console.log(data);
                         data.forEach(valv => {
                             id.push(valv.id);
                         });
-                        console.log(id);
                         if (eachcount == datas.length) {
-                            console.log('tapos'+eachcount+'-'+datas.length);
-                            console.log(id+'una');
                             $.ajax({
                                 url: 'storerreceived',
                                 headers: {
@@ -608,18 +546,14 @@ $(document).on('click', '#rec_Btn', function(){
                         }
                     },
                     error: function (data) {
-                        console.log(data.responseText);
                         alert(data.responseText);
                     }
                 });
             }
-            
         });    
     }
 });
-
 $(document).on('click', '#reqBtn', function(){
-    
     $.ajax({
         type:'get',
         url:'gen',
@@ -639,19 +573,15 @@ $(document).on('click', '#reqBtn', function(){
                 return [value];
             });
             catop+='<option selected disabled>select category</option>';
-            /*for(var i=0;i<data.length;i++){
-            catop+='<option value="'+data[i].id+'">'+data[i].category.toUpperCase()+'</option>';
-            }*/
             category.forEach(value => {
                 catop+='<option value="'+value.id+'">'+value.category.toUpperCase()+'</option>';
             });
             $("#category1").find('option').remove().end().append(catop);
             $('#sendrequestModal').modal({backdrop: 'static', keyboard: false});
             $('#loading').hide()
-        },
+        }
     });
 });
-
 $(document).on('click', '.add_item', function(){
     var rowcount = $(this).attr('btn_id');
     if ($(this).val() == 'Add Item') {
@@ -687,7 +617,6 @@ $(document).on('click', '.add_item', function(){
         $(this).val('Add Item');
     }
 });
-
 $(document).on('click', '.send_sub_Btn', function(){
     if (add == 0 || sub > 0) {
         alert('Please add item/s.');
@@ -746,7 +675,6 @@ $(document).on('click', '.send_sub_Btn', function(){
         }
     }
 });
-
 $(document).on('change', '.desc', function(){
     var count = $(this).attr('row_count');
     var id = $(this).val();
@@ -761,12 +689,10 @@ $(document).on('change', '.desc', function(){
         },
         success:function(data)
         {
-            console.log(data);
             $('#uom'+count).val(data);
-        },
+        }
     });
 });
-
 $(document).on('change', '.item', function(){
     var count = $(this).attr('row_count');
     var id = $(this).val();
@@ -781,12 +707,10 @@ $(document).on('change', '.item', function(){
         },
         success:function(data)
         {
-            console.log(data);
             $('#uom'+count).val(data);
         },
     });
 });
-
 $(document).on('change', '.category', function(){
     var codeOp = " ";
     var descOp = " ";
@@ -818,16 +742,13 @@ $(document).on('change', '.category', function(){
                     }
                 }
             });
-        },
+        }
     });
-    
     $('#qty'+count).val('0');
 });
-
 $(document).on('click', '.close', function(){
     window.location.href = 'request';
 });
-
 $(document).on('click', '.cancel', function(){
     window.location.href = 'request';
 });

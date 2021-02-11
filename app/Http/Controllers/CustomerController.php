@@ -14,65 +14,47 @@ class CustomerController extends Controller
     {
         $this->middleware('auth');
     }
-    
     public function index()
     {
         if (auth()->user()->hasanyrole('Repair')) {
             return redirect('/');
         }
-
         $title = 'Customers';
         return view('pages.customer', compact('title'));
     }
-
     public function customertable()
     {
-
         $customer = Customer::all();
-
         return DataTables::of($customer)
-
         ->addColumn('code', function (Customer $customer){
-            
             return strtoupper($customer->code);
         })
-
         ->addColumn('customer', function (Customer $customer){
-            
             return strtoupper($customer->customer);
         })
-
         ->make(true);
-
     }
 
     public function branchindex(Request $request, $id)
     {
-
         $customer = Customer::find($id);
         $title = strtoupper($customer->customer).' Branches';
         $customer = strtoupper($customer->customer);
         return view('pages.customerbranch', compact('customer', 'title'));
     }
-
     public function customerbranchtable($id)
     {
-
         $customer = CustomerBranch::where('customer_id', $id)->get();
-
         return DataTables::of($customer)
-
         ->addColumn('status', function (CustomerBranch $customer){
             if ($customer->status == 1) {
                 return 'Active';
             }else{
                 return 'Inactive';
             }
-            
         })
         ->make(true);
     }
-
     public function store(Request $request)
     {
         if (Customer::where('code', strtolower($request->input('customer_code')))->exists() || Customer::where('customer', strtolower($request->input('customer_name')))->exists()) {
@@ -85,7 +67,6 @@ class CustomerController extends Controller
             $data = '1';
         }
         return response()->json($data);
-        
     }
 
     public function branchadd(Request $request)
@@ -105,7 +86,6 @@ class CustomerController extends Controller
         }
         return response()->json($data);
     }
-
     public function branchupdate(Request $request)
     {
         if (CustomerBranch::where('code', strtolower($request->bcode))->where('customer_id', $request->bid)->where('id', '!=', $request->id)->exists() || CustomerBranch::where('customer_branch', strtolower($request->bname))->where('customer_id', $request->bid)->where('id', '!=', $request->id)->exists()) {
@@ -122,7 +102,6 @@ class CustomerController extends Controller
         }
         return response()->json($data);
     }
-
     public function update(Request $request)
     {
         if (Customer::where('code', strtolower($request->input('customer_code')))->where('id', '!=', $request->input('myid'))->exists() || Customer::where('customer', strtolower($request->input('customer_name')))->where('id', '!=', $request->input('myid'))->exists()) {
