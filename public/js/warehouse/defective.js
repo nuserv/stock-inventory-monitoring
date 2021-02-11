@@ -60,9 +60,7 @@ $(document).ready(function() {
             .search($(this).val())
             .draw();
     });
-
 });
-
 $(document).on("click", "#defectiveTable tr", function() {
     var trdata = table.row(this).data();
     $('#branch_id').val(trdata.branchid);
@@ -84,13 +82,11 @@ $(document).on("click", "#defectiveTable tr", function() {
         $('#submit_Btn').hide();
         $('#unrepair_Btn').hide();
     }
-
     $('#returnModal').modal({
         backdrop: 'static',
         keyboard: false
     });
 });
-
 $(document).on('click', '#submit_Btn', function() {
     if (sub > 0) {
         return false;
@@ -167,11 +163,13 @@ $(document).on('click', '#submit_Btn', function() {
         });
     }
 });
-
 $(document).on('click', '.close', function() {
-    window.location.href = 'return';
+    if ($('#level').val() != 'Repair') {
+        window.location.href = 'return';
+    }else{
+        window.location.href = '/';
+    }
 });
-
 $(document).on('click', '#unrepair_Btn', function() {
     if (sub > 0) {
         return false;
