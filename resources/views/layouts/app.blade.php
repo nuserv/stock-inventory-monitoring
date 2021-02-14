@@ -168,13 +168,16 @@
             @if(Request::is('request'))
                 @if(auth()->user()->hasAnyrole('Administrator', 'Encoder'))
                     <script src="{{asset('min/?f=js/warehouse/request.js')}}"></script>
+                    <script src="{{asset('min/?f=js/warehouse/request1.js')}}"></script>
                     <script src="{{asset('min/?f=js/warehouse/request2.js')}}"></script>
+                    <script src="{{asset('min/?f=js/warehouse/request3.js')}}"></script>
                 @endif
                 @if(auth()->user()->hasrole('Viewer'))
                     <script src="{{asset('min/?f=js/request.js')}}"></script>
                 @endif
                 @if(!auth()->user()->hasAnyrole('Administrator', 'Encoder', 'Viewer'))
                     <script src="{{asset('min/?f=js/branch/request.js')}}"></script>
+                    <script src="{{asset('min/?f=js/branch/request2.js')}}"></script>
                 @endif
             @endif
 
