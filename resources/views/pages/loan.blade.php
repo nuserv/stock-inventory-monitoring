@@ -3,7 +3,7 @@
 @section('content')
 <br><br>
 <div class="table-responsive">
-    <table class="table loanTable" id="loanTable">
+    <table class="table loanTable" id="loanTable" style="font-size:80%">
         <thead class="thead-dark">
             <tr>
                 <th>

@@ -65,7 +65,7 @@
                 <h5 class="modal-title w-100 text-center">REQUEST DETAILS</h5>
             </div>
             <div class="modal-body">
-                <table class="table display requestDetails" style="width:100%">
+                <table class="table display requestDetails" style="width:100%;font-size:80%">
                     <thead class="thead-dark">
                         <th>Item Code</th>
                         <th>Description</th>
@@ -74,7 +74,7 @@
                     </thead>
                 </table>
                 <br>
-                <table class="table schedDetails" style="width:100%">
+                <table class="table schedDetails" style="width:100%;font-size:80%">
                     <thead class="thead-dark">
                         <th>Item Code</th>
                         <th>Description</th>

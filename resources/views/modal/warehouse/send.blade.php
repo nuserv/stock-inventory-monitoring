@@ -50,7 +50,7 @@
                 <div>
                     <h5 class="modal-title w-100 text-center">REQUEST DETAILS</h5>
                 </div>
-                <table class="table sendDetails" style="height: 150px;width:100%">
+                <table class="table sendDetails" style="height: 150px;width:100%;font-size:80%">
                     <thead class="thead-dark">
                         <th>Item Code</th>
                         <th>Description</th>
@@ -63,33 +63,6 @@
                 <h6 class="modal-title w-100 text-center">ENTER ITEM HERE</h6>
             </div>
             <div class="modal-body" id="reqfield">
-                <!--div class="row no-margin" id="row1">
-                    <div class="col-md-2 form-group">
-                        <select id="category1" style="color: black" class="form-control category" row_count="1">
-                            <option selected disabled>select category</option>
-
-                        </select>
-                    </div>
-                    <div class="col-md-2 form-group">
-                        <select id="item1" style="color: black" class="form-control item" row_count="1">
-                            <option selected disabled>select item code</option>
-                        </select>
-                    </div>
-                    <div class="col-md-3 form-group">
-                        <select id="desc1" style="color: black" class="form-control desc" row_count="1">
-                            <option selected disabled>select item description</option>
-                        </select>
-                    </div>
-                    <div class="col-md-2 form-group">
-                        <input type="text" style="color: black" class="form-control serial" row_count="1" name="serial1" id="serial1" placeholder="input serial">
-                    </div>
-                    <div class="col-md-2 form-group">
-                        <input type="number" style="color: black" class="form-control" row_count="1" name="stock1" id="stock1" placeholder="0" style="width: 6em" disabled>
-                    </div>
-                    <div class="col-md-1 form-group">
-                        <input type="button" class="add_item btn btn-xs btn-primary" btn_id="1" value="Add Item">
-                    </div>
-                </div-->
             </div>
             <hr>
             <div class="modal-footer">

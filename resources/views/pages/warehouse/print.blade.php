@@ -47,7 +47,7 @@
     <h5 class="modal-title w-100 text-center">ITEM DETAILS</h5>
 </div>
 <div>
-    <table class="table itemDetails">
+    <table class="table itemDetails" style="font-size:80%">
         <thead class="thead-dark">
             <th>Delivery Schedule</th>
             <th>Item Code</th>

@@ -6,7 +6,7 @@
         <b>SEARCH&nbsp;&nbsp;</b><a href="#" id="search-ic"><i class="fa fa-lg fa-search" aria-hidden="true"></i></a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
         <b>FILTER&nbsp;&nbsp;</b><a href="#" id="filter" data-placement="bottom" data-toggle="popover" data-content='@include("inc.userfilter")'><i class="fa fa-lg fa-filter" aria-hidden="true"></i></a>
     </div>
-    <table class="table" id="userTable">
+    <table class="table" id="userTable" style="font-size:80%">
         <thead class="thead-dark">
             <tr class="tbsearch" style="display:none">
                 <td>
