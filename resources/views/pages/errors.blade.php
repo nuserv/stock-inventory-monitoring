@@ -53,7 +53,7 @@
                 <div class="code">
                     <p>The system currently works only on Google Chrome. Download it <a href="https://support.google.com/chrome/answer/95346">here</a>. </p>
                     <p>We will keep you posted once it works on other browsers. Thank you.</p>
-                    <a href="https://support.google.com/chrome/answer/95346"><img src="{{asset('idsi.png')}}" height="100"></a>
+                    <a href="#"><img src="{{asset('idsi.png')}}" height="100"></a>
                 </div>
             @endif
             @if(!(new \Jenssegers\Agent\Agent())->isDesktop())

@@ -30,7 +30,7 @@ $(document).ready(function()
             },
             {
                 "targets": [ 0 ],
-                "visible": false
+                "visible": true
             }
         ],
         ajax: {
@@ -51,10 +51,11 @@ $(document).ready(function()
             { data: 'status', name:'status'}
         ],
         select: {
-            style: 'multi',
+            style: 'single',
             selector: 'td:first-child'
         }
     });
+    $('.printBtn').hide();
     $('#search-ic').on("click", function () { 
         for ( var i=1 ; i<=5 ; i++ ) {
             
@@ -150,6 +151,7 @@ $(document).on('click', '.printBtn', function () {
 $(document).on('click', '#returnBtn', function(){
     var rowcount = table.data().count();
     var status = new Array();
+    $('.printBtn').show();
     for(var i=0;i<rowcount;i++){
         if (table.rows( i ).data()[0].status == 'For receiving')
         {
@@ -270,7 +272,7 @@ $(document).on("click", "#defectiveTable tr", function () {
         table.row($(this)).deselect()
     }
 });
-$(document).on('click', '#printBtn', function(){
+$(document).on('click', '#printrecBtn', function(){
     $('#loading').show();
     window.location.href = '/defective/print';
 });
