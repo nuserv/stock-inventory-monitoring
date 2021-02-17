@@ -5,8 +5,8 @@ RUN 	ln -fs /usr/share/zoneinfo/Asia/Manila /etc/localtime
 RUN 	apt-get update -y && \
 	apt-get upgrade -y && \
 	apt-get dist-upgrade -y && \
-	apt-get install software-properties-common php7.4 php7.4-fpm php7.4-curl php7.4-ldap php7.4-mysql php7.4-gd \
-	php7.4-xml php7.4-mbstring php7.4-zip php7.4-bcmath composer curl wget nano -y
+	apt-get install software-properties-common php7.3 php7.3-fpm php7.3-curl php7.3-ldap php7.3-mysql php7.3-gd \
+	php7.3-xml php7.3-mbstring php7.3-zip php7.3-bcmath composer curl wget nano -y
 RUN apt-get purge apache2 apache* -y
 WORKDIR /home/
 COPY . .
