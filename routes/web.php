@@ -89,7 +89,8 @@ Route::get('checkStock', 'StockController@checkStocks');//->middleware('ajax');
 Route::get('show', 'StockController@show');//->middleware('ajax');
 Route::get('stocks', 'StockController@index')->name('stocks.index');
 Route::get('uom', 'StockController@uom')->middleware('ajax');
-Route::delete('def', 'StockController@def')->middleware('ajax');
+Route::any('def', 'StockController@def')->middleware('ajax');
+Route::any('repaired', 'StockController@repaired')->middleware('ajax');
 
 Route::post('/branch/import', 'ImportController@branchstore');
 Route::post('/warehouse/import', 'ImportController@warestore');

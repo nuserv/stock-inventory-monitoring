@@ -6,6 +6,7 @@ var branchid;
 var stock;
 var cattable;
 var sub = 0;
+var repretselected;
 $(document).ready(function()
 {
     branchid = $('#branchid').attr('branchid');
@@ -297,11 +298,121 @@ $(document).on('click', '#sub_item_Btn', function(){
 $(document).on('click', '.cancel', function(){
     window.location.href = 'stocks';
 });
+var reprettable =
+    $('table.replace-return').DataTable({ 
+        "dom": 'lrtp',
+        processing: true,
+        serverSide: false,
+        "language": {
+            "emptyTable": "No item/s for return found!",
+            "processing": '<i class="fa fa-spinner fa-spin fa-3x fa-fw"></i><span class="sr-only">Searching...</span> ',
+            "info": "\"Showing _START_ to _END_ of _TOTAL_ Defectives\" &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;",
+            select: {
+                rows: {
+                    _: "You have selected %d Defective Units",
+                    0: "Select Defective Units to Return",
+                    1: "Only %d Defective Unit Selected"
+                }
+            }
+        },
+        "pageLength": 25,
+        columnDefs: [
+            {
+            orderable: false,
+            className: 'select-checkbox',      
+            targets: 0
+            },
+            {
+                "targets": [ 0 ],
+                "visible": true
+            }
+        ],
+        ajax: {
+            url: '/return-table',
+            async: false,
+            error: function(data) {
+                if(data.status == 401) {
+                    window.location.href = '/login';
+                }
+            }
+        },
+        columns: [
+            { data: null, defaultContent: ''},
+            { data: 'date', name:'date'},
+            { data: 'category', name:'category'},
+            { data: 'item', name:'item'},
+            { data: 'serial', name:'serial'},
+            { data: 'status', name:'status'}
+        ],
+        select: {
+            style: 'single',
+            selector: 'td:first-child'
+        }
+    });
+
+$(document).on('click', '.repret_sub_Btn', function(){
+    var repretrow = reprettable.rows( { selected: true } ).data();
+    if (repretrow.length == 0) {
+        alert('Please Select Item!');
+    }else{
+        console.log(repretrow);
+        $.ajax({
+            url: 'def',
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            },
+            dataType: 'json',
+            type: 'DELETE',
+            data: {
+                id: repretselected[0].id,
+                serial: repretselected[0].serial,
+                items_id: repretselected[0].items_id,
+                item: repretselected[0].item,
+                replace: 1,
+                repairitem: repretrow[0].item,
+                repairserial: repretrow[0].serial,
+                repairid:  repretrow[0].id
+            },
+            success: function(){
+                location.reload(); 
+            },
+            error: function (data) {
+                alert(data.responseText);
+            }
+        });
+    }
+});
+
+         
+$(document).on('click', '#use_Btn', function(){
+    repretselected = stock.rows( { selected: true } ).data();
+    console.log(repretselected);
+    $('#replace-item').val(repretselected[0].item);
+    var rowcount = reprettable.data().count();
+    var status = new Array();
+    for(var i=0;i<rowcount;i++){
+        if (reprettable.rows( i ).data()[0].status == 'For receiving')
+        {
+            status.push(i);
+        }
+    }
+    if (rowcount == status.length) {
+        return false;
+    }
+    if (rowcount != status.length) {
+        $('#loading').show();
+        reprettable.rows( status ).remove().draw();
+        $('#loading').hide();
+    }
+    $('#stockModal').hide();
+    $('#replace-return').modal({backdrop: 'static', keyboard: false});
+});
 
 $('table.stockDetails').DataTable().on('select', function () {
     var rowselected = stock.rows( { selected: true } ).data();
     if(rowselected.length > 0){
         $('#def_Btn').prop('disabled', false);
+        $('#use_Btn').prop('disabled', false);
     }
 });
 
@@ -309,6 +420,7 @@ $('table.stockDetails').DataTable().on('deselect', function () {
     var rowselected = stock.rows( { selected: true } ).data();
     if(rowselected.length == 0){
         $('#def_Btn').prop('disabled', true);
+        $('#use_Btn').prop('disabled', true);
     }
 });
 
@@ -326,6 +438,7 @@ $(document).on("click", "#def_Btn", function () {
             id: data[0].id,
             serial: data[0].serial,
             items_id: data[0].items_id,
+            replace: 0,
             item: data[0].item
         },
         success: function(){

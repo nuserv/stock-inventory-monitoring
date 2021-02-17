@@ -219,7 +219,11 @@ class StockController extends Controller
                 ->join('categories', 'category_id', '=', 'categories.id')
                 ->groupBy('category')
                 ->get();
-            return DataTables::of($stock)->make(true);
+            return DataTables::of($stock)
+            ->addColumn('category', function (Stock $stock){
+                return strtoupper($stock->category);
+            })
+            ->make(true);
         }else{
             $stock = Stock::select('UOM','categories.category', 'stocks.items_id as items_id', 'items.item as description', \DB::raw('SUM(CASE WHEN status = \'in\' THEN 1 ELSE 0 END) as quantity'))
                 ->where('stocks.status', 'in')
@@ -228,7 +232,11 @@ class StockController extends Controller
                 ->join('categories', 'stocks.category_id', '=', 'categories.id')
                 ->join('items', 'stocks.items_id', '=', 'items.id')
                 ->groupBy('items_id')->get();
-            return DataTables::of($stock)->make(true);
+            return DataTables::of($stock)
+            ->addColumn('description', function (Stock $stock){
+                return strtoupper($stock->description);
+            })
+            ->make(true);
         }
     }
     public function checkStocks(Request $request)
@@ -362,23 +370,67 @@ class StockController extends Controller
         $data = $pullout->save();
         return response()->json($data);
     }
+
+    public function repaired(Request $request)
+    {
+        $defect = Defective::where('id', $request->id)->first();
+        $addtostoc = new Stock;
+        $addtostoc->user_id = auth()->user()->id;
+        $addtostoc->category_id = $defect->category_id;
+        $addtostoc->branch_id = auth()->user()->branch->id;
+        $addtostoc->items_id = $defect->items_id;
+        $addtostoc->serial = $defect->serial;
+        $addtostoc->status = 'in';
+        $addtostoc->save();
+        $log = new UserLog;
+        $log->user_id = auth()->user()->id;
+        $log->activity = "Repaired $request->item(S/N: $defect->serial).";
+        $data = $defect->delete();
+        return response()->json($data);
+    }
+
     public function def(Request $request)
     {
         $def = Stock::where('id', $request->id)->where('serial', $request->serial)->where('status', 'in')->first();
         $defective = new Defective;
         $defective->branch_id = auth()->user()->branch->id;
-        $defective->user_id = auth()->user()->branch->id;
+        $defective->user_id = auth()->user()->id;
         $defective->category_id = $def->category_id;
         $defective->items_id = $request->items_id;
         $defective->serial = $request->serial;
         $defective->status = 'For return';
         $defective->save();
-        $log = new UserLog;
-        $log->activity = "Marked $request->item(S/N: $request->serial) as defective." ;
-        $log->user_id = auth()->user()->id;
-        $log->save();
-        $def->status = 'defective';
-        $data = $def->save();
+
+        if ($request->replace == 1) {
+            $log = new UserLog;
+            $log->user_id = auth()->user()->id;
+            $log->activity = "Use $request->item(S/N: $request->serial) to repair $request->repairitem(S/N: $request->repairserial).";
+            $log->save();
+            $def->status = "use to $request->repairitem(S/N: '$request->repairserial)";
+            $forrepair = Defective::select('serial', 'items.id as items_id', 'defectives.id as id', 'items.category_id')->where('defectives.id', $request->repairid)
+                ->join('items', 'items.id', '=', 'items_id')
+                ->first();
+            $addtostock = new Stock;
+            $addtostock->user_id = auth()->user()->id;
+            $addtostock->category_id = $forrepair->category_id;
+            $addtostock->branch_id = auth()->user()->branch->id;
+            $addtostock->items_id = $forrepair->items_id;
+            $addtostock->serial = $forrepair->serial;
+            $addtostock->status = 'in';
+            $addtostock->save();
+            $forrepair->delete();
+            $log = new UserLog;
+            $log->user_id = auth()->user()->id;
+            $log->activity = "Repaired $request->repairitem(S/N: $request->repairserial).";
+            $data = $def->save();
+        }else{
+            $log = new UserLog;
+            $log->user_id = auth()->user()->id;
+            $log->activity = "Marked $request->item(S/N: $request->serial) as defective.";
+            $log->save();
+            $def->status = "defective";
+            $data = $def->save();
+        }
         return response()->json($data);
     }
     public function loan(Request $request)

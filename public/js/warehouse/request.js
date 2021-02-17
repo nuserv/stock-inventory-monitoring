@@ -114,7 +114,7 @@ $(document).ready(function()
                 columns: [
                     { data: 'items_id', name:'items_id'},
                     { data: 'item_name', name:'item_name'},
-                    { data: 'qty', name:'qty'},
+                    { data: 'quantity', name:'quantity'},
                     { data: 'serial', name:'serial'}
                 ]
             });

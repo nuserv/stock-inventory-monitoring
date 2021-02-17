@@ -83,6 +83,9 @@ $(document).ready(function()
 });
 $('table.defectiveTable').DataTable().on('select', function () {
     var rowselected = table.rows( { selected: true } ).data();
+    if ($('#returnBtn').is(":visible")) {
+        $('#returnBtn').val('REPAIRED');
+    }
     if(rowselected.length > 0){
         $('#returnBtn').prop('disabled', false);
     }
@@ -91,11 +94,9 @@ $('table.defectiveTable').DataTable().on('select', function () {
     table.button( 0 ).enable( selectedRows > 0 );
 });
 $('table.defectiveTable').DataTable().on('deselect', function () {
-    var rowselected = table.rows( { selected: true } ).data();
-    if ($('#returnBtn').val() == "SUBMIT") {
-        if(rowselected.length == 0){
-            $('#returnBtn').prop('disabled', true);
-        }    
+    //var rowselected = table.rows( { selected: true } ).data();
+    if ($('#returnBtn').is(":visible")) {
+        $('#returnBtn').val('CREATE LIST');
     }
     var selectedRows = table.rows( { selected: true } ).count();
     table.button( 0 ).enable( selectedRows > 0 );
@@ -149,6 +150,29 @@ $(document).on('click', '.printBtn', function () {
     }); 
 });
 $(document).on('click', '#returnBtn', function(){
+    if ($('#returnBtn').val() == 'REPAIRED') {
+        var rowselected = table.rows( { selected: true } ).data();
+        console.log(rowselected);
+        $.ajax({
+            url: 'repaired',
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            },
+            dataType: 'json',
+            type: 'DELETE',
+            data: {
+                id: rowselected[0].id,
+                item: rowselected[0].item
+            },
+            success: function(){
+                location.reload(); 
+            },
+            error: function (data) {
+                alert(data.responseText);
+            }
+        });
+        return false;
+    }
     var rowcount = table.data().count();
     var status = new Array();
     $('.printBtn').show();
