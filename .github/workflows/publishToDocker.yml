@@ -12,6 +12,7 @@ jobs:
     - name: Publish to Registry (Latest Release)
       uses: elgohr/Publish-Docker-Github-Action@master
       with:
+        php-version: '7.3'
         name: nuserv/stock-inventory-monitoring/tim:latest
         username: ${{ github.actor }}
         password:  ${{secrets.NUSERV_REGISTRY_DOCKER}}
