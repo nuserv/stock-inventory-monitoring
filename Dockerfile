@@ -6,7 +6,7 @@ RUN 	apt-get update -y && \
 	apt-get upgrade -y && \
 	apt-get dist-upgrade -y
 RUN apt-get install software-properties-common -y 
-RUN	add-apt-repository ppa:ondrej/php
+RUN	add-apt-repository ppa:ondrej/php -y
 RUN apt-get update -y
 RUN apt-get install php7.4 php7.4-fpm php7.4-curl php7.4-ldap php7.4-mysql php7.4-gd \
 	php7.4-xml php7.4-mbstring php7.4-zip php7.4-bcmath composer curl wget nano -y
