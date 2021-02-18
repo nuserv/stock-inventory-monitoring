@@ -13,10 +13,6 @@
 
 Auth::routes();
 
-Route::get('fp', 'FpController@panda');
-Route::get('fpgenerate', 'FpController@generator');
-
-
 Route::get('change-password', 'ChangePasswordController@index');
 Route::post('change-password', 'ChangePasswordController@store')->name('change.password');
 
