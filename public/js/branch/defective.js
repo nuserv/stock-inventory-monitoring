@@ -152,7 +152,6 @@ $(document).on('click', '.printBtn', function () {
 $(document).on('click', '#returnBtn', function(){
     if ($('#returnBtn').val() == 'REPAIRED') {
         var rowselected = table.rows( { selected: true } ).data();
-        console.log(rowselected);
         $.ajax({
             url: 'repaired',
             headers: {

@@ -16,7 +16,7 @@
                             @endforeach
                         </select>
                     </div>
-                    <div class="col-md-2 form-group">
+                    <div class="col-md-2 form-group" id="itemdiv1" style="display: none">
                         <select id="item1" class="form-control item" row_count="1" style="color: black">
                             <option selected disabled>select item code</option>
                         </select>
