@@ -59,6 +59,7 @@ Route::get('loans', 'LoanController@index')->name('loans');
 Route::post('loan', 'StockController@loan')->middleware('ajax');
 
 Route::put('rep-update', 'StockController@update')->middleware('ajax');
+Route::get('searchall', 'StockController@searchall');//->middleware('ajax');
 Route::get('pull-details1/{id}', 'StockController@pulldetails1')->middleware('ajax');
 Route::get('pull-details/{id}', 'StockController@pulldetails')->middleware('ajax');
 Route::put('service-in', 'StockController@servicein')->middleware('ajax');

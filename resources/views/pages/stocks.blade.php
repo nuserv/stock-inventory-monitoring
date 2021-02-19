@@ -14,6 +14,9 @@
     </div>
 @endif
 </div>
+<form class="example" action="#" style="margin:auto;max-width:300px">
+  <input type="text" placeholder="Search.." id="searchall" size="50" autocomplete="off">
+</form>
 <div id="itemsearch">
     <input type="hidden" id="check" value="{{ $customers }}" />
     <div style="float: right;" class="pt-3">
@@ -42,10 +45,10 @@
             <thead class="thead-dark">
                 <tr class="tbsearch" style="display:none">
                     <td>
-                        <input type="text" class="form-control filter-input fl-0" data-column="0" />
+                        <input type="text" class="form-control filter-input fl-0" data-column="0" placeholder="Search description"/>
                     </td>
                     <td>
-                        <input type="text" class="form-control filter-input fl-1" data-column="1" />
+                        <input type="text" class="form-control filter-input fl-1" data-column="1" placeholder="Search quantity"/>
                     </td>
                 </tr>
                 <tr>
@@ -57,6 +60,24 @@
                     </th>
                     <th>
                         UOM
+                    </th>
+                </tr>
+            </thead>
+        </table>
+    </div>
+
+    <div id="salltable" style="display: none">
+        <table class="table searchtable" id="searchtable" style="display: none;font-size:80%;width: 100%">
+            <thead class="thead-dark">
+                <tr>
+                    <th>
+                        Category
+                    </th>
+                    <th>
+                        Item Description
+                    </th>
+                    <th>
+                        Serial
                     </th>
                 </tr>
             </thead>

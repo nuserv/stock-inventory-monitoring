@@ -37,6 +37,29 @@ $(document).ready(function()
         ]
     });
 
+    searchtable =
+    $('table.searchtable').DataTable({ 
+        "dom": 'lp',
+        "language": {
+            "emptyTable": " "
+        },
+        "pageLength": 25,
+        "order": [[ 1, "asc" ]],
+        processing: true,
+        serverSide: true,
+        ajax: {
+            "url": 'searchall',
+            error: function (data) {
+                alert(data.responseText);
+            }
+        },
+        columns: [
+            { data: 'category', name:'category'},
+            { data: 'description', name:'description'},
+            { data: 'serial', name:'serial'}
+        ]
+    });
+
     $('#search-ic').on("click", function () { 
         for ( var i=0 ; i<=6 ; i++ ) {
             
@@ -56,9 +79,51 @@ $(document).ready(function()
     });
 });
 
+$(document).on("keyup", "#searchall", function () {
+    if ($('#searchall').val()) {
+        searchtable.search(this.value).draw();
+        $('#searchtable').show();
+        $('#salltable').show();
+        $('#catTable').hide();
+        $('#ctable').hide();
+    }else{
+        $('#searchtable').hide();
+        $('#salltable').hide();
+        $('#catTable').show();
+        $('#ctable').show();
+    }
+});
+
+$(document).on("click", "#searchtable tr", function () {
+    var trdata = searchtable.row(this).data();
+    var id = trdata.items_id;
+    $('table.stockDetails').dataTable().fnDestroy();
+    $('#head').text(trdata.category.replace(/&amp;/g, '&'));
+    stock = 
+    $('table.stockDetails').DataTable({ 
+        "dom": 'rt',
+        "language": {
+            "emptyTable": "No Stock Available for this Item"
+        },
+        processing: true,
+        serverSide: true,
+        ajax: "/bserial/"+id,
+        columns: [
+            { data: 'updated_at', name:'updated_at'},
+            { data: 'item', name:'item'},
+            { data: 'serial', name:'serial'}
+        ],
+        select: {
+            style: 'single'
+        }
+    });
+    $('#stockModal').modal();
+});
+
 $(document).on("click", "#catTable tr", function () {
     var catdata = cattable.row(this).data();
     $('table.stockTable').dataTable().fnDestroy();
+    $('#searchall').hide()
     $('#itemsearch').show();
     $('#catname').text(catdata.category.replace(/&amp;/g, '&'));
     $('#catname').show();
@@ -73,7 +138,7 @@ $(document).on("click", "#catTable tr", function () {
         "language": {
             "emptyTable": " "
         },
-        "pageLength": 15,
+        "pageLength": 25,
         "order": [[ 1, "asc" ]],
         processing: true,
         serverSide: true,

@@ -172,6 +172,43 @@ class StockController extends Controller
         })
         ->make(true);
     }
+    public function searchall(Request $request)
+    {
+        /*$search = Stock::select('branch', 'branch_id', 'categories.id as category_id', 'categories.category as category', 'stocks.items_id as items_id', 'items.item as description', 'serial')
+            ->where('stocks.status', 'in')
+            ->where('branch_id', auth()->user()->branch->id)
+            ->where('category', 'like', '%'.$request->search.'%')
+            //->orwhere('description', 'like', '%'.$request->search.'%')
+            //->orwhere('serial', 'like', '%'.$request->search.'%')
+            ->join('categories', 'stocks.category_id', '=', 'categories.id')
+            ->join('items', 'stocks.items_id', '=', 'items.id')
+            ->join('branches', 'branches.id', '=', 'branch_id')
+            ->get();*/
+        /*$search1 = Stock::select('branch','branch_id','categories.id as category_id', 'categories.category as category', 'stocks.items_id as items_id', 'items.item as description', 'serial')
+            ->where('stocks.status', 'in')
+            ->where('branch_id', auth()->user()->branch->id)
+            //->where('categories.category', 'like', '%'.$request->search.'%')
+            ->where('items.item', 'like', '%'.$request->search.'%')
+            //->orwhere('serial', 'like', '%'.$request->search.'%')
+            ->join('categories', 'stocks.category_id', '=', 'categories.id')
+            ->join('items', 'stocks.items_id', '=', 'items.id')
+            ->join('branches', 'branches.id', '=', 'branch_id')
+            ->get();*/
+        $search2 = Stock::select('branch','branch_id','categories.id as category_id', 'categories.category as category', 'stocks.items_id as items_id', 'items.item as description', 'serial')
+            ->where('stocks.status', 'in')
+            ->where('branch_id', auth()->user()->branch->id)
+            //->where('categories.category', 'like', '%'.$request->search.'%')
+            //->where('items.item', 'like', '%'.$request->search.'%')
+            //->where('serial', 'like', '%'.$request->search.'%')
+            ->join('categories', 'stocks.category_id', '=', 'categories.id')
+            ->join('items', 'stocks.items_id', '=', 'items.id')
+            ->join('branches', 'branches.id', '=', 'branch_id')
+            ->get();
+        //dd($search);
+        //$result = $search->merge($search1);
+        //$result = $search2->merge($search1);
+        return DataTables::of($search2)->make(true);
+    }
     public function autocompleteCustomer(Request $request)
     {
         $customer = CustomerBranch::where("customer_branch", "LIKE", "%{$request->id}%")
