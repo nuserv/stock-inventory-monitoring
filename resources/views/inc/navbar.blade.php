@@ -49,11 +49,11 @@
                         <a class="nav-link {{ Request::is('loans') ? 'active' : '' }}" href="{{ route('loans') }}">Loans</a>
                     </li>
                 @endif
-                @hasanyrole('Administrator|Head|Viewer')
+                @role('Viewer')
                     <li class="nav-item">
                         <a class="nav-link {{ Request::is('user') ? 'active' : '' }}" href="{{ url('user') }}">Users</a>
                     </li>
-                @endhasanyrole
+                @endrole
             @endif
         </ul>
         <ul class="nav">
