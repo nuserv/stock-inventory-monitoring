@@ -29,6 +29,36 @@
                             <input type="text" style="color: black" class="form-control form-control-sm " name="name" id="sname" value="{{ auth()->user()->name }}" disabled>
                         </div>
                     </div>
+                    <div class="col-md-6 form-group row">
+                        <label for="reqno" class="col-md-4 col-form-label text-md-right">Request type:</label>
+                        <div class="col-md-8">
+                            <select id="requesttype" class="form-control requesttype" style="color: black;">
+                                <option selected disabled>select type</option>
+                                <option value="Stock">Stock</option>
+                                <option value="Service">Service</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="row no-margin" id="clientrow" style="display:none">
+                    <div class="col-md-6 form-group row">
+                        <label class="col-md-5 col-form-label text-md-right">Client Name:</label>
+                        <div class="col-md-7">
+                            <input type="text" list="client-name" style="color: black" class="form-control form-control-sm " id="client" placeholder="client name" autocomplete="off">
+                            <datalist id="client-name">
+                            </datalist>
+                            <input type="text" id="client-id" value="" hidden>
+                        </div>
+                    </div>
+                    <div class="col-md-6 form-group row">
+                        <label class="col-md-4 col-form-label text-md-right">Client Branch Name:</label>
+                        <div class="col-md-8">
+                            <input type="text" list="customer-name" style="color: black" class="form-control form-control-sm " id="customer" placeholder="client branch name" autocomplete="off">
+                            <datalist id="customer-name">
+                            </datalist>
+                            <input type="text" id="customer-id" value="" hidden>
+                        </div>
+                    </div>
                 </div>
             </div>
             <div class="modal-header">

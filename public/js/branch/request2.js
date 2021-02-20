@@ -309,3 +309,10 @@ $(document).on('click', '.close', function(){
 $(document).on('click', '.cancel', function(){
     window.location.href = 'request';
 });
+$(document).on('change', '#requesttype', function(){
+    if ($(this).val() == 'Stock') {
+        $('#clientrow').hide();
+    }else if ($(this).val() == 'Service'){
+        $('#clientrow').show();
+    }
+});
