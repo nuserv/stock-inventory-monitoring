@@ -52,7 +52,7 @@
                             <thead class="thead-dark">
                                 <tr class="tbsearchm">
                                     <td>
-                                        <input type="text" class="form-control mfilter-input fl-m" data-column="0" />
+                                        <input type="text" placeholder="Search item.." class="form-control mfilter-input fl-m" data-column="0" />
                                     </td>
                                 <tr>
                                     <th>DESCRIPTION</th>
@@ -70,7 +70,7 @@
                             <thead class="thead-dark">
                                 <tr class="tbsearchm">
                                     <td>
-                                        <input type="text" class="form-control cfilter-input fl-c" data-column="0" />
+                                        <input type="text" placeholder="Search category.." class="form-control cfilter-input fl-c" data-column="0" />
                                     </td>
                                 <tr>
                                     <th>Category</th>

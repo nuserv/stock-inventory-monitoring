@@ -8,6 +8,7 @@ use App\Warehouse;
 use App\Item;
 use App\Category;
 use App\Stock;
+use App\PreparedItem;
 use App\CustomerBranch;
 use App\Customer;
 use App\Pullout;
@@ -208,6 +209,25 @@ class StockController extends Controller
         //$result = $search->merge($search1);
         //$result = $search2->merge($search1);
         return DataTables::of($search2)->make(true);
+    }
+    public function searchserial(Request $request)
+    {
+        $sserial = PreparedItem::all();
+        //dd($sserial);
+        return DataTables::of($sserial)
+        ->addColumn('description', function (PreparedItem $PreparedItem){
+            $desc = Item::where('id', $PreparedItem->items_id)->first();
+            return strtoupper($desc->item);
+        })
+        ->addColumn('branch', function (PreparedItem $PreparedItem){
+            $branchname = Branch::where('id', $PreparedItem->branch_id)->first();
+            return strtoupper($branchname->branch);
+        })
+        ->addColumn('user', function (PreparedItem $PreparedItem){
+            $username = User::where('id', $PreparedItem->user_id)->first();
+            return $username->name.' '.$username->lastname;
+        })
+        ->make(true);
     }
     public function autocompleteCustomer(Request $request)
     {

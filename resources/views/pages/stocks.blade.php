@@ -14,9 +14,11 @@
     </div>
 @endif
 </div>
-<form class="example" action="#" style="margin:auto;max-width:300px">
+@if(!auth()->user()->hasrole('Administrator'))
+<form class="search-form" action="#" style="margin:auto;max-width:300px">
   <input type="text" placeholder="Search.." id="searchall" size="50" autocomplete="off">
 </form>
+@endif
 <div id="itemsearch">
     <input type="hidden" id="check" value="{{ $customers }}" />
     <div style="float: right;" class="pt-3">
@@ -65,7 +67,7 @@
             </thead>
         </table>
     </div>
-
+    @if(!auth()->user()->hasrole('Administrator'))
     <div id="salltable" style="display: none">
         <table class="table searchtable" id="searchtable" style="display: none;font-size:80%;width: 100%">
             <thead class="thead-dark">
@@ -83,6 +85,7 @@
             </thead>
         </table>
     </div>
+    @endif
 </div>
 <div class="d-flex">
     @if(auth()->user()->hasAnyrole('Administrator'))

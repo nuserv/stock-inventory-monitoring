@@ -436,4 +436,45 @@ $(document).ready(function()
         
         $('#requestModal').modal('show');
     });
+
+    searchtable =
+    $('table.searchtable').DataTable({ 
+        "dom": 't',
+        "language": {
+            "emptyTable": " "
+        },
+        "pageLength": 25,
+        "order": [[ 1, "asc" ]],
+        processing: true,
+        serverSide: true,
+        ajax: {
+            "url": 'searchserial',
+            error: function (data) {
+                alert(data.responseText);
+            }
+        },
+        columns: [
+            { data: 'created_at', name:'date'},
+            { data: 'description', name:'description'},
+            { data: 'serial', name:'serial'},
+            { data: 'branch', name:'branch'},
+            { data: 'user', name:'user'}
+        ]
+    });
 });
+$(document).on("keyup", "#searchall", function () {
+    if ($('#searchall').val()) {
+        searchtable.columns(2).search(this.value).draw();
+        //searchtable.search(this.value).draw();
+        $('#searchtable').show();
+        $('#salltable').show();
+        $('#requestdiv').hide();
+        $('#requestTable').hide();
+    }else{
+        $('#searchtable').hide();
+        $('#salltable').hide();
+        $('#requestdiv').show();
+        $('#requestTable').show();
+    }
+});
+
