@@ -6,6 +6,7 @@ var sub = 0;
 var add = 0;
 var test = 0;
 var pendingreq;
+var requestno;
 $(document).ready(function()
 {
     var d = new Date();
@@ -35,9 +36,11 @@ $(document).ready(function()
     });
     $('#requestTable tbody').on('click', 'tr', function () { 
         var trdata = table.row(this).data();
-        dtdata = table.row(this).data();;
+        dtdata = table.row(this).data();
+        requestno = trdata.request_no;
+        $('#head').text('STOCK REQUEST NO. '+trdata.request_no);
         $('#date').val(trdata.created_at);
-        $('#reqno').val(trdata.request_no);
+        $('#status').val(trdata.status);
         $('#branch').val(trdata.branch);
         $('#name').val(trdata.reqBy);
         $('#area').val(trdata.area);
@@ -61,6 +64,7 @@ $(document).ready(function()
             $('#del_Btn').show();
             $('#msg').hide();
             $('#rec_Btn').hide();
+            $('#not_rec_Btn').hide();
             $('#del_Btn').attr('reqno', trdata.request_no);
             var penreq;
             Promise.all([pendingrequest()]).then(() => { 
@@ -112,7 +116,7 @@ $(document).ready(function()
             }
         }else if(trdata.status == 'SCHEDULED'){
             $('table.requestDetails').hide();
-            $('.sched').hide();
+            $('.sched').show();
             $('table.schedDetails').show();
             $('#sched').val(trdata.sched);
             $('#del_Btn').hide();
@@ -121,6 +125,11 @@ $(document).ready(function()
             $('#rec_Btn').prop('disabled', true);
             var schedul;
             Promise.all([sched()]).then(() => { 
+                if (schedul == 1) {
+                    $('#not_rec_Btn').show();
+                }else{
+                    $('#not_rec_Btn').hide();
+                }
                 if (schedul <= 10) {
                     $('table.schedDetails').dataTable().fnDestroy();
                     schedtable = 
@@ -180,12 +189,13 @@ $(document).ready(function()
             }
         }else if(trdata.status == 'INCOMPLETE'){
             $('table.requestDetails').hide();
-            $('.sched').hide();
+            $('.sched').show();
             $('table.schedDetails').show();
             $('#sched').val(trdata.sched);
             $('#del_Btn').hide();
             $('#rec_Btn').show();
             $('#msg').show();
+            $('#not_rec_Btn').hide();
             $('#rec_Btn').prop('disabled', true);
             var incomp;
             Promise.all([incompleteschedtable()]).then(() => { 
@@ -249,7 +259,7 @@ $(document).ready(function()
             }
         }else if(trdata.status == 'RESCHEDULED'){
             $('table.requestDetails').hide();
-            $('.sched').hide();
+            $('.sched').show();
             $('table.schedDetails').show();
             $('#sched').val(trdata.sched);
             $('#del_Btn').hide();
@@ -258,6 +268,11 @@ $(document).ready(function()
             $('#rec_Btn').prop('disabled', true);
             var resched;
             Promise.all([rescheduleschedtable()]).then(() => { 
+                if (resched == 1) {
+                    $('#not_rec_Btn').show();
+                }else{
+                    $('#not_rec_Btn').hide();
+                }
                 if (resched <= 10) {
                     $('table.schedDetails').dataTable().fnDestroy();
                     schedtable = 
@@ -318,7 +333,7 @@ $(document).ready(function()
         }else if(trdata.status == 'PARTIAL'){
             $('table.requestDetails').hide();
             $('table.schedDetails').show();
-            $('.sched').hide();
+            $('.sched').show();
             $('#sched').val(trdata.sched);
             $('#del_Btn').hide();
             $('#rec_Btn').show();
@@ -326,6 +341,11 @@ $(document).ready(function()
             $('#rec_Btn').prop('disabled', true);
             var partial;
             Promise.all([partialschedtable()]).then(() => {
+                if (partial == 1) {
+                    $('#not_rec_Btn').show();
+                }else{
+                    $('#not_rec_Btn').hide();
+                }
                 if (partial == 0) {
                     $('.sched').hide();
                     $('#msg').hide();
@@ -443,12 +463,34 @@ $(document).ready(function()
         var rowselected = schedtable.rows( { selected: true } ).data();
         if(rowselected.length > 0){
             $('#rec_Btn').prop('disabled', false);
+            $('#not_rec_Btn').prop('disabled', true);
         }
     });
     $('table.schedDetails').DataTable().on('deselect', function () {
         var rowselected = schedtable.rows( { selected: true } ).data();
         if(rowselected.length == 0){
             $('#rec_Btn').prop('disabled', true);
+            $('#not_rec_Btn').prop('disabled', false);
+        }
+    });
+});
+$(document).on('click', '#not_rec_Btn', function(){
+    $.ajax({
+        url: 'notrec',
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        },
+        dataType: 'json',
+        type: 'PUT',
+        data: {
+            reqno : requestno
+        },
+        success:function()
+        {
+            window.location.href = 'request';
+        },
+        error: function (data) {
+            alert(data.responseText);
         }
     });
 });

@@ -74,6 +74,7 @@ $(document).ready(function()
     $('#requestTable tbody').on('click', 'tr', function () { 
         var trdata = table.row(this).data();
         bID = trdata.branch_id
+        $('#head').text('STOCK REQUEST NO. '+trdata.request_no);
         $('#requesttypes').val(trdata.type);
         if (trdata.type == "STOCK") {
             $('.ticketno').hide();
@@ -145,7 +146,7 @@ $(document).ready(function()
             $('#sched').val(months[trsched.getMonth()]+' '+trsched.getDate()+', ' +trsched.getFullYear());
         }
         $('#date').val(trdata.created_at);
-        $('#reqno').val(trdata.request_no);
+        $('#status').val(trdata.status);
         $('#branch').val(trdata.branch);
         $('#name').val(trdata.reqBy);
         $('#area').val(trdata.area);

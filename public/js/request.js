@@ -40,9 +40,10 @@ var r = 1;
         $('#requestTable tbody').on('click', 'tr', function () {
             var trdata = table.row(this).data();
             var trsched = new Date(trdata.sched);
+            $('#head').text('STOCK REQUEST NO. '+trdata.request_no);
             $('#sched').val(months[trsched.getMonth()]+' '+trsched.getDate()+', ' +trsched.getFullYear());
             $('#date').val(trdata.created_at);
-            $('#reqno').val(trdata.request_no);
+            $('#status').val(trdata.status);
             $('#branch').val(trdata.branch);
             $('#name').val(trdata.reqBy);
             $('#area').val(trdata.area);

@@ -2,7 +2,7 @@
     <div class="modal-dialog modal-dialog-centered modal-lg">
         <div class="modal-content">
             <div class="modal-header">
-                <h6 class="modal-title w-100 text-center">STOCK REQUEST</h6>
+                <h6 class="modal-title w-100 text-center" id="head">STOCK REQUEST</h6>
                 <button class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -16,9 +16,9 @@
                         </div>
                     </div>
                     <div class="col-md-6 form-group row">
-                        <label class="col-md-5 col-form-label text-md-right">Request no.:</label>
+                        <label class="col-md-5 col-form-label text-md-right">Status:</label>
                         <div class="col-md-7">
-                            <input type="text" style="color: black" class="form-control form-control-sm " id="reqno" placeholder="1-001" disabled>
+                            <input type="text" style="color: black" class="form-control form-control-sm " id="status" placeholder="1-001" disabled>
                         </div>
                     </div>
                 </div>
@@ -102,6 +102,7 @@
                 </table>
             </div>
             <div class="modal-footer">
+                <input type="button" class="btn btn-primary mr-auto" id="not_rec_Btn" class="button" value="Not received">
                 <span id="msg">Please select an item to receive.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
                 <input type="button" class="btn btn-primary del_Btn" id="del_Btn" reqno="0" class="button" value="Delete">
                 <input type="button" class="btn btn-primary rec_Btn" id="rec_Btn" class="button" value="Received">

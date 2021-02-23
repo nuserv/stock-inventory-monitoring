@@ -118,6 +118,8 @@ Route::get('pcount', 'StockRequestController@pcount')->middleware('ajax');
 Route::get('request', 'StockRequestController@index')->name('stock.index');
 //Route::get('view', 'StockRequestController@view')->name('stock.view');
 Route::put('update/{id}', 'StockRequestController@updateRequestDetails')->middleware('ajax');
+Route::put('notrec', 'StockRequestController@notreceived')->middleware('ajax');
+
 
 
 Route::get('users', 'UserController@getUsers')->middleware('ajax');

@@ -420,6 +420,13 @@ class StockRequestController extends Controller
         }
         return response()->json($data);
     }
+    public function notreceived(Request $request)
+    {
+        $notrec = StockRequest::where('request_no', $request->reqno)->first();
+        $notrec->status = "4";
+        $data = $notrec->save();
+        return response()->json($data);
+    }
     public function update(Request $request)
     {
         if ($request->stat == 'ok') {
