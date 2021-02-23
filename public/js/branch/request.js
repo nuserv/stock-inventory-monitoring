@@ -27,10 +27,10 @@ $(document).ready(function()
         ajax: 'requests',
         columns: [
             { data: 'created_at', name:'date', "width": "14%" },
-            { data: 'ticket', name:'ticket', "width": "14%"},
             { data: 'reqBy', name:'reqBy', "width": "14%"},
             { data: 'type', name:'type', "width": "14%"},
-            { data: 'status', name:'status', "width": "14%"}
+            { data: 'status', name:'status', "width": "14%"},
+            { data: 'ticket', name:'ticket', "width": "14%"}
         ]
     });
     $('#requestTable tbody').on('click', 'tr', function () { 

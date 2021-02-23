@@ -29,11 +29,11 @@ var r = 1;
             columns: [
                 { data: 'id', name:'id'},
                 { data: 'created_at', name:'date', "width": "14%" },
-                { data: 'request_no', name:'request_no', "width": "14%"},
                 { data: 'reqBy', name:'reqBy', "width": "14%"},
                 { data: 'branch', name:'branch',"width": "14%"},
-                { data: 'area', name:'area',"width": "14%"},
-                { data: 'status', name:'status', "width": "14%"}
+                { data: 'type', name:'type', "width": "14%"},
+                { data: 'status', name:'status', "width": "14%"},
+                { data: 'ticket', name:'ticket', "width": "14%"}
             ]
         });
 
@@ -47,29 +47,97 @@ var r = 1;
             $('#name').val(trdata.reqBy);
             $('#area').val(trdata.area);
             $('#reqbranch').val(trdata.branch_id);
-            $('table.requestDetails').dataTable().fnDestroy();
-            $('table.schedDetails').dataTable().fnDestroy();
-            $('#printBtn').show();
-            $('table.requestDetails').hide();
+            $('#requesttypes').val(trdata.type);
+            if (trdata.type == "STOCK") {
+                $('.ticketno').hide();
+                $('#clientrows').hide();
+            }else{
+                $('.ticketno').show();
+                $('#clientrows').show();
+                $('#clients').val(trdata.client);
+                $('#customers').val(trdata.customer);
+                $('#tickets').val(trdata.ticket);
+            }
+            if (trdata.status == 'PENDING') {
+                $('table.requestDetails').dataTable().fnDestroy();
+                $('table.requestDetails').show();
+                $('table.schedDetails').hide();
+                $('table.schedDetails').dataTable().fnDestroy();
+                var penreq;
+                Promise.all([pendingrequest()]).then(() => { 
+                    if (penreq <= 10) {
+                        $('table.requestDetails').dataTable().fnDestroy();
+                        pendingreq = 
+                        $('table.requestDetails').DataTable({ 
+                            "dom": 'rt',
+                            "language": {
+                                "emptyTable": " "
+                            },
+                            processing: true,
+                            serverSide: true,
+                            ajax: "/requests/"+trdata.request_no,
+                            columns: [
+                                { data: 'items_id', name:'items_id'},
+                                { data: 'item_name', name:'item_name'},
+                                { data: 'qty', name:'qty'}
+                            ]
+                        });
+                    }else if (penreq > 10) {
+                        $('table.requestDetails').dataTable().fnDestroy();
+                        pendingreq = 
+                        $('table.requestDetails').DataTable({ 
+                            "dom": 'lrtp',
+                            "language": {
+                                "emptyTable": " "
+                            },
+                            processing: true,
+                            serverSide: true,
+                            ajax: "/requests/"+trdata.request_no,
+                            columns: [
+                                { data: 'items_id', name:'items_id'},
+                                { data: 'item_name', name:'item_name'},
+                                { data: 'qty', name:'qty'}
+                            ]
+                        });
+                    }
+                });
+                function pendingrequest() {
+                    return $.ajax({
+                        type:'get',
+                        url: "/requests/"+trdata.request_no,
+                        success:function(data)
+                        {
+                            penreq = data.data.length;
+                        },
+                    });
+                }
+            }else{
+                $('table.requestDetails').dataTable().fnDestroy();
+                $('table.schedDetails').dataTable().fnDestroy();
+                $('table.requestDetails').hide();
+                $('table.schedDetails').show();
+                $('table.schedDetails').DataTable({ 
+                    "dom": 'rt',
+                    "language": {
+                        "emptyTable": " "
+                    },
+                    processing: true,
+                    serverSide: true,
+                    ajax: "/send/"+trdata.request_no,
+                    columnDefs: [
+                        {"className": "dt-center", "targets": "_all"}
+                    ],
+                    columns: [
+                        { data: 'items_id', name:'items_id'},
+                        { data: 'item_name', name:'item_name'},
+                        { data: 'quantity', name:'quantity'},
+                        { data: 'serial', name:'serial'}
+                    ]
+                });
+            }   
+            /*$('#printBtn').show();
             $('#unresolveBtn').hide();
-            $('table.schedDetails').show();
-            $('table.schedDetails').DataTable({ 
-                "dom": 'rt',
-                "language": {
-                    "emptyTable": " "
-                },
-                processing: true,
-                serverSide: true,
-                ajax: "/send/"+trdata.request_no,
-                columnDefs: [
-                    {"className": "dt-center", "targets": "_all"}
-                ],
-                columns: [
-                    { data: 'items_id', name:'items_id'},
-                    { data: 'item_name', name:'item_name'},
-                    { data: 'serial', name:'serial'}
-                ]
-            });
+            */
             $('#requestModal').modal('show');
 
         });

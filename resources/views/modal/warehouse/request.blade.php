@@ -97,8 +97,10 @@
                     <thead class="thead-dark">
                         <th>Item Code</th>
                         <th>Description</th>
-                        <th>Qty</th>
+                        <th>Qty - UOM</th>
+                        @if(!auth()->user()->hasrole('Viewer'))
                         <th>Stock Available</th>
+                        @endif
                     </thead>
                 </table>
                 <br>

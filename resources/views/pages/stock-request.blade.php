@@ -19,9 +19,6 @@
                     DATE
                 </th>
                 <th>
-                    TICKET NO.
-                </th>
-                <th>
                     REQUESTED BY
                 </th>
                 @if(auth()->user()->hasAnyrole('Administrator', 'Encoder', 'Viewer'))
@@ -34,6 +31,9 @@
                 </th>
                 <th>
                     STATUS
+                </th>
+                <th>
+                    TICKET NO.
                 </th>
             </tr>
         </thead>
