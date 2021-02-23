@@ -420,6 +420,10 @@ class StockRequestController extends Controller
         }
         return response()->json($data);
     }
+    public function test(Request $request)
+    {
+        StockRequest::where('status', 4)->where( 'created_at', '<', Carbon::now()->subDays(3))->update(['status' => 6]);
+    }
     public function notreceived(Request $request)
     {
         $notrec = StockRequest::where('request_no', $request->reqno)->first();
