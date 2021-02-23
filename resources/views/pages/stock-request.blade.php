@@ -19,7 +19,7 @@
                     DATE
                 </th>
                 <th>
-                    REQUEST NO.
+                    TICKET NO.
                 </th>
                 <th>
                     REQUESTED BY
@@ -28,10 +28,10 @@
                 <th>
                     BRANCH NAME
                 </th>
-                <th>
-                    AREA
-                </th>
                 @endif
+                <th>
+                    REQUEST TYPE
+                </th>
                 <th>
                     STATUS
                 </th>

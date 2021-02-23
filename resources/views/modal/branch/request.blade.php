@@ -16,8 +16,8 @@
                         </div>
                     </div>
                     <div class="col-md-6 form-group row">
-                        <label class="col-md-4 col-form-label text-md-right">Request no.:</label>
-                        <div class="col-md-8">
+                        <label class="col-md-5 col-form-label text-md-right">Request no.:</label>
+                        <div class="col-md-7">
                             <input type="text" style="color: black" class="form-control form-control-sm " id="reqno" placeholder="1-001" disabled>
                         </div>
                     </div>
@@ -30,8 +30,8 @@
                         </div>
                     </div>
                     <div class="col-md-6 form-group row">
-                        <label class="col-md-4 col-form-label text-md-right">Requested by:</label>
-                        <div class="col-md-8">
+                        <label class="col-md-5 col-form-label text-md-right">Requested by:</label>
+                        <div class="col-md-7">
                             <input type="text" style="color: black" class="form-control form-control-sm " id="name" value="{{ auth()->user()->name }}" disabled>
                         </div>
                     </div>
@@ -43,9 +43,37 @@
                             <input type="text" style="color: black" class="form-control form-control-sm " id="area" value="{{ auth()->user()->area->area }}" disabled>
                         </div>
                     </div>
+                    <div class="col-md-6 form-group row ticketno">
+                        <label class="col-md-5 col-form-label text-md-right">Ticket no.:</label>
+                        <div class="col-md-7">
+                            <input type="text" style="color: black" class="form-control form-control-sm " id="tickets" disabled>
+                        </div>
+                    </div>
+                </div>
+                <div class="row no-margin" id="clientrows" style="display:none">
+                    <div class="col-md-6 form-group row">
+                        <label class="col-md-5 col-form-label text-md-right">Client Name:</label>
+                        <div class="col-md-7">
+                            <input type="text" style="color: black" class="form-control form-control-sm " id="clients" disabled>
+                        </div>
+                    </div>
+                    <div class="col-md-6 form-group row">
+                        <label class="col-md-5 col-form-label text-md-right">Customer Name:</label>
+                        <div class="col-md-7">
+                            <input type="text" style="color: black" class="form-control form-control-sm " id="customers" disabled>
+                        </div>
+                    </div>
+                </div>
+                <div class="row no-margin">
+                    <div class="col-md-6 form-group row">
+                        <label class="col-md-5 col-form-label text-md-right">Request type:</label>
+                        <div class="col-md-7">
+                            <input type="text" style="color: black" class="form-control form-control-sm " id="requesttypes" value="" disabled>
+                        </div>
+                    </div>
                     <div class="col-md-6 form-group row sched">
-                        <label class="col-md-4 col-form-label text-md-right">Schedule on:</label>
-                        <div class="col-md-8">
+                        <label class="col-md-5 col-form-label text-md-right">Schedule on:</label>
+                        <div class="col-md-7">
                             <input type="text" style="color: black" class="form-control form-control-sm " id="sched" value="" disabled>
                         </div>
                     </div>

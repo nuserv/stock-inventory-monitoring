@@ -113,7 +113,7 @@ Route::get('send/{id}', 'StockRequestController@getsendDetails');//->middleware(
 Route::get('requests/{id}', 'StockRequestController@getRequestDetails');//->middleware('ajax');
 Route::get('getrequests', 'StockRequestController@getReqDetails')->middleware('ajax');
 Route::get('prep/{id}', 'StockRequestController@prepitemdetails')->middleware('ajax');
-Route::get('requests', 'StockRequestController@getRequests')->middleware('ajax');
+Route::get('requests', 'StockRequestController@getRequests');//->middleware('ajax');
 Route::get('pcount', 'StockRequestController@pcount')->middleware('ajax');
 Route::get('request', 'StockRequestController@index')->name('stock.index');
 //Route::get('view', 'StockRequestController@view')->name('stock.view');

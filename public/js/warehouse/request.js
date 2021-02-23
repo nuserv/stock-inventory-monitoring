@@ -63,10 +63,10 @@ $(document).ready(function()
         columns: [
             { data: 'id', name:'id'},
             { data: 'created_at', name:'date', "width": "14%" },
-            { data: 'request_no', name:'request_no', "width": "14%"},
+            { data: 'ticket', name:'ticket', "width": "14%"},
             { data: 'reqBy', name:'reqBy', "width": "14%"},
             { data: 'branch', name:'branch',"width": "14%"},
-            { data: 'area', name:'area',"width": "14%"},
+            { data: 'type', name:'type', "width": "14%"},
             { data: 'status', name:'status', "width": "14%"}
         ]
     });
@@ -74,6 +74,17 @@ $(document).ready(function()
     $('#requestTable tbody').on('click', 'tr', function () { 
         var trdata = table.row(this).data();
         bID = trdata.branch_id
+        $('#requesttypes').val(trdata.type);
+        if (trdata.type == "STOCK") {
+            $('.ticketno').hide();
+            $('#clientrows').hide();
+        }else{
+            $('.ticketno').show();
+            $('#clientrows').show();
+            $('#clients').val(trdata.client);
+            $('#customers').val(trdata.customer);
+            $('#tickets').val(trdata.ticket);
+        }
         if (trdata.status == 'SCHEDULED') {
             $('#prcBtn').hide();
             $('.sched').show();

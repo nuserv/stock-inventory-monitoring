@@ -28,7 +28,11 @@ $(document).on('change', '.replacementdesc', function(){
 });
 
 $(document).on('click', '.out_sub_Btn', function(){
-    if (outsub > 0) {
+    /*if (outsub > 0) {
+        return false;
+    }*/
+    if (r == 1 || outsub > 0) {
+        alert('Please add item/s.');
         return false;
     }
     var cat = "";
@@ -204,6 +208,12 @@ $(document).on('click', '.out_add_item', function(){
         $('#outrow'+rowcount).hide();
         $(this).val('Add Item');
         r--;
+    }
+    if (r == 1) {
+        $('#out_sub_Btn').prop('disabled', true);
+    }else{
+        $('#out_sub_Btn').prop('disabled', false);
+
     }
 });
 
@@ -404,6 +414,7 @@ $(document).on('keyup', '#client', function(){
     var id = $(this).val();
     var op = " ";
     $('#customer').val('');
+    $('#customer-id').val('');
     $("#customer-name").find('option').remove();
     $.ajax({
         type:'get',

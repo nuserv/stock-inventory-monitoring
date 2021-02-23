@@ -173,6 +173,11 @@ $(document).on('click', '.add_item', function(){
         $('#row'+rowcount).hide();
         $(this).val('Add Item');
     }
+    if (add == 0) {
+        $('#send_sub_Btn').prop('disabled', true);
+    }else{
+        $('#send_sub_Btn').prop('disabled', false);
+    }
 });
 $(document).on('click', '.send_sub_Btn', function(){
     if (add == 0 || sub > 0) {
@@ -183,6 +188,22 @@ $(document).on('click', '.send_sub_Btn', function(){
     var qty = "";
     var stat = "notok";
     var reqno = $('#sreqno').val();
+    if ($('#requesttype').val() == 'Service') {
+        if ($('#customer-id').val() == "") {
+            alert('Please Select the correct Customer Name!');
+            return false;
+        }
+    }
+    if ($('#requesttype').val() == "") {
+            alert('Please Select request type!');
+            return false;
+    }
+    if ($('#requesttype').val() == 'Service') {
+        if ($('#ticket').val() == "") {
+            alert('Please input ticket number!');
+            return false;
+        }
+    }
     $('#sendrequestModal').modal('toggle');
     $('#loading').show();
     for(var q=1;q<=y;q++){
@@ -210,6 +231,14 @@ $(document).on('click', '.send_sub_Btn', function(){
             }
         }
         if (q == y) {
+            var ticketno;
+            var customer;
+            var client;
+            if ($('#requesttype').val() == "Service") {
+                ticketno = $('#ticket').val();
+                client = $('#client-id').val();
+                customer = $('#customer-id').val();
+            }
             stat = "ok";
             $.ajax({
                 url: 'storerequest',
@@ -220,6 +249,10 @@ $(document).on('click', '.send_sub_Btn', function(){
                 type: 'POST',
                 data: {
                     reqno : reqno,  
+                    clientid : client,  
+                    customerid : customer,  
+                    ticket : ticketno,  
+                    type : $('#requesttype').val(),  
                     stat: stat                     
                 },
                 success: function(){
@@ -312,7 +345,66 @@ $(document).on('click', '.cancel', function(){
 $(document).on('change', '#requesttype', function(){
     if ($(this).val() == 'Stock') {
         $('#clientrow').hide();
+        $('#ticketrow').hide();
     }else if ($(this).val() == 'Service'){
+        $('#ticketrow').show();
         $('#clientrow').show();
     }
+});
+$(document).on('keyup', '#client', function(){
+    var id = $(this).val();
+    var op = " ";
+    $('#customer').val('');
+    $('#customer-id').val('');
+    $("#customer-name").find('option').remove();
+    $.ajax({
+        type:'get',
+        url:'client-autocomplete',
+        data:{
+            'id':id
+        },
+        success:function(data)
+        {
+            var customer = $.map(data, function(value, index) {
+                return [value];
+            });
+            op+=' ';
+            customer.forEach(value => {
+                op+='<option data-value="'+value.id+'" value="'+value.customer.toUpperCase()+'"></option>';
+            });
+            $("#client-name").find('option').remove().end().append(op);
+            
+            $('#client-id').val($('#client-name [value="'+$('#client').val()+'"]').data('value'));
+        },
+    });
+});
+$(document).on('keyup', '#customer', function(){
+    var id = $(this).val();
+    var op = " ";
+    if ($('#client-id').val()) {
+        var client = $('#client-id').val();
+    }else{
+        alert("Incomplete Client Name!");
+        return false;
+    }
+    $.ajax({
+        type:'get',
+        url:'customer-autocomplete',
+        data:{
+            'id':id,
+            'client':client
+        },
+        success:function(data)
+        {
+            var customer = $.map(data, function(value, index) {
+                return [value];
+            });
+            op+=' ';
+            customer.forEach(value => {
+                op+='<option data-value="'+value.id+'" value="'+value.customer_branch.toUpperCase()+'"></option>';
+            });
+            $("#customer-name").find('option').remove().end().append(op);
+            $('#customer-id').val($('#customer-name [value="'+$('#customer').val()+'"]').data('value'));
+        },
+    });
 });

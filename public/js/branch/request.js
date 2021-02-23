@@ -27,8 +27,9 @@ $(document).ready(function()
         ajax: 'requests',
         columns: [
             { data: 'created_at', name:'date', "width": "14%" },
-            { data: 'request_no', name:'request_no', "width": "14%"},
+            { data: 'ticket', name:'ticket', "width": "14%"},
             { data: 'reqBy', name:'reqBy', "width": "14%"},
+            { data: 'type', name:'type', "width": "14%"},
             { data: 'status', name:'status', "width": "14%"}
         ]
     });
@@ -40,6 +41,17 @@ $(document).ready(function()
         $('#branch').val(trdata.branch);
         $('#name').val(trdata.reqBy);
         $('#area').val(trdata.area);
+        $('#requesttypes').val(trdata.type);
+        if (trdata.type == "STOCK") {
+            $('.ticketno').hide();
+            $('#clientrows').hide();
+        }else{
+            $('.ticketno').show();
+            $('#clientrows').show();
+            $('#clients').val(trdata.client);
+            $('#customers').val(trdata.customer);
+            $('#tickets').val(trdata.ticket);
+        }
         $('table.requestDetails').dataTable().fnDestroy();
         $('table.schedDetails').dataTable().fnDestroy();
         if (trdata.status == 'PENDING') {

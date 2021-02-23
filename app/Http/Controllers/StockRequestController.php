@@ -9,6 +9,8 @@ use App\StockRequest;
 use App\RequestedItem;
 use App\PreparedItem;
 use App\Warehouse;
+use App\Customer;
+use App\CustomerBranch;
 use App\Category;
 use App\Item;
 use App\Stock;
@@ -286,6 +288,25 @@ class StockRequestController extends Controller
         ->addColumn('pending', function (StockRequest $request){
             return strtoupper($request->pending);
         })
+        ->addColumn('type', function (StockRequest $request){
+            return strtoupper($request->type);
+        })
+        ->addColumn('client', function (StockRequest $request){
+            if ($request->type == "Service") {
+                $client = Customer::select('customer')->where('id', $request->customer_id)->first()->customer;
+            }else {
+                $client = 'none';
+            }
+            return strtoupper($client);
+        })
+        ->addColumn('customer', function (StockRequest $request){
+            if ($request->type == "Service") {
+                $customer = CustomerBranch::select('customer_branch')->where('id', $request->customer_branch_id)->first()->customer_branch;
+            }else {
+                $customer = 'none';
+            }
+            return strtoupper($customer);
+        })
         ->make(true);
     }
     public function store(Request $request)
@@ -297,6 +318,10 @@ class StockRequestController extends Controller
             $reqno->branch_id = auth()->user()->branch->id;
             $reqno->area_id = auth()->user()->area->id;
             $reqno->status = 0;
+            $reqno->customer_id = $request->clientid;
+            $reqno->customer_branch_id = $request->customerid;
+            $reqno->ticket = $request->ticket;
+            $reqno->type = $request->type;
             $log = new UserLog;
             $log->activity = "Create Stock Request no. $request->reqno";
             $log->user_id = auth()->user()->id;
@@ -447,7 +472,7 @@ class StockRequestController extends Controller
             $prep->serial = $request->serial;
             $prep->branch_id = $request->branchid;
             $prep->schedule = $request->datesched;
-            $prep->user_id = auth()->user->id;
+            $prep->user_id = auth()->user()->id;
             $prep->save();
             $log = new UserLog;
             $log->activity = "Schedule $scheditem->item(S/N: $request->serial) with Request no. $request->reqno ";

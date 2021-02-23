@@ -60,6 +60,14 @@
                         </div>
                     </div>
                 </div>
+                <div class="row no-margin" id="ticketrow" style="display:none">
+                    <div class="col-md-6 form-group row">
+                        <label class="col-md-5 col-form-label text-md-right">Ticket no.:</label>
+                        <div class="col-md-7">
+                            <input type="text" style="color: black" class="form-control form-control-sm " id="ticket" placeholder="Enter ticket number" autocomplete="off">
+                        </div>
+                    </div>
+                </div>
             </div>
             <div class="modal-header">
                 <h6 class="modal-title w-100 text-center">ENTER ITEM HERE</h6>
@@ -95,7 +103,7 @@
             <hr>
             <div class="modal-footer">
                 <input type="button" class="btn btn-primary cancel" value="Cancel">
-                <input type="button" class="btn btn-primary send_sub_Btn" id="send_sub_Btn" class="button" value="Submit">
+                <input type="button" class="btn btn-primary send_sub_Btn" id="send_sub_Btn" class="button" value="Submit" disabled>
             </div>
         </div>
     </div>
