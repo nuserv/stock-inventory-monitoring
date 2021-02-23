@@ -119,8 +119,7 @@ Route::get('request', 'StockRequestController@index')->name('stock.index');
 //Route::get('view', 'StockRequestController@view')->name('stock.view');
 Route::put('update/{id}', 'StockRequestController@updateRequestDetails')->middleware('ajax');
 Route::put('notrec', 'StockRequestController@notreceived')->middleware('ajax');
-
-
+Route::get('mytest', 'StockRequestController@test');//->middleware('ajax');
 
 Route::get('users', 'UserController@getUsers')->middleware('ajax');
 Route::get('user', 'UserController@index')->name('user.index');

@@ -4,6 +4,7 @@ namespace App\Console;
 
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
+use App\StockRequest;
 
 class Kernel extends ConsoleKernel
 {
@@ -26,6 +27,10 @@ class Kernel extends ConsoleKernel
     {
         // $schedule->command('inspire')
         //          ->hourly();
+        $schedule->call(function () {
+            //StockRequest::->where( 'created_at', '<', Carbon::now()->subDays(3))->update(['active' => 0]);
+            StockRequest::where('status', 4)->where( 'created_at', '<', Carbon::now()->subDays(5))->update(['status' => 6, 'remarks' => 'missing']);
+        })->daily();
     }
 
     /**
