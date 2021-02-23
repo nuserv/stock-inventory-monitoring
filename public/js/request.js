@@ -63,6 +63,7 @@ var r = 1;
                 $('table.requestDetails').show();
                 $('table.schedDetails').hide();
                 $('table.schedDetails').dataTable().fnDestroy();
+                $('.sched').hide();
                 var penreq;
                 Promise.all([pendingrequest()]).then(() => { 
                     if (penreq <= 10) {
@@ -116,6 +117,7 @@ var r = 1;
                 $('table.schedDetails').dataTable().fnDestroy();
                 $('table.requestDetails').hide();
                 $('table.schedDetails').show();
+                $('.sched').show();
                 $('table.schedDetails').DataTable({ 
                     "dom": 'rt',
                     "language": {
