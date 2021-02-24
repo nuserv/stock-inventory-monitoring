@@ -89,7 +89,7 @@
                     </div>
                 </div>
             </div>
-            <div>
+            <div class="container">
                 <h5 class="modal-title w-100 text-center">REQUEST DETAILS</h5>
             </div>
             <div class="modal-body">
@@ -112,12 +112,14 @@
                         <th>Serial</th>
                     </thead>
                 </table>
+                <br>
+                <p class="notes" style="color:red"><b>NOTE: </b><span class="notes" style="color:black" id="notes"></span></p>
             </div>
             @if(auth()->user()->hasAnyrole('Administrator', 'Encoder'))
             <div class="modal-footer">
                 <input type="button" class="btn btn-primary mr-auto" id="prcBtn" class="button" value="Proceed" disabled>
                 <input type="button" id="printBtn" class="btn btn-primary mr-auto" value="PRINT">
-                <input type="button" id="unresolveBtn" class="btn btn-primary mr-auto" value="UNRESOLVE">
+                <input type="button" id="unresolveBtn" class="btn btn-primary mr-auto" value="UNRESOLVE" hidden>
                 <input type="button" class="btn btn-primary" data-dismiss="modal" value="CLOSE">
             </div>
             @endif

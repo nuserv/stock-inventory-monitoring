@@ -40,6 +40,7 @@ var r = 1;
         $('#requestTable tbody').on('click', 'tr', function () {
             var trdata = table.row(this).data();
             var trsched = new Date(trdata.sched);
+            $('.notes').hide();
             $('#head').text('STOCK REQUEST NO. '+trdata.request_no);
             $('#sched').val(months[trsched.getMonth()]+' '+trsched.getDate()+', ' +trsched.getFullYear());
             $('#date').val(trdata.created_at);
@@ -114,6 +115,10 @@ var r = 1;
                     });
                 }
             }else{
+                if (trdata.status == 'UNRESOLVED') {
+                    $('.notes').show();
+                    $('#notes').text('The Stock Request has not been resolved by the warehouse team five days from now. To resolve the issue a discussion with the warehouse team is recommended and input the remarks in the text field provided for the solution.');
+                }
                 $('table.requestDetails').dataTable().fnDestroy();
                 $('table.schedDetails').dataTable().fnDestroy();
                 $('table.requestDetails').hide();

@@ -276,6 +276,12 @@ class StockRequestController extends Controller
         ->addColumn('created_at', function (StockRequest $request){
             return $request->created_at->toFormattedDateString().' '.$request->created_at->toTimeString();
         })
+        ->addColumn('left', function (StockRequest $request){
+            //Carbon::now()->subDays($request->created_at))
+            $dd = Carbon::parse($request->updated_at)->addDays(5);
+            //$dd->year(date('Y'));
+            return Carbon::now()->diffInDays($dd, false);//Carbon::now()->subDays(5);
+        })
         ->addColumn('reqBy', function (StockRequest $request){
             return strtoupper($request->user->name);
         })

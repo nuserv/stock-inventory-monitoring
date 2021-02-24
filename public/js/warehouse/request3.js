@@ -50,12 +50,9 @@ $(document).on('click', '#save_Btn', function(){
             }
         }
     }
-    
 });
 
-
 $(document).on('change', '.desc', function(){
-    
     var count = $(this).attr('row_count');
     var id = $(this).val();
     $('#item' + count).val(id);
@@ -102,7 +99,7 @@ $(document).on('click', '.cancel', function(){
 $(document).on('click', '#printBtn', function(){
     if ($('#printBtn').val() == "PRINT") {
         window.location.href = '/print/'+$('#reqno').val();
-    }else if($('#printBtn').val() == "RESOLVE"){
+    }else if($('#printBtn').val() == "RESCHEDULE"){
         $('#reschedModal').modal('show');
     }
 });

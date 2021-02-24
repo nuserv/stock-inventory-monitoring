@@ -30,7 +30,7 @@ class Kernel extends ConsoleKernel
         $schedule->call(function () {
             //StockRequest::->where( 'created_at', '<', Carbon::now()->subDays(3))->update(['active' => 0]);
             StockRequest::where('status', 4)->where( 'created_at', '<', Carbon::now()->subDays(5))->update(['status' => 6, 'remarks' => 'missing']);
-        })->daily();
+        })->everyMinute();
     }
 
     /**
