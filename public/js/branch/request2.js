@@ -20,7 +20,7 @@ $(document).on('click', '#del_Btn', function(){
     });
 });
 $(document).on('click', '#rec_Btn', function(){
-    var reqno = $('#reqno').val();
+    var reqno = requestno;
     var sched = $('#sched').val();
     $('#loading').show();
     if(dtdata.status == "SCHEDULED"){

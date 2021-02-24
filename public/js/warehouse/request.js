@@ -112,6 +112,8 @@ $(document).ready(function()
         }else if(trdata.status == 'UNRESOLVED'){
             $('#printBtn').show();
             $('#printBtn').val('PRINT');
+            $('.notes').show();
+            $('#notes').text('Please be informed that the current status is now UNRESOLVED after the five days given to resolve the issue. Kindly contact the manager to resolve the issue.');
             $('table.requestDetails').hide();
             $('table.schedDetails').dataTable().fnDestroy();
             $('table.schedDetails').show();
@@ -147,16 +149,36 @@ $(document).ready(function()
             $('#printBtn').show();
             var trsched = new Date(trdata.sched);
             $('.notes').show();
-            if (trdata.left >= 0) {
+            if (trdata.left != 0) {
+                trdata.left++;
                 if (trdata.left > 1) {
-                    var withs = 's';
-                }else{
-                    var withs = '';
+                    var withs = 'days';
+                }else if(trdata.left == 1){
+                    trdata.hour == trdata.hour-24;
+                    var withs = 'day and '+toWords(trdata.hour)+'('+trdata.hour+') hours';
+                    if (trdata.hour == 1) {
+                        var withs = 'day and '+toWords(trdata.hour)+'('+trdata.hour+') hour';
+                    }
                 }
-                $('#notes').text('Please be informed that you only have '+toWords(trdata.left)+'('+trdata.left+') day'+withs+' to resolve this issue. Once the '+toWords(trdata.left)+'('+trdata.left+') day'+withs+' given has elapsed, the status of this issue will be automatically converted to UNRESOLVE.');
-                //$('#notes1').text('Once the '+toWords(trdata.left)+'('+trdata.left+') day'+withs+' given has elapsed, the status of this issue will be automatically converted to UNRESOLVE.');
+                $('#notes').text('Please be informed that you only have '+toWords(trdata.left)+'('+trdata.left+') '+withs+' to resolve this issue. Once the '+toWords(trdata.left)+'('+trdata.left+') '+withs+' given has elapsed, the status of this issue will be automatically converted to UNRESOLVE.');
             }else{
-                $('#notes').text('Please be informed that the current status is now UNRESOLVED after the five days given to resolve the issue. Kindly contact the manager to resolve the issue.');
+                if (trdata.left == 0) {
+                    if (trdata.hour != 0) {
+                        var withs = 'hours';
+                        trdata.left = trdata.hour;
+                        if (trdata.hour == 1) {
+                            trdata.minute = trdata.minute-60;
+                            var withs = 'hour and '+toWords(trdata.minute)+'('+trdata.minute+') minutes';
+                            if (trdata.minute == 1) {
+                                var withs = 'hour and '+toWords(trdata.minute)+'('+trdata.minute+') minute';
+                            }
+                        }
+                    }else{
+                        var withs = 'minutes';
+                        trdata.left = trdata.minute;
+                    }
+                }
+                $('#notes').text('Please be informed that you only have '+toWords(trdata.left)+'('+trdata.left+') '+withs+' to resolve this issue. Once the '+toWords(trdata.left)+'('+trdata.left+') '+withs+' given has elapsed, the status of this issue will be automatically converted to UNRESOLVE.');
             }
             $('#sched').val(months[trsched.getMonth()]+' '+trsched.getDate()+', ' +trsched.getFullYear());
         }

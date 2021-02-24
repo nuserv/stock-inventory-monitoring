@@ -282,6 +282,18 @@ class StockRequestController extends Controller
             //$dd->year(date('Y'));
             return Carbon::now()->diffInDays($dd, false);//Carbon::now()->subDays(5);
         })
+        ->addColumn('minute', function (StockRequest $request){
+            //Carbon::now()->subDays($request->created_at))
+            $dd = Carbon::parse($request->updated_at)->addDays(5);
+            //$dd->year(date('Y'));
+            return Carbon::now()->diffInMinutes($dd, false);//Carbon::now()->subDays(5);
+        })
+        ->addColumn('hour', function (StockRequest $request){
+            //Carbon::now()->subDays($request->created_at))
+            $dd = Carbon::parse($request->updated_at)->addDays(5);
+            //$dd->year(date('Y'));
+            return Carbon::now()->diffInHours($dd, false);//Carbon::now()->subDays(5);
+        })
         ->addColumn('reqBy', function (StockRequest $request){
             return strtoupper($request->user->name);
         })
@@ -428,7 +440,7 @@ class StockRequestController extends Controller
     }
     public function test(Request $request)
     {
-        StockRequest::where('status', 4)->where( 'created_at', '<', Carbon::now()->subDays(3))->update(['status' => 6]);
+        StockRequest::where('status', 4)->where( 'updated_at', '<', Carbon::now()->subDays(5))->update(['status' => 6]);
     }
     public function notreceived(Request $request)
     {

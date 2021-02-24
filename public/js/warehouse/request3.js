@@ -98,7 +98,7 @@ $(document).on('click', '.cancel', function(){
 
 $(document).on('click', '#printBtn', function(){
     if ($('#printBtn').val() == "PRINT") {
-        window.location.href = '/print/'+$('#reqno').val();
+        window.location.href = '/print/'+reqnumber;
     }else if($('#printBtn').val() == "RESCHEDULE"){
         $('#reschedModal').modal('show');
     }
@@ -106,7 +106,7 @@ $(document).on('click', '#printBtn', function(){
 
 $(document).on('click', '#unresolveBtn', function(){
     var status = "6";
-    var reqno = $('#reqno').val();
+    var reqno = reqnumber;
     var stat = "resched";
     $.ajax({
         url: 'update',
@@ -122,7 +122,7 @@ $(document).on('click', '#unresolveBtn', function(){
         dataType: 'json',
         success:function()
         {
-            window.location.href = '/print/'+$('#reqno').val();
+            window.location.href = '/print/'+reqnumber;
         },
         error: function (data) {
             alert(data.responseText);
@@ -132,7 +132,7 @@ $(document).on('click', '#unresolveBtn', function(){
 
 $(document).on('click', '#resched_btn', function(){
     var datesched = $('#resched').val();
-    var reqno = $('#reqno').val();
+    var reqno = reqnumber;
     var stat = "resched";
     var status = "5";
     $.ajax({
@@ -150,7 +150,7 @@ $(document).on('click', '#resched_btn', function(){
         dataType: 'json',
         success:function()
         {
-            window.location.href = '/print/'+$('#reqno').val();
+            window.location.href = '/print/'+reqnumber;
         },
         error: function (data) {
             alert(data.responseText);

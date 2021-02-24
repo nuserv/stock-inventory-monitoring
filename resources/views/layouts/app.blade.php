@@ -70,6 +70,7 @@
                 @endif
                 @if(auth()->user()->hasAnyrole('Viewer'))
                     @include('modal.warehouse.request')
+                    @include('modal.remarks')
                 @endif
                 @if(!auth()->user()->hasAnyrole('Administrator', 'Encoder', 'Viewer'))
                     @include('modal.branch.request')

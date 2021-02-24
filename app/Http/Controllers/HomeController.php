@@ -17,6 +17,7 @@ use App\PreparedItem;
 use App\Stock;
 use App\Defective;
 use App\UserLog;
+use Carbon\Carbon;
 
 use Auth;
 
@@ -32,6 +33,7 @@ class HomeController extends Controller
         if (auth()->user()->status == '0') {
             return redirect('logout');
         }
+        StockRequest::where('status', 4)->where( 'updated_at', '<', Carbon::now()->subDays(5))->update(['status' => 6]);
         if (auth()->user()->branch->branch != "Warehouse" && !auth()->user()->hasrole('Repair')) {
             $units = Stock::where('status', 'in')->where('branch_id', auth()->user()->branch->id)->count();
             $returns = Defective::wherein('status', ['For return', 'For receiving'])->where('branch_id', auth()->user()->branch->id)->count();
