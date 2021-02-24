@@ -13,6 +13,7 @@ var stat = "notok";
 var pending = 0;
 var check = false;
 var requestgo;
+var reqnumber;
 
 $(document).ready(function()
 {
@@ -74,6 +75,7 @@ $(document).ready(function()
     $('#requestTable tbody').on('click', 'tr', function () { 
         var trdata = table.row(this).data();
         bID = trdata.branch_id
+        reqnumber = trdata.request_no;
         $('#head').text('STOCK REQUEST NO. '+trdata.request_no);
         $('#requesttypes').val(trdata.type);
         if (trdata.type == "STOCK") {

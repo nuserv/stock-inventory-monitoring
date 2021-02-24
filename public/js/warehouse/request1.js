@@ -63,7 +63,7 @@ $(document).on('click', '#prcBtn', function(){
     $("#requestModal .closes").click();
     $('#loading').show();
     $('#sdate').val($('#date').val());
-    $('#sreqno').val($('#reqno').val());
+    $('#sreqno').val(reqnumber);
     $('#sbranch').val($('#branch').val());
     $('#sname').val($('#name').val());
     $('table.sendDetails').dataTable().fnDestroy();
