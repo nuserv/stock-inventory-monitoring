@@ -56,7 +56,7 @@
                 @endrole
                 @if(auth()->user()->branch->branch != 'Warehouse')
                     <li class="nav-item">
-                        <a class="nav-link {{ Request::is('preventive') ? 'active' : '' }}" href="{{ route('index.service-unit') }}">PM</a>
+                        <a class="nav-link {{ Request::is('preventive') ? 'active' : '' }}" href="{{ route('index.preventive') }}">PM</a>
                     </li>
                 @endif
             @endif

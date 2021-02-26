@@ -14,6 +14,7 @@ use App\Initial;
 use App\Warehouse;
 use App\StockRequest;
 use App\PreparedItem;
+use App\Category;
 use App\Stock;
 use App\Defective;
 use App\UserLog;
@@ -181,6 +182,15 @@ class HomeController extends Controller
     {
         $users = User::all();
         return view('pages.service-units', compact('users'));
+    }
+    public function preventive()
+    {
+        $title = "Preventive Maintenance";
+        $categories = Category::all();
+        if (auth()->user()->hasrole('Administrator')) {
+            return redirect('/');
+        }
+        return view('pages.pm', compact('title', 'categories'));
     }
     public function getprint(Request $request, $id)
     {

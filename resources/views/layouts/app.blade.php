@@ -99,6 +99,15 @@
                 @endif
             @endif
 
+            @if(Request::is('preventive'))
+                @if(!auth()->user()->hasAnyrole('Administrator', 'Encoder'))
+                    @include('modal.branch.in')
+                    @include('modal.out')
+                    @include('modal.branch.in-option')
+                    @include('modal.branch.service-in')
+                @endif
+            @endif
+
             @if(Request::is('stocks'))
                 @if(auth()->user()->hasAnyrole('Administrator', 'Encoder'))
                     @include('modal.warehouse.add')
@@ -197,6 +206,11 @@
             @if(Request::is('service-unit'))
                 <script src="{{asset('min/?f=js/branch/service-unit.js')}}"></script>
                 <script src="{{asset('min/?f=js/branch/service-out.js')}}"></script>
+            @endif
+
+            @if(Request::is('preventive'))
+                <script src="{{asset('min/?f=js/branch/service-unit.js')}}"></script>
+                <script src="{{asset('min/?f=js/branch/pm.js')}}"></script>
             @endif
 
             @if(Request::is('print/*'))

@@ -142,5 +142,5 @@ Route::get('getprint/{id}', 'HomeController@getprint')->middleware('ajax');
 //Route::get('initial/{id}', 'HomeController@initial')->middleware('ajax');
 Route::get('defective/print', 'HomeController@printDefective')->name('defective.print.index');
 
-
+Route::get('preventive', 'HomeController@preventive')->name('index.preventive');
 Route::get('convert', 'HomeController@convert');
