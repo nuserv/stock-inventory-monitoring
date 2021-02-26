@@ -3,56 +3,69 @@
 @section('content')
 @if(!auth()->user()->hasrole('Repair'))
 <div class="container pt-5">
-    @if (!auth()->user()->hasrole('Viewer'))
     <div class="container-fluid">
         <div class="row">
-            <div class="col-sm-2">
-                <a href="{{ route('stock.index')}}">
-                    <div class="card bg-card">
-                        <div class="card-body text-center">
-                            <p class="card-text">STOCK REQUEST</p>
-                            <p class="card-text">{{ $stockreq }}</p>
+            @if (!auth()->user()->hasrole('Viewer'))
+                <div class="col-sm-2">
+                    <a href="{{ route('stock.index')}}">
+                        <div class="card bg-card">
+                            <div class="card-body text-center">
+                                <p class="card-text">STOCK REQUEST</p>
+                                <p class="card-text">{{ $stockreq }}</p>
+                            </div>
                         </div>
-                    </div>
-                </a>
-            </div>
-            <div class="col-sm-2">
-                <a href="{{ route('stocks.index')}}">
-                    <div class="card bg-card">
-                        <div class="card-body text-center">
-                            <p class="card-text">STOCKS</p>
-                            <p class="card-text">{{ $units }}</p>
+                    </a>
+                </div>
+                <div class="col-sm-2">
+                    <a href="{{ route('stocks.index')}}">
+                        <div class="card bg-card">
+                            <div class="card-body text-center">
+                                <p class="card-text">STOCKS</p>
+                                <p class="card-text">{{ $units }}</p>
+                            </div>
                         </div>
-                    </div>
-                </a>
-            </div>
-            <div class="col-sm-2">
-                <a href="{{ route('return.index')}}">
-                    <div class="card bg-card">
-                        <div class="card-body text-center">
-                            <p class="card-text">RETURNS</p>
-                            <p class="card-text">{{ $returns }}</p>
+                    </a>
+                </div>
+                <div class="col-sm-2">
+                    <a href="{{ route('return.index')}}">
+                        <div class="card bg-card">
+                            <div class="card-body text-center">
+                                <p class="card-text">RETURNS</p>
+                                <p class="card-text">{{ $returns }}</p>
+                            </div>
                         </div>
-                    </div>
-                </a>
-            </div>
-            @if(auth()->user()->branch->branch != 'Warehouse')
-            <div class="col-sm-2">
-                <a href="{{ route('index.service-unit')}}">
-                    <div class="card bg-card">
-                        <div class="card-body text-center">
-                            <p class="card-text">SERVICE UNIT</p>
-                            <p class="card-text">{{ $sunits }}</p>
+                    </a>
+                </div>
+                @if(auth()->user()->branch->branch != 'Warehouse')
+                <div class="col-sm-2">
+                    <a href="{{ route('index.service-unit')}}">
+                        <div class="card bg-card">
+                            <div class="card-body text-center">
+                                <p class="card-text">SERVICE UNIT</p>
+                                <p class="card-text">{{ $sunits }}</p>
+                            </div>
                         </div>
-                    </div>
-                </a>
-            </div>
+                    </a>
+                </div>
+                <div class="col-sm-2">
+                    <a href="{{ url('loans') }}">
+                        <div class="card @if($loans > 0)bg-card-red @else bg-card @endif">
+                            <div class="card-body text-center">
+                                <p class="card-text">LOAN REQUEST</p>
+                                <p class="card-text">{{ $loans }}</p>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+                @endif
+            @endif
+            @if(auth()->user()->branch->branch == 'Warehouse' || auth()->user()->branch->branch == 'Viewer')
             <div class="col-sm-2">
-                <a href="{{ url('loans') }}">
-                    <div class="card @if($loans > 0)bg-card-red @else bg-card @endif">
+                <a href="{{ url('request') }}">
+                    <div class="card @if($unresolved > 0)bg-card-red @else bg-card @endif">
                         <div class="card-body text-center">
-                            <p class="card-text">LOAN REQUEST</p>
-                            <p class="card-text">{{ $loans }}</p>
+                            <p class="card-text">@if($unresolved > 0)UNRESOVLED @else STOCK REQUEST @endif</p>
+                            <p class="card-text">@if($unresolved > 0){{ $unresolved }} @else {{ $stockreq }} @endif</p>
                         </div>
                     </div>
                 </a>
@@ -60,7 +73,6 @@
             @endif
         </div>
     </div>
-    @endif
 </div>
 <ul class="nav nav-tabs">
     <li class="nav-item">

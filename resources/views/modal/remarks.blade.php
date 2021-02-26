@@ -9,8 +9,8 @@
             </div>
             <div class="modal-body" id="rembody">
                 <div class="row no-margin">
-                    <div class="col-md-8 form-group">
-                        <textarea type="text" class="form-control" rows="10"></textarea>
+                    <div class="col-md-12 form-group">
+                        <textarea type="text" class="form-control" rows="10" id="remarkstext"></textarea>
                     </div>
                 </div>
             </div>

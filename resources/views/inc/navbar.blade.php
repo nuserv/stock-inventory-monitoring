@@ -54,6 +54,11 @@
                         <a class="nav-link {{ Request::is('user') ? 'active' : '' }}" href="{{ url('user') }}">Users</a>
                     </li>
                 @endrole
+                @if(auth()->user()->branch->branch != 'Warehouse')
+                    <li class="nav-item">
+                        <a class="nav-link {{ Request::is('preventive') ? 'active' : '' }}" href="{{ route('index.service-unit') }}">PM</a>
+                    </li>
+                @endif
             @endif
         </ul>
         <ul class="nav">

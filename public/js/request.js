@@ -1,6 +1,7 @@
 var r = 1;
 var y = 1;
 var interval = null;
+var requestno;
 $(document).ready(function()
 {
     var d = new Date();
@@ -39,6 +40,7 @@ $(document).ready(function()
     $('#requestTable tbody').on('click', 'tr', function () {
         var trdata = table.row(this).data();
         var trsched = new Date(trdata.sched);
+        requestno = trdata.request_no;
         $('.notes').hide();
         $('#head').text('STOCK REQUEST NO. '+trdata.request_no);
         $('#sched').val(months[trsched.getMonth()]+' '+trsched.getDate()+', ' +trsched.getFullYear());
@@ -113,6 +115,32 @@ $(document).ready(function()
                     },
                 });
             }
+        }else if (trdata.status == 'RESOLVED') {
+            $('.notes').show();
+            $('#notes').text(trdata.remarks);
+            $('table.requestDetails').dataTable().fnDestroy();
+            $('table.schedDetails').dataTable().fnDestroy();
+            $('table.requestDetails').hide();
+            $('table.schedDetails').show();
+            $('.sched').show();
+            $('table.schedDetails').DataTable({ 
+                "dom": 'rt',
+                "language": {
+                    "emptyTable": " "
+                },
+                processing: true,
+                serverSide: true,
+                ajax: "/send/"+trdata.request_no,
+                columnDefs: [
+                    {"className": "dt-center", "targets": "_all"}
+                ],
+                columns: [
+                    { data: 'items_id', name:'items_id'},
+                    { data: 'item_name', name:'item_name'},
+                    { data: 'quantity', name:'quantity'},
+                    { data: 'serial', name:'serial'}
+                ]
+            });
         }else{
             if (trdata.status == 'UNRESOLVED') {
                 $('.notes').show();
@@ -142,17 +170,37 @@ $(document).ready(function()
                 ]
             });
         }   
-        /*$('#printBtn').show();
-        $('#unresolveBtn').hide();
-        */
         $('#requestModal').modal('show');
 
     });
 });
 $(document).on("click", ".schedDetails tr", function() {
-    $('#remarksModal').modal('show');
-    $('#requestModal').modal('hide');
+    if ($('#status').val() == 'UNRESOLVED') {
+        $('#remarksModal').modal('show');
+        $('#requestModal').modal('hide');
+    }
 });
 $(document).on('click', '.close', function(){
     window.location.href = 'request';
+});
+$(document).on('click', '#remarks_btn', function(){
+    $.ajax({
+        url: 'resolved',
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        },
+        dataType: 'json',
+        type: 'PUT',
+        data: {
+            requestno: requestno,
+            remarks: $('#remarkstext').val()
+        },
+        success: function (data) {
+            window.location.href = 'request';
+        },
+        error: function (data) {
+            alert(data.responseText);
+            return false;
+        }
+    });
 });

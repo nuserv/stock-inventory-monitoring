@@ -243,7 +243,7 @@ class StockRequestController extends Controller
                 ->where('branch_id', $user)
                 ->get();
         }else if(auth()->user()->hasRole('Viewer')){
-            $stock = StockRequest::wherein('status',  ['0', '1', '4', '5', '6', '8'])
+            $stock = StockRequest::wherein('status',  ['0', '1', '4', '5', '6', '8', '9'])
                 ->get();
         }else{
             $stock = StockRequest::wherein('status',  ['0', '1', '4', '5', '6', '8'])
@@ -268,6 +268,8 @@ class StockRequestController extends Controller
                 return 'UNRESOLVED';
             }else if ($request->status == 8){
                 return 'PARTIAL';
+            }else if ($request->status == 9){
+                return 'RESOLVED';
             }
         })
         ->addColumn('sched', function (StockRequest $request){
@@ -374,6 +376,16 @@ class StockRequestController extends Controller
             $reqitem->quantity = $request->qty;
             $data = $reqitem->save();
         }
+        return response()->json($data);
+    }
+
+
+    public function resolved(Request $request)
+    {
+        $resolve = StockRequest::where('request_no', $request->requestno)->first();
+        $resolve->remarks = $request->remarks;
+        $resolve->status = 9;
+        $data = $resolve->save();
         return response()->json($data);
     }
 
