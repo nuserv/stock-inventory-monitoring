@@ -98,7 +98,7 @@ $(document).on('change', '.outdesc', function(){
         for(var i=1;i<=y;i++){
             if ($('#outdesc'+i).val() == $(this).val()) {
                 rmserial = $('#outserial'+i).val();
-                $("#outserial"+count+" option[value=\'"+rmserial+"\']").remove();
+                //$("#outserial"+count+" option[value=\'"+rmserial+"\']").remove();
             }
         }
     });
@@ -137,6 +137,17 @@ $(document).on('change', '.outdesc', function(){
                     return [value];
                 });
                 serialOp+='<option selected disabled>select serial</option>';
+                for(var i=1;i<=y;i++){
+                    if ($('#outdesc'+i).val() == id) {
+                        rmserial = $('#outserial'+i).val();
+                        $.each(serial, function(idx, item) {
+                            if (item.serial == rmserial) {
+                                serial.splice(idx, 1); // Remove current item
+                                return false; // End the loop
+                            }
+                        });
+                    }
+                }
                 serial.forEach(value => {
                     serialOp+='<option value="'+value.serial+'">'+value.serial+'</option>';
                 });

@@ -29,7 +29,7 @@ $(document).on('change', '.replacementdesc', function(){
     });
 });
 
-$(document).on('click', '.out_sub_Btn', function(){
+$(document).on('click', '.pm_sub_Btn', function(){
     /*if (outsub > 0) {
         return false;
     }*/
@@ -40,23 +40,31 @@ $(document).on('click', '.out_sub_Btn', function(){
     var cat = "";
     var item = "";
     var check = 1;
-    if ($('#customer-id').val() != "") {
+    if (addr != "" || r != 1) {
         $('#service-unitModal').modal('toggle');
         $('#loading').show();
         for(var q=1;q<=y;q++){
+            var clientarray = new Array();
+            var customerarray = new Array();
             if ($('#outrow'+q).is(":visible")) {
                 if ($('.out_add_item[btn_id=\''+q+'\']').val() == 'Remove') {
                     check++;
                     outsub++;
-                    $('.out_sub_Btn').prop('disabled', true)
+                    $('.pm_sub_Btn').prop('disabled', true)
                     cat = $('#outcategory'+q).val();
                     item = $('#outdesc'+q).val();
                     serial = $('#outserial'+q).val();
-                    purpose = 'service unit';
-                    client = $('#client-id').val();
-                    customer = $('#customer-id').val();
+                    purpose = 'pm';
+                    for(var ab=1;ab<=addbranch;ab++){
+                        if ($('#divcount'+ab).is(":visible")) {
+                            if ($('.add_branch_btn[btn_id=\''+ab+'\']').val() == 'Remove') {
+                                clientarray.push($('#client-id'+ab).val());
+                                customerarray.push($('#customer-id'+ab).val());
+                            }
+                        }
+                    }
                     $.ajax({
-                        url: 'service-out',
+                        url: 'pm-out',
                         headers: {
                             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                         },
@@ -67,9 +75,13 @@ $(document).on('click', '.out_sub_Btn', function(){
                             serial: serial,
                             cat : cat,
                             purpose: purpose,
-                            customer: customer,
-                            client: client
+                            customer: customerarray,
+                            client: clientarray
                         },
+                        error: function (data) {
+                            alert(data.responseText);
+                            return false;
+                        }
                     });
                 }
             }
@@ -79,7 +91,7 @@ $(document).on('click', '.out_sub_Btn', function(){
         return false;
     }
     if (check > 1) {
-        window.location.href = 'service-unit';
+        window.location.href = 'preventive';
     }
 });
 
@@ -100,7 +112,7 @@ $(document).on('change', '.outdesc', function(){
         for(var i=1;i<=y;i++){
             if ($('#outdesc'+i).val() == $(this).val()) {
                 rmserial = $('#outserial'+i).val();
-                $("#outserial"+count+" option[value=\'"+rmserial+"\']").remove();
+                //$("#outserial"+count+" option[value=\'"+rmserial+"\']").remove();
             }
         }
     });
@@ -139,6 +151,17 @@ $(document).on('change', '.outdesc', function(){
                     return [value];
                 });
                 serialOp+='<option selected disabled>select serial</option>';
+                for(var i=1;i<=y;i++){
+                    if ($('#outdesc'+i).val() == id) {
+                        rmserial = $('#outserial'+i).val();
+                        $.each(serial, function(idx, item) {
+                            if (item.serial == rmserial) {
+                                serial.splice(idx, 1); // Remove current item
+                                return false; // End the loop
+                            }
+                        });
+                    }
+                }
                 serial.forEach(value => {
                     serialOp+='<option value="'+value.serial+'">'+value.serial+'</option>';
                 });
@@ -211,10 +234,10 @@ $(document).on('click', '.out_add_item', function(){
         $(this).val('Add Item');
         r--;
     }
-    if (r == 1) {
-        $('#out_sub_Btn').prop('disabled', true);
+    if (r == 1 || addr == 1) {
+        $('#pm_sub_Btn').prop('disabled', true);
     }else{
-        $('#out_sub_Btn').prop('disabled', false);
+        $('#pm_sub_Btn').prop('disabled', false);
 
     }
 });
@@ -437,7 +460,7 @@ $(document).on('keyup', '.client', function(){
             });
             $("#client-name").find('option').remove().end().append(op);
             $('#client-id'+rowcount).val($('#client-name [value="'+$('#client'+rowcount).val()+'"]').data('value'));
-            console.log($('#client-id'+rowcount).val());``
+            console.log($('#client-id'+rowcount).val());
         },
     });
 });
@@ -466,6 +489,17 @@ $(document).on('keyup', '.customer', function(){
                 return [value];
             });
             op+=' ';
+            for(var i=1;i<=addbranch;i++){
+                if ($('#client-id'+i).val() == client) {
+                    rmcustomer = $('#customer-id'+i).val();
+                    $.each(customer, function(idx, item) {
+                        if (item.id == rmcustomer) {
+                            customer.splice(idx, 1); // Remove current item
+                            return false; // End the loop
+                        }
+                    });
+                }
+            }
             customer.forEach(value => {
                 op+='<option data-value="'+value.id+'" value="'+value.customer_branch.toUpperCase()+'"></option>';
             });
@@ -477,16 +511,19 @@ $(document).on('keyup', '.customer', function(){
 
 $(document).on('click', '.add_branch_btn', function(){
     var rowcount = $(this).attr('btn_id');
+    console.log($('#customer-id'+rowcount).val());
     if ($(this).val() == 'Add branch') {
         if($('#client-id'+rowcount).val() && $('#customer-id'+rowcount).val()) {
             addbranch++;
-            var addme = '<div class="row no-margin" id="divcount'+addbranch+'"><div class="col-md-4 form-group row"><label class="col-md-4 col-form-label text-md-right">Client Name:</label><div class="col-md-8"><input type="text" list="client-name" client_count="'+addbranch+'" style="color: black" class="form-control form-control-sm client" id="client'+addbranch+'" placeholder="client name" autocomplete="off"><input type="text" id="client-id'+addbranch+'" value="" hidden></div></div><div class="col-md-6 form-group row"><label class="col-md-4 col-form-label text-md-right">Client Branch Name:</label><div class="col-md-8"><input type="text" list="customer-name" customer_count="'+addbranch+'" style="color: black" class="form-control form-control-sm customer" id="customer'+addbranch+'" placeholder="client branch name" autocomplete="off"><input type="text" id="customer-id'+addbranch+'" value="" hidden></div></div><div class="col-md-2 form-group row">&nbsp;&nbsp;&nbsp;<input type="button" class="add_branch_btn btn btn-xs btn-primary" btn_id="1" value="Add branch"></div></div>';
+            var addme = '<div class="row no-margin" id="divcount'+addbranch+'"><div class="col-md-4 form-group row"><label class="col-md-4 col-form-label text-md-right">Client Name:</label><div class="col-md-8"><input type="text" list="client-name" client_count="'+addbranch+'" style="color: black" class="form-control form-control-sm client" id="client'+addbranch+'" placeholder="client name" autocomplete="off"><input type="text" id="client-id'+addbranch+'" value="" hidden></div></div><div class="col-md-6 form-group row"><label class="col-md-4 col-form-label text-md-right">Client Branch Name:</label><div class="col-md-8"><input type="text" list="customer-name" customer_count="'+addbranch+'" style="color: black" class="form-control form-control-sm customer" id="customer'+addbranch+'" placeholder="client branch name" autocomplete="off"><input type="text" id="customer-id'+addbranch+'" value="" hidden></div></div><div class="col-md-2 form-group row">&nbsp;&nbsp;&nbsp;<input type="button" class="add_branch_btn btn btn-xs btn-primary" btn_id="'+addbranch+'" value="Add branch"></div></div>';
             $(this).val('Remove');
             $('#client'+ rowcount).prop('disabled', true);
             $('#customer'+ rowcount).prop('disabled', true);
             if (addr < 5 ) {
                 $('#branchdiv').append(addme);
                 addr++;
+                $("#customer-name").empty();
+                $("#client-name").empty();
             }
         }else if (!$('#client-id'+rowcount).val() && !$('#customer-id'+rowcount).val()) {
             alert('Please select the correct Client name!');
@@ -494,27 +531,22 @@ $(document).on('click', '.add_branch_btn', function(){
             alert('Please select the correct Client Branch name!');
         }
     }else{
-        if (r == 20) {
-            y++;
-            var additem = '<div class="row no-margin" id="outrow'+y+'"><div class="col-md-2 form-group"><select id="outcategory'+y+'" class="form-control outcategory" row_count="'+y+'"></select></div><div class="col-md-3 form-group"><select id="outdesc'+y+'" class="form-control outdesc" row_count="'+y+'"><option selected disabled>select item description</option></select></div><div class="col-md-2 form-group"><select id="outserial'+y+'" class="form-control outserial" row_count="'+y+'" style="color: black;"><option selected disabled>select serial</option></select></div><div class="col-md-1 form-group"><input type="number" class="form-control" min="0" name="outstock'+y+'" id="outstock'+y+'" placeholder="0" style="color:black; width: 6em" disabled></div><div class="col-md-1 form-group"><input type="button" class="out_add_item btn btn-xs btn-primary" btn_id="'+y+'" value="Add Item"></div></div>';
-            $('#outfield').append(additem);
-            $('#outcategory'+ rowcount).find('option').clone().appendTo('#outcategory'+y);
-            r++;
+        if (addr == 5) {
+            addbranch++;
+            var addme = '<div class="row no-margin" id="divcount'+addbranch+'"><div class="col-md-4 form-group row"><label class="col-md-4 col-form-label text-md-right">Client Name:</label><div class="col-md-8"><input type="text" list="client-name" client_count="'+addbranch+'" style="color: black" class="form-control form-control-sm client" id="client'+addbranch+'" placeholder="client name" autocomplete="off"><input type="text" id="client-id'+addbranch+'" value="" hidden></div></div><div class="col-md-6 form-group row"><label class="col-md-4 col-form-label text-md-right">Client Branch Name:</label><div class="col-md-8"><input type="text" list="customer-name" customer_count="'+addbranch+'" style="color: black" class="form-control form-control-sm customer" id="customer'+addbranch+'" placeholder="client branch name" autocomplete="off"><input type="text" id="customer-id'+addbranch+'" value="" hidden></div></div><div class="col-md-2 form-group row">&nbsp;&nbsp;&nbsp;<input type="button" class="add_branch_btn btn btn-xs btn-primary" btn_id="'+addbranch+'" value="Add branch"></div></div>';
+            $('#branchdiv').append(additem);
+            addr++;
+            $("#customer-name").empty();
+            $("#client-name").empty();
         }
-        $('#outcategory'+rowcount).val('select category');
-        $('#outdesc'+rowcount).val('select item description');
-        $('#outserial'+rowcount).val('select serial');
-        $('#outcategory'+rowcount).prop('disabled', false);
-        $('#outdesc'+rowcount).prop('disabled', false);
-        $('#outserial'+rowcount).prop('disabled', false);
-        $('#outrow'+rowcount).hide();
+        $('#divcount'+rowcount).hide();
         $(this).val('Add Item');
-        r--;
+        addr--;
     }
-    if (r == 1) {
-        $('#out_sub_Btn').prop('disabled', true);
+    if (addr == 1 || r == 1) {
+        $('#pm_sub_Btn').prop('disabled', true);
     }else{
-        $('#out_sub_Btn').prop('disabled', false);
+        $('#pm_sub_Btn').prop('disabled', false);
 
     }
 });

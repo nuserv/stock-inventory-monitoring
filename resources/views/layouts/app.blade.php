@@ -104,7 +104,7 @@
                     @include('modal.branch.in')
                     @include('modal.out')
                     @include('modal.branch.in-option')
-                    @include('modal.branch.service-in')
+                    @include('modal.pm-service-in')
                 @endif
             @endif
 
@@ -209,7 +209,7 @@
             @endif
 
             @if(Request::is('preventive'))
-                <script src="{{asset('min/?f=js/branch/service-unit.js')}}"></script>
+                <script src="{{asset('min/?f=js/branch/pm-service-unit.js')}}"></script>
                 <script src="{{asset('min/?f=js/branch/pm.js')}}"></script>
             @endif
 

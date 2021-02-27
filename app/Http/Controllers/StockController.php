@@ -15,6 +15,7 @@ use App\Pullout;
 use App\Loan;
 use App\Branch;
 use App\User;
+use App\Pm;
 use App\Initial;
 use Mail;
 use App\Defective;
@@ -173,6 +174,66 @@ class StockController extends Controller
         })
         ->make(true);
     }
+    public function pmserviceUnit()
+    {
+        $stock = Pm::where('branch_id', auth()->user()->branch->id)->get();
+        return DataTables::of($stock)
+        ->addColumn('date', function (Pm $request){
+            return $request->updated_at->toFormattedDateString().' '.$request->updated_at->toTimeString();
+        })
+        ->addColumn('items_id', function (Pm $request){
+            return $request->items_id;
+        })
+        ->addColumn('category', function (Pm $request){
+            $cat = Category::find($request->category_id);
+            return strtoupper($cat->category);
+        })
+        ->addColumn('description', function (Pm $request){
+            $item = Item::where('id', $request->items_id)->first();
+            return strtoupper($item->item);
+        })
+        ->addColumn('serial', function (Pm $request){
+            return strtoupper($request->serial);
+        })
+        ->addColumn('client', function (Pm $request){
+            $clients = '';
+            foreach (explode(',', $request->customer_ids) as $customer) {
+                if ($clients == "") {
+                    $client = CustomerBranch::select('customer_branch', 'customers.customer')
+                        ->where('customer_branches.id', $customer)
+                        ->join('customers', 'customer_id', '=', 'customers.id')
+                        ->first();
+                    $clients = ucwords(strtolower($client->customer.' - '.$client->customer_branch));
+                }else{
+                    $client = CustomerBranch::select('customer_branch', 'customers.customer')
+                        ->where('customer_branches.id', $customer)
+                        ->join('customers', 'customer_id', '=', 'customers.id')
+                        ->first();
+                    $clients = $clients.', '.ucwords(strtolower($client->customer.' - '.$client->customer_branch));
+                }
+            }
+            return $clients;
+        })
+        /*->addColumn('client_name', function (Pm $request){
+            $client = CustomerBranch::select('customer_branch', 'customers.customer')
+                ->where('customer_branches.id', $request->customer_branches_id)
+                ->join('customers', 'customer_id', '=', 'customers.id')
+                ->first();
+            return ucwords(strtolower($client->customer));
+        })
+        ->addColumn('customer_name', function (Pm $request){
+            $client = CustomerBranch::select('customer_branch', 'customers.customer')
+                ->where('customer_branches.id', $request->customer_branches_id)
+                ->join('customers', 'customer_id', '=', 'customers.id')
+                ->first();
+            return ucwords(strtolower($client->customer_branch));
+        })*/
+        ->addColumn('serviceby', function (Pm $request){
+            $user = User::select('name', 'lastname')->where('id', $request->user_id)->first();
+            return ucwords(strtolower($user->name.' '.$user->lastname));
+        })
+        ->make(true);
+    }
     public function searchall(Request $request)
     {
         /*$search = Stock::select('branch', 'branch_id', 'categories.id as category_id', 'categories.category as category', 'stocks.items_id as items_id', 'items.item as description', 'serial')
@@ -267,6 +328,19 @@ class StockController extends Controller
             ->get();
         return response()->json($pclient);
     }
+    
+    public function pmautocompleteCustomer(Request $request)
+    {
+        $clients = array();
+        foreach (explode(',', $request->customer_ids) as $customer) {
+            $client = CustomerBranch::select('customer_id', 'customer_branches.id as id', 'customer_branch', 'customers.customer')
+                ->where('customer_branches.id', $customer)
+                ->join('customers', 'customer_id', '=', 'customers.id')
+                ->first();
+            array_push($clients, $client);
+        }
+        return response()->json($clients);
+    }
     public function viewStocks(Request $request)
     {
         if ($request->data != 0) {
@@ -358,6 +432,9 @@ class StockController extends Controller
             $log->save();
         }
         $stock->status = $request->status;
+        if ($request->remarks == 'pm') {
+            $stock->customer_branches_id = $request->customerid;
+        }
         $stock->user_id = auth()->user()->id;
         $data = $stock->save();
         return response()->json($data);
@@ -537,6 +614,41 @@ class StockController extends Controller
         $stock->user_id = auth()->user()->id;
         $log = new UserLog;
         $log->activity = "Service out $item->item(S/N: $request->serial) to $customer->customer_branch." ;
+        $log->user_id = auth()->user()->id;
+        $log->save();
+        $data = $stock->save();
+        return response()->json($data);
+    }
+    public function pmOut(Request $request)
+    {
+        $stock = Stock::where('items_id', $request->item)
+            ->where('branch_id', auth()->user()->branch->id)
+            ->where('serial', $request->serial)
+            ->where('status', 'in')
+            ->first();
+        $item = Item::where('id', $request->item)->first();
+        $customer = CustomerBranch::where('id', $request->customer)->first();
+        $stock->status = $request->purpose;
+        $stock->user_id = auth()->user()->id;
+        $preventive = new Pm;
+        $preventive->stocks_id = $stock->id;
+        $preventive->branch_id = auth()->user()->branch->id;
+        $preventive->user_id = auth()->user()->id;
+        $preventive->category_id = $stock->category_id;
+        $preventive->items_id = $request->item;
+        $customers = "";
+        foreach ($request->customer as $key => $value) {
+            if ($customers == "") {
+                $customers = $value;
+            }else{
+                $customers = $customers.','.$value;
+            }
+        }
+        $preventive->customer_ids = $customers;
+        $preventive->serial = $request->serial;
+        $preventive->save();
+        $log = new UserLog;
+        $log->activity = "PM Service out $item->item(S/N: $request->serial) to $customer->customer_branch." ;
         $log->user_id = auth()->user()->id;
         $log->save();
         $data = $stock->save();

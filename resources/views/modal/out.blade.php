@@ -94,7 +94,7 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <input type="button" class="btn btn-primary out_sub_Btn" id="out_sub_Btn" reqno="0" class="button" value="Submit" disabled>
+                <input type="button" class="btn btn-primary pm_sub_Btn" id="pm_sub_Btn" reqno="0" class="button" value="Submit" disabled>
             </div>
         </div>
     </div>

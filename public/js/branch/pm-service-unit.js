@@ -13,11 +13,17 @@ $(document).ready(function()
         },
         processing: true,
         serverSide: true,
-        ajax: 'sUnit',
-        
+        ajax: 'pmsUnit',
+        "columnDefs": [
+        {
+            "targets": [1],
+            "render": function (data, type, row) {
+                return data.split(",").join("<br/>");
+            }
+        }],
         columns: [
-            { data: 'date', name:'date'},
-            { data: 'client', name:'client'},
+            { data: 'date', name:'date', "width": "14%"},
+            { data: 'client', name:'client', "width": "25%"},
             { data: 'category', name:'category'},
             { data: 'description', name:'description'},
             { data: 'serial', name:'serial'},
@@ -36,11 +42,11 @@ $(document).on('click', '#out_Btn', function(){
 $(document).on('click', '.in-close', function(){
     $('#service-unitModal').modal('toggle');
     $('#loading').show();
-    window.location.href = 'service-unit';
+    window.location.href = 'preventive';
 });
 
 $(document).on('click', '.close', function(){
-    window.location.href = 'service-unit';
+    window.location.href = 'preventive';
 });
 
 $(document).on("click", "#sUnitTable tr", function () {
@@ -64,6 +70,32 @@ $(document).on("click", "#sUnitTable tr", function () {
             });
             $("#repdesc").find('option').remove().end().append(itemop);
         },
+    });
+    $.ajax({
+        type:'get',
+        url:'pmcustomer-autocomplete',
+        data:{
+            customer_ids: trdata.customer_ids
+        },
+        success:function(data)
+        {
+            console.log(data);
+            var customerdata = $.map(data, function(value, index) {
+                return [value];
+            });
+            console.log(customerdata);
+            var op = ' ';
+            op+='<option selected disabled>select client branch</option>';
+            customerdata.forEach(value => {
+                op+='<option value="'+value.id+'">'+value.customer.toUpperCase()+' - '+value.customer_branch.toUpperCase()+'</option>';
+                //op+='<option data-value="'+value.id+'" value="'+value.customer+' - '+value.customer_branch+'"></option>';
+            });
+            $("#incustomer").find('option').remove().end().append(op);
+            console.log($("#incustomer").val());
+        },
+        error: function (data) {
+            alert(data.responseText);
+        }
     });
     $('#indesc').val(trdata.description);
     $('#indescid').val(trdata.id);
@@ -120,61 +152,67 @@ $(document).on('change', '#repdesc', function(){
 });
 
 $(document).on('click', '.in_sub_Btn', function(){
-    if ($('#intype').val()) {
-        if ($('#intype').val() == 'service-unit') {
-            if (status != '') {
-                $('#service-inModal').toggle();
-                $('#loading').show();
-                $.ajax({
-                    url: 'service-in',
-                    headers: {
-                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                    },
-                    dataType: 'json',
-                    type: 'PUT',
-                    data: {
-                        stat: 'sunit',
-                        id: $('#indescid').val(),
-                        serial: $('#inserial').val(),
-                        status: status,
-                        remarks: 'service'
-                    },
-                    success:function()
-                    {
-                        window.location.href = 'service-unit';
-                    },
-                });
-            }
-        }else if ($('#intype').val() == 'replacement') {
-            if (desc != '' && $('#repserial').val() != "") {
-                $('#service-inModal').toggle();
-                $('#loading').show();
-                $.ajax({
-                    url: 'rep-update',
-                    headers: {
-                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                    },
-                    dataType: 'json',
-                    type: 'PUT',
-                    async: false,
-                    data: {
-                        stat: 'replace',
-                        id: $('#indescid').val(),
-                        ids: $('#repdesc').val(),
-                        serial: $('#repserial').val(),
-                        status: 'defective',
-                        remarks: 'service'
-                    },
-                    success:function()
-                    {
-                        window.location.href = 'service-unit';
-                    },
-                    error: function (data) {
-                        alert(data.responseText);
-                    }
-                });
+    if ($("#incustomer").val()) {
+        if ($('#intype').val()) {
+            if ($('#intype').val() == 'service-unit') {
+                if (status != '') {
+                    $('#service-inModal').toggle();
+                    $('#loading').show();
+                    $.ajax({
+                        url: 'service-in',
+                        headers: {
+                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                        },
+                        dataType: 'json',
+                        type: 'PUT',
+                        data: {
+                            stat: 'sunit',
+                            id: $('#indescid').val(),
+                            serial: $('#inserial').val(),
+                            status: status,
+                            customerid: $("#incustomer").val(),
+                            remarks: 'pm'
+                        },
+                        success:function()
+                        {
+                            window.location.href = 'preventive';
+                        },
+                    });
+                }
+            }else if ($('#intype').val() == 'replacement') {
+                if (desc != '' && $('#repserial').val() != "") {
+                    $('#service-inModal').toggle();
+                    $('#loading').show();
+                    $.ajax({
+                        url: 'rep-update',
+                        headers: {
+                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                        },
+                        dataType: 'json',
+                        type: 'PUT',
+                        async: false,
+                        data: {
+                            stat: 'replace',
+                            id: $('#indescid').val(),
+                            ids: $('#repdesc').val(),
+                            serial: $('#repserial').val(),
+                            status: 'defective',
+                            customerid: $("#incustomer").val(),
+                            remarks: 'pm'
+                        },
+                        success:function()
+                        {
+                            window.location.href = 'preventive';
+                        },
+                        error: function (data) {
+                            alert(data.responseText);
+                        }
+                    });
+                }
             }
         }
+    }else{
+        alert('Please elect Client branch!');
     }
 });
 
