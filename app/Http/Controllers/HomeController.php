@@ -152,10 +152,10 @@ class HomeController extends Controller
             foreach ($user as $user) {
                 $myuser[] = $user->id;
             }
-            $act = UserLog::wherein('user_id', $myuser)->orderBy('id', 'DESC')->get();
+            $act = UserLog::wherein('user_id', $myuser)->orderBy('id', 'desc')->get();
         }
         if (!auth()->user()->hasAnyRole('Head', 'Administrator', 'Viewer')) {
-            $act = UserLog::where('user_id', auth()->user()->id)->orderBy('id', 'DESC')->get();
+            $act = UserLog::where('user_id', auth()->user()->id)->orderBy('id', 'desc')->take(1000)->get();
         }
         return DataTables::of($act)
         ->addColumn('date', function (UserLog $request){

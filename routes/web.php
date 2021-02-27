@@ -58,12 +58,12 @@ Route::get('loanstable', 'LoanController@table')->middleware('ajax');
 Route::get('loans', 'LoanController@index')->name('loans');
 Route::post('loan', 'StockController@loan')->middleware('ajax');
 
-Route::put('rep-update', 'StockController@update')->middleware('ajax');
+Route::any('rep-update', 'StockController@update')->middleware('ajax');
 Route::get('searchall', 'StockController@searchall');//->middleware('ajax');
 Route::get('searchserial', 'StockController@searchserial');//->middleware('ajax');
 Route::get('pull-details1/{id}', 'StockController@pulldetails1')->middleware('ajax');
 Route::get('pull-details/{id}', 'StockController@pulldetails')->middleware('ajax');
-Route::put('service-in', 'StockController@servicein')->middleware('ajax');
+Route::any('service-in', 'StockController@servicein')->middleware('ajax');
 Route::get('serial', 'StockController@serial')->middleware('ajax');
 Route::get('description', 'StockController@description')->middleware('ajax');
 Route::get('category', 'StockController@category')->middleware('ajax');

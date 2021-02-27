@@ -3,6 +3,7 @@ var service = '';
 var serial = '';
 var desc = '';
 var status = '';
+var pmsid;
 $(document).ready(function()
 {
     sunit = $('table.sUnitTable').DataTable({ 
@@ -23,7 +24,7 @@ $(document).ready(function()
         }],
         columns: [
             { data: 'date', name:'date', "width": "14%"},
-            { data: 'client', name:'client', "width": "25%"},
+            { data: 'client', name:'client', "width": "30%"},
             { data: 'category', name:'category'},
             { data: 'description', name:'description'},
             { data: 'serial', name:'serial'},
@@ -51,6 +52,7 @@ $(document).on('click', '.close', function(){
 
 $(document).on("click", "#sUnitTable tr", function () {
     var trdata = sunit.row(this).data();
+    pmsid = trdata.id;
     $('#service-inModal').modal({backdrop: 'static', keyboard: false});
     $('#inclient').val(trdata.client_name);
     $('#incustomer').val(trdata.customer_name);
@@ -171,12 +173,16 @@ $(document).on('click', '.in_sub_Btn', function(){
                             serial: $('#inserial').val(),
                             status: status,
                             customerid: $("#incustomer").val(),
+                            pmid: pmsid,
                             remarks: 'pm'
                         },
                         success:function()
                         {
                             window.location.href = 'preventive';
                         },
+                        error: function (data) {
+                            alert(data.responseText);
+                        }
                     });
                 }
             }else if ($('#intype').val() == 'replacement') {
@@ -198,6 +204,7 @@ $(document).on('click', '.in_sub_Btn', function(){
                             serial: $('#repserial').val(),
                             status: 'defective',
                             customerid: $("#incustomer").val(),
+                            pmid: pmsid,
                             remarks: 'pm'
                         },
                         success:function()
@@ -212,7 +219,7 @@ $(document).on('click', '.in_sub_Btn', function(){
             }
         }
     }else{
-        alert('Please elect Client branch!');
+        alert('Please select Client branch!');
     }
 });
 

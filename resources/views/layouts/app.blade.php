@@ -101,9 +101,7 @@
 
             @if(Request::is('preventive'))
                 @if(!auth()->user()->hasAnyrole('Administrator', 'Encoder'))
-                    @include('modal.branch.in')
                     @include('modal.out')
-                    @include('modal.branch.in-option')
                     @include('modal.pm-service-in')
                 @endif
             @endif

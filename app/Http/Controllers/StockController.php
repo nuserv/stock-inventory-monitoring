@@ -416,24 +416,55 @@ class StockController extends Controller
             $defective = new Defective;
             $defective->branch_id = auth()->user()->branch->id;
             $defective->user_id = auth()->user()->id;
-            $defective->items_id = $stock->items_id;
+            if ($request->stat == 'replace') {
+                $defective->items_id = $request->ids;
+            }else{
+                $defective->items_id = $request->id;
+            }
             $defective->status = 'For return';
-            $defective->serial = $stock->serial;
-            $defective->category_id = $stock->category_id;
+            if ($request->remarks == 'pm') {
+                $pmdb = Pm::where('id', $request->pmid)->first();
+                $defective->category_id = $stock->category_id;
+            }else{
+                $defective->category_id = $stock->category_id;
+            }
+            $defective->serial = $request->serial;
             $defective->save();
-            $log = new UserLog;
-            $log->activity = "Service in $item->item(defective) with serial no. $stock->serial from $customer->customer_branch." ;
-            $log->user_id = auth()->user()->id;
-            $log->save();
+            if ($request->remarks == 'pm') {
+                $pmdb = Pm::where('id', $request->pmid)->first();
+                $pmitem = Item::where('id', $pmdb->items_id)->first();
+                $pmcustomer = CustomerBranch::where('id', $request->customerid)->first();
+                $log = new UserLog;
+                $log->activity = "PM Service in $pmitem->item(defective) with serial no. $request->serial from $pmcustomer->customer_branch." ;
+                $log->user_id = auth()->user()->id;
+                $log->save();
+            }else{
+                $log = new UserLog;
+                $log->activity = "Service in $item->item(defective) with serial no. $request->serial from $customer->customer_branch." ;
+                $log->user_id = auth()->user()->id;
+                $log->save();
+            }
         }else{
-            $log = new UserLog;
-            $log->activity = "Service in $item->item(good) with serial no. $stock->serial from $customer->customer_branch." ;
-            $log->user_id = auth()->user()->id;
-            $log->save();
+            if ($request->remarks == 'pm') {
+                $pmdb = Pm::where('id', $request->pmid)->first();
+                $pmitem = Item::where('id', $pmdb->items_id)->first();
+                $pmcustomer = CustomerBranch::where('id', $request->customerid)->first();
+                $log = new UserLog;
+                $log->activity = "Service in $pmitem->item(good) with serial no. $request->serial from $pmcustomer->customer_branch." ;
+                $log->user_id = auth()->user()->id;
+                $log->save();
+            }else{
+                $log = new UserLog;
+                $log->activity = "Service in $item->item(good) with serial no. $stock->serial from $customer->customer_branch." ;
+                $log->user_id = auth()->user()->id;
+                $log->save();
+            }
         }
         $stock->status = $request->status;
         if ($request->remarks == 'pm') {
             $stock->customer_branches_id = $request->customerid;
+            $pmupdate = Pm::where('id', $request->pmid)->first();
+            $pmupdate->delete();
         }
         $stock->user_id = auth()->user()->id;
         $data = $stock->save();
