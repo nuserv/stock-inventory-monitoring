@@ -65,6 +65,9 @@ $(document).on("click", "#loanTable tr", function () {
                 $("#loanserial1").find('option').remove().end().append(serialOp);
             },
             error: function (data) {
+                if(data.status == 401) {
+                    window.location.href = '/login';
+                }
                 alert(data.responseText);
             }
         });
@@ -96,6 +99,9 @@ $(document).on("click", "#loanTable tr", function () {
                     $('#serial').val(data.serial);
                 },
                 error: function (data) {
+                    if(data.status == 401) {
+                        window.location.href = '/login';
+                    }
                     alert(data.responseText);
                 }
             });
@@ -127,6 +133,9 @@ $(document).on("click", "#submit_Btn", function () {
                 branch: branch
             },
             error: function (data) {
+                if(data.status == 401) {
+                    window.location.href = '/login';
+                }
                 alert(data.responseText);
             }
         });
@@ -147,6 +156,9 @@ $(document).on("click", "#submit_Btn", function () {
                 window.location.reload();
             },
             error: function (data) {
+                if(data.status == 401) {
+                    window.location.href = '/login';
+                }
                 alert(data.responseText);
             }
         });
@@ -170,6 +182,9 @@ $(document).on("click", "#received_Btn", function () {
                 branch: branch
             },
             error: function (data) {
+                if(data.status == 401) {
+                    window.location.href = '/login';
+                }
                 alert(data.responseText);
             }
         });
@@ -189,6 +204,9 @@ $(document).on("click", "#received_Btn", function () {
                 window.location.reload();
             },
             error: function (data) {
+                if(data.status == 401) {
+                    window.location.href = '/login';
+                }
                 alert(data.responseText);
             }
         });
@@ -213,6 +231,9 @@ $(document).on("click", "#del_Btn", function () {
             window.location.reload();
         },
         error: function (data) {
+            if(data.status == 401) {
+                window.location.href = '/login';
+            }
             alert(data.responseText);
         }
     });
@@ -237,6 +258,9 @@ $(document).on('change', '#loandesc1', function(){
             $("#loanserial1").find('option').remove().end().append(serialOp);
         },
         error: function (data) {
+            if(data.status == 401) {
+                window.location.href = '/login';
+            }
             alert(data.responseText);
         }
     });
@@ -266,6 +290,9 @@ $(document).on('change', '#loanbranch', function(){
             $("#loanreqdesc1").find('option').remove().end().append(itemOp);
         },
         error: function (data) {
+            if(data.status == 401) {
+                window.location.href = '/login';
+            }
             alert(data.responseText);
         }
     });
@@ -295,6 +322,9 @@ $(document).on('change', '.loancategory', function(){
             itemOp = " ";
         },
         error: function (data) {
+            if(data.status == 401) {
+                window.location.href = '/login';
+            }
             alert(data.responseText);
         }
     });
@@ -322,6 +352,9 @@ $(document).on('click', '#loan_sub_Btn', function(){
                         window.location.reload();
                     },
                     error: function (data) {
+                        if(data.status == 401) {
+                            window.location.href = '/login';
+                        }
                         alert(data.responseText);
                     }
                 });
@@ -337,6 +370,12 @@ $(document).on('click', '#loan_Btn', function(){
         {
             reqno = result;
         },
+        error: function (data) {
+            if(data.status == 401) {
+                window.location.href = '/login';
+            }
+            alert(data.responseText);
+        }
     });
     $('#loanModal').modal({backdrop: 'static', keyboard: false});
 });

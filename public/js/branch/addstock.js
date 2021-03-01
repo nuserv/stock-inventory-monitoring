@@ -24,6 +24,11 @@ $(document).on('click', '.sub_Btn', function(){
                         serial: serial,
                         cat : cat
                     },
+                    error: function(data) {
+                        if(data.status == 401) {
+                            window.location.href = '/login';
+                        }
+                    }
                 });
             }
         }

@@ -15,6 +15,9 @@ $(document).on('click', '#del_Btn', function(){
             location.reload();
         },
         error: function (data) {
+            if(data.status == 401) {
+                window.location.href = '/login';
+            }
             alert(data.responseText);
         }
     });
@@ -59,6 +62,9 @@ $(document).on('click', '#rec_Btn', function(){
                             location.reload();
                         },
                         error: function (data) {
+                            if(data.status == 401) {
+                                window.location.href = '/login';
+                            }
                             alert(data.responseText);
                         }
                     });
@@ -97,12 +103,18 @@ $(document).on('click', '#rec_Btn', function(){
                                     location.reload();
                                 },
                                 error: function (data) {
+                                    if(data.status == 401) {
+                                        window.location.href = '/login';
+                                    }
                                     alert(data.responseText);
                                 }
                             });
                         }
                     },
                     error: function (data) {
+                        if(data.status == 401) {
+                            window.location.href = '/login';
+                        }
                         alert(data.responseText);
                     }
                 });
@@ -136,6 +148,12 @@ $(document).on('click', '#reqBtn', function(){
             $("#category1").find('option').remove().end().append(catop);
             $('#sendrequestModal').modal({backdrop: 'static', keyboard: false});
             $('#loading').hide()
+        },
+        error: function (data) {
+            if(data.status == 401) {
+                window.location.href = '/login';
+            }
+            alert(data.responseText);
         }
     });
 });
@@ -227,6 +245,12 @@ $(document).on('click', '.send_sub_Btn', function(){
                         qty: qty,
                         stat: stat                           
                     },
+                    error: function (data) {
+                        if(data.status == 401) {
+                            window.location.href = '/login';
+                        }
+                        alert(data.responseText);
+                    }
                 });
             }
         }
@@ -259,6 +283,9 @@ $(document).on('click', '.send_sub_Btn', function(){
                     window.location.href = 'request';
                 },
                 error: function (data) {
+                    if(data.status == 401) {
+                        window.location.href = '/login';
+                    }
                     alert(data.responseText);
                 }
             });
@@ -280,6 +307,12 @@ $(document).on('change', '.desc', function(){
         success:function(data)
         {
             $('#uom'+count).val(data);
+        },
+        error: function (data) {
+            if(data.status == 401) {
+                window.location.href = '/login';
+            }
+            alert(data.responseText);
         }
     });
 });
@@ -299,6 +332,12 @@ $(document).on('change', '.item', function(){
         {
             $('#uom'+count).val(data);
         },
+        error: function (data) {
+            if(data.status == 401) {
+                window.location.href = '/login';
+            }
+            alert(data.responseText);
+        }
     });
 });
 $(document).on('change', '.category', function(){
@@ -332,6 +371,12 @@ $(document).on('change', '.category', function(){
                     }
                 }
             });
+        },
+        error: function (data) {
+            if(data.status == 401) {
+                window.location.href = '/login';
+            }
+            alert(data.responseText);
         }
     });
     $('#qty'+count).val('0');
@@ -376,6 +421,12 @@ $(document).on('keyup', '#client', function(){
             
             $('#client-id').val($('#client-name [value="'+$('#client').val()+'"]').data('value'));
         },
+        error: function (data) {
+            if(data.status == 401) {
+                window.location.href = '/login';
+            }
+            alert(data.responseText);
+        }
     });
 });
 $(document).on('keyup', '#customer', function(){
@@ -406,5 +457,11 @@ $(document).on('keyup', '#customer', function(){
             $("#customer-name").find('option').remove().end().append(op);
             $('#customer-id').val($('#customer-name [value="'+$('#customer').val()+'"]').data('value'));
         },
+        error: function (data) {
+            if(data.status == 401) {
+                window.location.href = '/login';
+            }
+            alert(data.responseText);
+        }
     });
 });

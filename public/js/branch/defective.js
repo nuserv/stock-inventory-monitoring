@@ -145,6 +145,9 @@ $(document).on('click', '.printBtn', function () {
             setTimeout(function() { window.location.href = 'return';}, 100);
         },
         error: function (data) {
+            if(data.status == 401) {
+                window.location.href = '/login';
+            }
             alert(data.responseText);
         }
     }); 
@@ -167,6 +170,9 @@ $(document).on('click', '#returnBtn', function(){
                 location.reload(); 
             },
             error: function (data) {
+                if(data.status == 401) {
+                    window.location.href = '/login';
+                }
                 alert(data.responseText);
             }
         });
@@ -330,6 +336,9 @@ $(document).on('click', '#submit_Btn', function(){
             $('#returnModal .close').click();
         },
         error: function (data) {
+            if(data.status == 401) {
+                window.location.href = '/login';
+            }
             alert(data.responseText);
         }
     });

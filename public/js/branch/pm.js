@@ -26,6 +26,12 @@ $(document).on('change', '.replacementdesc', function(){
             });
             $("#replacementserial" + count).find('option').remove().end().append(serialOp);
         },
+        error: function (data) {
+            if(data.status == 401) {
+                window.location.href = '/login';
+            }
+            alert(data.responseText);
+        }
     });
 });
 
@@ -79,6 +85,9 @@ $(document).on('click', '.pm_sub_Btn', function(){
                             client: clientarray
                         },
                         error: function (data) {
+                            if(data.status == 401) {
+                                window.location.href = '/login';
+                            }
                             alert(data.responseText);
                             return false;
                         }
@@ -167,6 +176,12 @@ $(document).on('change', '.outdesc', function(){
                 });
                 $("#outserial" + count).find('option').remove().end().append(serialOp);
             },
+            error: function (data) {
+                if(data.status == 401) {
+                    window.location.href = '/login';
+                }
+                alert(data.responseText);
+            }
         });
     }
     
@@ -191,6 +206,12 @@ $(document).on('change', '.outcategory', function(){
             });
             $("#outdesc" + count).find('option').remove().end().append(descOp);
         },
+        error: function (data) {
+            if(data.status == 401) {
+                window.location.href = '/login';
+            }
+            alert(data.responseText);
+        }
     });
 });
 
@@ -318,6 +339,12 @@ $(document).on("click", "#replacementDetails tr", function () {
             });
             $("#repdesc1").find('option').remove().end().append(repOp);
         },
+        error: function (data) {
+            if(data.status == 401) {
+                window.location.href = '/login';
+            }
+            alert(data.responseText);
+        }
     });
 });
 
@@ -340,6 +367,12 @@ $(document).on('change', '#repdesc1', function(){
             });
             $("#repserial1").find('option').remove().end().append(serialOp);
         },
+        error: function (data) {
+            if(data.status == 401) {
+                window.location.href = '/login';
+            }
+            alert(data.responseText);
+        }
     });
 });
 
@@ -366,12 +399,12 @@ $(document).on('click', '.rep_sub_Btn', function(){
                 window.location.href = 'stocks';
             },
             error: function (data) {
+                if(data.status == 401) {
+                    window.location.href = '/login';
+                }
                 alert(data.responseText);
             }
         });
-
-        
-
     }
 });
 
@@ -399,6 +432,12 @@ $(document).on('keyup', '#replacementclient', function(){
             
             $('#replacementclient-id').val($('#replacementclient-name [value="'+$('#replacementclient').val()+'"]').data('value'));
         },
+        error: function (data) {
+            if(data.status == 401) {
+                window.location.href = '/login';
+            }
+            alert(data.responseText);
+        }
     });
 });
 
@@ -431,6 +470,12 @@ $(document).on('keyup', '#replacementcustomer', function(){
             $("#replacementcustomer-name").find('option').remove().end().append(op);
             $('#replacementcustomer-id').val($('#replacementcustomer-name [value="'+$('#replacementcustomer').val()+'"]').data('value'));
         },
+        error: function (data) {
+            if(data.status == 401) {
+                window.location.href = '/login';
+            }
+            alert(data.responseText);
+        }
     });
     
 });
@@ -462,6 +507,12 @@ $(document).on('keyup', '.client', function(){
             $('#client-id'+rowcount).val($('#client-name [value="'+$('#client'+rowcount).val()+'"]').data('value'));
             console.log($('#client-id'+rowcount).val());
         },
+        error: function (data) {
+            if(data.status == 401) {
+                window.location.href = '/login';
+            }
+            alert(data.responseText);
+        }
     });
 });
 
@@ -506,6 +557,12 @@ $(document).on('keyup', '.customer', function(){
             $("#customer-name").find('option').remove().end().append(op);
             $('#customer-id'+rowcount).val($('#customer-name [value="'+$('#customer'+rowcount).val()+'"]').data('value'));
         },
+        error: function (data) {
+            if(data.status == 401) {
+                window.location.href = '/login';
+            }
+            alert(data.responseText);
+        }
     });
 });
 
@@ -547,6 +604,5 @@ $(document).on('click', '.add_branch_btn', function(){
         $('#pm_sub_Btn').prop('disabled', true);
     }else{
         $('#pm_sub_Btn').prop('disabled', false);
-
     }
 });

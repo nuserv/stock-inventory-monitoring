@@ -67,6 +67,9 @@ $(document).ready(function()
                     "data": 0
                 },
                 error: function (data) {
+                    if(data.status == 401) {
+                        window.location.href = '/login';
+                    }
                     alert(data.responseText);
                 }
             },
@@ -152,7 +155,13 @@ $(document).ready(function()
                     }else{
                         alert(data.error);
                     }
-                } 
+                },
+                error: function (data) {
+                    if(data.status == 401) {
+                        window.location.href = '/login';
+                    }
+                    alert(data.responseText);
+                }
             });
         }
         if(editBtn == 'Save'){
@@ -171,6 +180,12 @@ $(document).ready(function()
                     }else{
                         alert(data.error);
                     }
+                },
+                error: function (data) {
+                    if(data.status == 401) {
+                        window.location.href = '/login';
+                    }
+                    alert(data.responseText);
                 }
             });
         }
@@ -248,6 +263,12 @@ $(document).on('click', '#catbranchDetails tr', function(){
                 "data": {
                     "data": 1,
                     "category": categid 
+                },
+                error: function (data) {
+                    if(data.status == 401) {
+                        window.location.href = '/login';
+                    }
+                    alert(data.responseText);
                 }
             },
             columns: [
@@ -290,6 +311,9 @@ $(document).on('click', '#catBtn', function(){
                 "data": 0
             },
             error: function (data) {
+                if(data.status == 401) {
+                    window.location.href = '/login';
+                }
                 alert(data.responseText);
             }
         },
@@ -339,6 +363,12 @@ $(document).on('click', '#updateBtn', function(){
                 ]
             });
             $("#updateModal .close").click();
+        },
+        error: function (data) {
+            if(data.status == 401) {
+                window.location.href = '/login';
+            }
+            alert(data.responseText);
         }
     });
 });

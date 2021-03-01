@@ -72,6 +72,12 @@ $(document).on("click", "#sUnitTable tr", function () {
             });
             $("#repdesc").find('option').remove().end().append(itemop);
         },
+        error: function (data) {
+            if(data.status == 401) {
+                window.location.href = '/login';
+            }
+            alert(data.responseText);
+        }
     });
     $.ajax({
         type:'get',
@@ -96,6 +102,9 @@ $(document).on("click", "#sUnitTable tr", function () {
             console.log($("#incustomer").val());
         },
         error: function (data) {
+            if(data.status == 401) {
+                window.location.href = '/login';
+            }
             alert(data.responseText);
         }
     });
@@ -181,6 +190,9 @@ $(document).on('click', '.in_sub_Btn', function(){
                             window.location.href = 'preventive';
                         },
                         error: function (data) {
+                            if(data.status == 401) {
+                                window.location.href = '/login';
+                            }
                             alert(data.responseText);
                         }
                     });
@@ -212,6 +224,9 @@ $(document).on('click', '.in_sub_Btn', function(){
                             window.location.href = 'preventive';
                         },
                         error: function (data) {
+                            if(data.status == 401) {
+                                window.location.href = '/login';
+                            }
                             alert(data.responseText);
                         }
                     });

@@ -112,6 +112,12 @@ $(document).ready(function()
                     {
                         penreq = data.data.length;
                     },
+                    error: function (data) {
+                        if(data.status == 401) {
+                            window.location.href = '/login';
+                        }
+                        alert(data.responseText);
+                    }
                 });
             }
         }else if(trdata.status == 'SCHEDULED'){
@@ -185,6 +191,12 @@ $(document).ready(function()
                     {
                         schedul = data.data.length;
                     },
+                    error: function (data) {
+                        if(data.status == 401) {
+                            window.location.href = '/login';
+                        }
+                        alert(data.responseText);
+                    }
                 });
             }
         }else if(trdata.status == 'INCOMPLETE'){
@@ -255,6 +267,12 @@ $(document).ready(function()
                     {
                         incomp = data.data.length;
                     },
+                    error: function (data) {
+                        if(data.status == 401) {
+                            window.location.href = '/login';
+                        }
+                        alert(data.responseText);
+                    }
                 });
             }
         }else if(trdata.status == 'RESCHEDULED'){
@@ -328,6 +346,12 @@ $(document).ready(function()
                     {
                         resched = data.data.length;
                     },
+                    error: function (data) {
+                        if(data.status == 401) {
+                            window.location.href = '/login';
+                        }
+                        alert(data.responseText);
+                    }
                 });
             }
         }else if(trdata.status == 'PARTIAL'){
@@ -396,6 +420,12 @@ $(document).ready(function()
                             {
                                 requestdet = data.data.length;
                             },
+                            error: function (data) {
+                                if(data.status == 401) {
+                                    window.location.href = '/login';
+                                }
+                                alert(data.responseText);
+                            }
                         });
                     }
                     $('#rec_Btn').hide();
@@ -454,6 +484,12 @@ $(document).ready(function()
                     {
                         partial = data.data.length;
                     },
+                    error: function (data) {
+                        if(data.status == 401) {
+                            window.location.href = '/login';
+                        }
+                        alert(data.responseText);
+                    }
                 });
             }
         }
@@ -490,6 +526,9 @@ $(document).on('click', '#not_rec_Btn', function(){
             window.location.href = 'request';
         },
         error: function (data) {
+            if(data.status == 401) {
+                window.location.href = '/login';
+            }
             alert(data.responseText);
         }
     });

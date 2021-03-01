@@ -26,8 +26,10 @@ $(document).ready(function()
             "data": {
                 "data": 1
             },
-            error: function (data) {
-                alert(data.responseText);
+            error: function(data) {
+                if(data.status == 401) {
+                    window.location.href = '/login';
+                }
             }
         },
         
@@ -51,8 +53,10 @@ $(document).ready(function()
         serverSide: true,
         ajax: {
             "url": 'searchall',
-            error: function (data) {
-                alert(data.responseText);
+            error: function(data) {
+                if(data.status == 401) {
+                    window.location.href = '/login';
+                }
             }
         },
         columns: [
@@ -109,7 +113,14 @@ $(document).on("click", "#searchtable tr", function () {
         },
         processing: true,
         serverSide: true,
-        ajax: "/bserial/"+id,
+        ajax: {
+            "url": "/bserial/"+id,
+            error: function(data) {
+                if(data.status == 401) {
+                    window.location.href = '/login';
+                }
+            }
+        },
         columns: [
             { data: 'updated_at', name:'updated_at'},
             { data: 'item', name:'item'},
@@ -150,8 +161,10 @@ $(document).on("click", "#catTable tr", function () {
                 "data": 0,
                 "category": catdata.category_id 
             },
-            error: function (data) {
-                alert(data.responseText);
+            error: function(data) {
+                if(data.status == 401) {
+                    window.location.href = '/login';
+                }
             }
         },
         columns: [
