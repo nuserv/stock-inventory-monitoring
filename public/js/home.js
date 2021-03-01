@@ -10,7 +10,7 @@ $(document).ready(function()
         "pageLength": 25,
         "order": [ 0, 'desc' ],
         processing: true,
-        serverSide: false,
+        serverSide: true,
         ajax: {
             url: 'activity',
             error: function(data) {

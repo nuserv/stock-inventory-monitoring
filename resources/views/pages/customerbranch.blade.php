@@ -41,7 +41,7 @@
         </thead>
     </table>
 </div>
-@role('Viewer')
+@role('Editor')
 <input type="button" id="branchBtn" class="btn btn-primary" value="Add Customer Branch">
 @endrole
 @endsection

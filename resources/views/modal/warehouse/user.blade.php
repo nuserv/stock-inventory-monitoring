@@ -54,24 +54,15 @@
                         <div class="col-md-6">
                             <select name="role" id="role" class="form-control" style="color: black;" disabled>
                                 <option selected disabled>select roles</option>
-                                @role('Administrator')
+                                @role('Manager')
                                     @foreach ($roles as $role)
                                         <option value="{{ $role->name }}">{{ $role->name }}</option>
                                     @endforeach
                                 @endrole
-                                @role('Head')
-                                    @foreach ($roles as $role)
-                                        @if( $role->id > auth()->user()->roles->first()->id)
-                                            @if($role->name != "Encoder" && auth()->user()->hasrole('Head'))
-                                                <option value="{{ $role->name }}">{{ $role->name }}</option>
-                                            @endif
-                                        @endif
-                                    @endforeach
-                                @endrole
-                                @role('Viewer')
+                                @role('Editor')
                                     @foreach ($roles as $role)
                                         @if( $role->id > 1)
-                                            @if($role->name != "Administrator" && auth()->user()->hasrole('Viewer'))
+                                            @if(auth()->user()->hasrole('Editor'))
                                                 <option value="{{ $role->name }}">{{ $role->name }}</option>
                                             @endif
                                         @endif

@@ -3,12 +3,12 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h6 class="modal-title w-100 text-center" id="head">STOCK REQUEST</h6>
-                @if (auth()->user()->hasAnyrole('Viewer'))
+                @if (auth()->user()->hasAnyrole('Manager', 'Editor'))
                     <button class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 @endif
-                @if (!auth()->user()->hasAnyrole('Viewer'))
+                @if (!auth()->user()->hasAnyrole('Manager', 'Editor'))
                     <button class="close cancel" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -98,7 +98,7 @@
                         <th>Item Code</th>
                         <th>Description</th>
                         <th>Qty - UOM</th>
-                        @if(!auth()->user()->hasrole('Viewer'))
+                        @if(!auth()->user()->hasanyrole('Manager', 'Editor'))
                         <th>Stock Available</th>
                         @endif
                     </thead>

@@ -141,9 +141,11 @@ class HomeController extends Controller
     }
     public function activity()
     {
-        if (auth()->user()->hasAnyRole('Administrator', 'Viewer')) {
+        if (auth()->user()->hasAnyRole('Administrator', 'Editor',  'Manager')) {
             $act = UserLog::select('user_logs.*', 'users.email')
                 ->join('users', 'users.id', '=', 'user_logs.user_id')
+                ->orderBy('id', 'desc')
+                ->take(200)
                 ->get();
         }
         if (auth()->user()->roles->first()->name == 'Head') {
@@ -152,10 +154,10 @@ class HomeController extends Controller
             foreach ($user as $user) {
                 $myuser[] = $user->id;
             }
-            $act = UserLog::wherein('user_id', $myuser)->orderBy('id', 'desc')->get();
+            $act = UserLog::wherein('user_id', $myuser)->orderBy('id', 'desc')->take(200)->get();
         }
-        if (!auth()->user()->hasAnyRole('Head', 'Administrator', 'Viewer')) {
-            $act = UserLog::where('user_id', auth()->user()->id)->orderBy('id', 'desc')->take(1000)->get();
+        if (auth()->user()->hasAnyRole('Tech', 'Repair')) {
+            $act = UserLog::where('user_id', auth()->user()->id)->orderBy('id', 'desc')->take(200)->get();
         }
         return DataTables::of($act)
         ->addColumn('date', function (UserLog $request){
@@ -187,7 +189,7 @@ class HomeController extends Controller
     {
         $title = "Preventive Maintenance";
         $categories = Category::all();
-        if (auth()->user()->hasrole('Administrator')) {
+        if (!auth()->user()->hasanyrole('Head', 'Tech')) {
             return redirect('/');
         }
         return view('pages.pm', compact('title', 'categories'));

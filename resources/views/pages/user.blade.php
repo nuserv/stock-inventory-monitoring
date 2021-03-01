@@ -39,5 +39,7 @@
         </thead>
     </table>
 </div>
+@if(auth()->user()->hasanyrole('Manager', 'Editor'))
 <input type="button" id="addBtn" class="btn btn-primary" value="New User">
+@endif
 @endsection
