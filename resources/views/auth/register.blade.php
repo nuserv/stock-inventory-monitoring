@@ -93,9 +93,15 @@
                             <div class="col-md-6">
                                 <select name="role" id="role" class="form-control @error('role') is-invalid @enderror">
                                     <option selected disabled>select roles</option>
-                                    @foreach ($roles as $role)
-                                        <option value="{{ $role->name }}">{{ $role->name}}</option>
-                                    @endforeach
+                                    @if(auth()->user()->hasrole('Manager'))
+                                        <option value="Manager">Manager</option>
+                                    @endif
+                                    <option value="Editor">Editor</option>
+                                    <option value="Warehouse Manager">Warehouse Manager</option>
+                                    <option value="Head">Head</option>
+                                    <option value="Repair">Repair</option>
+                                    <option value="Tech">Tech</option>
+                                    <option value="Encoder">Encoder</option>
                                 </select>
 
                                 @error('role')

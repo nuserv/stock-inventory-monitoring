@@ -74,7 +74,7 @@ $(document).on('click', function (e)
             $('#last_name').val(trdata.lastname);
             $('#email').val(trdata.email);
             $('#area').val(area);
-            $('#role').val(trdata.role);
+            //$('#role').val(trdata.role);
             $('#status').val(dtdata.dataStatus);
             $('#subBtn').val('Update');
 
@@ -92,9 +92,9 @@ $(document).on('click', function (e)
                 $('#email').val('');
                 $('#password').val('');
                 $('#password_confirmation').val('');
-                if ($('#myrole').val() == 2) {
+                /*if ($('#myrole').val() == 2) {
                     $('#role').val('Tech');   
-                }
+                }*/
                 $('#area').val('select area');
                 $('#branch').val('select branch');
                 $('#status').val('1');
