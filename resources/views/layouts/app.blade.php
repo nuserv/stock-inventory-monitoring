@@ -51,7 +51,7 @@
             @include('inc.header')
             @include('inc.navbar')
             @if(!Auth::guest())
-                <input type="text" hidden id="level" value={{ auth()->user()->roles->first()->name }}>
+                <input type="text" hidden id="level" value="{{ auth()->user()->roles->first()->name }}">
             @endif
             <div class="py-2">
             @yield('content')
