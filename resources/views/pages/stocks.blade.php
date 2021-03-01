@@ -33,8 +33,16 @@
                     <th>
                         Category
                     </th>
+                    @if(auth()->user()->branch->branch != "Warehouse")
                     <th>
-                        Quantity
+                        Stock In
+                    </th>
+                    <th>
+                        Stock Out
+                    </th>
+                    @endif
+                    <th>
+                        @if(auth()->user()->branch->branch != "Warehouse")Total @else Quantity @endif
                     </th>
                 </tr>
             </thead>
@@ -57,8 +65,16 @@
                     <th>
                         Item Description
                     </th>
+                    @if(auth()->user()->branch->branch != "Warehouse")
                     <th>
-                        Quantity
+                        Stock In
+                    </th>
+                    <th>
+                        Stock Out
+                    </th>
+                    @endif
+                    <th>
+                        @if(auth()->user()->branch->branch != "Warehouse")Total @else Quantity @endif
                     </th>
                     <th>
                         UOM

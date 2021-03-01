@@ -345,7 +345,12 @@ class StockController extends Controller
     public function viewStocks(Request $request)
     {
         if ($request->data != 0) {
-            $stock = Stock::select('category_id', 'category', \DB::raw('SUM(CASE WHEN status = \'in\' THEN 1 ELSE 0 END) as quantity'))
+
+            $stock = Stock::where('status', 'service unit')
+                    ->where('branch_id', auth()->user()->branch->id)
+                    ->get();
+
+            $stock = Stock::select('category_id', 'category', \DB::raw('SUM(CASE WHEN status = \'in\' THEN 1 ELSE 0 END) as stockin'))
                 ->where('stocks.status', 'in')
                 ->where('branch_id', auth()->user()->branch->id)
                 ->join('categories', 'category_id', '=', 'categories.id')
@@ -355,9 +360,22 @@ class StockController extends Controller
             ->addColumn('category', function (Stock $stock){
                 return strtoupper($stock->category);
             })
+            ->addColumn('stockout', function (Stock $stock){
+                $out = Stock::where('status', 'service unit')
+                    ->where('category_id', $stock->category_id)
+                    ->count();
+                return strtoupper($out);
+            })
+            ->addColumn('total', function (Stock $stock){
+                $out = Stock::where('status', 'service unit')
+                    ->where('category_id', $stock->category_id)
+                    ->count();
+                
+                return ($stock->stockin+$out);
+            })
             ->make(true);
         }else{
-            $stock = Stock::select('UOM','categories.category', 'stocks.items_id as items_id', 'items.item as description', \DB::raw('SUM(CASE WHEN status = \'in\' THEN 1 ELSE 0 END) as quantity'))
+            $stock = Stock::select('UOM','categories.category', 'stocks.items_id as items_id', 'items.item as description', \DB::raw('SUM(CASE WHEN status = \'in\' THEN 1 ELSE 0 END) as stockin'))
                 ->where('stocks.status', 'in')
                 ->where('branch_id', auth()->user()->branch->id)
                 ->where('categories.id', $request->category)
@@ -367,6 +385,18 @@ class StockController extends Controller
             return DataTables::of($stock)
             ->addColumn('description', function (Stock $stock){
                 return strtoupper($stock->description);
+            })
+            ->addColumn('stockout', function (Stock $stock){
+                $out = Stock::where('status', 'service unit')
+                    ->where('items_id', $stock->items_id)
+                    ->count();
+                return strtoupper($out);
+            })
+            ->addColumn('total', function (Stock $stock){
+                $out = Stock::where('status', 'service unit')
+                    ->where('items_id', $stock->items_id)
+                    ->count();
+                return ($stock->stockin+$out);
             })
             ->make(true);
         }
