@@ -3,6 +3,9 @@
         <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
         
         <head>
+            @if(Auth::guest())
+                <meta http-equiv="refresh" content="300">
+            @endif
             <meta charset="utf-8">
             <meta name="viewport" content="width=device-width, initial-scale=1">
             @auth
@@ -14,7 +17,7 @@
             <link rel="stylesheet" type="text/css" href="{{ url('/css/styles.css') }}" />
             <link rel="stylesheet" href="//cdn.datatables.net/1.10.21/css/jquery.dataTables.min.css">
             <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-            <link href="http://code.jquery.com/ui/1.10.4/themes/smoothness/jquery-ui.css" rel="Stylesheet" type="text/css" />
+            <link href="https://code.jquery.com/ui/1.10.4/themes/smoothness/jquery-ui.css" rel="Stylesheet" type="text/css" />
             <!--link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/dt/dt-1.10.23/sl-1.3.1/datatables.min.css"/-->
             <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/dt/dt-1.10.23/b-1.6.5/b-print-1.6.5/sl-1.3.1/datatables.min.css"/>
             @auth
@@ -43,7 +46,6 @@
                 }
             </style>
         </head>
-    
         <body>
         <div id="loading"></div>
             @include('inc.header')
@@ -149,7 +151,7 @@
             <script src="https://cdn.datatables.net/buttons/1.6.5/js/dataTables.buttons.min.js"></script>
             <!--script src="https://cdn.datatables.net/select/1.3.1/js/dataTables.select.min.js"></script-->
             <script type="text/javascript" src="https://cdn.datatables.net/v/dt/dt-1.10.23/b-1.6.5/b-print-1.6.5/sl-1.3.1/datatables.min.js"></script>
-            <script type="text/javascript" src="http://code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
+            <script type="text/javascript" src="https://code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
             <script type="text/javascript" src="{{asset('js/moment.min.js')}}"></script>
             
             @if(Request::is('user'))

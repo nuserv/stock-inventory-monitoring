@@ -53,7 +53,7 @@
                 <li class="nav-item">
                     <a class="nav-link {{ Request::is('return') ? 'active' : '' }}" href="{{ route('return.index') }}">Returns</a>
                 </li>
-                @if(auth()->user()->hasanyrole('Manager', 'Editor', 'Head'))
+                @if(auth()->user()->hasanyrole('Manager', 'Editor', 'Head', 'Administrator'))
                     <li class="nav-item">
                         <a class="nav-link {{ Request::is('user') ? 'active' : '' }}" href="{{ url('user') }}">Users</a>
                     </li>
