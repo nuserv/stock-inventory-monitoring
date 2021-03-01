@@ -32,6 +32,9 @@ $(document).on('click', function (e)
         });
 
         $('#userTable tbody').on('click', 'tr', function () { 
+            if ($('#level').val() == 'Head') {
+                return false;
+            }
             var dtdata = $('#userTable tbody tr:eq(0)').data();
             var trdata = table.row(this).data();
             var area = trdata.area_id;

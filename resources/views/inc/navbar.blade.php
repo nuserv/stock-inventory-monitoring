@@ -30,12 +30,10 @@
                 </li>
                 @if(auth()->user()->hasanyrole('Administrator', 'Encoder', 'Head', 'Tech'))
                     <li class="nav-item">
-                        <a class="nav-link {{ Request::is('stocks') ? 'active' : '' }}" href="{{ route('stocks.index') }}">Stock</a>
+                        <a class="nav-link {{ Request::is('stocks') ? 'active' : '' }}" href="{{ route('stocks.index') }}">Stocks</a>
                     </li>
                 @endif
-                <li class="nav-item">
-                    <a class="nav-link {{ Request::is('return') ? 'active' : '' }}" href="{{ route('return.index') }}">Return</a>
-                </li>
+                
                 @role('Manager')
                     <li class="nav-item">
                         <a class="nav-link {{ Request::is('unrepair') ? 'active' : '' }}" href="{{ url('/unrepair') }}">Unrepairable</a>
@@ -46,19 +44,21 @@
                         <a class="nav-link {{ Request::is('service-unit') ? 'active' : '' }}" href="{{ route('index.service-unit') }}">Service IN / OUT</a>
                     </li>
                     <li class="nav-item">
+                        <a class="nav-link {{ Request::is('preventive') ? 'active' : '' }}" href="{{ route('index.preventive') }}">Preventive Maintenance</a>
+                    </li>
+                    <li class="nav-item">
                         <a class="nav-link {{ Request::is('loans') ? 'active' : '' }}" href="{{ route('loans') }}">Loans</a>
                     </li>
                 @endif
-                @if(auth()->user()->hasanyrole('Manager', 'Editor'))
+                <li class="nav-item">
+                    <a class="nav-link {{ Request::is('return') ? 'active' : '' }}" href="{{ route('return.index') }}">Returns</a>
+                </li>
+                @if(auth()->user()->hasanyrole('Manager', 'Editor', 'Head'))
                     <li class="nav-item">
                         <a class="nav-link {{ Request::is('user') ? 'active' : '' }}" href="{{ url('user') }}">Users</a>
                     </li>
                 @endif
-                @if(auth()->user()->branch->branch != 'Warehouse')
-                    <li class="nav-item">
-                        <a class="nav-link {{ Request::is('preventive') ? 'active' : '' }}" href="{{ route('index.preventive') }}">PM</a>
-                    </li>
-                @endif
+                
             @endif
         </ul>
         <ul class="nav">
