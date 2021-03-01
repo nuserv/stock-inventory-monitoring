@@ -157,7 +157,7 @@ class HomeController extends Controller
             }
             $act = UserLog::wherein('user_id', $myuser)->orderBy('id', 'desc')->take(200)->get();
         }
-        if (auth()->user()->hasAnyRole('Tech', 'Repair')) {
+        if (auth()->user()->hasAnyRole('Tech', 'Repair', 'Encoder')) {
             $act = UserLog::where('user_id', auth()->user()->id)->orderBy('id', 'desc')->take(200)->get();
         }
         return DataTables::of($act)

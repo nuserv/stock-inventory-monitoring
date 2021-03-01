@@ -140,7 +140,7 @@ class BranchController extends Controller
                 ->where('branches.id', '!=', auth()->user()->branch->id)
                 ->join('areas', 'areas.id', '=', 'branches.area_id')
                 ->get();
-        }else if (auth()->user()->hasanyrole('Editor', 'Manager')){
+        }else if (auth()->user()->hasanyrole('Editor', 'Manager', 'Encoder')){
             $branches = Branch::select('branches.*', 'areas.area')
                 ->join('areas', 'areas.id', '=', 'branches.area_id')
                 ->get();
