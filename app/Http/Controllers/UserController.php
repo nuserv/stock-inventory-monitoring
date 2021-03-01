@@ -28,19 +28,19 @@ class UserController extends Controller
         $areas = Area::all();
         $roles = Role::all();
         $title = 'Users';
-        if (!auth()->user()->hasanyrole('Administrator|Head|Viewer')) {
+        if (!auth()->user()->hasanyrole('Manager|Editor')) {
             return redirect('/');
         }
-        if (auth()->user()->hasrole('Head')) {
+        /*if (auth()->user()->hasrole('Head')) {
             $areas = Area::where('id', auth()->user()->area->id)->get();
-        }
+        }*/
         return view('pages.user', compact('users', 'areas','roles', 'title'));
     }
     public function getUsers()
     {
-        if (auth()->user()->hasrole('Administrator')) {
+        if (auth()->user()->hasrole('Manager')) {
             $users = User::where('id', '!=', auth()->user()->id)->get();
-        }else if(auth()->user()->hasrole('Viewer')){
+        }else if(auth()->user()->hasrole('Editor')){
             $users = User::select('users.*')
                 ->where('id', '!=', auth()->user()->id)
                 ->join('model_has_roles', 'model_id', '=', 'users.id')

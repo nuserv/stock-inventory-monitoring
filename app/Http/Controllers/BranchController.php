@@ -139,11 +139,11 @@ class BranchController extends Controller
                 ->where('branches.id', '!=', auth()->user()->branch->id)
                 ->join('areas', 'areas.id', '=', 'branches.area_id')
                 ->get();
-        }else if (auth()->user()->hasrole('Viewer')){
+        }else if (auth()->user()->hasanyrole('Editor', 'Manager')){
             $branches = Branch::select('branches.*', 'areas.area')
                 ->join('areas', 'areas.id', '=', 'branches.area_id')
                 ->get();
-        }else if (!auth()->user()->hasanyrole('Viewer', 'Administrator')){
+        }else if (auth()->user()->hasanyrole('Head', 'Tech')){
             $branches = Branch::select('branches.*', 'areas.area')
                 ->whereNotin('branches.id', [auth()->user()->branch->id, '1'])
                 ->where('branches.area_id', '=', auth()->user()->area->id)

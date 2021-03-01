@@ -43,7 +43,7 @@
         </thead>
     </table>
 </div>
-@role('Viewer')
+@role('Editor')
 <input type="button" id="addBtn" class="btn btn-primary" value="New branch">
 @endrole
 @endsection

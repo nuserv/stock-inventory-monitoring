@@ -5,7 +5,7 @@
 <div class="container pt-5">
     <div class="container-fluid">
         <div class="row">
-            @if (!auth()->user()->hasrole('Viewer'))
+            @if (!auth()->user()->hasrole('Manager', 'Editor'))
                 <div class="col-sm-2">
                     <a href="{{ route('stock.index')}}">
                         <div class="card bg-card">
@@ -59,12 +59,12 @@
                 </div>
                 @endif
             @endif
-            @if(auth()->user()->branch->branch == 'Warehouse' || auth()->user()->branch->branch == 'Viewer')
+            @if(auth()->user()->branch->branch == 'Warehouse' || auth()->user()->hasanyrole('Manager', 'Editor'))
             <div class="col-sm-2">
                 <a href="{{ url('request') }}">
                     <div class="card @if($unresolved > 0)bg-card-red @else bg-card @endif">
                         <div class="card-body text-center">
-                            <p class="card-text">@if($unresolved > 0)UNRESOVLED @else STOCK REQUEST @endif</p>
+                            <p class="card-text">UNRESOLVED</p>
                             <p class="card-text">@if($unresolved > 0){{ $unresolved }} @else {{ $stockreq }} @endif</p>
                         </div>
                     </div>

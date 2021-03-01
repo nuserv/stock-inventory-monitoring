@@ -175,7 +175,7 @@ $(document).ready(function()
     });
 });
 $(document).on("click", ".schedDetails tr", function() {
-    if ($('#status').val() == 'UNRESOLVED') {
+    if ($('#status').val() == 'UNRESOLVED' && $('#level').val() == 'Manager') {
         $('#remarksModal').modal('show');
         $('#requestModal').modal('hide');
     }

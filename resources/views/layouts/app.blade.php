@@ -68,30 +68,30 @@
                     @include('modal.warehouse.send')
                     @include('modal.warehouse.resched')
                 @endif
-                @if(auth()->user()->hasAnyrole('Viewer'))
+                @if(auth()->user()->hasAnyrole('Manager', 'Editor'))
                     @include('modal.warehouse.request')
                     @include('modal.remarks')
                 @endif
-                @if(!auth()->user()->hasAnyrole('Administrator', 'Encoder', 'Viewer'))
+                @if(auth()->user()->hasAnyrole('Head', 'Tech'))
                     @include('modal.branch.request')
                     @include('modal.branch.send')
                 @endif
             @endif
 
             @if(Request::is('customer'))
-                @if(auth()->user()->hasrole('Viewer'))
+                @if(auth()->user()->hasrole('Editor'))
                     @include('modal.customer')
                 @endif
             @endif
 
             @if(Request::is('customer/*'))
-                @if(auth()->user()->hasrole('Viewer'))
+                @if(auth()->user()->hasrole('Editor'))
                     @include('modal.customerbranch')
                 @endif
             @endif
 
             @if(Request::is('service-unit'))
-                @if(!auth()->user()->hasAnyrole('Administrator', 'Encoder'))
+                @if(auth()->user()->hasAnyrole('Head', 'Tech'))
                     @include('modal.branch.in')
                     @include('modal.branch.out')
                     @include('modal.branch.in-option')
@@ -100,7 +100,7 @@
             @endif
 
             @if(Request::is('preventive'))
-                @if(!auth()->user()->hasAnyrole('Administrator', 'Encoder'))
+                @if(auth()->user()->hasAnyrole('Head', 'Tech'))
                     @include('modal.out')
                     @include('modal.pm-service-in')
                 @endif
@@ -125,7 +125,7 @@
             @endif
 
             @if(Request::is('user'))
-                    @include('modal.warehouse.user')
+                @include('modal.warehouse.user')
             @endif
 
             @if(Request::is('loans'))
@@ -164,10 +164,10 @@
                 @if(auth()->user()->hasAnyrole('Administrator', 'Encoder'))
                     <script src="{{asset('min/?f=js/warehouse/branch.js')}}"></script>
                 @endif
-                @if (!auth()->user()->hasAnyrole('Administrator', 'Encoder', 'Viewer'))
+                @if (auth()->user()->hasAnyrole('Head', 'Tech'))
                     <script src="{{asset('min/?f=js/branch/branch.js')}}"></script>
                 @endif
-                @if (auth()->user()->hasrole('Viewer'))
+                @if (auth()->user()->hasanyrole('Editor', 'Manager'))
                     <script src="{{asset('min/?f=js/branch.js')}}"></script>
                 @endif
             @endif
@@ -179,10 +179,10 @@
                     <script src="{{asset('min/?f=js/warehouse/request2.js')}}"></script>
                     <script src="{{asset('min/?f=js/warehouse/request3.js')}}"></script>
                 @endif
-                @if(auth()->user()->hasrole('Viewer'))
+                @if(auth()->user()->hasanyrole('Editor', 'Manager'))
                     <script src="{{asset('min/?f=js/request.js')}}"></script>
                 @endif
-                @if(!auth()->user()->hasAnyrole('Administrator', 'Encoder', 'Viewer'))
+                @if(auth()->user()->hasAnyrole('Head', 'Tech'))
                     <script src="{{asset('min/?f=js/branch/request.js')}}"></script>
                     <script src="{{asset('min/?f=js/branch/request2.js')}}"></script>
                 @endif
@@ -223,10 +223,10 @@
                 @if(auth()->user()->hasAnyrole('Administrator', 'Encoder'))
                     <script src="{{asset('min/?f=js/warehouse/defective.js')}}"></script>
                 @endif
-                @if(auth()->user()->hasrole('Viewer'))
+                @if(auth()->user()->hasanyrole('Editor', 'Manager'))
                     <script src="{{asset('min/?f=js/defective.js')}}"></script>
                 @endif
-                @if (!auth()->user()->hasAnyrole('Administrator', 'Encoder', 'Viewer'))
+                @if (auth()->user()->hasAnyrole('Head', 'Tech'))
                     <script src="{{asset('min/?f=js/branch/defective.js')}}"></script>
                 @endif
             @endif
@@ -247,10 +247,9 @@
             @if(Request::is('log') && auth()->user()->hasrole('Repair'))
                 <script src="{{asset('min/?f=js/home.js')}}"></script>
             @endif
-            @if(Request::is('unrepair') && auth()->user()->hasanyrole('Repair', 'Viewer'))
+            @if(Request::is('unrepair') && auth()->user()->hasanyrole('Repair', 'Editor', 'Manager'))
                 <script src="{{asset('min/?f=js/unrepair.js')}}"></script>
             @endif
-
         </body>
     </html>
 

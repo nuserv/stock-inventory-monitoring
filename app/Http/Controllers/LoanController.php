@@ -20,7 +20,7 @@ class LoanController extends Controller
     }
     public function index()
     {
-        if (auth()->user()->hasrole('Administrator')) {
+        if (!auth()->user()->hasanyrole('Head', 'Tech')) {
             return redirect('/');
         }
         $title = 'Loans';

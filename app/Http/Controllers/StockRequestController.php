@@ -242,7 +242,7 @@ class StockRequestController extends Controller
             $stock = StockRequest::wherein('status',  ['0', '1', '4', '5', '8'])
                 ->where('branch_id', $user)
                 ->get();
-        }else if(auth()->user()->hasRole('Viewer')){
+        }else if(auth()->user()->hasRole('Editor', 'Manager')){
             $stock = StockRequest::wherein('status',  ['0', '1', '4', '5', '6', '8', '9'])
                 ->get();
         }else{

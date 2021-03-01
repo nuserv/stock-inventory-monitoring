@@ -10,7 +10,7 @@
     <table class="table requestTable" id="requestTable" style="font-size:80%">
         <thead class="thead-dark">
             <tr>
-                @if(auth()->user()->hasAnyrole('Administrator', 'Encoder', 'Viewer'))
+                @if(auth()->user()->hasAnyrole('Administrator', 'Encoder', 'Editor', 'Manager'))
                 <th>
                     ID
                 </th>
@@ -21,7 +21,7 @@
                 <th>
                     REQUESTED BY
                 </th>
-                @if(auth()->user()->hasAnyrole('Administrator', 'Encoder', 'Viewer'))
+                @if(auth()->user()->hasAnyrole('Administrator', 'Encoder', 'Editor', 'Manager'))
                 <th>
                     BRANCH NAME
                 </th>

@@ -56,7 +56,7 @@
                                     </td>
                                 <tr>
                                     <th>DESCRIPTION</th>
-                                    @if (auth()->user()->hasanyrole('Viewer', 'Administrator', 'Encoder'))
+                                    @if (auth()->user()->hasanyrole('Editor', 'Manager', 'Administrator', 'Encoder'))
                                         <th>INITIAL STOCK</th>
                                     @endif
                                     <th>AVAILABLE</th>
@@ -80,13 +80,13 @@
                             </thead>
                         </table>
                     </div>
-                    @role('Viewer')
+                    @if(auth()->user()->hasanyrole('Manager', 'Editor'))
                     <div class="modal-footer">
                         <input type="button" id="editBtn" class="btn btn-primary" value="Edit">
                         <input type="submit" id="saveBtn" class="btn btn-primary" value="Save">
                         <input type="button" class="btn btn-primary mr-auto" data-dismiss="modal" value="Cancel">
                     </div>
-                    @endrole
+                    @endif
                 </form>
             </div>
             <div class="modal-footer">

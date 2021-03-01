@@ -30,7 +30,7 @@ class StockController extends Controller
     }
     public function index()
     {
-        if (auth()->user()->hasanyrole('Viewer', 'Repair')) {
+        if (auth()->user()->hasanyrole('Editor', 'Manager', 'Repair')) {
             return redirect('/');
         }
         $title = 'Stocks';
@@ -119,7 +119,7 @@ class StockController extends Controller
     {
         $title = "Service Unit";
         $categories = Category::all();
-        if (auth()->user()->hasrole('Administrator')) {
+        if (!auth()->user()->hasanyrole('Head', 'Tech')) {
             return redirect('/');
         }
         return view('pages.service-unit', compact('title', 'categories'));
