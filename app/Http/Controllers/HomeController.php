@@ -142,7 +142,7 @@ class HomeController extends Controller
     }
     public function activity()
     {
-        if (auth()->user()->hasAnyRole('Administrator', 'Editor',  'Manager')) {
+        if (auth()->user()->hasAnyRole('Warehouse Manager', 'Editor',  'Manager')) {
             $act = UserLog::select('user_logs.*', 'users.email')
                 ->join('users', 'users.id', '=', 'user_logs.user_id')
                 ->orderBy('id', 'desc')

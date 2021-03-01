@@ -59,13 +59,13 @@
 
             @if(Request::is('branch'))
                 @include('modal.warehouse.branch')
-                @if(auth()->user()->hasrole('Administrator'))
+                @if(auth()->user()->hasrole('Warehouse Manager'))
                     @include('modal.warehouse.initial')
                 @endif
             @endif
 
             @if(Request::is('request'))
-                @if(auth()->user()->hasAnyrole('Administrator', 'Encoder'))
+                @if(auth()->user()->hasAnyrole('Warehouse Manager', 'Encoder'))
                     @include('modal.warehouse.request')
                     @include('modal.warehouse.send')
                     @include('modal.warehouse.resched')
@@ -109,7 +109,7 @@
             @endif
 
             @if(Request::is('stocks'))
-                @if(auth()->user()->hasAnyrole('Administrator', 'Encoder'))
+                @if(auth()->user()->hasAnyrole('Warehouse Manager', 'Encoder'))
                     @include('modal.warehouse.add')
                     @include('modal.warehouse.category')
                     @include('modal.warehouse.item')
@@ -163,7 +163,7 @@
             @endif
 
             @if(Request::is('branch'))
-                @if(auth()->user()->hasAnyrole('Administrator', 'Encoder'))
+                @if(auth()->user()->hasAnyrole('Warehouse Manager', 'Encoder'))
                     <script src="{{asset('min/?f=js/warehouse/branch.js')}}"></script>
                 @endif
                 @if (auth()->user()->hasAnyrole('Head', 'Tech'))
@@ -175,7 +175,7 @@
             @endif
 
             @if(Request::is('request'))
-                @if(auth()->user()->hasAnyrole('Administrator', 'Encoder'))
+                @if(auth()->user()->hasAnyrole('Warehouse Manager', 'Encoder'))
                     <script src="{{asset('min/?f=js/warehouse/request.js')}}"></script>
                     <script src="{{asset('min/?f=js/warehouse/request1.js')}}"></script>
                     <script src="{{asset('min/?f=js/warehouse/request2.js')}}"></script>
@@ -191,7 +191,7 @@
             @endif
 
             @if(Request::is('stocks'))
-                @if(auth()->user()->hasAnyrole('Administrator', 'Encoder'))
+                @if(auth()->user()->hasAnyrole('Warehouse Manager', 'Encoder'))
                     <script src="{{asset('min/?f=js/warehouse/stock.js')}}"></script>
                 @else
                     <script src="{{asset('min/?f=js/branch/stocks.js')}}"></script>
@@ -222,7 +222,7 @@
             @endif
 
             @if(Request::is('return'))
-                @if(auth()->user()->hasAnyrole('Administrator', 'Encoder'))
+                @if(auth()->user()->hasAnyrole('Warehouse Manager', 'Encoder'))
                     <script src="{{asset('min/?f=js/warehouse/defective.js')}}"></script>
                 @endif
                 @if(auth()->user()->hasanyrole('Editor', 'Manager'))

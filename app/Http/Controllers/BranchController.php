@@ -135,7 +135,7 @@ class BranchController extends Controller
     }
     public function getBranches()
     {
-        if (auth()->user()->hasrole('Administrator')) {
+        if (auth()->user()->hasrole('Warehouse Manager')) {
             $branches = Branch::select('branches.*', 'areas.area')
                 ->where('branches.id', '!=', auth()->user()->branch->id)
                 ->join('areas', 'areas.id', '=', 'branches.area_id')

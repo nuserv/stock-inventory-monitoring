@@ -29,7 +29,7 @@ class UserController extends Controller
         $areas = Area::all();
         $roles = Role::all();
         $title = 'Users';
-        if (!auth()->user()->hasanyrole('Manager|Editor|Head|Administrator')) {
+        if (!auth()->user()->hasanyrole('Manager|Editor|Head|Warehouse Manager')) {
             return redirect('/');
         }
         /*if (auth()->user()->hasrole('Head')) {

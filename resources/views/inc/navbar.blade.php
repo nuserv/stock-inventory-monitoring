@@ -28,7 +28,7 @@
                 <li class="nav-item">
                     <a class="nav-link {{ Request::is('request') ? 'active' : '' }}" href="{{ route('stock.index') }}">Stock Request</a>
                 </li>
-                @if(auth()->user()->hasanyrole('Administrator', 'Encoder', 'Head', 'Tech'))
+                @if(auth()->user()->hasanyrole('Warehouse Manager', 'Encoder', 'Head', 'Tech'))
                     <li class="nav-item">
                         <a class="nav-link {{ Request::is('stocks') ? 'active' : '' }}" href="{{ route('stocks.index') }}">Stocks</a>
                     </li>
@@ -53,7 +53,7 @@
                 <li class="nav-item">
                     <a class="nav-link {{ Request::is('return') ? 'active' : '' }}" href="{{ route('return.index') }}">Returns</a>
                 </li>
-                @if(auth()->user()->hasanyrole('Manager', 'Editor', 'Head', 'Administrator'))
+                @if(auth()->user()->hasanyrole('Manager', 'Editor', 'Head', 'Warehouse Manager'))
                     <li class="nav-item">
                         <a class="nav-link {{ Request::is('user') ? 'active' : '' }}" href="{{ url('user') }}">Users</a>
                     </li>

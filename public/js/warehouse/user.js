@@ -32,7 +32,7 @@ $(document).on('click', function (e)
         });
 
         $('#userTable tbody').on('click', 'tr', function () { 
-            if ($('#level').val() == 'Head' || $('#level').val() == 'Administrator') {
+            if ($('#level').val() == 'Head' || $('#level').val() == 'Warehouse Manager') {
                 return false;
             }
             var dtdata = $('#userTable tbody tr:eq(0)').data();
