@@ -206,20 +206,16 @@ $(document).on('click', '.send_sub_Btn', function(){
     var qty = "";
     var stat = "notok";
     var reqno = $('#sreqno').val();
-    if (($('#requesttype').val() != "Service") || ($('#requesttype').val() != "Stock")) {
-        if (($('#requesttype').val() == "Service") && (!$('#customer-id').val())) {
-            alert('Please Select the correct Customer Name!');
-            return false;
-        }
-        if (($('#requesttype').val() == "Service") && (!$('#ticket').val())) {
-            alert('Please input ticket number!');
-            return false;
-        }
-    }else{
+    if (!$('#requesttype').val()) {
         alert('Please Select request type!');
-            return false;
+        return false;
+    }else if ($('#requesttype').val() == "Service" && $('#customer-id').val() == "") {
+        alert('Please Select the correct Customer Name!');
+        return false;
+    }else if ($('#requesttype').val() == "Service" && $('#ticket').val() == "") {
+        alert('Please input ticket number!');
+        return false;
     }
-    
     $('#sendrequestModal').modal('toggle');
     $('#loading').show();
     for(var q=1;q<=y;q++){

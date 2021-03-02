@@ -46,8 +46,14 @@ $(document).ready(function()
             "emptyTable": "No stock request found!"
         },
         "fnRowCallback": function(nRow, aData) {
+        //"createdRow": function ( nrow, ndata, index ) {
             if ( aData.status == "UNRESOLVED" || aData.status == "INCOMPLETE") {        
-                $('td', nRow).css('background-color', 'Red');
+                $('td', nRow).eq(4).css('color', '#F1423A');
+                $('td', nRow).eq(4).css('font-weight', 'bold');
+            }
+            if (aData.type == "SERVICE" && aData.status == 'PENDING') {
+                $('td', nRow).eq(3).css('color', 'green');
+                $('td', nRow).eq(3).css('font-weight', 'bold');
             }
         },
         "order": [[ 5, 'desc'], [ 0, 'desc']],
@@ -76,6 +82,8 @@ $(document).ready(function()
             { data: 'ticket', name:'ticket', "width": "14%"}
         ]
     });
+    var cells = table.cells(":contains('UNRESOLVED')").nodes();
+    $(cells).css('color', '#F1423A');
 
     $('#requestTable tbody').on('click', 'tr', function () { 
         var trdata = table.row(this).data();
