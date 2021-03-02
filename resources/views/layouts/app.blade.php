@@ -4,7 +4,7 @@
         
         <head>
             @if(Auth::guest())
-                <meta http-equiv="refresh" content="300">
+                <meta http-equiv="refresh" content="{{ config('session.lifetime') * 60 }}">
             @endif
             <meta charset="utf-8">
             <meta name="viewport" content="width=device-width, initial-scale=1">

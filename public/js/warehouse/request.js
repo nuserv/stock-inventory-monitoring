@@ -46,7 +46,7 @@ $(document).ready(function()
             "emptyTable": "No stock request found!"
         },
         "fnRowCallback": function(nRow, aData) {
-        //"createdRow": function ( nrow, ndata, index ) {
+        //"createdRow": function ( nRow, aData ) {
             if ( aData.status == "UNRESOLVED" || aData.status == "INCOMPLETE") {        
                 $('td', nRow).eq(4).css('color', '#F1423A');
                 $('td', nRow).eq(4).css('font-weight', 'bold');
