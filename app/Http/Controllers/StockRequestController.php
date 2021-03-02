@@ -240,14 +240,14 @@ class StockRequestController extends Controller
     {
         $user = auth()->user()->branch->id;
         if (auth()->user()->branch->branch != 'Warehouse'){
-            $stock = StockRequest::wherein('status',  ['0', '1', '4', '5', '8'])
+            $stock = StockRequest::wherein('status',  ['0', '1', '4', '5', '8', 'PENDING'])
                 ->where('branch_id', $user)
                 ->get();
         }else if(auth()->user()->hasRole('Editor', 'Manager')){
-            $stock = StockRequest::wherein('status',  ['0', '1', '4', '5', '6', '8', '9'])
+            $stock = StockRequest::wherein('status',  ['0', '1', '4', '5', '6', '8', '9', 'PENDING'])
                 ->get();
         }else{
-            $stock = StockRequest::wherein('status',  ['0', '1', '4', '5', '6', '8'])
+            $stock = StockRequest::wherein('status',  ['0', '1', '4', '5', '6', '8', 'PENDING'])
                 ->get();
         }
         return DataTables::of($stock)
@@ -257,7 +257,7 @@ class StockRequestController extends Controller
             'data-user' => '{{ $user_id }}',
         ])
         ->addColumn('status', function (StockRequest $request){
-            if ($request->status == 0) {
+            if ($request->status == 0 || $request->status == 'PENDING') {
                 return 'PENDING';
             }else if ($request->status == 1){
                 return 'SCHEDULED';
@@ -338,7 +338,7 @@ class StockRequestController extends Controller
             $reqno->user_id = auth()->user()->id;
             $reqno->branch_id = auth()->user()->branch->id;
             $reqno->area_id = auth()->user()->area->id;
-            $reqno->status = 0;
+            $reqno->status = 'PENDING';
             $reqno->customer_id = $request->clientid;
             $reqno->customer_branch_id = $request->customerid;
             $reqno->ticket = $request->ticket;
@@ -375,6 +375,7 @@ class StockRequestController extends Controller
             $reqitem->request_no = $request->reqno;
             $reqitem->items_id = $request->item;
             $reqitem->quantity = $request->qty;
+            $reqitem->status = 'PENDING';
             $data = $reqitem->save();
         }
         return response()->json($data);

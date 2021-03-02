@@ -146,24 +146,30 @@ $(document).on('click', '.sub_Btn', function(){
 });
 
 $(document).on('keyup', '.serial', function () {
+    pending = 0;
     for(q=1;q<=w;q++){
         if (q <= w) {
-            pending = 0;
             if ($.inArray(q, uomarray) == -1){
                 if (!$('#serial'+q).val()) {
+                    console.log(uomarray+'test');
                     pending++;
                     $('#sub_Btn').prop('disabled', true);
                     check = false;
                     if (pending != w) {
                         check = true;
                         $('#sub_Btn').prop('disabled', false);
+                        console.log('dito');
+                        console.log(pending);
+                        console.log(w);
                     }
                 }
                 if (w == 1 && !$('#serial'+q).val()) {
                     $('#sub_Btn').prop('disabled', true);
                 }else if (w == 1 && $('#serial'+q).val()){
                     $('#sub_Btn').prop('disabled', false);
+
                 }
+                
             }else{
                 var ins = $('#inputqty'+q).val();
                 $.ajax({
@@ -186,6 +192,7 @@ $(document).on('keyup', '.serial', function () {
                 });
                 if ($('#inputqty'+q).val() == 0) {
                     $('#sub_Btn').prop('disabled', true);
+                    console.log('zero')
                     check = false;
                     if (pending != w) {
                         check = true;

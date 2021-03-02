@@ -167,10 +167,11 @@ function imposeMinMax(el){
         el.value = el.max;
       }
     }
+    pending = 0;
     for(q=1;q<=w;q++){
         if (q <= w) {
-            pending = 0;
             if ($.inArray(q, uomarray) == -1){
+                console.log('mypending');
                 if (!$('#serial'+q).val()) {
                     pending++;
                     $('#sub_Btn').prop('disabled', true);
@@ -205,11 +206,15 @@ function imposeMinMax(el){
                         alert(data.responseText);
                     }
                 });
-                if ($('#inputqty'+q).val() == 0) {
+                if (!$('#inputqty'+q).val() || $('#inputqty'+q).val() == 0) {
+                    pending++;
                     $('#sub_Btn').prop('disabled', true);
                     check = false;
+                    console.log('test');
                     if (pending != w) {
                         check = true;
+                        console.log(q+'dito'+w);
+                        console.log('pending'+pending);
                         $('#sub_Btn').prop('disabled', false);
                     }
                 }
