@@ -24,6 +24,7 @@ class StockRequestController extends Controller
 {
     public function __construct()
     {
+        $this->middleware('ajax-session-expired');
         $this->middleware('auth');
     }
     public function index()

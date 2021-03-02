@@ -56,7 +56,7 @@
                                     </td>
                                 <tr>
                                     <th>DESCRIPTION</th>
-                                    @if (auth()->user()->hasanyrole('Editor', 'Manager', 'Administrator', 'Encoder'))
+                                    @if (auth()->user()->hasanyrole('Editor', 'Manager', 'Warehouse Manager', 'Encoder'))
                                         <th>INITIAL STOCK</th>
                                     @endif
                                     <th>AVAILABLE</th>

@@ -20,6 +20,7 @@ class UserController extends Controller
      */
     public function __construct()
     {
+        $this->middleware('ajax-session-expired');
         $this->middleware('auth');
     }
     public function index()
@@ -28,7 +29,7 @@ class UserController extends Controller
         $areas = Area::all();
         $roles = Role::all();
         $title = 'Users';
-        if (!auth()->user()->hasanyrole('Manager|Editor|Head')) {
+        if (!auth()->user()->hasanyrole('Manager', 'Editor','Head','Warehouse Manager')) {
             return redirect('/');
         }
         /*if (auth()->user()->hasrole('Head')) {

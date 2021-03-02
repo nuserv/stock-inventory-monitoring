@@ -33,10 +33,12 @@ $(document).ready(function()
         
         columns: [
             { data: 'category', name:'category'},
-            { data: 'quantity', name:'quantity'}
+            { data: 'stockin', name:'stockin'},
+            { data: 'stockout', name:'stockout'},
+            { data: 'total', name:'total'}
         ]
     });
-
+   
     searchtable =
     $('table.searchtable').DataTable({ 
         "dom": 'lp',
@@ -154,7 +156,9 @@ $(document).on("click", "#catTable tr", function () {
         },
         columns: [
             { data: 'description', name:'description'},
-            { data: 'quantity', name:'quantity'},
+            { data: 'stockin', name:'stockin'},
+            { data: 'stockout', name:'stockout'},
+            { data: 'total', name:'total'},
             { data: 'UOM', name:'UOM'}
 
         ]

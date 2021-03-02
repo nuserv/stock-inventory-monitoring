@@ -21,6 +21,7 @@ class BranchController extends Controller
 {
     public function __construct()
     {
+        $this->middleware('ajax-session-expired');
         $this->middleware('auth');
     }
     public function index()
@@ -134,12 +135,12 @@ class BranchController extends Controller
     }
     public function getBranches()
     {
-        if (auth()->user()->hasrole('Administrator')) {
+        if (auth()->user()->hasrole('Warehouse Manager')) {
             $branches = Branch::select('branches.*', 'areas.area')
                 ->where('branches.id', '!=', auth()->user()->branch->id)
                 ->join('areas', 'areas.id', '=', 'branches.area_id')
                 ->get();
-        }else if (auth()->user()->hasanyrole('Editor', 'Manager')){
+        }else if (auth()->user()->hasanyrole('Editor', 'Manager', 'Encoder')){
             $branches = Branch::select('branches.*', 'areas.area')
                 ->join('areas', 'areas.id', '=', 'branches.area_id')
                 ->get();

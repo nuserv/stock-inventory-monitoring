@@ -26,6 +26,7 @@ class HomeController extends Controller
 {
     public function __construct()
     {
+        $this->middleware('ajax-session-expired');
         $this->middleware('auth');
     }
     public function index()
@@ -141,7 +142,7 @@ class HomeController extends Controller
     }
     public function activity()
     {
-        if (auth()->user()->hasAnyRole('Administrator', 'Editor',  'Manager')) {
+        if (auth()->user()->hasAnyRole('Warehouse Manager', 'Editor',  'Manager')) {
             $act = UserLog::select('user_logs.*', 'users.email')
                 ->join('users', 'users.id', '=', 'user_logs.user_id')
                 ->orderBy('id', 'desc')
@@ -156,7 +157,7 @@ class HomeController extends Controller
             }
             $act = UserLog::wherein('user_id', $myuser)->orderBy('id', 'desc')->take(200)->get();
         }
-        if (auth()->user()->hasAnyRole('Tech', 'Repair')) {
+        if (auth()->user()->hasAnyRole('Tech', 'Repair', 'Encoder')) {
             $act = UserLog::where('user_id', auth()->user()->id)->orderBy('id', 'desc')->take(200)->get();
         }
         return DataTables::of($act)

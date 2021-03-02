@@ -115,7 +115,7 @@
                 <br>
                 <p class="notes" style="color:red"><b>NOTE: </b><span class="notes" style="color:black" id="notes"></span></p>
             </div>
-            @if(auth()->user()->hasAnyrole('Administrator', 'Encoder'))
+            @if(auth()->user()->hasAnyrole('Warehouse Manager', 'Encoder'))
             <div class="modal-footer">
                 <input type="button" class="btn btn-primary mr-auto" id="prcBtn" class="button" value="Proceed" disabled>
                 <input type="button" id="printBtn" class="btn btn-primary mr-auto" value="PRINT">

@@ -25,7 +25,7 @@
         </thead>
     </table>
 </div>
-@if(!auth()->user()->hasrole('Administrator'))
+@if(!auth()->user()->hasrole('Warehouse Manager'))
 <input type="button" id="loan_Btn" class="btn btn-xs btn-primary" value="NEW LOAN">
 @endif
 @endsection

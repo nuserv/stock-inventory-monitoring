@@ -31,7 +31,7 @@ return [
     |
     */
 
-    'lifetime' => 15,
+    'lifetime' => 5,
 
     'expire_on_close' => true,
 
@@ -166,7 +166,7 @@ return [
     |
     */
 
-    'secure' => env('SESSION_SECURE_COOKIE', false),
+    'secure' => env('SESSION_SECURE_COOKIE', true),
 
     /*
     |--------------------------------------------------------------------------
@@ -194,6 +194,6 @@ return [
     |
     */
 
-    'same_site' => null,
+    'same_site' => lax,
 
 ];

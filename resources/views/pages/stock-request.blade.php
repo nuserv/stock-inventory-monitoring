@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
-@if(auth()->user()->hasrole('Administrator'))
+@if(auth()->user()->hasrole('Warehouse Manager'))
     <form class="search-form" action="#" style="margin:auto;max-width:300px">
     <input type="text" placeholder="Search serial.." id="searchall" size="50" autocomplete="off">
     </form>
@@ -10,7 +10,7 @@
     <table class="table requestTable" id="requestTable" style="font-size:80%">
         <thead class="thead-dark">
             <tr>
-                @if(auth()->user()->hasAnyrole('Administrator', 'Encoder', 'Editor', 'Manager'))
+                @if(auth()->user()->hasAnyrole('Warehouse Manager', 'Encoder', 'Editor', 'Manager'))
                 <th>
                     ID
                 </th>
@@ -21,7 +21,7 @@
                 <th>
                     REQUESTED BY
                 </th>
-                @if(auth()->user()->hasAnyrole('Administrator', 'Encoder', 'Editor', 'Manager'))
+                @if(auth()->user()->hasAnyrole('Warehouse Manager', 'Encoder', 'Editor', 'Manager'))
                 <th>
                     BRANCH NAME
                 </th>
@@ -39,7 +39,7 @@
         </thead>
     </table>
 </div>
-@if(auth()->user()->hasrole('Administrator'))
+@if(auth()->user()->hasrole('Warehouse Manager'))
     <div id="salltable" style="display: none">
         <table class="table searchtable" id="searchtable" style="display: none;font-size:80%;width: 100%">
             <thead class="thead-dark">
