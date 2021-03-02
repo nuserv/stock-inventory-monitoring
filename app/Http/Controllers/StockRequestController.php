@@ -259,17 +259,17 @@ class StockRequestController extends Controller
         ->addColumn('status', function (StockRequest $request){
             if ($request->status == 0 || $request->status == 'PENDING') {
                 return 'PENDING';
-            }else if ($request->status == 1){
+            }else if ($request->status == 1 || $request->status == 'SCHEDULED'){
                 return 'SCHEDULED';
-            }else if ($request->status == 4){
+            }else if ($request->status == 4 || $request->status == 'INCOMPLETE'){
                 return 'INCOMPLETE';
-            }else if ($request->status == 5){
+            }else if ($request->status == 5 || $request->status == 'RESCHEDULED'){
                 return 'RESCHEDULED';
-            }else if ($request->status == 6){
+            }else if ($request->status == 6 || $request->status == 'UNRESOLVED'){
                 return 'UNRESOLVED';
-            }else if ($request->status == 8){
+            }else if ($request->status == 8 || $request->status == 'PARTIAL'){
                 return 'PARTIAL';
-            }else if ($request->status == 9){
+            }else if ($request->status == 9 || $request->status == 'RESOLVED'){
                 return 'RESOLVED';
             }
         })
@@ -386,7 +386,7 @@ class StockRequestController extends Controller
     {
         $resolve = StockRequest::where('request_no', $request->requestno)->first();
         $resolve->remarks = $request->remarks;
-        $resolve->status = 9;
+        $resolve->status = 'RESOLVED';
         $data = $resolve->save();
         return response()->json($data);
     }
@@ -438,10 +438,10 @@ class StockRequestController extends Controller
             ->first();
         if ($preparedItem) {
             $reqno = StockRequest::where('request_no', $request->reqno)->first();
-            if ($reqno->status == 8) {
+            if ($reqno->status == 'PARTIAL') {
                 $reqno->status = $request->status;
             }else{
-                $reqno->status = 4;
+                $reqno->status = 'INCOMPLETE';
             }
             $reqno->save();
             $data = '1';
@@ -459,7 +459,7 @@ class StockRequestController extends Controller
     public function notreceived(Request $request)
     {
         $notrec = StockRequest::where('request_no', $request->reqno)->first();
-        $notrec->status = "4";
+        $notrec->status = "INCOMPLETE";
         $data = $notrec->save();
         return response()->json($data);
     }
@@ -487,12 +487,12 @@ class StockRequestController extends Controller
             });*/
             $data = true;
         }else if($request->stat == 'resched'){
-            if ($request->status == '5') {
+            if ($request->status == 'RESCHEDULED') {
                 $reqno = StockRequest::where('request_no', $request->reqno)->first();
                 $reqno->status = $request->status;
                 $reqno->schedule = $request->datesched;
                 $data = $reqno->save();
-            }else if($request->status == '6') {
+            }else if($request->status == 'UNRESOLVED') {
                 $reqno = StockRequest::where('request_no', $request->reqno)->first();
                 $reqno->status = $request->status;
                 $data = $reqno->save();
@@ -527,7 +527,7 @@ class StockRequestController extends Controller
     public function dest(Request $request)
     {
         $delete = StockRequest::where('request_no', $request->reqno)->where('status', '0')->first();
-        $delete->status = 3;
+        $delete->status = 'DELETED';
         $log = new UserLog;
         $log->activity = "Delete request no. $request->reqno" ;
         $log->user_id = auth()->user()->id;

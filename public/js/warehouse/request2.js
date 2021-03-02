@@ -107,12 +107,12 @@ $(document).on('click', '.sub_Btn', function(){
             }
             if (q == w) {
                 if (pending != 0) {
-                    var status = '8';
+                    var status = 'PARTIAL';
                 }else{
                     if (requestgo == true) {
-                        var status = '1';
+                        var status = 'SCHEDULED';
                     }else{
-                        var status = '8';
+                        var status = 'PARTIAL';
                     }
                 }
                 $.ajax({

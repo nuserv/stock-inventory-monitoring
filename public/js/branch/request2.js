@@ -27,11 +27,11 @@ $(document).on('click', '#rec_Btn', function(){
     var sched = $('#sched').val();
     $('#loading').show();
     if(dtdata.status == "SCHEDULED"){
-        var status = "2";
+        var status = "COMPLETED";
     }else if(dtdata.status == "RESCHEDULED"){
-        var status = "7";
+        var status = "RECOMPLETED";
     }else if(dtdata.status == "PARTIAL"){
-        var status = "8";
+        var status = "PARTIAL";
     }
     var datas = schedtable.rows( { selected: true } ).data();
     var id = [];
