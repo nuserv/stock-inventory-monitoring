@@ -52,8 +52,12 @@ $(document).ready(function()
                 $('td', nRow).eq(4).css('font-weight', 'bold');
             }
             if (aData.type == "SERVICE" && aData.status == 'PENDING') {
-                $('td', nRow).eq(3).css('color', 'green');
-                $('td', nRow).eq(3).css('font-weight', 'bold');
+                $('td', nRow).eq(4).css('color', 'blue');
+                $('td', nRow).eq(4).css('font-weight', 'bold');
+            }
+            if (aData.type == "STOCK" && aData.status == 'PENDING') {
+                $('td', nRow).eq(4).css('color', 'GREEN');
+                $('td', nRow).eq(4).css('font-weight', 'bold');
             }
         },
         "order": [[ 5, 'desc'], [ 0, 'desc']],
