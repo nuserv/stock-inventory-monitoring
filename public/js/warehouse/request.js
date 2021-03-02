@@ -45,7 +45,12 @@ $(document).ready(function()
         "language": {
             "emptyTable": "No stock request found!"
         },
-        "order": [[ 5, 'asc'], [ 0, 'desc']],
+        "fnRowCallback": function(nRow, aData, iDisplayIndex, iDisplayIndexFull) {
+            if ( aData.status == "UNRESOLVED" || aData.status == "INCOMPLETE") {        
+                $('td', nRow).css('background-color', 'Red');
+            }
+        },
+        "order": [[ 5, 'desc'], [ 0, 'desc']],
         "columnDefs": [
         {
             "targets": [ 0 ],

@@ -44,6 +44,9 @@
                 input, select, textarea{
                     color: black;
                 }
+                .red {
+                    background-color: red !important;
+                }
             </style>
         </head>
         <body>
