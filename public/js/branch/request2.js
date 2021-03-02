@@ -206,12 +206,12 @@ $(document).on('click', '.send_sub_Btn', function(){
     var qty = "";
     var stat = "notok";
     var reqno = $('#sreqno').val();
-    if ($('#requesttype').val() != 'Service' || $('#requesttype').val() != 'Stock') {
-        if ($('#requesttype').val() = 'Service' && $('#customer-id').val() == "") {
+    if (($('#requesttype').val() != 'Service') || ($('#requesttype').val() != 'Stock')) {
+        if (($('#requesttype').val() = 'Service') && ($('#customer-id').val() == "")) {
             alert('Please Select the correct Customer Name!');
             return false;
         }
-        if ($('#requesttype').val() == 'Service' && $('#ticket').val() == "") {
+        if (($('#requesttype').val() == 'Service') && ($('#ticket').val() == "")) {
             alert('Please input ticket number!');
             return false;
         }

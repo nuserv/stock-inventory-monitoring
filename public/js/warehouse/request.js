@@ -45,7 +45,7 @@ $(document).ready(function()
         "language": {
             "emptyTable": "No stock request found!"
         },
-        "fnRowCallback": function(nRow, aData, iDisplayIndex, iDisplayIndexFull) {
+        "fnRowCallback": function(nRow, aData) {
             if ( aData.status == "UNRESOLVED" || aData.status == "INCOMPLETE") {        
                 $('td', nRow).css('background-color', 'Red');
             }
@@ -117,6 +117,7 @@ $(document).ready(function()
         }else if(trdata.status == 'UNRESOLVED'){
             $('#printBtn').show();
             $('#printBtn').val('PRINT');
+            $('.sched').hide();
             $('.notes').show();
             $('#notes').text('Please be informed that the current status is now UNRESOLVED after the five days given to resolve the issue. Kindly contact the manager to resolve the issue.');
             $('table.requestDetails').hide();
