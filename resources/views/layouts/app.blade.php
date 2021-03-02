@@ -4,7 +4,14 @@
         
         <head>
             @if(Auth::guest())
-                <meta http-equiv="refresh" content="{{ config('session.lifetime') * 60 }}">
+                <meta http-equiv="refresh" content="{{ config('session.lifetime') * 60 }};url={{ url('/login') }}">
+            @endif
+            @if(!Auth::guest())
+                @if(auth()->user()->branch->branch != "Warehouse")
+                    <meta http-equiv="refresh" content="300;url={{ url('/logout') }}">
+                @else
+                    <meta http-equiv="refresh" content="895">
+                @endif
             @endif
             <meta charset="utf-8">
             <meta name="viewport" content="width=device-width, initial-scale=1">
