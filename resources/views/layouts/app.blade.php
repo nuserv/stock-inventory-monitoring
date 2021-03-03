@@ -8,7 +8,7 @@
             @endif
             @if(!Auth::guest())
                 @if(auth()->user()->branch->branch != "Warehouse")
-                    <meta http-equiv="refresh" content="300;url={{ url('/logout') }}">
+                    <meta http-equiv="refresh" content="301;url={{ url('/logout') }}">
                 @else
                     <meta http-equiv="refresh" content="895">
                 @endif
@@ -19,10 +19,11 @@
             <meta name="csrf-token" content="{{ csrf_token() }}">
             @endauth
             
+            <!--link href="{{ asset('css/app.css') }}" rel="stylesheet"-->
             <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
             <link rel="stylesheet" type="text/css" href="{{ url('/css/style.css') }}" />
             <link rel="stylesheet" type="text/css" href="{{ url('/css/styles.css') }}" />
-            <link rel="stylesheet" href="//cdn.datatables.net/1.10.21/css/jquery.dataTables.min.css">
+            <link rel="stylesheet" href="https://cdn.datatables.net/1.10.23/css/jquery.dataTables.min.css">
             <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
             <link href="https://code.jquery.com/ui/1.10.4/themes/smoothness/jquery-ui.css" rel="Stylesheet" type="text/css" />
             <!--link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/dt/dt-1.10.23/sl-1.3.1/datatables.min.css"/-->
@@ -150,10 +151,11 @@
                 @include('modal.branch.return')
             @endif
             
+            <!--script src="{{ asset('js/app.js') }}"></script-->
             <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
             <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
             <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous"></script>
-            <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-3-typeahead/4.0.2/bootstrap3-typeahead.js"></script>
+            <!--script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-3-typeahead/4.0.2/bootstrap3-typeahead.js"></script-->
             <script src="https://cdn.datatables.net/1.10.23/js/jquery.dataTables.min.js"></script>
             <script src="https://cdn.datatables.net/buttons/1.6.5/js/dataTables.buttons.min.js"></script>
             <!--script src="https://cdn.datatables.net/select/1.3.1/js/dataTables.select.min.js"></script-->
