@@ -41,6 +41,7 @@ $(document).on('click', function (e)
             var op=" ";
             $('#myid').val(trdata.id);
             $('#first_name').prop('disabled', false);
+            $('#middle_name').prop('disabled', false);
             $('#last_name').prop('disabled', false);
             $('#email').prop('disabled', false);
             $('#password').prop('disabled', true);
@@ -56,7 +57,6 @@ $(document).on('click', function (e)
                 type:'get',
                 url:'getBranchName',
                 data:{'id':area},
-                async: false,
                 success:function(data)
                 {
                     var branch = $.map(data, function(value, index) {
@@ -72,6 +72,7 @@ $(document).on('click', function (e)
             });
             $('#first_name').val(trdata.name);
             $('#last_name').val(trdata.lastname);
+            $('#middle_name').val(trdata.middlename);
             $('#email').val(trdata.email);
             $('#area').val(area);
             //$('#role').val(trdata.role);
@@ -89,6 +90,7 @@ $(document).on('click', function (e)
                 $('#userModal').modal('show');
                 $('#first_name').val('');
                 $('#last_name').val('');
+                $('#middle_name').val('');
                 $('#email').val('');
                 $('#password').val('');
                 $('#password_confirmation').val('');
@@ -100,6 +102,7 @@ $(document).on('click', function (e)
                 $('#status').val('1');
                 $('#first_name').prop('disabled', false);
                 $('#last_name').prop('disabled', false);
+                $('#middle_name').prop('disabled', false);
                 $('#email').prop('disabled', false);
                 $('#password').prop('disabled', false);
                 $('#password_confirmation').prop('disabled', false);
@@ -141,6 +144,8 @@ $(document).on('click', function (e)
             subBtn = $('#subBtn').val();
             if(subBtn == 'Update'){
                 var myid = $('#myid').val();
+                $('#userModal').toggle();
+                $('#loading').show();
                 $.ajax({
                     type: "PUT",
                     url: "/user_update/"+myid,
@@ -150,16 +155,19 @@ $(document).on('click', function (e)
                     data: $('#userForm').serialize(),
                     success: function(data){
                         if($.isEmptyObject(data.error)){
-                            $('#userModal').modal('hide');
                             alert("User data updated");
                             window.location.reload();
                         }else{
+                            $('#loading').hide();
                             alert(data.error);
+                            $('#userModal').toggle();
                         }
                     } 
                 });
             }
             if(subBtn == 'Save'){
+                $('#userModal').toggle();
+                $('#loading').show();
                 $.ajax({
                     type: "POST",
                     url: "user_add",
@@ -169,12 +177,19 @@ $(document).on('click', function (e)
                     data: $('#userForm').serialize(),
                     success: function(data){
                         if($.isEmptyObject(data.error)){
-                            $('#userModal').modal('hide');
                             alert("User data saved");
                             window.location.reload();
                         }else{
+                            $('#loading').hide();
                             alert(data.error);
+                            $('#userModal').toggle();
+
                         }
+                    },
+                    error: function (data) {
+                        $('#loading').hide();
+                        alert(data.responseText);
+                        $('#userModal').toggle();
                     }
                 });
             }

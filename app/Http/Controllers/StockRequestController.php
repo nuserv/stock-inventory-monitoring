@@ -249,6 +249,7 @@ class StockRequestController extends Controller
         }else{
             $stock = StockRequest::wherein('status',  ['0', '1', '4', '5', '6', '8', 'PENDING', 'SCHEDULED', 'INCOMPLETE', 'RESCHEDULED', 'UNRESOLVED', 'PARTIAL'])
                 ->get();
+            //dd($stock);
         }
         return DataTables::of($stock)
         ->setRowData([
@@ -256,23 +257,37 @@ class StockRequestController extends Controller
             'data-status' => '{{ $status }}',
             'data-user' => '{{ $user_id }}',
         ])
-        ->addColumn('status', function (StockRequest $request){
-            if ($request->status == 0 || $request->status == 'PENDING') {
+        /*->addColumn('status', function (StockRequest $request){
+            if ($request->status == 0) {
                 return 'PENDING';
-            }else if ($request->status == 1 || $request->status == 'SCHEDULED'){
+            }else if ($request->status == 'PENDING'){
+                return 'PENDING';
+            }else if ($request->status == 1){
                 return 'SCHEDULED';
-            }else if ($request->status == 4 || $request->status == 'INCOMPLETE'){
+            }else if ($request->status == 'SCHEDULED'){
+                return 'SCHEDULED';
+            }else if ($request->status == 4){
                 return 'INCOMPLETE';
-            }else if ($request->status == 5 || $request->status == 'RESCHEDULED'){
+            }else if ($request->status == 'INCOMPLETE'){
+                return 'INCOMPLETE';
+            }else if ($request->status == 5){
                 return 'RESCHEDULED';
-            }else if ($request->status == 6 || $request->status == 'UNRESOLVED'){
+            }else if ($request->status == 'RESCHEDULED'){
+                return 'RESCHEDULED';
+            }else if ($request->status == 6){
                 return 'UNRESOLVED';
-            }else if ($request->status == 8 || $request->status == 'PARTIAL'){
+            }else if ($request->status == 'UNRESOLVED'){
+                return 'UNRESOLVED';
+            }else if ($request->status == 8){
                 return 'PARTIAL';
-            }else if ($request->status == 9 || $request->status == 'RESOLVED'){
+            }else if ($request->status == 'PARTIAL'){
+                return 'PARTIAL';
+            }else if ($request->status == 9){
+                return 'RESOLVED';
+            }else if ($request->status == 'RESOLVED'){
                 return 'RESOLVED';
             }
-        })
+        })*/
         ->addColumn('sched', function (StockRequest $request){
             return $request->schedule;
         })

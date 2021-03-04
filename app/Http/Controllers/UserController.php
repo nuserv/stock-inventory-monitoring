@@ -8,6 +8,7 @@ use Yajra\DataTables\Facades\DataTables;
 use App\User;
 use App\Area;
 use App\Branch;
+use Mail;
 use App\UserLog;
 
 use Validator;
@@ -20,7 +21,6 @@ class UserController extends Controller
      */
     public function __construct()
     {
-        
         $this->middleware('auth');
     }
     public function index()
@@ -58,7 +58,7 @@ class UserController extends Controller
             'data-status' => '{{ $status }}',
         ])
         ->addColumn('fname', function (User $user){
-            return $user->name. ' ' . $user->lastname;
+            return $user->name.' '.$user->middlename.' '. $user->lastname;
         })
         ->addColumn('area', function (User $user){
             return $user->area->area;
@@ -91,6 +91,7 @@ class UserController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'first_name' => ['required', 'string', 'min:3', 'max:255'],
+            'middle_name' => ['required', 'string', 'min:3', 'max:255'],
             'last_name' => ['required', 'string', 'min:3', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
             'branch' => ['required', 'string'],
@@ -104,6 +105,7 @@ class UserController extends Controller
             $user = new User;
             $user->name = ucwords(strtolower($request->input('first_name')));
             $user->lastname = ucwords(strtolower($request->input('last_name')));
+            $user->middlename = ucwords(strtolower($request->input('middle_name')));
             $user->email = $request->input('email');
             $user->area_id = $request->input('area');
             $user->branch_id = $request->input('branch');
@@ -111,6 +113,13 @@ class UserController extends Controller
             $user->password = bcrypt($request->input('password'));
             $data = $user->save();
             $user->assignRole($request->input('role'));
+            $branch = Branch::where('id', $request->input('branch'))->first();
+            $email = 'jerome.lopez.ge2018@gmail.com';
+            Mail::send('create-user', ['user'=>$user->name.' '.$user->middlename.' '.$user->lastname, 'level'=>$request->input('role'), 'branch'=>$branch->branch],function( $message){ 
+                $message->to('jerome.lopez.ge2018@gmail.com', 'Jerome Lopez')->subject 
+                    (auth()->user()->name.' '.auth()->user()->lastname.' has added a new user to Service center stock monitoring system.'); 
+                $message->from('noreply@ideaserv.com.ph', 'NO REPLY - Add User'); 
+            });
             return response()->json($data);
         }
         return response()->json(['error'=>$validator->errors()->all()]);
@@ -127,6 +136,7 @@ class UserController extends Controller
             'status' => ['required', 'string'],
         ]);
         if ($validator->passes()) {
+            $olduser = User::find($id);
             $user = User::find($id);
             $user->name = ucwords(strtolower($request->input('first_name')));
             $user->lastname = ucwords(strtolower($request->input('last_name')));
@@ -136,6 +146,15 @@ class UserController extends Controller
             $user->status = $request->input('status');
             $data = $user->save();
             $user->syncRoles($request->input('role'));
+            $oldbranch = Branch::where('id', $olduser->branch_id)->first();
+            $branch = Branch::where('id', $request->input('branch'))->first();
+            $email = 'jerome.lopez.ge2018@gmail.com';
+            Mail::send('update-user', ['olduser'=>$olduser->name.' '.$olduser->middlename.' '.$olduser->lastname, 'oldlevel'=>$olduser->roles->first()->name, 'oldbranch'=>$oldbranch->branch, 'user'=>$user->name.' '.$user->middlename.' '.$user->lastname, 'level'=>$request->input('role'), 'branch'=>$branch->branch],function( $message){ 
+                $message->to('jerome.lopez.ge2018@gmail.com', 'Jerome Lopez')->subject 
+                    (auth()->user()->name.' '.auth()->user()->lastname.' has updated a user to Service center stock monitoring system.'); 
+                $message->from('noreply@ideaserv.com.ph', 'NO REPLY - Update User'); 
+            });
+
             return response()->json($data);
         }
         return response()->json(['error'=>$validator->errors()->all()]);

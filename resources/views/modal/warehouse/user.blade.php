@@ -19,6 +19,12 @@
                         </div>
                     </div>
                     <div class="form-group row">
+                        <label for="middle_name" class="col-md-4 col-form-label text-md-right">{{ __('Middle Name') }}</label>
+                        <div class="col-md-6">
+                            <input id="middle_name" type="text" class="form-control" name="middle_name" style="color: black;" disabled>
+                        </div>
+                    </div>
+                    <div class="form-group row">
                         <label for="last_name" class="col-md-4 col-form-label text-md-right">{{ __('Last Name') }}</label>
                         <div class="col-md-6">
                             <input id="last_name" type="text" class="form-control" name="last_name" style="color: black;" disabled>
