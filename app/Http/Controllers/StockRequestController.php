@@ -240,14 +240,14 @@ class StockRequestController extends Controller
     {
         $user = auth()->user()->branch->id;
         if (auth()->user()->branch->branch != 'Warehouse'){
-            $stock = StockRequest::wherein('status',  ['0', '1', '4', '5', '8', 'PENDING'])
+            $stock = StockRequest::wherein('status',  ['0', '1', '4', '5', '8', 'PENDING', 'SCHEDULED', 'INCOMPLETE', 'RESCHEDULED', 'PARTIAL'])
                 ->where('branch_id', $user)
                 ->get();
         }else if(auth()->user()->hasRole('Editor', 'Manager')){
-            $stock = StockRequest::wherein('status',  ['0', '1', '4', '5', '6', '8', '9', 'PENDING'])
+            $stock = StockRequest::wherein('status',  ['0', '1', '4', '5', '6', '8', '9', 'PENDING', 'SCHEDULED', 'INCOMPLETE', 'RESCHEDULED', 'UNRESOLVED', 'PARTIAL', 'RESOLVED'])
                 ->get();
         }else{
-            $stock = StockRequest::wherein('status',  ['0', '1', '4', '5', '6', '8', 'PENDING'])
+            $stock = StockRequest::wherein('status',  ['0', '1', '4', '5', '6', '8', 'PENDING', 'SCHEDULED', 'INCOMPLETE', 'RESCHEDULED', 'UNRESOLVED', 'PARTIAL'])
                 ->get();
         }
         return DataTables::of($stock)

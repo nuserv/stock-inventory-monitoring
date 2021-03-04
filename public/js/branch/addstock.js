@@ -15,7 +15,7 @@ $(document).on('click', '.sub_Btn', function(){
                 $.ajax({
                     url: 'store',
                     headers: {
-                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                        'X-CSRF-TOKEN': $('meta[name="ctok"]').attr('content')
                     },
                     dataType: 'json',
                     type: 'POST',

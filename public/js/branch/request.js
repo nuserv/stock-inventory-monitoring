@@ -510,11 +510,12 @@ $(document).ready(function()
         }
     });
 });
+
 $(document).on('click', '#not_rec_Btn', function(){
     $.ajax({
         url: 'notrec',
         headers: {
-            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            'X-CSRF-TOKEN': $('meta[name="ctok"]').attr('content')
         },
         dataType: 'json',
         type: 'PUT',

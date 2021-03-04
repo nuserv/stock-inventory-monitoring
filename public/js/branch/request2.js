@@ -4,7 +4,7 @@ $(document).on('click', '#del_Btn', function(){
     $.ajax({
         url: 'remove',
         headers: {
-            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            'X-CSRF-TOKEN': $('meta[name="ctok"]').attr('content')
         },
         dataType: 'json',
         type: 'DELETE',
@@ -48,7 +48,7 @@ $(document).on('click', '#rec_Btn', function(){
                     $.ajax({
                         url: 'storerreceived',
                         headers: {
-                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                            'X-CSRF-TOKEN': $('meta[name="ctok"]').attr('content')
                         },
                         dataType: 'json',
                         type: 'POST',
@@ -89,7 +89,7 @@ $(document).on('click', '#rec_Btn', function(){
                             $.ajax({
                                 url: 'storerreceived',
                                 headers: {
-                                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                                    'X-CSRF-TOKEN': $('meta[name="ctok"]').attr('content')
                                 },
                                 dataType: 'json',
                                 type: 'POST',
@@ -229,7 +229,7 @@ $(document).on('click', '.send_sub_Btn', function(){
                 $.ajax({
                     url: 'storerequest',
                     headers: {
-                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                        'X-CSRF-TOKEN': $('meta[name="ctok"]').attr('content')
                     },
                     dataType: 'json',
                     type: 'POST',
@@ -261,7 +261,7 @@ $(document).on('click', '.send_sub_Btn', function(){
             $.ajax({
                 url: 'storerequest',
                 headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    'X-CSRF-TOKEN': $('meta[name="ctok"]').attr('content')
                 },
                 dataType: 'json',
                 type: 'POST',

@@ -123,7 +123,7 @@ $(document).on("click", "#submit_Btn", function () {
         $.ajax({
             url: 'loanstock',
             headers: {
-                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                'X-CSRF-TOKEN': $('meta[name="ctok"]').attr('content')
             },
             dataType: 'json',
             type: 'PUT',
@@ -142,7 +142,7 @@ $(document).on("click", "#submit_Btn", function () {
         $.ajax({
             url: 'loansapproved',
             headers: {
-                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                'X-CSRF-TOKEN': $('meta[name="ctok"]').attr('content')
             },
             dataType: 'json',
             type: 'PUT',
@@ -173,7 +173,7 @@ $(document).on("click", "#received_Btn", function () {
         $.ajax({
             url: 'loanupdate',
             headers: {
-                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                'X-CSRF-TOKEN': $('meta[name="ctok"]').attr('content')
             },
             dataType: 'json',
             type: 'PUT',
@@ -191,7 +191,7 @@ $(document).on("click", "#received_Btn", function () {
         $.ajax({
             url: 'loansapproved',
             headers: {
-                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                'X-CSRF-TOKEN': $('meta[name="ctok"]').attr('content')
             },
             dataType: 'json',
             type: 'PUT',
@@ -218,7 +218,7 @@ $(document).on("click", "#del_Btn", function () {
     $.ajax({
         url: 'loandelete',
         headers: {
-            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            'X-CSRF-TOKEN': $('meta[name="ctok"]').attr('content')
         },
         dataType: 'json',
         type: 'PUT',
@@ -338,7 +338,7 @@ $(document).on('click', '#loan_sub_Btn', function(){
                 $.ajax({
                     url: 'loan',
                     headers: {
-                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                        'X-CSRF-TOKEN': $('meta[name="ctok"]').attr('content')
                     },
                     dataType: 'json',
                     type: 'POST',

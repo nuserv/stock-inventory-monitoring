@@ -77,7 +77,7 @@ $('#customerForm').on('submit', function(e){
             type: "PUT",
             url: "customer_add",
             headers: {
-                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                'X-CSRF-TOKEN': $('meta[name="ctok"]').attr('content')
             },
             data: $('#customerForm').serialize(),
             success: function(data){
@@ -99,7 +99,7 @@ $('#customerForm').on('submit', function(e){
             type: "POST",
             url: "customer_add",
             headers: {
-                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                'X-CSRF-TOKEN': $('meta[name="ctok"]').attr('content')
             },
             data: $('#customerForm').serialize(),
             success: function(data){

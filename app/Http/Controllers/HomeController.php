@@ -35,7 +35,7 @@ class HomeController extends Controller
         if (auth()->user()->status == '0') {
             return redirect('logout');
         }
-        StockRequest::where('status', 4)->where( 'updated_at', '<', Carbon::now()->subDays(5))->update(['status' => 6]);
+        StockRequest::wherein('status', ['4', 'INCOMPLETE'])->where( 'updated_at', '<', Carbon::now()->subDays(5))->update(['status' => 'UNRESOLVED']);
         if (auth()->user()->branch->branch != "Warehouse" && !auth()->user()->hasrole('Repair')) {
             $units = Stock::where('status', 'in')->where('branch_id', auth()->user()->branch->id)->count();
             $returns = Defective::wherein('status', ['For return', 'For receiving'])->where('branch_id', auth()->user()->branch->id)->count();
@@ -48,10 +48,10 @@ class HomeController extends Controller
         }else if (auth()->user()->hasrole('Repair')){
             return view('pages.warehouse.return', compact('title'));
         }else{
-            $stockreq = StockRequest::wherein('status', ['0', '1', '4', '5'])->count();
+            $stockreq = StockRequest::wherein('status', ['PENDING', '0',])->count();
             $units = Warehouse::where('status', 'in')->count();
             $returns = Defective::where('status', 'For receiving')->count();
-            $unresolved = StockRequest::where('status', 6)->count();
+            $unresolved = StockRequest::wherein('status', ['6', 'UNRESOLVED'])->count();
             return view('pages.home', compact('stockreq', 'units', 'returns', 'title', 'unresolved'));
         }
     }

@@ -224,7 +224,7 @@ $(document).on('click', '.sub_Btn', function(){
                 $.ajax({
                     url: 'store',
                     headers: {
-                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                        'X-CSRF-TOKEN': $('meta[name="ctok"]').attr('content')
                     },
                     dataType: 'json',
                     type: 'POST',
@@ -329,7 +329,7 @@ $(document).on('click', '#sub_cat_Btn', function(){
                 $.ajax({
                     url: 'addcategory',
                     headers: {
-                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                        'X-CSRF-TOKEN': $('meta[name="ctok"]').attr('content')
                     },
                     dataType: 'json',
                     type: 'POST',
@@ -365,7 +365,7 @@ $(document).on('click', '#sub_item_Btn', function(){
                 $.ajax({
                     url: 'additem',
                     headers: {
-                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                        'X-CSRF-TOKEN': $('meta[name="ctok"]').attr('content')
                     },
                     dataType: 'json',
                     type: 'POST',

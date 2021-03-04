@@ -157,7 +157,7 @@ var aa = 0;
                     type: "PUT",
                     url: "/branch_update/"+myid,
                     headers: {
-                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                        'X-CSRF-TOKEN': $('meta[name="ctok"]').attr('content')
                     },
                     data: $('#branchForm').serialize(),
                     success: function(data){
@@ -175,7 +175,7 @@ var aa = 0;
                     type: "POST",
                     url: "branch_add",
                     headers: {
-                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                        'X-CSRF-TOKEN': $('meta[name="ctok"]').attr('content')
                     },
                     data: $('#branchForm').serialize(),
                     success: function(data){

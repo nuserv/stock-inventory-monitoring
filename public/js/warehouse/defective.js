@@ -100,7 +100,7 @@ $(document).on('click', '#submit_Btn', function() {
         $.ajax({
             url: 'return-update',
             headers: {
-                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                'X-CSRF-TOKEN': $('meta[name="ctok"]').attr('content')
             },
             dataType: 'json',
             type: 'PUT',
@@ -122,7 +122,7 @@ $(document).on('click', '#submit_Btn', function() {
         $.ajax({
             url: 'return-update',
             headers: {
-                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                'X-CSRF-TOKEN': $('meta[name="ctok"]').attr('content')
             },
             dataType: 'json',
             type: 'PUT',
@@ -145,7 +145,7 @@ $(document).on('click', '#submit_Btn', function() {
         $.ajax({
             url: 'return-update',
             headers: {
-                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                'X-CSRF-TOKEN': $('meta[name="ctok"]').attr('content')
             },
             dataType: 'json',
             type: 'PUT',
@@ -182,7 +182,7 @@ $(document).on('click', '#unrepair_Btn', function() {
     $.ajax({
         url: 'return-update',
         headers: {
-            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            'X-CSRF-TOKEN': $('meta[name="ctok"]').attr('content')
         },
         dataType: 'json',
         type: 'PUT',

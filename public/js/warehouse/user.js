@@ -145,7 +145,7 @@ $(document).on('click', function (e)
                     type: "PUT",
                     url: "/user_update/"+myid,
                     headers: {
-                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                        'X-CSRF-TOKEN': $('meta[name="ctok"]').attr('content')
                     },
                     data: $('#userForm').serialize(),
                     success: function(data){
@@ -164,7 +164,7 @@ $(document).on('click', function (e)
                     type: "POST",
                     url: "user_add",
                     headers: {
-                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                        'X-CSRF-TOKEN': $('meta[name="ctok"]').attr('content')
                     },
                     data: $('#userForm').serialize(),
                     success: function(data){

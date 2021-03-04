@@ -187,7 +187,7 @@ $(document).on('click', '#remarks_btn', function(){
     $.ajax({
         url: 'resolved',
         headers: {
-            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            'X-CSRF-TOKEN': $('meta[name="ctok"]').attr('content')
         },
         dataType: 'json',
         type: 'PUT',

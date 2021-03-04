@@ -23,7 +23,7 @@ $(document).on('click', '#save_Btn', function(){
                 $.ajax({
                     url: 'update',
                     headers: {
-                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                        'X-CSRF-TOKEN': $('meta[name="ctok"]').attr('content')
                     },
                     dataType: 'json',
                     type: 'PUT',
@@ -111,7 +111,7 @@ $(document).on('click', '#unresolveBtn', function(){
     $.ajax({
         url: 'update',
         headers: {
-            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            'X-CSRF-TOKEN': $('meta[name="ctok"]').attr('content')
         },
         type: 'PUT',
         data: { 
@@ -138,7 +138,7 @@ $(document).on('click', '#resched_btn', function(){
     $.ajax({
         url: 'update',
         headers: {
-            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            'X-CSRF-TOKEN': $('meta[name="ctok"]').attr('content')
         },
         type: 'PUT',
         data: { 

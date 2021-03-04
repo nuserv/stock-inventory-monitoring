@@ -72,7 +72,7 @@ $(document).on('click', '.pm_sub_Btn', function(){
                     $.ajax({
                         url: 'pm-out',
                         headers: {
-                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                            'X-CSRF-TOKEN': $('meta[name="ctok"]').attr('content')
                         },
                         dataType: 'json',
                         type: 'PUT',
@@ -384,7 +384,7 @@ $(document).on('click', '.rep_sub_Btn', function(){
         $.ajax({
             url: 'rep-update',
             headers: {
-                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                'X-CSRF-TOKEN': $('meta[name="ctok"]').attr('content')
             },
             dataType: 'json',
             type: 'PUT',

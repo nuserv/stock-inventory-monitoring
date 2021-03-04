@@ -329,7 +329,7 @@ $(document).on('click', '#sub_cat_Btn', function(){
                 $.ajax({
                     url: 'addcategory',
                     headers: {
-                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                        'X-CSRF-TOKEN': $('meta[name="ctok"]').attr('content')
                     },
                     dataType: 'json',
                     type: 'POST',
@@ -362,7 +362,7 @@ $(document).on('click', '#sub_item_Btn', function(){
                 $.ajax({
                     url: 'additem',
                     headers: {
-                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                        'X-CSRF-TOKEN': $('meta[name="ctok"]').attr('content')
                     },
                     dataType: 'json',
                     type: 'POST',
@@ -443,7 +443,7 @@ $(document).on('click', '.repret_sub_Btn', function(){
         $.ajax({
             url: 'def',
             headers: {
-                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                'X-CSRF-TOKEN': $('meta[name="ctok"]').attr('content')
             },
             dataType: 'json',
             type: 'DELETE',
@@ -518,7 +518,7 @@ $(document).on("click", "#confirm_Btn", function () {
         $.ajax({
             url: 'confirm',
             headers: {
-                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                'X-CSRF-TOKEN': $('meta[name="ctok"]').attr('content')
             },
             dataType: 'json',
             type: 'get',
@@ -534,7 +534,7 @@ $(document).on("click", "#confirm_Btn", function () {
                     $.ajax({
                         url: 'def',
                         headers: {
-                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                            'X-CSRF-TOKEN': $('meta[name="ctok"]').attr('content')
                         },
                         dataType: 'json',
                         type: 'DELETE',
@@ -562,29 +562,6 @@ $(document).on("click", "#confirm_Btn", function () {
             }
         });
     }
-    /*var data = stock.rows( { selected: true } ).data();
-    $('#loading').show();
-    $.ajax({
-        url: 'def',
-        headers: {
-            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-        },
-        dataType: 'json',
-        type: 'DELETE',
-        data: {
-            id: data[0].id,
-            serial: data[0].serial,
-            items_id: data[0].items_id,
-            replace: 0,
-            item: data[0].item
-        },
-        success: function(){
-            location.reload(); 
-        },
-        error: function (data) {
-            alert(data.responseText);
-        }
-    });*/
 });
 
 $(document).on("click", "#stockTable tr", function () {

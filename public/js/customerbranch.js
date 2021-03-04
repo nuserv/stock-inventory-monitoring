@@ -88,7 +88,7 @@ $(document).on('click', '#saveBtn', function(){
             type: "POST",
             url: "../cbranch_add",
             headers: {
-                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                'X-CSRF-TOKEN': $('meta[name="ctok"]').attr('content')
             },
             data: {
                 bcode: bcode,
@@ -117,7 +117,7 @@ $(document).on('click', '#saveBtn', function(){
             type: "Put",
             url: "../cbranch_update",
             headers: {
-                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                'X-CSRF-TOKEN': $('meta[name="ctok"]').attr('content')
             },
             data: {
                 bcode: bcode,

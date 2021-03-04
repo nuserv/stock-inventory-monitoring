@@ -172,7 +172,7 @@ $(document).on('click', '.in_sub_Btn', function(){
                     $.ajax({
                         url: 'service-in',
                         headers: {
-                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                            'X-CSRF-TOKEN': $('meta[name="ctok"]').attr('content')
                         },
                         dataType: 'json',
                         type: 'PUT',
@@ -204,7 +204,7 @@ $(document).on('click', '.in_sub_Btn', function(){
                     $.ajax({
                         url: 'rep-update',
                         headers: {
-                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                            'X-CSRF-TOKEN': $('meta[name="ctok"]').attr('content')
                         },
                         dataType: 'json',
                         type: 'PUT',

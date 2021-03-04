@@ -148,7 +148,7 @@ $(document).on('click', '.pout_sub_Btn', function(){
                     $.ajax({
                         url: 'pull-out',
                         headers: {
-                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                            'X-CSRF-TOKEN': $('meta[name="ctok"]').attr('content')
                         },
                         dataType: 'json',
                         type: 'POST',
@@ -223,7 +223,7 @@ $(document).on('click', '#good_sub_Btn', function(){
                 $.ajax({
                     url: 'service-in',
                     headers: {
-                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                        'X-CSRF-TOKEN': $('meta[name="ctok"]').attr('content')
                     },
                     dataType: 'json',
                     type: 'PUT',
