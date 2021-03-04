@@ -361,7 +361,7 @@ class StockController extends Controller
                 return strtoupper($stock->category);
             })
             ->addColumn('stockout', function (Stock $stock){
-                $out = Stock::where('status', 'service unit')
+                $out = Stock::wherein('status', ['service unit', 'pm'])
                     ->where('category_id', $stock->category_id)
                     ->count();
                 return strtoupper($out);

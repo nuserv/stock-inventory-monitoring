@@ -31,4 +31,21 @@ class ChangePasswordController extends Controller
         User::find(auth()->user()->id)->update(['password'=> Hash::make($request->new_password)]);
         return redirect()->back()->with('success', 'Password change successfully.');
     }
+    public function confirm(Request $request)
+    {
+        $user = User::where('email', $request->email)->first();
+        if ($user) {
+            if ($user->hasrole('Head') && auth()->user()->branch->id == $user->branch_id) {
+                if (!Hash::check($request->password, $user->password)) {
+                    return response()->json('Login Fail, pls check password!');
+                }else{
+                    return response()->json('success');
+                }
+            }else{
+                return response()->json('Not Allowed!');
+            }
+        }else{
+            return response()->json('Login Fail, Please check email!');
+        }
+    }
 }

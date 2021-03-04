@@ -74,7 +74,7 @@ class BranchController extends Controller
                 if (auth()->user()->branch->id == 1 && $id == 1) {
                     $stock_out = 0;
                 }else{
-                    $stock_out = Stock::where('status', 'service unit')
+                    $stock_out = Stock::wherein('status', ['service unit', 'pm'])
                         ->where('branch_id', $id)
                         ->where('category_id', $category->id)
                         ->count();
@@ -115,7 +115,7 @@ class BranchController extends Controller
                 if (auth()->user()->branch->id == 1 && $id == 1) {
                     $stock_out = 0;
                 }else{
-                    $stock_out = Stock::where('status', 'service unit')
+                    $stock_out = Stock::wherein('status', ['service unit', 'pm'])
                         ->where('branch_id', $id)
                         ->where('items_id', $item->id)
                         ->count();

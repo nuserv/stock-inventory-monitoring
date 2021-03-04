@@ -509,7 +509,60 @@ $('table.stockDetails').DataTable().on('deselect', function () {
 });
 
 $(document).on("click", "#def_Btn", function () {
-    var data = stock.rows( { selected: true } ).data();
+    $('#passwordModal').modal('show');
+});
+
+$(document).on("click", "#confirm_Btn", function () {
+    var datas = stock.rows( { selected: true } ).data();
+    if ($('#email').val() && $('#password').val()){
+        $.ajax({
+            url: 'confirm',
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            },
+            dataType: 'json',
+            type: 'get',
+            data: {
+                password: $('#password').val(),
+                email: $('#email').val()
+            },
+            success: function(data){
+                if (data == 'success') {
+                    $('#passwordModal').modal('hide');
+                    $('#stockModal').modal('hide');
+                    $('#loading').show();
+                    $.ajax({
+                        url: 'def',
+                        headers: {
+                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                        },
+                        dataType: 'json',
+                        type: 'DELETE',
+                        data: {
+                            id: datas[0].id,
+                            serial: datas[0].serial,
+                            items_id: datas[0].items_id,
+                            replace: 0,
+                            item: datas[0].item
+                        },
+                        success: function(){
+                            location.reload(); 
+                        },
+                        error: function (data) {
+                            alert(data.responseText);
+                        }
+                    });
+                }else{
+                    alert(data);
+                }
+                
+            },
+            error: function (data) {
+                alert(data.responseText);
+            }
+        });
+    }
+    /*var data = stock.rows( { selected: true } ).data();
     $('#loading').show();
     $.ajax({
         url: 'def',
@@ -531,7 +584,7 @@ $(document).on("click", "#def_Btn", function () {
         error: function (data) {
             alert(data.responseText);
         }
-    });
+    });*/
 });
 
 $(document).on("click", "#stockTable tr", function () {
@@ -557,5 +610,5 @@ $(document).on("click", "#stockTable tr", function () {
             style: 'single'
         }
     });
-    $('#stockModal').modal();
+    $('#stockModal').modal('show');
 });
