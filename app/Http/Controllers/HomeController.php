@@ -35,8 +35,8 @@ class HomeController extends Controller
         if (auth()->user()->status == '0') {
             return redirect('logout');
         }
-        $mail = StockRequest::wherein('status', ['4', 'INCOMPLETE'])->where( 'updated_at', '<', Carbon::now()->subDays(5))->update(['status' => 'UNRESOLVED']);
-        if ($mail) {
+        StockRequest::wherein('status', ['4', 'INCOMPLETE'])->where( 'updated_at', '<', Carbon::now()->subDays(5))->update(['status' => 'UNRESOLVED']);
+        /*if ($mail) {
             $branch = Branch::where('id', $request->input('branch'))->first();
             $email = 'jerome.lopez.ge2018@gmail.com';
             Mail::send('create-user', ['user'=>$user->name.' '.$user->middlename.' '.$user->lastname, 'level'=>$request->input('role'), 'branch'=>$branch->branch],function( $message){ 
@@ -44,7 +44,7 @@ class HomeController extends Controller
                     (auth()->user()->name.' '.auth()->user()->lastname.' has added a new user to Service center stock monitoring system.'); 
                 $message->from('noreply@ideaserv.com.ph', 'Add User - NO-REPLY'); 
             });
-        }
+        }*/
         if (auth()->user()->branch->branch != "Warehouse" && !auth()->user()->hasrole('Repair')) {
             $units = Stock::where('status', 'in')->where('branch_id', auth()->user()->branch->id)->count();
             $returns = Defective::wherein('status', ['For return', 'For receiving'])->where('branch_id', auth()->user()->branch->id)->count();
