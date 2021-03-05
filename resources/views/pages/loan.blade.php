@@ -16,9 +16,6 @@
                     Item Description
                 </th>
                 <th>
-                    Type
-                </th>
-                <th>
                     Status
                 </th>
             </tr>

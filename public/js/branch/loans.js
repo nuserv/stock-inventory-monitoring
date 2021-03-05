@@ -26,7 +26,6 @@ $(document).ready(function()
             { data: 'date', name:'date'},
             { data: 'branch', name:'branch'},
             { data: 'item', name:'item'},
-            { data: 'stat', name:'stat'},
             { data: 'status', name:'status'}
         ]
     });
