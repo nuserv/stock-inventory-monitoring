@@ -60,7 +60,7 @@ $(document).ready(function()
                 $('td', nRow).eq(4).css('font-weight', 'bold');
             }
         },
-        "order": [[ 5, 'desc'], [ 0, 'desc']],
+        "order": [ 0, 'asc'],
         "columnDefs": [
         {
             "targets": [ 0 ],

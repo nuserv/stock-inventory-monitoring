@@ -170,8 +170,8 @@ class StockController extends Controller
             return ucwords(strtolower($client->customer_branch));
         })
         ->addColumn('serviceby', function (Stock $request){
-            $user = User::select('name', 'lastname')->where('id', $request->user_id)->first();
-            return ucwords(strtolower($user->name.' '.$user->lastname));
+            $user = User::select('name', 'middlename', 'lastname')->where('id', $request->user_id)->first();
+            return ucwords(strtolower($user->name.' '.$user->middlename.' '.$user->lastname));
         })
         ->make(true);
     }
@@ -231,7 +231,7 @@ class StockController extends Controller
         })*/
         ->addColumn('serviceby', function (Pm $request){
             $user = User::select('name', 'lastname')->where('id', $request->user_id)->first();
-            return ucwords(strtolower($user->name.' '.$user->lastname));
+            return ucwords(strtolower($user->name.' '.$user->middlename.' '.$user->lastname));
         })
         ->make(true);
     }
@@ -287,7 +287,7 @@ class StockController extends Controller
         })
         ->addColumn('user', function (PreparedItem $PreparedItem){
             $username = User::where('id', $PreparedItem->user_id)->first();
-            return $username->name.' '.$username->lastname;
+            return $username->name.' '.$username->middlename.' '.$username->lastname;
         })
         ->make(true);
     }

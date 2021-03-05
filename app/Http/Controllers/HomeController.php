@@ -182,7 +182,7 @@ class HomeController extends Controller
         })
         ->addColumn('fullname', function (UserLog $request){
             $username = User::where('id', $request->user_id)->first();
-            return $username->name. ' '. $username->lastname;
+            return $username->name.' '.$username->middlename.' '. $username->lastname;
         })
         ->addColumn('userlevel', function (UserLog $request){
             $username = User::where('id', $request->user_id)->first();
