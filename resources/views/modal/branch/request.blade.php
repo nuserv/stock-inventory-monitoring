@@ -78,12 +78,20 @@
                         </div>
                     </div>
                 </div>
+                <div class="row no-margin">
+                    <div class="col-md-6 form-group row" id="intransitrow" style="display:none">
+                        <label class="col-md-5 col-form-label text-md-right">In transit on:</label>
+                        <div class="col-md-7">
+                            <input type="text" style="color: black" class="form-control form-control-sm " id="intransitsched" value="" disabled>
+                        </div>
+                    </div>
+                </div>
             </div>
             <div>
-                <h5 class="modal-title w-100 text-center">REQUEST DETAILS</h5>
+                <h5 class="modal-title w-100 text-center" id="reqlabel">REQUEST DETAILS</h5>
             </div>
             <div class="modal-body">
-                <table class="table requestDetails" style="width:100%">
+                <table class="table requestDetails" style="font-size:80%">
                     <thead class="thead-dark">
                         <th>Item Code</th>
                         <th>Description</th>
@@ -91,7 +99,19 @@
                     </thead>
                 </table>
                 <br>
-                <table class="table schedDetails" id="schedDetails" style="width:100%">
+                <h5 class="modal-title w-100 text-center" id='schedslabel'>SCHEDULED ITEM DETAILS</h5>
+                <table class="table schedDetails" id="schedDetails" style="font-size:80%">
+                    <thead class="thead-dark">
+                        <th>Delivery Schedule</th>
+                        <th>Item Code</th>
+                        <th>Description</th>
+                        <th>Qty - UOM</th>
+                        <th>Serial</th>
+                    </thead>
+                </table>
+                <br>
+                <h5 class="modal-title w-100 text-center" id='intransitlabel'>INTRANSIT ITEM DETAILS</h5>
+                <table class="table intransitDetails" id="intransitDetails" style="font-size:80%">
                     <thead class="thead-dark">
                         <th>Delivery Schedule</th>
                         <th>Item Code</th>

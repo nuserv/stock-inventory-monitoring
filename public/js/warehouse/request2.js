@@ -1,3 +1,49 @@
+$(document).on('click', '#intransitBtn', function(){
+    if ($('#status').val() == 'SCHEDULED' || $('#status').val() == 'RESCHEDULED') {
+        $.ajax({
+            url: 'intransit',
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="ctok"]').attr('content')
+            },
+            type: 'PUT',
+            data: { 
+                reqno: reqnumber,
+                status: 'IN-TRANSIT'
+            },
+            dataType: 'json',
+            success:function()
+            {
+                location.reload();
+            },
+            error: function (data) {
+                alert(data.responseText);
+                return false;
+            }
+        });
+    }else if ($('#status').val() == 'PARTIAL SCHEDULED' || $('#status').val() == 'PARTIAL IN TRANSIT') {
+        $.ajax({
+            url: 'intransit',
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="ctok"]').attr('content')
+            },
+            type: 'PUT',
+            data: { 
+                reqno: reqnumber,
+                status: 'PARTIAL IN TRANSIT'
+            },
+            dataType: 'json',
+            success:function()
+            {
+                location.reload();
+            },
+            error: function (data) {
+                alert(data.responseText);
+                return false;
+            }
+        });
+    }
+});
+
 $(document).on('click', '.sub_Btn', function(){
     if ($('#datesched').val()) {
         $('#sendModal').toggle();
@@ -107,12 +153,12 @@ $(document).on('click', '.sub_Btn', function(){
             }
             if (q == w) {
                 if (pending != 0) {
-                    var status = 'PARTIAL';
+                    var status = 'PARTIAL SCHEDULED';
                 }else{
                     if (requestgo == true) {
                         var status = 'SCHEDULED';
                     }else{
-                        var status = 'PARTIAL';
+                        var status = 'PARTIAL SCHEDULED';
                     }
                 }
                 $.ajax({

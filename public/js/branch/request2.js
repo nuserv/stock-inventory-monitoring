@@ -33,7 +33,7 @@ $(document).on('click', '#rec_Btn', function(){
     }else if(dtdata.status == "PARTIAL"){
         var status = "PARTIAL";
     }
-    var datas = schedtable.rows( { selected: true } ).data();
+    var datas = intransittable.rows( { selected: true } ).data();
     var id = [];
     var eachcount = 0;
     if(datas.length > 0){

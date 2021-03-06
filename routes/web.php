@@ -104,6 +104,7 @@ Route::get('gen', 'StockRequestController@generateRandomNumber')->middleware('aj
 Route::get('getcatreq', 'StockRequestController@getCatReq')->middleware('ajax');
 Route::get('prepitem', 'StockRequestController@prepitem')->middleware('ajax');
 Route::put('update', 'StockRequestController@update')->middleware('ajax');
+Route::put('intransit', 'StockRequestController@intransit')->middleware('ajax');
 Route::post('storerequest', 'StockRequestController@store')->middleware('ajax');
 Route::delete('remove', 'StockRequestController@dest')->middleware('ajax');
 Route::get('getstock', 'StockRequestController@getStock')->middleware('ajax');
@@ -115,6 +116,7 @@ Route::get('getcon', 'StockRequestController@getcon');//->middleware('ajax');
 //Route::get('read/{id}', 'StockRequestController@read')->name('stock.read');
 Route::delete('delete/{id}', 'StockRequestController@destroy')->middleware('ajax');
 Route::get('send/{id}', 'StockRequestController@getsendDetails');//->middleware('ajax');
+Route::get('intransit/{id}', 'StockRequestController@getintransitDetails');//->middleware('ajax');
 Route::get('requests/{id}', 'StockRequestController@getRequestDetails');//->middleware('ajax');
 Route::get('getrequests', 'StockRequestController@getReqDetails')->middleware('ajax');
 Route::get('prep/{id}', 'StockRequestController@prepitemdetails')->middleware('ajax');

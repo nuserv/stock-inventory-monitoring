@@ -108,8 +108,43 @@ class StockRequestController extends Controller
         $data = PreparedItem::select('id')->where('request_no', $request->reqno)->where('items_id', $request->itemsid)->get();
         return response()->json($data);
     }
+    public function getintransitDetails(Request $request, $id){
+        $consumable = PreparedItem::select('uom', 'prepared_items.id as id', 'items_id', 'request_no', 'serial', 'schedule')
+            ->where('request_no', $id)
+            ->where('intransit', 'yes')
+            ->whereNotin('uom', ['Unit'])
+            ->join('items', 'items.id', '=', 'items_id')
+            ->selectRaw('count(items_id) as quantity')
+            ->groupBy('items_id')
+            ->get();
+        $unit = PreparedItem::select('uom', 'prepared_items.id as id', 'items_id', 'request_no', 'serial', 'schedule')
+            ->where('intransit', 'yes')
+            ->where('request_no', $id)
+            ->whereNotin('uom', ['Pc', 'Meter'])
+            ->join('items', 'items.id', '=', 'items_id')
+            ->selectRaw('count(prepared_items.id) as quantity')
+            ->groupBy('prepared_items.id')
+            ->get();
+        $result = $unit->merge($consumable);
+        return DataTables::of($result)
+        ->addColumn('item_name', function (PreparedItem $PreparedItem){
+            return strtoupper($PreparedItem->items->item);
+        })
+        ->addColumn('serial', function (PreparedItem $PreparedItem){
+            return strtoupper($PreparedItem->serial);
+        })
+        ->addColumn('quantity', function (PreparedItem $PreparedItem){
+            if ($PreparedItem->quantity != 1) {
+                return $PreparedItem->quantity.' - '.$PreparedItem->items->UOM.'s';
+            }else{
+                return $PreparedItem->quantity.' - '.$PreparedItem->items->UOM;
+            }
+        })
+        ->make(true);
+    }
     public function getsendDetails(Request $request, $id){
         $consumable = PreparedItem::select('uom', 'prepared_items.id as id', 'items_id', 'request_no', 'serial', 'schedule')
+            ->where('intransit', 'no')
             ->where('request_no', $id)
             ->whereNotin('uom', ['Unit'])
             ->join('items', 'items.id', '=', 'items_id')
@@ -117,6 +152,7 @@ class StockRequestController extends Controller
             ->groupBy('items_id')
             ->get();
         $unit = PreparedItem::select('uom', 'prepared_items.id as id', 'items_id', 'request_no', 'serial', 'schedule')
+            ->where('intransit', 'no')
             ->where('request_no', $id)
             ->whereNotin('uom', ['Pc', 'Meter'])
             ->join('items', 'items.id', '=', 'items_id')
@@ -197,6 +233,23 @@ class StockRequestController extends Controller
                 return $RequestedItem->quantity. ' ' .$RequestedItem->items->UOM;
             }
         })
+        ->addColumn('validation', function (RequestedItem $RequestedItem){
+            $data = Warehouse::select(\DB::raw('SUM(CASE WHEN status = \'in\' THEN 1 ELSE 0 END) as stock'))
+                ->where('status', 'in')
+                ->where('items_id',$RequestedItem->items->id)
+                ->groupBy('items_id')
+                ->first();
+            if (!$data) {
+                $stock = 0;
+            }else{
+                $stock = $data->stock;
+            }
+            if ($RequestedItem->quantity <= $stock) {
+                return 'yes';
+            }else{
+                return 'no';
+            }
+        })
         ->addColumn('stock', function (RequestedItem $RequestedItem){
             $data = Warehouse::select(\DB::raw('SUM(CASE WHEN status = \'in\' THEN 1 ELSE 0 END) as stock'))
                 ->where('status', 'in')
@@ -240,14 +293,14 @@ class StockRequestController extends Controller
     {
         $user = auth()->user()->branch->id;
         if (auth()->user()->branch->branch != 'Warehouse'){
-            $stock = StockRequest::wherein('status',  ['0', '1', '4', '5', '8', 'PENDING', 'SCHEDULED', 'INCOMPLETE', 'RESCHEDULED', 'PARTIAL'])
+            $stock = StockRequest::wherein('status',  ['PARTIAL SCHEDULED', 'PARTIAL IN TRANSIT', 'PENDING', 'SCHEDULED', 'INCOMPLETE', 'RESCHEDULED', 'PARTIAL', 'IN TRANSIT'])
                 ->where('branch_id', $user)
                 ->get();
         }else if(auth()->user()->hasRole('Editor', 'Manager')){
-            $stock = StockRequest::wherein('status',  ['0', '1', '4', '5', '6', '8', '9', 'PENDING', 'SCHEDULED', 'INCOMPLETE', 'RESCHEDULED', 'UNRESOLVED', 'PARTIAL', 'RESOLVED'])
+            $stock = StockRequest::wherein('status',  ['PARTIAL SCHEDULED', 'PARTIAL IN TRANSIT', 'PENDING', 'SCHEDULED', 'INCOMPLETE', 'RESCHEDULED', 'UNRESOLVED', 'PARTIAL', 'RESOLVED', 'IN TRANSIT'])
                 ->get();
         }else{
-            $stock = StockRequest::wherein('status',  ['0', '1', '4', '5', '6', '8', 'PENDING', 'SCHEDULED', 'INCOMPLETE', 'RESCHEDULED', 'UNRESOLVED', 'PARTIAL'])
+            $stock = StockRequest::wherein('status',  ['PARTIAL SCHEDULED', 'PARTIAL IN TRANSIT', 'PENDING', 'SCHEDULED', 'INCOMPLETE', 'RESCHEDULED', 'UNRESOLVED', 'PARTIAL', 'IN TRANSIT'])
                 ->get();
             //dd($stock);
         }
@@ -293,6 +346,11 @@ class StockRequestController extends Controller
         })
         ->addColumn('created_at', function (StockRequest $request){
             return $request->created_at->toFormattedDateString().' '.$request->created_at->toTimeString();
+        })
+        ->addColumn('intransit', function (StockRequest $request){
+            if ($request->intransit) {
+                return Carbon::parse($request->intransit)->toFormattedDateString().' '.Carbon::parse($request->intransit)->toTimeString();
+            }
         })
         ->addColumn('left', function (StockRequest $request){
             //Carbon::now()->subDays($request->created_at))
@@ -478,12 +536,41 @@ class StockRequestController extends Controller
         $data = $notrec->save();
         return response()->json($data);
     }
+    public function intransit(Request $request)
+    {
+        if($request->status == 'IN TRANSIT'){
+            $reqno = StockRequest::where('request_no', $request->reqno)->first();
+            $reqno->status = $request->status;
+            $reqno->intransit = Carbon::now()->toDateTimeString();;
+            PreparedItem::where('request_no', $request->reqno)->where('intransit', 'no')->update(['intransit' => 'yes']);
+            $data = $reqno->save();
+        }else if ($request->status == 'PARTIAL IN TRANSIT') {
+            $reqno = StockRequest::where('request_no', $request->reqno)->first();
+            $reqno->status = $request->status;
+            $reqno->intransitval = '0';
+            $reqno->intransit = Carbon::now()->toDateTimeString();;
+            PreparedItem::where('request_no', $request->reqno)->where('intransit', 'no')->update(['intransit' => 'yes']);
+            $data = $reqno->save();
+        }
+        return response()->json($data);
+    }
+
     public function update(Request $request)
     {
         if ($request->stat == 'ok') {
             $reqno = StockRequest::where('request_no', $request->reqno)->first();
+            if ($reqno->status == 'PARTIAL IN TRANSIT') {
+                $reqno->intransitval == '1';
+            }else {
+                if ($request->status == "PARTIAL SCHEDULED") {
+                    $reqno->intransitval == '1';
+                }else {
+                    $reqno->intransitval == '0';
+                }
+            }
             $reqno->status = $request->status;
             $reqno->schedule = $request->datesched;
+            
             $reqno->save();
             $prepitem = PreparedItem::select('items.item', 'serial', 'branch_id')
                 ->where('request_no', $request->reqno)
@@ -530,6 +617,7 @@ class StockRequestController extends Controller
             $prep->serial = $request->serial;
             $prep->branch_id = $request->branchid;
             $prep->schedule = $request->datesched;
+            $prep->intransit = 'no';
             $prep->user_id = auth()->user()->id;
             $prep->save();
             $log = new UserLog;

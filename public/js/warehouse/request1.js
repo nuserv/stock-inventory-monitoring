@@ -59,6 +59,11 @@ $(document).on('change', '#resched', function(){
         alert('Invalid Date!');
     }
 });
+$(document).on('click', '#closeBtn', function(){
+    $("#requestModal .close").click();
+
+});
+
 $(document).on('click', '#prcBtn', function(){
     $("#requestModal .closes").click();
     $('#loading').show();
@@ -89,6 +94,9 @@ $(document).on('click', '#prcBtn', function(){
         requestgo = false;
     }else{
         requestgo = true;
+        if (valid == 'no') {
+            requestgo = false;
+        }
     }
  
     for(var i=0;i<rowcount;i++){

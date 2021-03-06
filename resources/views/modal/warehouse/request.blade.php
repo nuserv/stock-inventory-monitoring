@@ -82,15 +82,23 @@
                         </div>
                     </div>
                     <div class="col-md-6 form-group row sched">
-                        <label class="col-md-5 col-form-label text-md-right">Schedule on:</label>
+                        <label class="col-md-5 col-form-label text-md-right" id="schedlabel">Schedule on:</label>
                         <div class="col-md-7">
                             <input type="text" style="color: black" class="form-control form-control-sm " id="sched" value="" disabled>
                         </div>
                     </div>
                 </div>
+                <div class="row no-margin">
+                    <div class="col-md-6 form-group row" id="intransitrow" style="display:none">
+                        <label class="col-md-5 col-form-label text-md-right">In transit on:</label>
+                        <div class="col-md-7">
+                            <input type="text" style="color: black" class="form-control form-control-sm " id="intransitsched" value="" disabled>
+                        </div>
+                    </div>
+                </div>
             </div>
             <div class="container">
-                <h5 class="modal-title w-100 text-center">REQUEST DETAILS</h5>
+                <h5 class="modal-title w-100 text-center" id="reqlabel">REQUEST DETAILS</h5>
             </div>
             <div class="modal-body">
                 <table class="table display requestDetails" style="width:100%;font-size:80%">
@@ -104,7 +112,19 @@
                     </thead>
                 </table>
                 <br>
+                <h5 class="modal-title w-100 text-center" id='schedslabel'>SCHEDULED ITEM DETAILS</h5>
                 <table class="table schedDetails" style="width:100%;font-size:80%">
+                    <thead class="thead-dark">
+                        <th>Item Code</th>
+                        <th>Description</th>
+                        <th>Qty - UOM</th>
+                        <th>Serial</th>
+                    </thead>
+                </table>
+                <br>
+                <br>
+                <h5 class="modal-title w-100 text-center" id='intransitlabel'>IN TRANSIT ITEM DETAILS</h5>
+                <table class="table intransitDetails" style="width:100%;font-size:80%">
                     <thead class="thead-dark">
                         <th>Item Code</th>
                         <th>Description</th>
@@ -119,8 +139,8 @@
             <div class="modal-footer">
                 <input type="button" class="btn btn-primary mr-auto" id="prcBtn" class="button" value="Proceed" disabled>
                 <input type="button" id="printBtn" class="btn btn-primary mr-auto" value="PRINT">
-                <input type="button" id="unresolveBtn" class="btn btn-primary mr-auto" value="UNRESOLVE" hidden>
-                <input type="button" class="btn btn-primary" data-dismiss="modal" value="CLOSE">
+                <input type="button" id="intransitBtn" class="btn btn-primary mr-auto" value="IN-TRANSIT" style="display:none">
+                <input type="button" class="btn btn-primary refresh" data-dismiss="modal" id="closeBtn" value="CLOSE">
             </div>
             @endif
         </div>

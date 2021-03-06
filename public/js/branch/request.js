@@ -1,6 +1,6 @@
 var y = 1;
 var table;
-var schedtable;
+var intransittable;
 var dtdata;
 var sub = 0;
 var add = 0;
@@ -59,11 +59,14 @@ $(document).ready(function()
         $('table.schedDetails').dataTable().fnDestroy();
         if (trdata.status == 'PENDING') {
             $('table.schedDetails').hide();
+            $('table.intransitDetails').hide();
             $('table.requestDetails').show();
             $('.sched').hide();
             $('#del_Btn').show();
             $('#msg').hide();
             $('#rec_Btn').hide();
+            $('#schedslabel').hide();
+            $('#intransitlabel').hide();
             $('#not_rec_Btn').hide();
             $('#del_Btn').attr('reqno', trdata.request_no);
             var penreq;
@@ -120,7 +123,93 @@ $(document).ready(function()
                     }
                 });
             }
-        }else if(trdata.status == 'SCHEDULED'){
+        }else if(trdata.status == 'IN TRANSIT' || trdata.status == 'PARTIAL IN TRANSIT'){
+            $('table.requestDetails').remove();
+            $('table.schedDetails').remove();
+            $('table.requestDetails').dataTable().fnDestroy();
+            $('.sched').show();
+            $('table.intransitDetails').show();
+            $('#sched').val(trdata.sched);
+            $('#del_Btn').hide();
+            $('#rec_Btn').show();
+            $('#intransitlabel').show();
+            $('#schedslabel').hide();
+            $('#reqlabel').hide();
+            $('#msg').show();
+            $('#rec_Btn').prop('disabled', true);
+            $('#intransitrow').show();
+            $('#intransitsched').val(trdata.intransit);
+            var intransit;
+            Promise.all([intransitfunc()]).then(() => { 
+                if (intransit == 1) {
+                    $('#not_rec_Btn').show();
+                }else{
+                    $('#not_rec_Btn').hide();
+                }
+                if (intransit <= 10) {
+                    $('table.intransitDetails').dataTable().fnDestroy();
+                    intransittable = 
+                    $('table.intransitDetails').DataTable({ 
+                        "dom": 'rt',
+                        "language": {
+                            "emptyTable": " "
+                        },
+                        processing: true,
+                        serverSide: true,
+                        ajax: "/intransit/"+trdata.request_no,
+                        
+                        columns: [
+                            { data: 'schedule', name:'schedule'},
+                            { data: 'items_id', name:'items_id'},
+                            { data: 'item_name', name:'item_name'},
+                            { data: 'quantity', name:'quantity'},
+                            { data: 'serial', name:'serial'}
+                        ],
+                        select: {
+                            style: 'multi'
+                        }
+                    });
+                }else if (intransit > 10) {
+                    $('table.intransitDetails').dataTable().fnDestroy();
+                    intransittable = 
+                    $('table.intransitDetails').DataTable({ 
+                        "dom": 'lrtp',
+                        "language": {
+                            "emptyTable": " "
+                        },
+                        processing: true,
+                        serverSide: true,
+                        ajax: "/intransit/"+trdata.request_no,
+                        columns: [
+                            { data: 'schedule', name:'schedule'},
+                            { data: 'items_id', name:'items_id'},
+                            { data: 'item_name', name:'item_name'},
+                            { data: 'quantity', name:'quantity'},
+                            { data: 'serial', name:'serial'}
+                        ],
+                        select: {
+                            style: 'multi'
+                        }
+                    });
+                }
+            });
+            function intransitfunc() {
+                return $.ajax({
+                    type:'get',
+                    url: "/intransit/"+trdata.request_no,
+                    success:function(data)
+                    {
+                        intransit = data.data.length;
+                    },
+                    error: function (data) {
+                        if(data.status == 401) {
+                            window.location.href = '/login';
+                        }
+                        alert(data.responseText);
+                    }
+                });
+            }
+        }else if(trdata.status == 'PARTIAL SCHEDULED' && trdata.intransitval == '1'){
             $('table.requestDetails').hide();
             $('.sched').show();
             $('table.schedDetails').show();
@@ -129,6 +218,8 @@ $(document).ready(function()
             $('#rec_Btn').show();
             $('#msg').show();
             $('#rec_Btn').prop('disabled', true);
+            $('#intransitrow').show();
+            $('#intransitsched').val(trdata.intransit);
             var schedul;
             Promise.all([sched()]).then(() => { 
                 if (schedul == 1) {
@@ -199,19 +290,22 @@ $(document).ready(function()
                     }
                 });
             }
-        }else if(trdata.status == 'INCOMPLETE'){
+        }else if(trdata.status == 'SCHEDULED' || (trdata.status == 'PARTIAL SCHEDULED' && trdata.intransitval != '1')){
             $('table.requestDetails').hide();
+            $('table.intransitDetails').hide();
             $('.sched').show();
             $('table.schedDetails').show();
             $('#sched').val(trdata.sched);
             $('#del_Btn').hide();
-            $('#rec_Btn').show();
-            $('#msg').show();
-            $('#not_rec_Btn').hide();
+            $('#rec_Btn').hide();
+            $('#reqlabel').hide();
+            $('#intransitlabel').hide();
+            $('#msg').hide();
             $('#rec_Btn').prop('disabled', true);
-            var incomp;
-            Promise.all([incompleteschedtable()]).then(() => { 
-                if (incomp <= 10) {
+            $('#not_rec_Btn').hide();
+            var schedul;
+            Promise.all([sched()]).then(() => { 
+                if (schedul <= 10) {
                     $('table.schedDetails').dataTable().fnDestroy();
                     schedtable = 
                     $('table.schedDetails').DataTable({ 
@@ -229,12 +323,9 @@ $(document).ready(function()
                             { data: 'item_name', name:'item_name'},
                             { data: 'quantity', name:'quantity'},
                             { data: 'serial', name:'serial'}
-                        ],
-                        select: {
-                            style: 'multi'
-                        }
+                        ]
                     });
-                }else if (incomp > 10) {
+                }else if (schedul > 10) {
                     $('table.schedDetails').dataTable().fnDestroy();
                     schedtable = 
                     $('table.schedDetails').DataTable({ 
@@ -245,6 +336,83 @@ $(document).ready(function()
                         processing: true,
                         serverSide: true,
                         ajax: "/send/"+trdata.request_no,
+                        columns: [
+                            { data: 'schedule', name:'schedule'},
+                            { data: 'items_id', name:'items_id'},
+                            { data: 'item_name', name:'item_name'},
+                            { data: 'quantity', name:'quantity'},
+                            { data: 'serial', name:'serial'}
+                        ]
+                    });
+                }
+            });
+            function sched() {
+                return $.ajax({
+                    type:'get',
+                    url: "/send/"+trdata.request_no,
+                    success:function(data)
+                    {
+                        schedul = data.data.length;
+                    },
+                    error: function (data) {
+                        if(data.status == 401) {
+                            window.location.href = '/login';
+                        }
+                        alert(data.responseText);
+                    }
+                });
+            }
+        }else if(trdata.status == 'INCOMPLETE'){
+            $('table.requestDetails').hide();
+            $('table.schedDetails').hide();
+            $('.sched').show();
+            $('table.intransitDetails').show();
+            $('#sched').val(trdata.sched);
+            $('#del_Btn').hide();
+            $('#rec_Btn').show();
+            $('#intransitrow').show();
+            $('#intransitsched').val(trdata.intransit);
+            $('#reqlabel').hide();
+            $('#schedslabel').hide();
+            $('#msg').show();
+            $('#not_rec_Btn').hide();
+            $('#rec_Btn').prop('disabled', true);
+            var incomp;
+            Promise.all([incompleteschedtable()]).then(() => { 
+                if (incomp <= 10) {
+                    $('table.intransitDetails').dataTable().fnDestroy();
+                    intransittable = 
+                    $('table.intransitDetails').DataTable({ 
+                        "dom": 'rt',
+                        "language": {
+                            "emptyTable": " "
+                        },
+                        processing: true,
+                        serverSide: true,
+                        ajax: "/intransit/"+trdata.request_no,
+                        
+                        columns: [
+                            { data: 'schedule', name:'schedule'},
+                            { data: 'items_id', name:'items_id'},
+                            { data: 'item_name', name:'item_name'},
+                            { data: 'quantity', name:'quantity'},
+                            { data: 'serial', name:'serial'}
+                        ],
+                        select: {
+                            style: 'multi'
+                        }
+                    });
+                }else if (incomp > 10) {
+                    $('table.intransitDetails').dataTable().fnDestroy();
+                    intransittable = 
+                    $('table.intransitDetails').DataTable({ 
+                        "dom": 'lrtp',
+                        "language": {
+                            "emptyTable": " "
+                        },
+                        processing: true,
+                        serverSide: true,
+                        ajax: "/intransit/"+trdata.request_no,
                         
                         columns: [
                             { data: 'schedule', name:'schedule'},
@@ -262,7 +430,7 @@ $(document).ready(function()
             function incompleteschedtable() {
                 return $.ajax({
                     type:'get',
-                    url: "/send/"+trdata.request_no,
+                    url: "/intransit/"+trdata.request_no,
                     success:function(data)
                     {
                         incomp = data.data.length;
@@ -275,7 +443,7 @@ $(document).ready(function()
                     }
                 });
             }
-        }else if(trdata.status == 'RESCHEDULED'){
+        }else if(trdata.status == 'IN-TRANSIT'){
             $('table.requestDetails').hide();
             $('.sched').show();
             $('table.schedDetails').show();
@@ -495,15 +663,15 @@ $(document).ready(function()
         }
         $('#requestModal').modal('show');
     });
-    $('table.schedDetails').DataTable().on('select', function () {
-        var rowselected = schedtable.rows( { selected: true } ).data();
+    $('table.intransitDetails').DataTable().on('select', function () {
+        var rowselected = intransittable.rows( { selected: true } ).data();
         if(rowselected.length > 0){
             $('#rec_Btn').prop('disabled', false);
             $('#not_rec_Btn').prop('disabled', true);
         }
     });
-    $('table.schedDetails').DataTable().on('deselect', function () {
-        var rowselected = schedtable.rows( { selected: true } ).data();
+    $('table.intransitDetails').DataTable().on('deselect', function () {
+        var rowselected = intransittable.rows( { selected: true } ).data();
         if(rowselected.length == 0){
             $('#rec_Btn').prop('disabled', true);
             $('#not_rec_Btn').prop('disabled', false);
