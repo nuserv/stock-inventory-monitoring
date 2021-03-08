@@ -187,8 +187,8 @@
                 <script src="{{asset('min/?f=js/request.js')}}"></script>
             @endif
             @if(auth()->user()->hasAnyrole('Head', 'Tech'))
-                <script src="{{asset('min/?f=js/branch/request.js')}}"></script>
-                <script src="{{asset('min/?f=js/branch/request2.js')}}"></script>
+                <script src="{{asset('js/branch/request.js')}}"></script>
+                <script src="{{asset('js/branch/request2.js')}}"></script>
             @endif
         @endif
 

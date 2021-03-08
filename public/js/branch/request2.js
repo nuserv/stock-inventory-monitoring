@@ -131,7 +131,9 @@ $(document).on('click', '#reqBtn', function(){
             $('#sreqno').val(result);
         },
     });
-    $('#loading').show()
+    $('#sendrequestModal').modal({backdrop: 'static', keyboard: false});
+
+    /*$('#loading').show()
     var catop;
     $.ajax({
         type:'get',
@@ -142,6 +144,7 @@ $(document).on('click', '#reqBtn', function(){
                 return [value];
             });
             catop+='<option selected disabled>select category</option>';
+            stockcat = category;
             category.forEach(value => {
                 catop+='<option value="'+value.id+'">'+value.category.toUpperCase()+'</option>';
             });
@@ -155,7 +158,7 @@ $(document).on('click', '#reqBtn', function(){
             }
             alert(data.responseText);
         }
-    });
+    });*/
 });
 $(document).on('click', '.add_item', function(){
     var rowcount = $(this).attr('btn_id');
@@ -340,39 +343,77 @@ $(document).on('change', '.category', function(){
     var count = $(this).attr('row_count');
     var id = $(this).val();
     $('#stock' + count).val('Stock');
-    $.ajax({
-        type:'get',
-        url:'getcode',
-        data:{'id':id},
-        success:function(data)
-        {
-            var itemcode = $.map(data, function(value, index) {
-                return [value];
-            });
-            codeOp+='<option selected disabled>select item code</option>';
-            descOp+='<option selected disabled>select item description</option>';
-            itemcode.forEach(value => {
-                codeOp+='<option value="'+value.id+'">'+value.id+'</option>';
-                descOp+='<option value="'+value.id+'">'+value.item.toUpperCase()+'</option>';
-            });
-            $("#item" + count).find('option').remove().end().append(codeOp);
-            $("#desc" + count).find('option').remove().end().append(descOp);
-            itemcode.forEach(value => {
-                for(var g=1;g<=count;g++){
-                    if (value.id == $("#item" + g).val()) {
-                        $('#item'+count+' option[value='+value.id+']').remove()
-                        $('#desc'+count+' option[value='+value.id+']').remove()
+    if ($('#requesttype').val() == 'Stock') {
+        $.ajax({
+            type:'get',
+            url:'getcode',
+            data:{'id':id},
+            success:function(data)
+            {
+                var itemcode = $.map(data, function(value, index) {
+                    return [value];
+                });
+                codeOp+='<option selected disabled>select item code</option>';
+                descOp+='<option selected disabled>select item description</option>';
+                itemcode.forEach(value => {
+                    codeOp+='<option value="'+value.id+'">'+value.id+'</option>';
+                    descOp+='<option value="'+value.id+'">'+value.item.toUpperCase()+'</option>';
+                });
+                $("#item" + count).find('option').remove().end().append(codeOp);
+                $("#desc" + count).find('option').remove().end().append(descOp);
+                itemcode.forEach(value => {
+                    for(var g=1;g<=count;g++){
+                        if (value.id == $("#item" + g).val()) {
+                            $('#item'+count+' option[value='+value.id+']').remove()
+                            $('#desc'+count+' option[value='+value.id+']').remove()
+                        }
                     }
+                });
+            },
+            error: function (data) {
+                if(data.status == 401) {
+                    window.location.href = '/login';
                 }
-            });
-        },
-        error: function (data) {
-            if(data.status == 401) {
-                window.location.href = '/login';
+                alert(data.responseText);
             }
-            alert(data.responseText);
-        }
-    });
+        });
+    }else if ($('#requesttype').val() == 'Service') {
+        $.ajax({
+            type:'get',
+            url:'servicerequest',
+            data:{'id':id},
+            success:function(data)
+            {   
+                if (data.length != "0") {
+                    var itemcode = $.map(data, function(value, index) {
+                        return [value];
+                    });
+                    codeOp+='<option selected disabled>select item code</option>';
+                    descOp+='<option selected disabled>select item description</option>';
+                    itemcode.forEach(value => {
+                        codeOp+='<option value="'+value.id+'">'+value.id+'</option>';
+                        descOp+='<option value="'+value.id+'">'+value.item.toUpperCase()+'</option>';
+                    });
+                    $("#item" + count).find('option').remove().end().append(codeOp);
+                    $("#desc" + count).find('option').remove().end().append(descOp);
+                    itemcode.forEach(value => {
+                        for(var g=1;g<=count;g++){
+                            if (value.id == $("#item" + g).val()) {
+                                $('#item'+count+' option[value='+value.id+']').remove()
+                                $('#desc'+count+' option[value='+value.id+']').remove()
+                            }
+                        }
+                    });
+                }
+            },
+            error: function (data) {
+                if(data.status == 401) {
+                    window.location.href = '/login';
+                }
+                alert(data.responseText);
+            }
+        });
+    }
     $('#qty'+count).val('0');
 });
 $(document).on('click', '.close', function(){
@@ -382,12 +423,28 @@ $(document).on('click', '.cancel', function(){
     window.location.href = 'request';
 });
 $(document).on('change', '#requesttype', function(){
+    var catop;
+    var desc;
+    $('.requesttype').show();
+    desc+='<option selected disabled>select item description</option>';
+    $("#desc1").find('option').remove().end().append(desc);
     if ($(this).val() == 'Stock') {
         $('#clientrow').hide();
         $('#ticketrow').hide();
+        catop+='<option selected disabled>select category</option>';
+        stockcat.forEach(value => {
+            catop+='<option value="'+value.id+'">'+value.category.toUpperCase()+'</option>';
+        });
+        $("#category1").find('option').remove().end().append(catop);
     }else if ($(this).val() == 'Service'){
         $('#ticketrow').show();
         $('#clientrow').show();
+        catop+='<option selected disabled>select category</option>';
+        servicecat.forEach(value => {
+            catop+='<option value="'+value.id+'">'+value.category.toUpperCase()+'</option>';
+        });
+        $("#category1").find('option').remove().end().append(catop);
+        
     }
 });
 $(document).on('keyup', '#client', function(){

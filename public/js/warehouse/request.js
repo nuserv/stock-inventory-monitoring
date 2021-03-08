@@ -60,6 +60,13 @@ $(document).ready(function()
                     $('td', nRow).eq(4).css('font-weight', 'bold');
                 }
             }
+            if (!aData.schedule && aData.status == "PENDING" && aData.type == "SERVICE") {
+                var created = aData.leftcreatedmin;
+                if (created <= 0) {
+                    $('td', nRow).css('background-color', 'lightgray');
+                    $('td', nRow).css('font-weight', 'bold');
+                }
+            }
             if (aData.schedule && (aData.status == "PARTIAL SCHEDULED")) {
                 var scheddate = aData.schedule
                 var datesplited = scheddate.split("/");;
@@ -134,6 +141,9 @@ $(document).ready(function()
         $('.notes').hide();
         $('#head').text('STOCK REQUEST NO. '+trdata.request_no);
         $('#requesttypes').val(trdata.type);
+        $('table.requestDetails').dataTable().fnDestroy();
+        $('table.schedDetails').dataTable().fnDestroy();
+        $('table.intransitDetails').dataTable().fnDestroy();
         if (trdata.type == "STOCK") {
             $('.ticketno').hide();
             $('#clientrows').hide();

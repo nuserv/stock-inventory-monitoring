@@ -24,6 +24,63 @@ $(document).ready(function()
             "targets": [ 0 ],
             "visible": false
         }],
+        "fnRowCallback": function(nRow, aData) {
+            //"createdRow": function ( nRow, aData ) {
+                if (aData.schedule && (aData.status == "SCHEDULED" || aData.status == "RESCHEDULED")) {
+                    var scheddate = aData.schedule
+                    var datesplited = scheddate.split("/");;
+                    var setsched = datesplited[2]+datesplited[0]+datesplited[1];
+                    var today = new Date().toISOString().slice(0,10).split('-');
+                    var syncdate = today[0]+today[1]+today[2];
+                    if (setsched <= syncdate) {
+                        $('td', nRow).eq(4).css('color', 'darkmagenta');
+                        $('td', nRow).eq(4).css('font-weight', 'bold');
+                    }
+                }
+                if (!aData.schedule && aData.status == "PENDING" && aData.type == "SERVICE") {
+                    var created = aData.leftcreatedmin;
+                    if (created <= 0) {
+                        $('td', nRow).css('background-color', 'lightgray');
+                        $('td', nRow).css('font-weight', 'bold');
+                    }
+                }
+                if (aData.schedule && (aData.status == "PARTIAL SCHEDULED")) {
+                    var scheddate = aData.schedule
+                    var datesplited = scheddate.split("/");;
+                    var setsched = datesplited[2]+datesplited[0]+datesplited[1];
+                    var today = new Date().toISOString().slice(0,10).split('-');
+                    var syncdate = today[0]+today[1]+today[2];
+                    if (setsched <= syncdate) {
+                        $('td', nRow).eq(4).css('color', 'darkmagenta');
+                        $('td', nRow).eq(4).css('font-weight', 'bold');
+                    }
+                }
+                if (aData.schedule && (aData.status == "PARTIAL IN TRANSIT" && aData.intransitval == '1')) {
+                    var scheddate = aData.schedule
+                    var datesplited = scheddate.split("/");;
+                    var setsched = datesplited[2]+datesplited[0]+datesplited[1];
+                    var today = new Date().toISOString().slice(0,10).split('-');
+                    var syncdate = today[0]+today[1]+today[2];
+                    if (setsched <= syncdate) {
+                        $('td', nRow).eq(4).css('color', 'darkmagenta');
+                        $('td', nRow).eq(4).css('font-weight', 'bold');
+                    }
+                }
+                
+                if ( aData.status == "UNRESOLVED" || aData.status == "INCOMPLETE") {        
+                    $('td', nRow).eq(4).css('color', '#F1423A');
+                    $('td', nRow).eq(4).css('font-weight', 'bold');
+                }
+                if (aData.type == "SERVICE" && aData.status == 'PENDING') {
+                    $('td', nRow).eq(4).css('color', 'blue');
+                    $('td', nRow).eq(4).css('font-weight', 'bold');
+                }
+                if (aData.type == "STOCK" && aData.status == 'PENDING') {
+                    $('td', nRow).eq(4).css('color', 'GREEN');
+                    $('td', nRow).eq(4).css('font-weight', 'bold');
+                }
+    
+            },
         processing: true,
         serverSide: true,
         ajax: 'requests',

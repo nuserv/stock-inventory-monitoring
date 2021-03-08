@@ -421,6 +421,26 @@ class StockController extends Controller
         }
         return response()->json(array_filter($cat));
     }
+    public function checkService(Request $request)
+    {
+        $initials = Initial::where('branch_id', auth()->user()->branch->id)->get();
+        $cat = array();
+        foreach ($initials as $initial) {
+            $count = Stock::where('stocks.status', 'in')
+                ->where('branch_id', auth()->user()->branch->id)
+                ->where('items_id', $initial->items_id)->count();
+            if ($count == "0") {
+                $category = Item::select('items.category_id as id', 'categories.category')
+                    ->where('items.id', $initial->items_id)
+                    ->join('categories', 'categories.id', '=', 'category_id')
+                    ->first();
+                if(!in_array($category, $cat)){
+                    array_push($cat, $category);
+                }
+            }
+        }
+        return response()->json(array_filter($cat));
+    }
     public function addItem(Request $request)
     {
         $add = new Item;

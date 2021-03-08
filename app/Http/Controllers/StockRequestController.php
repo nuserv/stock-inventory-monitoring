@@ -64,6 +64,28 @@ class StockRequestController extends Controller
         }
         return response()->json(array_filter($icode));
     }
+
+    public function servicerequest(Request $request){
+        $initials = Initial::where('branch_id', auth()->user()->branch->id)
+            ->join('items', 'items_id', '=', 'items.id')
+            ->where('category_id', $request->id)
+            ->get();
+        $icode = [];
+        $itm =[];
+        foreach ($initials as $initial) {
+            $count = Stock::where('stocks.status', 'in')
+                ->where('branch_id', auth()->user()->branch->id)
+                ->where('items_id', $initial->items_id)
+                ->count();
+            if ($count == "0") {
+                $itemcode = Item::select('id', 'item')->where('id', $initial->items_id)->first();
+                if(!in_array($itemcode, $icode)){
+                    array_push($icode, $itemcode);
+                }
+            }
+        }
+        return response()->json(array_filter($icode));
+    }
     public function getCatReq(Request $request){
         $catreqs = RequestedItem::select('categories.category', 'categories.id')
             ->where('request_no', $request->reqno)
@@ -310,37 +332,7 @@ class StockRequestController extends Controller
             'data-status' => '{{ $status }}',
             'data-user' => '{{ $user_id }}',
         ])
-        /*->addColumn('status', function (StockRequest $request){
-            if ($request->status == 0) {
-                return 'PENDING';
-            }else if ($request->status == 'PENDING'){
-                return 'PENDING';
-            }else if ($request->status == 1){
-                return 'SCHEDULED';
-            }else if ($request->status == 'SCHEDULED'){
-                return 'SCHEDULED';
-            }else if ($request->status == 4){
-                return 'INCOMPLETE';
-            }else if ($request->status == 'INCOMPLETE'){
-                return 'INCOMPLETE';
-            }else if ($request->status == 5){
-                return 'RESCHEDULED';
-            }else if ($request->status == 'RESCHEDULED'){
-                return 'RESCHEDULED';
-            }else if ($request->status == 6){
-                return 'UNRESOLVED';
-            }else if ($request->status == 'UNRESOLVED'){
-                return 'UNRESOLVED';
-            }else if ($request->status == 8){
-                return 'PARTIAL';
-            }else if ($request->status == 'PARTIAL'){
-                return 'PARTIAL';
-            }else if ($request->status == 9){
-                return 'RESOLVED';
-            }else if ($request->status == 'RESOLVED'){
-                return 'RESOLVED';
-            }
-        })*/
+        
         ->addColumn('sched', function (StockRequest $request){
             return $request->schedule;
         })
@@ -357,6 +349,18 @@ class StockRequestController extends Controller
             $dd = Carbon::parse($request->updated_at)->addDays(5);
             //$dd->year(date('Y'));
             return Carbon::now()->diffInDays($dd, false);//Carbon::now()->subDays(5);
+        })
+        ->addColumn('leftcreatedhour', function (StockRequest $request){
+            //Carbon::now()->subDays($request->created_at))
+            $dd = Carbon::parse($request->created_at)->addDays(1);
+            //$dd->year(date('Y'));
+            return Carbon::now()->diffInHours($dd, false);//Carbon::now()->subDays(5);
+        })
+        ->addColumn('leftcreatedmin', function (StockRequest $request){
+            //Carbon::now()->subDays($request->created_at))
+            $dd = Carbon::parse($request->created_at)->addDays(1);
+            //$dd->year(date('Y'));
+            return Carbon::now()->diffInMinutes($dd, false);//Carbon::now()->subDays(5);
         })
         ->addColumn('minute', function (StockRequest $request){
             //Carbon::now()->subDays($request->created_at))

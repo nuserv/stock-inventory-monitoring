@@ -69,10 +69,10 @@
                     </div>
                 </div>
             </div>
-            <div class="modal-header">
+            <div class="modal-header requesttype" style="display:none">
                 <h6 class="modal-title w-100 text-center">ENTER ITEM HERE</h6>
             </div>
-            <div class="modal-body" id="reqfield">
+            <div class="modal-body requesttype" id="reqfield" style="display:none">
                 <div class="row no-margin" id="row1">
                     <div class="col-md-2 form-group">
                         <select id="category1" class="form-control category" row_count="1" style="color: black;">
