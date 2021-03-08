@@ -548,6 +548,7 @@ class StockRequestController extends Controller
             $reqno->intransit = Carbon::now()->toDateTimeString();;
             PreparedItem::where('request_no', $request->reqno)->where('intransit', 'no')->update(['intransit' => 'yes']);
             $data = $reqno->save();
+            return response()->json($data);
         }else if ($request->status == 'PARTIAL IN TRANSIT') {
             $reqno = StockRequest::where('request_no', $request->reqno)->first();
             $reqno->status = $request->status;
@@ -555,8 +556,9 @@ class StockRequestController extends Controller
             $reqno->intransit = Carbon::now()->toDateTimeString();;
             PreparedItem::where('request_no', $request->reqno)->where('intransit', 'no')->update(['intransit' => 'yes']);
             $data = $reqno->save();
+            
+            return response()->json($data);
         }
-        return response()->json($data);
     }
 
     public function update(Request $request)
