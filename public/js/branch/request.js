@@ -451,7 +451,7 @@ $(document).ready(function()
                     }
                 });
             }
-        }else if(trdata.status == 'IN-TRANSIT'){
+        }else if(trdata.status == 'IN TRANSIT'){
             $('table.requestDetails').hide();
             $('.sched').show();
             $('table.schedDetails').show();
