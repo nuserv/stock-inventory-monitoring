@@ -139,7 +139,7 @@
             <div class="modal-footer">
                 <input type="button" class="btn btn-primary mr-auto" id="prcBtn" class="button" value="Proceed" disabled>
                 <input type="button" id="printBtn" class="btn btn-primary mr-auto" value="PRINT">
-                <input type="button" id="intransitBtn" class="btn btn-primary mr-auto" value="IN-TRANSIT" style="display:none">
+                <input type="button" id="intransitBtn" class="btn btn-primary mr-auto" value="IN TRANSIT" style="display:none">
                 <input type="button" class="btn btn-primary refresh" data-dismiss="modal" id="closeBtn" value="CLOSE">
             </div>
             @endif
