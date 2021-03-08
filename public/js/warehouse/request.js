@@ -159,7 +159,7 @@ $(document).ready(function()
             $('#prcBtn').hide();
             $('.sched').show();
             $('#printBtn').show();
-            $('#intransitrow').show();
+            $('#intransitrow').hide();
             $('#intransitBtn').show();
             $('#save_Btn').hide();
             var trsched = new Date(trdata.sched);

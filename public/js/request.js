@@ -26,6 +26,8 @@ $(document).ready(function()
         }],
         "fnRowCallback": function(nRow, aData) {
             //"createdRow": function ( nRow, aData ) {
+                console.log(nRow);
+                console.log(aData);
                 if (aData.schedule && (aData.status == "SCHEDULED" || aData.status == "RESCHEDULED")) {
                     var scheddate = aData.schedule
                     var datesplited = scheddate.split("/");;
@@ -118,10 +120,82 @@ $(document).ready(function()
             $('#customers').val(trdata.customer);
             $('#tickets').val(trdata.ticket);
         }
+        if (trdata.status == 'RESCHEDULED') {
+
+        };
+        if (trdata.status == 'SCHEDULED') {
+            $('#printBtn').show();
+            $('#reqlabel').remove();
+            $('#intransitlabel').remove();
+            $('table.requestDetails').remove();
+            $('table.intransitDetails').remove();
+            var trsched = new Date(trdata.sched);
+            $('#sched').val(months[trsched.getMonth()]+' '+trsched.getDate()+', ' +trsched.getFullYear());
+            var schedreq;
+            Promise.all([schedrequest()]).then(() => {
+                if (schedreq <= 10) {
+                    $('table.schedDetails').dataTable().fnDestroy();
+                    scheddetails =
+                    $('table.schedDetails').DataTable({ 
+                        "dom": 'rt',
+                        "language": {
+                            "emptyTable": " "
+                        },
+                        processing: true,
+                        serverSide: true,
+                        ajax: "/send/"+trdata.request_no,
+                        columns: [
+                            { data: 'items_id', name:'items_id'},
+                            { data: 'item_name', name:'item_name'},
+                            { data: 'quantity', name:'quantity'},
+                            { data: 'serial', name:'serial'}
+                        ]
+                    });
+                }else if (schedreq > 10) {
+                    $('table.schedDetails').dataTable().fnDestroy();
+                    scheddetails =
+                    $('table.schedDetails').DataTable({ 
+                        "dom": 'lrtp',
+                        "language": {
+                            "emptyTable": " "
+                        },
+                        processing: true,
+                        serverSide: true,
+                        ajax: "/send/"+trdata.request_no,
+                        columns: [
+                            { data: 'items_id', name:'items_id'},
+                            { data: 'item_name', name:'item_name'},
+                            { data: 'quantity', name:'quantity'},
+                            { data: 'serial', name:'serial'}
+                        ]
+                    });
+                }
+            });
+
+            function schedrequest() {
+                return $.ajax({
+                    type:'get',
+                    url: "/send/"+trdata.request_no,
+                    success:function(data)
+                    {
+                        schedreq = data.data.length;
+                    },
+                });
+            }
+        }
         if (trdata.status == 'PENDING') {
+            $('#prcBtn').show();
+            $('.sched').hide();
+            $('#sched').val('');
+            $('#printBtn').hide();
+            $('#schedslabel').hide();
+            $('#intransitlabel').hide();
+            $('#save_Btn').show();
             $('table.requestDetails').dataTable().fnDestroy();
+            $('table.intransitDetails').dataTable().fnDestroy();
             $('table.requestDetails').show();
             $('table.schedDetails').hide();
+            $('table.intransitDetails').hide();
             $('table.schedDetails').dataTable().fnDestroy();
             $('.sched').hide();
             var penreq;

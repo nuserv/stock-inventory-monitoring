@@ -8,7 +8,7 @@ $(document).on('click', '#intransitBtn', function(){
             type: 'PUT',
             data: { 
                 reqno: reqnumber,
-                status: 'IN-TRANSIT'
+                status: 'IN TRANSIT'
             },
             dataType: 'json',
             success:function()
