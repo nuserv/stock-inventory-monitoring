@@ -120,10 +120,64 @@ $(document).ready(function()
             $('#customers').val(trdata.customer);
             $('#tickets').val(trdata.ticket);
         }
-        if (trdata.status == 'RESCHEDULED') {
+        if (trdata.status == 'IN TRANSIT' || trdata.status == 'INCOMPLETE') {
+            $('#printBtn').hide();
+            $('#reqlabel').remove();
+            $('#schedslabel').remove();
+            $('table.requestDetails').remove();
+            $('table.schedDetails').remove();
+            var intransit;
+            Promise.all([intrans()]).then(() => {
+                if (intransit <= 10) {
+                    $('table.schedDetails').dataTable().fnDestroy();
+                    intransitdetails =
+                    $('table.intransitDetails').DataTable({ 
+                        "dom": 'rt',
+                        "language": {
+                            "emptyTable": " "
+                        },
+                        processing: true,
+                        serverSide: true,
+                        ajax: "/intransit/"+trdata.request_no,
+                        columns: [
+                            { data: 'items_id', name:'items_id'},
+                            { data: 'item_name', name:'item_name'},
+                            { data: 'quantity', name:'quantity'},
+                            { data: 'serial', name:'serial'}
+                        ]
+                    });
+                }else if (intransit > 10) {
+                    $('table.intransitDetails').dataTable().fnDestroy();
+                    intransitdetails =
+                    $('table.intransitDetails').DataTable({ 
+                        "dom": 'lrtp',
+                        "language": {
+                            "emptyTable": " "
+                        },
+                        processing: true,
+                        serverSide: true,
+                        ajax: "/intransit/"+trdata.request_no,
+                        columns: [
+                            { data: 'items_id', name:'items_id'},
+                            { data: 'item_name', name:'item_name'},
+                            { data: 'quantity', name:'quantity'},
+                            { data: 'serial', name:'serial'}
+                        ]
+                    });
+                }
+            });
 
-        };
-        if (trdata.status == 'SCHEDULED') {
+            function intrans() {
+                return $.ajax({
+                    type:'get',
+                    url: "/intransit/"+trdata.request_no,
+                    success:function(data)
+                    {
+                        intransit = data.data.length;
+                    },
+                });
+            }
+        }else if (trdata.status == 'SCHEDULED' || trdata.status == 'RESCHEDULED') {
             $('#printBtn').show();
             $('#reqlabel').remove();
             $('#intransitlabel').remove();
@@ -182,8 +236,7 @@ $(document).ready(function()
                     },
                 });
             }
-        }
-        if (trdata.status == 'PENDING') {
+        }else if (trdata.status == 'PENDING') {
             $('#prcBtn').show();
             $('.sched').hide();
             $('#sched').val('');
@@ -277,19 +330,23 @@ $(document).ready(function()
                 $('.notes').show();
                 $('#notes').text('The five days given to resolve the issue has lapsed [Since '+moment(trdata.updated_at).format("dddd, MMMM D, YYYY")+']. To resolve the issue a discussion with the warehouse team is recommended and input the remarks in the text field provided for the solution.');
             }
-            $('table.requestDetails').dataTable().fnDestroy();
+            $('#schedslabel').hide();
+            $('#reqlabel').hide();
             $('table.schedDetails').dataTable().fnDestroy();
+            $('table.requestDetails').dataTable().fnDestroy();
+            $('table.intransitDetails').dataTable().fnDestroy();
+            $('table.intransitDetails').show();
+            $('table.schedDetails').hide();
             $('table.requestDetails').hide();
-            $('table.schedDetails').show();
             $('.sched').show();
-            $('table.schedDetails').DataTable({ 
+            $('table.intransitDetails').DataTable({ 
                 "dom": 'rt',
                 "language": {
                     "emptyTable": " "
                 },
                 processing: true,
                 serverSide: true,
-                ajax: "/send/"+trdata.request_no,
+                ajax: "/intransit/"+trdata.request_no,
                 columnDefs: [
                     {"className": "dt-center", "targets": "_all"}
                 ],
@@ -305,7 +362,7 @@ $(document).ready(function()
 
     });
 });
-$(document).on("click", ".schedDetails tr", function() {
+$(document).on("click", ".intransitDetails tr", function() {
     if ($('#status').val() == 'UNRESOLVED' && $('#level').val() == 'Manager') {
         $('#remarksModal').modal('show');
         $('#requestModal').modal('hide');
