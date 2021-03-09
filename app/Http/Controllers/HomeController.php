@@ -51,6 +51,7 @@ class HomeController extends Controller
             $returns = Defective::wherein('status', ['For return', 'For receiving'])->where('branch_id', auth()->user()->branch->id)->count();
             $stockreq = StockRequest::where('branch_id', auth()->user()->branch->id)
                 ->wherein('status', ['PENDING', 'SCHEDULED'])
+                ->where('stat', '=', 'ACTIVE')
                 ->count();
             $sunits = Stock::where('status', 'service unit')->where('branch_id', auth()->user()->branch->id)->count();
             $loans = Loan::where('status', 'pending')->where('to_branch_id', auth()->user()->branch->id)->count();
@@ -58,7 +59,9 @@ class HomeController extends Controller
         }else if (auth()->user()->hasrole('Repair')){
             return view('pages.warehouse.return', compact('title'));
         }else{
-            $stockreq = StockRequest::where('status', 'PENDING')->count();
+            $stockreq = StockRequest::where('status', 'PENDING')
+                ->where('stat', '=', 'ACTIVE')
+                ->count();
             $units = Warehouse::where('status', 'in')->count();
             $returns = Defective::where('status', 'For receiving')->count();
             $unresolved = StockRequest::where('status', 'UNRESOLVED')->count();
