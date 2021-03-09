@@ -102,7 +102,7 @@ $('table.defectiveTable').DataTable().on('deselect', function () {
     table.button( 0 ).enable( selectedRows > 0 );
 });
 $(document).on('click', '.printBtn', function () {
-    var data = table.rows( { selected: true } ).data()
+    //var data = table.rows( { selected: true } ).data()
     var id = new Array();
     table.rows().every( function ( rowIdx, tableLoop, rowLoop ) {
         var data = this.data();
