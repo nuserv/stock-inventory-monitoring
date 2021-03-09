@@ -36,6 +36,7 @@ class HomeController extends Controller
             return redirect('logout');
         }
         StockRequest::wherein('status', ['4', 'INCOMPLETE'])->where( 'updated_at', '<', Carbon::now()->subDays(5))->update(['status' => 'UNRESOLVED']);
+        
         /*if ($mail) {
             $branch = Branch::where('id', $request->input('branch'))->first();
             $email = 'jerome.lopez.ge2018@gmail.com';

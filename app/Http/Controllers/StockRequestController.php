@@ -316,13 +316,16 @@ class StockRequestController extends Controller
         $user = auth()->user()->branch->id;
         if (auth()->user()->branch->branch != 'Warehouse'){
             $stock = StockRequest::wherein('status',  ['PARTIAL SCHEDULED', 'PARTIAL IN TRANSIT', 'PENDING', 'SCHEDULED', 'INCOMPLETE', 'RESCHEDULED', 'PARTIAL', 'IN TRANSIT'])
+                ->where('stat', 'ACTIVE')
                 ->where('branch_id', $user)
                 ->get();
         }else if(auth()->user()->hasRole('Editor', 'Manager')){
-            $stock = StockRequest::wherein('status',  ['PARTIAL SCHEDULED', 'PARTIAL IN TRANSIT', 'PENDING', 'SCHEDULED', 'INCOMPLETE', 'RESCHEDULED', 'UNRESOLVED', 'PARTIAL', 'RESOLVED', 'IN TRANSIT'])
+            $stock = StockRequest::wherein('status',  ['PARTIAL SCHEDULED', 'PARTIAL IN TRANSIT', 'PENDING', 'SCHEDULED', 'INCOMPLETE', 'RESCHEDULED', 'UNRESOLVED', 'PARTIAL', 'IN TRANSIT'])
+                ->where('stat', 'ACTIVE')
                 ->get();
         }else{
             $stock = StockRequest::wherein('status',  ['PARTIAL SCHEDULED', 'PARTIAL IN TRANSIT', 'PENDING', 'SCHEDULED', 'INCOMPLETE', 'RESCHEDULED', 'UNRESOLVED', 'PARTIAL', 'IN TRANSIT'])
+                ->where('stat', 'ACTIVE')
                 ->get();
             //dd($stock);
         }
@@ -416,6 +419,7 @@ class StockRequestController extends Controller
             $reqno->branch_id = auth()->user()->branch->id;
             $reqno->area_id = auth()->user()->area->id;
             $reqno->status = 'PENDING';
+            $reqno->stat = 'ACTIVE';
             $reqno->customer_id = $request->clientid;
             $reqno->customer_branch_id = $request->customerid;
             $reqno->ticket = $request->ticket;
@@ -463,7 +467,7 @@ class StockRequestController extends Controller
     {
         $resolve = StockRequest::where('request_no', $request->requestno)->first();
         $resolve->remarks = $request->remarks;
-        $resolve->status = 'RESOLVED';
+        $resolve->stat = 'RESOLVED';
         $data = $resolve->save();
         return response()->json($data);
     }
@@ -524,7 +528,7 @@ class StockRequestController extends Controller
             $data = '1';
         }else{
             $reqno = StockRequest::where('request_no', $request->reqno)->first();
-            $reqno->status = $request->status;
+            $reqno->stat = $request->status;
             $reqno->save();
         }
         return response()->json($data);

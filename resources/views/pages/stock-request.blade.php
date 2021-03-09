@@ -64,6 +64,10 @@
         </table>
     </div>
 @endif
+@if(auth()->user()->hasAnyRole('Head', 'Tech'))
+<input type="button" id="reqBtn" class="btn btn-primary" value="REQUEST STOCKS">
+<br><br><br>
+@endif
 <div>
     <ul class="legend">
         <li><span class="BLUE"></span> Urgent Service Stock Request (PENDING)</li><br>
@@ -73,7 +77,4 @@
         <li><span class="RED"></span> Unresolve and Incomplete issues</li>
     </ul>
 </div>
-@if(auth()->user()->hasAnyRole('Head', 'Tech'))
-<input type="button" id="reqBtn" class="btn btn-primary" value="REQUEST STOCKS">
-@endif
 @endsection

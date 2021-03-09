@@ -369,7 +369,7 @@ $(document).ready(function()
                     },
                 });
             }
-        }else if (trdata.status == 'PARTIAL SCHEDULED' && trdata.intransitval == '0') {
+        }else if (trdata.status == 'PARTIAL SCHEDULED' && (trdata.intransitval == '0' || !trdata.intransitval)) {
             $('#printBtn').hide();
             //$('#unresolveBtn').hide();
             $('#intransitlabel').remove();

@@ -131,10 +131,15 @@ $(document).on('click', '#reqBtn', function(){
             $('#sreqno').val(result);
         },
     });
-    $('#sendrequestModal').modal({backdrop: 'static', keyboard: false});
-
-    /*$('#loading').show()
-    var catop;
+    $('#loading').show()
+    setTimeout(function() { 
+        $('#loading').delay(2000).hide()
+        $('#sendrequestModal').modal({backdrop: 'static', keyboard: false}); 
+    }, 3000);
+    
+    
+    
+    /*var catop;
     $.ajax({
         type:'get',
         url:'checkStock',
@@ -175,6 +180,7 @@ $(document).on('click', '.add_item', function(){
                 $('#qty'+ rowcount).prop('disabled', true);
                 $('#reqfield').append(additem);
                 $('#category'+ rowcount).find('option').clone().appendTo('#category'+y);
+                console.log('pasok');
             }else{
                 alert("Please Select Item!");
             }
@@ -196,8 +202,10 @@ $(document).on('click', '.add_item', function(){
     }
     if (add == 0) {
         $('#send_sub_Btn').prop('disabled', true);
+        $('#requesttype').prop('disabled', false);
     }else{
         $('#send_sub_Btn').prop('disabled', false);
+        $('#requesttype').prop('disabled', true);
     }
 });
 $(document).on('click', '.send_sub_Btn', function(){
