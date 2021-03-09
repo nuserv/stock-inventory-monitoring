@@ -16,7 +16,8 @@ $(document).ready(function()
         "dom": 'lrtip',
         "pageLength": 50,
         "language": {
-            "emptyTable": " "
+            "emptyTable": "No data found!",
+            "info": "\"Showing _START_ to _END_ of _TOTAL_ Stock Request\"",
         },
         "order": [[ 6, 'asc'], [ 0, 'desc']],
         "columnDefs": [

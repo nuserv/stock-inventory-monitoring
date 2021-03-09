@@ -23,6 +23,7 @@ $(document).ready(function()
         "pageLength": 25,
         "language": {
             "emptyTable": 'No stock request found.',
+            "info": "\"Showing _START_ to _END_ of _TOTAL_ Stock Request\"",
             "processing": '<i class="fa fa-spinner fa-spin fa-3x fa-fw"></i><span class="sr-only">Searching...</span>'
         },
         processing: true,
