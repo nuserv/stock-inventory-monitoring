@@ -64,6 +64,15 @@
         </table>
     </div>
 @endif
+<div>
+    <ul class="legend">
+        <li><span class="BLUE"></span> Urgent Service Stock Request (PENDING)</li><br>
+        <li><span class="GREEN"></span> Stock Request (PENDING)</li><br>
+        <li><span class="MAGENTA"></span> Delivery Delays (SCHEDULED & PARTIAL SCHEDULED)</li><br>
+        <li><span class="GRAYROW"></span> (GRAY ROW) 24 Hours Delay (Urgent Service - PENDING)</li><br>
+        <li><span class="RED"></span> Unresolve and Incomplete issues</li>
+    </ul>
+</div>
 @if(auth()->user()->hasAnyRole('Head', 'Tech'))
 <input type="button" id="reqBtn" class="btn btn-primary" value="REQUEST STOCKS">
 @endif

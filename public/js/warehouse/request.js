@@ -43,9 +43,10 @@ $(document).ready(function()
     var table =
     $('table.requestTable').DataTable({ 
         "dom": 'lrtip',
-        "pageLength": 50,
+        "pageLength": 10,
         "language": {
-            "emptyTable": "No stock request found!"
+            "emptyTable": "No stock request found!",
+            "info": "\"Showing _START_ to _END_ of _TOTAL_ Stock Request\"",
         },
         "fnRowCallback": function(nRow, aData) {
         //"createdRow": function ( nRow, aData ) {

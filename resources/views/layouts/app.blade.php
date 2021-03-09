@@ -46,6 +46,15 @@
             input, select, textarea{
                 color: black;
             }
+            .legend { list-style: none; }
+            .legend li { float: left; margin-right: 10px; }
+            .legend span { border: 1px solid #ccc; float: left; width: 12px; height: 12px; margin: 2px; }
+            /* your colors */
+            .legend .BLUE { background-color: blue; }
+            .legend .GREEN { background-color: green; }
+            .legend .MAGENTA { background-color: darkmagenta; }
+            .legend .GRAYROW { background-color: gray; }
+            .legend .RED { background-color: #F1423A; }
         </style>
     </head>
     <body>
