@@ -570,15 +570,19 @@ class StockRequestController extends Controller
         if ($request->stat == 'ok') {
             $reqno = StockRequest::where('request_no', $request->reqno)->first();
             if ($reqno->status == 'PARTIAL IN TRANSIT') {
-                $reqno->intransitval == '1';
+                $reqno->intransitval = '1';
             }else {
                 if ($request->status == "PARTIAL SCHEDULED") {
-                    $reqno->intransitval == '1';
+                    $reqno->intransitval = '1';
                 }else {
-                    $reqno->intransitval == '0';
+                    $reqno->intransitval = '0';
                 }
             }
-            $reqno->status = $request->status;
+            if ($request->status == "COMPLETED" || $request->status == "RECOMPLETED") {
+                $reqno->stat = 'COMPLETED';
+            }else {
+                $reqno->status = $request->status;
+            }
             $reqno->schedule = $request->datesched;
             
             $reqno->save();
