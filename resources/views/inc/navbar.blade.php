@@ -50,15 +50,16 @@
                         <a class="nav-link {{ Request::is('loans') ? 'active' : '' }}" href="{{ route('loans') }}">Loans</a>
                     </li>
                 @endif
+                @if(!auth()->user()->hasrole('Tech'))
                 <li class="nav-item">
                     <a class="nav-link {{ Request::is('return') ? 'active' : '' }}" href="{{ route('return.index') }}">Returns</a>
                 </li>
+                @endif
                 @if(auth()->user()->hasanyrole('Manager', 'Editor', 'Head', 'Warehouse Manager'))
                     <li class="nav-item">
                         <a class="nav-link {{ Request::is('user') ? 'active' : '' }}" href="{{ url('user') }}">Users</a>
                     </li>
                 @endif
-                
             @endif
         </ul>
         <ul class="nav">

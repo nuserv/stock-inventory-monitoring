@@ -47,9 +47,20 @@ class UserController extends Controller
                 ->join('model_has_roles', 'model_id', '=', 'users.id')
                 ->where('role_id', '!=', '1')
                 ->get();
+        }else if(auth()->user()->hasrole('Warehouse Manager')){
+            $users = User::select('users.*')
+                ->where('id', '!=', auth()->user()->id)
+                ->join('model_has_roles', 'model_id', '=', 'users.id')
+                ->where('branch_id', auth()->user()->branch->id)
+                ->where('role_id', '!=', '1')
+                ->where('role_id', '!=', '4')
+                ->get();
         }else{
             $users = User::where('id', '!=', auth()->user()->id)
                 ->where('branch_id', auth()->user()->branch->id)
+                ->join('model_has_roles', 'model_id', '=', 'users.id')
+                ->where('role_id', '!=', '1')
+                ->where('role_id', '!=', '4')
                 ->get();
         }
         return DataTables::of($users)

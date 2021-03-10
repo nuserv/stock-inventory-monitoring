@@ -23,9 +23,13 @@ class DefectiveController extends Controller
     }
     public function index()
     {
+        
         $title = 'Defective Unit/Parts';
         $users = User::all();
         if (auth()->user()->branch->branch != 'Warehouse') {
+            if (auth()->user()->hasrole('Tech')) {
+                return redirect('/');
+            }
             return view('pages.branch.return', compact('users', 'title'));
         }else{
             return view('pages.warehouse.return', compact('users', 'title'));
@@ -53,7 +57,7 @@ class DefectiveController extends Controller
         $defective = Defective::select('defectives.updated_at', 'defectives.category_id', 'branch_id as branchid', 'defectives.id as id', 'items.item', 'items.id as itemid', 'defectives.serial', 'defectives.status')
             ->where('branch_id', auth()->user()->branch->id)
             ->join('items', 'defectives.items_id', '=', 'items.id')
-            ->wherein('status', ['For return', 'For receiving'])
+            ->where('defectives.status', 'For return')
             ->get();
         $waredef =Defective::select('branches.branch', 'defectives.category_id', 'branches.id as branchid', 'defectives.updated_at', 'defectives.id as id', 'items.item', 'items.id as itemid', 'defectives.serial', 'defectives.status')
             ->wherein('defectives.status', ['For receiving', 'Repaired', 'For Repair'])

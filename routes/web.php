@@ -44,7 +44,7 @@ Route::put('cbranch_update', 'CustomerController@branchupdate')->middleware('aja
 
 
 Route::put('return-update', 'DefectiveController@update')->middleware('ajax');
-Route::get('return-table', 'DefectiveController@table')->middleware('ajax');
+Route::get('return-table', 'DefectiveController@table');//->middleware('ajax');
 Route::get('printtable', 'DefectiveController@printtable')->middleware('ajax');
 Route::get('return', 'DefectiveController@index')->name('return.index');
 
@@ -72,7 +72,7 @@ Route::get('bcategory', 'StockController@bcategory')->middleware('ajax');
 Route::get('bitem', 'StockController@bitem')->middleware('ajax');
 Route::get('bserial/{id}', 'StockController@bserial')->middleware('ajax');
 Route::get('service-unit', 'StockController@service')->name('index.service-unit');
-Route::get('sUnit', 'StockController@serviceUnit')->middleware('ajax');
+Route::get('sUnit', 'StockController@serviceUnit');//->middleware('ajax');
 Route::get('pmsUnit', 'StockController@pmserviceUnit');//->middleware('ajax');
 Route::get('pclient-autocomplete', 'StockController@pautocompleteClient')->middleware('ajax');
 //Route::get('pmclient-autocomplete', 'StockController@pmautocompleteClient')->middleware('ajax');

@@ -22,10 +22,7 @@ $(document).ready(function()
             { data: 'description', name:'description'},
             { data: 'serial', name:'serial'},
             { data: 'serviceby', name:'serviceby'}
-        ],
-        select: {
-            style: 'single'
-        }
+        ]
     });
 });
 
@@ -45,6 +42,9 @@ $(document).on('click', '.close', function(){
 
 $(document).on("click", "#sUnitTable tr", function () {
     var trdata = sunit.row(this).data();
+    if (trdata.user_id != $('#userid').val()) {
+        return false;
+    }
     $('#service-inModal').modal({backdrop: 'static', keyboard: false});
     $('#inclient').val(trdata.client_name);
     $('#incustomer').val(trdata.customer_name);
@@ -66,7 +66,7 @@ $(document).on("click", "#sUnitTable tr", function () {
         },
     });
     $('#indesc').val(trdata.description);
-    $('#indescid').val(trdata.id);
+    $('#indescid').val(trdata.items_id);
     $('#inserial').hide();
     $('#inserial').val(trdata.serial);
     $('#inserial').prop('disabled', true);

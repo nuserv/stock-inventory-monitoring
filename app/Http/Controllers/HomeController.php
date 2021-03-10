@@ -26,7 +26,6 @@ class HomeController extends Controller
 {
     public function __construct()
     {
-        
         $this->middleware('auth');
     }
     public function index()
@@ -72,6 +71,18 @@ class HomeController extends Controller
     {
         $title = 'Activities';
         return view('pages.home', compact('title'));
+    }
+    public function myapi(Request $request)
+    {
+        $stockreq = StockRequest::where('id', $request->id)
+                ->wherein('status', ['PENDING', 'SCHEDULED'])
+                ->where('stat', '=', 'ACTIVE')
+                ->update(['stat' => 'mytest']);
+        $mystock = StockRequest::where('requests.id', $request->id)
+        ->wherein('requests.status', ['PENDING', 'SCHEDULED'])
+        ->join('branches', 'branches.id', 'branch_id')
+        ->first();
+        return $mystock->branch;
     }
     public function unrepair()
     {
