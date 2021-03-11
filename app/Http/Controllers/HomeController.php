@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Spatie\Activitylog\Models\Activity;
 use Spatie\Permission\Models\Role;
 use Yajra\DataTables\Facades\DataTables;
+use Route;
 use App\User;
 use App\Branch;
 use App\Item;
@@ -30,10 +31,16 @@ class HomeController extends Controller
     }
     public function index()
     {
-        $title = 'Dashboard';
         if (auth()->user()->status == '0') {
             return redirect('logout');
         }
+        $route = Route::current()->getname();
+        if ($route == 'disposed') {
+            $title = 'Disposed';
+            return view('pages.disposed', compact('title'));
+        }
+        
+        $title = 'Dashboard';
         StockRequest::wherein('status', ['4', 'INCOMPLETE'])->where( 'updated_at', '<', Carbon::now()->subDays(5))->update(['status' => 'UNRESOLVED']);
         
         /*if ($mail) {
@@ -45,7 +52,7 @@ class HomeController extends Controller
                 $message->from('noreply@ideaserv.com.ph', 'Add User - NO-REPLY'); 
             });
         }*/
-        if (auth()->user()->branch->branch != "Warehouse" && !auth()->user()->hasrole('Repair')) {
+        if (auth()->user()->branch->branch != "Warehouse" && !auth()->user()->hasanyrole('Repair', 'Returns Manager')) {
             $units = Stock::where('status', 'in')->where('branch_id', auth()->user()->branch->id)->count();
             $returns = Defective::wherein('status', ['For return', 'For receiving'])->where('branch_id', auth()->user()->branch->id)->count();
             $stockreq = StockRequest::where('branch_id', auth()->user()->branch->id)
@@ -57,6 +64,8 @@ class HomeController extends Controller
             return view('pages.home', compact('stockreq', 'units', 'returns', 'sunits', 'title', 'loans'));
         }else if (auth()->user()->hasrole('Repair')){
             return view('pages.warehouse.return', compact('title'));
+        }else if (auth()->user()->hasrole('Returns Manager')){
+            return view('pages.unrepair', compact('title'));
         }else{
             $stockreq = StockRequest::where('status', 'PENDING')
                 ->where('stat', '=', 'ACTIVE')

@@ -251,14 +251,20 @@
             <script src="{{asset('min/?f=js/customerbranch.js')}}"></script>
         @endif
 
-        @if(Request::is('/') && !auth()->user()->hasrole('Repair'))
+        @if(Request::is('/') && !auth()->user()->hasanyrole('Repair', 'Returns Manager'))
             <script src="{{asset('min/?f=js/home.js')}}"></script>
         @endif
         @if (Request::is('/') && auth()->user()->hasrole('Repair'))
             <script src="{{asset('min/?f=js/warehouse/defective.js')}}"></script>
         @endif
+        @if (Request::is('/') && auth()->user()->hasrole('Returns Manager'))
+            <script src="{{asset('min/?f=js/unrepair.js')}}"></script>
+        @endif
         @if(Request::is('log') && auth()->user()->hasrole('Repair'))
             <script src="{{asset('min/?f=js/home.js')}}"></script>
+        @endif
+        @if(Request::is('disposed') && auth()->user()->hasrole('Returns Manager'))
+            <script src="{{asset('min/?f=js/disposed.js')}}"></script>
         @endif
         @if(Request::is('unrepair') && auth()->user()->hasanyrole('Repair', 'Editor', 'Manager'))
             <script src="{{asset('min/?f=js/unrepair.js')}}"></script>

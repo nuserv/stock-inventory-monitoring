@@ -2,10 +2,10 @@
 
 @section('content')
 <div class="table-responsive">
-    <!--div style="float: right;" class="pt-3">
+    <div style="float: right;" class="pt-3">
         <b>SEARCH&nbsp;&nbsp;</b><a href="#" id="search-ic"><i class="fa fa-lg fa-search" aria-hidden="true"></i></a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-    </div-->
-    <table class="table unrepairTable" id="unrepairTable" style="font-size:80%">
+    </div>
+    <table class="table disposedTable" id="disposedTable" style="font-size:80%">
         <thead class="thead-dark">
             <tr class="tbsearch" style="display:none">
                 <td>
@@ -50,10 +50,6 @@
                 <th>
                     Status
                 </th>
-                @if(auth()->user()->hasrole('Returns Manager'))
-                    <th>
-                    </th>
-                @endif
             </tr>
         </thead>
     </table>

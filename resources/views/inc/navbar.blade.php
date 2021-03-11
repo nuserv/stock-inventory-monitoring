@@ -5,13 +5,17 @@
             <li class="nav-item">
                 <a class="nav-link {{ Request::is('/') ? 'active' : '' }}" href="{{ url('/') }}">Home</a>
             </li>
+            @if(auth()->user()->hasrole('Returns Manager'))
+                <li class="nav-item">
+                    <a class="nav-link {{ Request::is('disposed') ? 'active' : '' }}" href="{{ url('/disposed') }}">Disposed</a>
+                </li>
+            @endif
             @if(auth()->user()->hasrole('Repair'))
-                
                 <li class="nav-item">
                     <a class="nav-link {{ Request::is('unrepair') ? 'active' : '' }}" href="{{ url('/unrepair') }}">Unrepairable</a>
                 </li>
             @endif
-            @if(!auth()->user()->hasrole('Repair'))
+            @if(!auth()->user()->hasanyrole('Repair', 'Returns Manager'))
                 <li class="nav-item">
                     <a class="nav-link {{ Request::is('branch') ? 'active' : '' }}" href="{{ route('branch.index') }}">Service Center</a>
                 </li>

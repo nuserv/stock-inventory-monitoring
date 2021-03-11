@@ -72,6 +72,7 @@ $(document).on("click", "#defectiveTable tr", function() {
     if (trdata.status == 'For receiving') {
         $('#submit_Btn').val('Received');
         $('#submit_Btn').show();
+        $('#unrepair_Btn').hide();
     } else if (trdata.status == 'For repair' && $('#level').val() == 'Repair') {
         $('#submit_Btn').val('Repaired');
         $('#submit_Btn').show();
@@ -91,10 +92,10 @@ $(document).on('click', '#submit_Btn', function() {
     if (sub > 0) {
         return false;
     }
+    $('#returnModal').modal('hide');
     $('#loading').show();
     var branch = $('#branch_id').val();
     var id = $('#myid').val();
-    var status = $('#submit_Btn').val();
     if ($('#submit_Btn').val() == 'Received') {
         sub++;
         $.ajax({
@@ -107,7 +108,7 @@ $(document).on('click', '#submit_Btn', function() {
             data: {
                 id: id,
                 branch: branch,
-                status: status
+                status: 'Received'
             },
             success: function(data) {
                 location.reload();
@@ -129,7 +130,7 @@ $(document).on('click', '#submit_Btn', function() {
             data: {
                 id: id,
                 branch: branch,
-                status: status
+                status: 'Repaired'
             },
             success: function(data) {
                 location.reload();
@@ -141,7 +142,6 @@ $(document).on('click', '#submit_Btn', function() {
     }
     if ($('#submit_Btn').val() == 'Add to stock') {
         sub++;
-        status = 'warehouse';
         $.ajax({
             url: 'return-update',
             headers: {
@@ -152,7 +152,7 @@ $(document).on('click', '#submit_Btn', function() {
             data: {
                 id: id,
                 branch: branch,
-                status: status
+                status: 'warehouse'
             },
             success: function() {
                 location.reload();
@@ -174,10 +174,10 @@ $(document).on('click', '#unrepair_Btn', function() {
     if (sub > 0) {
         return false;
     }
+    $('#returnModal').modal('hide');
     $('#loading').show();
     var branch = $('#branch_id').val();
     var id = $('#myid').val();
-    var status = 'unrepairable';
     sub++;
     $.ajax({
         url: 'return-update',
@@ -189,9 +189,9 @@ $(document).on('click', '#unrepair_Btn', function() {
         data: {
             id: id,
             branch: branch,
-            status: status
+            status: 'Unrepairable approval'
         },
-        success: function(data) {
+        success: function() {
             location.reload();
         },
         error: function(data) {

@@ -16,6 +16,7 @@ var requestgo;
 var reqnumber;
 var valpartial;
 var valid = 'yes';
+var table;
 
 $(document).ready(function()
 {
@@ -40,7 +41,7 @@ $(document).ready(function()
     $('#date').val(months[d.getMonth()]+' '+d.getDate()+', ' +d.getFullYear()+' '+hour+':'+String(d.getMinutes()).padStart(2, '0')+ampm);
     $('#sdate').val(months[d.getMonth()]+' '+d.getDate()+', ' +d.getFullYear()+' '+hour+':'+String(d.getMinutes()).padStart(2, '0')+ampm);
 
-    var table =
+    table =
     $('table.requestTable').DataTable({ 
         "dom": 'lrtip',
         "pageLength": 10,
@@ -1063,19 +1064,7 @@ $(document).ready(function()
     });
 });
 $(document).on("keyup", "#searchall", function () {
-    if ($('#searchall').val()) {
-        searchtable.columns(2).search(this.value).draw();
-        //searchtable.search(this.value).draw();
-        $('#searchtable').show();
-        $('#salltable').show();
-        $('#requestdiv').hide();
-        $('#requestTable').hide();
-    }else{
-        $('#searchtable').hide();
-        $('#salltable').hide();
-        $('#requestdiv').show();
-        $('#requestTable').show();
-    }
+    table.search(this.value).draw();
 });
 
 var th = ['','thousand','million', 'billion','trillion'];

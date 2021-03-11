@@ -34,7 +34,9 @@
                         <div class="col-md-8">
                             <select id="requesttype" class="form-control requesttype" style="color: black;">
                                 <option selected disabled>select type</option>
-                                <option value="Stock">Stock</option>
+                                @if(auth()->user()->hasrole('Head'))
+                                    <option value="Stock">Stock</option>
+                                @endif
                                 <option value="Service">Service</option>
                             </select>
                         </div>

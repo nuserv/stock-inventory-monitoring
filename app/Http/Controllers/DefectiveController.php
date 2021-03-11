@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Yajra\DataTables\Facades\DataTables;
 use App\User;
+use Route;
 use App\Defective;
 use App\Branch;
 use App\Item;
@@ -60,16 +61,16 @@ class DefectiveController extends Controller
             ->where('defectives.status', 'For return')
             ->get();
         $waredef =Defective::select('branches.branch', 'defectives.category_id', 'branches.id as branchid', 'defectives.updated_at', 'defectives.id as id', 'items.item', 'items.id as itemid', 'defectives.serial', 'defectives.status')
-            ->wherein('defectives.status', ['For receiving', 'Repaired', 'For Repair'])
+            ->where('defectives.status', 'Repaired')
             ->join('items', 'defectives.items_id', '=', 'items.id')
             ->join('branches', 'defectives.branch_id', '=', 'branches.id')
             ->get();
         $repair = Defective::select('branches.branch', 'defectives.category_id', 'branches.id as branchid', 'defectives.updated_at', 'defectives.id as id', 'items.item', 'items.id as itemid', 'defectives.serial', 'defectives.status')
-            ->wherein('defectives.status', ['For repair', 'Repaired'])
+            ->wherein('defectives.status', ['For receiving', 'For repair', 'Repaired'])
             ->join('items', 'defectives.items_id', '=', 'items.id')
             ->join('branches', 'defectives.branch_id', '=', 'branches.id')
             ->get();
-        if (auth()->user()->branch->branch == 'Warehouse' && !auth()->user()->hasrole('Repair')) {
+        if (auth()->user()->branch->branch == 'Warehouse' && !auth()->user()->hasanyrole('Repair', 'Returns Manager')) {
             $data = $waredef;
         }else if (auth()->user()->branch->branch == 'Warehouse' && auth()->user()->hasrole('Repair')){
             $data = $repair;
@@ -84,16 +85,36 @@ class DefectiveController extends Controller
             $cat = Category::where('id', $data->category_id)->first();
             return $cat->category;
         })
+        ->addColumn('status', function (Defective $data){
+            return $data->status;
+        })
         ->make(true);
     }
     public function unrepairable()
     {
         $repair = Defective::select('branches.branch', 'defectives.category_id', 'branches.id as branchid', 'defectives.updated_at', 'defectives.id as id', 'items.item', 'items.id as itemid', 'defectives.serial', 'defectives.status')
-            ->where('defectives.status', 'unrepairable')
+            ->wherein('defectives.status', ['Unrepairable', 'Unrepairable approval'])
             ->join('items', 'defectives.items_id', '=', 'items.id')
             ->join('branches', 'defectives.branch_id', '=', 'branches.id')
             ->get();
         return DataTables::of($repair)
+        ->addColumn('date', function (Defective $data){
+            return $data->updated_at->toFormattedDateString().' '.$data->updated_at->toTimeString();
+        })
+        ->addColumn('category', function (Defective $data){
+            $cat = Category::where('id', $data->category_id)->first();
+            return $cat->category;
+        })
+        ->make(true);
+    }
+    public function disposed()
+    {
+        $disposed = Defective::select('branches.branch', 'defectives.category_id', 'branches.id as branchid', 'defectives.updated_at', 'defectives.id as id', 'items.item', 'items.id as itemid', 'defectives.serial', 'defectives.status')
+            ->where('defectives.status', 'Disposed')
+            ->join('items', 'defectives.items_id', '=', 'items.id')
+            ->join('branches', 'defectives.branch_id', '=', 'branches.id')
+            ->get();
+        return DataTables::of($disposed)
         ->addColumn('date', function (Defective $data){
             return $data->updated_at->toFormattedDateString().' '.$data->updated_at->toTimeString();
         })
@@ -177,17 +198,59 @@ class DefectiveController extends Controller
                 $data = $log->save();
                 return response()->json($data);
             }
-            if ($request->status == 'unrepairable') {
+            if ($request->status == 'Unrepairable approval') {
                 $unreapairable = Defective::where('id', $request->id)
                     ->where('branch_id', $request->branch)
                     ->where('status', 'For repair')
                     ->first();
-                $unreapairable->status = "unrepairable";
+                $unreapairable->status = "Unrepairable approval";
                 $unreapairable->save();
                 $item = Item::where('id', $unreapairable->items_id)->first();
                 $cat = Category::where('id', $item->category_id)->first();
                 $log = new UserLog;
-                $log->activity = "Marked $item->item($unreapairable->serial) as unreapairabled." ;
+                $log->activity = "Marked $item->item($unreapairable->serial) as unreapairable and subject for approval." ;
+                $log->user_id = auth()->user()->id;
+                $unreapairable->save();
+                $data = $log->save();
+                return response()->json($data);
+            }
+            if ($request->status == 'approved') {
+                $unreapairable = Defective::where('id', $request->id)
+                    ->first();
+                $unreapairable->status = "Unrepairable";
+                $unreapairable->save();
+                $item = Item::where('id', $unreapairable->items_id)->first();
+                $cat = Category::where('id', $item->category_id)->first();
+                $log = new UserLog;
+                $log->activity = "Marked $item->item($unreapairable->serial) as unreapairable and ready to dispose." ;
+                $log->user_id = auth()->user()->id;
+                $unreapairable->save();
+                $data = $log->save();
+                return response()->json($data);
+            }
+            if ($request->status == 'dispose') {
+                $unreapairable = Defective::where('id', $request->id)
+                    ->first();
+                $unreapairable->status = "Disposed";
+                $unreapairable->save();
+                $item = Item::where('id', $unreapairable->items_id)->first();
+                $cat = Category::where('id', $item->category_id)->first();
+                $log = new UserLog;
+                $log->activity = "Marked $item->item($unreapairable->serial) as dispose" ;
+                $log->user_id = auth()->user()->id;
+                $unreapairable->save();
+                $data = $log->save();
+                return response()->json($data);
+            }
+            if ($request->status == 'return') {
+                $unreapairable = Defective::where('id', $request->id)
+                    ->first();
+                $unreapairable->status = "For repair";
+                $unreapairable->save();
+                $item = Item::where('id', $unreapairable->items_id)->first();
+                $cat = Category::where('id', $item->category_id)->first();
+                $log = new UserLog;
+                $log->activity = "Return $item->item($unreapairable->serial) to Repair" ;
                 $log->user_id = auth()->user()->id;
                 $unreapairable->save();
                 $data = $log->save();

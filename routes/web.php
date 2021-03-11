@@ -22,11 +22,13 @@ Route::get('/', 'HomeController@index')->name('home.index');
 //Route::get('/home', 'HomeController@index')->name('home.indexs');
 Route::get('/log', 'HomeController@log')->middleware('ajax');
 Route::get('/unrepair', 'HomeController@unrepair')->name('index.unrepair');
-Route::get('/unrepairable', 'DefectiveController@unrepairable')->middleware('ajax');
+Route::get('/disposed', 'HomeController@index')->name('disposed');
+Route::get('/dispose', 'DefectiveController@disposed')->name('dispose');//->middleware('ajax');
+Route::get('/unrepairable', 'DefectiveController@unrepairable');//->middleware('ajax');
 
 
 
-//Route::get('service_center', 'BranchController@index');
+//Route::get('service_center', 'BranchController@index');unrepairable
 //Route::get('service_units', 'HomeController@service_units');
 //Route::get('spare_parts', 'HomeController@spare_parts');
 Route::get('activity', 'HomeController@activity')->middleware('ajax');

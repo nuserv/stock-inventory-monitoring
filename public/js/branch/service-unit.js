@@ -43,7 +43,9 @@ $(document).on('click', '.close', function(){
 $(document).on("click", "#sUnitTable tr", function () {
     var trdata = sunit.row(this).data();
     if (trdata.user_id != $('#userid').val()) {
-        return false;
+        if ($('#userlevel').val() != 'Head') {
+            return false;
+        }
     }
     $('#service-inModal').modal({backdrop: 'static', keyboard: false});
     $('#inclient').val(trdata.client_name);

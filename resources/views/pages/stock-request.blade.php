@@ -3,7 +3,7 @@
 @section('content')
 @if(auth()->user()->hasrole('Warehouse Manager'))
     <form class="search-form" action="#" style="margin:auto;max-width:300px">
-    <input type="text" placeholder="Search serial.." id="searchall" size="50" autocomplete="off">
+    <input type="text" placeholder="Search.." id="searchall" size="50" autocomplete="off">
     </form>
 @endif
 <div class="table" id="requestdiv">

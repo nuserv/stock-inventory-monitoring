@@ -65,6 +65,7 @@
                                     @endif
                                     <option value="Editor">Editor</option>
                                     <option value="Warehouse Manager">Warehouse Manager</option>
+                                    <option value="Returns Manager">Returns Manager</option>
                                     <option value="Head">Head</option>
                                     <option value="Repair">Repair</option>
                                     <option value="Tech">Tech</option>

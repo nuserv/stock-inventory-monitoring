@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
-@if(!auth()->user()->hasrole('Repair'))
+@if(!auth()->user()->hasrole('Repair', 'Returns Manager'))
 <div class="container pt-5">
     <div class="container-fluid">
         <div class="row">
