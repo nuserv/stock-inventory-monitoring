@@ -607,6 +607,7 @@ class StockRequestController extends Controller
                 $reqno = StockRequest::where('request_no', $request->reqno)->first();
                 $reqno->status = $request->status;
                 $reqno->schedule = $request->datesched;
+                PreparedItem::where('request_no', $request->reqno)->update(['schedule' => $request->datesched]);
                 $data = $reqno->save();
             }else if($request->status == 'UNRESOLVED') {
                 $reqno = StockRequest::where('request_no', $request->reqno)->first();

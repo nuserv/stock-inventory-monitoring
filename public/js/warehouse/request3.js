@@ -105,7 +105,7 @@ $(document).on('click', '#printBtn', function(){
 });
 
 $(document).on('click', '#unresolveBtn', function(){
-    var status = "6";
+    var status = "UNRESOLVED";
     var reqno = reqnumber;
     var stat = "resched";
     $.ajax({
@@ -134,7 +134,7 @@ $(document).on('click', '#resched_btn', function(){
     var datesched = $('#resched').val();
     var reqno = reqnumber;
     var stat = "resched";
-    var status = "5";
+    var status = "RESCHEDULED";
     $.ajax({
         url: 'update',
         headers: {
