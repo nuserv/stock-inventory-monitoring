@@ -71,8 +71,8 @@ class HomeController extends Controller
                 ->where('stat', '=', 'ACTIVE')
                 ->count();
             $units = Warehouse::where('status', 'in')->count();
-            $returns = Defective::where('status', 'For receiving')->count();
-            $unresolved = StockRequest::where('status', 'UNRESOLVED')->count();
+            $returns = Defective::where('status', 'Repaired')->count();
+            $unresolved = StockRequest::where('status', 'UNRESOLVED')->where('stat', 'ACTIVE')->count();
             return view('pages.home', compact('stockreq', 'units', 'returns', 'title', 'unresolved'));
         }
     }

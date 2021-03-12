@@ -149,7 +149,7 @@ class DefectiveController extends Controller
         })
         ->addColumn('mydate', function (Defective $data){
 
-            return Carbon::parse($data->updated_at)->format('Y/m/d');
+            return Carbon::parse($data->updated_at)->format('m/d/Y');
         })
         ->addColumn('category', function (Defective $data){
             $cat = Category::where('id', $data->category_id)->first();

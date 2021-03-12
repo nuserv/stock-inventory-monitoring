@@ -5,14 +5,15 @@
     <b>SEARCH&nbsp;&nbsp;</b><a href="#" id="search-ic"><i class="fa fa-lg fa-search" aria-hidden="true"></i></a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 </div><br><br><br-->
 <div class="container pt-3">
-    <div class="col-md-4 pull-right">
+<div class="printBtn"></div>
+    <div class="pull-right">
         <div class="input-group input-daterange">
             <input type="text" id="min-date" readonly="readonly" class="form-control date-range-filter" placeholder="From:" autocomplete="off">
         <div class="input-group-addon">to</div>
             <input type="text" id="max-date" readonly="readonly" class="form-control date-range-filter" placeholder="To:" autocomplete="off"><button id="goBtn" class="btn btn-primary">Search</button>
         </div>
     </div>
-</div>
+</div><br><br>
 <div class="table-responsive">
     <table class="table disposedTable" id="disposedTable" style="font-size:80%">
         <thead class="thead-dark">

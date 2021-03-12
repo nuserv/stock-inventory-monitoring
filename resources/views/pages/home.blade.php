@@ -65,7 +65,7 @@
                     <div class="card @if($unresolved > 0)bg-card-red @else bg-card @endif">
                         <div class="card-body text-center">
                             <p class="card-text">UNRESOLVED</p>
-                            <p class="card-text">@if($unresolved > 0){{ $unresolved }} @else {{ $stockreq }} @endif</p>
+                            <p class="card-text">@if($unresolved > 0){{ $unresolved }} @else {{ $unresolved }} @endif</p>
                         </div>
                     </div>
                 </a>

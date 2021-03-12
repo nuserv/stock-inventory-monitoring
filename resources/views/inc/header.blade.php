@@ -6,7 +6,7 @@
         <a href="{{route('change.password')}}">
             <div class="p-2 ml-auto" style="text-align: right;">
                     <p style="color: #0d1a80">{{ auth()->user()->name}} {{ auth()->user()->lastname}}</p>
-                    <p style="color: #0d1a80">{{ auth()->user()->branch->branch}}</p>
+                    <p style="color: #0d1a80">{{ auth()->user()->roles->first()->name}} - {{ auth()->user()->branch->branch}}</p>
                     <p style="color: #0d1a80">{{Carbon\Carbon::now()->toDayDateTimeString()}}</p>
                     <input type="text" id="userlog" value="{{ auth()->user()->name}} {{ auth()->user()->lastname}}" hidden>   
                     <input type="text" id="userid" value="{{ auth()->user()->id}}" hidden>   
