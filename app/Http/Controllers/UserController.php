@@ -140,6 +140,7 @@ class UserController extends Controller
         $validator = Validator::make($request->all(), [
             'first_name' => ['required', 'string', 'min:3', 'max:255'],
             'last_name' => ['required', 'string', 'min:3', 'max:255'],
+            'middle_name' => ['required', 'string', 'min:3', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255'],
             'branch' => ['required', 'string'],
             'area' => ['required', 'string'],
@@ -153,6 +154,7 @@ class UserController extends Controller
             $user->lastname = ucwords(strtolower($request->input('last_name')));
             $user->email = $request->input('email');
             $user->area_id = $request->input('area');
+            $user->middlename = ucwords(strtolower($request->input('middle_name')));
             $user->branch_id = $request->input('branch');
             $user->status = $request->input('status');
             $data = $user->save();
