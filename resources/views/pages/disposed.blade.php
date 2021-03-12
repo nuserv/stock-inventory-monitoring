@@ -7,9 +7,9 @@
 <div class="container pt-3">
     <div class="col-md-4 pull-right">
         <div class="input-group input-daterange">
-            <input type="text" id="min-date" class="form-control date-range-filter" placeholder="From:" autocomplete="off">
+            <input type="text" id="min-date" readonly="readonly" class="form-control date-range-filter" placeholder="From:" autocomplete="off">
         <div class="input-group-addon">to</div>
-            <input type="text" id="max-date" class="form-control date-range-filter" placeholder="To:" autocomplete="off"><button id="goBtn" class="btn btn-primary">Search</button>
+            <input type="text" id="max-date" readonly="readonly" class="form-control date-range-filter" placeholder="To:" autocomplete="off"><button id="goBtn" class="btn btn-primary">Search</button>
         </div>
     </div>
 </div>

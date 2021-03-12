@@ -1,11 +1,21 @@
 var table;
+var mydate = '';
+var disposed;
 $(document).ready(function()
 {
+    
     $("#min-date").datepicker({
-        "dateFormat": "yy/mm/dd"
+        "dateFormat": "yy/mm/dd",
+        onSelect: function(dateStr) {
+            var min = $(this).datepicker('getDate') || new Date(); // Selected date or today if none
+            $('#max-date').datepicker('option', {minDate: min});
+        },
+        maxDate: '0',
     })
     $("#max-date").datepicker({
-        "dateFormat": "yy/mm/dd"
+        "dateFormat": "yy/mm/dd",
+        minDate: '+0',
+        maxDate: '0',
     })
 
     table =
@@ -45,7 +55,6 @@ $(document).ready(function()
             .draw();
         }
         $('.tbsearch').toggle();
-        
     });
 
     $('.filter-input').keyup(function() { 
@@ -54,6 +63,41 @@ $(document).ready(function()
             .draw();
     });
 });
+var startdate = '';
+var enddate = '';
+$('#max-date').on("change", function () { 
+    console.log($('#max-date').val());
+    if (!$('#min-date').val()) {
+        $(this).val('');
+        alert('select start Date first!');
+        return false;
+    }
+    enddate = $('#max-date').val();
+});
+$('#min-date').on("change", function () { 
+    startdate = $('#min-date').val();
+    if (!$('#min-date').val()) {
+        $(this).val('');
+        alert('select start Date first!');
+        return false;
+    }
+});
+
+$(document).on("click", "#goBtn", function() {
+    if (!$('#min-date').val() || !$('#max-date').val()) {
+        alert('select Date first!');
+        return false;
+    }
+    table
+    .rows( function ( idx, data, node ) {
+        if (data.mydate != startdate || data.mydate != enddate){
+            return idx;
+        };
+    } )
+    .remove()
+    .draw();
+});
+
 $(document).on("click", ".approveBtn", function() {
     var returnid = $(this).attr('return_id');
     console.log(returnid);

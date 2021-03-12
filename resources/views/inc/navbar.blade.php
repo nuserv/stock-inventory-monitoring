@@ -19,7 +19,7 @@
                 <li class="nav-item">
                     <a class="nav-link {{ Request::is('branch') ? 'active' : '' }}" href="{{ route('branch.index') }}">Service Center</a>
                 </li>
-                @if(auth()->user()->branch->branch != 'Warehouse')
+                @if(auth()->user()->branch->branch != 'Warehouse' && auth()->user()->branch->branch != 'Main-Office')
                     <li class="nav-item">
                         <a class="nav-link {{ Request::is('customer') ? 'active' : '' }} {{ Request::is('customer/*') ? 'active' : '' }}" href="{{ url('customer') }}">Customer</a>
                     </li>
@@ -38,12 +38,7 @@
                     </li>
                 @endif
                 
-                @role('Manager')
-                    <li class="nav-item">
-                        <a class="nav-link {{ Request::is('unrepair') ? 'active' : '' }}" href="{{ url('/unrepair') }}">Unrepairable</a>
-                    </li>
-                @endrole
-                @if(auth()->user()->branch->branch != 'Warehouse')
+                @if(auth()->user()->branch->branch != 'Warehouse' && auth()->user()->branch->branch != 'Main-Office')
                     <li class="nav-item">
                         <a class="nav-link {{ Request::is('service-unit') ? 'active' : '' }}" href="{{ route('index.service-unit') }}">Service IN / OUT</a>
                     </li>

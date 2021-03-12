@@ -66,6 +66,11 @@ class DefectiveController extends Controller
             ->join('items', 'defectives.items_id', '=', 'items.id')
             ->join('branches', 'defectives.branch_id', '=', 'branches.id')
             ->get();
+        $main =Defective::select('branches.branch', 'defectives.category_id', 'branches.id as branchid', 'defectives.updated_at', 'defectives.id as id', 'items.item', 'items.id as itemid', 'defectives.serial', 'defectives.status')
+            ->wherein('defectives.status', ['Repaired', 'For Repair'])
+            ->join('items', 'defectives.items_id', '=', 'items.id')
+            ->join('branches', 'defectives.branch_id', '=', 'branches.id')
+            ->get();
         $repair = Defective::select('branches.branch', 'defectives.category_id', 'branches.id as branchid', 'defectives.updated_at', 'defectives.id as id', 'items.item', 'items.id as itemid', 'defectives.serial', 'defectives.status')
             ->wherein('defectives.status', ['For receiving', 'For repair', 'Repaired'])
             ->join('items', 'defectives.items_id', '=', 'items.id')
@@ -75,6 +80,8 @@ class DefectiveController extends Controller
             $data = $waredef;
         }else if (auth()->user()->branch->branch == 'Warehouse' && auth()->user()->hasrole('Repair')){
             $data = $repair;
+        }else if (auth()->user()->branch->branch == 'Main-Office'){
+            $data = $main;
         }else{
             $data = $defective;
         }
@@ -101,6 +108,27 @@ class DefectiveController extends Controller
         return DataTables::of($repair)
         ->addColumn('date', function (Defective $data){
             return $data->updated_at->toFormattedDateString().' '.$data->updated_at->toTimeString();
+        })
+        ->addColumn('category', function (Defective $data){
+            $cat = Category::where('id', $data->category_id)->first();
+            return $cat->category;
+        })
+        ->make(true);
+    }
+    public function sdisposed($request)
+    {
+        $disposed = Defective::select('branches.branch', 'defectives.category_id', 'branches.id as branchid', 'defectives.updated_at', 'defectives.id as id', 'items.item', 'items.id as itemid', 'defectives.serial', 'defectives.status')
+            ->where('defectives.status', 'Disposed')
+            ->join('items', 'defectives.items_id', '=', 'items.id')
+            ->join('branches', 'defectives.branch_id', '=', 'branches.id')
+            ->get();
+        return DataTables::of($disposed)
+        ->addColumn('date', function (Defective $data){
+            return $data->updated_at->toFormattedDateString().' '.$data->updated_at->toTimeString();
+        })
+        ->addColumn('mydate', function (Defective $data){
+
+            return Carbon::parse($data->updated_at)->format('Y/m/d');
         })
         ->addColumn('category', function (Defective $data){
             $cat = Category::where('id', $data->category_id)->first();

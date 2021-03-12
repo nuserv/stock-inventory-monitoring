@@ -52,7 +52,7 @@ class HomeController extends Controller
                 $message->from('noreply@ideaserv.com.ph', 'Add User - NO-REPLY'); 
             });
         }*/
-        if (auth()->user()->branch->branch != "Warehouse" && !auth()->user()->hasanyrole('Repair', 'Returns Manager')) {
+        if (auth()->user()->branch->branch != "Warehouse" && auth()->user()->branch->branch != 'Main-Office' && !auth()->user()->hasanyrole('Repair', 'Returns Manager')) {
             $units = Stock::where('status', 'in')->where('branch_id', auth()->user()->branch->id)->count();
             $returns = Defective::wherein('status', ['For return', 'For receiving'])->where('branch_id', auth()->user()->branch->id)->count();
             $stockreq = StockRequest::where('branch_id', auth()->user()->branch->id)

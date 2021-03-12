@@ -33,7 +33,7 @@ $(document).ready(function()
         $('table.unrepairTable').DataTable({ 
             "dom": 'lrtip',
             "language": {
-                "emptyTable": " "
+                "emptyTable": "No data found!"
             },
             "order": [[ 0, "desc", ]],
             processing: true,

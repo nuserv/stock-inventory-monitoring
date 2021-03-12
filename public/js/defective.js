@@ -5,7 +5,7 @@ $(document).ready(function()
     $('table.defectiveTable').DataTable({ 
         "dom": 'lrtip',
         "language": {
-            "emptyTable": " "
+            "emptyTable": "No data found!"
         },
         processing: true,
         serverSide: true,

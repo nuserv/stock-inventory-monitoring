@@ -24,6 +24,7 @@ Route::get('/log', 'HomeController@log')->middleware('ajax');
 Route::get('/unrepair', 'HomeController@unrepair')->name('index.unrepair');
 Route::get('/disposed', 'HomeController@index')->name('disposed');
 Route::get('/dispose', 'DefectiveController@disposed')->name('dispose');//->middleware('ajax');
+Route::get('/sdispose', 'DefectiveController@sdisposed')->name('sdispose');//->middleware('ajax');
 Route::get('/unrepairable', 'DefectiveController@unrepairable');//->middleware('ajax');
 
 

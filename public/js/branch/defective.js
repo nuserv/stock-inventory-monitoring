@@ -118,6 +118,7 @@ $('table.defectiveTable').DataTable().on('deselect', function () {
     }
     
 });
+
 $(document).on('click', '.printBtn', function () {
     var data = table.rows( { selected: true } ).data()
     var id = new Array();

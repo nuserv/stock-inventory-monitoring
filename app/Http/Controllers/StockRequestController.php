@@ -314,7 +314,7 @@ class StockRequestController extends Controller
     public function getRequests()
     {
         $user = auth()->user()->branch->id;
-        if (auth()->user()->branch->branch != 'Warehouse'){
+        if (auth()->user()->branch->branch != 'Warehouse' && auth()->user()->branch->branch != 'Main-Office'){
             $stock = StockRequest::wherein('status',  ['PARTIAL SCHEDULED', 'PARTIAL IN TRANSIT', 'PENDING', 'SCHEDULED', 'INCOMPLETE', 'RESCHEDULED', 'PARTIAL', 'IN TRANSIT'])
                 ->where('stat', 'ACTIVE')
                 ->where('branch_id', $user)
