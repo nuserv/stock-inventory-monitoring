@@ -89,6 +89,9 @@ $('table.defectiveTable').DataTable().on('select', function () {
     if(rowselected.length > 0){
         $('#returnBtn').prop('disabled', false);
     }
+    if ( $('#returnBtn').val() ==  'CREATE LIST' && table.rows( { selected: true } ).count() == 0) {
+        $('#returnBtn').prop('disabled', true);
+    }
     var selectedRows = table.rows( { selected: true } ).count();
 
     table.button( 0 ).enable( selectedRows > 0 );
@@ -100,23 +103,37 @@ $('table.defectiveTable').DataTable().on('deselect', function () {
     }
     var selectedRows = table.rows( { selected: true } ).count();
     table.button( 0 ).enable( selectedRows > 0 );
+    var ret = table.data();
+    
+    if(ret.length > 0){
+        for(var i=0;i<ret.length;i++){
+            if (ret[i].status == "For return") {
+                $('#returnBtn').prop('disabled', false);
+                return false;
+            }
+        }  
+    }
+    if ( $('#returnBtn').val() ==  'CREATE LIST' && table.rows( { selected: true } ).count() == 0) {
+        $('#returnBtn').prop('disabled', true);
+    }
+    
 });
 $(document).on('click', '.printBtn', function () {
-    //var data = table.rows( { selected: true } ).data()
+    var data = table.rows( { selected: true } ).data()
     var id = new Array();
-    table.rows().every( function ( rowIdx, tableLoop, rowLoop ) {
+    /*table.rows().every( function ( rowIdx, tableLoop, rowLoop ) {
         var data = this.data();
         if (data.status == "For return") {
             id.push(data.id);
         }
-    });
-    /*if(data.length > 0){
+    });*/
+    if(data.length > 0){
         for(var i=0;i<data.length;i++){
             if (data[i].status == "For return") {
                 id.push(data[i].id);
             }
         }  
-    }*/
+    }
     $('#loading').show();
     $.ajax({
         url: 'return-update',
@@ -214,13 +231,17 @@ $(document).on('click', '#returnBtn', function(){
                     }
                 }
             },
+            select: {
+                style: 'multi',
+                selector: 'td:first-child'
+            },
             "pageLength": 25,
             columnDefs: [
                 {
                 orderable: false,
                 className: 'select-checkbox',      
                 targets: 0,
-                visible: false
+                visible: true
                 }
             ],
             ajax: {
@@ -240,6 +261,7 @@ $(document).on('click', '#returnBtn', function(){
                 { data: 'serial', name:'serial'},
                 { data: 'status', name:'status'}
             ],
+            
             buttons: {
                 dom: {
                     button: {
@@ -251,7 +273,7 @@ $(document).on('click', '#returnBtn', function(){
                         extend: 'print',
                         className: 'btn btn-primary',
                         titleAttr: 'Submit and print preview',
-                        enabled: true,
+                        enabled: false,
                         text: '<span class="icon text-white-50"><i class="fa fa-print" style="color:white"></i></span><span> SUBMIT</span>',
                         customize: function (doc) {
                             var d = new Date();

@@ -229,10 +229,10 @@ class StockRequestController extends Controller
     }
     public function updateRequestDetails(Request $request, $id)
     {
-        RequestedItem::where('request_no', $id)->where('items_id', $request->item)->decrement('quantity', 1);
+        RequestedItem::where('request_no', $id)->where('items_id', $request->item)->decrement('pending', 1);
         $updated = RequestedItem::where('request_no', $id)->where('items_id', $request->item)->first();
-        if ($updated->quantity == 0) {
-            $data = $updated->delete();
+        if ($updated->pending == 0) {
+            $data = $updated->status = 'COMPLETED';
             return response()->json($data);
         }else{
             return response()->json(true);
@@ -456,6 +456,7 @@ class StockRequestController extends Controller
             $reqitem->request_no = $request->reqno;
             $reqitem->items_id = $request->item;
             $reqitem->quantity = $request->qty;
+            $reqitem->pending = $request->qty;
             $reqitem->status = 'PENDING';
             $data = $reqitem->save();
         }

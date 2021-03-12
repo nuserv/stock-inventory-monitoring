@@ -1,12 +1,19 @@
 var table;
 $(document).ready(function()
 {
-    
+    $("#min-date").datepicker({
+        "dateFormat": "yy/mm/dd"
+    })
+    $("#max-date").datepicker({
+        "dateFormat": "yy/mm/dd"
+    })
+
     table =
     $('table.disposedTable').DataTable({ 
         "dom": 'lrtip',
         "language": {
-            "emptyTable": " "
+            "processing": '<i class="fa fa-spinner fa-spin fa-3x fa-fw"></i><span class="sr-only"></span> ',
+            "emptyTable": "No data found!"
         },
         "order": [[ 0, "desc", ]],
         processing: true,
@@ -20,12 +27,13 @@ $(document).ready(function()
             }
         },
         columns: [
+            { data: 'mydate', name: 'mydate'},
             { data: 'date', name:'date'},
             { data: 'category', name:'category'},
             { data: 'item', name:'item'},
             { data: 'serial', name:'serial'},
             { data: 'status', name:'status'}
-        ]
+        ],
     });
 
     $('#search-ic').on("click", function () { 

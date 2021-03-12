@@ -14,6 +14,7 @@ use App\Category;
 use App\UserLog;
 use DB;
 use Auth;
+use Carbon\Carbon;
 class DefectiveController extends Controller
 {
 
@@ -58,7 +59,7 @@ class DefectiveController extends Controller
         $defective = Defective::select('defectives.updated_at', 'defectives.category_id', 'branch_id as branchid', 'defectives.id as id', 'items.item', 'items.id as itemid', 'defectives.serial', 'defectives.status')
             ->where('branch_id', auth()->user()->branch->id)
             ->join('items', 'defectives.items_id', '=', 'items.id')
-            ->where('defectives.status', 'For return')
+            ->wherein('defectives.status', ['For return', 'For receiving'])
             ->get();
         $waredef =Defective::select('branches.branch', 'defectives.category_id', 'branches.id as branchid', 'defectives.updated_at', 'defectives.id as id', 'items.item', 'items.id as itemid', 'defectives.serial', 'defectives.status')
             ->where('defectives.status', 'Repaired')
@@ -117,6 +118,10 @@ class DefectiveController extends Controller
         return DataTables::of($disposed)
         ->addColumn('date', function (Defective $data){
             return $data->updated_at->toFormattedDateString().' '.$data->updated_at->toTimeString();
+        })
+        ->addColumn('mydate', function (Defective $data){
+
+            return Carbon::parse($data->updated_at)->format('Y/m/d');
         })
         ->addColumn('category', function (Defective $data){
             $cat = Category::where('id', $data->category_id)->first();
