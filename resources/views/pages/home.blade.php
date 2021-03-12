@@ -30,7 +30,7 @@
                     <a href="{{ route('return.index')}}">
                         <div class="card bg-card">
                             <div class="card-body text-center">
-                                <p class="card-text">RETURNS</p>
+                                <p class="card-text">@if (auth()->user()->hasanyrole('Warehouse Manager')) REPAIRED @else RETURNS @endif</p>
                                 <p class="card-text">{{ $returns }}</p>
                             </div>
                         </div>

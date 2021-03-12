@@ -49,10 +49,15 @@
                         <a class="nav-link {{ Request::is('loans') ? 'active' : '' }}" href="{{ route('loans') }}">Loans</a>
                     </li>
                 @endif
-                @if(!auth()->user()->hasrole('Tech'))
+                @if(!auth()->user()->hasanyrole('Tech', 'Warehouse Manager'))
                 <li class="nav-item">
                     <a class="nav-link {{ Request::is('return') ? 'active' : '' }}" href="{{ route('return.index') }}">Returns</a>
                 </li>
+                @endif
+                @if (auth()->user()->hasanyrole('Warehouse Manager'))
+                    <li class="nav-item">
+                        <a class="nav-link {{ Request::is('return') ? 'active' : '' }}" href="{{ route('return.index') }}">Repaired</a>
+                    </li>
                 @endif
                 @if(auth()->user()->hasanyrole('Manager', 'Editor', 'Head', 'Warehouse Manager'))
                     <li class="nav-item">
