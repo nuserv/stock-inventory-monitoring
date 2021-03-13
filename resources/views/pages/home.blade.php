@@ -16,6 +16,7 @@
                         </div>
                     </a>
                 </div>
+                @if (!auth()->user()->hasanyrole('Manager', 'Editor'))
                 <div class="col-sm-2">
                     <a href="{{ route('stocks.index')}}">
                         <div class="card bg-card">
@@ -26,6 +27,7 @@
                         </div>
                     </a>
                 </div>
+                @endif
                 <div class="col-sm-2">
                     <a href="{{ route('return.index')}}">
                         <div class="card bg-card">

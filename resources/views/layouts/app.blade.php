@@ -10,7 +10,11 @@
         @auth
             @if(auth()->user()->branch->branch != "Warehouse")
                 <meta http-equiv="refresh" content="601;url={{ url('/logout') }}">
-            @else
+            @endif
+            @if(auth()->user()->branch->branch == "Warehouse")
+                <meta http-equiv="refresh" content="895">
+            @endif
+            @if(auth()->user()->hasanyrole('Returns Manager', 'Manager', 'Editor'))
                 <meta http-equiv="refresh" content="895">
             @endif
         <meta name="ctok" content="{{ csrf_token() }}">
@@ -120,12 +124,16 @@
         @endif
 
         @if(Request::is('stocks'))
-            @if(auth()->user()->hasAnyrole('Warehouse Manager', 'Encoder'))
+            @if(auth()->user()->hasAnyrole('Manager', 'Editor'))
+               
+            @endif
+            @if(auth()->user()->hasAnyrole('Warehouse Manager'))
                 @include('modal.warehouse.add')
                 @include('modal.warehouse.category')
                 @include('modal.warehouse.item')
                 @include('modal.warehouse.import')
-            @else
+            @endif
+            @if(auth()->user()->branch->branch != 'Warehouse' && auth()->user()->branch->branch != 'Main-office')
                 @include('modal.branch.import')
                 @include('modal.branch.add')
                 @include('modal.branch.pull-out')

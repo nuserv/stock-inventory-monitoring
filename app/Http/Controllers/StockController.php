@@ -31,8 +31,13 @@ class StockController extends Controller
     }
     public function index()
     {
-        if (auth()->user()->hasanyrole('Editor', 'Manager', 'Repair', 'Returns Manager')) {
+        if (auth()->user()->hasanyrole( 'Repair', 'Returns Manager')) {
             return redirect('/');
+        }
+        
+        if (auth()->user()->hasanyrole('Editor', 'Manager')) {
+            $title = 'Warehouse Stock';
+            return view('pages.stocks', compact('title'));
         }
         $title = 'Stocks';
         $categories = Category::all();

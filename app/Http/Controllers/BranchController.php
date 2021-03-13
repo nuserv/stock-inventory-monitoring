@@ -71,7 +71,7 @@ class BranchController extends Controller
             return DataTables::of(Category::all())
             ->addColumn('stock_out', function ($category) use ($id){
                     
-                if (auth()->user()->branch->id == 1 && $id == 1) {
+                if (auth()->user()->branch->branch == 'Warehouse' && $id == 1) {
                     $stock_out = 0;
                 }else{
                     $stock_out = Stock::wherein('status', ['service unit', 'pm'])
@@ -143,6 +143,7 @@ class BranchController extends Controller
         }else if (auth()->user()->hasanyrole('Editor', 'Manager', 'Encoder')){
             $branches = Branch::select('branches.*', 'areas.area')
                 ->where('branches.id', '!=', auth()->user()->branch->id)
+                ->where('branches.branch', '!=', 'Warehouse')
                 ->join('areas', 'areas.id', '=', 'branches.area_id')
                 ->get();
         }else if (auth()->user()->hasanyrole('Head', 'Tech')){
