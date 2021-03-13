@@ -141,6 +141,9 @@
         @if(Request::is('user'))
             @include('modal.warehouse.user')
         @endif
+        @if(Request::is('disposed'))
+            @include('modal.dreports')
+        @endif
 
         @if(Request::is('loans'))
             @include('modal.branch.loans')

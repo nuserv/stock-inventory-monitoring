@@ -2,27 +2,66 @@ var table;
 var mydate = '';
 var disposed;
 var startdate;
-
+var tables;
+var desc=" ";
+search = '0';
 $(document).ready(function()
 {
     
     $("#min-date").datepicker({
+        template: "modal",
         "dateFormat": "mm/dd/yy",
         onSelect: function(dateStr) {
             var min = $(this).datepicker('getDate') || new Date(); // Selected date or today if none
             $('#max-date').datepicker('option', {minDate: min});
         },
         maxDate: '0',
+        beforeShow: function() {
+            setTimeout(function(){
+                $('.ui-datepicker').css('z-index', 99999999999999);
+            }, 0);
+        }
     })
     $("#max-date").datepicker({
         "dateFormat": "mm/dd/yy",
         minDate: '+0',
         maxDate: '0',
+        beforeShow: function() {
+            setTimeout(function(){
+                $('.ui-datepicker').css('z-index', 99999999999999);
+            }, 0);
+        }
     })
 
     table =
     $('table.disposedTable').DataTable({ 
-        "dom": 'Blrtip',
+        "dom": 'lrtip',
+        "language": {
+            "processing": '<i class="fa fa-spinner fa-spin fa-3x fa-fw"></i><span class="sr-only"></span> ',
+            "emptyTable": "No data found!"
+        },
+        "order": [[ 0, "desc", ]],
+        processing: true,
+        serverSide: false,
+        ajax: {
+            url: 'dispose',
+        error: function(data) {
+                if(data.status == 401) {
+                    window.location.href = '/login';
+                }
+            }
+        },
+        columns: [
+            { data: 'date', name:'date'},
+            { data: 'category', name:'category'},
+            { data: 'item', name:'item'},
+            { data: 'serial', name:'serial'}
+        ]
+    });
+
+    tables =
+    $('table.disposedsTable').DataTable({ 
+        "dom": 'Brtip',
         "language": {
             "processing": '<i class="fa fa-spinner fa-spin fa-3x fa-fw"></i><span class="sr-only"></span> ',
             "emptyTable": "No data found!"
@@ -44,7 +83,6 @@ $(document).ready(function()
             { data: 'category', name:'category'},
             { data: 'item', name:'item'},
             { data: 'serial', name:'serial'},
-            { data: 'status', name:'status'}
         ],
         "columnDefs": [
             {
@@ -64,7 +102,7 @@ $(document).ready(function()
                     className: 'btn btn-primary',
                     titleAttr: 'Print',
                     enabled: true,
-                    autoPrint: false,
+                    autoPrint: true,
                     text: '<span class="icon text-white-50"><i class="fa fa-print" style="color:white"></i></span><span> PRINT</span>',
                     customize: function (doc) {
                         var d = new Date();
@@ -93,36 +131,49 @@ $(document).ready(function()
                     title:'',
                     exportOptions: {
                         rows: function (idx) {
-                            var dt = new $.fn.dataTable.Api('#disposedTable' );
+                            var dt = new $.fn.dataTable.Api('#disposedsTable' );
                             var selected = dt.rows( { selected: true } ).indexes().toArray();
                         
                             if( selected.length === 0 || $.inArray(idx, selected) !== -1)
                             return true;
                             return false;
                         },
-                        columns: [ 1, 2, 3, 4, 5 ]
+                        columns: [ 1, 2, 3, 4 ]
                     },
                     init: function(node) {$(node).removeClass('dt-button')},
                 }
             ]
         }
     });
-    table.buttons().container().appendTo('.printBtn');
-    $('#search-ic').on("click", function () { 
-        for ( var i=0 ; i<=5 ; i++ ) {
-            
-            $('.fl-'+i).val('').change();
-            table
-            .columns(i).search( '' )
-            .draw();
-        }
-        $('.tbsearch').toggle();
+    tables.buttons().container().appendTo('.printBtn');
+    $('.printBtn').hide();
+    desc+='<option selected disabled>select item</option>';
+    setTimeout(function () {
+        var data = table.data();
+    /*if(data.length > 0){
+        for(var i=0;i<data.length;i++){
+            if (data[i].item == "For return") {
+                $('#returnBtn').prop('disabled', false);
+                return false;
+            }
+        }  
+    }*/
+    var itemcode = $.map(data, function(value, index) {
+        return [value];
     });
+    itemcode.forEach(value => {
+        desc+='<option value="'+value.item+'">'+value.item+'</option>';
+    });
+    $("#item").find('option').remove().end().append(desc);
+    console.log(desc);
+    }, 1000)
+    
 
-    $('.filter-input').keyup(function() { 
-        table.column( $(this).data('column'))
-            .search( $(this).val())
-            .draw();
+});
+$('#generate').on("click", function () { 
+    $('#disposedModal').modal({
+        backdrop: 'static',
+        keyboard: false
     });
 });
 $('#max-date').on("change", function () { 
@@ -139,34 +190,78 @@ $('#min-date').on("change", function () {
         return false;
     }
 });
-
-$(document).on("click", "#goBtn", function() {
-    if (!$('#min-date').val() || !$('#max-date').val()) {
-        alert('select Date first!');
-        return false;
-    }
-    console.log($('#min-date').val());
-    startdate = $('#min-date').val()
-    var rowcount = table.data().count();
-    for(var i=0;i<rowcount;i++){
-        if (table.rows( i ).data()[0].mydate.replace(new RegExp('/', 'g'),"") == startdate)
-        {
-            console.log(i);
-        }else{
-            console.log(table.rows( i ).data()[0].mydate.replace(new RegExp('/', 'g'),""));
-        }
-    }
-    var filteredData = table
-        .rows()
-        .indexes()
-        .filter( function ( value, index ) {
-        return (table.rows(value).data()[0].mydate == startdate); 
-        });
-        console.log(table.row(1).data());
-        console.log(filteredData);
-
-    table.rows( filteredData ).remove().draw();
+$(document).on("keyup", "#searchall", function () {
+    table.search(this.value).draw();
 });
+$(document).on('click', '.cancel', function(){
+    window.location.href = 'disposed';
+});
+$(document).on("click", "#byDate", function() {
+    $('#datediv').show();
+    $('#itemdiv').hide();
+});
+$(document).on("click", "#byItem", function() {
+    $('#datediv').hide();
+    $('#itemdiv').show();
+});
+$(document).on('change', "#item", function() {
+    search = '1';
+});
+$(document).on("click", ".goBtn", function() {
+    if ($('#byDate').is(':checked')) {
+        if (!$('#min-date').val() || !$('#max-date').val()) {
+            alert('select Date first!');
+            return false;
+        }
+        tables.ajax.reload();
+        $('#disposedModal').modal('hide');
+        $('#loading').show();
+        setTimeout(function () {
+            var filteredData = tables
+            .rows()
+            .indexes()
+            .filter( function ( value, index ) {
+            return (tables.rows(value).data()[0].mydate.replace(new RegExp('/', 'g'),"") < $('#min-date').val().replace(new RegExp('/', 'g'),"")); 
+            });
+    
+            tables.rows( filteredData ).remove().draw();
+            filteredData = tables
+                .rows()
+                .indexes()
+                .filter( function ( value, index ) {
+                return (tables.rows(value).data()[0].mydate.replace(new RegExp('/', 'g'),"") > $('#max-date').val().replace(new RegExp('/', 'g'),"")); 
+                });
+            tables.rows( filteredData ).remove().draw();
+            setTimeout(function () {
+                $('.buttons-print').click();
+                setTimeout(function () {
+                    window.location.href = 'disposed';
+                }, 1000)
+            }, 1000)
+            $('#loading').hide();
+        }, 1000)
+    }else if ($('#byItem').is(':checked')) {
+        if (search == '0') {
+            alert('select item first!');
+            return false;
+        }
+        $('#disposedModal').modal('hide');
+        $('#loading').show();
+        tables
+        .columns( 3 )
+        .search( $('#item').val() )
+        .draw();
+        setTimeout(function () {    
+            $('.buttons-print').click();
+            setTimeout(function () {
+                window.location.href = 'disposed';
+            }, 1000)
+            $('#loading').hide();
+        }, 1000)
+    }
+
+});
+
 
 $(document).on("click", ".approveBtn", function() {
     var returnid = $(this).attr('return_id');
