@@ -469,6 +469,7 @@ class StockController extends Controller
         $stock = Stock::where('id', $request->id)->first();
         $item = Item::where('id', $stock->items_id)->first();
         $customer = CustomerBranch::where('id', $stock->customer_branches_id)->first();
+        //return dd($stock);
         if ($request->status == 'defective') {
             $defective = new Defective;
             $defective->branch_id = auth()->user()->branch->id;

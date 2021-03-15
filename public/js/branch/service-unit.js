@@ -68,7 +68,7 @@ $(document).on("click", "#sUnitTable tr", function () {
         },
     });
     $('#indesc').val(trdata.description);
-    $('#indescid').val(trdata.items_id);
+    $('#indescid').val(trdata.id);
     $('#inserial').hide();
     $('#inserial').val(trdata.serial);
     $('#inserial').prop('disabled', true);
@@ -126,7 +126,9 @@ $(document).on('click', '.in_sub_Btn', function(){
         if ($('#intype').val() == 'service-unit') {
             if (status != '') {
                 $('#service-inModal').toggle();
-                $('#loading').show();
+               $('#loading').show();
+               console.log($('#indescid').val());
+               //return false;
                 $.ajax({
                     url: 'service-in',
                     headers: {
@@ -141,10 +143,14 @@ $(document).on('click', '.in_sub_Btn', function(){
                         status: status,
                         remarks: 'service'
                     },
-                    success:function()
+                    success:function(data)
                     {
+                        //console.log(data);
                         window.location.href = 'service-unit';
                     },
+                    error: function (data) {
+                        alert(data.responseText);
+                    }
                 });
             }
         }else if ($('#intype').val() == 'replacement') {
