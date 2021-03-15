@@ -42,17 +42,19 @@ class LoanController extends Controller
     }
     public function table(Request $request)
     {
-        $myloans = Loan::select('loans.id', 'loans.items_id', 'loans.to_branch_id', 'loans.from_branch_id', 'branches.id as branchid', 'branches.branch', 'loans.updated_at', 'items.item', 'loans.status', 'loans.updated_at')
+        $myloans = Loan::select('lastname', 'name', 'user_id', 'loans.id', 'loans.items_id', 'loans.to_branch_id', 'loans.from_branch_id', 'branches.id as branchid', 'branches.branch', 'loans.updated_at', 'items.item', 'loans.status', 'loans.updated_at')
             ->where('loans.from_branch_id', auth()->user()->branch->id)
             ->where('loans.status', '!=', 'completed')
             ->where('loans.status', '!=', 'deleted')
+            ->join('users', 'users.id', '=', 'user_id')
             ->join('branches', 'loans.to_branch_id', '=', 'branches.id')
             ->join('items', 'loans.items_id', '=', 'items.id')
             ->get();
-        $loans = Loan::select('loans.id', 'loans.items_id', 'loans.to_branch_id', 'loans.from_branch_id', 'branches.id as branchid', 'branches.branch', 'loans.updated_at', 'items.item', 'loans.status', 'loans.updated_at')
+        $loans = Loan::select('lastname', 'name', 'user_id', 'loans.id', 'loans.items_id', 'loans.to_branch_id', 'loans.from_branch_id', 'branches.id as branchid', 'branches.branch', 'loans.updated_at', 'items.item', 'loans.status', 'loans.updated_at')
             ->where('loans.to_branch_id', auth()->user()->branch->id)
             ->where('loans.status', '!=', 'completed')
             ->where('loans.status', '!=', 'deleted')
+            ->join('users', 'users.id', '=', 'user_id')
             ->join('branches', 'loans.from_branch_id', '=', 'branches.id')
             ->join('items', 'loans.items_id', '=', 'items.id')
             ->get();
@@ -67,6 +69,9 @@ class LoanController extends Controller
             }else{
                 return 'OUT-BOUND';
             }
+        })
+        ->addColumn('requestby', function (Loan $request){
+            return $request->name.' '.$request->lastname;
         })
         ->make(true);
     }
@@ -140,7 +145,7 @@ class LoanController extends Controller
         $branch = Branch::where('id', $loan->from_branch_id)->first();
         $item = Item::where('id', $loan->items_id)->first();
         $loan->status = $request->status;
-        $loan->user_id = auth()->user()->id;
+        $loan->approved_by = auth()->user()->id;
         $log = new UserLog;
         $log->activity = "Approved request $item->item from $branch->branch" ;
         $log->user_id = auth()->user()->id;

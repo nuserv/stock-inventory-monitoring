@@ -16,6 +16,9 @@
                     Item Description
                 </th>
                 <th>
+                    Requested by
+                </th>
+                <th>
                     Status
                 </th>
             </tr>

@@ -26,6 +26,7 @@ $(document).ready(function()
             { data: 'date', name:'date'},
             { data: 'branch', name:'branch'},
             { data: 'item', name:'item'},
+            { data: 'requestby', name:'requestby'},
             { data: 'status', name:'status'}
         ]
     });

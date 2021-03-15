@@ -58,7 +58,7 @@ Route::put('loanstock', 'LoanController@stock')->middleware('ajax');
 Route::get('loanitemcode', 'LoanController@getItemCode')->middleware('ajax');
 Route::put('loansapproved', 'LoanController@update')->middleware('ajax');
 //Route::get('loanrequesttable', 'LoanController@tablerequest')->name('loansrequest.table');
-Route::get('loanstable', 'LoanController@table')->middleware('ajax');
+Route::get('loanstable', 'LoanController@table');//->middleware('ajax');
 Route::get('loans', 'LoanController@index')->name('loans');
 Route::post('loan', 'StockController@loan')->middleware('ajax');
 
