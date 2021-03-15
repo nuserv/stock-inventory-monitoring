@@ -35,10 +35,7 @@ class StockController extends Controller
             return redirect('/');
         }
         
-        if (auth()->user()->hasanyrole('Editor', 'Manager')) {
-            $title = 'Warehouse Stock';
-            return view('pages.stocks', compact('title'));
-        }
+        
         $title = 'Stocks';
         $categories = Category::all();
         $service_units = Stock::where('branch_id', auth()->user()->branch->id)
@@ -55,6 +52,10 @@ class StockController extends Controller
         $branches = Branch::where('area_id', auth()->user()->area->id)
             ->where('id', '!=', auth()->user()->branch->id)
             ->get();
+        if (auth()->user()->hasanyrole('Editor', 'Manager')) {
+            $title = 'Warehouse Stock';
+            return view('pages.stocks', compact('categories', 'service_units', 'customers', 'branches', 'title'));
+        }
         return view('pages.stocks', compact('categories', 'service_units', 'customers', 'branches', 'title'));
     }
     public function category(Request $request){
@@ -842,8 +843,7 @@ class StockController extends Controller
                 ->get();
             return Datatables::of($stock)->make(true);
         }else{
-            $stock = Warehouse::select('items.UOM', 'warehouses.category_id','items_id', \DB::raw('SUM(CASE WHEN status = \'in\' THEN 1 ELSE 0 END) as stock'))
-                ->where('status', 'in')
+            $stock = Warehouse::select('items.UOM', 'warehouses.category_id','items_id', \DB::raw('SUM(CASE WHEN status = \'in\' THEN 1 ELSE 0 END) as stockIN'), \DB::raw('SUM(CASE WHEN status = \'sent\' THEN 1 ELSE 0 END) as stockOUT'))
                 ->where('warehouses.category_id', $request->category)
                 ->join('items', 'items_id', '=', 'items.id')
                 ->groupBy('items_id')->get();
@@ -859,8 +859,14 @@ class StockController extends Controller
                 $item = Item::where('id', $request->items_id)->first();
                 return $item->item;
             })
+            ->addColumn('StockIN', function (Warehouse $request){
+                return $request->stockIN+$request->stockOUT;
+            })
+            ->addColumn('StockOUT', function (Warehouse $request){
+                return $request->stockOUT;
+            })
             ->addColumn('quantity', function (Warehouse $request){
-                return $request->stock;
+                return $request->stockIN;
             })
             ->make(true);
         }

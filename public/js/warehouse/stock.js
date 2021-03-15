@@ -85,6 +85,8 @@ $(document).on("click", "#catTable tr", function () {
         },
         columns: [
             { data: 'description', name:'description'},
+            { data: 'StockIN', name:'StockIN'},
+            { data: 'StockOUT', name:'StockOUT'},
             { data: 'quantity', name:'quantity'},
             { data: 'UOM', name:'UOM'}
         ]
