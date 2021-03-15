@@ -645,7 +645,7 @@ class StockRequestController extends Controller
     }
     public function dest(Request $request)
     {
-        $delete = StockRequest::where('request_no', $request->reqno)->where('status', '0')->first();
+        $delete = StockRequest::where('request_no', $request->reqno)->where('status', 'PENDING')->first();
         $delete->status = 'DELETED';
         $log = new UserLog;
         $log->activity = "Delete request no. $request->reqno" ;
