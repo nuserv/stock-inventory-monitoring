@@ -102,7 +102,7 @@ $(document).ready(function()
                     className: 'btn btn-primary',
                     titleAttr: 'Print',
                     enabled: true,
-                    autoPrint: true,
+                    autoPrint: false,
                     text: '<span class="icon text-white-50"><i class="fa fa-print" style="color:white"></i></span><span> PRINT</span>',
                     customize: function (doc) {
                         var d = new Date();
