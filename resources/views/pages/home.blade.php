@@ -63,7 +63,7 @@
             @endif
             @if(auth()->user()->branch->branch == 'Warehouse' || auth()->user()->hasanyrole('Manager', 'Editor'))
             <div class="col-sm-2">
-                <a href="{{ url('request') }}">
+                <a href="{{ url('resolved') }}">
                     <div class="card bg-card">
                         <div class="card-body text-center">
                             <p class="card-text">RESOLVED</p>
