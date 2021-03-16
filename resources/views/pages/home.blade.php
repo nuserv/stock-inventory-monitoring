@@ -66,7 +66,7 @@
                 <a href="{{ url('request') }}">
                     <div class="card @if($resolved > 0)bg-card-red @else bg-card @endif">
                         <div class="card-body text-center">
-                            <p class="card-text">UNRESOLVED</p>
+                            <p class="card-text">RESOLVED</p>
                             <p class="card-text">@if($resolved > 0){{ $resolved }} @else {{ $resolved }} @endif</p>
                         </div>
                     </div>
