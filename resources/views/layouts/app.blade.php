@@ -8,15 +8,18 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         @auth
-            @if(auth()->user()->branch->branch != "Warehouse")
-                <meta http-equiv="refresh" content="601;url={{ url('/logout') }}">
-            @endif
             @if(auth()->user()->branch->branch == "Warehouse")
                 <meta http-equiv="refresh" content="895">
+            @else
+                @if(auth()->user()->hasanyrole('Returns Manager', 'Manager', 'Editor'))
+                    <meta http-equiv="refresh" content="895">
+                @else
+                    @if(auth()->user()->branch->branch != "Warehouse")
+                        <meta http-equiv="refresh" content="601;url={{ url('/logout') }}">
+                    @endif
+                @endif
             @endif
-            @if(auth()->user()->hasanyrole('Returns Manager', 'Manager', 'Editor'))
-                <meta http-equiv="refresh" content="895">
-            @endif
+            
         <meta name="ctok" content="{{ csrf_token() }}">
         @endauth
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
@@ -93,6 +96,9 @@
                 @include('modal.branch.request')
                 @include('modal.branch.send')
             @endif
+        @endif
+        @if(Request::is('resolved'))
+            @include('modal.warehouse.resolved')
         @endif
 
         @if(Request::is('customer'))
@@ -211,6 +217,9 @@
                 <script src="{{asset('js/branch/request.js')}}"></script>
                 <script src="{{asset('js/branch/request2.js')}}"></script>
             @endif
+        @endif
+        @if(Request::is('resolved'))
+            <script src="{{asset('min/?f=js/resolved.js')}}"></script>
         @endif
 
         @if(Request::is('stocks'))

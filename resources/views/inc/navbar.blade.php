@@ -35,7 +35,12 @@
                 <li class="nav-item">
                     <a class="nav-link {{ Request::is('request') ? 'active' : '' }}" href="{{ route('stock.index') }}">Stock Request</a>
                 </li>
-                @if(auth()->user()->hasanyrole('Warehouse Manager', 'Encoder', 'Head', 'Tech'))
+                @if(auth()->user()->hasanyrole('Warehouse Manager', 'Manager'))
+                <li class="nav-item">
+                    <a class="nav-link {{ Request::is('resolved') ? 'active' : '' }}" href="{{ route('resolved.index') }}">Resolved</a>
+                </li>
+                @endif
+                @if(auth()->user()->hasanyrole('Warehouse Manager', 'Editor', 'Head', 'Tech'))
                     <li class="nav-item">
                         <a class="nav-link {{ Request::is('stocks') ? 'active' : '' }}" href="{{ route('stocks.index') }}">Stocks</a>
                     </li>

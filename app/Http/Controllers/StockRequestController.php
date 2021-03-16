@@ -39,6 +39,18 @@ class StockRequestController extends Controller
         $categories = Category::all();
         return view('pages.stock-request', compact('stocks', 'categories', 'title'));
     }
+    public function resolve()
+    {
+        if (auth()->user()->hasanyrole('Repair', 'Returns Manager')) {
+            return redirect('/');
+        }
+        $title = 'Stock Request';
+        $stocks = Warehouse::select('items_id', 'serial', \DB::raw('SUM(CASE WHEN status = \'in\' THEN 1 ELSE 0 END) as stock'))
+            ->where('status', 'in')
+            ->groupBy('items_id')->get();
+        $categories = Category::all();
+        return view('pages.resolved', compact('stocks', 'categories', 'title'));
+    }
     public function getItemCode(Request $request){
         $data = Item::select('id', 'item')->where('category_id', $request->id)->get();
         return response()->json($data);
@@ -391,6 +403,96 @@ class StockRequestController extends Controller
         })
         ->addColumn('type', function (StockRequest $request){
             return strtoupper($request->type);
+        })
+        ->addColumn('client', function (StockRequest $request){
+            if ($request->type == "Service") {
+                $client = Customer::select('customer')->where('id', $request->customer_id)->first()->customer;
+            }else {
+                $client = 'none';
+            }
+            return strtoupper($client);
+        })
+        ->addColumn('customer', function (StockRequest $request){
+            if ($request->type == "Service") {
+                $customer = CustomerBranch::select('customer_branch')->where('id', $request->customer_branch_id)->first()->customer_branch;
+            }else {
+                $customer = 'none';
+            }
+            return strtoupper($customer);
+        })
+        ->make(true);
+    }
+    public function getResolved()
+    {
+        $user = auth()->user()->branch->id;
+       
+        $stock = StockRequest::wherein('stat',  ['RESOLVED'])->get();
+        return DataTables::of($stock)
+        ->setRowData([
+            'data-id' => '{{ $request_no }}',
+            'data-status' => '{{ $status }}',
+            'data-user' => '{{ $user_id }}',
+        ])
+        
+        ->addColumn('sched', function (StockRequest $request){
+            return $request->schedule;
+        })
+        ->addColumn('created_at', function (StockRequest $request){
+            return $request->created_at->toFormattedDateString().' '.$request->created_at->toTimeString();
+        })
+        ->addColumn('intransit', function (StockRequest $request){
+            if ($request->intransit) {
+                return Carbon::parse($request->intransit)->toFormattedDateString().' '.Carbon::parse($request->intransit)->toTimeString();
+            }
+        })
+        ->addColumn('left', function (StockRequest $request){
+            //Carbon::now()->subDays($request->created_at))
+            $dd = Carbon::parse($request->updated_at)->addDays(5);
+            //$dd->year(date('Y'));
+            return Carbon::now()->diffInDays($dd, false);//Carbon::now()->subDays(5);
+        })
+        ->addColumn('leftcreatedhour', function (StockRequest $request){
+            //Carbon::now()->subDays($request->created_at))
+            $dd = Carbon::parse($request->created_at)->addDays(1);
+            //$dd->year(date('Y'));
+            return Carbon::now()->diffInHours($dd, false);//Carbon::now()->subDays(5);
+        })
+        ->addColumn('leftcreatedmin', function (StockRequest $request){
+            //Carbon::now()->subDays($request->created_at))
+            $dd = Carbon::parse($request->created_at)->addDays(1);
+            //$dd->year(date('Y'));
+            return Carbon::now()->diffInMinutes($dd, false);//Carbon::now()->subDays(5);
+        })
+        ->addColumn('minute', function (StockRequest $request){
+            //Carbon::now()->subDays($request->created_at))
+            $dd = Carbon::parse($request->updated_at)->addDays(5);
+            //$dd->year(date('Y'));
+            return Carbon::now()->diffInMinutes($dd, false);//Carbon::now()->subDays(5);
+        })
+        ->addColumn('hour', function (StockRequest $request){
+            //Carbon::now()->subDays($request->created_at))
+            $dd = Carbon::parse($request->updated_at)->addDays(5);
+            //$dd->year(date('Y'));
+            return Carbon::now()->diffInHours($dd, false);//Carbon::now()->subDays(5);
+        })
+        ->addColumn('reqBy', function (StockRequest $request){
+            return strtoupper($request->user->name);
+        })
+        ->addColumn('branch', function (StockRequest $request){
+            return strtoupper($request->branch->branch);
+        })
+        ->addColumn('area', function (StockRequest $request){
+            return strtoupper($request->area->area);
+        })
+        ->addColumn('pending', function (StockRequest $request){
+            return strtoupper($request->pending);
+        })
+        ->addColumn('type', function (StockRequest $request){
+            return strtoupper($request->type);
+        })
+        ->addColumn('resolved_name', function (StockRequest $request){
+            $name = User::where('id', $request->resolved_by)->first();
+            return strtoupper($name->name.' '.$name->lastname);
         })
         ->addColumn('client', function (StockRequest $request){
             if ($request->type == "Service") {

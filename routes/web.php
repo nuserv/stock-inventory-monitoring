@@ -103,6 +103,7 @@ Route::post('/branch/import', 'ImportController@branchstore');
 Route::post('/warehouse/import', 'ImportController@warestore');
 
 
+Route::get('resolved', 'StockRequestController@resolve')->name('resolved.index');
 Route::POST('storerreceived', 'StockRequestController@received')->middleware('ajax');
 Route::get('gen', 'StockRequestController@generateRandomNumber')->middleware('ajax');
 Route::get('getcatreq', 'StockRequestController@getCatReq')->middleware('ajax');
@@ -126,6 +127,7 @@ Route::get('requests/{id}', 'StockRequestController@getRequestDetails');//->midd
 Route::get('getrequests', 'StockRequestController@getReqDetails')->middleware('ajax');
 Route::get('prep/{id}', 'StockRequestController@prepitemdetails')->middleware('ajax');
 Route::get('requests', 'StockRequestController@getRequests');//->middleware('ajax');
+Route::get('res', 'StockRequestController@getResolved');//->middleware('ajax');
 Route::get('pcount', 'StockRequestController@pcount')->middleware('ajax');
 Route::get('request', 'StockRequestController@index')->name('stock.index');
 //Route::get('view', 'StockRequestController@view')->name('stock.view');
