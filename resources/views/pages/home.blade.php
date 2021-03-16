@@ -64,7 +64,17 @@
             @if(auth()->user()->branch->branch == 'Warehouse' || auth()->user()->hasanyrole('Manager', 'Editor'))
             <div class="col-sm-2">
                 <a href="{{ url('request') }}">
-                    <div class="card @if($unresolved > 0)bg-card-red @else bg-card @endif">
+                    <div class="card @if($resolved > 0)bg-card-red @else bg-card @endif">
+                        <div class="card-body text-center">
+                            <p class="card-text">UNRESOLVED</p>
+                            <p class="card-text">@if($resolved > 0){{ $resolved }} @else {{ $resolved }} @endif</p>
+                        </div>
+                    </div>
+                </a>
+            </div>
+            <div class="col-sm-2">
+                <a href="{{ url('request') }}">
+                    <div class="card bg-card">
                         <div class="card-body text-center">
                             <p class="card-text">UNRESOLVED</p>
                             <p class="card-text">@if($unresolved > 0){{ $unresolved }} @else {{ $unresolved }} @endif</p>
