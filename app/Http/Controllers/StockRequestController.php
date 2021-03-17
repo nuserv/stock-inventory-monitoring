@@ -619,10 +619,30 @@ class StockRequestController extends Controller
         }
         $preparedItem = PreparedItem::where('branch_id', auth()->user()->branch->id)
             ->where('request_no', $request->reqno)
+            ->where('intransit', 'yes')
             ->first();
-        if ($preparedItem) {
+        if ($request->status == "COMPLETED") {
             $reqno = StockRequest::where('request_no', $request->reqno)->first();
-            if ($reqno->status == 'PARTIAL') {
+            if ($preparedItem) {
+                $reqno->status = 'INCOMPLETE';
+            }else{
+                $reqno->status = $request->status;
+            }
+        }
+        if ($request->status  == "PARTIAL IN TRANSIT") {
+            $reqno = StockRequest::where('request_no', $request->reqno)->first();
+            if ($preparedItem) {
+                $reqno->status = $request->status;
+            }else{
+                $reqno->status = 'PARTIAL';
+            }  
+        }
+        $reqno->save();
+        $data = '1';
+        return response()->json($data);
+        /*if ($preparedItem) {
+            $reqno = StockRequest::where('request_no', $request->reqno)->first();
+            if ($reqno->status == 'PARTIAL IN TRANSIT') {
                 $reqno->status = $request->status;
             }else{
                 $reqno->status = 'INCOMPLETE';
@@ -631,10 +651,12 @@ class StockRequestController extends Controller
             $data = '1';
         }else{
             $reqno = StockRequest::where('request_no', $request->reqno)->first();
+            if ($reqno->status == 'PARTIAL IN TRANSIT') {
+                $reqno->status = 'PARTIAL';
+            }
             $reqno->stat = $request->status;
             $reqno->save();
-        }
-        return response()->json($data);
+        }*/
     }
     public function test(Request $request)
     {

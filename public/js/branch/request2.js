@@ -26,12 +26,10 @@ $(document).on('click', '#rec_Btn', function(){
     var reqno = requestno;
     var sched = $('#sched').val();
     $('#loading').show();
-    if(dtdata.status == "SCHEDULED"){
+    if(dtdata.status == "IN TRANSIT"){
         var status = "COMPLETED";
-    }else if(dtdata.status == "RESCHEDULED"){
-        var status = "RECOMPLETED";
-    }else if(dtdata.status == "PARTIAL"){
-        var status = "PARTIAL";
+    }else if(dtdata.status == "PARTIAL IN TRANSIT"){
+        var status = "PARTIAL IN TRANSIT";
     }
     var datas = intransittable.rows( { selected: true } ).data();
     var id = [];

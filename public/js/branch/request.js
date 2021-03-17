@@ -542,8 +542,8 @@ $(document).ready(function()
                 });
             }
         }else if(trdata.status == 'PARTIAL'){
-            $('table.requestDetails').hide();
-            $('table.schedDetails').show();
+            $('table.requestDetails').show();
+            $('table.schedDetails').hide();
             $('.sched').show();
             $('#sched').val(trdata.sched);
             $('#del_Btn').hide();
@@ -563,6 +563,9 @@ $(document).ready(function()
                     $('table.schedDetails').dataTable().fnDestroy();
                     $('table.schedDetails').hide();
                     $('table.requestDetails').show();
+                    $('#intransitlabel').hide();
+                    $('#schedslabel').hide();
+                    $('#reqlabel').show();
                     var requestdet;
                     Promise.all([partialrequesttable()]).then(() => {
                         if (requestdet <= 10) {

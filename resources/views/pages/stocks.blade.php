@@ -74,9 +74,11 @@
                     <th>
                         Stock Out
                     </th>
+                    @if(auth()->user()->branch->branch != "Warehouse" && auth()->user()->branch->branch != "Main-Office")
                     <th>
                         Defectives
                     </th>
+                    @endif
                     <th>
                         @if(auth()->user()->branch->branch != "Warehouse" && auth()->user()->branch->branch != "Main-Office")Total @else Available Stock @endif
                     </th>
