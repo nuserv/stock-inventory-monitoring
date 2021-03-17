@@ -134,6 +134,7 @@ Route::get('request', 'StockRequestController@index')->name('stock.index');
 Route::put('update/{id}', 'StockRequestController@updateRequestDetails')->middleware('ajax');
 Route::put('notrec', 'StockRequestController@notreceived')->middleware('ajax');
 Route::put('resolved', 'StockRequestController@resolved')->middleware('ajax');
+Route::put('update_serial', 'StockRequestController@upserial')->middleware('ajax');
 Route::get('mytest', 'StockRequestController@test');//->middleware('ajax');
 
 Route::get('users', 'UserController@getUsers')->middleware('ajax');
@@ -158,3 +159,4 @@ Route::get('defective/print', 'HomeController@printDefective')->name('defective.
 
 Route::get('preventive', 'HomeController@preventive')->name('index.preventive');
 Route::get('convert', 'HomeController@convert');
+Route::get('imp', 'HomeController@imp');

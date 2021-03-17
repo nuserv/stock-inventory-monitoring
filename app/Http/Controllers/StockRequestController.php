@@ -667,7 +667,22 @@ class StockRequestController extends Controller
             return response()->json($data);
         }
     }
+    
+    public function upserial(Request $request)
+    {
+        $serial = PreparedItem::where('serial', $request->old)
+            ->join('items', 'items.id', '=', 'items_id')
+            ->first();
+        $new = PreparedItem::where('serial', $request->old)->first();
+        $new->serial = $request->new;
+        $new->save();
+        $log = new UserLog;
+        $log->activity = "Change $serial->item serial number from $serial->serial to $new->serial";
+        $log->user_id = auth()->user()->id;
+        $data = $log->save();
+        return response()->json($data);
 
+    }
     public function update(Request $request)
     {
         if ($request->stat == 'ok') {

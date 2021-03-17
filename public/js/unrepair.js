@@ -52,7 +52,7 @@ $(document).ready(function()
                         if (data.status == "Unrepairable approval") {
                             return '<button id="approveBtn" class="btn-primary approveBtn" return_id="'+data.id+'">Approved</button>'
                         }else if(data.status == "Unrepairable" || data.status == "unrepairable"){
-                            return '<button class="btn-info disposeBtn" id="disposeBtn" return_id="'+data.id+'">Dispose</button>&nbsp;&nbsp;&nbsp;&nbsp;<button class="btn-primary returnBtn" id="returnBtn" return_id="'+data.id+'">Return</button>'
+                            return '<button class="btn-info disposeBtn" return_id="'+data.id+'">Dispose</button>&nbsp;&nbsp;&nbsp;&nbsp;<button class="btn-primary returnBtn" id="returnBtn" return_id="'+data.id+'">Return</button>'
                         }
                     },
                     "defaultContent": '',

@@ -18,6 +18,9 @@ use App\PreparedItem;
 use App\Category;
 use App\Stock;
 use App\Defective;
+use App\Customer;
+use App\CustomerBranch;
+use DB;
 use App\UserLog;
 use Carbon\Carbon;
 
@@ -219,6 +222,33 @@ class HomeController extends Controller
     {
         $users = User::all();
         return view('pages.service-units', compact('users'));
+    }
+
+    public function imp()
+    {
+        $sources = DB::table('customer_branch')->get();
+            foreach ($sources as $source) {
+                $customer = Customer::where('code', $source->custcode)->first();
+                if ($customer) {
+                    $branch = CustomerBranch::where('customer_id', $customer->id)->where('code', $source->brchcode)->first();
+                    if (!$branch) {
+                        $add = new CustomerBranch;
+                        $add->customer_branch = $source->brchname;
+                        $add->address = $source->addr1;
+                        $add->code = $source->brchcode;
+                        $add->customer_id = $customer->id;
+                        if ($source->contact_number) {
+                            $add->contact = $source->contact_number;
+                        }
+                        if ($source->contact_person) {
+                            $add->cperson = $source->contact_person;
+                        }
+                        $add->status = '1';
+                        $add->save();
+                    }
+                }
+            }
+        return dd(CustomerBranch::all());
     }
     public function preventive()
     {

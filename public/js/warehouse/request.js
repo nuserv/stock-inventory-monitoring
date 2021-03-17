@@ -9,6 +9,7 @@ var sub = 0;
 var save = 0;
 var pcount = 0;
 var requestdetails;
+var intransitdets;
 var stat = "notok";
 var pending = 0;
 var check = false;
@@ -17,6 +18,7 @@ var reqnumber;
 var valpartial;
 var valid = 'yes';
 var table;
+var serialnum;
 
 $(document).ready(function()
 {
@@ -135,7 +137,10 @@ $(document).ready(function()
     var cells = table.cells(":contains('UNRESOLVED')").nodes();
     $(cells).css('color', '#F1423A');
 
+    
+
     $('#requestTable tbody').on('click', 'tr', function () { 
+        console.log('ito');
         var trdata = table.row(this).data();
         bID = trdata.branch_id
         reqnumber = trdata.request_no;
@@ -690,10 +695,19 @@ $(document).ready(function()
                         serverSide: true,
                         ajax: "/send/"+trdata.request_no,
                         columns: [
-                            { data: 'items_id', name:'items_id'},
                             { data: 'item_name', name:'item_name'},
                             { data: 'quantity', name:'quantity'},
                             { data: 'serial', name:'serial'}
+                        ],
+                        "columnDefs": [
+                            {   
+                                "render": function ( data, type, row, meta ) {
+                                        return '<button id="editBtn" class="btn-primary editBtn" serial_num="'+data.serial+'">Edit Serial</button>';
+                                },
+                                "defaultContent": '',
+                                "data": null,
+                                "targets": [3]
+                            }
                         ]
                     });
                 }else if (schedreq > 10) {
@@ -708,10 +722,19 @@ $(document).ready(function()
                         serverSide: true,
                         ajax: "/send/"+trdata.request_no,
                         columns: [
-                            { data: 'items_id', name:'items_id'},
                             { data: 'item_name', name:'item_name'},
                             { data: 'quantity', name:'quantity'},
                             { data: 'serial', name:'serial'}
+                        ],
+                        "columnDefs": [
+                            {   
+                                "render": function ( data, type, row, meta ) {
+                                        return '<button id="editBtn" class="btn-primary editBtn" serial_num="'+data.serial+'">Edit Serial</button>';
+                                },
+                                "defaultContent": '',
+                                "data": null,
+                                "targets": [3]
+                            }
                         ]
                     });
                 }
@@ -741,7 +764,7 @@ $(document).ready(function()
             Promise.all([intransitrequest()]).then(() => {
                 if (intransitreq <= 10) {
                     $('table.intransitDetails').dataTable().fnDestroy();
-                    intransitdetails =
+                    intransitdets =
                     $('table.intransitDetails').DataTable({ 
                         "dom": 'rt',
                         "language": {
@@ -751,15 +774,24 @@ $(document).ready(function()
                         serverSide: true,
                         ajax: "/intransit/"+trdata.request_no,
                         columns: [
-                            { data: 'items_id', name:'items_id'},
                             { data: 'item_name', name:'item_name'},
                             { data: 'quantity', name:'quantity'},
                             { data: 'serial', name:'serial'}
+                        ],
+                        "columnDefs": [
+                            {   
+                                "render": function ( data, type, row, meta ) {
+                                        return '<button id="editBtn" class="btn-primary editBtn" serial_num="'+data.serial+'">Edit Serial</button>';
+                                },
+                                "defaultContent": '',
+                                "data": null,
+                                "targets": [3]
+                            }
                         ]
                     });
                 }else if (intransitreq > 10) {
                     $('table.intransitDetails').dataTable().fnDestroy();
-                    intransitdetails =
+                    intransitdets =
                     $('table.intransitDetails').DataTable({ 
                         "dom": 'lrtp',
                         "language": {
@@ -769,10 +801,20 @@ $(document).ready(function()
                         serverSide: true,
                         ajax: "/intransit/"+trdata.request_no,
                         columns: [
-                            { data: 'items_id', name:'items_id'},
                             { data: 'item_name', name:'item_name'},
                             { data: 'quantity', name:'quantity'},
                             { data: 'serial', name:'serial'}
+                        ],
+                        "columnDefs": [
+                            {   
+                                "render": function ( data, type, row, meta ) {
+                                    console.log(data);
+                                        return '<button id="editBtn" class="btn-primary editBtn" serial_num="'+data.serial+'">Edit Serial</button>';
+                                },
+                                "defaultContent": '',
+                                "data": null,
+                                "targets": [3]
+                            }
                         ]
                     });
                 }
@@ -799,7 +841,7 @@ $(document).ready(function()
             Promise.all([intransitrequest()]).then(() => {
                 if (intransitreq <= 10) {
                     $('table.intransitDetails').dataTable().fnDestroy();
-                    intransitdetails =
+                    intransitdets =
                     $('table.intransitDetails').DataTable({ 
                         "dom": 'rt',
                         "language": {
@@ -809,15 +851,24 @@ $(document).ready(function()
                         serverSide: true,
                         ajax: "/intransit/"+trdata.request_no,
                         columns: [
-                            { data: 'items_id', name:'items_id'},
                             { data: 'item_name', name:'item_name'},
                             { data: 'quantity', name:'quantity'},
                             { data: 'serial', name:'serial'}
+                        ],
+                        "columnDefs": [
+                            {   
+                                "render": function ( data, type, row, meta ) {
+                                        return '<button id="editBtn" class="btn-primary editBtn" serial_num="'+data.serial+'">Edit Serial</button>';
+                                },
+                                "defaultContent": '',
+                                "data": null,
+                                "targets": [3]
+                            }
                         ]
                     });
                 }else if (intransitreq > 10) {
                     $('table.intransitDetails').dataTable().fnDestroy();
-                    intransitdetails =
+                    intransitdets =
                     $('table.intransitDetails').DataTable({ 
                         "dom": 'lrtp',
                         "language": {
@@ -827,10 +878,19 @@ $(document).ready(function()
                         serverSide: true,
                         ajax: "/intransit/"+trdata.request_no,
                         columns: [
-                            { data: 'items_id', name:'items_id'},
                             { data: 'item_name', name:'item_name'},
                             { data: 'quantity', name:'quantity'},
                             { data: 'serial', name:'serial'}
+                        ],
+                        "columnDefs": [
+                            {   
+                                "render": function ( data, type, row, meta ) {
+                                        return '<button id="editBtn" class="btn-primary editBtn" serial_num="'+data.serial+'">Edit Serial</button>';
+                                },
+                                "defaultContent": '',
+                                "data": null,
+                                "targets": [3]
+                            }
                         ]
                     });
                 }
@@ -934,11 +994,17 @@ $(document).ready(function()
                         serverSide: true,
                         ajax: "/send/"+trdata.request_no,
                         columns: [
-                            { data: 'items_id', name:'items_id'},
                             { data: 'item_name', name:'item_name'},
                             { data: 'quantity', name:'quantity'},
-                            { data: 'serial', name:'serial'}
-                        ]
+                            { data: 'serial', name:'serial'},
+                            { data: null}
+                        ],
+                        columnDefs: [
+                            {
+                                "targets": [ 3 ],
+                                "visible": false
+                            }
+                        ],
                     });
                 }else if (resched > 10) {
                     $('table.schedDetails').dataTable().fnDestroy();
@@ -952,11 +1018,17 @@ $(document).ready(function()
                         serverSide: true,
                         ajax: "/send/"+trdata.request_no,
                         columns: [
-                            { data: 'items_id', name:'items_id'},
                             { data: 'item_name', name:'item_name'},
                             { data: 'quantity', name:'quantity'},
-                            { data: 'serial', name:'serial'}
-                        ]
+                            { data: 'serial', name:'serial'},
+                            { data: null}
+                        ],
+                        columnDefs: [
+                            {
+                                "targets": [ 3 ],
+                                "visible": false
+                            }
+                        ],
                     });
                 }
             });
@@ -996,10 +1068,19 @@ $(document).ready(function()
                         serverSide: true,
                         ajax: "/intransit/"+trdata.request_no,
                         columns: [
-                            { data: 'items_id', name:'items_id'},
                             { data: 'item_name', name:'item_name'},
                             { data: 'quantity', name:'quantity'},
                             { data: 'serial', name:'serial'}
+                        ],
+                        "columnDefs": [
+                            {   
+                                "render": function ( data, type, row, meta ) {
+                                        return '<button id="editBtn" class="btn-primary editBtn" serial_num="'+data.serial+'">Edit Serial</button>';
+                                },
+                                "defaultContent": '',
+                                "data": null,
+                                "targets": [3]
+                            }
                         ]
                     });
                 }else if (incomp > 10) {
@@ -1014,10 +1095,19 @@ $(document).ready(function()
                         serverSide: true,
                         ajax: "/intransit/"+trdata.request_no,
                         columns: [
-                            { data: 'items_id', name:'items_id'},
                             { data: 'item_name', name:'item_name'},
                             { data: 'quantity', name:'quantity'},
                             { data: 'serial', name:'serial'}
+                        ],
+                        "columnDefs": [
+                            {   
+                                "render": function ( data, type, row, meta ) {
+                                        return '<button id="editBtn" class="btn-primary editBtn" serial_num="'+data.serial+'">Edit Serial</button>';
+                                },
+                                "defaultContent": '',
+                                "data": null,
+                                "targets": [3]
+                            }
                         ]
                     });
                 }
@@ -1061,6 +1151,37 @@ $(document).ready(function()
             { data: 'branch', name:'branch'},
             { data: 'user', name:'user'}
         ]
+    });
+});
+
+$(document).on("click", ".editBtn", function() {
+    serialnum = $(this).attr('serial_num');
+    console.log(serialnum);
+    $('#serialModal').modal('show');
+    $('#editserial').val(serialnum);
+});
+
+$(document).on("click", "#serial_btn", function() {
+    $.ajax({
+        url: 'update_serial',
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="ctok"]').attr('content')
+        },
+        dataType: 'json',
+        type: 'PUT',
+        data: {
+            old: serialnum,
+            new: $('#editserial').val()
+        },
+        success: function(data) {
+            console.log(data);
+            alert('Serial Number updated');
+            location.reload();
+        },
+        error: function(data) {
+            alert(data.responseText);
+
+        }
     });
 });
 $(document).on("keyup", "#searchall", function () {

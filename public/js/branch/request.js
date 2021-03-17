@@ -37,6 +37,8 @@ $(document).ready(function()
             { data: 'ticket', name:'ticket', "width": "14%"}
         ]
     });
+    
+
     $('#requestTable tbody').on('click', 'tr', function () {
         var trdata = table.row(this).data();
         /*if (trdata.type != 'Service') {

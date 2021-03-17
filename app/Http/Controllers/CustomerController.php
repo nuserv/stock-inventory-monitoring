@@ -66,6 +66,13 @@ class CustomerController extends Controller
             $customer->customer = strtolower($request->input('customer_name'));
             $customer->save();
             $data = '1';
+            /*$oldbranch = Branch::where('id', $olduser->branch_id)->first();
+            $branch = Branch::where('id', $request->input('branch'))->first();
+            Mail::send('update-user', ['olduser'=>$olduser->name.' '.$olduser->middlename.' '.$olduser->lastname, 'oldlevel'=>$olduser->roles->first()->name, 'oldbranch'=>$oldbranch->branch, 'user'=>$user->name.' '.$user->middlename.' '.$user->lastname, 'level'=>$request->input('role'), 'branch'=>$branch->branch],function( $message){ 
+                $message->to('kdgonzales@ideaserv.com.ph', 'Kenneth Gonzales')->subject 
+                    (auth()->user()->name.' '.auth()->user()->lastname.' has updated a user to Service center stock monitoring system.'); 
+                $message->from('noreply@ideaserv.com.ph', 'NO REPLY - Update User'); 
+            });*/
         }
         return response()->json($data);
     }

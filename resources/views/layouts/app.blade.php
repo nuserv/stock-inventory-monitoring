@@ -87,6 +87,7 @@
                 @include('modal.warehouse.request')
                 @include('modal.warehouse.send')
                 @include('modal.warehouse.resched')
+                @include('modal.warehouse.serial')
             @endif
             @if(auth()->user()->hasAnyrole('Manager', 'Editor'))
                 @include('modal.warehouse.request')
