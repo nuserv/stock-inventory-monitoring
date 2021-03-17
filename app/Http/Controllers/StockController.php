@@ -477,7 +477,7 @@ class StockController extends Controller
             if ($request->stat == 'replace') {
                 $defective->items_id = $request->ids;
             }else{
-                $defective->items_id = $request->id;
+                $defective->items_id = $stock->_items_id;
             }
             $defective->status = 'For return';
             if ($request->remarks == 'pm') {
