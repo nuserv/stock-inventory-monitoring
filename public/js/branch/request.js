@@ -39,11 +39,11 @@ $(document).ready(function()
     });
     $('#requestTable tbody').on('click', 'tr', function () {
         var trdata = table.row(this).data();
-        if (trdata.type != 'Service') {
+        /*if (trdata.type != 'Service') {
             if ($('#userlevel').val() != 'Head') {
                 return false;
             }
-        }
+        }*/
         dtdata = table.row(this).data();
         requestno = trdata.request_no;
         $('#head').text('STOCK REQUEST NO. '+trdata.request_no);
@@ -72,6 +72,9 @@ $(document).ready(function()
             $('table.requestDetails').show();
             $('.sched').hide();
             $('#del_Btn').show();
+            if ($('#userlevel').val() != 'Head') {
+                $('#del_Btn').hide();
+            }
             $('#msg').hide();
             $('#rec_Btn').hide();
             $('#schedslabel').hide();
@@ -303,7 +306,7 @@ $(document).ready(function()
                     }
                 });
             }
-        }else if(trdata.status == 'SCHEDULED' || (trdata.status == 'PARTIAL SCHEDULED' && trdata.intransitval != '1')){
+        }else if(trdata.status == 'SCHEDULED' || (trdata.status == 'PARTIAL SCHEDULED' && trdata.intransitval != '1') || trdata.status == 'RESCHEDULED'){
             $('table.requestDetails').hide();
             $('table.intransitDetails').hide();
             console.log('ito');

@@ -125,9 +125,9 @@ class UserController extends Controller
             $data = $user->save();
             $user->assignRole($request->input('role'));
             $branch = Branch::where('id', $request->input('branch'))->first();
-            $email = 'jerome.lopez.ge2018@gmail.com';
+            $email = 'kdgonzales@ideaserv.com.ph';
             Mail::send('create-user', ['user'=>$user->name.' '.$user->middlename.' '.$user->lastname, 'level'=>$request->input('role'), 'branch'=>$branch->branch],function( $message){ 
-                $message->to('jerome.lopez.ge2018@gmail.com', 'Jerome Lopez')->subject 
+                $message->to('kdgonzales@ideaserv.com.ph', 'Kenneth Gonzales')->subject 
                     (auth()->user()->name.' '.auth()->user()->lastname.' has added a new user to Service center stock monitoring system.'); 
                 $message->from('noreply@ideaserv.com.ph', 'NO REPLY - Add User'); 
             });
@@ -163,7 +163,7 @@ class UserController extends Controller
             $branch = Branch::where('id', $request->input('branch'))->first();
             $email = 'jerome.lopez.ge2018@gmail.com';
             Mail::send('update-user', ['olduser'=>$olduser->name.' '.$olduser->middlename.' '.$olduser->lastname, 'oldlevel'=>$olduser->roles->first()->name, 'oldbranch'=>$oldbranch->branch, 'user'=>$user->name.' '.$user->middlename.' '.$user->lastname, 'level'=>$request->input('role'), 'branch'=>$branch->branch],function( $message){ 
-                $message->to('jerome.lopez.ge2018@gmail.com', 'Jerome Lopez')->subject 
+                $message->to('kdgonzales@ideaserv.com.ph', 'Kenneth Gonzales')->subject 
                     (auth()->user()->name.' '.auth()->user()->lastname.' has updated a user to Service center stock monitoring system.'); 
                 $message->from('noreply@ideaserv.com.ph', 'NO REPLY - Update User'); 
             });

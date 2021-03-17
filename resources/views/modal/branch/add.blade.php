@@ -27,7 +27,7 @@
                         </select>
                     </div>
                     <div class="col-md-2 form-group">
-                        <input type="text" id="serial1" class="form-control serial" row_count="1" value="N/A" style="color: black">
+                        <input type="text" id="serial1" class="form-control serial" row_count="1" value="N/A" style="color: black" onkeypress="return event.charCode >= 47">
                     </div>
                     <div class="col-md-1 form-group">
                         <input type="button" class="add_item btn btn-xs btn-primary" btn_id="1" value="Add Item">

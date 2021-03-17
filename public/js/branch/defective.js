@@ -122,19 +122,19 @@ $('table.defectiveTable').DataTable().on('deselect', function () {
 $(document).on('click', '.printBtn', function () {
     var data = table.rows( { selected: true } ).data()
     var id = new Array();
-    /*table.rows().every( function ( rowIdx, tableLoop, rowLoop ) {
+    table.rows().every( function ( rowIdx, tableLoop, rowLoop ) {
         var data = this.data();
         if (data.status == "For return") {
             id.push(data.id);
         }
-    });*/
-    if(data.length > 0){
+    });
+    /*if(data.length > 0){
         for(var i=0;i<data.length;i++){
             if (data[i].status == "For return") {
                 id.push(data[i].id);
             }
         }  
-    }
+    }*/
     $('#loading').show();
     $.ajax({
         url: 'return-update',
@@ -232,17 +232,13 @@ $(document).on('click', '#returnBtn', function(){
                     }
                 }
             },
-            select: {
-                style: 'multi',
-                selector: 'td:first-child'
-            },
             "pageLength": 25,
             columnDefs: [
                 {
                 orderable: false,
                 className: 'select-checkbox',      
                 targets: 0,
-                visible: true
+                visible: false
                 }
             ],
             ajax: {
@@ -274,7 +270,8 @@ $(document).on('click', '#returnBtn', function(){
                         extend: 'print',
                         className: 'btn btn-primary',
                         titleAttr: 'Submit and print preview',
-                        enabled: false,
+                        enabled: true,
+                        autoPrint: false,
                         text: '<span class="icon text-white-50"><i class="fa fa-print" style="color:white"></i></span><span> SUBMIT</span>',
                         customize: function (doc) {
                             var d = new Date();

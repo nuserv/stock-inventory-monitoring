@@ -54,22 +54,26 @@ class ImportController extends Controller
         $data = Excel::toArray($import, $file);
         $error = 0;
         $itemswitherror = [];
+        $itemswithsuccess = [];
         $count = 0;
         foreach ($data[0] as $key => $value) {
             $items = Customer::where('code', $value[0])->first();
             if ($items) {
                 $count = $count + 1;
                 if ($value[1] || $value[1] != 0) {
-                    $add = new CustomerBranch;
-                    $add->customer_branch = $value[2];
-                    $add->address = $value[3];
-                    $add->code = $value[1];
-                    $add->customer_id = $items->id;
-                    if ($value[4]) {
-                        $add->contact = $value[4];
+                    $branch = CustomerBranch::where('customer_id', $items->id)->where('code', $value[1])->first();
+                    if (!$branch) {
+                        $add = new CustomerBranch;
+                        $add->customer_branch = $value[2];
+                        $add->address = $value[3];
+                        $add->code = $value[1];
+                        $add->customer_id = $items->id;
+                        if ($value[4]) {
+                            $add->contact = $value[4];
+                        }
+                        $add->status = '1';
+                        $add->save();
                     }
-                    $add->status = '1';
-                    $add->save();
                 }else{
                     $error = 1;
                     array_push($itemswitherror, $value[1].'-'.$count);
