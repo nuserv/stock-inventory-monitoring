@@ -37,6 +37,7 @@ $(document).ready(function()
             { data: 'category', name:'category'},
             { data: 'stockin', name:'stockin'},
             { data: 'stockout', name:'stockout'},
+            { data: 'defectives', name:'defectives'},
             { data: 'total', name:'total'}
         ]
     });
@@ -171,6 +172,7 @@ $(document).on("click", "#catTable tr", function () {
             { data: 'description', name:'description'},
             { data: 'stockin', name:'stockin'},
             { data: 'stockout', name:'stockout'},
+            { data: 'defectives', name:'defectives'},
             { data: 'total', name:'total'},
             { data: 'UOM', name:'UOM'}
 

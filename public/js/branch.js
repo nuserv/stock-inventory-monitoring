@@ -84,6 +84,7 @@ var aa = 0;
                 },
                 columns: [
                     { data: 'category', name:'category'},
+                    { data: 'defectives', name:'defectives'},
                     { data: 'available', name:'available'},
                     { data: 'stock_out', name:'stock_out'}
                 ]
@@ -277,7 +278,8 @@ var aa = 0;
                     },
                     columns: [
                         { data: 'item', name:'item', "width": "17%"},
-                        { data: 'initial', name:'initial', "width": "17%"},
+                        { data: 'initial', name:'initial', "width": "14%"},
+                        { data: 'defectives', name:'defectives', "width": "14%"},
                         { data: 'available', name:'available', "width": "14%"},
                         { data: 'stock_out', name:'stock_out', "width": "14%"}
                     ]

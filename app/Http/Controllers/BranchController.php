@@ -11,6 +11,7 @@ use App\Stock;
 use App\Initial;
 use App\Item;
 use App\Category;
+use App\Defective;
 use App\Warehouse;
 use Auth;
 use DB;
@@ -94,6 +95,19 @@ class BranchController extends Controller
                 }
                 return $avail;
             })
+            ->addColumn('defectives', function ($category) use ($id){
+                if (auth()->user()->branch->id == 1 && $id == 1) {
+                    $avail = Warehouse::where('status', 'in')
+                        ->where('category_id', $category->id)
+                        ->count();
+                }else{
+                    $avail = Defective::where('status', 'For return')
+                        ->where('branch_id', $id)
+                        ->where('category_id', $category->id)
+                        ->count();
+                }
+                return $avail;
+            })
             ->make(true);
         }else{ 
             $stock = Item::where('category_id', $request->category)->get();
@@ -105,6 +119,19 @@ class BranchController extends Controller
                         ->count();
                 }else{
                     $avail = Stock::where('status', 'in')
+                        ->where('branch_id', $id)
+                        ->where('items_id', $item->id)
+                        ->count();
+                }
+                return $avail.' '.$item->UOM;
+            })
+            ->addColumn('defectives', function ($item) use ($id){
+                if (auth()->user()->branch->id == 1 && $id == 1) {
+                    $avail = Warehouse::where('status', 'in')
+                        ->where('items_id', $item->id)
+                        ->count();
+                }else{
+                    $avail = Defective::where('status', 'For return')
                         ->where('branch_id', $id)
                         ->where('items_id', $item->id)
                         ->count();

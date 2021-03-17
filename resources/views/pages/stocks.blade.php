@@ -35,10 +35,13 @@
                     </th>
                     @if(auth()->user()->branch->branch != "Warehouse" && auth()->user()->branch->branch != "Main-Office")
                     <th>
-                        Stock In
+                        Stock Available
                     </th>
                     <th>
                         Stock Out
+                    </th>
+                    <th>
+                        Defectives
                     </th>
                     @endif
                     <th>
@@ -66,10 +69,13 @@
                         Item Description
                     </th>
                     <th>
-                        Stock In
+                        Stock Available
                     </th>
                     <th>
                         Stock Out
+                    </th>
+                    <th>
+                        Defectives
                     </th>
                     <th>
                         @if(auth()->user()->branch->branch != "Warehouse" && auth()->user()->branch->branch != "Main-Office")Total @else Available Stock @endif
