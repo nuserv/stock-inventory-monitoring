@@ -606,10 +606,19 @@ $(document).ready(function()
                         serverSide: true,
                         ajax: "/send/"+trdata.request_no,
                         columns: [
-                            { data: 'items_id', name:'items_id'},
                             { data: 'item_name', name:'item_name'},
                             { data: 'quantity', name:'quantity'},
                             { data: 'serial', name:'serial'}
+                        ],
+                        "columnDefs": [
+                            {   
+                                "render": function ( data, type, row, meta ) {
+                                        return '<button id="editBtn" class="btn-primary editBtn" serial_num="'+data.serial+'">Edit Serial</button>';
+                                },
+                                "defaultContent": '',
+                                "data": null,
+                                "targets": [3]
+                            }
                         ]
                     });
                 }else if (schedreq > 10) {
@@ -624,10 +633,19 @@ $(document).ready(function()
                         serverSide: true,
                         ajax: "/send/"+trdata.request_no,
                         columns: [
-                            { data: 'items_id', name:'items_id'},
                             { data: 'item_name', name:'item_name'},
                             { data: 'quantity', name:'quantity'},
                             { data: 'serial', name:'serial'}
+                        ],
+                        "columnDefs": [
+                            {   
+                                "render": function ( data, type, row, meta ) {
+                                        return '<button id="editBtn" class="btn-primary editBtn" serial_num="'+data.serial+'">Edit Serial</button>';
+                                },
+                                "defaultContent": '',
+                                "data": null,
+                                "targets": [3]
+                            }
                         ]
                     });
                 }
@@ -658,10 +676,19 @@ $(document).ready(function()
                         serverSide: true,
                         ajax: "/intransit/"+trdata.request_no,
                         columns: [
-                            { data: 'items_id', name:'items_id'},
                             { data: 'item_name', name:'item_name'},
                             { data: 'quantity', name:'quantity'},
                             { data: 'serial', name:'serial'}
+                        ],
+                        "columnDefs": [
+                            {   
+                                "render": function ( data, type, row, meta ) {
+                                        return '<button id="editBtn" class="btn-primary editBtn" serial_num="'+data.serial+'">Edit Serial</button>';
+                                },
+                                "defaultContent": '',
+                                "data": null,
+                                "targets": [3]
+                            }
                         ]
                     });
                 }else if (intransitreq > 10) {
@@ -676,10 +703,19 @@ $(document).ready(function()
                         serverSide: true,
                         ajax: "/intransit/"+trdata.request_no,
                         columns: [
-                            { data: 'items_id', name:'items_id'},
                             { data: 'item_name', name:'item_name'},
                             { data: 'quantity', name:'quantity'},
                             { data: 'serial', name:'serial'}
+                        ],
+                        "columnDefs": [
+                            {   
+                                "render": function ( data, type, row, meta ) {
+                                        return '<button id="editBtn" class="btn-primary editBtn" serial_num="'+data.serial+'">Edit Serial</button>';
+                                },
+                                "defaultContent": '',
+                                "data": null,
+                                "targets": [3]
+                            }
                         ]
                     });
                 }
@@ -1178,9 +1214,9 @@ $(document).ready(function()
 
 $(document).on("click", ".editBtn", function() {
     serialnum = $(this).attr('serial_num');
-    console.log(serialnum);
     $('#serialModal').modal('show');
     $('#editserial').val(serialnum);
+    $('#serial_btn').prop('disabled', true);
 });
 
 $(document).on("click", "#serial_btn", function() {
