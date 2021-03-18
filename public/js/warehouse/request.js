@@ -1245,6 +1245,13 @@ $(document).on("click", "#serial_btn", function() {
 $(document).on("keyup", "#searchall", function () {
     table.search(this.value).draw();
 });
+$(document).on("keyup", "#editserial", function () {
+    if ($(this).val() == serialnum) {
+        $('#serial_btn').prop('disabled', true);
+    }else{
+        $('#serial_btn').prop('disabled', false);
+    }
+});
 
 var th = ['','thousand','million', 'billion','trillion'];
 // uncomment this line for English Number System
