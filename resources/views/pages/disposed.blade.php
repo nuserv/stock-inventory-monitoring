@@ -2,7 +2,7 @@
 
 @section('content')
 
-<br><div><input type="button" class="btn btn-primary" id="generate" value="Reports"><input type="text" id="searchall" style="float: right;margin-right: 20px;" placeholder="Search.."></div><br>
+<br><div><input type="button" class="btn btn-primary" id="generate" value="Reports"><input type="text" id="searchall" style="float: right;margin-right: 20px;" placeholder="Search.." autocomplete="off"></div><br>
 <div class="table-responsive">
     <table class="table disposedTable" id="disposedTable" style="font-size:80%">
         <thead class="thead-dark">

@@ -252,7 +252,7 @@ class StockRequestController extends Controller
     }
     public function getRequestDetails(Request $request, $id)
     {
-        return DataTables::of(RequestedItem::where('request_no', $id)->get())
+        return DataTables::of(RequestedItem::where('request_no', $id)->where('pending', '!=', 0)->get())
         ->addColumn('item_name', function (RequestedItem $RequestedItem){
             return strtoupper($RequestedItem->items->item);
         })
@@ -261,10 +261,10 @@ class StockRequestController extends Controller
             return $uom->uom;
         })
         ->addColumn('qty', function (RequestedItem $RequestedItem){
-            if ($RequestedItem->quantity != 1) {
-                return $RequestedItem->quantity. ' ' .$RequestedItem->items->UOM.'s';
+            if ($RequestedItem->pending != 1) {
+                return $RequestedItem->pending. ' ' .$RequestedItem->items->UOM.'s';
             }else{
-                return $RequestedItem->quantity. ' ' .$RequestedItem->items->UOM;
+                return $RequestedItem->pending. ' ' .$RequestedItem->items->UOM;
             }
         })
         ->addColumn('validation', function (RequestedItem $RequestedItem){
@@ -634,7 +634,7 @@ class StockRequestController extends Controller
             if ($preparedItem) {
                 $reqno->status = $request->status;
             }else{
-                $reqno->status = 'PARTIAL';
+                $reqno->status = 'PENDING';
             }  
         }
         $reqno->save();

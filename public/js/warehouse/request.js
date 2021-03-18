@@ -46,7 +46,7 @@ $(document).ready(function()
     table =
     $('table.requestTable').DataTable({ 
         "dom": 'lrtip',
-        "pageLength": 10,
+        "pageLength": 25,
         "language": {
             "emptyTable": "No stock request found!",
             "info": "\"Showing _START_ to _END_ of _TOTAL_ Stock Request\"",
@@ -126,7 +126,7 @@ $(document).ready(function()
         },
         columns: [
             { data: 'id', name:'id'},
-            { data: 'created_at', name:'date', "width": "14%" },
+            { data: 'created_at', name:'created_at', "width": "14%" },
             { data: 'reqBy', name:'reqBy', "width": "14%"},
             { data: 'branch', name:'branch',"width": "14%"},
             { data: 'type', name:'type', "width": "14%"},
@@ -504,6 +504,8 @@ $(document).ready(function()
             //$('#unresolveBtn').hide();
             $('table.requestDetails').show();
             $('table.schedDetails').show();
+            $('table.intransitDetails').hide();
+            $('#intransitlabel').remove();
             var partreq;
             Promise.all([partialrequest()]).then(() => { 
                 if (partreq <= 10) {

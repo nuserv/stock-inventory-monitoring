@@ -30,7 +30,7 @@ $(document).ready(function()
         serverSide: true,
         ajax: 'requests',
         columns: [
-            { data: 'created_at', name:'date', "width": "14%" },
+            { data: 'created_at', name:'created_at', "width": "14%" },
             { data: 'reqBy', name:'reqBy', "width": "14%"},
             { data: 'type', name:'type', "width": "14%"},
             { data: 'status', name:'status', "width": "14%"},
@@ -544,6 +544,7 @@ $(document).ready(function()
         }else if(trdata.status == 'PARTIAL'){
             $('table.requestDetails').show();
             $('table.schedDetails').hide();
+            $('table.intransitDetails').hide();
             $('.sched').show();
             $('#sched').val(trdata.sched);
             $('#del_Btn').hide();

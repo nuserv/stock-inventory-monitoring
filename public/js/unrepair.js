@@ -4,7 +4,7 @@ $(document).ready(function()
     if ($('#userlevel').val() == 'Repair') {
         table =
         $('table.unrepairTable').DataTable({ 
-            "dom": 'lrtip',
+            "dom": 'flrtip',
             "language": {
                 "emptyTable": " "
             },
