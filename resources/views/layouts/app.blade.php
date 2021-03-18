@@ -9,10 +9,10 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         @auth
             @if(auth()->user()->branch->branch == "Warehouse")
-                <meta http-equiv="refresh" content="895">
+                <meta http-equiv="refresh" content="800">
             @else
                 @if(auth()->user()->hasanyrole('Returns Manager', 'Manager', 'Editor'))
-                    <meta http-equiv="refresh" content="895">
+                    <meta http-equiv="refresh" content="800">
                 @else
                     @if(auth()->user()->branch->branch != "Warehouse")
                         <meta http-equiv="refresh" content="601;url={{ url('/logout') }}">

@@ -16,7 +16,7 @@
                         </div>
                     </a>
                 </div>
-                @if (!auth()->user()->hasanyrole('Manager', 'Editor'))
+                @if (!auth()->user()->hasanyrole('Manager', 'Editor', 'Encoder'))
                 <div class="col-sm-2">
                     <a href="{{ route('stocks.index')}}">
                         <div class="card bg-card">
@@ -61,7 +61,7 @@
                 </div>
                 @endif
             @endif
-            @if(auth()->user()->branch->branch == 'Warehouse' || auth()->user()->hasanyrole('Manager', 'Editor'))
+            @if(auth()->user()->hasanyrole('Warehouse Manager', 'Manager', 'Editor'))
             <div class="col-sm-2">
                 <a href="{{ url('resolved') }}">
                     <div class="card bg-card">

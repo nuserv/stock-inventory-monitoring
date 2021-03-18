@@ -57,12 +57,12 @@
                         <a class="nav-link {{ Request::is('loans') ? 'active' : '' }}" href="{{ route('loans') }}">Loans</a>
                     </li>
                 @endif
-                @if(!auth()->user()->hasanyrole('Tech', 'Warehouse Manager'))
+                @if(!auth()->user()->hasanyrole('Tech', 'Warehouse Manager', 'Encoder'))
                 <li class="nav-item">
                     <a class="nav-link {{ Request::is('return') ? 'active' : '' }}" href="{{ route('return.index') }}">Returns</a>
                 </li>
                 @endif
-                @if (auth()->user()->hasanyrole('Warehouse Manager'))
+                @if (auth()->user()->hasanyrole('Warehouse Manager', 'Encoder'))
                     <li class="nav-item">
                         <a class="nav-link {{ Request::is('return') ? 'active' : '' }}" href="{{ route('return.index') }}">Repaired</a>
                     </li>
