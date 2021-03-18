@@ -221,11 +221,17 @@ $(document).ready(function()
                     {"className": "dt-center", "targets": "_all"}
                 ],
                 columns: [
-                    { data: 'items_id', name:'items_id'},
                     { data: 'item_name', name:'item_name'},
                     { data: 'quantity', name:'quantity'},
-                    { data: 'serial', name:'serial'}
-                ]
+                    { data: 'serial', name:'serial'},
+                    { data: null}
+                ],
+                columnDefs: [
+                    {
+                        "targets": [ 3 ],
+                        "visible": false
+                    }
+                ],
             });
             //$('#unresolveBtn').hide();
             $('#prcBtn').hide();
@@ -384,7 +390,14 @@ $(document).ready(function()
             $('table.schedDetails').show();
             var partreq;
             Promise.all([partialrequest()]).then(() => { 
-                if (partreq <= 10) {
+                if (partreq == 0) {
+                    $('table.requestDetails').dataTable().fnDestroy();
+                    $('table.requestDetails').hide();
+                    $('#prcBtn').hide();
+                    $('#reqlabel').remove();
+                    $('#printBtn').show();
+
+                }else if (partreq <= 10) {
                     $('table.requestDetails').dataTable().fnDestroy();
                     requestdetails = 
                     $('table.requestDetails').DataTable({ 
@@ -445,6 +458,7 @@ $(document).ready(function()
                     success:function(data)
                     {
                         partreq = data.data.length;
+                        console.log(data);
                     },
                 });
             }
@@ -508,7 +522,13 @@ $(document).ready(function()
             $('#intransitlabel').remove();
             var partreq;
             Promise.all([partialrequest()]).then(() => { 
-                if (partreq <= 10) {
+                if (partreq == 0) {
+                    $('table.requestDetails').dataTable().fnDestroy();
+                    $('table.requestDetails').hide();
+                    $('#reqlabel').remove();
+                    $('#printBtn').show();
+                    $('#prcBtn').hide();
+                }else if (partreq <= 10) {
                     $('table.requestDetails').dataTable().fnDestroy();
                     requestdetails = 
                     $('table.requestDetails').DataTable({ 

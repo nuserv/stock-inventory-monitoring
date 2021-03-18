@@ -626,7 +626,7 @@ class StockRequestController extends Controller
             if ($preparedItem) {
                 $reqno->status = 'INCOMPLETE';
             }else{
-                $reqno->status = $request->status;
+                $reqno->stat = $request->status;
             }
         }
         if ($request->status  == "PARTIAL IN TRANSIT") {
