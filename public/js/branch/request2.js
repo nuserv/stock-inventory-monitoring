@@ -28,7 +28,7 @@ $(document).on('click', '#rec_Btn', function(){
     $('#loading').show();
     if(dtdata.status == "IN TRANSIT" || dtdata.status == "INCOMPLETE"){
         var status = "COMPLETED";
-    }else if(dtdata.status == "PARTIAL IN TRANSIT"){
+    }else if(dtdata.status == "PARTIAL IN TRANSIT" || dtdata.status == "PARTIAL SCHEDULED"){
         var status = "PARTIAL IN TRANSIT";
     }
     var datas = intransittable.rows( { selected: true } ).data();

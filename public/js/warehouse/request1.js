@@ -101,15 +101,15 @@ $(document).on('click', '#prcBtn', function(){
  
     for(var i=0;i<rowcount;i++){
         if (rowselected[i].uom == 'Unit') {
-            if (rowselected[i].quantity <= rowselected[i].stock) {
-                for(var e=0;e<rowselected[i].quantity;e++){
+            if (rowselected[i].pending <= rowselected[i].stock) {
+                for(var e=0;e<rowselected[i].pending;e++){
                     w++;
                     var additem = '<div class="row no-margin" id="row'+w+'"><div class="col-md-2 form-group"><select id="item'+w+'" class="form-control item" row_count="'+w+'" style="color:black"><option selected disabled>select item code</option><option value="'+rowselected[i].items_id+'">'+rowselected[i].items_id+'</option></select></div><div class="col-md-3 form-group"><select id="desc'+w+'" class="form-control desc" row_count="'+w+'" style="color:black"><option selected disabled>select item description</option><option value="'+rowselected[i].items_id+'">'+rowselected[i].item_name+'</option></select></div><div class="col-md-2 form-group"><input type="text" class="form-control serial" row_count="'+w+'" id="serial'+w+'" placeholder="input serial" style="color:black" autocomplete="off" onkeypress="return event.charCode >= 47"></div></div>'
                     $('#reqfield').append(additem);
                     $('#item'+w).val(rowselected[i].items_id);
                     $('#desc'+w).val(rowselected[i].items_id);
                 }
-            }else if(rowselected[i].quantity > rowselected[i].stock){
+            }else if(rowselected[i].pending > rowselected[i].stock){
                 for(var e=0;e<rowselected[i].stock;e++){
                     w++;
                     var additem = '<div class="row no-margin" id="row'+w+'"><div class="col-md-2 form-group"><select id="item'+w+'" class="form-control item" row_count="'+w+'" style="color:black"><option selected disabled>select item code</option><option value="'+rowselected[i].items_id+'">'+rowselected[i].items_id+'</option></select></div><div class="col-md-3 form-group"><select id="desc'+w+'" class="form-control desc" row_count="'+w+'" style="color:black"><option selected disabled>select item description</option><option value="'+rowselected[i].items_id+'">'+rowselected[i].item_name+'</option></select></div><div class="col-md-2 form-group"><input type="text" class="form-control serial" row_count="'+w+'" id="serial'+w+'" placeholder="input serial" style="color:black" autocomplete="off" onkeypress="return event.charCode >= 47"></div></div>'
@@ -119,8 +119,8 @@ $(document).on('click', '#prcBtn', function(){
                 }
             }
         }else{
-            if (rowselected[i].quantity <= rowselected[i].stock) {
-                var maxqty = rowselected[i].quantity;
+            if (rowselected[i].pending <= rowselected[i].stock) {
+                var maxqty = rowselected[i].pending;
             }else{
                 var maxqty = rowselected[i].stock;
             }
