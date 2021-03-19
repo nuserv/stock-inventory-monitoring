@@ -26,7 +26,7 @@ $(document).on('click', '#rec_Btn', function(){
     var reqno = requestno;
     var sched = $('#sched').val();
     $('#loading').show();
-    if(dtdata.status == "IN TRANSIT"){
+    if(dtdata.status == "IN TRANSIT" || dtdata.status == "INCOMPLETE"){
         var status = "COMPLETED";
     }else if(dtdata.status == "PARTIAL IN TRANSIT"){
         var status = "PARTIAL IN TRANSIT";
