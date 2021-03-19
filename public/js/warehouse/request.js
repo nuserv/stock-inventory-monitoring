@@ -882,6 +882,7 @@ $(document).ready(function()
             }
         }else if(trdata.status == 'PARTIAL IN TRANSIT'){
             $('#printBtn').hide();
+            $('#prcBtn').hide();
             $('table.schedDetails').remove();
             $('#schedslabel').remove();
             $('#intransitlabel').show();

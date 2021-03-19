@@ -233,7 +233,7 @@ $(document).ready(function()
             $('#del_Btn').hide();
             $('#reqlabel').hide();
             $('#schedslabel').hide();
-            $('#rec_Btn').show();
+            $('#rec_Btn').hide();
             $('#msg').show();
             $('#rec_Btn').prop('disabled', true);
             $('#intransitrow').show();
@@ -263,10 +263,7 @@ $(document).ready(function()
                             { data: 'item_name', name:'item_name'},
                             { data: 'quantity', name:'quantity'},
                             { data: 'serial', name:'serial'}
-                        ],
-                        select: {
-                            style: 'multi'
-                        }
+                        ]
                     });
                 }else if (intransit > 10) {
                     $('table.intransitDetails').dataTable().fnDestroy();
@@ -285,10 +282,7 @@ $(document).ready(function()
                             { data: 'item_name', name:'item_name'},
                             { data: 'quantity', name:'quantity'},
                             { data: 'serial', name:'serial'}
-                        ],
-                        select: {
-                            style: 'multi'
-                        }
+                        ]
                     });
                 }
             });
