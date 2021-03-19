@@ -43,7 +43,7 @@
                     <a href="{{ route('index.service-unit')}}">
                         <div class="card bg-card">
                             <div class="card-body text-center">
-                                <p class="card-text">SERVICE UNIT</p>
+                                <p class="card-text">SERVICE OUT</p>
                                 <p class="card-text">{{ $sunits }}</p>
                             </div>
                         </div>

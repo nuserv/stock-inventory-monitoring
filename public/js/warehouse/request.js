@@ -106,7 +106,6 @@ $(document).ready(function()
                 $('td', nRow).eq(4).css('color', 'GREEN');
                 $('td', nRow).eq(4).css('font-weight', 'bold');
             }
-
         },
         "order": [ 0, 'asc'],
         "columnDefs": [
@@ -134,10 +133,6 @@ $(document).ready(function()
             { data: 'ticket', name:'ticket', "width": "14%"}
         ]
     });
-    var cells = table.cells(":contains('UNRESOLVED')").nodes();
-    $(cells).css('color', '#F1423A');
-
-    
 
     $('#requestTable tbody').on('click', 'tr', function () { 
         console.log('ito');
@@ -217,9 +212,6 @@ $(document).ready(function()
                 processing: true,
                 serverSide: true,
                 ajax: "/intransit/"+trdata.request_no,
-                columnDefs: [
-                    {"className": "dt-center", "targets": "_all"}
-                ],
                 columns: [
                     { data: 'item_name', name:'item_name'},
                     { data: 'quantity', name:'quantity'},
@@ -271,7 +263,7 @@ $(document).ready(function()
                 if (trdata.left > 1) {
                     var withs = 'days';
                 }else if(trdata.left == 1){
-                    trdata.hour == trdata.hour-24;
+                    trdata.hour = trdata.hour-24;
                     var withs = 'day and '+toWords(trdata.hour)+'('+trdata.hour+') hours';
                     if (trdata.hour == 1) {
                         var withs = 'day and '+toWords(trdata.hour)+'('+trdata.hour+') hour';
