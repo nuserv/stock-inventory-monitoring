@@ -13,7 +13,7 @@
         @auth
             @if(auth()->user()->branch->branch == "Warehouse")
                 <meta http-equiv="refresh" content="800">
-            @elsemay 
+            @else
                 @if(auth()->user()->hasanyrole('Returns Manager', 'Manager', 'Editor'))
                     <meta http-equiv="refresh" content="800">
                 @else
