@@ -101,6 +101,8 @@ $(document).on('click', '#saveBtn', function(){
                 if(data > '0'){
                     table.draw();
                     $('#customerbranchModal .close').click();
+                    alert('Branch successfully added!');
+                    location.reload();
                 }else{
                     alert("Branch already registered");
                 }
@@ -132,6 +134,8 @@ $(document).on('click', '#saveBtn', function(){
                 if(data > '0'){
                     table.draw();
                     $('#customerbranchModal .close').click();
+                    alert('Branch successfully added!');
+                    location.reload();
                 }else{
                     alert("Branch already registered");
                 }

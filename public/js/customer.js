@@ -84,6 +84,8 @@ $('#customerForm').on('submit', function(e){
                 if(data > '0'){
                     customertable.draw();
                     $('#customerModal .close').click();
+                    alert('Branch successfully added!');
+                    location.reload();
                 }else{
                     alert("Customer already registered");
                 }
@@ -106,6 +108,8 @@ $('#customerForm').on('submit', function(e){
                 if(data > '0'){
                     customertable.draw();
                     $('#customerModal .close').click();
+                    alert('Branch successfully added!');
+                    location.reload();
                 }else{
                     alert("Customer already registered");
                 }

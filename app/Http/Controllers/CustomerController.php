@@ -87,7 +87,7 @@ class CustomerController extends Controller
         }else{
             $customerbranch = new CustomerBranch;
             $customerbranch->code = strtolower($request->bcode);
-            $customerbranch->customer_branch = strtolower($request->bname);
+            $customerbranch->customer_branch = $request->bname;
             $customerbranch->customer_id = $request->bid;
             $customerbranch->address = $request->address;
             $customerbranch->contact = $request->number;
