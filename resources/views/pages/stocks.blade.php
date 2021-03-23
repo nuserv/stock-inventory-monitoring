@@ -13,7 +13,7 @@
             @endforeach
     </div>
 @endif
-</div>
+
 @if(auth()->user()->hasanyrole('Head', 'Tech'))
 <form class="search-form" action="#" style="margin:auto;max-width:300px">
   <input type="text" placeholder="Search.." id="searchall" size="50" autocomplete="off">

@@ -74,7 +74,7 @@
         <li><span class="GREEN"></span> Stock Request (PENDING)</li><br>
         <li><span class="MAGENTA"></span> Delivery Delays (SCHEDULED & PARTIAL SCHEDULED)</li><br>
         <li><span class="GRAYROW"></span> (GRAY ROW) 24 Hours Delay (Urgent Service - PENDING)</li><br>
-        <li><span class="RED"></span> Unresolve and Incomplete issues</li>
+        <li><span class="RED"></span> Unresolved and Incomplete issues</li>
     </ul>
 </div>
 @endsection

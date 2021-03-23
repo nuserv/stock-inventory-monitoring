@@ -54,6 +54,9 @@ class CustomerController extends Controller
                 return 'Inactive';
             }
         })
+        ->addColumn('customer_branch', function (CustomerBranch $customer){
+            return ucwords($customer->customer_branch);
+        })
         ->make(true);
     }
     public function store(Request $request)
