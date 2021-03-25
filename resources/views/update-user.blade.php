@@ -24,7 +24,6 @@
                         {{ $olduser }}
                     </p>
                 </td>
-                <td>To</td>
                 <td width="542" style="width:546pt;border-top:none;border:solid #d9d9d9 1.0pt;background:white;">
                     <p>
                         {{ $user }}
@@ -41,9 +40,7 @@
                            {{ $oldlevel }}
                         </span>
                     </p>
-                </td>
-                <td>To</td>
-                <td width="542" style="width:546pt;border-top:none;border:solid #d9d9d9 1.0pt;background:white;">
+                </td><td width="542" style="width:546pt;border-top:none;border:solid #d9d9d9 1.0pt;background:white;">
                     <p>
                         <span style="color:black">
                            {{ $level }}
@@ -55,7 +52,6 @@
                 <td width="165" style="width:143;border-top:none;border:solid #d9d9d9 1.0pt;background:white;">
                     <p>Branch:</p>
                 </td>
-                <td>To</td>
                 <td width="542" style="width:546pt;border-top:none;border:solid #d9d9d9 1.0pt;background:white;">
                     <p>
                         <span style="color:black">
