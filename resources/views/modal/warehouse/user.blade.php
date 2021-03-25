@@ -15,25 +15,25 @@
                     <div class="form-group row">
                         <label for="first_name" class="col-md-4 col-form-label text-md-right">{{ __('First Name') }}</label>
                         <div class="col-md-6">
-                            <input id="first_name" type="text" class="form-control" name="first_name" style="color: black;" disabled>
+                            <input id="first_name" type="text" class="form-control" name="first_name" style="color: black;" disabled required>
                         </div>
                     </div>
                     <div class="form-group row">
                         <label for="middle_name" class="col-md-4 col-form-label text-md-right">{{ __('Middle Name') }}</label>
                         <div class="col-md-6">
-                            <input id="middle_name" type="text" class="form-control" name="middle_name" style="color: black;" disabled>
+                            <input id="middle_name" type="text" class="form-control" name="middle_name" style="color: black;" disabled required>
                         </div>
                     </div>
                     <div class="form-group row">
                         <label for="last_name" class="col-md-4 col-form-label text-md-right">{{ __('Last Name') }}</label>
                         <div class="col-md-6">
-                            <input id="last_name" type="text" class="form-control" name="last_name" style="color: black;" disabled>
+                            <input id="last_name" type="text" class="form-control" name="last_name" style="color: black;" disabled required>
                         </div>
                     </div>
                     <div class="form-group row">
                         <label for="email" class="col-md-4 col-form-label text-md-right">{{ __('E-Mail Address') }}</label>
                         <div class="col-md-6">
-                            <input id="email" type="email" class="form-control" name="email" style="color: black;" disabled>
+                            <input id="email" type="email" class="form-control" name="email" style="color: black;" disabled required>
                         </div>
                     </div>
                     <div class="form-group row">
@@ -49,9 +49,9 @@
                     </div>
                     <div class="form-group row">
                         <label for="branch" class="col-md-4 col-form-label text-md-right">{{ __('Branch') }}</label>
-
                         <div class="col-md-6">
                             <select name="branch" id="branch" class="form-control branch" style="color: black;" disabled>
+                            <option selected disabled>select branch</option>
                             </select>
                         </div>
                     </div>
@@ -59,17 +59,7 @@
                         <label for="role" class="col-md-4 col-form-label text-md-right">{{ __('Level') }}</label>
                         <div class="col-md-6">
                             <select name="role" id="role" class="form-control" style="color: black;" disabled>
-                                <option selected disabled>select roles</option>
-                                    @if(auth()->user()->hasrole('Manager'))
-                                        <option value="Manager">Manager</option>
-                                    @endif
-                                    <option value="Editor">Editor</option>
-                                    <option value="Warehouse Manager">Warehouse Manager</option>
-                                    <option value="Returns Manager">Returns Manager</option>
-                                    <option value="Head">Head</option>
-                                    <option value="Repair">Repair</option>
-                                    <option value="Tech">Tech</option>
-                                    <option value="Encoder">Encoder</option>
+                            <option selected disabled>select level</option>
                             </select>
                         </div>
                     </div>

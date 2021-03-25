@@ -137,7 +137,7 @@ Route::put('resolved', 'StockRequestController@resolved')->middleware('ajax');
 Route::put('update_serial', 'StockRequestController@upserial')->middleware('ajax');
 Route::get('mytest', 'StockRequestController@test');//->middleware('ajax');
 
-Route::get('users', 'UserController@getUsers')->middleware('ajax');
+Route::get('users', 'UserController@getUsers');//->middleware('ajax');
 Route::get('user', 'UserController@index')->name('user.index');
 Route::get('getBranchName', 'UserController@getBranchName')->middleware('ajax');
 Route::post('user_add', 'UserController@store')->middleware('ajax');

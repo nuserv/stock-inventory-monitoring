@@ -105,8 +105,6 @@ class UserController extends Controller
             'middle_name' => ['required', 'string', 'min:3', 'max:255'],
             'last_name' => ['required', 'string', 'min:3', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
-            'branch' => ['required', 'string'],
-            'area' => ['required', 'string'],
             'role' => ['required', 'string'],
             'status' => ['required', 'string'],
             'password' => ['required', 'string', 'min:1', 'confirmed'],
@@ -133,7 +131,7 @@ class UserController extends Controller
             });
             return response()->json($data);
         }
-        return response()->json(['error'=>$validator->errors()->all()]);
+        return response()->json(['error'=>$validator->errors()->first()]);
     }
     public function update(Request $request, $id)
     {
