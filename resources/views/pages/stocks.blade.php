@@ -69,7 +69,7 @@
                         Item Description
                     </th>
                     <th>
-                        Stock Available
+                        Stock In
                     </th>
                     <th>
                         Stock Out
