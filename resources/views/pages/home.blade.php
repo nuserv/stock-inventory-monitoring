@@ -10,7 +10,7 @@
                     <a href="{{ route('stock.index')}}">
                         <div class="card bg-card">
                             <div class="card-body text-center">
-                                <p class="card-text">STOCK REQUEST</p>
+                                <p class="card-text" style="font-size: 12px">STOCK REQUEST</p>
                                 <p class="card-text">{{ $stockreq }}</p>
                             </div>
                         </div>
@@ -21,7 +21,7 @@
                     <a href="{{ route('stocks.index')}}">
                         <div class="card bg-card">
                             <div class="card-body text-center">
-                                <p class="card-text">STOCKS</p>
+                                <p class="card-text" style="font-size: 12px">STOCKS</p>
                                 <p class="card-text">{{ $units }}</p>
                             </div>
                         </div>
@@ -32,7 +32,7 @@
                     <a href="{{ route('return.index')}}">
                         <div class="card bg-card">
                             <div class="card-body text-center">
-                                <p class="card-text">@if (auth()->user()->hasanyrole('Warehouse Manager', 'Encoder')) REPAIRED @else RETURNS @endif</p>
+                                <p class="card-text" style="font-size: 12px">@if (auth()->user()->hasanyrole('Warehouse Manager', 'Encoder')) REPAIRED @else RETURNS @endif</p>
                                 <p class="card-text">{{ $returns }}</p>
                             </div>
                         </div>
@@ -43,7 +43,7 @@
                     <a href="{{ route('index.service-unit')}}">
                         <div class="card bg-card">
                             <div class="card-body text-center">
-                                <p class="card-text">SERVICE OUT</p>
+                                <p class="card-text" style="font-size: 12px">SERVICE OUT</p>
                                 <p class="card-text">{{ $sunits }}</p>
                             </div>
                         </div>
@@ -53,7 +53,7 @@
                     <a href="{{ url('loans') }}">
                         <div class="card @if($loans > 0)bg-card-red @else bg-card @endif">
                             <div class="card-body text-center">
-                                <p class="card-text">LOAN REQUEST</p>
+                                <p class="card-text" style="font-size: 12px">LOAN REQUEST</p>
                                 <p class="card-text">{{ $loans }}</p>
                             </div>
                         </div>
@@ -65,7 +65,7 @@
             <div class="col-sm-2">
                 <a href="{{ url('resolved') }}">
                     <div class="card bg-card">
-                        <div class="card-body text-center">
+                        <div class="card-body text-center" style="font-size: 12px">
                             <p class="card-text">RESOLVED</p>
                             <p class="card-text">@if($resolved > 0){{ $resolved }} @else {{ $resolved }} @endif</p>
                         </div>
@@ -76,7 +76,7 @@
                 <a href="{{ url('request') }}">
                     <div class="card @if($unresolved > 0)bg-card-red @else bg-card @endif"">
                         <div class="card-body text-center">
-                            <p class="card-text">UNRESOLVED</p>
+                            <p class="card-text" style="font-size: 12px">UNRESOLVED</p>
                             <p class="card-text">@if($unresolved > 0){{ $unresolved }} @else {{ $unresolved }} @endif</p>
                         </div>
                     </div>
