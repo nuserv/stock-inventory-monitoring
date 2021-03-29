@@ -114,7 +114,7 @@
         <input type="button" id="addCatBtn" class="btn btn-xs btn-primary" value="Add Category">&nbsp;&nbsp;
         <input type="button" id="addCodeBtn" class="btn btn-xs btn-primary" value="Add Item">
     @endif
-    @if(auth()->user()->hasAnyrole('Warehouse Manager|Head'))
+    @if(auth()->user()->hasAnyrole('Warehouse Manager|Head|Encoder'))
         <input type="button" id="importBtn" class="btn btn-xs btn-primary ml-auto" value="IMPORT">&nbsp;&nbsp;
         <input type="button" id="addStockBtn" class="btn btn-xs btn-primary" value="ADD STOCK">
     @endif
