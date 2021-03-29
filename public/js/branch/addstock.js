@@ -34,7 +34,7 @@ $(document).on('click', '.sub_Btn', function(){
         }
     }
     if (check > 1) {
-        window.location.href = 'stocks';
+        location.reload();
     }
 });
 $(document).on('change', '.category', function(){

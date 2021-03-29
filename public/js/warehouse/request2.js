@@ -177,7 +177,7 @@ $(document).on('click', '.sub_Btn', function(){
                     dataType: 'json',
                     success:function()
                     {
-                        return window.location.href = '/print/'+$('#sreqno').val();
+                        window.location.href = '/print/'+$('#sreqno').val();
                     },
                     error: function (data) {
                         alert(data.responseText);
@@ -197,16 +197,12 @@ $(document).on('keyup', '.serial', function () {
         if (q <= w) {
             if ($.inArray(q, uomarray) == -1){
                 if (!$('#serial'+q).val()) {
-                    console.log(uomarray+'test');
                     pending++;
                     $('#sub_Btn').prop('disabled', true);
                     check = false;
                     if (pending != w) {
                         check = true;
                         $('#sub_Btn').prop('disabled', false);
-                        console.log('dito');
-                        console.log(pending);
-                        console.log(w);
                     }
                 }
                 if (w == 1 && !$('#serial'+q).val()) {

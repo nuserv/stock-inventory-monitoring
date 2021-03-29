@@ -27,8 +27,6 @@ $(document).ready(function()
         }],
         "fnRowCallback": function(nRow, aData) {
             //"createdRow": function ( nRow, aData ) {
-                console.log(nRow);
-                console.log(aData);
                 if (aData.schedule && (aData.status == "SCHEDULED" || aData.status == "RESCHEDULED")) {
                     var scheddate = aData.schedule
                     var datesplited = scheddate.split("/");;
@@ -69,7 +67,6 @@ $(document).ready(function()
                         $('td', nRow).eq(4).css('font-weight', 'bold');
                     }
                 }
-                
                 if ( aData.status == "UNRESOLVED" || aData.status == "INCOMPLETE") {        
                     $('td', nRow).eq(4).css('color', '#F1423A');
                     $('td', nRow).eq(4).css('font-weight', 'bold');
@@ -82,7 +79,6 @@ $(document).ready(function()
                     $('td', nRow).eq(4).css('color', 'GREEN');
                     $('td', nRow).eq(4).css('font-weight', 'bold');
                 }
-    
             },
         processing: true,
         serverSide: true,
@@ -360,7 +356,6 @@ $(document).ready(function()
             });
         }   
         $('#requestModal').modal('show');
-
     });
 });
 $(document).on("click", ".intransitDetails tr", function() {

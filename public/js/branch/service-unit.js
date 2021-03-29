@@ -33,11 +33,11 @@ $(document).on('click', '#out_Btn', function(){
 $(document).on('click', '.in-close', function(){
     $('#service-unitModal').modal('toggle');
     $('#loading').show();
-    window.location.href = 'service-unit';
+    location.reload();
 });
 
 $(document).on('click', '.close', function(){
-    window.location.href = 'service-unit';
+    location.reload();
 });
 
 $(document).on("click", "#sUnitTable tr", function () {
@@ -145,8 +145,7 @@ $(document).on('click', '.in_sub_Btn', function(){
                     },
                     success:function(data)
                     {
-                        //console.log(data);
-                        window.location.href = 'service-unit';
+                        location.reload();
                     },
                     error: function (data) {
                         alert(data.responseText);
@@ -175,7 +174,7 @@ $(document).on('click', '.in_sub_Btn', function(){
                     },
                     success:function()
                     {
-                        window.location.href = 'service-unit';
+                        location.reload();
                     },
                     error: function (data) {
                         alert(data.responseText);

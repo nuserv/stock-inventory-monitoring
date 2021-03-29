@@ -46,7 +46,7 @@ $(document).on('click', '#save_Btn', function(){
         }
         if (q == y) {
             if (check > 1) {
-                window.location.href = '/request';
+                location.reload();
             }
         }
     }
@@ -93,7 +93,7 @@ $(document).on('change', '.category', function(){
 });
 
 $(document).on('click', '.cancel', function(){
-    window.location.href = 'request';
+    location.reload();
 });
 
 $(document).on('click', '#printBtn', function(){

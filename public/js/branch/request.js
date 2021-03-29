@@ -41,11 +41,6 @@ $(document).ready(function()
 
     $('#requestTable tbody').on('click', 'tr', function () {
         var trdata = table.row(this).data();
-        /*if (trdata.type != 'Service') {
-            if ($('#userlevel').val() != 'Head') {
-                return false;
-            }
-        }*/
         dtdata = table.row(this).data();
         requestno = trdata.request_no;
         $('#head').text('STOCK REQUEST NO. '+trdata.request_no);

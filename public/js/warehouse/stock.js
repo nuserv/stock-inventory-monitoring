@@ -57,9 +57,9 @@ $(document).on("click", "#catTable tr", function () {
     var catdata = cattable.row(this).data();
     $('table.stockTable').dataTable().fnDestroy();
     $('#itemsearch').show();
-    $('#catname').text(catdata.category.replace(/&amp;/g, '&'));
+    $('#catname').text(catdata.category.replace(/&quot;/g, '\"').replace(/&amp;/g, '\&'));
     $('#catname').show();
-    $('#head').text(catdata.category.replace(/&amp;/g, '&'));
+    $('#head').text(catdata.category.replace(/&quot;/g, '\"').replace(/&amp;/g, '\&'));
     $('#catTable').hide();
     $('#ctable').hide();
     $('#stockTable').show();
@@ -241,7 +241,7 @@ $(document).on('click', '.sub_Btn', function(){
         }
     }
     if (check > 1) {
-        window.location.href = 'stocks';
+        location.reload();
     }
 });
 
@@ -344,7 +344,7 @@ $(document).on('click', '#sub_cat_Btn', function(){
     }
     if (check > 1) {
         alert("Category added!");
-        window.location.href = 'stocks';
+        location.reload();
     }
 });
 
@@ -382,12 +382,12 @@ $(document).on('click', '#sub_item_Btn', function(){
     }
     if (check > 1) {
         alert("Item added!");
-        window.location.href = 'stocks';
+        location.reload();
     }
 });
 
 $(document).on('click', '.cancel', function(){
-    window.location.href = 'stocks';
+    location.reload();
 });
 
 $(document).on('click', '#importBtn', function(){

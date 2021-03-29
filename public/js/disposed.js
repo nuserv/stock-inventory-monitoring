@@ -7,7 +7,6 @@ var desc=" ";
 search = '0';
 $(document).ready(function()
 {
-    
     $("#min-date").datepicker({
         template: "modal",
         "dateFormat": "mm/dd/yy",
@@ -165,7 +164,6 @@ $(document).ready(function()
         desc+='<option value="'+value.item+'">'+value.item+'</option>';
     });
     $("#item").find('option').remove().end().append(desc);
-    console.log(desc);
     }, 1000)
     
 
@@ -194,7 +192,7 @@ $(document).on("keyup", "#searchall", function () {
     table.search(this.value).draw();
 });
 $(document).on('click', '.cancel', function(){
-    window.location.href = 'disposed';
+    location.reload();
 });
 $(document).on("click", "#byDate", function() {
     $('#datediv').show();
@@ -235,7 +233,7 @@ $(document).on("click", ".goBtn", function() {
             setTimeout(function () {
                 $('.buttons-print').click();
                 setTimeout(function () {
-                    window.location.href = 'disposed';
+                    location.reload();
                 }, 1000)
             }, 1000)
             $('#loading').hide();
@@ -254,14 +252,13 @@ $(document).on("click", ".goBtn", function() {
         setTimeout(function () {    
             $('.buttons-print').click();
             setTimeout(function () {
-                window.location.href = 'disposed';
+                location.reload();
             }, 1000)
             $('#loading').hide();
         }, 1000)
     }
 
 });
-
 
 $(document).on("click", ".approveBtn", function() {
     var returnid = $(this).attr('return_id');

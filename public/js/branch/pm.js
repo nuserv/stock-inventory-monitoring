@@ -100,7 +100,7 @@ $(document).on('click', '.pm_sub_Btn', function(){
         return false;
     }
     if (check > 1) {
-        window.location.href = 'preventive';
+        location.reload();
     }
 });
 
@@ -505,7 +505,6 @@ $(document).on('keyup', '.client', function(){
             });
             $("#client-name").find('option').remove().end().append(op);
             $('#client-id'+rowcount).val($('#client-name [value="'+$('#client'+rowcount).val()+'"]').data('value'));
-            console.log($('#client-id'+rowcount).val());
         },
         error: function (data) {
             if(data.status == 401) {

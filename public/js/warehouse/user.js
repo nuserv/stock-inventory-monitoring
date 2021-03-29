@@ -101,35 +101,33 @@ $(document).ready(function()
     $('#addBtn').on('click', function(e){ 
         e.preventDefault();
         $('#subBtn').val('Save');
-        
-            $("#divpass1").show();
-            $("#divpass2").show();
-            $('#userModal').modal('show');
-            $('#first_name').val('');
-            $('#last_name').val('');
-            $('#middle_name').val('');
-            $('#email').val('');
-            $('#password').val('');
-            $('#password_confirmation').val('');
-            $('#area').val('select area');
-            $('#branch').val('select branch');
-            $('#status').val('1');
-            $('#first_name').prop('disabled', false);
-            $('#last_name').prop('disabled', false);
-            $('#middle_name').prop('disabled', false);
-            $('#email').prop('disabled', false);
-            $('#password').prop('disabled', false);
-            $('#password_confirmation').prop('disabled', false);
-            $('#role').prop('disabled', false);
-            $('#area').prop('disabled', false);
-            $('#branch').prop('disabled', false);
-            $('#status').prop('disabled', false);
+        $("#divpass1").show();
+        $("#divpass2").show();
+        $('#userModal').modal('show');
+        $('#first_name').val('');
+        $('#last_name').val('');
+        $('#middle_name').val('');
+        $('#email').val('');
+        $('#password').val('');
+        $('#password_confirmation').val('');
+        $('#area').val('select area');
+        $('#branch').val('select branch');
+        $('#status').val('1');
+        $('#first_name').prop('disabled', false);
+        $('#last_name').prop('disabled', false);
+        $('#middle_name').prop('disabled', false);
+        $('#email').prop('disabled', false);
+        $('#password').prop('disabled', false);
+        $('#password_confirmation').prop('disabled', false);
+        $('#role').prop('disabled', false);
+        $('#area').prop('disabled', false);
+        $('#branch').prop('disabled', false);
+        $('#status').prop('disabled', false);
     });
 
     $('.area').change(function(){ 
         var area = $(this).val();
         var op=" ";
-        
         $.ajax({
             type:'get',
             url:'getBranchName',
@@ -197,7 +195,6 @@ $(document).ready(function()
                         $('#loading').hide();
                         alert(data.error);
                         $('#userModal').toggle();
-
                     }
                 },
                 error: function (data) {
@@ -238,7 +235,6 @@ $(document).ready(function()
 
     $('#search-ic').on("click", function (event) { 
         for ( var i=0 ; i<=5 ; i++ ) {
-            
             $('.fl-'+i).val('').change();
             table
             .columns(i).search( '' )

@@ -367,11 +367,9 @@ $(document).on('click', '#submit_Btn', function(){
     });
 });
 $(document).on('click', '.cancel', function(){
-    window.location.href = 'return';
+    location.reload();
 });
 $(document).on('click', '.close', function(){
     table.draw();
-    interval = setInterval(function(){
-        table.draw();
-    }, 30000);
+    location.reload();
 });

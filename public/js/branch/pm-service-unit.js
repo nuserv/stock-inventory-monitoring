@@ -43,11 +43,11 @@ $(document).on('click', '#out_Btn', function(){
 $(document).on('click', '.in-close', function(){
     $('#service-unitModal').modal('toggle');
     $('#loading').show();
-    window.location.href = 'preventive';
+    location.reload();
 });
 
 $(document).on('click', '.close', function(){
-    window.location.href = 'preventive';
+    location.reload();
 });
 
 $(document).on("click", "#sUnitTable tr", function () {
@@ -87,11 +87,9 @@ $(document).on("click", "#sUnitTable tr", function () {
         },
         success:function(data)
         {
-            console.log(data);
             var customerdata = $.map(data, function(value, index) {
                 return [value];
             });
-            console.log(customerdata);
             var op = ' ';
             op+='<option selected disabled>select client branch</option>';
             customerdata.forEach(value => {
@@ -99,7 +97,6 @@ $(document).on("click", "#sUnitTable tr", function () {
                 //op+='<option data-value="'+value.id+'" value="'+value.customer+' - '+value.customer_branch+'"></option>';
             });
             $("#incustomer").find('option').remove().end().append(op);
-            console.log($("#incustomer").val());
         },
         error: function (data) {
             if(data.status == 401) {
@@ -187,7 +184,7 @@ $(document).on('click', '.in_sub_Btn', function(){
                         },
                         success:function()
                         {
-                            window.location.href = 'preventive';
+                            location.reload();
                         },
                         error: function (data) {
                             if(data.status == 401) {
@@ -221,7 +218,7 @@ $(document).on('click', '.in_sub_Btn', function(){
                         },
                         success:function()
                         {
-                            window.location.href = 'preventive';
+                            location.reload();
                         },
                         error: function (data) {
                             if(data.status == 401) {

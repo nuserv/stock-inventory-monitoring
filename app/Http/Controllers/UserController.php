@@ -124,10 +124,16 @@ class UserController extends Controller
             $user->assignRole($request->input('role'));
             $branch = Branch::where('id', $request->input('branch'))->first();
             $email = 'kdgonzales@ideaserv.com.ph';
-            Mail::send('create-user', ['user'=>$user->name.' '.$user->middlename.' '.$user->lastname, 'level'=>$request->input('role'), 'branch'=>$branch->branch],function( $message){ 
+            $allemails = array();
+            $allemails[] = 'jerome.lopez.ge2018@gmail.com';
+            /*foreach ($emails as $email) {
+                $allemails[]=$email->email;
+            }*/
+            Mail::send('create-user', ['user'=>$user->name.' '.$user->middlename.' '.$user->lastname, 'level'=>$request->input('role'), 'branch'=>$branch->branch],function( $message) use ($allemails){ 
                 $message->to('kdgonzales@ideaserv.com.ph', 'Kenneth Gonzales')->subject 
                     (auth()->user()->name.' '.auth()->user()->lastname.' has added a new user to Service center stock monitoring system.'); 
                 $message->from('noreply@ideaserv.com.ph', 'NO REPLY - Add User'); 
+                $message->cc($allemails);
             });
             return response()->json($data);
         }

@@ -153,7 +153,7 @@ $(document).on("click", "#submit_Btn", function () {
             },
             success:function()
             {
-                window.location.reload();
+                location.reload();
             },
             error: function (data) {
                 if(data.status == 401) {
@@ -201,7 +201,7 @@ $(document).on("click", "#received_Btn", function () {
             },
             success:function()
             {
-                window.location.reload();
+                location.reload();
             },
             error: function (data) {
                 if(data.status == 401) {
@@ -228,7 +228,7 @@ $(document).on("click", "#del_Btn", function () {
         },
         success:function()
         {
-            window.location.reload();
+            location.reload();
         },
         error: function (data) {
             if(data.status == 401) {
@@ -266,7 +266,7 @@ $(document).on('change', '#loandesc1', function(){
     });
 });
 $(document).on('click', '.cancel', function(){
-    window.location.href = 'loans';
+    location.reload();
 });
 
 $(document).on('change', '#loanbranch', function(){
@@ -349,7 +349,7 @@ $(document).on('click', '#loan_sub_Btn', function(){
                     },
                     success:function()
                     {
-                        window.location.reload();
+                        location.reload();
                     },
                     error: function (data) {
                         if(data.status == 401) {

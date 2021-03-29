@@ -10,7 +10,6 @@ $(document).ready(function()
     var months = ["January","February","March","April","May","June","July","August","September","October","November","December"];
     $('#date').val(months[d.getMonth()]+' '+d.getDate()+', ' +d.getFullYear()+' '+hour+':'+String(d.getMinutes()).padStart(2, '0')+ampm);
     $('#sdate').val(months[d.getMonth()]+' '+d.getDate()+', ' +d.getFullYear()+' '+hour+':'+String(d.getMinutes()).padStart(2, '0')+ampm);
-
     var table =
     $('table.resolvedTable').DataTable({ 
         "dom": 'lrtip',
@@ -53,8 +52,6 @@ $(document).ready(function()
         $('#reqbranch').val(trdata.branch_id);
         $('#requesttypes').val(trdata.type);
         $('#resolvedby').val(trdata.resolved_name);
-
-
         if (trdata.type == "STOCK") {
             $('.ticketno').hide();
             $('#clientrows').hide();

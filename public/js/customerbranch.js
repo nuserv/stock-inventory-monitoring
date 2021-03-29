@@ -63,7 +63,6 @@ $(document).on("click", "#customerbranchTable tr", function () {
 });
 
 $('#branchBtn').on("click", function(){
-
     $('#saveBtn').val('Save');
     $('#branch_code').val('');
     $('#branch_name').val('');

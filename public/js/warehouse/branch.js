@@ -98,7 +98,7 @@ $(document).ready(function()
         $('#status').prop('disabled', true);
         $('#myid').val(trdata.id);
         $('#branch_name').val(trdata.branch);
-        $('#address').val(trdata.address.replace(/&amp;/g, '&'));
+        $('#address').val(trdata.address.replace(/&quot;/g, '\"').replace(/&amp;/g, '\&'));
         $('#area').val(trdata.area_id);
         $('#contact_person').val(trdata.head);
         $('#mobile').val(trdata.phone);
@@ -262,7 +262,7 @@ $(document).on('click', '#catbranchDetails tr', function(){
     $('#cattable').hide();
     $('#catbranchDetails').hide();
     $('#table').show();
-    $('#catname').text(trdata.category.replace(/&amp;/g, '&'));
+    $('#catname').text(trdata.category.replace(/&quot;/g, '\"').replace(/&amp;/g, '\&'));
     stockTable =
         $('table.branchDetails').DataTable({ 
             "dom": 'rtip',
@@ -297,7 +297,7 @@ $(document).on('click', '#branchDetails tr', function(){
     var trdata = stockTable.row(this).data();
     var tritem =  trdata.item;
     iteminiid = trdata.id;
-    $('#head4').text(tritem.replace(/&quot;/g, '\"'));
+    $('#head4').text(tritem.replace(/&quot;/g, '\"').replace(/&amp;/g, '\&'));
     $('#item-qty').val(trdata.initial);
     $('#updateModal').modal('show');
 });

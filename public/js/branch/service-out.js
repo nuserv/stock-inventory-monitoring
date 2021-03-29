@@ -349,7 +349,7 @@ $(document).on('click', '.rep_sub_Btn', function(){
             },
             success:function()
             {
-                window.location.href = 'stocks';
+                location.reload();
             },
             error: function (data) {
                 alert(data.responseText);
@@ -476,6 +476,6 @@ $(document).on('keyup', '#customer', function(){
             });
             $("#customer-name").find('option').remove().end().append(op);
             $('#customer-id').val($('#customer-name [value="'+$('#customer').val()+'"]').data('value'));
-        },
+        }
     });
 });

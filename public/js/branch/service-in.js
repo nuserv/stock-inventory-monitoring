@@ -176,7 +176,7 @@ $(document).on('click', '.pout_sub_Btn', function(){
         return false;
     }
     if (check > 1) {
-        window.location.href = 'stocks';
+        location.reload();
     }
 });
 

@@ -23,7 +23,6 @@ $(document).ready(function()
 
     $('#search-ic').on("click", function () { 
         for ( var i=0 ; i<=5 ; i++ ) {
-            
             $('.fl-'+i).val('').change();
             table
             .columns(i).search( '' )
@@ -38,5 +37,4 @@ $(document).ready(function()
             .search( $(this).val())
             .draw();
     });
-
 });

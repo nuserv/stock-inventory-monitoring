@@ -19,7 +19,6 @@ $(document).ready(function()
 
     $('#search-ic').on("click", function () { 
         for ( var i=0 ; i<=6 ; i++ ) {
-            
             $('.fl-'+i).val('').change();
             customertable
             .columns(i).search( '' )
@@ -37,7 +36,6 @@ $(document).ready(function()
 });
 
 $(document).on("click", "#customerTable tr", function () {
-    
     var trdata = customertable.row(this).data();
     var id = trdata.id;
     if($('#editBtn').val() == 'Cancel'){
@@ -52,7 +50,6 @@ $(document).on("click", "#customerTable tr", function () {
 });
 
 $('#customerBtn').on("click", function(){
-
     $('#customer_code').val('');
     $('#customer_name').val('');
     $('#subBtn').val('Save');

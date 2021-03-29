@@ -78,6 +78,7 @@ class HomeController extends Controller
             $unresolved = StockRequest::where('status', 'UNRESOLVED')->where('stat', 'ACTIVE')->count();
             $resolved = StockRequest::where('status', 'UNRESOLVED')->where('stat', 'RESOLVED')->count();
             return view('pages.home', compact('stockreq', 'units', 'returns', 'title', 'unresolved', 'resolved'));
+
         }
     }
     public function log()

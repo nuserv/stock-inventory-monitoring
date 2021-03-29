@@ -41,7 +41,6 @@ $(document).ready(function()
             .draw();
         }
         $('.tbsearch').toggle();
-        
     });
 
     $('.filter-input').keyup(function() { 

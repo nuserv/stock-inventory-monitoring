@@ -151,7 +151,7 @@ $(document).ready(function()
                     if($.isEmptyObject(data.error)){
                         $('#branchModal').modal('hide');
                         alert("Branch data updated");
-                        window.location.reload();
+                        location.reload();
                     }else{
                         alert(data.error);
                     }
@@ -176,7 +176,7 @@ $(document).ready(function()
                     if($.isEmptyObject(data.error)){
                         $('#branchModal').modal('hide');
                         alert("Branch data saved");
-                        window.location.reload();
+                        location.reload();
                     }else{
                         alert(data.error);
                     }

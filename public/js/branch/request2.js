@@ -135,33 +135,6 @@ $(document).on('click', '#reqBtn', function(){
         $('#sendrequestModal').modal({backdrop: 'static', keyboard: false}); 
     }, 3000);
     
-    
-    
-    /*var catop;
-    $.ajax({
-        type:'get',
-        url:'checkStock',
-        success:function(data)
-        {
-            var category = $.map(data, function(value, index) {
-                return [value];
-            });
-            catop+='<option selected disabled>select category</option>';
-            stockcat = category;
-            category.forEach(value => {
-                catop+='<option value="'+value.id+'">'+value.category.toUpperCase()+'</option>';
-            });
-            $("#category1").find('option').remove().end().append(catop);
-            $('#sendrequestModal').modal({backdrop: 'static', keyboard: false});
-            $('#loading').hide()
-        },
-        error: function (data) {
-            if(data.status == 401) {
-                window.location.href = '/login';
-            }
-            alert(data.responseText);
-        }
-    });*/
 });
 $(document).on('click', '.add_item', function(){
     var rowcount = $(this).attr('btn_id');
@@ -423,10 +396,10 @@ $(document).on('change', '.category', function(){
     $('#qty'+count).val('0');
 });
 $(document).on('click', '.close', function(){
-    window.location.href = 'request';
+    location.reload();
 });
 $(document).on('click', '.cancel', function(){
-    window.location.href = 'request';
+    location.reload();
 });
 $(document).on('change', '#requesttype', function(){
     var catop;
