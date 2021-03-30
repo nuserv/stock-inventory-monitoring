@@ -133,6 +133,9 @@ $(document).on('click', '#reqBtn', function(){
     setTimeout(function() { 
         $('#loading').delay(2000).hide()
         $('#sendrequestModal').modal({backdrop: 'static', keyboard: false}); 
+        if($('#level').val() == 'Tech'){
+            $('#requesttype').val('Service').change();
+        }
     }, 3000);
     
 });
@@ -423,7 +426,6 @@ $(document).on('change', '#requesttype', function(){
             catop+='<option value="'+value.id+'">'+value.category.toUpperCase()+'</option>';
         });
         $("#category1").find('option').remove().end().append(catop);
-        
     }
 });
 $(document).on('keyup', '#client', function(){

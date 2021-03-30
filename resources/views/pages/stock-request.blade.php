@@ -68,6 +68,7 @@
 <input type="button" id="reqBtn" class="btn btn-primary" value="REQUEST STOCKS">
 <br><br><br>
 @endif
+@if(auth()->user()->branch->branch == "Warehouse" || auth()->user()->branch->branch == "Main-office")
 <div>
     <ul class="legend">
         <li><span class="BLUE"></span> Urgent Service Stock Request (PENDING)</li><br>
@@ -77,4 +78,5 @@
         <li><span class="RED"></span> Unresolved and Incomplete issues</li>
     </ul>
 </div>
+@endif
 @endsection

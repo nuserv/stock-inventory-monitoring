@@ -208,6 +208,9 @@ $(document).ready(function()
         }
     });
 
+    table.columns( [5, 6] ).visible(false);
+
+
     $('body').on('click', '.branchColumnCb', function(){ 
         var column = table.column( $(this).attr('data-column') );
         var colnum = $(this).attr('data-column');
