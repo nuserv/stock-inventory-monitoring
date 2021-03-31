@@ -375,6 +375,7 @@ $(document).ready(function()
             }
         }else if (trdata.status == 'PARTIAL SCHEDULED' && (trdata.intransitval == '0' || !trdata.intransitval)) {
             $('#printBtn').hide();
+            console.log('test');
             //$('#unresolveBtn').hide();
             $('#intransitlabel').remove();
             $('table.intransitDetails').remove();
@@ -507,6 +508,7 @@ $(document).ready(function()
             }
         }else if (trdata.status == 'PARTIAL SCHEDULED' && trdata.intransitval == '1') {
             $('#printBtn').hide();
+            console.log('test2');
             //$('#unresolveBtn').hide();
             $('table.requestDetails').show();
             $('table.schedDetails').show();

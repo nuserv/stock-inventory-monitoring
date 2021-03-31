@@ -118,7 +118,9 @@
                         <th>Description</th>
                         <th>Qty - UOM</th>
                         <th>Serial</th>
+                         @if(!auth()->user()->hasanyrole('Manager', 'Editor'))
                         <th></th>
+                        @endif
                     </thead>
                 </table>
                 <br>

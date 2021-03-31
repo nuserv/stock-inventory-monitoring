@@ -40,7 +40,7 @@
                     <a class="nav-link {{ Request::is('resolved') ? 'active' : '' }}" href="{{ route('resolved.index') }}">Resolved</a>
                 </li>
                 @endif
-                @if(auth()->user()->hasanyrole('Warehouse Manager', 'Head', 'Tech'))
+                @if(auth()->user()->hasanyrole('Warehouse Manager', 'Head', 'Tech', 'Encoder'))
                     <li class="nav-item">
                         <a class="nav-link {{ Request::is('stocks') ? 'active' : '' }}" href="{{ route('stocks.index') }}">Stocks</a>
                     </li>

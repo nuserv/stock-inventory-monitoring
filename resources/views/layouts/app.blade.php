@@ -134,10 +134,7 @@
         @endif
 
         @if(Request::is('stocks'))
-            @if(auth()->user()->hasAnyrole('Manager', 'Editor'))
-               
-            @endif
-            @if(auth()->user()->hasAnyrole('Warehouse Manager'))
+            @if(auth()->user()->hasAnyrole('Warehouse Manager', 'Encoder'))
                 @include('modal.warehouse.add')
                 @include('modal.warehouse.category')
                 @include('modal.warehouse.item')
@@ -227,7 +224,7 @@
         @endif
 
         @if(Request::is('stocks'))
-            @if(auth()->user()->hasAnyrole('Warehouse Manager', 'Editor', 'Manager'))
+            @if(auth()->user()->hasAnyrole('Warehouse Manager', 'Editor', 'Manager', 'Encoder'))
                 <script src="{{asset('min/?f=js/warehouse/stock.js')}}"></script>
             @else
                 <script src="{{asset('min/?f=js/branch/stocks.js')}}"></script>

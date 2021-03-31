@@ -192,6 +192,118 @@ $(document).ready(function()
                         "language": {
                             "emptyTable": " "
                         },
+                        serverSide: true,
+                        ajax: "/send/"+trdata.request_no,
+                        columns: [
+                            { data: 'item_name', name:'item_name'},
+                            { data: 'quantity', name:'quantity'},
+                            { data: 'serial', name:'serial'}
+                        ]
+                    });
+                }else if (schedreq > 10) {
+                    $('table.schedDetails').dataTable().fnDestroy();
+                    scheddetails =
+                    $('table.schedDetails').DataTable({ 
+                        "dom": 'lrtp',
+                        "language": {
+                            "emptyTable": " "
+                        },
+                        processing: true,
+                        serverSide: true,
+                        ajax: "/send/"+trdata.request_no,
+                        columns: [
+                            { data: 'item_name', name:'item_name'},
+                            { data: 'quantity', name:'quantity'},
+                            { data: 'serial', name:'serial'}
+                        ]
+                    });
+                }
+            });
+
+            function schedrequest() {
+                return $.ajax({
+                    type:'get',
+                    url: "/send/"+trdata.request_no,
+                    success:function(data)
+                    {
+                        schedreq = data.data.length;
+                    },
+                });
+            }
+        }else if (trdata.status == 'PARTIAL SCHEDULED' && (trdata.intransitval == '0' || !trdata.intransitval)) {
+            $('#printBtn').hide();
+            console.log('test');
+            //$('#unresolveBtn').hide();
+            $('#intransitlabel').remove();
+            $('table.intransitDetails').remove();
+            $('table.requestDetails').show();
+            $('table.schedDetails').show();
+            var partreq;
+            Promise.all([partialrequest()]).then(() => { 
+                if (partreq == 0) {
+                    $('table.requestDetails').dataTable().fnDestroy();
+                    $('table.requestDetails').hide();
+                    $('#prcBtn').hide();
+                    $('#reqlabel').remove();
+                    $('#printBtn').show();
+
+                }else if (partreq <= 10) {
+                    $('table.requestDetails').dataTable().fnDestroy();
+                    requestdetails = 
+                    $('table.requestDetails').DataTable({ 
+                        "dom": 'rt',
+                        "language": {
+                            "emptyTable": " "
+                        },
+                        processing: true,
+                        serverSide: true,
+                        ajax: "/requests/"+trdata.request_no,
+                        columns: [
+                            { data: 'items_id', name:'items_id'},
+                            { data: 'item_name', name:'item_name'},
+                            { data: 'qty', name:'qty'}
+                        ],
+                    });
+                }else if (partreq > 10) {
+                    $('table.requestDetails').dataTable().fnDestroy();
+                    requestdetails = 
+                    $('table.requestDetails').DataTable({ 
+                        "dom": 'lrtp',
+                        "language": {
+                            "emptyTable": " "
+                        },
+                        processing: true,
+                        serverSide: true,
+                        ajax: "/requests/"+trdata.request_no,
+                        columns: [
+                            { data: 'items_id', name:'items_id'},
+                            { data: 'item_name', name:'item_name'},
+                            { data: 'qty', name:'qty'}
+                        ]
+                    });
+                }
+            });
+            function partialrequest() {
+                return $.ajax({
+                    type:'get',
+                    url: "/requests/"+trdata.request_no,
+                    success:function(data)
+                    {
+                        partreq = data.data.length;
+                        console.log(data);
+                    },
+                });
+            }
+            var schedreq;
+            Promise.all([schedrequest()]).then(() => {
+                if (schedreq <= 10) {
+                    $('table.schedDetails').dataTable().fnDestroy();
+                    scheddetails =
+                    $('table.schedDetails').DataTable({ 
+                        "dom": 'rt',
+                        "language": {
+                            "emptyTable": " "
+                        },
                         processing: true,
                         serverSide: true,
                         ajax: "/send/"+trdata.request_no,
@@ -230,6 +342,168 @@ $(document).ready(function()
                     success:function(data)
                     {
                         schedreq = data.data.length;
+                    },
+                });
+            }
+        }else if (trdata.status == 'PARTIAL SCHEDULED' && trdata.intransitval == '1') {
+            $('#printBtn').hide();
+            console.log('test2');
+            //$('#unresolveBtn').hide();
+            $('table.requestDetails').show();
+            $('table.schedDetails').show();
+            $('table.intransitDetails').hide();
+            $('#intransitlabel').remove();
+            var partreq;
+            Promise.all([partialrequest()]).then(() => { 
+                console.log('pasok');
+                if (partreq == 0) {
+                    $('table.requestDetails').dataTable().fnDestroy();
+                    $('table.requestDetails').hide();
+                    //$('#reqlabel').remove();
+                    //$('#printBtn').show();
+                    //$('#prcBtn').hide();
+                }else if (partreq <= 10) {
+                    console.log('nandito');
+                    requestdetails = 
+                    $('table.requestDetails').DataTable({ 
+                        "dom": 'rt',
+                        "language": {
+                            "emptyTable": " "
+                        },
+                        serverSide: true,
+                        ajax: "/requests/"+trdata.request_no,
+                        columns: [
+                            { data: 'items_id', name:'items_id'},
+                            { data: 'item_name', name:'item_name'},
+                            { data: 'qty', name:'qty'}
+                        ]
+                    });
+                }else if (partreq > 10) {
+                    console.log('dito');
+                    $('table.requestDetails').dataTable().fnDestroy();
+                    requestdetails = 
+                    $('table.requestDetails').DataTable({ 
+                        "dom": 'lrtp',
+                        "language": {
+                            "emptyTable": " "
+                        },
+                        processing: true,
+                        serverSide: true,
+                        ajax: "/requests/"+trdata.request_no,
+                        columns: [
+                            { data: 'items_id', name:'items_id'},
+                            { data: 'item_name', name:'item_name'},
+                            { data: 'qty', name:'qty'}
+                        ],
+                    });
+                }
+            });
+            function partialrequest() {
+                return $.ajax({
+                    type:'get',
+                    url: "/requests/"+trdata.request_no,
+                    success:function(data)
+                    {
+                        partreq = data.data.length;
+                    },
+                });
+            }
+            var schedreq;
+            Promise.all([schedrequest()]).then(() => {
+                if (schedreq <= 10) {
+                    $('table.schedDetails').dataTable().fnDestroy();
+                    scheddetails =
+                    $('table.schedDetails').DataTable({ 
+                        "dom": 'rt',
+                        "language": {
+                            "emptyTable": " "
+                        },
+                        processing: true,
+                        serverSide: true,
+                        ajax: "/send/"+trdata.request_no,
+                        columns: [
+                            { data: 'item_name', name:'item_name'},
+                            { data: 'quantity', name:'quantity'},
+                            { data: 'serial', name:'serial'}
+                        ],
+                    });
+                }else if (schedreq > 10) {
+                    $('table.schedDetails').dataTable().fnDestroy();
+                    scheddetails =
+                    $('table.schedDetails').DataTable({ 
+                        "dom": 'lrtp',
+                        "language": {
+                            "emptyTable": " "
+                        },
+                        processing: true,
+                        serverSide: true,
+                        ajax: "/send/"+trdata.request_no,
+                        columns: [
+                            { data: 'item_name', name:'item_name'},
+                            { data: 'quantity', name:'quantity'},
+                            { data: 'serial', name:'serial'}
+                        ]
+                    });
+                }
+            });
+
+            function schedrequest() {
+                return $.ajax({
+                    type:'get',
+                    url: "/send/"+trdata.request_no,
+                    success:function(data)
+                    {
+                        schedreq = data.data.length;
+                    },
+                });
+            }
+
+            var intransitreq;
+            Promise.all([intransitrequest()]).then(() => {
+                if (intransitreq <= 10) {
+                    $('table.intransitDetails').dataTable().fnDestroy();
+                    intransitdetails =
+                    $('table.intransitDetails').DataTable({ 
+                        "dom": 'rt',
+                        "language": {
+                            "emptyTable": " "
+                        },
+                        processing: true,
+                        serverSide: true,
+                        ajax: "/intransit/"+trdata.request_no,
+                        columns: [
+                            { data: 'item_name', name:'item_name'},
+                            { data: 'quantity', name:'quantity'},
+                            { data: 'serial', name:'serial'}
+                        ],
+                    });
+                }else if (intransitreq > 10) {
+                    $('table.intransitDetails').dataTable().fnDestroy();
+                    intransitdetails =
+                    $('table.intransitDetails').DataTable({ 
+                        "dom": 'lrtp',
+                        "language": {
+                            "emptyTable": " "
+                        },
+                        processing: true,
+                        serverSide: true,
+                        ajax: "/intransit/"+trdata.request_no,
+                        columns: [
+                            { data: 'item_name', name:'item_name'},
+                            { data: 'quantity', name:'quantity'},
+                            { data: 'serial', name:'serial'}
+                        ]
+                    });
+                }
+            });
+
+            function intransitrequest() {
+                return $.ajax({
+                    type:'get',
+                    url: "/intransit/"+trdata.request_no,
+                    success:function(data)
+                    {
+                        intransitreq = data.data.length;
                     },
                 });
             }
@@ -325,7 +599,7 @@ $(document).ready(function()
         }else{
             if (trdata.status == 'UNRESOLVED') {
                 $('.notes').show();
-                $('#notes').text('The five days given to resolve the issue has lapsed [Since '+moment(trdata.updated_at).format("dddd, MMMM D, YYYY")+']. To resolve the issue a discussion with the warehouse team is recommended and input the remarks in the text field provided for the solution.');
+                $('#notes').text('The five days given to resolve the issue has lapsed [Since '+moment(trdata.updated_at).format("dddd, MMMM D, YYYY")+']. To resolve the issue. A discussion with the warehouse team is recommended and input the remarks in the text field provided for the solution.');
             }
             $('#schedslabel').hide();
             $('#reqlabel').hide();
@@ -367,6 +641,15 @@ $(document).on("click", ".intransitDetails tr", function() {
 $(document).on('click', '.close', function(){
     window.location.href = 'request';
 });
+$('#remarks_btn').prop('disabled', true);
+$(document).on('keypress', '#remarkstext', function(){
+    if ($(this).val().length >= 9) {
+        $('#remarks_btn').prop('disabled', false);
+    }else{
+        $('#remarks_btn').prop('disabled', true);
+    }
+});
+
 $(document).on('click', '#remarks_btn', function(){
     $.ajax({
         url: 'resolved',

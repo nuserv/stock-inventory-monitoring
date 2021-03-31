@@ -11,6 +11,7 @@ use App\Customer;
 use App\CustomerBranch;
 use App\Warehouse;
 use App\Stock;
+use App\UserLog;
 
 class ImportController extends Controller
 {
@@ -36,6 +37,10 @@ class ImportController extends Controller
                 }
                 $add->status = 'in';
                 $add->save();
+                $log = new UserLog;
+                $log->activity = "Add $items->item with serial no. $add->serial to stocks" ;
+                $log->user_id = auth()->user()->id;
+                $log->save();
             }elseif (!$items) {
                 $error = 1;
                 array_push($itemswitherror, $value[0]);
@@ -47,48 +52,6 @@ class ImportController extends Controller
             return back()->withStatus('Excel File Imported Successfully');
         }
     }
-    /*public function warestore(Request $request)
-    {
-        $file = $request->file('upload');
-        $import = new WarehouseImport;
-        $data = Excel::toArray($import, $file);
-        $error = 0;
-        $itemswitherror = [];
-        $itemswithsuccess = [];
-        $count = 0;
-        foreach ($data[0] as $key => $value) {
-            $items = Customer::where('code', $value[0])->first();
-            if ($items) {
-                $count = $count + 1;
-                if ($value[1] || $value[1] != 0) {
-                    $branch = CustomerBranch::where('customer_id', $items->id)->where('code', $value[1])->first();
-                    if (!$branch) {
-                        $add = new CustomerBranch;
-                        $add->customer_branch = $value[2];
-                        $add->address = $value[3];
-                        $add->code = $value[1];
-                        $add->customer_id = $items->id;
-                        if ($value[4]) {
-                            $add->contact = $value[4];
-                        }
-                        $add->status = '1';
-                        $add->save();
-                    }
-                }else{
-                    $error = 1;
-                    array_push($itemswitherror, $value[1].'-'.$count);
-                }
-            }else if (!$items) {
-                $error = 1;
-                array_push($itemswitherror, $value[0]);
-            }
-        }
-        if ($error == 1) {
-            return back()->withErrors([$itemswitherror]);
-        }else{
-            return back()->withStatus('Excel File Imported Successfully');
-        }
-    }*/
     
     public function warestore(Request $request)
     {
@@ -108,6 +71,10 @@ class ImportController extends Controller
                         $add->items_id = $items->id;
                         $add->serial = '-';
                         $add->status = 'in';
+                        $log = new UserLog;
+                        $log->activity = "Add $items->item to stocks." ;
+                        $log->user_id = auth()->user()->id;
+                        $log->save();
                         $add->save();
                     }
                 }
