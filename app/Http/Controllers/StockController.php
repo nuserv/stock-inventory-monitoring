@@ -420,6 +420,12 @@ class StockController extends Controller
                     ->count();
                 return $stock->stockin+$out+$defective;
             })
+            ->addColumn('initial', function (Stock $stock){
+                $initials = Initial::select('qty')->where('branch_id', auth()->user()->branch->id)
+                    ->where('items_id', $stock->items_id)
+                    ->first();
+                return $initials->qty;
+            })
             ->make(true);
         }
     }

@@ -69,7 +69,7 @@
                         Item Description
                     </th>
                     <th>
-                        Stock In
+                        @if(auth()->user()->branch->branch != "Warehouse" && auth()->user()->branch->branch != "Main-Office")Stock Available @else Stock In @endif
                     </th>
                     <th>
                         Stock Out
@@ -80,7 +80,7 @@
                     </th>
                     @endif
                     <th>
-                        @if(auth()->user()->branch->branch != "Warehouse" && auth()->user()->branch->branch != "Main-Office")Total @else Available Stock @endif
+                        @if(auth()->user()->branch->branch != "Warehouse" && auth()->user()->branch->branch != "Main-Office")Total @else Stock Available @endif
                     </th>
                     <th>
                         UOM

@@ -154,13 +154,19 @@ $(document).on("click", "#catTable tr", function () {
         },
         "pageLength": 25,
         "order": [[ 1, "asc" ]],
+        "fnRowCallback": function(nRow, aData) {
+            if (aData.initial > aData.stockin) {
+                $('td', nRow).eq(0).css('color', 'red');
+                $('td', nRow).eq(0).css('font-weight', 'bold');
+            }
+        },
         processing: true,
         serverSide: true,
         ajax: {
             "url": 'viewStock',
             "data": {
                 "data": 0,
-                "category": catdata.category_id 
+                "category": catdata.category_id
             },
             error: function(data) {
                 if(data.status == 401) {
