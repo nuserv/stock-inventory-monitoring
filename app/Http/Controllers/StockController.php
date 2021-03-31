@@ -352,10 +352,6 @@ class StockController extends Controller
     {
         if ($request->data != 0) {
 
-            $stock = Stock::where('status', 'service unit')
-                    ->where('branch_id', auth()->user()->branch->id)
-                    ->get();
-
             $stock = Stock::select('category_id', 'category', \DB::raw('SUM(CASE WHEN status = \'in\' THEN 1 ELSE 0 END) as stockin'))
                 ->where('stocks.status', 'in')
                 ->where('branch_id', auth()->user()->branch->id)
@@ -386,6 +382,25 @@ class StockController extends Controller
                     ->where('category_id', $stock->category_id)
                     ->count();
                 return ($stock->stockin+$out+$defective);
+            })
+            ->addColumn('alert', function (Stock $stock){
+                $items = Item::where('category_id', $stock->category_id)->get();
+                $alert = 0;
+                foreach ($items as $item) {
+                    if ($alert == 0) {
+                        $initials = Initial::select('qty')->where('branch_id', auth()->user()->branch->id)
+                        ->where('items_id', $item->id)
+                        ->first();
+                    $itemstock = Stock::where('items_id', $item->id)
+                        ->where('branch_id', auth()->user()->branch->id)
+                        ->where('status', 'in')
+                        ->count();
+                        if ($initials->qty > $itemstock) {
+                            $alert = 1;
+                        }
+                    }
+                }
+                return $alert;
             })
             ->make(true);
         }else{

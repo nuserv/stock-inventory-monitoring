@@ -16,9 +16,16 @@ $(document).ready(function()
     $('table.catTable').DataTable({ 
         "dom": 'lrtip',
         "language": {
-            "emptyTable": "No stock found!"
+            "emptyTable": "No stock found!",
+            "processing": '<i class="fa fa-spinner fa-spin fa-3x fa-fw"></i>'
         },
         "pageLength": 50,
+        "fnRowCallback": function(nRow, aData) {
+            if (aData.alert > 0) {
+                $('td', nRow).css('color', 'red');
+                $('td', nRow).css('font-weight', 'bold');
+            }
+        },
         processing: true,
         serverSide: true,
         ajax: {
@@ -156,8 +163,8 @@ $(document).on("click", "#catTable tr", function () {
         "order": [[ 1, "asc" ]],
         "fnRowCallback": function(nRow, aData) {
             if (aData.initial > aData.stockin) {
-                $('td', nRow).eq(0).css('color', 'red');
-                $('td', nRow).eq(0).css('font-weight', 'bold');
+                $('td', nRow).css('color', 'red');
+                $('td', nRow).css('font-weight', 'bold');
             }
         },
         processing: true,
