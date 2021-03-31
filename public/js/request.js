@@ -137,7 +137,6 @@ $(document).ready(function()
                         serverSide: true,
                         ajax: "/intransit/"+trdata.request_no,
                         columns: [
-                            { data: 'items_id', name:'items_id'},
                             { data: 'item_name', name:'item_name'},
                             { data: 'quantity', name:'quantity'},
                             { data: 'serial', name:'serial'}
@@ -155,7 +154,6 @@ $(document).ready(function()
                         serverSide: true,
                         ajax: "/intransit/"+trdata.request_no,
                         columns: [
-                            { data: 'items_id', name:'items_id'},
                             { data: 'item_name', name:'item_name'},
                             { data: 'quantity', name:'quantity'},
                             { data: 'serial', name:'serial'}
@@ -259,7 +257,6 @@ $(document).ready(function()
                         serverSide: true,
                         ajax: "/requests/"+trdata.request_no,
                         columns: [
-                            { data: 'items_id', name:'items_id'},
                             { data: 'item_name', name:'item_name'},
                             { data: 'qty', name:'qty'}
                         ],
@@ -276,7 +273,6 @@ $(document).ready(function()
                         serverSide: true,
                         ajax: "/requests/"+trdata.request_no,
                         columns: [
-                            { data: 'items_id', name:'items_id'},
                             { data: 'item_name', name:'item_name'},
                             { data: 'qty', name:'qty'}
                         ]
@@ -308,7 +304,6 @@ $(document).ready(function()
                         serverSide: true,
                         ajax: "/send/"+trdata.request_no,
                         columns: [
-                            { data: 'items_id', name:'items_id'},
                             { data: 'item_name', name:'item_name'},
                             { data: 'quantity', name:'quantity'},
                             { data: 'serial', name:'serial'}
@@ -326,7 +321,6 @@ $(document).ready(function()
                         serverSide: true,
                         ajax: "/send/"+trdata.request_no,
                         columns: [
-                            { data: 'items_id', name:'items_id'},
                             { data: 'item_name', name:'item_name'},
                             { data: 'quantity', name:'quantity'},
                             { data: 'serial', name:'serial'}
@@ -373,7 +367,6 @@ $(document).ready(function()
                         serverSide: true,
                         ajax: "/requests/"+trdata.request_no,
                         columns: [
-                            { data: 'items_id', name:'items_id'},
                             { data: 'item_name', name:'item_name'},
                             { data: 'qty', name:'qty'}
                         ]
@@ -391,7 +384,6 @@ $(document).ready(function()
                         serverSide: true,
                         ajax: "/requests/"+trdata.request_no,
                         columns: [
-                            { data: 'items_id', name:'items_id'},
                             { data: 'item_name', name:'item_name'},
                             { data: 'qty', name:'qty'}
                         ],
@@ -536,7 +528,6 @@ $(document).ready(function()
                         serverSide: true,
                         ajax: "/requests/"+trdata.request_no,
                         columns: [
-                            { data: 'items_id', name:'items_id'},
                             { data: 'item_name', name:'item_name'},
                             { data: 'qty', name:'qty'}
                         ]
@@ -553,7 +544,6 @@ $(document).ready(function()
                         serverSide: true,
                         ajax: "/requests/"+trdata.request_no,
                         columns: [
-                            { data: 'items_id', name:'items_id'},
                             { data: 'item_name', name:'item_name'},
                             { data: 'qty', name:'qty'}
                         ]
@@ -618,18 +608,17 @@ $(document).ready(function()
                 processing: true,
                 serverSide: true,
                 ajax: "/intransit/"+trdata.request_no,
-                columnDefs: [
-                    {"className": "dt-center", "targets": "_all"}
-                ],
                 columns: [
-                    { data: 'items_id', name:'items_id'},
                     { data: 'item_name', name:'item_name'},
                     { data: 'quantity', name:'quantity'},
                     { data: 'serial', name:'serial'}
                 ]
             });
-        }   
-        $('#requestModal').modal('show');
+        }
+        $('#requestModal').modal({
+            backdrop: 'static',
+            keyboard: false
+        });
     });
 });
 $(document).on("click", ".intransitDetails tr", function() {

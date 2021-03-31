@@ -93,7 +93,6 @@ $(document).ready(function()
                         serverSide: true,
                         ajax: "/requests/"+trdata.request_no,
                         columns: [
-                            { data: 'items_id', name:'items_id'},
                             { data: 'item_name', name:'item_name'},
                             { data: 'qty', name:'qty'}
                         ]
@@ -110,7 +109,6 @@ $(document).ready(function()
                         serverSide: true,
                         ajax: "/requests/"+trdata.request_no,
                         columns: [
-                            { data: 'items_id', name:'items_id'},
                             { data: 'item_name', name:'item_name'},
                             { data: 'qty', name:'qty'}
                         ]
@@ -170,7 +168,6 @@ $(document).ready(function()
                         
                         columns: [
                             { data: 'schedule', name:'schedule'},
-                            { data: 'items_id', name:'items_id'},
                             { data: 'item_name', name:'item_name'},
                             { data: 'quantity', name:'quantity'},
                             { data: 'serial', name:'serial'}
@@ -192,7 +189,6 @@ $(document).ready(function()
                         ajax: "/intransit/"+trdata.request_no,
                         columns: [
                             { data: 'schedule', name:'schedule'},
-                            { data: 'items_id', name:'items_id'},
                             { data: 'item_name', name:'item_name'},
                             { data: 'quantity', name:'quantity'},
                             { data: 'serial', name:'serial'}
@@ -254,7 +250,6 @@ $(document).ready(function()
                         
                         columns: [
                             { data: 'schedule', name:'schedule'},
-                            { data: 'items_id', name:'items_id'},
                             { data: 'item_name', name:'item_name'},
                             { data: 'quantity', name:'quantity'},
                             { data: 'serial', name:'serial'}
@@ -273,7 +268,6 @@ $(document).ready(function()
                         ajax: "/send/"+trdata.request_no,
                         columns: [
                             { data: 'schedule', name:'schedule'},
-                            { data: 'items_id', name:'items_id'},
                             { data: 'item_name', name:'item_name'},
                             { data: 'quantity', name:'quantity'},
                             { data: 'serial', name:'serial'}
@@ -327,7 +321,6 @@ $(document).ready(function()
                         
                         columns: [
                             { data: 'schedule', name:'schedule'},
-                            { data: 'items_id', name:'items_id'},
                             { data: 'item_name', name:'item_name'},
                             { data: 'quantity', name:'quantity'},
                             { data: 'serial', name:'serial'}
@@ -346,7 +339,6 @@ $(document).ready(function()
                         ajax: "/send/"+trdata.request_no,
                         columns: [
                             { data: 'schedule', name:'schedule'},
-                            { data: 'items_id', name:'items_id'},
                             { data: 'item_name', name:'item_name'},
                             { data: 'quantity', name:'quantity'},
                             { data: 'serial', name:'serial'}
@@ -401,7 +393,6 @@ $(document).ready(function()
                         
                         columns: [
                             { data: 'schedule', name:'schedule'},
-                            { data: 'items_id', name:'items_id'},
                             { data: 'item_name', name:'item_name'},
                             { data: 'quantity', name:'quantity'},
                             { data: 'serial', name:'serial'}
@@ -424,7 +415,6 @@ $(document).ready(function()
                         
                         columns: [
                             { data: 'schedule', name:'schedule'},
-                            { data: 'items_id', name:'items_id'},
                             { data: 'item_name', name:'item_name'},
                             { data: 'quantity', name:'quantity'},
                             { data: 'serial', name:'serial'}
@@ -481,7 +471,6 @@ $(document).ready(function()
                         
                         columns: [
                             { data: 'schedule', name:'schedule'},
-                            { data: 'items_id', name:'items_id'},
                             { data: 'item_name', name:'item_name'},
                             { data: 'quantity', name:'quantity'},
                             { data: 'serial', name:'serial'}
@@ -503,7 +492,6 @@ $(document).ready(function()
                         ajax: "/send/"+trdata.request_no,
                         columns: [
                             { data: 'schedule', name:'schedule'},
-                            { data: 'items_id', name:'items_id'},
                             { data: 'item_name', name:'item_name'},
                             { data: 'quantity', name:'quantity'},
                             { data: 'serial', name:'serial'}
@@ -569,7 +557,6 @@ $(document).ready(function()
                                 serverSide: true,
                                 ajax: "/requests/"+trdata.request_no,
                                 columns: [
-                                    { data: 'items_id', name:'items_id'},
                                     { data: 'item_name', name:'item_name'},
                                     { data: 'qty', name:'qty'}
                                 ]
@@ -585,7 +572,6 @@ $(document).ready(function()
                                 serverSide: true,
                                 ajax: "/requests/"+trdata.request_no,
                                 columns: [
-                                    { data: 'items_id', name:'items_id'},
                                     { data: 'item_name', name:'item_name'},
                                     { data: 'qty', name:'qty'}
                                 ]
@@ -622,7 +608,6 @@ $(document).ready(function()
                         ajax: "/send/"+trdata.request_no,
                         columns: [
                             { data: 'schedule', name:'schedule'},
-                            { data: 'items_id', name:'items_id'},
                             { data: 'item_name', name:'item_name'},
                             { data: 'quantity', name:'quantity'},
                             { data: 'serial', name:'serial'}
@@ -645,7 +630,6 @@ $(document).ready(function()
                         
                         columns: [
                             { data: 'schedule', name:'schedule'},
-                            { data: 'items_id', name:'items_id'},
                             { data: 'item_name', name:'item_name'},
                             { data: 'quantity', name:'quantity'},
                             { data: 'serial', name:'serial'}
@@ -741,7 +725,7 @@ $(document).on('click', '#not_rec_Btn', function(){
         },
         success:function()
         {
-            window.location.href = 'request';
+            location.reload();
         },
         error: function (data) {
             if(data.status == 401) {

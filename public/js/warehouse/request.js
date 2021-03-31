@@ -326,10 +326,9 @@ $(document).ready(function()
                         serverSide: false,
                         ajax: "/requests/"+trdata.request_no,
                         columns: [
-                            { data: 'items_id', name:'items_id'},
                             { data: 'item_name', name:'item_name'},
-                            { data: 'qty', name:'qty'},
-                            { data: 'stockuom', name:'stockuom'}
+                            { data: 'qty', name:'qty', "width": "25%"},
+                            { data: 'stockuom', name:'stockuom', "width": "25%"}
                         ],
                         select: {
                             style: 'multi'
@@ -352,10 +351,9 @@ $(document).ready(function()
                         serverSide: false,
                         ajax: "/requests/"+trdata.request_no,
                         columns: [
-                            { data: 'items_id', name:'items_id'},
                             { data: 'item_name', name:'item_name'},
-                            { data: 'qty', name:'qty'},
-                            { data: 'stockuom', name:'stockuom'}
+                            { data: 'qty', name:'qty', "width": "25%"},
+                            { data: 'stockuom', name:'stockuom', "width": "25%"}
                         ],
                         select: {
                             style: 'multi'
@@ -407,10 +405,9 @@ $(document).ready(function()
                         serverSide: true,
                         ajax: "/requests/"+trdata.request_no,
                         columns: [
-                            { data: 'items_id', name:'items_id'},
                             { data: 'item_name', name:'item_name'},
-                            { data: 'qty', name:'qty'},
-                            { data: 'stockuom', name:'stockuom'}
+                            { data: 'qty', name:'qty', "width": "25%"},
+                            { data: 'stockuom', name:'stockuom', "width": "25%"}
                         ],
                         select: {
                             style: 'multi'
@@ -433,10 +430,9 @@ $(document).ready(function()
                         serverSide: true,
                         ajax: "/requests/"+trdata.request_no,
                         columns: [
-                            { data: 'items_id', name:'items_id'},
                             { data: 'item_name', name:'item_name'},
-                            { data: 'qty', name:'qty'},
-                            { data: 'stockuom', name:'stockuom'}
+                            { data: 'qty', name:'qty', "width": "25%"},
+                            { data: 'stockuom', name:'stockuom', "width": "25%"}
                         ],
                         select: {
                             style: 'multi'
@@ -469,7 +465,6 @@ $(document).ready(function()
                         serverSide: true,
                         ajax: "/send/"+trdata.request_no,
                         columns: [
-                            { data: 'items_id', name:'items_id'},
                             { data: 'item_name', name:'item_name'},
                             { data: 'quantity', name:'quantity'},
                             { data: 'serial', name:'serial'}
@@ -487,7 +482,6 @@ $(document).ready(function()
                         serverSide: true,
                         ajax: "/send/"+trdata.request_no,
                         columns: [
-                            { data: 'items_id', name:'items_id'},
                             { data: 'item_name', name:'item_name'},
                             { data: 'quantity', name:'quantity'},
                             { data: 'serial', name:'serial'}
@@ -539,10 +533,9 @@ $(document).ready(function()
                         serverSide: true,
                         ajax: "/requests/"+trdata.request_no,
                         columns: [
-                            { data: 'items_id', name:'items_id'},
                             { data: 'item_name', name:'item_name'},
-                            { data: 'qty', name:'qty'},
-                            { data: 'stockuom', name:'stockuom'}
+                            { data: 'qty', name:'qty', "width": "25%"},
+                            { data: 'stockuom', name:'stockuom', "width": "25%"}
                         ],
                         select: {
                             style: 'multi'
@@ -565,10 +558,9 @@ $(document).ready(function()
                         serverSide: true,
                         ajax: "/requests/"+trdata.request_no,
                         columns: [
-                            { data: 'items_id', name:'items_id'},
                             { data: 'item_name', name:'item_name'},
-                            { data: 'qty', name:'qty'},
-                            { data: 'stockuom', name:'stockuom'}
+                            { data: 'qty', name:'qty', "width": "25%"},
+                            { data: 'stockuom', name:'stockuom', "width": "25%"}
                         ],
                         select: {
                             style: 'multi'
@@ -978,10 +970,9 @@ $(document).ready(function()
                         serverSide: false,
                         ajax: "/requests/"+trdata.request_no,
                         columns: [
-                            { data: 'items_id', name:'items_id'},
                             { data: 'item_name', name:'item_name'},
-                            { data: 'qty', name:'qty'},
-                            { data: 'stockuom', name:'stockuom'}
+                            { data: 'qty', name:'qty', "width": "25%"},
+                            { data: 'stockuom', name:'stockuom', "width": "25%"}
                         ],
                         select: {
                             style: 'multi'
@@ -1004,10 +995,9 @@ $(document).ready(function()
                         serverSide: false,
                         ajax: "/requests/"+trdata.request_no,
                         columns: [
-                            { data: 'items_id', name:'items_id'},
                             { data: 'item_name', name:'item_name'},
-                            { data: 'qty', name:'qty'},
-                            { data: 'stockuom', name:'stockuom'}
+                            { data: 'qty', name:'qty', "width": "25%"},
+                            { data: 'stockuom', name:'stockuom', "width": "25%"}
                         ],
                         select: {
                             style: 'multi'
@@ -1178,7 +1168,10 @@ $(document).ready(function()
             }
         }
         
-        $('#requestModal').modal('show');
+        $('#requestModal').modal({
+            backdrop: 'static',
+            keyboard: false
+        });
     });
 
     searchtable =
