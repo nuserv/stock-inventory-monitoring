@@ -18,6 +18,9 @@ $(document).ready(function()
             if (aData.stat == "IN-BOUND" && aData.status == "pending") { 
                 $('td', nRow).eq(4).text('for approval');
             }
+            if (aData.stat == "OUT-BOUND" && aData.status == "approved") { 
+                $('td', nRow).eq(4).text('for receiving');
+            }
         },
         ajax: {
             url: 'loanstable',
@@ -49,6 +52,9 @@ $(document).on("click", "#loanTable tr", function () {
     $('#myid').val(trdata.id);
     $('#branch_id').val(trdata.branchid);
     $('#branch').val(trdata.branch);
+    if (trdata.stat == 'OUT-BOUND' && trdata.status == "approved") {
+        $('#status').val('for receiving');
+    }
     if (trdata.stat == 'IN-BOUND') {
         if (trdata.status == "pending") {
             $('#status').val('for approval');
@@ -178,7 +184,9 @@ $(document).on("click", "#received_Btn", function () {
     var id = $('#myid').val();
     var branch = $('#branch_id').val();
     var status = 'completed';
-    if ($('#serial').val() && $('#status').val() == 'approved') {
+    if ($('#serial').val() && $('#status').val() == 'for receiving') {
+        $('#loansModal').hide();
+        $('#loading').show();
         $.ajax({
             url: 'loanupdate',
             headers: {
