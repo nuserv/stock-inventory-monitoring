@@ -46,14 +46,14 @@
                 </form>
                 <hr>
                 <div class="row no-margin" id="loanrow1">
-                    <div class="col-md-5 form-group">
+                    <div class="col-md-8 form-group">
                         <select id="loanserial1" class="form-control loanserial" row_count="1">
                             <option selected disabled>select serial</option>
                         </select>
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <input type="button" class="btn btn-primary" id="submit_Btn" value="Approved request">
+                    <input type="button" class="btn btn-primary" id="submit_Btn" value="Approve request">
                     <input type="button" class="btn btn-primary" id="received_Btn" value="Received">
                     <input type="button" class="btn btn-primary" id="del_Btn" value="Delete request">
                 </div>

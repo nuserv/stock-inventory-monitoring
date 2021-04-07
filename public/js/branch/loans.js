@@ -13,7 +13,12 @@ $(document).ready(function()
         serverSide: true,
         "language": {
             "emptyTable": "No loan request found!"
-            },
+        },
+        "fnRowCallback": function(nRow, aData) {
+            if (aData.stat == "IN-BOUND" && aData.status == "pending") { 
+                $('td', nRow).eq(4).text('For approval');
+            }
+        },
         ajax: {
             url: 'loanstable',
             error: function(data) {
@@ -45,6 +50,9 @@ $(document).on("click", "#loanTable tr", function () {
     $('#branch_id').val(trdata.branchid);
     $('#branch').val(trdata.branch);
     if (trdata.stat == 'IN-BOUND') {
+        if (trdata.status == "pending") {
+            $('#status').val('For approval');
+        }
         $('#serials').hide();
         $('#received_Btn').hide();
         $('#del_Btn').hide();
@@ -118,7 +126,8 @@ $(document).on("click", "#submit_Btn", function () {
     var item = $('#loanserial1').val();
     var branch = $('#branch_id').val();
     var status = 'approved';
-    if ($('#loanserial1').val() && $('#status').val() == 'pending') {
+    if ($('#loanserial1').val() && $('#status').val() == 'For approval') {
+        $('#loansModal').hide();
         $('#loading').show();
         $.ajax({
             url: 'loanstock',
