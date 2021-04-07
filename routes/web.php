@@ -12,6 +12,10 @@
 */
 
 Auth::routes();
+Route::get('/forget-password', 'ForgotPasswordController@getEmail');
+Route::post('/forget-password', 'ForgotPasswordController@postEmail');
+Route::get('/reset-password/{token}', 'ResetPasswordController@getPassword');
+Route::post('/reset-password', 'ResetPasswordController@updatePassword');
 
 Route::get('change-password', 'ChangePasswordController@index');
 Route::get('confirm', 'ChangePasswordController@confirm');
