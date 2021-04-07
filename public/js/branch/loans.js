@@ -16,7 +16,7 @@ $(document).ready(function()
         },
         "fnRowCallback": function(nRow, aData) {
             if (aData.stat == "IN-BOUND" && aData.status == "pending") { 
-                $('td', nRow).eq(4).text('For approval');
+                $('td', nRow).eq(4).text('for approval');
             }
         },
         ajax: {
@@ -51,7 +51,7 @@ $(document).on("click", "#loanTable tr", function () {
     $('#branch').val(trdata.branch);
     if (trdata.stat == 'IN-BOUND') {
         if (trdata.status == "pending") {
-            $('#status').val('For approval');
+            $('#status').val('for approval');
         }
         $('#serials').hide();
         $('#received_Btn').hide();
