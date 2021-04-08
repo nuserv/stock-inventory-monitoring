@@ -67,6 +67,7 @@ $(document).ready(function()
             $('#remarks').val(trdata.remarks);
             $('table.intransitDetails').show();
             $('.sched').show();
+            $('#status').val(trdata.stat);
             $('table.intransitDetails').dataTable().fnDestroy();
             $('table.intransitDetails').DataTable({ 
                 "dom": 'lrtp',
