@@ -300,7 +300,7 @@ $(document).on('click', '#branchDetails tr', function(){
     var tritem =  trdata.item;
     iteminiid = trdata.id;
     $('#head4').text(tritem.replace(/&quot;/g, '\"').replace(/&amp;/g, '\&'));
-    $('#item-qty').val(trdata.initial);
+    $('#item-qty').val(trdata.initial.split(" ")[0]);
     $('#updateModal').modal('show');
 });
 
@@ -380,7 +380,8 @@ $(document).on('click', '#updateBtn', function(){
                 },
                 columns: [
                     { data: 'item', name:'item', "width": "17%"},
-                    { data: 'initial', name:'initial', "width": "17%"},
+                    { data: 'initial', name:'initial', "width": "14%"},
+                    { data: 'defectives', name:'defectives', "width": "14%"},
                     { data: 'available', name:'available', "width": "14%"},
                     { data: 'stock_out', name:'stock_out', "width": "14%"}
                 ]
