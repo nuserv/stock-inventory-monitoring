@@ -132,7 +132,7 @@ $(document).on("click", "#submit_Btn", function () {
     var item = $('#loanserial1').val();
     var branch = $('#branch_id').val();
     var status = 'approved';
-    if ($('#loanserial1').val() && $('#status').val() == 'For approval') {
+    if ($('#loanserial1').val() && $('#status').val() == 'for approval') {
         $('#loansModal').hide();
         $('#loading').show();
         $.ajax({
