@@ -395,6 +395,14 @@ class StockRequestController extends Controller
         ->addColumn('branch', function (StockRequest $request){
             return strtoupper($request->branch->branch);
         })
+        ->addColumn('customer', function (StockRequest $request){
+            if ($request->type == 'Service') {
+                $custname = CustomerBranch::where('id', $request->customer_branch_id)->first();
+                return strtoupper($custname->customer_branch);
+            }else{
+                return 'not urgent';
+            }
+        })
         ->addColumn('area', function (StockRequest $request){
             return strtoupper($request->area->area);
         })

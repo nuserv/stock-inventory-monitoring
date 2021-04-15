@@ -15,10 +15,13 @@
                     <input type="text" class="form-control filter-input fl-2" data-column="2" placeholder="Search Branch" />
                 </td>
                 <td>
-                    <input type="text" class="form-control filter-input fl-3" data-column="3" placeholder="Search Ticker #" />
+                    <input type="text" class="form-control filter-input fl-3" data-column="3" placeholder="Search Customer" />
                 </td>
                 <td>
-                    <input type="text" class="form-control filter-input fl-4" data-column="4" placeholder="Search Status" />
+                    <input type="text" class="form-control filter-input fl-4" data-column="4" placeholder="Search Ticker #" />
+                </td>
+                <td>
+                    <input type="text" class="form-control filter-input fl-5" data-column="5" placeholder="Search Status" />
                 </td>
             </tr>
             <tr>
@@ -30,6 +33,9 @@
                 </th>
                 <th>
                     BRANCH NAME
+                </th>
+                <th>
+                    Customer
                 </th>
                 <th>
                     TICKET NO.

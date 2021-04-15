@@ -32,6 +32,7 @@ $(document).ready(function()
             { data: 'created_at', name:'date', "width": "14%" },
             { data: 'reqBy', name:'reqBy', "width": "14%"},
             { data: 'branch', name:'branch',"width": "14%"},
+            { data: 'customer', name:'customer',"width": "14%"},
             { data: 'ticket', name:'ticket', "width": "14%"},
             { data: 'status', name:'status', "width": "14%"}
         ]
