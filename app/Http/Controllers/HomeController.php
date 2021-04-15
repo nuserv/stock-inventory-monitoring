@@ -23,7 +23,7 @@ use App\CustomerBranch;
 use DB;
 use App\UserLog;
 use Carbon\Carbon;
-
+use Mail;
 use Auth;
 
 class HomeController extends Controller
@@ -44,17 +44,36 @@ class HomeController extends Controller
         }
         
         $title = 'Dashboard';
+        $mail = StockRequest::wherein('status', ['4', 'INCOMPLETE'])->where( 'updated_at', '<', Carbon::now()->subDays(5))->first();
+        //dd($mail);
+        if ($mail) {
+            $branch = Branch::where('id', $mail->branch_id)->first();
+            $count = PreparedItem::where('request_no', $mail->request_no)->count();
+            $items = PreparedItem::where('request_no', $mail->request_no)->get();
+            //return $count;
+            if ($count) {
+                //return $items;
+                foreach ($items as $item) {
+                    $missing = Item::where('id', $item->items_id)->first();
+                    $email = 'jerome.lopez.ge2018@gmail.com';
+                    $gomail = Mail::send('unresolved', ['item'=>$missing->item, 'RDate'=>$mail->created_at, 'intransit'=>$mail->intransit, 'branch'=>$branch->branch],function( $message){ 
+                        $message->to('jerome.lopez.ge2018@gmail.com', 'Jerome Lopez')->subject 
+                            ('Unresolved Issue Notification'); 
+                        $message->from('noreply@ideaserv.com.ph', 'Unresolved - NO-REPLY'); 
+                    });
+                if ($gomail){
+                    return 'tama';
+                }
+
+                }
+            }
+        }
         StockRequest::wherein('status', ['4', 'INCOMPLETE'])->where( 'updated_at', '<', Carbon::now()->subDays(5))->update(['status' => 'UNRESOLVED']);
-        
-        /*if ($mail) {
-            $branch = Branch::where('id', $request->input('branch'))->first();
-            $email = 'jerome.lopez.ge2018@gmail.com';
-            Mail::send('create-user', ['user'=>$user->name.' '.$user->middlename.' '.$user->lastname, 'level'=>$request->input('role'), 'branch'=>$branch->branch],function( $message){ 
-                $message->to('jerome.lopez.ge2018@gmail.com', 'Jerome Lopez')->subject 
-                    (auth()->user()->name.' '.auth()->user()->lastname.' has added a new user to Service center stock monitoring system.'); 
-                $message->from('noreply@ideaserv.com.ph', 'Add User - NO-REPLY'); 
-            });
-        }*/
+
+        if (auth()->user()->hasrole('Viewer')) {
+            return view('pages.pending', compact('title'));
+        }
+
         if (auth()->user()->branch->branch != "Warehouse" && auth()->user()->branch->branch != 'Main-Office' && !auth()->user()->hasanyrole('Repair', 'Returns Manager')) {
             $units = Stock::where('status', 'in')->where('branch_id', auth()->user()->branch->id)->count();
             $returns = Defective::wherein('status', ['For return', 'For receiving'])->where('branch_id', auth()->user()->branch->id)->count();
@@ -78,7 +97,6 @@ class HomeController extends Controller
             $unresolved = StockRequest::where('status', 'UNRESOLVED')->where('stat', 'ACTIVE')->count();
             $resolved = StockRequest::where('status', 'UNRESOLVED')->where('stat', 'RESOLVED')->count();
             return view('pages.home', compact('stockreq', 'units', 'returns', 'title', 'unresolved', 'resolved'));
-
         }
     }
     public function log()

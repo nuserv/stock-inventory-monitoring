@@ -29,7 +29,7 @@ class StockRequestController extends Controller
     }
     public function index()
     {
-        if (auth()->user()->hasanyrole('Repair', 'Returns Manager')) {
+        if (auth()->user()->hasanyrole('Repair', 'Returns Manager', 'Viewer')) {
             return redirect('/');
         }
         $title = 'Stock Request';

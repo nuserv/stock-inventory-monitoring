@@ -15,7 +15,7 @@
                     <a class="nav-link {{ Request::is('unrepair') ? 'active' : '' }}" href="{{ url('/unrepair') }}">Unrepairable</a>
                 </li>
             @endif
-            @if(!auth()->user()->hasanyrole('Repair', 'Returns Manager'))
+            @if(!auth()->user()->hasanyrole('Repair', 'Returns Manager', 'Viewer'))
                 <li class="nav-item">
                     <a class="nav-link {{ Request::is('branch') ? 'active' : '' }}" href="{{ route('branch.index') }}">Service Center</a>
                 </li>

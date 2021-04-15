@@ -105,7 +105,7 @@
                     <thead class="thead-dark">
                         <th>Description</th>
                         <th>Qty - UOM</th>
-                        @if(!auth()->user()->hasanyrole('Manager', 'Editor'))
+                        @if(!auth()->user()->hasanyrole('Manager', 'Editor', 'Viewer'))
                         <th>Stock Available</th>
                         @endif
                     </thead>
@@ -117,7 +117,7 @@
                         <th>Description</th>
                         <th>Qty - UOM</th>
                         <th>Serial</th>
-                         @if(!auth()->user()->hasanyrole('Manager', 'Editor'))
+                        @if(!auth()->user()->hasanyrole('Manager', 'Editor', 'Viewer'))
                         <th></th>
                         @endif
                     </thead>
@@ -130,7 +130,7 @@
                         <th>Description</th>
                         <th>Qty - UOM</th>
                         <th>Serial</th>
-                         @if(!auth()->user()->hasanyrole('Manager', 'Editor'))
+                         @if(!auth()->user()->hasanyrole('Manager', 'Editor', 'Viewer'))
                         <th></th>
                         @endif
                     </thead>

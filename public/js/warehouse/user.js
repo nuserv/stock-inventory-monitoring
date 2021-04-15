@@ -82,6 +82,7 @@ $(document).ready(function()
                 roleop+='<option value="Manager">Manager</option>';
             }
             roleop+='<option value="Editor">Editor</option>';
+            roleop+='<option value="Viewer">Viewer</option>';
         }else if (trdata.branch_id == "1") {
             roleop+='<option value="Warehouse Manager">Warehouse Manager</option>';
             roleop+='<option value="Returns Manager">Returns Manager</option>';
@@ -260,6 +261,7 @@ $('#branch').on('change', function () {
             op+='<option value="Manager">Manager</option>';
         }
         op+='<option value="Editor">Editor</option>';
+        op+='<option value="Viewer">Viewer</option>';
     }else if ($(this).val() == "1") {
         op+='<option value="Warehouse Manager">Warehouse Manager</option>';
         op+='<option value="Returns Manager">Returns Manager</option>';

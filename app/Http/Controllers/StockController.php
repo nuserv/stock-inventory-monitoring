@@ -31,11 +31,9 @@ class StockController extends Controller
     }
     public function index()
     {
-        if (auth()->user()->hasanyrole( 'Repair', 'Returns Manager')) {
+        if (auth()->user()->hasanyrole( 'Repair', 'Returns Manager', 'Viewer')) {
             return redirect('/');
         }
-        
-        
         $title = 'Stocks';
         $categories = Category::all();
         $service_units = Stock::where('branch_id', auth()->user()->branch->id)

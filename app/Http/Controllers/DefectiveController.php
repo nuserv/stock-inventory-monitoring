@@ -28,7 +28,10 @@ class DefectiveController extends Controller
         
         $title = 'Defective Unit/Parts';
         $users = User::all();
-        
+        if (auth()->user()->hasanyrole('Viewer')) {
+            return redirect('/');
+        }
+
         if (auth()->user()->branch->branch == 'Main-Office'){
             return view('pages.warehouse.return', compact('users', 'title'));
         }else if (auth()->user()->branch->branch != 'Warehouse') {
