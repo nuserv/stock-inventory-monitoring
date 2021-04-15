@@ -571,6 +571,7 @@ class StockRequestController extends Controller
         $resolve = StockRequest::where('request_no', $request->requestno)->first();
         $resolve->remarks = $request->remarks;
         $resolve->stat = 'RESOLVED';
+        $resolve->resolve_by = auth()->user()->id;
         $data = $resolve->save();
         return response()->json($data);
     }
