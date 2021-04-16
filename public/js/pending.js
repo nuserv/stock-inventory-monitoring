@@ -24,6 +24,15 @@ $(document).ready(function()
             if (aData.type != "SERVICE") {
                 $(nRow).hide();
             }
+            if (aData.status == "UNRESOLVED") {
+                $(nRow).hide();
+            }
+            if (aData.status == "RESOLVED") {
+                $(nRow).hide();
+            }
+            if (aData.status == "INCOMPLETE") {
+                $(nRow).hide();
+            }
         },
         processing: true,
         serverSide: true,

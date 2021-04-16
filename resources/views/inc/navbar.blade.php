@@ -2,9 +2,11 @@
     <div class="navbar-collapse collapse justify-content-between align-items-center w-100">
         @auth
         <ul class="nav mr-auto">
+            @if(!auth()->user()->hasrole('Viewer'))
             <li class="nav-item">
                 <a class="nav-link {{ Request::is('/') ? 'active' : '' }}" href="{{ url('/') }}">Home</a>
             </li>
+            @endif
             @if(auth()->user()->hasrole('Returns Manager'))
                 <li class="nav-item">
                     <a class="nav-link {{ Request::is('disposed') ? 'active' : '' }}" href="{{ url('/disposed') }}">Disposed</a>

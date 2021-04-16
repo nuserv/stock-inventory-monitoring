@@ -27,10 +27,10 @@ class Kernel extends ConsoleKernel
     {
         // $schedule->command('inspire')
         //          ->hourly();
-        $schedule->call(function () {
+        /*$schedule->call(function () {
             //StockRequest::->where( 'created_at', '<', Carbon::now()->subDays(3))->update(['active' => 0]);
             StockRequest::wherein('status', ['INCOMPLETE'])->where( 'updated_at', '<', Carbon::now()->subDays(5))->update(['status' => 'UNRESOLVED']);
-        })->everyMinute();
+        })->everyMinute();*/
     }
 
     /**
