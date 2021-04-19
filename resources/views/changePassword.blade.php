@@ -9,7 +9,7 @@
                     <div class="navbar-collapse collapse justify-content-center align-items-center w-100">
                         <ul class="nav justify-content-center">
                             <li class="nav-item" style="color: white; font-size: 20px">
-                            Change password
+                            CHANGE PASSWORD
                             </li>
                         </ul>
                     </div>
