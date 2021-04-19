@@ -69,9 +69,9 @@ class HomeController extends Controller
                 'remarks'=>$request->input('remarks')
                 ],
                 function( $message) use($user, $branch, $email){ 
-                $message->to('jerome.lopez.ge2018@gmail.com', 'Jerome Lopez')->subject 
+                $message->to('bsms.support@ideaserv.com.ph', 'bsms.support@ideaserv.com.ph')->subject 
                     ('Report A Problem'); 
-                $message->from($email, 'Report A Problem - '.$user. ' - '.$branch); 
+                $message->from($email, 'Report A Problem - '.$user. ' - '.$branch);
             });
             return redirect()->back()->with('success', 'Thank you '.$user.'! Your report has been successfully sent. Thank you for contacting us.');
         }
