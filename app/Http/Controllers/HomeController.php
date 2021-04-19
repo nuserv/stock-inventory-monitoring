@@ -61,7 +61,7 @@ class HomeController extends Controller
             Config::set('mail', $config);
             $allemails = array();
             $allemails[] = 'jerome.lopez.ge2018@gmail.com';
-            Mail::send('report-a-problem', 
+            $data = Mail::send('report-a-problem', 
                 [
                 'branch'=>auth()->user()->branch->branch,
                 'module'=>$request->input('module'),
@@ -73,7 +73,11 @@ class HomeController extends Controller
                     ('Report A Problem'); 
                 $message->from($email, 'Report A Problem - '.$user. ' - '.$branch);
             });
-            return redirect()->back()->with('success', 'Thank you '.$user.'! Your report has been successfully sent. Thank you for contacting us.');
+            if ($data) {
+                return redirect()->back()->with('success', 'Thank you '.$user.'! Your report has been successfully sent. Thank you for contacting us.');
+            }else{
+                return back()->withErrors('Error please refresh page');
+            }
         }
     }
 
