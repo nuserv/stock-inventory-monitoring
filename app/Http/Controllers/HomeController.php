@@ -26,6 +26,7 @@ use App\UserLog;
 use Carbon\Carbon;
 use Mail;
 use Auth;
+use Config;
 
 class HomeController extends Controller
 {
@@ -48,8 +49,19 @@ class HomeController extends Controller
             $user = auth()->user()->name.' '.auth()->user()->lastname;
             $branch = auth()->user()->branch->branch;
             $email = auth()->user()->email;
-
-            $data = Mail::send('report-a-problem', 
+            $config = array(
+                'driver'     => 'smtp',
+                'host'       => 'mail.ideaserv.com.ph',
+                'port'       => '465',
+                'from'       => array('address' => 'bsms.support@ideaserv.com.ph', 'name' => 'support'),
+                'encryption' => 'ssl',
+                'username'   => 'bsms.support@ideaserv.com.ph',
+                'password'   => 'q1w2e3r4t5y6'
+            );
+            Config::set('mail', $config);
+            $allemails = array();
+            $allemails[] = 'jerome.lopez.ge2018@gmail.com';
+            Mail::send('report-a-problem', 
                 [
                 'branch'=>auth()->user()->branch->branch,
                 'module'=>$request->input('module'),

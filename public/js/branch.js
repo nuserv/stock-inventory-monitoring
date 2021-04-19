@@ -134,7 +134,8 @@ $(document).ready(function()
         $('#editBtn').hide();
         $('#saveBtn').show();
         $('#table').hide();
-        
+        $('#catbranchDetails').hide();
+        $('#catBtn').hide();
     });
 
     $('#editBtn').on('click', function(){
@@ -172,6 +173,8 @@ $(document).ready(function()
             });
         }
         if(editBtn == 'Save'){
+            $('#loading').show();
+            $('#branchModal').modal('hide');
             $.ajax({
                 type: "POST",
                 url: "branch_add",
@@ -181,8 +184,7 @@ $(document).ready(function()
                 data: $('#branchForm').serialize(),
                 success: function(data){
                     if($.isEmptyObject(data.error)){
-                        $('#branchModal .close').click();
-                        table.draw();
+                        location.reload();
                     }else{
                         alert(data.error);
                     }

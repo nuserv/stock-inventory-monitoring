@@ -879,7 +879,7 @@ class StockController extends Controller
                 ->get();
             return Datatables::of($stock)->make(true);
         }else{
-            $stock = Warehouse::select('items.UOM', 'warehouses.category_id','items_id', \DB::raw('SUM(CASE WHEN status = \'in\' THEN 1 ELSE 0 END) as stockIN'), \DB::raw('SUM(CASE WHEN status = \'sent\' THEN 1 ELSE 0 END) as stockOUT'))
+            $stock = Warehouse::select('warehouses.id as myid', 'items.UOM', 'warehouses.category_id','items_id', \DB::raw('SUM(CASE WHEN status = \'in\' THEN 1 ELSE 0 END) as stockIN'), \DB::raw('SUM(CASE WHEN status = \'sent\' THEN 1 ELSE 0 END) as stockOUT'))
                 ->where('warehouses.category_id', $request->category)
                 ->join('items', 'items_id', '=', 'items.id')
                 ->groupBy('items_id')->get();

@@ -24,6 +24,7 @@ class ImportController extends Controller
         $itemswitherror = [];
         foreach ($data[0] as $key => $value) {
             $items = Item::where('item', $value[0])->first();
+            //dd($items->category_id);
             if ($items) {
                 $add = new Stock;
                 $add->user_id = auth()->user()->id;
@@ -41,6 +42,7 @@ class ImportController extends Controller
                 $log->activity = "Add $items->item with serial no. $add->serial to stocks" ;
                 $log->user_id = auth()->user()->id;
                 $log->save();
+                //dd($add);
             }elseif (!$items) {
                 $error = 1;
                 array_push($itemswitherror, $value[0]);

@@ -132,7 +132,7 @@ $(document).ready(function()
         $('#editBtn').hide();
         $('#saveBtn').show();
         $('#table').hide();
-        
+        $('#catbranchDetails').hide();
     });
 
     $('#editBtn').on('click', function(){
