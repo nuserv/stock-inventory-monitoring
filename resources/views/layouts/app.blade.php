@@ -277,6 +277,10 @@
             <script src="{{asset('min/?f=js/customerbranch.js')}}"></script>
         @endif
         
+        @if(Request::is('report-a-problem'))
+            <script src="{{asset('min/?f=js/reportproblem.js')}}"></script>
+        @endif
+
         @if (Request::is('/') && auth()->user()->hasrole('Viewer'))
             <script src="{{asset('min/?f=js/pending.js')}}"></script>
         @endif

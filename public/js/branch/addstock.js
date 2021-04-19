@@ -10,7 +10,7 @@ $(document).on('click', '.sub_Btn', function(){
                 check++;
                 $('.sub_Btn').prop('disabled', true)
                 cat = $('#category'+q).val();
-                item = $('#item'+q).val();
+                item = $('#desc'+q).val();
                 serial = $('#serial'+q).val();
                 $.ajax({
                     url: 'store',
@@ -57,7 +57,6 @@ $(document).on('change', '.category', function(){
                 codeOp+='<option value="'+value.id+'">'+value.id+'</option>';
                 descOp+='<option value="'+value.id+'">'+value.item.toUpperCase()+'</option>';
             });
-            $("#item" + count).find('option').remove().end().append(codeOp);
             $("#desc" + count).find('option').remove().end().append(descOp);
         },
     });

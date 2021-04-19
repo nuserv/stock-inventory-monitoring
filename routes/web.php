@@ -20,6 +20,9 @@ Route::post('/reset-password', 'ResetPasswordController@updatePassword');
 Route::get('change-password', 'ChangePasswordController@index');
 Route::get('confirm', 'ChangePasswordController@confirm');
 Route::post('change-password', 'ChangePasswordController@store')->name('change.password');
+Route::get('report-a-problem', 'HomeController@report');
+Route::post('report-a-problem', 'HomeController@reportAproblem')->name('report.problem');
+
 
 
 Route::get('/', 'HomeController@index')->name('home.index');

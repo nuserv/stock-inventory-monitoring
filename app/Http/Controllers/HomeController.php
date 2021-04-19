@@ -7,6 +7,7 @@ use Spatie\Activitylog\Models\Activity;
 use Spatie\Permission\Models\Role;
 use Yajra\DataTables\Facades\DataTables;
 use Route;
+use Validator;
 use App\User;
 use App\Branch;
 use App\Item;
@@ -32,6 +33,38 @@ class HomeController extends Controller
     {
         $this->middleware('auth');
     }
+    public function report()
+    {
+        $title = 'Report a problem';
+        return view('report', compact('title'));
+    }
+    public function reportAproblem(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'module' => ['required', 'string', 'min:5', 'max:255'],
+            'remarks' => ['required', 'string', 'min:10'],
+        ]);
+        if ($validator->passes()) {
+            $user = auth()->user()->name.' '.auth()->user()->lastname;
+            $branch = auth()->user()->branch->branch;
+            $email = auth()->user()->email;
+
+            $data = Mail::send('report-a-problem', 
+                [
+                'branch'=>auth()->user()->branch->branch,
+                'module'=>$request->input('module'),
+                'email'=>auth()->user()->email,
+                'remarks'=>$request->input('remarks')
+                ],
+                function( $message) use($user, $branch, $email){ 
+                $message->to('jerome.lopez.ge2018@gmail.com', 'Jerome Lopez')->subject 
+                    ('Report A Problem'); 
+                $message->from($email, 'Report A Problem - '.$user. ' - '.$branch); 
+            });
+            return redirect()->back()->with('success', 'Thank you '.$user.'! Your report has been successfully sent. Thank you for contacting us.');
+        }
+    }
+
     public function index()
     {
         if (auth()->user()->status == '0') {
