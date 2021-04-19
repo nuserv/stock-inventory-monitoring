@@ -1,10 +1,19 @@
 @extends('layouts.app')
 @section('content')
-<br><br><br><br><br><br><br><br>
+<br><br><br>
 <div class="container">
     <div class="row justify-content-center">
         <div class="col-md-8">
-            <div class="card">   
+            <div class="card">
+                <nav class="nav nav-tabs navbar-expand-md">
+                    <div class="navbar-collapse collapse justify-content-center align-items-center w-100">
+                        <ul class="nav justify-content-center">
+                            <li class="nav-item" style="color: white; font-size: 20px">
+                            Change password
+                            </li>
+                        </ul>
+                    </div>
+                </nav>
                 <div class="card-body">
                     <form method="POST" action="{{ route('change.password') }}">
                         @csrf 
