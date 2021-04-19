@@ -68,8 +68,8 @@
                     <br><br>
                     <div class="form-group row mb-0">
                         <div class="col-md-12 offset-md-2">
-                        You may also contact us at our viber number below for chat support.<br>
-                        <span><img src="/viber.jpg" alt="viber.jpg" style="width: auto; height: 90px;"> </span><span> 09175420409 / 09568772910</span>
+                        You may also contact us at our viber number below for chat support.<br><br>
+                        <span><img src="/viber.png" alt="viber.png" style="width: auto; height: 50px;"> </span><span> 09175420409 / 09568772910</span>
                         </div>
                     </div>
                 </div>
