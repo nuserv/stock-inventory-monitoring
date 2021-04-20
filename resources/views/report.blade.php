@@ -19,10 +19,10 @@
                     
                     <form method="POST" action="{{ route('report.problem') }}">
                         @csrf 
-                         @foreach ($errors->all() as $error)
+                        @foreach ($errors->all() as $error)
                             <p class="text-danger">{{ $error }}</p>
-                         @endforeach 
-                         @if (Session::has('success'))
+                        @endforeach 
+                        @if (Session::has('success'))
                             <div class="alert alert-success">
                                 <ul>
                                     <li>{{ Session::get('success') }}</li>

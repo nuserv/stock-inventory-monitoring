@@ -22,7 +22,6 @@
                     @endif
                 @endif
             @endif
-            
         <meta name="ctok" content="{{ csrf_token() }}">
         @endauth
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
@@ -277,10 +276,6 @@
             <script src="{{asset('min/?f=js/customerbranch.js')}}"></script>
         @endif
         
-        @if(Request::is('report-a-problem'))
-            <script src="{{asset('min/?f=js/reportproblem.js')}}"></script>
-        @endif
-
         @if (Request::is('/') && auth()->user()->hasrole('Viewer'))
             <script src="{{asset('min/?f=js/pending.js')}}"></script>
         @endif
