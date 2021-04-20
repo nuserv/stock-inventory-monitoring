@@ -51,6 +51,7 @@ $(document).ready(function()
             .search( $(this).val())
             .draw();
     });
+    
 });
 
 $(document).on("click", "#catTable tr", function () {
@@ -96,7 +97,6 @@ $(document).on("click", "#catTable tr", function () {
 
 $(document).on('click', '#addStockBtn', function(){
     $('#addModal').modal({backdrop: 'static', keyboard: false});
-
 });
 
 $(document).on('change', '.item', function(){

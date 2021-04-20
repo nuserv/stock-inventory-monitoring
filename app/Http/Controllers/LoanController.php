@@ -27,6 +27,7 @@ class LoanController extends Controller
         $title = 'Loans';
         $branches = Branch::where('area_id', auth()->user()->area->id)
             ->where('id', '!=', auth()->user()->branch->id)
+            ->orderBy('branch')
             ->get();
         return view('pages.loan', compact('branches', 'title'));
     }

@@ -10,6 +10,7 @@ use App\Area;
 use App\Branch;
 use Mail;
 use App\UserLog;
+use Config;
 
 use Validator;
 class UserController extends Controller
@@ -111,6 +112,16 @@ class UserController extends Controller
             'password_confirmation' => 'required|same:password'
         ]);
         if ($validator->passes()) {
+            $config = array(
+                'driver'     => 'smtp',
+                'host'       => 'mail.ideaserv.com.ph',
+                'port'       => '465',
+                'from'       => array('address' => 'info@ideaserv.com.ph', 'name' => 'info@ideaserv.com.ph'),
+                'encryption' => 'ssl',
+                'username'   => 'info@ideaserv.com.ph',
+                'password'   => 'q1w2e3r4t5y6'
+            );
+            Config::set('mail', $config);
             $user = new User;
             $user->name = ucwords(strtolower($request->input('first_name')));
             $user->lastname = ucwords(strtolower($request->input('last_name')));
@@ -132,8 +143,7 @@ class UserController extends Controller
             Mail::send('create-user', ['user'=>$user->name.' '.$user->middlename.' '.$user->lastname, 'level'=>$request->input('role'), 'branch'=>$branch->branch],function( $message) use ($allemails){ 
                 $message->to('kdgonzales@ideaserv.com.ph', 'Kenneth Gonzales')->subject 
                     (auth()->user()->name.' '.auth()->user()->lastname.' has added a new user to Service center stock monitoring system.'); 
-                $message->from('noreply@ideaserv.com.ph', 'NO REPLY - Add User'); 
-                $message->cc($allemails);
+                $message->from('info@ideaserv.com.ph', 'Add User'); 
             });
             return response()->json($data);
         }
@@ -152,6 +162,16 @@ class UserController extends Controller
             'status' => ['required', 'string'],
         ]);
         if ($validator->passes()) {
+            $config = array(
+                'driver'     => 'smtp',
+                'host'       => 'mail.ideaserv.com.ph',
+                'port'       => '465',
+                'from'       => array('address' => 'info@ideaserv.com.ph', 'name' => 'info@ideaserv.com.ph'),
+                'encryption' => 'ssl',
+                'username'   => 'info@ideaserv.com.ph',
+                'password'   => 'q1w2e3r4t5y6'
+            );
+            Config::set('mail', $config);
             $olduser = User::find($id);
             $user = User::find($id);
             $user->name = ucwords(strtolower($request->input('first_name')));
@@ -165,13 +185,10 @@ class UserController extends Controller
             $user->syncRoles($request->input('role'));
             $oldbranch = Branch::where('id', $olduser->branch_id)->first();
             $branch = Branch::where('id', $request->input('branch'))->first();
-            $allemails = array();
-            $allemails[] = 'jerome.lopez.ge2018@gmail.com';
             Mail::send('update-user', ['olduser'=>$olduser->name.' '.$olduser->middlename.' '.$olduser->lastname, 'oldlevel'=>$olduser->roles->first()->name, 'oldbranch'=>$oldbranch->branch, 'user'=>$user->name.' '.$user->middlename.' '.$user->lastname, 'level'=>$request->input('role'), 'branch'=>$branch->branch],function( $message){ 
                 $message->to('kdgonzales@ideaserv.com.ph', 'Kenneth Gonzales')->subject 
                     (auth()->user()->name.' '.auth()->user()->lastname.' has updated a user to Service center stock monitoring system.'); 
-                $message->from('noreply@ideaserv.com.ph', 'NO REPLY - Update User'); 
-                $message->cc($allemails);
+                $message->from('info@ideaserv.com.ph', 'Update User'); 
             });
 
             return response()->json($data);

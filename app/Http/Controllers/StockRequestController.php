@@ -52,13 +52,14 @@ class StockRequestController extends Controller
         return view('pages.resolved', compact('stocks', 'categories', 'title'));
     }
     public function getItemCode(Request $request){
-        $data = Item::select('id', 'item')->where('category_id', $request->id)->get();
+        $data = Item::select('id', 'item')->where('category_id', $request->id)->orderBy('item')->get();
         return response()->json($data);
     }
     public function getCode(Request $request){
         $initials = Initial::where('branch_id', auth()->user()->branch->id)
             ->join('items', 'items_id', '=', 'items.id')
             ->where('category_id', $request->id)
+            ->orderBy('item')
             ->get();
         $icode = [];
         $itm =[];
@@ -81,6 +82,7 @@ class StockRequestController extends Controller
         $initials = Initial::where('branch_id', auth()->user()->branch->id)
             ->join('items', 'items_id', '=', 'items.id')
             ->where('category_id', $request->id)
+            ->orderBy('item')
             ->get();
         $icode = [];
         $itm =[];
@@ -128,12 +130,14 @@ class StockRequestController extends Controller
             $data = Warehouse::select('items_id', 'serial')
                 ->where('status', 'in')
                 ->where('items_id', $request->id)
+                ->orderBy('serial')
                 ->get();
         }else{
             $data = Stock::select('id', 'items_id', 'serial')
                 ->where('status', 'in')
                 ->where('items_id', $request->id)
                 ->where('branch_id', auth()->user()->branch->id)
+                ->orderBy('serial')
                 ->get();
         }
         return response()->json($data);

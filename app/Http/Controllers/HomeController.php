@@ -321,7 +321,7 @@ class HomeController extends Controller
     public function preventive()
     {
         $title = "Preventive Maintenance";
-        $categories = Category::all();
+        $categories = Category::orderBy('category')->get();
         if (!auth()->user()->hasanyrole('Head', 'Tech')) {
             return redirect('/');
         }

@@ -35,7 +35,7 @@ class StockController extends Controller
             return redirect('/');
         }
         $title = 'Stocks';
-        $categories = Category::all();
+        $categories = Category::orderBy('category')->get();
         $service_units = Stock::where('branch_id', auth()->user()->branch->id)
             ->where('stocks.status', 'service unit')
             ->join('categories', 'stocks.category_id', '=', 'categories.id')
@@ -48,6 +48,7 @@ class StockController extends Controller
             ->join('items', 'stocks.items_id', '=', 'items.id')
             ->get();
         $branches = Branch::where('area_id', auth()->user()->area->id)
+            ->orderBy('branch')
             ->where('id', '!=', auth()->user()->branch->id)
             ->get();
         if (auth()->user()->hasanyrole('Editor', 'Manager')) {
@@ -63,6 +64,7 @@ class StockController extends Controller
             ->join('customer_branches', 'stocks.customer_branches_id', '=', 'customer_branches.id')
             ->join('categories', 'stocks.category_id', '=', 'categories.id')
             ->join('customers', 'customer_branches.customer_id', '=', 'customers.id')
+            ->orderBy('category')
             ->get();
         return response()->json($cat);
     }
@@ -72,6 +74,7 @@ class StockController extends Controller
             ->where('stocks.status', 'in')
             ->join('categories', 'stocks.category_id', '=', 'categories.id')
             ->groupBy('stocks.category_id')
+            ->orderBy('category')
             ->get();
         return response()->json($cat);
     }
@@ -82,6 +85,7 @@ class StockController extends Controller
             ->where('stocks.status', 'in')
             ->join('items', 'stocks.items_id', '=', 'items.id')
             ->groupBy('stocks.items_id')
+            ->orderBy('item')
             ->get();
         return response()->json($item);
     }
@@ -91,6 +95,7 @@ class StockController extends Controller
             ->where('stocks.items_id', $id)
             ->where('stocks.status', 'in')
             ->join('items', 'stocks.items_id', '=', 'items.id')
+            ->orderBy('serial')
             ->get();
         return DataTables::of($serial)->make(true);
     }
@@ -103,6 +108,7 @@ class StockController extends Controller
             ->join('categories', 'stocks.category_id', '=', 'categories.id')
             ->join('customers', 'customer_branches.customer_id', '=', 'customers.id')
             ->join('items', 'stocks.items_id', '=', 'items.id')
+            ->orderBy('item')
             ->get();
         return response()->json($desc);
     }
@@ -116,6 +122,7 @@ class StockController extends Controller
             ->join('customer_branches', 'stocks.customer_branches_id', '=', 'customer_branches.id')
             ->join('categories', 'stocks.category_id', '=', 'categories.id')
             ->join('customers', 'customer_branches.customer_id', '=', 'customers.id')
+            ->orderBy('serial')
             ->join('items', 'stocks.items_id', '=', 'items.id')
             ->get();
         return response()->json($serial);
@@ -123,7 +130,7 @@ class StockController extends Controller
     public function service()
     {
         $title = "Service Unit";
-        $categories = Category::all();
+        $categories = Category::orderBy('category')->get();
         if (!auth()->user()->hasanyrole('Head', 'Tech')) {
             return redirect('/');
         }
@@ -444,7 +451,11 @@ class StockController extends Controller
     }
     public function checkStocks(Request $request)
     {
-        $initials = Initial::where('branch_id', auth()->user()->branch->id)->get();
+        $initials = Initial::where('branch_id', auth()->user()->branch->id)
+                    ->join('items', 'items.id', '=', 'items_id')
+                    ->join('categories', 'categories.id', '=', 'items.category_id')
+                    ->orderBy('category')
+                    ->get();
         $cat = array();
         foreach ($initials as $initial) {
             $count = Stock::where('stocks.status', 'in')
@@ -464,7 +475,11 @@ class StockController extends Controller
     }
     public function checkService(Request $request)
     {
-        $initials = Initial::where('branch_id', auth()->user()->branch->id)->get();
+        $initials = Initial::where('branch_id', auth()->user()->branch->id)
+                    ->join('items', 'items.id', '=', 'items_id')
+                    ->join('categories', 'categories.id', '=', 'items.category_id')
+                    ->orderBy('category')
+                    ->get();
         $cat = array();
         foreach ($initials as $initial) {
             $count = Stock::where('stocks.status', 'in')

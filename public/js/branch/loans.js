@@ -38,6 +38,7 @@ $(document).ready(function()
             { data: 'status', name:'status'}
         ]
     });
+    $("#loanbranch").find('option[value="38"]').remove();
 });
 $(document).on("click", "#loanTable tr", function () {
     var trdata = table.row(this).data();
