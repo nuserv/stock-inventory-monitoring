@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Spatie\Activitylog\Models\Activity;
 use Spatie\Permission\Models\Role;
 use Yajra\DataTables\Facades\DataTables;
+use App\Mail\EmailForQueuing;
 use Route;
 use Validator;
 use App\User;
@@ -61,7 +62,7 @@ class HomeController extends Controller
             Config::set('mail', $config);
             $allemails = array();
             $allemails[] = 'jerome.lopez.ge2018@gmail.com';
-            Mail::send('report-a-problem', 
+            $send = Mail::send('report-a-problem', 
                 [
                 'branch'=>auth()->user()->branch->branch,
                 'module'=>$request->input('module'),
@@ -69,10 +70,22 @@ class HomeController extends Controller
                 'remarks'=>$request->input('remarks')
                 ],
                 function( $message) use($user, $branch, $email){ 
-                $message->to('bsms.support@ideaserv.com.ph', 'bsms.support@ideaserv.com.ph')->subject 
-                    ('Report A Problem'); 
+                $message->to('bsms.support@ideaserv.com.ph', 'bsms.support@ideaserv.com.ph')->subject('Report A Problem'); 
                 $message->from($email, 'Report A Problem - '.$user. ' - '.$branch);
             });
+
+            $email = auth()->user()->email;
+            $name = auth()->user()->name. ' '. auth()->user()->lastname;
+            Mail::to($email, $name)->later(15, new EmailForQueuing);
+            /*Mail::later(15, 'responder', 
+                [
+                'fullname'=>auth()->user()->name.' '.auth()->user()->lastname,
+                ],
+                function( $message) use($email, $name){ 
+                $message->to($email, $name)->subject('Report A Problem'); 
+                $message->from('bsms.support@ideaserv.com.ph', 'BSMS Support Team');
+            });*/
+        
             return redirect()->back()->with('success', 'Thank you '.$user.'! Your report has been successfully sent. Thank you for contacting us.');
         }
     }
