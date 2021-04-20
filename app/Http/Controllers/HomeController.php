@@ -76,7 +76,7 @@ class HomeController extends Controller
 
             $email = auth()->user()->email;
             $name = auth()->user()->name. ' '. auth()->user()->lastname;
-            Mail::to($email, $name)->later(15, new EmailForQueuing);
+            Mail::to($email, $name)->later(15, new EmailForQueuing());
             /*Mail::later(15, 'responder', 
                 [
                 'fullname'=>auth()->user()->name.' '.auth()->user()->lastname,
