@@ -12,7 +12,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         @auth
             @if (Session::has('success') && Request::is('report-a-problem'))
-                <meta http-equiv="refresh" content="5">
+                <meta http-equiv="refresh" content="5" url={{ url('/') }}>
             @else
                 @if(auth()->user()->branch->branch == "Warehouse")
                     <meta http-equiv="refresh" content="800">
