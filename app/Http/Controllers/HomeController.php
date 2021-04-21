@@ -168,6 +168,7 @@ class HomeController extends Controller
                 $message->to($email, $name)->subject('Report A Problem'); 
                 $message->from('bsms.support@ideaserv.com.ph', 'BSMS Support Team');
             });
+            $responder->delete();
         }
 
         if (auth()->user()->hasrole('Viewer')) {
