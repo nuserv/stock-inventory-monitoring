@@ -148,7 +148,7 @@ class HomeController extends Controller
             }
         }
         StockRequest::wherein('status', ['4', 'INCOMPLETE'])->where( 'updated_at', '<', Carbon::now()->subDays(5))->update(['status' => 'UNRESOLVED']);
-        $responder = Responder::select('responder.*', 'users.name', 'users.lastname')->where('branch_id', auth()->user()->branch->id)
+        $responder = Responder::select('responders.*', 'users.name', 'users.lastname')->where('branch_id', auth()->user()->branch->id)
                     ->join('users', 'user_id', '=', 'users.id')
                     ->first();
         if ($responder) {
