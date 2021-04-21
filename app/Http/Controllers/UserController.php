@@ -199,8 +199,6 @@ class UserController extends Controller
                     (auth()->user()->name.' '.auth()->user()->lastname.' has updated a user to Service center stock monitoring system.'); 
                 $message->from('noreply@ideaserv.com.ph', 'Update User'); 
             });
-           
-
             return response()->json($data);
         }
         return response()->json(['error'=>$validator->errors()->all()]);
