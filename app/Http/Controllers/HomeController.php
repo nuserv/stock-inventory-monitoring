@@ -164,7 +164,7 @@ class HomeController extends Controller
             Config::set('mail', $config);
             $email = $responder->email;
             $name = $responder->name. ' '. $responder->lastname;
-            Mail::send('responder', function( $message) use($email, $name){ 
+            Mail::send('responder',['email'=>'email'], function( $message) use($email, $name){ 
                 $message->to($email, $name)->subject('Report A Problem'); 
                 $message->from('bsms.support@ideaserv.com.ph', 'BSMS Support Team');
             });
