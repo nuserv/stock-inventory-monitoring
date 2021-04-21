@@ -248,9 +248,11 @@ class StockRequestController extends Controller
         RequestedItem::where('request_no', $id)->where('items_id', $request->item)->decrement('pending', 1);
         $updated = RequestedItem::where('request_no', $id)->where('items_id', $request->item)->first();
         if ($updated->pending == 0) {
-            $data = $updated->status = 'COMPLETED';
+            $updated->status = 'COMPLETED';
+            $data = $updated->save();
             return response()->json($data);
         }else{
+            $data = $updated->status;
             return response()->json(true);
         }
     }

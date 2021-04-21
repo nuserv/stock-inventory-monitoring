@@ -190,7 +190,7 @@ class UserController extends Controller
             $user->middlename = ucwords(strtolower($request->input('middle_name')));
             $user->branch_id = $request->input('branch');
             $user->status = $request->input('status');
-            $data = $user->save();
+            $user->save();
             $user->syncRoles($request->input('role'));
             $oldbranch = Branch::where('id', $olduser->branch_id)->first();
             $branch = Branch::where('id', $request->input('branch'))->first();
@@ -199,6 +199,7 @@ class UserController extends Controller
                     (auth()->user()->name.' '.auth()->user()->lastname.' has updated a user to Service center stock monitoring system.'); 
                 $message->from('noreply@ideaserv.com.ph', 'Update User'); 
             });
+           
 
             return response()->json($data);
         }

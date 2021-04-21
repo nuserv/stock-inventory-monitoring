@@ -68,20 +68,22 @@ $(document).on('click', '.sub_Btn', function(){
                                 datesched: $('#datesched').val(),
                                 stat: "notok"
                             },
-                            error: function (data) {
-                                alert(data.responseText);
-                                return false;
-                            }
-                        });
-                        $.ajax({
-                            url: 'update/'+$('#sreqno').val(),
-                            headers: {
-                                'X-CSRF-TOKEN': $('meta[name="ctok"]').attr('content')
-                            },
-                            dataType: 'json',
-                            type: 'PUT',
-                            data: {
-                                item: $('#item'+q).val(),
+                            success: function(){
+                                $.ajax({
+                                    url: 'update/'+$('#sreqno').val(),
+                                    headers: {
+                                        'X-CSRF-TOKEN': $('meta[name="ctok"]').attr('content')
+                                    },
+                                    dataType: 'json',
+                                    type: 'PUT',
+                                    data: {
+                                        item: $('#item'+q).val(),
+                                    },
+                                    error: function (data) {
+                                        alert(data.responseText);
+                                        return false;
+                                    }
+                                });
                             },
                             error: function (data) {
                                 alert(data.responseText);
@@ -128,20 +130,22 @@ $(document).on('click', '.sub_Btn', function(){
                                 datesched: $('#datesched').val(),
                                 stat: "notok"
                             },
-                            error: function (data) {
-                                alert(data.responseText);
-                                return false;
-                            }
-                        });
-                        $.ajax({
-                            url: 'update/'+$('#sreqno').val(),
-                            headers: {
-                                'X-CSRF-TOKEN': $('meta[name="ctok"]').attr('content')
-                            },
-                            dataType: 'json',
-                            type: 'PUT',
-                            data: {
-                                item: $('#item'+q).val(),
+                            success: function(){
+                                $.ajax({
+                                    url: 'update/'+$('#sreqno').val(),
+                                    headers: {
+                                        'X-CSRF-TOKEN': $('meta[name="ctok"]').attr('content')
+                                    },
+                                    dataType: 'json',
+                                    type: 'PUT',
+                                    data: {
+                                        item: $('#item'+q).val(),
+                                    },
+                                    error: function (data) {
+                                        alert(data.responseText);
+                                        return false;
+                                    }
+                                });
                             },
                             error: function (data) {
                                 alert(data.responseText);
