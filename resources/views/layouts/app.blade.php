@@ -15,13 +15,13 @@
             <meta http-equiv="refresh" content="5;url={{ url('/') }}">
         @else
             @if(auth()->user()->branch->branch == "Warehouse")
-                <meta http-equiv="refresh" content="800">
+                <meta http-equiv="refresh" content="1800">
             @else
                 @if(auth()->user()->hasanyrole('Returns Manager', 'Manager', 'Editor'))
-                    <meta http-equiv="refresh" content="800">
+                    <meta http-equiv="refresh" content="1800">
                 @else
                     @if(auth()->user()->branch->branch != "Warehouse")
-                        <meta http-equiv="refresh" content="601;url={{ url('/logout') }}">
+                        <meta http-equiv="refresh" content="1800;url={{ url('/logout') }}">
                     @endif
                 @endif
             @endif
