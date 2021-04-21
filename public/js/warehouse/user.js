@@ -19,7 +19,7 @@ $(document).ready(function()
         "language": {
             "emptyTable": "No registered user to this branch"
         },
-        "pageLength": 15,
+        "pageLength": 10,
         ajax: 'users',
         columns: [
             { data: 'fname', name:'fname' },

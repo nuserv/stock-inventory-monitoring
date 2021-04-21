@@ -924,8 +924,9 @@ class StockController extends Controller
     }
     public function update(Request $request)
     {
+        $update = Stock::where('id', $request->id)->first();
+        $customer = CustomerBranch::where('id', $update->customer_branches_id)->first();
         if ($request->stat == 'sunit') {
-            $update = Stock::where('id', $request->id)->first();
             $update->status = $request->status;
             $update->user_id = auth()->user()->id;
             $update->save();
@@ -939,12 +940,11 @@ class StockController extends Controller
             $defective->status = 'For return';
             $defective->save();
             $log = new UserLog;
-            $log->activity = "Replaced $item->item(S/N: $request->serial)." ;
+            $log->activity = "Replaced $item->item(S/N: $request->serial) from $customer->customer_branch." ;
             $log->user_id = auth()->user()->id;
             $data = $log->save();
             return response()->json($data);
         }else if ($request->stat == 'replace') {
-            $update = Stock::where('id', $request->id)->first();
             $update->status = 'replacement';
             $update->user_id = auth()->user()->id;
             $update->save();
@@ -958,7 +958,7 @@ class StockController extends Controller
             $defective->status = 'For return';
             $defective->save();
             $log = new UserLog;
-            $log->activity = "Replaced $item->item(S/N: $request->serial)." ;
+            $log->activity = "Replaced $item->item(S/N: $request->serial) from $customer->customer_branch." ;
             $log->user_id = auth()->user()->id;
             $data = $log->save();
             return response()->json($data);
