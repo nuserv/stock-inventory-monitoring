@@ -421,21 +421,25 @@ class StockController extends Controller
             })
             ->addColumn('stockout', function (Stock $stock){
                 $out = Stock::wherein('status', ['service unit', 'pm'])
+                    ->where('branch_id', auth()->user()->branch->id)
                     ->where('items_id', $stock->items_id)
                     ->count();
                 return $out;
             })
             ->addColumn('defectives', function (Stock $stock){
                 $defective = Defective::where('status', 'For return')
+                    ->where('branch_id', auth()->user()->branch->id)
                     ->where('items_id', $stock->items_id)
                     ->count();
                 return $defective;
             })
             ->addColumn('total', function (Stock $stock){
                 $out = Stock::wherein('status', ['service unit', 'pm'])
+                    ->where('branch_id', auth()->user()->branch->id)
                     ->where('items_id', $stock->items_id)
                     ->count();
                 $defective = Defective::where('status', 'For return')
+                    ->where('branch_id', auth()->user()->branch->id)
                     ->where('items_id', $stock->items_id)
                     ->count();
                 return $stock->stockin+$out+$defective;
