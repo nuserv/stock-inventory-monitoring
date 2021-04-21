@@ -113,15 +113,24 @@ class UserController extends Controller
         ]);
         if ($validator->passes()) {
             $config = array(
-                'driver'     => 'smtp',
-                'host'       => 'mail.ideaserv.com.ph',
-                'port'       => '465',
+                'driver'     => env('MAIL_DRIVER', 'smtp'),
+                'host'       => env('MAIL_HOST', 'smtp.mailgun.org'),
+                'port'       => env('MAIL_PORT', 587),
                 'from'       => array('address' => 'noreply@ideaserv.com.ph', 'name' => 'noreply@ideaserv.com.ph'),
-                'encryption' => 'ssl',
-                'username'   => 'noreply@ideaserv.com.ph',
-                'password'   => 'q1w2e3r4t5y6'
+                'encryption' => env('MAIL_ENCRYPTION', 'tls'),
+                'username'   => env('BSMS_USERNAME'),
+                'password'   => env('BSMS_PASSWORD'),
             );
             Config::set('mail', $config);
+            $config = array(
+            'driver'     => env('MAIL_DRIVER', 'smtp'),
+            'host'       => env('MAIL_HOST', 'smtp.mailgun.org'),
+            'port'       => env('MAIL_PORT', 587),
+            'from'       => array('address' => 'bsms.support@ideaserv.com.ph', 'name' => 'support'),
+            'encryption' => env('MAIL_ENCRYPTION', 'tls'),
+            'username'   => env('BSMS_USERNAME'),
+            'password'   => env('BSMS_PASSWORD'),
+        );
             $user = new User;
             $user->name = ucwords(strtolower($request->input('first_name')));
             $user->lastname = ucwords(strtolower($request->input('last_name')));
@@ -163,13 +172,13 @@ class UserController extends Controller
         ]);
         if ($validator->passes()) {
             $config = array(
-                'driver'     => 'smtp',
-                'host'       => 'mail.ideaserv.com.ph',
-                'port'       => '465',
+                'driver'     => env('MAIL_DRIVER', 'smtp'),
+                'host'       => env('MAIL_HOST', 'smtp.mailgun.org'),
+                'port'       => env('MAIL_PORT', 587),
                 'from'       => array('address' => 'noreply@ideaserv.com.ph', 'name' => 'noreply@ideaserv.com.ph'),
-                'encryption' => 'ssl',
-                'username'   => 'noreply@ideaserv.com.ph',
-                'password'   => 'q1w2e3r4t5y6'
+                'encryption' => env('MAIL_ENCRYPTION', 'tls'),
+                'username'   => env('NOREPLY_USERNAME'),
+                'password'   => env('BSMS_PASSWORD'),
             );
             Config::set('mail', $config);
             $olduser = User::find($id);

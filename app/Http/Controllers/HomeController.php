@@ -51,17 +51,16 @@ class HomeController extends Controller
             $branch = auth()->user()->branch->branch;
             $email = auth()->user()->email;
             $config = array(
-                'driver'     => 'smtp',
-                'host'       => 'mail.ideaserv.com.ph',
-                'port'       => '465',
+                'driver'     => env('MAIL_DRIVER', 'smtp'),
+                'host'       => env('MAIL_HOST', 'smtp.mailgun.org'),
+                'port'       => env('MAIL_PORT', 587),
                 'from'       => array('address' => 'bsms.support@ideaserv.com.ph', 'name' => 'support'),
-                'encryption' => 'ssl',
-                'username'   => 'bsms.support@ideaserv.com.ph',
-                'password'   => 'q1w2e3r4t5y6'
+                'encryption' => env('MAIL_ENCRYPTION', 'tls'),
+                'username'   => env('BSMS_USERNAME'),
+                'password'   => env('BSMS_PASSWORD'),
             );
             Config::set('mail', $config);
-            $allemails = array();
-            $allemails[] = 'jerome.lopez.ge2018@gmail.com';
+            
             $send = Mail::send('report-a-problem', 
                 [
                 'branch'=>auth()->user()->branch->branch,
@@ -73,10 +72,11 @@ class HomeController extends Controller
                 $message->to('bsms.support@ideaserv.com.ph', 'bsms.support@ideaserv.com.ph')->subject('Report A Problem'); 
                 $message->from($email, 'Report A Problem - '.$user. ' - '.$branch);
             });
-
-            $email = auth()->user()->email;
-            $name = auth()->user()->name. ' '. auth()->user()->lastname;
-            Mail::to($email, $name)->later(15, new EmailForQueuing());
+            $responder = new Responder;
+            $responder->branch_id = auth()->user()->branch->id;
+            $responder->user_id = auth()->user()->id;
+            $responder->email = auth()->user()->email;
+            $responder->save();
             /*Mail::later(15, 'responder', 
                 [
                 'fullname'=>auth()->user()->name.' '.auth()->user()->lastname,
@@ -88,6 +88,27 @@ class HomeController extends Controller
         
             return redirect()->back()->with('success', 'Thank you '.$user.'! Your report has been successfully sent. Thank you for contacting us.');
         }
+    }
+
+    public function responder()
+    {
+        $config = array(
+            'driver'     => env('MAIL_DRIVER', 'smtp'),
+            'host'       => env('MAIL_HOST', 'smtp.mailgun.org'),
+            'port'       => env('MAIL_PORT', 587),
+            'from'       => array('address' => 'bsms.support@ideaserv.com.ph', 'name' => 'support'),
+            'encryption' => env('MAIL_ENCRYPTION', 'tls'),
+            'username'   => env('BSMS_USERNAME'),
+            'password'   => env('BSMS_PASSWORD'),
+        );
+        Config::set('mail', $config);
+        $email = auth()->user()->email;
+        $name = auth()->user()->name. ' '. auth()->user()->lastname;
+        $data = Mail::send('responder', function( $message) use($email, $name){ 
+            $message->to($email, $name)->subject('Report A Problem'); 
+            $message->from('bsms.support@ideaserv.com.ph', 'BSMS Support Team');
+        });
+        return response()->json($data);
     }
 
     public function index()
@@ -119,14 +140,34 @@ class HomeController extends Controller
                             ('Unresolved Issue Notification'); 
                         $message->from('noreply@ideaserv.com.ph', 'Unresolved - NO-REPLY'); 
                     });
-                if ($gomail){
-                    return 'tama';
-                }
-
+                    if ($gomail){
+                        return 'tama';
+                    }
                 }
             }
         }
         StockRequest::wherein('status', ['4', 'INCOMPLETE'])->where( 'updated_at', '<', Carbon::now()->subDays(5))->update(['status' => 'UNRESOLVED']);
+        $responder = Responder::select('responder.*', 'users.name', 'users.lastname')->where('branch_id', auth()->user()->branch->id)
+                    ->join('users', 'user_id', '=', 'users.id')
+                    ->first();
+        if ($responder) {
+            $config = array(
+                'driver'     => env('MAIL_DRIVER', 'smtp'),
+                'host'       => env('MAIL_HOST', 'smtp.mailgun.org'),
+                'port'       => env('MAIL_PORT', 587),
+                'from'       => array('address' => 'bsms.support@ideaserv.com.ph', 'name' => 'support'),
+                'encryption' => env('MAIL_ENCRYPTION', 'tls'),
+                'username'   => env('BSMS_USERNAME'),
+                'password'   => env('BSMS_PASSWORD'),
+            );
+            Config::set('mail', $config);
+            $email = $responder->email;
+            $name = $responder->name. ' '. $responder->lastname;
+            Mail::send('responder', function( $message) use($email, $name){ 
+                $message->to($email, $name)->subject('Report A Problem'); 
+                $message->from('bsms.support@ideaserv.com.ph', 'BSMS Support Team');
+            });
+        }
 
         if (auth()->user()->hasrole('Viewer')) {
             return view('pages.pending', compact('title'));
@@ -203,7 +244,7 @@ class HomeController extends Controller
                     $initial = new Initial;
                     $initial->items_id = $item->id;
                     $initial->branch_id = $branchs->id;
-                    $initial->qty = 0;
+                    $initial->qty = 5;
                     $initial->save();
                 }
             }

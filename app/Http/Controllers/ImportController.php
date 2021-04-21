@@ -63,26 +63,29 @@ class ImportController extends Controller
         $error = 0;
         $itemswitherror = [];
         foreach ($data[0] as $key => $value) {
-            $items = Item::where('item', $value[0])->first();
-            if ($items) {
-                if ($value[1] && $value[1] != 0) {
-                    for ($i=1; $i <= $value[1]; $i++) { 
-                        $add = new Warehouse;
-                        $add->user_id = auth()->user()->id;
-                        $add->category_id = $items->category_id;
-                        $add->items_id = $items->id;
-                        $add->serial = '-';
-                        $add->status = 'in';
-                        $log = new UserLog;
-                        $log->activity = "Add $items->item to stocks." ;
-                        $log->user_id = auth()->user()->id;
-                        $log->save();
-                        $add->save();
+            if ($value[1]) {
+                $items = Item::where('item', $value[0])->first();
+                if ($items) {
+                    if ($value[1] && $value[1] != 0) {
+                        for ($i=1; $i <= $value[1]; $i++) { 
+                            $add = new Warehouse;
+                            $add->user_id = auth()->user()->id;
+                            $add->category_id = $items->category_id;
+                            $add->items_id = $items->id;
+                            $add->serial = '-';
+                            $add->status = 'in';
+                            $log = new UserLog;
+                            $log->activity = "Add $items->item to stocks." ;
+                            $log->user_id = auth()->user()->id;
+                            $log->save();
+                            $add->save();
+                        }
                     }
+                }elseif (!$items) {
+    
+                    $error = 1;
+                    array_push($itemswitherror, $value[0]);
                 }
-            }elseif (!$items) {
-                $error = 1;
-                array_push($itemswitherror, $value[0]);
             }
         }
         if ($error == 1) {

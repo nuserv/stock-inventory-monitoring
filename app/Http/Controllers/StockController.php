@@ -509,7 +509,7 @@ class StockController extends Controller
             $initial = new Initial;
             $initial->items_id = $add->id;
             $initial->branch_id = $branchs->id;
-            $initial->qty = 1;
+            $initial->qty = 5;
             $data = $initial->save();
         }
         return response()->json($data);

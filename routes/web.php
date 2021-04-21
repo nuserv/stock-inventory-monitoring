@@ -21,6 +21,7 @@ Route::get('change-password', 'ChangePasswordController@index');
 Route::get('confirm', 'ChangePasswordController@confirm');
 Route::post('change-password', 'ChangePasswordController@store')->name('change.password');
 Route::get('report-a-problem', 'HomeController@report');
+Route::any('respond', 'HomeController@responder');
 Route::post('report-a-problem', 'HomeController@reportAproblem')->name('report.problem');
 
 
@@ -161,7 +162,7 @@ Route::get('logout', '\App\Http\Controllers\Auth\LoginController@logout');
 
 Route::get('print/{id}', 'HomeController@print')->name('branch.print.index');
 Route::get('getprint/{id}', 'HomeController@getprint')->middleware('ajax');
-//Route::get('initial/{id}', 'HomeController@initial')->middleware('ajax');
+Route::get('initial/{id}', 'HomeController@initial');//->middleware('ajax');
 Route::get('defective/print', 'HomeController@printDefective')->name('defective.print.index');
 
 Route::get('preventive', 'HomeController@preventive')->name('index.preventive');
