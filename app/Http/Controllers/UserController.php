@@ -103,7 +103,6 @@ class UserController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'first_name' => ['required', 'string', 'min:3', 'max:255'],
-            'middle_name' => ['required', 'string', 'min:3', 'max:255'],
             'last_name' => ['required', 'string', 'min:3', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
             'role' => ['required', 'string'],
@@ -140,7 +139,6 @@ class UserController extends Controller
             $user->branch_id = $request->input('branch');
             $user->status = $request->input('status');
             $user->password = bcrypt($request->input('password'));
-            $data = $user->save();
             $user->assignRole($request->input('role'));
             $branch = Branch::where('id', $request->input('branch'))->first();
             $email = 'kdgonzales@ideaserv.com.ph';
@@ -150,10 +148,10 @@ class UserController extends Controller
                 $allemails[]=$email->email;
             }*/
             Mail::send('create-user', ['user'=>$user->name.' '.$user->middlename.' '.$user->lastname, 'level'=>$request->input('role'), 'branch'=>$branch->branch],function( $message) use ($allemails){ 
-                $message->to('kdgonzales@ideaserv.com.ph', 'Kenneth Gonzales')->subject 
-                    (auth()->user()->name.' '.auth()->user()->lastname.' has added a new user to Service center stock monitoring system.'); 
+                $message->to('jolopez@ideaserv.com.ph', 'Kenneth Gonzales')->subject(auth()->user()->name.' '.auth()->user()->lastname.' has added a new user to Service center stock monitoring system.'); 
                 $message->from('noreply@ideaserv.com.ph', 'Add User'); 
             });
+            $data = $user->save();
             return response()->json($data);
         }
         return response()->json(['error'=>$validator->errors()->first()]);
@@ -163,7 +161,6 @@ class UserController extends Controller
         $validator = Validator::make($request->all(), [
             'first_name' => ['required', 'string', 'min:3', 'max:255'],
             'last_name' => ['required', 'string', 'min:3', 'max:255'],
-            'middle_name' => ['required', 'string', 'min:3', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255'],
             'branch' => ['required', 'string'],
             'area' => ['required', 'string'],
@@ -190,13 +187,12 @@ class UserController extends Controller
             $user->middlename = ucwords(strtolower($request->input('middle_name')));
             $user->branch_id = $request->input('branch');
             $user->status = $request->input('status');
-            $user->save();
+            $data = $user->save();
             $user->syncRoles($request->input('role'));
             $oldbranch = Branch::where('id', $olduser->branch_id)->first();
             $branch = Branch::where('id', $request->input('branch'))->first();
             Mail::send('update-user', ['olduser'=>$olduser->name.' '.$olduser->middlename.' '.$olduser->lastname, 'oldlevel'=>$olduser->roles->first()->name, 'oldbranch'=>$oldbranch->branch, 'user'=>$user->name.' '.$user->middlename.' '.$user->lastname, 'level'=>$request->input('role'), 'branch'=>$branch->branch],function( $message){ 
-                $message->to('kdgonzales@ideaserv.com.ph', 'Kenneth Gonzales')->subject 
-                    (auth()->user()->name.' '.auth()->user()->lastname.' has updated a user to Service center stock monitoring system.'); 
+                $message->to('jolopez@ideaserv.com.ph', 'Kenneth Gonzales')->subject(auth()->user()->name.' '.auth()->user()->lastname.' has updated a user to Service center stock monitoring system.'); 
                 $message->from('noreply@ideaserv.com.ph', 'Update User'); 
             });
             return response()->json($data);
