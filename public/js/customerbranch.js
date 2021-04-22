@@ -50,7 +50,7 @@ $(document).on("click", "#customerbranchTable tr", function () {
     $('#myid').val(id);
     $('#branch_code').val(trdata.code);
     $('#branch_name').val(trdata.customer_branch);
-    $('#address').val(trdata.address);
+    $('#address').val(trdata.address.replace(/&quot;/g, '\"').replace(/&amp;/g, '\&'));
     $('#number').val(trdata.contact);
     $('.status').show();
     if(trdata.status == "Active"){
