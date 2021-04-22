@@ -27,8 +27,8 @@ $(document).ready(function()
         columns: [
             { data: 'id', name:'id'},
             { data: 'date', name:'date',"width": "14%"},
-            { data: 'branch', name:'branch',"width": "14%"},
             { data: 'fullname', name:'fullname',"width": "14%"},
+            { data: 'branch', name:'branch',"width": "14%"},
             { data: 'activity', name:'activity'}
         ]
     });

@@ -124,10 +124,10 @@
                     DATE & TIME
                 </th>
                 <th>
-                    BRANCH
+                    FULLNAME
                 </th>
                 <th>
-                    FULLNAME &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    BRANCH
                 </th>
                 <th>
                     ACTIVITY
