@@ -324,9 +324,9 @@ class HomeController extends Controller
         ->addColumn('time', function (UserLog $request){
             return $request->updated_at->toTimeString();
         })
-        ->addColumn('username', function (UserLog $request){
-            $username = User::where('id', $request->user_id)->first();
-            return $username->email;
+        ->addColumn('branch', function (UserLog $request){
+            $branch = User::where('id', $request->user_id)->first();
+            return $branch->branch->branch;
         })
         ->addColumn('fullname', function (UserLog $request){
             $username = User::where('id', $request->user_id)->first();

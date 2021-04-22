@@ -124,7 +124,7 @@
                     DATE & TIME
                 </th>
                 <th>
-                    EMAIL
+                    BRANCH
                 </th>
                 <th>
                     FULLNAME &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
