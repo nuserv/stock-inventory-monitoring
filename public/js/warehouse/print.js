@@ -27,8 +27,6 @@ $(document).ready(function()
                 }
             },
             columns: [
-                { data: 'schedule', name:'schedule'},
-                { data: 'items_id', name:'items_id'},
                 { data: 'item', name:'item'},
                 { data: 'quantity', name:'quantity'},
                 { data: 'serial', name:'serial'}
@@ -40,7 +38,7 @@ $(document).ready(function()
                         className: 'btn btn-primary btn-icon-split buttonsToHide',
                         titleAttr: 'Submit and print preview',
                         enabled: true,
-                        autoPrint: true,
+                        autoPrint: false,
                         text: '<span class="icon text-white-50"><i class="fa fa-print" style="color:white"></i></span><span> PRINT</span>',
                         customize: function (doc) {
                             var d = new Date();
@@ -48,7 +46,6 @@ $(document).ready(function()
                             var ampm = (String(d.getHours()).padStart(2, '0') < 12 || String(d.getHours()).padStart(2, '0') === 24) ? "AM" : "PM";
                             var months = ["January","February","March","April","May","June","July","August","September","October","November","December"];
                             $(doc.document.body)
-                                                            
                                 .prepend('<img style="position:absolute; top:10; left:20;width:100;margin-botton:50px" src="'+window.location.origin+'/idsi.png">')
                                 //.prepend('<div style="position:absolute; top:10; right:0;">My Title</div>')
                                 .prepend('<div style="position:absolute; bottom:80; left:15;font-family: arial; font-weight: bold;">Prepared By: '+$("#userlog").val()+'</div>')
@@ -56,13 +53,14 @@ $(document).ready(function()
                                 .prepend('<div style="position:absolute; bottom:80; right:15;font-family: arial; font-weight: bold;">Received By: _____________________</div>')
                                 .prepend('<div style="position:absolute; bottom:50; right:15;font-family: arial; font-weight: bold;">Received Date: _____________________</div>')
                                 .prepend('<div style="position:absolute; top:40; left:125;font-size:28px;color: #0d1a80; font-family: arial; font-weight: bold;">SERVICE CENTER STOCK INVENTORY MONITORING</div>')
+                                .prepend('<div style="position:absolute; top:90;margin: auto;font-size:16px;color: #0d1a80; font-family: arial; font-weight: bold;">Delivery Receipt For '+$("#branch").val()+'</div>')
                                 .prepend('<img style="position:absolute; top:400; left:300;font-size:20px;margin-botton:50px" src="'+window.location.origin+'/idsiwatermark.png">')
                             //  .prepend('<div style="position:absolute; bottom:20; left:100;">Pagina '+page.toString()+' of '+pages.toString()+'</div>');
                             //jsDate.toString()
                             $(doc.document.body).find('table')            			
                                     .removeClass('dataTable')
                             .css('font-size','12px') 
-                                    .css('margin-top','85px')
+                                    .css('margin-top','100px')
                             .css('margin-bottom','60px')
                             $(doc.document.body).find('th').each(function(index){
                                 $(this).css('font-size','14px');

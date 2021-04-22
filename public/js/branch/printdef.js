@@ -46,7 +46,7 @@ $(document).ready(function()
                     className: 'btn btn-primary btn-icon-split',
                     titleAttr: 'PRINT',
                     enabled: false,
-                    //autoPrint: false,
+                    autoPrint: false,
                     text: '<span class="icon text-white-50"><i class="fa fa-print" style="color:white"></i></span><span> Print Preview</span>',
                     customize: function (doc) {
                         var d = new Date();
@@ -62,6 +62,7 @@ $(document).ready(function()
                             .prepend('<div style="position:absolute; bottom:50; left:15;font-family: arial; font-weight: bold;">Prepared Date: '+months[d.getMonth()]+' '+d.getDate()+', ' +d.getFullYear()+' '+hour+':'+String(d.getMinutes()).padStart(2, '0')+ampm+'</div>')
                             .prepend('<div style="position:absolute; bottom:80; right:15;font-family: arial; font-weight: bold;">Received By: _____________________</div>')
                             .prepend('<div style="position:absolute; bottom:50; right:15;font-family: arial; font-weight: bold;">Received Date: _____________________</div>')
+                            .prepend('<div style="position:absolute; top:90;margin: auto;font-size:16px;color: #0d1a80; font-family: arial; font-weight: bold;">Delivery receipt of defective units from '+$('#branchname').val()+'</div>')
                             .prepend('<div style="position:absolute; top:40; left:125;font-size:28px;color: #0d1a80; font-family: arial; font-weight: bold;">SERVICE CENTER STOCK INVENTORY MONITORING</div>')
                             .prepend('<img style="position:absolute; top:400; left:300;font-size:20px;margin-botton:50px" src="'+window.location.origin+'/idsiwatermark.png">')
                         //  .prepend('<div style="position:absolute; bottom:20; left:100;">Pagina '+page.toString()+' of '+pages.toString()+'</div>');
@@ -69,7 +70,7 @@ $(document).ready(function()
                         $(doc.document.body).find('table')            			
                                     .removeClass('dataTable')
                             .css('font-size','12px') 
-                                    .css('margin-top','85px')
+                                    .css('margin-top','100px')
                             .css('margin-bottom','60px')
                             $(doc.document.body).find('th').each(function(index){
                                 $(this).css('font-size','14px');
