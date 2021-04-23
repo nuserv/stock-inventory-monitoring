@@ -163,7 +163,7 @@ class UserController extends Controller
                 $message->from('noreply@ideaserv.com.ph', 'Add User'); 
             });
             $log = new UserLog;
-            $log->activity = auth()->user()->name.' '.auth()->user()->lastname. 'add new user '.$user->name.' '.$user->lastname.'to '. $branch->branch.' office.';
+            $log->activity = auth()->user()->name.' '.auth()->user()->lastname. 'add new user '.$user->name.' '.$user->lastname.' to '. $branch->branch.' office.';
             $log->user_id = auth()->user()->id;
             $log->save();
             $data = $user->save();
