@@ -33,6 +33,7 @@ class UserController extends Controller
         if (!auth()->user()->hasanyrole('Manager', 'Editor','Head','Warehouse Manager')) {
             return redirect('/');
         }
+        $new = User::where('status', 3)->first();
         $newuser = User::where('status', 3)->update(['status' => '1']);
         $config = array(
             'driver'     => env('MAIL_DRIVER', 'smtp'),
@@ -45,8 +46,8 @@ class UserController extends Controller
             );
         Config::set('mail', $config);
         if ($newuser) {
-            Mail::send('new-user', ['email'=>$newuser->email],function( $message) use ($newuser){ 
-                $message->to($newuser->email, $newuser->name.' '.$newuser->lastname)->subject('Account Details'); 
+            Mail::send('new-user', ['email'=>$new->email],function( $message) use ($new){ 
+                $message->to($new->email, $new->name.' '.$new->lastname)->subject('Account Details'); 
                 $message->from('bsms@ideaserv.com.ph', ' '); 
             });
         }
