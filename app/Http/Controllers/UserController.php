@@ -33,7 +33,7 @@ class UserController extends Controller
         if (!auth()->user()->hasanyrole('Manager', 'Editor','Head','Warehouse Manager')) {
             return redirect('/');
         }
-        $newuser = User::where('status', 3)->first();
+        $newuser = User::where('status', 3)->update(['status' => '1']);
         $config = array(
             'driver'     => env('MAIL_DRIVER', 'smtp'),
             'host'       => env('MAIL_HOST', 'smtp.mailgun.org'),
@@ -45,8 +45,6 @@ class UserController extends Controller
             );
         Config::set('mail', $config);
         if ($newuser) {
-            $newuser->status = 1;
-            $newuser->save();
             Mail::send('new-user', ['email'=>$newuser->email],function( $message) use ($newuser){ 
                 $message->to($newuser->email, $newuser->name.' '.$newuser->lastname)->subject('Account Details'); 
                 $message->from('bsms@ideaserv.com.ph', ' '); 
