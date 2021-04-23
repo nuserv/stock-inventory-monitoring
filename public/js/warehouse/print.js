@@ -38,7 +38,10 @@ $(document).ready(function()
                         className: 'btn btn-primary btn-icon-split buttonsToHide',
                         titleAttr: 'Submit and print preview',
                         enabled: true,
-                        autoPrint: false,
+                        paging: true,
+                        autoPrint: true,
+                        footer: true,
+                        header: true,
                         text: '<span class="icon text-white-50"><i class="fa fa-print" style="color:white"></i></span><span> PRINT</span>',
                         customize: function (doc) {
                             var d = new Date();
@@ -52,21 +55,52 @@ $(document).ready(function()
                                 .prepend('<div style="position:absolute; bottom:50; left:15;font-family: arial; font-weight: bold;">Prepared Date: '+months[d.getMonth()]+' '+d.getDate()+', ' +d.getFullYear()+' '+hour+':'+String(d.getMinutes()).padStart(2, '0')+ampm+'</div>')
                                 .prepend('<div style="position:absolute; bottom:80; right:15;font-family: arial; font-weight: bold;">Received By: _____________________</div>')
                                 .prepend('<div style="position:absolute; bottom:50; right:15;font-family: arial; font-weight: bold;">Received Date: _____________________</div>')
-                                .prepend('<div style="position:absolute; top:40; left:125;font-size:28px;color: #0d1a80; font-family: arial; font-weight: bold;">SERVICE CENTER STOCK INVENTORY MONITORING</div>')
-                                .prepend('<div style="position:absolute; top:90;margin: auto;font-size:16px;color: #0d1a80; font-family: arial; font-weight: bold;">Delivery Receipt For '+$("#branch").val()+'</div>')
+                                .prepend('<div style="position:absolute; top:40; left:125;font-size:28px;color: #0d1a80; font-family: arial; font-weight: bold;">SERVICE CENTER STOCK MONITORING SYSTEM</center></div>')
+                                .prepend('<div style="position:absolute; top:90; width:100%;left:40%;font-size:20px;font-weight: bold"><b></b>STOCK REQUEST DELIVERY RECEIPT<b></b></div>')
+                                //.prepend('<div style="position:absolute; top:90;margin: auto;font-size:16px;color: #0d1a80; font-family: arial; font-weight: bold;">Delivery Receipt For '+$("#branch").val()+'</div>')
+                                .prepend('<div style="position:absolute; top:140;"><b>Requested by:</b> '+$('#name').val()+'</div>')
+                                .prepend('<div style="position:absolute; top:140;left:70%"><b>Stock request no.:</b> '+$('#reqno').val()+'</div>')
+                                .prepend('<div style="position:absolute; top:170;"><b>Area.:</b> '+$('#area').val()+'</div>')
+                                .prepend('<div style="position:absolute; top:170;left:70%"><b>Request type:</b> '+$('#requesttyp').val()+'</div>')
+                                .prepend('<div style="position:absolute; top:200;"><label for="textbranch"><b>Branch address:&nbsp;&nbsp;</b></label><textarea id="textbranch" style="vertical-align: top;resize: none;background: transparent;border:0 none" rows="2" cols="90" readonly>'+$('#branchaddress').val()+'</textarea></div>')
+                                .prepend('<div style="position:absolute; top:200;left:70%"><b>Date Schedule:</b> '+$('#datesched').val()+'</div>')
                                 .prepend('<img style="position:absolute; top:400; left:300;font-size:20px;margin-botton:50px" src="'+window.location.origin+'/idsiwatermark.png">')
                             //  .prepend('<div style="position:absolute; bottom:20; left:100;">Pagina '+page.toString()+' of '+pages.toString()+'</div>');
                             //jsDate.toString()
                             $(doc.document.body).find('table')            			
                                     .removeClass('dataTable')
-                            .css('font-size','12px') 
-                                    .css('margin-top','100px')
-                            .css('margin-bottom','60px')
+                            .css('font-size','14px') 
+                                    .css('margin-top','230px')
+                            .css('margin-bottom','100px')
                             $(doc.document.body).find('th').each(function(index){
                                 $(this).css('font-size','14px');
                                 $(this).css('color','black');
                                 $(this).css('background-color','F0F0F0');
                             });
+                            doc['footer'] = (function(page, pages) {
+                                return {
+                                  columns: [
+                                    {
+                                      alignment: 'center',
+                                      text: [
+                                        { text: page.toString(), italics: true },
+                                        ' of ',
+                                        { text: pages.toString(), italics: true }
+                                      ]
+                                  }],
+                                  margin: [10, 0]
+                                }
+                              });
+                              doc['header'] = (function(page, pages) {
+                                return {
+                                  columns: [
+                                    {
+                                      alignment: 'center',
+                                      text: [ 'This is your header' ]
+                                  }],
+                                  margin: [10, 0]
+                                }
+                              });       
                         },
                         title:'',
                         exportOptions: {

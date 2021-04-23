@@ -253,7 +253,7 @@ class HomeController extends Controller
         }
         if ($id == 'ini') {
             $items = Item::all();
-            $branches = Branch::all();
+            $branches = Branch::where('id', '12')->get();
             foreach ($branches as $branchs) {
                 foreach ($items as $item) {
                     if ($branchs->id != 1) {
@@ -274,11 +274,12 @@ class HomeController extends Controller
             foreach ($branches as $branchs) {
                 foreach ($items as $item) {
                     if ($branchs->id != 1) {
-                        $ini = Initial::where('items_id', $item->id)
+                        $inia = Initial::where('items_id', $item->id)
                             ->where('branch_id', $branchs->id)
                             ->first();
-                        $ini->qty = '5';
-                        $ini->save();
+                            dd($inia);
+                        $inia->qty = 9;
+                        $inia->save();
                     }
                 }
             }

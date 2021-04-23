@@ -167,7 +167,7 @@ $(document).on('click', '.in_sub_Btn', function(){
                     $('#service-inModal').toggle();
                     $('#loading').show();
                     $.ajax({
-                        url: 'service-in',
+                        url: 'pmservice-in',
                         headers: {
                             'X-CSRF-TOKEN': $('meta[name="ctok"]').attr('content')
                         },
@@ -199,7 +199,7 @@ $(document).on('click', '.in_sub_Btn', function(){
                     $('#service-inModal').toggle();
                     $('#loading').show();
                     $.ajax({
-                        url: 'rep-update',
+                        url: 'PMrep-update',
                         headers: {
                             'X-CSRF-TOKEN': $('meta[name="ctok"]').attr('content')
                         },

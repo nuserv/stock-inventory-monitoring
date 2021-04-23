@@ -12,7 +12,6 @@
                     <input type="text" id="userid" value="{{ auth()->user()->id}}" hidden>   
                     <input type="text" id="userlevel" value="{{ auth()->user()->roles->first()->name}}" hidden>  
                     <input type="text" id="branchname" value="{{ auth()->user()->branch->branch}}" hidden>   
-
             </div>
         </a>
         <i class="fa fa-user-circle fa-4x p-2"></i>

@@ -1,6 +1,8 @@
 @extends('layouts.app')
 
 @section('content')
+<input type="text" id="requesttyp" value="{{ $request->type}}" hidden>
+<input type="text" id="branchaddress" value="{{ \App\Branch::where('id', $request->branch_id)->first()->address }}" hidden>     
 <div class="row no-margin">
     <div class="col-md-6 form-group row">
         <label class="col-md-5 col-form-label text-md-right">Date requested:</label>

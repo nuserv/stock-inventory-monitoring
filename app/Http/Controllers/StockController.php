@@ -369,21 +369,25 @@ class StockController extends Controller
             })
             ->addColumn('stockout', function (Stock $stock){
                 $out = Stock::wherein('status', ['service unit', 'pm'])
+                    ->where('branch_id', auth()->user()->branch->id)
                     ->where('category_id', $stock->category_id)
                     ->count();
                 return strtoupper($out);
             })
             ->addColumn('defectives', function (Stock $stock){
                 $defective = Defective::where('status', 'For return')
+                    ->where('branch_id', auth()->user()->branch->id)
                     ->where('category_id', $stock->category_id)
                     ->count();
                 return strtoupper($defective);
             })
             ->addColumn('total', function (Stock $stock){
                 $out = Stock::wherein('status', ['service unit', 'pm'])
+                    ->where('branch_id', auth()->user()->branch->id)
                     ->where('category_id', $stock->category_id)
                     ->count();
                 $defective = Defective::where('status', 'For return')
+                    ->where('branch_id', auth()->user()->branch->id)
                     ->where('category_id', $stock->category_id)
                     ->count();
                 return ($stock->stockin+$out+$defective);
@@ -518,6 +522,51 @@ class StockController extends Controller
         }
         return response()->json($data);
     }
+    public function pmservicein(Request $request)
+    {
+        $pm = Pm::where('id', $request->id)->first();
+        $stock = Stock::where('id', $pm->stocks_id)->first();
+        $item = Item::where('id', $pm->items_id)->first();
+        $customer = CustomerBranch::where('id', $request->customerid)->first();
+        //return dd($stock);
+        if ($request->status == 'defective') {
+            $defective = new Defective;
+            $defective->branch_id = auth()->user()->branch->id;
+            $defective->user_id = auth()->user()->id;
+            if ($request->stat == 'replace') {
+                $defective->items_id = $request->ids;
+            }else{
+                $defective->items_id = $stock->items_id;
+            }
+            $defective->status = 'For return';
+            $defective->category_id = $stock->category_id;
+            $defective->serial = $request->serial;
+            $defective->save();
+            $pmdb = Pm::where('id', $request->pmid)->first();
+            $pmitem = Item::where('id', $pmdb->items_id)->first();
+            $pmcustomer = CustomerBranch::where('id', $request->customerid)->first();
+            $log = new UserLog;
+            $log->activity = "PM Service in $pmitem->item(defective) with serial no. $request->serial from $pmcustomer->customer_branch." ;
+            $log->user_id = auth()->user()->id;
+            $log->save();
+        }else{
+            $pmdb = Pm::where('id', $request->pmid)->first();
+            $pmitem = Item::where('id', $pmdb->items_id)->first();
+            $pmcustomer = CustomerBranch::where('id', $request->customerid)->first();
+            $log = new UserLog;
+            $log->activity = "PM Service in $pmitem->item(good) with serial no. $request->serial from $pmcustomer->customer_branch." ;
+            $log->user_id = auth()->user()->id;
+            $log->save();
+        }
+        $stock->status = $request->status;
+        $stock->customer_branches_id = $request->customerid;
+        $pmupdate = Pm::where('id', $request->pmid)->first();
+        $pmupdate->delete();
+        $stock->user_id = auth()->user()->id;
+        $data = $stock->save();
+        return response()->json($data);
+    }
+
     public function servicein(Request $request)
     {
         $stock = Stock::where('id', $request->id)->first();
@@ -929,7 +978,7 @@ class StockController extends Controller
     public function update(Request $request)
     {
         $update = Stock::where('id', $request->id)->first();
-        $customer = CustomerBranch::where('id', $update->customer_branches_id)->first();
+        $customer = CustomerBranch::where('id', $request->customerid)->first();
         if ($request->stat == 'sunit') {
             $update->status = $request->status;
             $update->user_id = auth()->user()->id;
@@ -965,6 +1014,50 @@ class StockController extends Controller
             $log->activity = "Replaced $item->item(S/N: $request->serial) from $customer->customer_branch." ;
             $log->user_id = auth()->user()->id;
             $data = $log->save();
+            return response()->json($data);
+        }
+    }
+    public function PMupdate(Request $request)
+    {
+        $pm = Pm::where('id', $request->id)->first();
+        $update = Stock::where('id', $pm->stocks_id)->first();
+        $customer = CustomerBranch::where('id', $request->customerid)->first();
+        if ($request->stat == 'sunit') {
+            $update->status = $request->status;
+            $update->user_id = auth()->user()->id;
+            $update->save();
+            $item = Item::where('id', $update->items_id)->first();
+            $defective = new Defective;
+            $defective->branch_id = auth()->user()->branch->id;
+            $defective->user_id = auth()->user()->branch->id;
+            $defective->category_id = $update->category_id;
+            $defective->items_id = $update->items_id;
+            $defective->serial = $request->serial;
+            $defective->status = 'For return';
+            $defective->save();
+            $log = new UserLog;
+            $log->activity = "Replaced $item->item(S/N: $request->serial) from $customer->customer_branch." ;
+            $log->user_id = auth()->user()->id;
+            $data = $log->save();
+            return response()->json($data);
+        }else if ($request->stat == 'replace') {
+            $update->status = 'replacement';
+            $update->user_id = auth()->user()->id;
+            $update->save();
+            $item = Item::where('id', $request->ids)->first();
+            $defective = new Defective;
+            $defective->branch_id = auth()->user()->branch->id;
+            $defective->user_id = auth()->user()->branch->id;
+            $defective->category_id = $update->category_id;
+            $defective->items_id = $request->ids;
+            $defective->serial = $request->serial;
+            $defective->status = 'For return';
+            $defective->save();
+            $log = new UserLog;
+            $log->activity = "Replaced $item->item(S/N: $request->serial) from $customer->customer_branch." ;
+            $log->user_id = auth()->user()->id;
+            $data = $log->save();
+            $pm->delete();
             return response()->json($data);
         }
     }
