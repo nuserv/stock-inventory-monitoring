@@ -33,6 +33,24 @@ class UserController extends Controller
         if (!auth()->user()->hasanyrole('Manager', 'Editor','Head','Warehouse Manager')) {
             return redirect('/');
         }
+        $newuser = User::where('status', 3)->first();
+        Config::set('mail', $config);
+            $config = array(
+            'driver'     => env('MAIL_DRIVER', 'smtp'),
+            'host'       => env('MAIL_HOST', 'smtp.mailgun.org'),
+            'port'       => env('MAIL_PORT', 587),
+            'from'       => array('address' => 'bsms.support@ideaserv.com.ph', 'name' => 'support'),
+            'encryption' => env('MAIL_ENCRYPTION', 'tls'),
+            'username'   => env('BSMS_USERNAME'),
+            'password'   => env('BSMS_PASSWORD'),
+        );
+        if ($newuser) {
+            Mail::send('new-user', ['email'=>$newuser->email],function( $message) use ($newuser){ 
+                $message->to($newuser->email, $newuser->name.' '.$newuser->lastname)->subject('Account Details'); 
+                $message->from('bsms@ideaserv.com.ph', ' '); 
+            });
+        }
+        
         /*if (auth()->user()->hasrole('Head')) {
             $areas = Area::where('id', auth()->user()->area->id)->get();
         }*/
@@ -129,7 +147,7 @@ class UserController extends Controller
             'encryption' => env('MAIL_ENCRYPTION', 'tls'),
             'username'   => env('BSMS_USERNAME'),
             'password'   => env('BSMS_PASSWORD'),
-        );
+            );
             $user = new User;
             $user->name = ucwords(strtolower($request->input('first_name')));
             $user->lastname = ucwords(strtolower($request->input('last_name')));
@@ -137,7 +155,7 @@ class UserController extends Controller
             $user->email = $request->input('email');
             $user->area_id = $request->input('area');
             $user->branch_id = $request->input('branch');
-            $user->status = $request->input('status');
+            $user->status = 3;
             $user->password = bcrypt($request->input('password'));
             $user->assignRole($request->input('role'));
             $branch = Branch::where('id', $request->input('branch'))->first();
@@ -151,6 +169,10 @@ class UserController extends Controller
                 $message->to('kdgonzales@ideaserv.com.ph', 'Kenneth Gonzales')->subject(auth()->user()->name.' '.auth()->user()->lastname.' has added a new user to Service center stock monitoring system.'); 
                 $message->from('noreply@ideaserv.com.ph', 'Add User'); 
             });
+            $log = new UserLog;
+            $log->activity = auth()->user()->name.' '.auth()->user()->lastname. 'add new user '.$user->name.' '.$user->lastname.'to '. $branch->branch.' office.';
+            $log->user_id = auth()->user()->id;
+            $log->save();
             $data = $user->save();
             return response()->json($data);
         }
