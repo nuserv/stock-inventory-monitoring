@@ -34,8 +34,7 @@ class UserController extends Controller
             return redirect('/');
         }
         $newuser = User::where('status', 3)->first();
-        Config::set('mail', $config);
-            $config = array(
+        $config = array(
             'driver'     => env('MAIL_DRIVER', 'smtp'),
             'host'       => env('MAIL_HOST', 'smtp.mailgun.org'),
             'port'       => env('MAIL_PORT', 587),
@@ -43,7 +42,8 @@ class UserController extends Controller
             'encryption' => env('MAIL_ENCRYPTION', 'tls'),
             'username'   => env('BSMS_USERNAME'),
             'password'   => env('BSMS_PASSWORD'),
-        );
+            );
+        Config::set('mail', $config);
         if ($newuser) {
             Mail::send('new-user', ['email'=>$newuser->email],function( $message) use ($newuser){ 
                 $message->to($newuser->email, $newuser->name.' '.$newuser->lastname)->subject('Account Details'); 
@@ -139,15 +139,7 @@ class UserController extends Controller
                 'password'   => env('BSMS_PASSWORD'),
             );
             Config::set('mail', $config);
-            $config = array(
-            'driver'     => env('MAIL_DRIVER', 'smtp'),
-            'host'       => env('MAIL_HOST', 'smtp.mailgun.org'),
-            'port'       => env('MAIL_PORT', 587),
-            'from'       => array('address' => 'bsms.support@ideaserv.com.ph', 'name' => 'support'),
-            'encryption' => env('MAIL_ENCRYPTION', 'tls'),
-            'username'   => env('BSMS_USERNAME'),
-            'password'   => env('BSMS_PASSWORD'),
-            );
+            
             $user = new User;
             $user->name = ucwords(strtolower($request->input('first_name')));
             $user->lastname = ucwords(strtolower($request->input('last_name')));
