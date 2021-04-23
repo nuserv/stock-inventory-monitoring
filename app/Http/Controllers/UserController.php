@@ -48,7 +48,7 @@ class UserController extends Controller
         if ($newuser) {
             Mail::send('new-user', ['email'=>$new->email],function( $message) use ($new){ 
                 $message->to($new->email, $new->name.' '.$new->lastname)->subject('Account Details'); 
-                $message->from('bsms@ideaserv.com.ph', ' '); 
+                $message->from('bsms@ideaserv.com.ph', 'BSMS support'); 
             });
         }
         /*if (auth()->user()->hasrole('Head')) {
