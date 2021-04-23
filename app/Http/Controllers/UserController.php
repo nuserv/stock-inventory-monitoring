@@ -45,12 +45,13 @@ class UserController extends Controller
             );
         Config::set('mail', $config);
         if ($newuser) {
+            $newuser->status = 1;
+            $newuser->save();
             Mail::send('new-user', ['email'=>$newuser->email],function( $message) use ($newuser){ 
                 $message->to($newuser->email, $newuser->name.' '.$newuser->lastname)->subject('Account Details'); 
                 $message->from('bsms@ideaserv.com.ph', ' '); 
             });
         }
-        
         /*if (auth()->user()->hasrole('Head')) {
             $areas = Area::where('id', auth()->user()->area->id)->get();
         }*/
