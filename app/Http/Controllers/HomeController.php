@@ -304,7 +304,6 @@ class HomeController extends Controller
             $act = UserLog::select('user_logs.*', 'users.email')
                 ->join('users', 'users.id', '=', 'user_logs.user_id')
                 ->orderBy('id', 'desc')
-                ->take(200)
                 ->get();
         }
         if (auth()->user()->roles->first()->name == 'Head') {
