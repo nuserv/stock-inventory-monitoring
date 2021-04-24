@@ -25,6 +25,8 @@ Route::any('respond', 'HomeController@responder');
 Route::post('report-a-problem', 'HomeController@reportAproblem')->name('report.problem');
 
 
+Route::get('item', 'HomeController@item')->name('home.item');
+Route::get('items', 'HomeController@items')->name('home.items');
 
 Route::get('/', 'HomeController@index')->name('home.index');
 //Route::get('/home', 'HomeController@index')->name('home.indexs');

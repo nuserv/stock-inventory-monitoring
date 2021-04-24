@@ -41,6 +41,18 @@ class HomeController extends Controller
         $title = 'Report a problem';
         return view('report', compact('title'));
     }
+
+    public function item()
+    {
+        $title = 'Item List';
+        return view('pages.item', compact('title'));
+    }
+    public function items()
+    {
+        $item = Item::select('items.*', 'category')
+            ->join('categories', 'category_id', '=', 'categories.id');
+        return DataTables::of($item)->make(true);
+    }
     public function reportAproblem(Request $request)
     {
         $validator = Validator::make($request->all(), [
