@@ -7,10 +7,10 @@ $(document).ready(function()
                 "emptyTable": "No data found!",
                 "processing": '<i class="fa fa-spinner fa-spin fa-3x fa-fw"></i>'
             },
-        "pageLength": 10,
+        "pageLength": 25,
         "order": [ 0, 'desc' ],
         processing: true,
-        serverSide: false,
+        serverSide: true,
         ajax: {
             url: 'activity',
             error: function(data) {
