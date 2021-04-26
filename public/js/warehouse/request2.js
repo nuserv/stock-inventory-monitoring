@@ -227,7 +227,40 @@ $(document).on('click', '.sub_Btn', function(){
 
 $(document).on('keyup', '.serial', function () {
     pending = 0;
-    var mycount = $(this).attr('row_count');
+    /*var mycount = $(this).attr('row_count');
+    var go = 0;
+    if ($(this).val() && $(this).val().length >= 3) {
+        if ($(this).val().toLowerCase() ==  "n/a") {
+            $.ajax({
+                url: 'checkserial',
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="ctok"]').attr('content')
+                },
+                dataType: 'json',
+                type: 'get',
+                async: false,
+                data: {
+                    item: $('#item'+mycount).val(),
+                },
+                success: function (data) {
+                    if (data != "allowed") {
+                        $('#sub_Btn').prop('disabled', true);
+                        console.log('allowed');
+                        go = 0;
+                    }else{
+                        $('#sub_Btn').prop('disabled', false);
+                        console.log('not');
+                        go = 1;
+                    }
+                },
+                error: function (data) {
+                    alert(data.responseText);
+                    return false;
+                }
+            });
+        }
+    }*/
+
     for(q=1;q<=w;q++){
         if (q <= w) {
             if ($.inArray(q, uomarray) == -1){
@@ -284,35 +317,6 @@ $(document).on('keyup', '.serial', function () {
             }
         }
     }
-    if ($(this).val() && $(this).val().length >= 3) {
-        if ($(this).val().toLowerCase() ==  "n/a") {
-            $.ajax({
-                url: 'checkserial',
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="ctok"]').attr('content')
-                },
-                dataType: 'json',
-                type: 'get',
-                async: false,
-                data: {
-                    item: $('#desc'+mycount).val(),
-                },
-                success: function (data) {
-                    if (data != "allowed") {
-                        $('#sub_Btn').prop('disabled', true);
-                        console.log('allowed');
-                    }else{
-                        $('#sub_Btn').prop('disabled', false);
-                        console.log('not');
-                    }
-                },
-                error: function (data) {
-                    alert(data.responseText);
-                    return false;
-                }
-            });
-        }
-    }else{
-        $('#sub_Btn').prop('disabled', true);
-    }
+    
 });
+

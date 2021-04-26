@@ -104,7 +104,7 @@ $(document).on('click', '#prcBtn', function(){
             if (rowselected[i].pending <= rowselected[i].stock) {
                 for(var e=0;e<rowselected[i].pending;e++){
                     w++;
-                    var additem = '<div class="row no-margin" id="row'+w+'"><div class="col-md-2 form-group"><select id="item'+w+'" class="form-control item" row_count="'+w+'" style="color:black"><option selected disabled>select item code</option><option value="'+rowselected[i].items_id+'">'+rowselected[i].items_id+'</option></select></div><div class="col-md-3 form-group"><select id="desc'+w+'" class="form-control desc" row_count="'+w+'" style="color:black"><option selected disabled>select item description</option><option value="'+rowselected[i].items_id+'">'+rowselected[i].item_name+'</option></select></div><div class="col-md-2 form-group"><input type="text" class="form-control serial" row_count="'+w+'" id="serial'+w+'" placeholder="input serial" style="color:black" autocomplete="off" onkeypress="return event.charCode >= 47"></div></div>'
+                    var additem = '<div class="row no-margin" id="row'+w+'"><div class="col-md-2 form-group"><select id="item'+w+'" class="form-control item" row_count="'+w+'" style="color:black"><option selected value="'+rowselected[i].items_id+'">'+rowselected[i].items_id+'</option></select></div><div class="col-md-3 form-group"><select id="desc'+w+'" class="form-control desc" row_count="'+w+'" style="color:black"><option selected disabled>select item description</option><option value="'+rowselected[i].items_id+'">'+rowselected[i].item_name+'</option></select></div><div class="col-md-2 form-group"><input type="text" class="form-control serial" row_count="'+w+'" id="serial'+w+'" placeholder="input serial" style="color:black" autocomplete="off" onkeypress="return event.charCode >= 47" onkeyup="checkserial(this)"></div></div>'
                     $('#reqfield').append(additem);
                     $('#item'+w).val(rowselected[i].items_id);
                     $('#desc'+w).val(rowselected[i].items_id);
@@ -112,7 +112,7 @@ $(document).on('click', '#prcBtn', function(){
             }else if(rowselected[i].pending > rowselected[i].stock){
                 for(var e=0;e<rowselected[i].stock;e++){
                     w++;
-                    var additem = '<div class="row no-margin" id="row'+w+'"><div class="col-md-2 form-group"><select id="item'+w+'" class="form-control item" row_count="'+w+'" style="color:black"><option selected disabled>select item code</option><option value="'+rowselected[i].items_id+'">'+rowselected[i].items_id+'</option></select></div><div class="col-md-3 form-group"><select id="desc'+w+'" class="form-control desc" row_count="'+w+'" style="color:black"><option selected disabled>select item description</option><option value="'+rowselected[i].items_id+'">'+rowselected[i].item_name+'</option></select></div><div class="col-md-2 form-group"><input type="text" class="form-control serial" row_count="'+w+'" id="serial'+w+'" placeholder="input serial" style="color:black" autocomplete="off" onkeypress="return event.charCode >= 47"></div></div>'
+                    var additem = '<div class="row no-margin" id="row'+w+'"><div class="col-md-2 form-group"><select id="item'+w+'" class="form-control item" row_count="'+w+'" style="color:black"><option selected value="'+rowselected[i].items_id+'">'+rowselected[i].items_id+'</option></select></div><div class="col-md-3 form-group"><select id="desc'+w+'" class="form-control desc" row_count="'+w+'" style="color:black"><option selected disabled>select item description</option><option value="'+rowselected[i].items_id+'">'+rowselected[i].item_name+'</option></select></div><div class="col-md-2 form-group"><input type="text" class="form-control serial" row_count="'+w+'" id="serial'+w+'" placeholder="input serial" style="color:black" autocomplete="off" onkeypress="return event.charCode >= 47" onkeyup="checkserial(this)"></div></div>'
                     $('#reqfield').append(additem);
                     $('#item'+w).val(rowselected[i].items_id);
                     $('#desc'+w).val(rowselected[i].items_id);
@@ -127,7 +127,7 @@ $(document).on('click', '#prcBtn', function(){
             w++;
             uomcount = w;
             uomarray.push(w);
-            var additem = '<div class="row no-margin" id="row'+w+'"><div class="col-md-2 form-group"><select id="item'+w+'" class="form-control item" row_count="'+w+'" style="color:black"><option selected disabled>select item code</option><option value="'+rowselected[i].items_id+'">'+rowselected[i].items_id+'</option></select></div><div class="col-md-3 form-group"><select id="desc'+w+'" class="form-control desc" row_count="'+w+'" style="color:black"><option selected disabled>select item description</option><option value="'+rowselected[i].items_id+'">'+rowselected[i].item_name+'</option></select></div><div class="col-md-2 form-group"><input type="text" class="form-control inputqty" row_count="'+w+'" id="inputqty'+w+'" maxlength="2" min="0" max="'+maxqty+'" value="0" style="color:black" onkeypress="return event.charCode >= 47" onkeyup=imposeMinMax(this)></div><div class="col-md-2 form-group"><input type="text" class="form-control uom" row_count="'+w+'" id="uom'+w+'" value="'+rowselected[i].uom+'" style="color:black" autocomplete="off" disabled></div></div>'
+            var additem = '<div class="row no-margin" id="row'+w+'"><div class="col-md-2 form-group"><select id="item'+w+'" class="form-control item" row_count="'+w+'" style="color:black"><option selected value="'+rowselected[i].items_id+'">'+rowselected[i].items_id+'</option></select></div><div class="col-md-3 form-group"><select id="desc'+w+'" class="form-control desc" row_count="'+w+'" style="color:black"><option selected disabled>select item description</option><option value="'+rowselected[i].items_id+'">'+rowselected[i].item_name+'</option></select></div><div class="col-md-2 form-group"><input type="text" class="form-control inputqty" row_count="'+w+'" id="inputqty'+w+'" maxlength="2" min="0" max="'+maxqty+'" value="0" style="color:black" onkeypress="return event.charCode >= 47" onkeyup=imposeMinMax(this) onkeyup="checkserial(this)"></div><div class="col-md-2 form-group"><input type="text" class="form-control uom" row_count="'+w+'" id="uom'+w+'" value="'+rowselected[i].uom+'" style="color:black" autocomplete="off" disabled></div></div>'
             $('#reqfield').append(additem);
             $('#item'+w).val(rowselected[i].items_id);
             $('#desc'+w).val(rowselected[i].items_id);
@@ -137,3 +137,33 @@ $(document).on('click', '#prcBtn', function(){
     $('#sendModal').modal('show');
 
 });
+function checkserial(ex) {
+    //var mycount = document.getElementById(ex.id).row_count.value;
+    var myval = ex.id;
+    var slicena = myval.slice(6)
+    console.log(slicena);
+    if ($('#serial'+slicena).val().toLowerCase() == 'n/a') {
+        $.ajax({
+            url: 'checkserial',
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="ctok"]').attr('content')
+            },
+            dataType: 'json',
+            type: 'get',
+            async: false,
+            data: {
+                item: $('#item'+slicena).val()
+            },
+            success: function (data) {
+                if (data != "allowed") {
+                    $('#serial'+slicena).val('');
+                    alert('N/A not allowed!');
+                }
+            },
+            error: function (data) {
+                alert(data.responseText);
+                return false;
+            }
+        });
+    }
+}
