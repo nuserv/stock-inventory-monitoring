@@ -23,7 +23,7 @@ $(document).ready(function() {
                 },
                 {
                     data: 'branch',
-                    name: 'branch'
+                    name: 'branch', "width": "14%"
                 },
                 {
                     data: 'category',
@@ -43,17 +43,6 @@ $(document).ready(function() {
                 }
             ],
         });
-
-    $('#search-ic').on("click", function() { 
-        for (var i = 0; i <= 5; i++) {
-
-            $('.fl-' + i).val('').change();
-            table
-                .columns(i).search('')
-                .draw();
-        }
-        $('.tbsearch').toggle();
-    });
 
     $('.filter-input').keyup(function() { 
         table.column($(this).data('column'))
@@ -111,7 +100,9 @@ $(document).on('click', '#submit_Btn', function() {
                 status: 'Received'
             },
             success: function(data) {
-                location.reload();
+                //location.reload();
+                table.draw();
+                $('#loading').hide();
             },
             error: function(data) {
                 alert(data.responseText);
