@@ -64,11 +64,6 @@ $(document).on('click', '.sub_Btn', function(){
                         cat : cat,
                         stop: stop
                     },
-                    success: function (data) {
-                        if (data == "stop") {
-                            return false;
-                        }
-                    },
                     error: function(data) {
                         if(data.status == 401) {
                             window.location.href = '/login';
@@ -78,9 +73,9 @@ $(document).on('click', '.sub_Btn', function(){
             }
         }
     }
-        if (check > 1 && go == 1) {
-            location.reload();
-        }
+    if (check > 1) {
+        location.reload();
+    }
 });
 $(document).on('change', '.category', function(){
     var codeOp = " ";
