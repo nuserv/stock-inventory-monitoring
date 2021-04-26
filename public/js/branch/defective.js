@@ -8,7 +8,6 @@ $(document).ready(function()
         processing: true,
         serverSide: false,
         destroy: true,
-        searching: false,
         "language": {
             "emptyTable": "No item/s for return found!",
             "processing": '<i class="fa fa-spinner fa-spin fa-3x fa-fw"></i><span class="sr-only">Searching...</span> ',
@@ -66,11 +65,14 @@ $(document).ready(function()
         }
         $('.tbsearch').toggle();
     });
+
     $('.filter-input').keyup(function() { 
-        table.column( $(this).data('column'))
-            .search( $(this).val())
+        console.log($(this).data('column'));
+        table.column($(this).data('column'))
+            .search($(this).val())
             .draw();
     });
+
     var data = table.data();
     if(data.length > 0){
         for(var i=0;i<data.length;i++){
@@ -317,9 +319,10 @@ $(document).on('click', '#returnBtn', function(){
         $('#returnBtn').hide();
         table.buttons().container().appendTo('.printBtn');
         $('#loading').hide();
+        $('#printrecBtn').hide();
     }
 });
-$(document).on("click", "#defectiveTable tr", function () {
+$(document).on("click", "#defectiveTable tbody tr", function () {
     if (table.row(this).data().status != "For return") {
         table.row($(this)).deselect()
     }
