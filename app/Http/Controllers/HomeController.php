@@ -319,8 +319,8 @@ class HomeController extends Controller
     public function activity()
     {
         if (auth()->user()->hasAnyRole('Warehouse Manager', 'Editor',  'Manager')) {
-            $act = UserLog::query();
-                /*orderBy('id', 'desc')
+            $act = UserLog::query()->orderBy('id', 'desc');
+                /*
                 ->take(1000)
                 ->get();*/
         }
@@ -330,10 +330,12 @@ class HomeController extends Controller
             foreach ($user as $user) {
                 $myuser[] = $user->id;
             }
-            $act = UserLog::wherein('user_id', $myuser)->orderBy('id', 'desc')->take(1000)->get();
+            
+            $act = Userlog::query()->wherein('user_id', $myuser)->orderBy('id', 'desc');
+            //$act = UserLog::wherein('user_id', $myuser)->orderBy('id', 'desc')->take(1000)->get();
         }
         if (auth()->user()->hasAnyRole('Tech', 'Repair', 'Encoder')) {
-            $act = UserLog::where('user_id', auth()->user()->id)->orderBy('id', 'desc')->take(200)->get();
+            $act = UserLog::query()->where('user_id', auth()->user()->id)->orderBy('id', 'desc');
         }
         return DataTables::of($act)
         ->addColumn('date', function (UserLog $request){

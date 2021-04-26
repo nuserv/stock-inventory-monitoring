@@ -74,6 +74,11 @@
                         <a style="padding-right:8px; padding-left:8px" class="nav-link {{ Request::is('user') ? 'active' : '' }}" href="{{ url('user') }}">Users</a>
                     </li>
                 @endif
+                @if(auth()->user()->hasanyrole('Manager', 'Editor'))
+                    <li class="nav-item">
+                        <a style="padding-right:8px; padding-left:8px" class="nav-link {{ Request::is('item') ? 'active' : '' }}" href="{{ url('item') }}">Items</a>
+                    </li>
+                @endif
             @endif
         </ul>
         <ul class="nav">
