@@ -295,7 +295,7 @@ $(document).on('keyup', '.serial', function () {
                 type: 'get',
                 async: false,
                 data: {
-                    item: $('#serial'+mycount).val(),
+                    item: $('#desc'+mycount).val(),
                 },
                 success: function (data) {
                     if (data != "allowed") {
