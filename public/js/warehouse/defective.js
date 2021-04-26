@@ -124,7 +124,8 @@ $(document).on('click', '#submit_Btn', function() {
                 status: 'Repaired'
             },
             success: function(data) {
-                location.reload();
+                table.draw();
+                $('#loading').hide();
             },
             error: function(data) {
                 alert(data.responseText);
