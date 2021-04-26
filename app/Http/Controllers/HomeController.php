@@ -286,6 +286,21 @@ class HomeController extends Controller
                 }
             }
         }
+        if ($id == 'add') {
+            $items = Item::where('id', 375)->get();
+            $branches = Branch::all();
+            foreach ($branches as $branchs) {
+                foreach ($items as $item) {
+                    if ($branchs->id != 1) {
+                        $stock = new Initial;
+                        $stock->branch_id = $branchs->id;
+                        $stock->items_id = $item->id;
+                        $stock->qty = '9';
+                        $stock->save();
+                    }
+                }
+            }
+        }
         if ($id == 'initial') {
             $items = Item::all();
             $branches = Branch::all();

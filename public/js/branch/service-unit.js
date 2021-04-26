@@ -24,6 +24,8 @@ $(document).ready(function()
             { data: 'serviceby', name:'serviceby'}
         ]
     });
+    $('#in_sub_Btn').prop('disabled', true);
+    $('#repserial').prop('disabled', true);
 });
 
 $(document).on('click', '#out_Btn', function(){
@@ -89,6 +91,7 @@ $(document).on('change', '#intype', function(){
         status = '';
         desc = '';
         $('#instatus').prop('disabled', false);
+        $('#in_sub_Btn').prop('disabled', false);
 
     }else if ($(this).val() == 'replacement') {
         $('#indesc').hide();
@@ -96,7 +99,7 @@ $(document).on('change', '#intype', function(){
         $('#repdesc').show();
         $('#repdesc').prop('disabled', false);
         $('#inserial').prop('disabled', true);
-        $('#repserial').prop('disabled', false);
+        $('#repserial').prop('disabled', true);
         $('#repserial').show();
         $('#repserial').val('');
         $('#inserial').hide();
@@ -104,8 +107,42 @@ $(document).on('change', '#intype', function(){
         $('#instatus').hide();
         $('#instatus').val('select item status');
         $('#repstatus').show();
+        $('#in_sub_Btn').prop('disabled', true);
         status = '';
         desc = '';
+    }
+});
+$(document).on('keyup', '#repserial', function(){
+    if ($(this).val() && $(this).val().length >= 3) {
+        if ($(this).val().toLowerCase() ==  "n/a") {
+            $.ajax({
+                url: 'checkserial',
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="ctok"]').attr('content')
+                },
+                dataType: 'json',
+                type: 'get',
+                async: false,
+                data: {
+                    item: $('#repdesc').val(),
+                },
+                success: function (data) {
+                    if (data != "allowed") {
+                        $('#in_sub_Btn').prop('disabled', true);
+                        console.log('allowed');
+                    }else{
+                        $('#in_sub_Btn').prop('disabled', false);
+                        console.log('not');
+                    }
+                },
+                error: function (data) {
+                    alert(data.responseText);
+                    return false;
+                }
+            });
+        }
+    }else{
+        $('#in_sub_Btn').prop('disabled', true);
     }
 });
 
@@ -119,6 +156,7 @@ $(document).on('change', '#instatus', function(){
 
 $(document).on('change', '#repdesc', function(){
     desc = $(this).val();
+    $('#repserial').prop('disabled', false);
 });
 
 $(document).on('click', '.in_sub_Btn', function(){

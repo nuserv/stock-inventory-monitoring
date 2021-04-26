@@ -150,6 +150,7 @@ class BranchController extends Controller
                 return $stock_out.' '.$item->UOM;
             })
             ->addColumn('initial', function ($item) use ($id){
+                
                 $ini = Initial::select('qty')
                     ->where('items_id', $item->id)
                     ->where('branch_id', $id)
