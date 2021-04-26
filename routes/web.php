@@ -130,6 +130,7 @@ Route::get('getstock', 'StockRequestController@getStock')->middleware('ajax');
 Route::get('getserials', 'StockRequestController@getSerials')->middleware('ajax');
 Route::get('itemcode', 'StockRequestController@getItemCode')->middleware('ajax');
 Route::get('getcode', 'StockRequestController@getCode');//->middleware('ajax');
+Route::get('checkserial', 'StockRequestController@checkserial');//->middleware('ajax');
 Route::get('servicerequest', 'StockRequestController@servicerequest');//->middleware('ajax');
 Route::get('getuomq', 'StockRequestController@getuomq');//->middleware('ajax');
 Route::get('getcon', 'StockRequestController@getcon');//->middleware('ajax');

@@ -809,4 +809,14 @@ class StockRequestController extends Controller
         $data = $delete->save();
         return response()->json($data);
     }
+    public function checkserial(Request $request)
+    {
+        $item = Item::where('id', $request->item)->first();
+        if ($item->n_a == "yes") {
+            $data = "allowed";
+        }else {
+            $data = "not allowed";
+        }
+        return response()->json($data);
+    }
 }

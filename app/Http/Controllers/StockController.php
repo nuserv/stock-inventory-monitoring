@@ -849,6 +849,10 @@ class StockController extends Controller
     public function store(Request $request)
     {
         $item = Item::where('id', $request->item)->first();
+        if ($request->stop == 1) {
+            $data = 'stop';
+            return response()->json($data);
+        }
         if (auth()->user()->branch->branch == 'Warehouse') {
             for ($i=1; $i <= $request->qty ; $i++) { 
                 $add = new Warehouse;

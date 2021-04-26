@@ -53,6 +53,39 @@ $(document).on('click', '.sub_Btn', function(){
             if (q<=w) {
                 if ($.inArray(q, uomarray) == -1){
                     if ($('#serial'+q).val()) {
+                        if($('#serial'+q).val() == "N/A" || $('#serial'+q).val() == "n/a") {
+                            $.ajax({
+                                url: 'checkserial',
+                                headers: {
+                                    'X-CSRF-TOKEN': $('meta[name="ctok"]').attr('content')
+                                },
+                                dataType: 'json',
+                                type: 'get',
+                                data: {
+                                    item: $('#item'+q).val(),
+                                },
+                                success: function (data) {
+                                    if (data != "allowed") {
+                                        alert('N/A not allowed!');
+                                        $('#loading').hide();
+                                        return false;
+
+                                    }
+                                },
+                                error: function (data) {
+                                    alert(data.responseText);
+                                    return false;
+                                }
+                            });
+                        }
+                    }
+                }
+            }
+        }
+        for(var q=1;q<=w;q++){
+            if (q<=w) {
+                if ($.inArray(q, uomarray) == -1){
+                    if ($('#serial'+q).val()) {
                         $.ajax({
                             url: 'update',
                             headers: {
