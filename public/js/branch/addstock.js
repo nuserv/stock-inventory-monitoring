@@ -6,11 +6,11 @@ $(document).on('click', '.sub_Btn', function(){
     var go = 0;
     var stop = 0;
     $('#loading').show();
-    for(var q=1;q<=y;q++){
+    /*for(var q=1;q<=y;q++){
         if ($('#row'+q).is(":visible")) {
             if ($('.add_item[btn_id=\''+q+'\']').val() == 'Remove') {
                 if ($('#serial'+q).val()) {
-                    if($('#serial'+q).val() == "N/A" || $('#serial'+q).val() == "n/a") {
+                    if($('#serial'+q).val() == "N/A") {
                         $.ajax({
                             url: 'checkserial',
                             headers: {
@@ -30,6 +30,7 @@ $(document).on('click', '.sub_Btn', function(){
                                 }
                                 if (q=y) {
                                     go = 1;
+                                    should_i_go_now();
                                 }
                             },
                             error: function (data) {
@@ -41,43 +42,45 @@ $(document).on('click', '.sub_Btn', function(){
                 }
             }
         }
-    }
-    if (go == 1) {
-        for(var q=1;q<=y;q++){
-            if ($('#row'+q).is(":visible")) {
-                if ($('.add_item[btn_id=\''+q+'\']').val() == 'Remove') {
-                    check++;
-                    $('.sub_Btn').prop('disabled', true)
-                    cat = $('#category'+q).val();
-                    item = $('#desc'+q).val();
-                    serial = $('#serial'+q).val();
-                    $.ajax({
-                        url: 'store',
-                        headers: {
-                            'X-CSRF-TOKEN': $('meta[name="ctok"]').attr('content')
-                        },
-                        dataType: 'json',
-                        type: 'POST',
-                        data: {
-                            item: item,
-                            serial: serial,
-                            cat : cat,
-                            stop: stop
-                        },
-                        error: function(data) {
-                            if(data.status == 401) {
-                                window.location.href = '/login';
-                            }
+    }*/
+    for(var q=1;q<=y;q++){
+        if ($('#row'+q).is(":visible")) {
+            if ($('.add_item[btn_id=\''+q+'\']').val() == 'Remove') {
+                check++;
+                $('.sub_Btn').prop('disabled', true)
+                cat = $('#category'+q).val();
+                item = $('#desc'+q).val();
+                serial = $('#serial'+q).val();
+                $.ajax({
+                    url: 'store',
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="ctok"]').attr('content')
+                    },
+                    dataType: 'json',
+                    type: 'POST',
+                    data: {
+                        item: item,
+                        serial: serial,
+                        cat : cat,
+                        stop: stop
+                    },
+                    success: function (data) {
+                        if (data == "stop") {
+                            return false;
                         }
-                    });
-                }
+                    },
+                    error: function(data) {
+                        if(data.status == 401) {
+                            window.location.href = '/login';
+                        }
+                    }
+                });
             }
         }
-        if (check > 1) {
+    }
+        if (check > 1 && go == 1) {
             location.reload();
         }
-    }
-    
 });
 $(document).on('change', '.category', function(){
     var codeOp = " ";
