@@ -62,7 +62,6 @@ $(document).on('click', '.sub_Btn', function(){
                         item: item,
                         serial: serial,
                         cat : cat,
-                        stop: stop
                     },
                     error: function(data) {
                         if(data.status == 401) {
