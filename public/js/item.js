@@ -8,7 +8,7 @@ $(document).ready(function()
                 "emptyTable": "No data found!"
             },
             processing: true,
-            serverSide: true,
+            serverSide: false,
             ajax: {
                 url: 'items',
             error: function(data) {
@@ -44,6 +44,12 @@ $(document).ready(function()
                 { data: 'item', name:'item'},
                 { data: null}
             ]
+        });
+
+        $('.filter-input').keyup(function() {
+            table.column( $(this).data('column'))
+                .search( $(this).val())
+                .draw();
         });
 });
 
