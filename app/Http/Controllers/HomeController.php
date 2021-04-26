@@ -53,6 +53,12 @@ class HomeController extends Controller
             ->join('categories', 'category_id', '=', 'categories.id');
         return DataTables::of($item)->make(true);
     }
+    public function itemsUpdate(Request $request)
+    {
+        $data = Item::where('id', $request->item)->update(['n_a' => $request->stat]);
+        return response()->json($data);
+
+    }
     public function reportAproblem(Request $request)
     {
         $validator = Validator::make($request->all(), [
@@ -313,11 +319,10 @@ class HomeController extends Controller
     public function activity()
     {
         if (auth()->user()->hasAnyRole('Warehouse Manager', 'Editor',  'Manager')) {
-            $act = UserLog::select('user_logs.*', 'users.email')
-                ->join('users', 'users.id', '=', 'user_logs.user_id')
-                ->orderBy('id', 'desc')
+            $act = UserLog::query();
+                /*orderBy('id', 'desc')
                 ->take(1000)
-                ->get();
+                ->get();*/
         }
         if (auth()->user()->roles->first()->name == 'Head') {
             $myuser = [];
@@ -325,7 +330,7 @@ class HomeController extends Controller
             foreach ($user as $user) {
                 $myuser[] = $user->id;
             }
-            $act = UserLog::wherein('user_id', $myuser)->orderBy('id', 'desc')->take(200)->get();
+            $act = UserLog::wherein('user_id', $myuser)->orderBy('id', 'desc')->take(1000)->get();
         }
         if (auth()->user()->hasAnyRole('Tech', 'Repair', 'Encoder')) {
             $act = UserLog::where('user_id', auth()->user()->id)->orderBy('id', 'desc')->take(200)->get();

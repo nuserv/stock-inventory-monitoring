@@ -39,6 +39,8 @@ $(document).ready(function()
         var trdata = table.row(this).data();
         var area = trdata.area_id;
         var op=" ";
+        console.log(trdata.status);
+        console.log(dtdata.status);
         $('#myid').val(trdata.id);
         $('#first_name').prop('disabled', false);
         $('#middle_name').prop('disabled', false);
@@ -94,7 +96,11 @@ $(document).ready(function()
         }
         $('#role').find('option').remove().end().append(roleop);
         $('#role').val(trdata.role);
-        $('#status').val(dtdata.dataStatus);
+        if (trdata.status == "Active") {
+            $('#status').val(1);
+        }else{
+            $('#status').val(0);
+        }
         $('#subBtn').val('Update');
 
     });
