@@ -59,26 +59,26 @@ class UserController extends Controller
     public function getUsers()
     {
         if (auth()->user()->hasrole('Manager')) {
-            $users = User::query()->where('id', '!=', auth()->user()->id);
+            $users = User::where('id', '!=', auth()->user()->id)->get();
         }else if(auth()->user()->hasrole('Editor')){
-            $users = User::query()->select('users.*')
+            $users = User::select('users.*')
                 ->where('id', '!=', auth()->user()->id)
                 ->join('model_has_roles', 'model_id', '=', 'users.id')
-                ->where('role_id', '!=', '1');
+                ->where('role_id', '!=', '1')->get();
                 
         }else if(auth()->user()->hasrole('Warehouse Manager')){
-            $users = User::query()->select('users.*')
+            $users = User::select('users.*')
                 ->where('id', '!=', auth()->user()->id)
                 ->join('model_has_roles', 'model_id', '=', 'users.id')
                 ->where('branch_id', auth()->user()->branch->id)
                 ->where('role_id', '!=', '1')
-                ->where('role_id', '!=', '4');
+                ->where('role_id', '!=', '4')->get();
         }else{
-            $users = User::query()->where('id', '!=', auth()->user()->id)
+            $users = User::where('id', '!=', auth()->user()->id)
                 ->where('branch_id', auth()->user()->branch->id)
                 ->join('model_has_roles', 'model_id', '=', 'users.id')
                 ->where('role_id', '!=', '1')
-                ->where('role_id', '!=', '4');
+                ->where('role_id', '!=', '4')->get();
         }
         return DataTables::of($users)
         ->setRowData([
