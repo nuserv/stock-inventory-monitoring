@@ -123,10 +123,10 @@ class LoanController extends Controller
         $branch = Branch::where('id', $update->id_branch)->first();
         $update->status = 'in';
         $update->user_id = auth()->user()->id;
-        $log = new UserLog;
+        /*$log = new UserLog;
         $log->activity = "Received request $item->item from $branch->branch." ;
         $log->user_id = auth()->user()->id;
-        $log->save();
+        $log->save();*/
         $data = $update->save();
         return response()->json($data);
     }
@@ -148,7 +148,11 @@ class LoanController extends Controller
         $loan->status = $request->status;
         $loan->approved_by = auth()->user()->id;
         $log = new UserLog;
-        $log->activity = "Approved request $item->item from $branch->branch" ;
+        if ($request->status == "completed") {
+            $log->activity = "Received request $item->item from $branch->branch." ;
+        }else{
+            $log->activity = "Approved request $item->item from $branch->branch" ;
+        }
         $log->user_id = auth()->user()->id;
         $log->save();
         $data = $loan->save();
