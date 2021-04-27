@@ -978,7 +978,7 @@ class StockController extends Controller
     public function update(Request $request)
     {
         $update = Stock::where('id', $request->id)->first();
-        $customer = CustomerBranch::where('id', $request->customerid)->first();
+        $customer = CustomerBranch::where('id', $request->custid)->first();
         if ($request->stat == 'sunit') {
             $update->status = $request->status;
             $update->user_id = auth()->user()->id;
@@ -993,7 +993,7 @@ class StockController extends Controller
             $defective->status = 'For return';
             $defective->save();
             $log = new UserLog;
-            $log->activity = "Replaced $item->item(S/N: $request->serial) from $customer->customer_branch." ;
+            $log->activity = "Service-in $item->item(S/N: $request->serial) from $customer->customer_branch." ;
             $log->user_id = auth()->user()->id;
             $data = $log->save();
             return response()->json($data);

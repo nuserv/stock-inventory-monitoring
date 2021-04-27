@@ -3,6 +3,7 @@ var service = '';
 var serial = '';
 var desc = '';
 var status = '';
+var trdata;
 $(document).ready(function()
 {
     sunit = $('table.sUnitTable').DataTable({ 
@@ -43,7 +44,7 @@ $(document).on('click', '.close', function(){
 });
 
 $(document).on("click", "#sUnitTable tr", function () {
-    var trdata = sunit.row(this).data();
+    trdata = sunit.row(this).data();
     if (trdata.user_id != $('#userid').val()) {
         if ($('#userlevel').val() != 'Head') {
             return false;
@@ -110,6 +111,7 @@ $(document).on('change', '#intype', function(){
         $('#in_sub_Btn').prop('disabled', true);
         status = '';
         desc = '';
+
     }
 });
 $(document).on('keyup', '#repserial', function(){
@@ -181,6 +183,7 @@ $(document).on('click', '.in_sub_Btn', function(){
                         id: $('#indescid').val(),
                         serial: $('#inserial').val(),
                         status: status,
+                        custid: trdata.customer_branches_id,
                         remarks: 'service'
                     },
                     success:function(data)
@@ -210,6 +213,7 @@ $(document).on('click', '.in_sub_Btn', function(){
                         ids: $('#repdesc').val(),
                         serial: $('#repserial').val(),
                         status: 'defective',
+                        custid: trdata.customer_branches_id,
                         remarks: 'service'
                     },
                     success:function()
