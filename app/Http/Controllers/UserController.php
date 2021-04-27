@@ -33,8 +33,8 @@ class UserController extends Controller
         if (!auth()->user()->hasanyrole('Manager', 'Editor','Head','Warehouse Manager')) {
             return redirect('/');
         }
-        $new = User::query()->where('status', 3)->first();
-        $newuser = User::query()->where('status', 3)->update(['status' => '1']);
+        $new = User::where('status', 3)->first();
+        $newuser = User::where('status', 3)->update(['status' => '1']);
         $config = array(
             'driver'     => env('MAIL_DRIVER', 'smtp'),
             'host'       => env('MAIL_HOST', 'smtp.mailgun.org'),
@@ -64,21 +64,23 @@ class UserController extends Controller
             $users = User::select('users.*')
                 ->where('id', '!=', auth()->user()->id)
                 ->join('model_has_roles', 'model_id', '=', 'users.id')
-                ->where('role_id', '!=', '1')->get();
-                
+                ->where('role_id', '!=', '1')
+                ->get();
         }else if(auth()->user()->hasrole('Warehouse Manager')){
             $users = User::select('users.*')
                 ->where('id', '!=', auth()->user()->id)
                 ->join('model_has_roles', 'model_id', '=', 'users.id')
                 ->where('branch_id', auth()->user()->branch->id)
                 ->where('role_id', '!=', '1')
-                ->where('role_id', '!=', '4')->get();
+                ->where('role_id', '!=', '4')
+                ->get();
         }else{
             $users = User::where('id', '!=', auth()->user()->id)
                 ->where('branch_id', auth()->user()->branch->id)
                 ->join('model_has_roles', 'model_id', '=', 'users.id')
                 ->where('role_id', '!=', '1')
-                ->where('role_id', '!=', '4')->get();
+                ->where('role_id', '!=', '4')
+                ->get();
         }
         return DataTables::of($users)
         ->setRowData([
@@ -109,9 +111,9 @@ class UserController extends Controller
     }
     public function getBranchName(Request $request)
     {
-        $data = Branch::query()->select('branch', 'id')->where('area_id', $request->id);
+        $data = Branch::select('branch', 'id')->where('area_id', $request->id)->get();
         if (auth()->user()->hasrole('Head')) {
-            $data = Branch::query()->where('id', auth()->user()->branch->id);
+            $data = Branch::where('id', auth()->user()->branch->id)->get();
         }
         return response()->json($data);
     }
@@ -148,7 +150,7 @@ class UserController extends Controller
             $user->status = 3;
             $user->password = bcrypt($request->input('password'));
             $user->assignRole($request->input('role'));
-            $branch = Branch::query()->where('id', $request->input('branch'))->first();
+            $branch = Branch::where('id', $request->input('branch'))->first();
             $email = 'kdgonzales@ideaserv.com.ph';
             $allemails = array();
             $allemails[] = 'jerome.lopez.ge2018@gmail.com';
@@ -201,8 +203,8 @@ class UserController extends Controller
             $user->status = $request->input('status');
             $data = $user->save();
             $user->syncRoles($request->input('role'));
-            $oldbranch = Branch::query()->where('id', $olduser->branch_id)->first();
-            $branch = Branch::query()->where('id', $request->input('branch'))->first();
+            $oldbranch = Branch::where('id', $olduser->branch_id)->first();
+            $branch = Branch::where('id', $request->input('branch'))->first();
             Mail::send('update-user', ['olduser'=>$olduser->name.' '.$olduser->middlename.' '.$olduser->lastname, 'oldlevel'=>$olduser->roles->first()->name, 'oldbranch'=>$oldbranch->branch, 'user'=>$user->name.' '.$user->middlename.' '.$user->lastname, 'level'=>$request->input('role'), 'branch'=>$branch->branch],function( $message){ 
                 $message->to('kdgonzales@ideaserv.com.ph', 'Kenneth Gonzales')->subject(auth()->user()->name.' '.auth()->user()->lastname.' has updated a user to Service center stock monitoring system.'); 
                 $message->from('noreply@ideaserv.com.ph', 'Update User'); 
