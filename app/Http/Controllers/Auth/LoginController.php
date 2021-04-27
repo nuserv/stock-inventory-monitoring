@@ -7,6 +7,7 @@ use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Spatie\Permission\Models\Role;
 use App\Branch;
 use App\Area;
+use Jenssegers\Agent\Agent;
 use App\User;
 class LoginController extends Controller
 {

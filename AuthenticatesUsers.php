@@ -5,6 +5,7 @@ namespace Illuminate\Foundation\Auth;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\ValidationException;
+use Jenssegers\Agent\Agent;
 
 trait AuthenticatesUsers
 {
@@ -17,6 +18,10 @@ trait AuthenticatesUsers
      */
     public function showLoginForm()
     {
+        $agent = new Agent();
+        if (($agent->isDesktop() && $agent->browser() != 'Chrome') || (!$agent->isDesktop())) {
+            return view('pages.errors');
+        }
         return view('auth.login');
     }
 

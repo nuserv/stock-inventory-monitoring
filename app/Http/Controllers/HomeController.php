@@ -49,7 +49,7 @@ class HomeController extends Controller
     }
     public function items()
     {
-        $item = Item::query()->select('items.*', 'category')
+        $item = Item::select('items.*', 'category')
             ->join('categories', 'category_id', '=', 'categories.id');
         return DataTables::of($item)->make(true);
     }
@@ -254,7 +254,7 @@ class HomeController extends Controller
     public function printDefective()
     {
         sleep(2);
-        $request = Defective::query()->where('branch_id', auth()->user()->branch->id)->where('status', 'For receiving');
+        $request = Defective::where('branch_id', auth()->user()->branch->id)->where('status', 'For receiving');
         $title = 'Print Preview';
         return view('pages.branch.print', compact('title'));
     }

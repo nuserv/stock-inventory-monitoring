@@ -3,7 +3,6 @@
 namespace App\Http\Middleware;
 
 use Closure;
-
 class AjaxRequestOnly
 {
     /**
@@ -15,9 +14,11 @@ class AjaxRequestOnly
      */
     public function handle($request, Closure $next)
     {
+        
         if($request->ajax()) {
             return $next($request);
         }
+
         return redirect('/');
     }
 }
