@@ -140,6 +140,8 @@ $(document).on('keyup', '#repserial', function(){
                     return false;
                 }
             });
+        }else{
+            $('#in_sub_Btn').prop('disabled', false);
         }
     }else{
         $('#in_sub_Btn').prop('disabled', true);
