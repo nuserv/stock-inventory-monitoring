@@ -108,5 +108,6 @@ $(document).on('change', '.item', function(){
 $(document).on('change', '.desc', function(){
     var count = $(this).attr('row_count');
     var id = $(this).val();
+    $('#serial' + count).val('');
     $('#item' + count).val(id);
 });
