@@ -67,6 +67,11 @@ $(document).on('change', '.togBtn', function(){
                 item: returnid,
                 stat: 'no'
             },
+            success: function (data) {
+                if (data) {
+                    console.log('true');
+                }
+            },
             error: function(data) {
                 $('.togBtn[return_id=\''+returnid+'\']').prop('checkbox', false);
             }
@@ -82,6 +87,11 @@ $(document).on('change', '.togBtn', function(){
             data: {
                 item: returnid,
                 stat: 'yes'
+            },
+            success: function (data) {
+                if (data) {
+                    console.log('true');
+                }
             },
             error: function(data) {
                 $('.togBtn[return_id=\''+returnid+'\']').prop('checkbox', true);

@@ -49,15 +49,19 @@ class HomeController extends Controller
     }
     public function items()
     {
-        $item = Item::select('items.*', 'category')
+        $item = Item::query()->select('items.*', 'category')
             ->join('categories', 'category_id', '=', 'categories.id');
         return DataTables::of($item)->make(true);
     }
     public function itemsUpdate(Request $request)
-    {
-        $data = Item::where('id', $request->item)->update(['n_a' => $request->stat]);
+    {   
+        $items = Item::where('id', $request->item)->first();
+        $item = Item::where('id', $request->item)->update(['n_a' => $request->stat]);
+        $log = new UserLog;
+        $log->activity = auth()->user()->name.' '.auth()->user()->lastname.' update '.$items->item.'.';
+        $log->user_id = auth()->user()->id;
+        $data = $log->save();
         return response()->json($data);
-
     }
     public function reportAproblem(Request $request)
     {
@@ -250,7 +254,7 @@ class HomeController extends Controller
     public function printDefective()
     {
         sleep(2);
-        $request = Defective::where('branch_id', auth()->user()->branch->id)->where('status', 'For receiving')->get();
+        $request = Defective::query()->where('branch_id', auth()->user()->branch->id)->where('status', 'For receiving');
         $title = 'Print Preview';
         return view('pages.branch.print', compact('title'));
     }

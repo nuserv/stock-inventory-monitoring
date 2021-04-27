@@ -69,7 +69,7 @@ class BranchController extends Controller
             ->groupBy('stocks.items_id')
             ->get();
         if ($request->data != 1) {
-            return DataTables::of(Category::orderBy('category')->get())
+            return DataTables::of(Category::query()->orderBy('category'))
             ->addColumn('stock_out', function ($category) use ($id){
                     
                 if (auth()->user()->branch->branch == 'Warehouse' && $id == 1) {
@@ -110,7 +110,7 @@ class BranchController extends Controller
             })
             ->make(true);
         }else{ 
-            $stock = Item::where('category_id', $request->category)->get();
+            $stock = Item::query()->where('category_id', $request->category);
             return DataTables::of($stock)
             ->addColumn('available', function ($item) use ($id){
                 if (auth()->user()->branch->id == 1 && $id == 1) {
@@ -163,24 +163,21 @@ class BranchController extends Controller
     public function getBranches()
     {
         if (auth()->user()->hasrole('Warehouse Manager')) {
-            $branches = Branch::select('branches.*', 'areas.area')
+            $branches = Branch::query()->select('branches.*', 'areas.area')
                 ->where('branches.id', '!=', auth()->user()->branch->id)
                 ->where('branches.branch', '!=', 'Main-office')
-                ->join('areas', 'areas.id', '=', 'branches.area_id')
-                ->get();
+                ->join('areas', 'areas.id', '=', 'branches.area_id');
         }else if (auth()->user()->hasanyrole('Editor', 'Manager', 'Encoder')){
-            $branches = Branch::select('branches.*', 'areas.area')
+            $branches = Branch::query()->select('branches.*', 'areas.area')
                 ->where('branches.id', '!=', auth()->user()->branch->id)
                 ->where('branches.branch', '!=', 'Warehouse')
-                ->join('areas', 'areas.id', '=', 'branches.area_id')
-                ->get();
+                ->join('areas', 'areas.id', '=', 'branches.area_id');
         }else if (auth()->user()->hasanyrole('Head', 'Tech')){
-            $branches = Branch::select('branches.*', 'areas.area')
+            $branches = Branch::query()->select('branches.*', 'areas.area')
                 ->whereNotin('branches.id', [auth()->user()->branch->id, '1'])
                 ->where('branches.branch', '!=', 'Main-office')
                 ->where('branches.area_id', '=', auth()->user()->area->id)
-                ->join('areas', 'areas.id', '=', 'branches.area_id')
-                ->get();
+                ->join('areas', 'areas.id', '=', 'branches.area_id');
         }
         return DataTables::of($branches)
         ->setRowData([

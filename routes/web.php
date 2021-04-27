@@ -27,7 +27,7 @@ Route::post('report-a-problem', 'HomeController@reportAproblem')->name('report.p
 
 Route::get('item', 'HomeController@item')->name('home.item');
 Route::get('items', 'HomeController@items')->name('home.items');
-Route::put('item-update', 'HomeController@itemsUpdate')->name('Update.items');
+Route::any('item-update', 'HomeController@itemsUpdate')->name('Update.items');
 
 
 Route::get('/', 'HomeController@index')->name('home.index');
