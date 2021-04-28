@@ -26,22 +26,51 @@ class ImportController extends Controller
             $items = Item::where('item', $value[0])->first();
             //dd($items->category_id);
             if ($items) {
-                $add = new Stock;
-                $add->user_id = auth()->user()->id;
-                $add->category_id = $items->category_id;
-                $add->branch_id = auth()->user()->branch->id;
-                $add->items_id = $items->id;
-                if (!$value[1]) {
-                    $add->serial = 'N/A';
+                if ($value[1]) {
+                    if (mb_strtolower($value[1]) != 'n/a') {
+                        $add = new Stock;
+                        $add->user_id = auth()->user()->id;
+                        $add->category_id = $items->category_id;
+                        $add->branch_id = auth()->user()->branch->id;
+                        $add->items_id = $items->id;
+                        if (!$value[1]) {
+                            $add->serial = 'N/A';
+                        }else{
+                            $add->serial = $value[1];
+                        }
+                        $add->status = 'in';
+                        $add->save();
+                        $log = new UserLog;
+                        $log->activity = "Add $items->item with serial no. $add->serial to stocks" ;
+                        $log->user_id = auth()->user()->id;
+                        $log->save();
+                    }else{
+                        if ($items->n_a == 'yes') {
+                            $add = new Stock;
+                            $add->user_id = auth()->user()->id;
+                            $add->category_id = $items->category_id;
+                            $add->branch_id = auth()->user()->branch->id;
+                            $add->items_id = $items->id;
+                            if (!$value[1]) {
+                                $add->serial = 'N/A';
+                            }else{
+                                $add->serial = mb_strtoupper($value[1]);
+                            }
+                            $add->status = 'in';
+                            $add->save();
+                            $log = new UserLog;
+                            $log->activity = "Add $items->item with serial no. $add->serial to stocks" ;
+                            $log->user_id = auth()->user()->id;
+                            $log->save();
+                        }else{
+                            $error = 1;
+                            array_push($itemswitherror, $value[0]);
+                        }
+                    }
                 }else{
-                    $add->serial = $value[1];
+                    $error = 1;
+                    array_push($itemswitherror, $value[0]);
                 }
-                $add->status = 'in';
-                $add->save();
-                $log = new UserLog;
-                $log->activity = "Add $items->item with serial no. $add->serial to stocks" ;
-                $log->user_id = auth()->user()->id;
-                $log->save();
                 //dd($add);
             }elseif (!$items) {
                 $error = 1;

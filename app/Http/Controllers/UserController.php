@@ -141,9 +141,9 @@ class UserController extends Controller
             Config::set('mail', $config);
             
             $user = new User;
-            $user->name = ucwords(strtolower($request->input('first_name')));
-            $user->lastname = ucwords(strtolower($request->input('last_name')));
-            $user->middlename = ucwords(strtolower($request->input('middle_name')));
+            $user->name = ucwords(mb_strtolower($request->input('first_name')));
+            $user->lastname = ucwords(mb_strtolower($request->input('last_name')));
+            $user->middlename = ucwords(mb_strtolower($request->input('middle_name')));
             $user->email = $request->input('email');
             $user->area_id = $request->input('area');
             $user->branch_id = $request->input('branch');
@@ -194,11 +194,11 @@ class UserController extends Controller
             Config::set('mail', $config);
             $olduser = User::find($id);
             $user = User::find($id);
-            $user->name = ucwords(strtolower($request->input('first_name')));
-            $user->lastname = ucwords(strtolower($request->input('last_name')));
+            $user->name = ucwords(mb_strtolower($request->input('first_name')));
+            $user->lastname = ucwords(mb_strtolower($request->input('last_name')));
             $user->email = $request->input('email');
             $user->area_id = $request->input('area');
-            $user->middlename = ucwords(strtolower($request->input('middle_name')));
+            $user->middlename = ucwords(mb_strtolower($request->input('middle_name')));
             $user->branch_id = $request->input('branch');
             $user->status = $request->input('status');
             $data = $user->save();

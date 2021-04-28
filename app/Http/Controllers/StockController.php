@@ -150,39 +150,39 @@ class StockController extends Controller
         })
         ->addColumn('category', function (Stock $request){
             $cat = Category::find($request->category_id);
-            return strtoupper($cat->category);
+            return mb_strtoupper($cat->category);
         })
         ->addColumn('description', function (Stock $request){
             $item = Item::where('id', $request->items_id)->first();
-            return strtoupper($item->item);
+            return mb_strtoupper($item->item);
         })
         ->addColumn('serial', function (Stock $request){
-            return strtoupper($request->serial);
+            return mb_strtoupper($request->serial);
         })
         ->addColumn('client', function (Stock $request){
             $client = CustomerBranch::select('customer_branch', 'customers.customer')
                 ->where('customer_branches.id', $request->customer_branches_id)
                 ->join('customers', 'customer_id', '=', 'customers.id')
                 ->first();
-            return ucwords(strtolower($client->customer.' - '.$client->customer_branch));
+            return ucwords(mb_strtolower($client->customer.' - '.$client->customer_branch));
         })
         ->addColumn('client_name', function (Stock $request){
             $client = CustomerBranch::select('customer_branch', 'customers.customer')
                 ->where('customer_branches.id', $request->customer_branches_id)
                 ->join('customers', 'customer_id', '=', 'customers.id')
                 ->first();
-            return ucwords(strtolower($client->customer));
+            return ucwords(mb_strtolower($client->customer));
         })
         ->addColumn('customer_name', function (Stock $request){
             $client = CustomerBranch::select('customer_branch', 'customers.customer')
                 ->where('customer_branches.id', $request->customer_branches_id)
                 ->join('customers', 'customer_id', '=', 'customers.id')
                 ->first();
-            return ucwords(strtolower($client->customer_branch));
+            return ucwords(mb_strtolower($client->customer_branch));
         })
         ->addColumn('serviceby', function (Stock $request){
             $user = User::select('name', 'middlename', 'lastname')->where('id', $request->user_id)->first();
-            return ucwords(strtolower($user->name.' '.$user->middlename.' '.$user->lastname));
+            return ucwords(mb_strtolower($user->name.' '.$user->middlename.' '.$user->lastname));
         })
         ->make(true);
     }
@@ -198,14 +198,14 @@ class StockController extends Controller
         })
         ->addColumn('category', function (Pm $request){
             $cat = Category::find($request->category_id);
-            return strtoupper($cat->category);
+            return mb_strtoupper($cat->category);
         })
         ->addColumn('description', function (Pm $request){
             $item = Item::where('id', $request->items_id)->first();
-            return strtoupper($item->item);
+            return mb_strtoupper($item->item);
         })
         ->addColumn('serial', function (Pm $request){
-            return strtoupper($request->serial);
+            return mb_strtoupper($request->serial);
         })
         ->addColumn('client', function (Pm $request){
             $clients = '';
@@ -215,13 +215,13 @@ class StockController extends Controller
                         ->where('customer_branches.id', $customer)
                         ->join('customers', 'customer_id', '=', 'customers.id')
                         ->first();
-                    $clients = ucwords(strtolower($client->customer.' - '.$client->customer_branch));
+                    $clients = ucwords(mb_strtolower($client->customer.' - '.$client->customer_branch));
                 }else{
                     $client = CustomerBranch::select('customer_branch', 'customers.customer')
                         ->where('customer_branches.id', $customer)
                         ->join('customers', 'customer_id', '=', 'customers.id')
                         ->first();
-                    $clients = $clients.', '.ucwords(strtolower($client->customer.' - '.$client->customer_branch));
+                    $clients = $clients.', '.ucwords(mb_strtolower($client->customer.' - '.$client->customer_branch));
                 }
             }
             return $clients;
@@ -231,18 +231,18 @@ class StockController extends Controller
                 ->where('customer_branches.id', $request->customer_branches_id)
                 ->join('customers', 'customer_id', '=', 'customers.id')
                 ->first();
-            return ucwords(strtolower($client->customer));
+            return ucwords(mb_strtolower($client->customer));
         })
         ->addColumn('customer_name', function (Pm $request){
             $client = CustomerBranch::select('customer_branch', 'customers.customer')
                 ->where('customer_branches.id', $request->customer_branches_id)
                 ->join('customers', 'customer_id', '=', 'customers.id')
                 ->first();
-            return ucwords(strtolower($client->customer_branch));
+            return ucwords(mb_strtolower($client->customer_branch));
         })*/
         ->addColumn('serviceby', function (Pm $request){
             $user = User::select('name', 'lastname')->where('id', $request->user_id)->first();
-            return ucwords(strtolower($user->name.' '.$user->middlename.' '.$user->lastname));
+            return ucwords(mb_strtolower($user->name.' '.$user->middlename.' '.$user->lastname));
         })
         ->make(true);
     }
@@ -290,11 +290,11 @@ class StockController extends Controller
         return DataTables::of($sserial)
         ->addColumn('description', function (PreparedItem $PreparedItem){
             $desc = Item::where('id', $PreparedItem->items_id)->first();
-            return strtoupper($desc->item);
+            return mb_strtoupper($desc->item);
         })
         ->addColumn('branch', function (PreparedItem $PreparedItem){
             $branchname = Branch::where('id', $PreparedItem->branch_id)->first();
-            return strtoupper($branchname->branch);
+            return mb_strtoupper($branchname->branch);
         })
         ->addColumn('user', function (PreparedItem $PreparedItem){
             $username = User::where('id', $PreparedItem->user_id)->first();
@@ -365,21 +365,21 @@ class StockController extends Controller
                 ->get();
             return DataTables::of($stock)
             ->addColumn('category', function (Stock $stock){
-                return strtoupper($stock->category);
+                return mb_strtoupper($stock->category);
             })
             ->addColumn('stockout', function (Stock $stock){
                 $out = Stock::wherein('status', ['service unit', 'pm'])
                     ->where('branch_id', auth()->user()->branch->id)
                     ->where('category_id', $stock->category_id)
                     ->count();
-                return strtoupper($out);
+                return mb_strtoupper($out);
             })
             ->addColumn('defectives', function (Stock $stock){
                 $defective = Defective::where('status', 'For return')
                     ->where('branch_id', auth()->user()->branch->id)
                     ->where('category_id', $stock->category_id)
                     ->count();
-                return strtoupper($defective);
+                return mb_strtoupper($defective);
             })
             ->addColumn('total', function (Stock $stock){
                 $out = Stock::wherein('status', ['service unit', 'pm'])
@@ -421,7 +421,7 @@ class StockController extends Controller
                 ->groupBy('items_id')->get();
             return DataTables::of($stock)
             ->addColumn('description', function (Stock $stock){
-                return strtoupper($stock->description);
+                return mb_strtoupper($stock->description);
             })
             ->addColumn('stockout', function (Stock $stock){
                 $out = Stock::wherein('status', ['service unit', 'pm'])
@@ -891,7 +891,7 @@ class StockController extends Controller
         $escapedHeader=[];
         //validate
         foreach ($header as $key => $value) {
-            $lheader = strtolower($value);
+            $lheader = mb_strtolower($value);
             array_push($escapedHeader, $lheader);
         }
         //looping throu other columns

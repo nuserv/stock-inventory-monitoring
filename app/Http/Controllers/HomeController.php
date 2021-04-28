@@ -284,23 +284,22 @@ class HomeController extends Controller
             }
         }
         if ($id == 'ini') {
+            $length = 10;
+            $permitted_chars = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
             $items = Item::all();
-            $branches = Branch::wherein('id', [18,17,40,41,14,37,19,15,16])->get();
+            $branches = Branch::where('area_id', 5)->get();
             foreach ($branches as $branchs) {
                 foreach ($items as $item) {
+                    $series = $item->id;
+                    $results = mb_strtolower(($series).substr(str_shuffle($permitted_chars), 0, $length));
                     if ($branchs->id != 1) {
                         $stock = new Stock;
                         $stock->category_id = $item->category_id;
                         $stock->branch_id = $branchs->id;
                         $stock->items_id = $item->id;
-                        $stock->serial = 'N/A';
+                        $stock->serial = $results;
                         $stock->status = 'in';
                         $stock->save();
-                        $initial = new Initial;
-                        $initial->branch_id = $branchs->id;
-                        $initial->items_id = $item->id;
-                        $initial->qty = '9';
-                        $initial->save();
                     }
                 }
             }

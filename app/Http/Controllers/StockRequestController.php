@@ -166,10 +166,10 @@ class StockRequestController extends Controller
         $result = $unit->merge($consumable);
         return DataTables::of($result)
         ->addColumn('item_name', function (PreparedItem $PreparedItem){
-            return strtoupper($PreparedItem->items->item);
+            return mb_strtoupper($PreparedItem->items->item);
         })
         ->addColumn('serial', function (PreparedItem $PreparedItem){
-            return strtoupper($PreparedItem->serial);
+            return mb_strtoupper($PreparedItem->serial);
         })
         ->addColumn('quantity', function (PreparedItem $PreparedItem){
             if ($PreparedItem->quantity != 1) {
@@ -200,10 +200,10 @@ class StockRequestController extends Controller
         $result = $unit->merge($consumable);
         return DataTables::of($result)
         ->addColumn('item_name', function (PreparedItem $PreparedItem){
-            return strtoupper($PreparedItem->items->item);
+            return mb_strtoupper($PreparedItem->items->item);
         })
         ->addColumn('serial', function (PreparedItem $PreparedItem){
-            return strtoupper($PreparedItem->serial);
+            return mb_strtoupper($PreparedItem->serial);
         })
         ->addColumn('quantity', function (PreparedItem $PreparedItem){
             if ($PreparedItem->quantity != 1) {
@@ -231,7 +231,7 @@ class StockRequestController extends Controller
         return DataTables::of(PreparedItem::where('request_no', $id)->get())
         ->addColumn('item_name', function ($PreparedItem){
 
-            return strtoupper($PreparedItem->items->item);
+            return mb_strtoupper($PreparedItem->items->item);
         })
         ->make(true);
     }   
@@ -260,7 +260,7 @@ class StockRequestController extends Controller
     {
         return DataTables::of(RequestedItem::where('request_no', $id)->where('pending', '!=', 0)->get())
         ->addColumn('item_name', function (RequestedItem $RequestedItem){
-            return strtoupper($RequestedItem->items->item);
+            return mb_strtoupper($RequestedItem->items->item);
         })
         ->addColumn('uom', function (RequestedItem $RequestedItem){
             $uom = Item::select('UOM as uom')->where('id', $RequestedItem->items->id)->first();
@@ -396,27 +396,27 @@ class StockRequestController extends Controller
             return Carbon::now()->diffInHours($dd, false);//Carbon::now()->subDays(5);
         })
         ->addColumn('reqBy', function (StockRequest $request){
-            return strtoupper($request->user->name);
+            return mb_strtoupper($request->user->name);
         })
         ->addColumn('branch', function (StockRequest $request){
-            return strtoupper($request->branch->branch);
+            return mb_strtoupper($request->branch->branch);
         })
         ->addColumn('customer', function (StockRequest $request){
             if ($request->type == 'Service') {
                 $custname = CustomerBranch::where('id', $request->customer_branch_id)->first();
-                return strtoupper($custname->customer_branch);
+                return mb_strtoupper($custname->customer_branch);
             }else{
                 return 'not urgent';
             }
         })
         ->addColumn('area', function (StockRequest $request){
-            return strtoupper($request->area->area);
+            return mb_strtoupper($request->area->area);
         })
         ->addColumn('pending', function (StockRequest $request){
-            return strtoupper($request->pending);
+            return mb_strtoupper($request->pending);
         })
         ->addColumn('type', function (StockRequest $request){
-            return strtoupper($request->type);
+            return mb_strtoupper($request->type);
         })
         ->addColumn('client', function (StockRequest $request){
             if ($request->type == "Service") {
@@ -424,7 +424,7 @@ class StockRequestController extends Controller
             }else {
                 $client = 'none';
             }
-            return strtoupper($client);
+            return mb_strtoupper($client);
         })
         ->addColumn('customer', function (StockRequest $request){
             if ($request->type == "Service") {
@@ -432,7 +432,7 @@ class StockRequestController extends Controller
             }else {
                 $customer = 'none';
             }
-            return strtoupper($customer);
+            return mb_strtoupper($customer);
         })
         ->make(true);
     }
@@ -490,23 +490,23 @@ class StockRequestController extends Controller
             return Carbon::now()->diffInHours($dd, false);//Carbon::now()->subDays(5);
         })
         ->addColumn('reqBy', function (StockRequest $request){
-            return strtoupper($request->user->name);
+            return mb_strtoupper($request->user->name);
         })
         ->addColumn('branch', function (StockRequest $request){
-            return strtoupper($request->branch->branch);
+            return mb_strtoupper($request->branch->branch);
         })
         ->addColumn('area', function (StockRequest $request){
-            return strtoupper($request->area->area);
+            return mb_strtoupper($request->area->area);
         })
         ->addColumn('pending', function (StockRequest $request){
-            return strtoupper($request->pending);
+            return mb_strtoupper($request->pending);
         })
         ->addColumn('type', function (StockRequest $request){
-            return strtoupper($request->type);
+            return mb_strtoupper($request->type);
         })
         ->addColumn('resolved_name', function (StockRequest $request){
             $name = User::where('id', $request->resolved_by)->first();
-            return strtoupper($name->name.' '.$name->lastname);
+            return mb_strtoupper($name->name.' '.$name->lastname);
         })
         ->addColumn('client', function (StockRequest $request){
             if ($request->type == "Service") {
@@ -514,7 +514,7 @@ class StockRequestController extends Controller
             }else {
                 $client = 'none';
             }
-            return strtoupper($client);
+            return mb_strtoupper($client);
         })
         ->addColumn('customer', function (StockRequest $request){
             if ($request->type == "Service") {
@@ -522,7 +522,7 @@ class StockRequestController extends Controller
             }else {
                 $customer = 'none';
             }
-            return strtoupper($customer);
+            return mb_strtoupper($customer);
         })
         ->make(true);
     }

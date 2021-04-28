@@ -18,7 +18,7 @@
                     <div class="col-md-6 form-group row">
                         <label class="col-md-6 col-form-label text-md-right">Service Engineer:</label>
                         <div class="col-md-6">
-                            <input type="text" style="color: black" class="form-control form-control-sm " id="pengr" value="{{ strtoupper(auth()->user()->name) }}" disabled>
+                            <input type="text" style="color: black" class="form-control form-control-sm " id="pengr" value="{{ mb_strtoupper(auth()->user()->name) }}" disabled>
                         </div>
                     </div>
                 </div>

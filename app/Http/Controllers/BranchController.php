@@ -185,7 +185,7 @@ class BranchController extends Controller
             'data-status' => '{{ $status }}',
         ])
         ->addColumn('address', function (Branch $branch){
-            return ucwords(strtolower($branch->address));
+            return ucwords(mb_strtolower($branch->address));
         })
         ->addColumn('status', function (Branch $branch){
 
@@ -211,11 +211,11 @@ class BranchController extends Controller
         if ($validator->passes()) {
             $items = Item::all();
             $branch = new Branch;
-            $branch->branch = ucwords(strtolower($request->input('branch_name')));
-            $branch->email = strtolower($request->input('email'));
+            $branch->branch = ucwords(mb_strtolower($request->input('branch_name')));
+            $branch->email = mb_strtolower($request->input('email'));
             $branch->address = $request->input('address');
             $branch->area_id = $request->input('area');
-            $branch->head = ucwords(strtolower($request->input('contact_person')));
+            $branch->head = ucwords(mb_strtolower($request->input('contact_person')));
             $branch->phone = $request->input('mobile');
             $branch->status = $request->input('status');
             $branch->save();
@@ -253,11 +253,11 @@ class BranchController extends Controller
         ]);
         if ($validator->passes()) {
             $branch = Branch::find($id);
-            $branch->branch = ucwords(strtolower($request->input('branch_name')));
+            $branch->branch = ucwords(mb_strtolower($request->input('branch_name')));
             $branch->email = $request->input('email');
             $branch->address = $request->input('address');
             $branch->area_id = $request->input('area');
-            $branch->head = ucwords(strtolower($request->input('contact_person')));
+            $branch->head = ucwords(mb_strtolower($request->input('contact_person')));
             $branch->phone = $request->input('mobile');
             $branch->status = $request->input('status');
             $data = $branch->save();

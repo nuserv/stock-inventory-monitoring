@@ -13,7 +13,7 @@
                         <select id="goodcustomer1" class="form-control goodcustomer" row_count="1">
                             <option selected disabled>select customer</option>
                             @foreach ($customers as $customer)
-                            <option value="{{ $customer->customer_branches_id }}">{{ strtoupper($customer->customer_branch) }}</option>
+                            <option value="{{ $customer->customer_branches_id }}">{{ mb_strtoupper($customer->customer_branch) }}</option>
                             @endforeach
                         </select>
                     </div>
