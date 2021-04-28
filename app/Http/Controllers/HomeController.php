@@ -273,9 +273,19 @@ class HomeController extends Controller
                 }
             }
         }
+        if ($id == 'del') {
+            $items = Item::all();
+            $branches = Branch::wherein('id', [18,17,40,41,14,37,19,15,16])->get();
+            foreach ($branches as $branchs) {
+                $del = initial::where('branch_id', $branchs)->get();
+                foreach ($del as $dl) {
+                    $dl->delete();
+                }
+            }
+        }
         if ($id == 'ini') {
             $items = Item::all();
-            $branches = Branch::where('id', '12')->get();
+            $branches = Branch::wherein('id', [18,17,40,41,14,37,19,15,16])->get();
             foreach ($branches as $branchs) {
                 foreach ($items as $item) {
                     if ($branchs->id != 1) {
@@ -286,21 +296,26 @@ class HomeController extends Controller
                         $stock->serial = 'N/A';
                         $stock->status = 'in';
                         $stock->save();
+                        $initial = new Initial;
+                        $initial->branch_id = $branchs->id;
+                        $initial->items_id = $item->id;
+                        $initial->qty = '9';
+                        $initial->save();
                     }
                 }
             }
         }
         if ($id == 'add') {
-            $items = Item::where('id', 375)->get();
+            $items = Item::wherein('id', [375,])->get();
             $branches = Branch::all();
             foreach ($branches as $branchs) {
                 foreach ($items as $item) {
                     if ($branchs->id != 1) {
-                        $stock = new Initial;
-                        $stock->branch_id = $branchs->id;
-                        $stock->items_id = $item->id;
-                        $stock->qty = '9';
-                        $stock->save();
+                        $initial = new Initial;
+                        $initial->branch_id = $branchs->id;
+                        $initial->items_id = $item->id;
+                        $initial->qty = '9';
+                        $initial->save();
                     }
                 }
             }
@@ -338,7 +353,20 @@ class HomeController extends Controller
     public function activity()
     {
         if (auth()->user()->hasAnyRole('Warehouse Manager', 'Editor',  'Manager')) {
-            $act = UserLog::query()->orderBy('id', 'desc');
+            $act = UserLog::query()
+                ->select(
+                    'user_logs.id as logid',
+                    'user_logs.updated_at',
+                    'user_logs.activity',
+                    'name',
+                    'middlename',
+                    'lastname',
+                    'branch',
+                )
+                ->join('users', 'users.id', 'user_id')
+                ->join('branches', 'branches.id', 'branch_id')
+                ->orderBy('logid', 'desc')
+                ->get();
                 /*
                 ->take(1000)
                 ->get();*/
@@ -350,13 +378,42 @@ class HomeController extends Controller
                 $myuser[] = $user->id;
             }
             
-            $act = Userlog::query()->wherein('user_id', $myuser)->orderBy('id', 'desc');
+            $act = Userlog::query()
+                ->wherein('user_id', $myuser)
+                ->select(
+                    'user_logs.id as logid',
+                    'user_logs.updated_at',
+                    'user_logs.activity',
+                    'name',
+                    'middlename',
+                    'lastname',
+                    'branch',
+                )
+                ->join('users', 'users.id', 'user_id')
+                ->join('branches', 'branches.id', 'branch_id')
+                ->orderBy('logid', 'desc');
             //$act = UserLog::wherein('user_id', $myuser)->orderBy('id', 'desc')->take(1000)->get();
         }
         if (auth()->user()->hasAnyRole('Tech', 'Repair', 'Encoder')) {
-            $act = UserLog::query()->where('user_id', auth()->user()->id)->orderBy('id', 'desc');
+            $act = UserLog::query()
+                ->where('user_id', auth()->user()->id)
+                ->select(
+                    'user_logs.id as logid',
+                    'user_logs.updated_at',
+                    'user_logs.activity',
+                    'name',
+                    'middlename',
+                    'lastname',
+                    'branch',
+                )
+                ->join('users', 'users.id', 'user_id')
+                ->join('branches', 'branches.id', 'branch_id')
+                ->orderBy('logid', 'desc');
         }
         return DataTables::of($act)
+        ->addColumn('id', function (UserLog $request){
+            return $request->logid;
+        })
         ->addColumn('date', function (UserLog $request){
             return $request->updated_at->toFormattedDateString(). ' '.$request->updated_at->toTimeString();
         })
@@ -364,17 +421,17 @@ class HomeController extends Controller
             return $request->updated_at->toTimeString();
         })
         ->addColumn('branch', function (UserLog $request){
-            $branch = User::where('id', $request->user_id)->first();
-            return $branch->branch->branch;
+            //$branch = User::where('id', $request->user_id)->first();
+            return $request->branch;
         })
         ->addColumn('fullname', function (UserLog $request){
-            $username = User::where('id', $request->user_id)->first();
-            return $username->name.' '.$username->middlename.' '. $username->lastname;
+            //$username = User::where('id', $request->user_id)->first();
+            return $request->name.' '.$request->middlename.' '. $request->lastname;
         })
-        ->addColumn('userlevel', function (UserLog $request){
+        /*->addColumn('userlevel', function (UserLog $request){
             $username = User::where('id', $request->user_id)->first();
             return $username->roles->first()->name;
-        })
+        })*/
         ->make(true);
     }
     public function service_units()
