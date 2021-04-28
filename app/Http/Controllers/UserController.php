@@ -124,9 +124,9 @@ class UserController extends Controller
             'last_name' => ['required', 'string', 'min:3', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
             'role' => ['required', 'string'],
-            'status' => ['required', 'string'],
-            'password' => ['required', 'string', 'min:1', 'confirmed'],
-            'password_confirmation' => 'required|same:password'
+            'status' => ['required', 'string']
+            //'password' => ['required', 'string', 'min:1', 'confirmed'],
+            //password_confirmation' => 'required|same:password'
         ]);
         if ($validator->passes()) {
             $config = array(
@@ -148,7 +148,7 @@ class UserController extends Controller
             $user->area_id = $request->input('area');
             $user->branch_id = $request->input('branch');
             $user->status = 3;
-            $user->password = bcrypt($request->input('password'));
+            $user->password = bcrypt('123456');
             $user->assignRole($request->input('role'));
             $branch = Branch::where('id', $request->input('branch'))->first();
             $email = 'kdgonzales@ideaserv.com.ph';
