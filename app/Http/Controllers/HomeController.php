@@ -351,7 +351,7 @@ class HomeController extends Controller
     }
     public function activity()
     {
-        if (auth()->user()->hasAnyRole('Warehouse Manager', 'Editor',  'Manager')) {
+        if (auth()->user()->hasAnyRole('Editor',  'Manager')) {
             $act = UserLog::query()
                 ->select(
                     'user_logs.id as logid',
@@ -370,7 +370,7 @@ class HomeController extends Controller
                 ->take(1000)
                 ->get();*/
         }
-        if (auth()->user()->roles->first()->name == 'Head') {
+        if (auth()->user()->hasAnyRole('Head',  'Warehouse Manager')) {
             $myuser = [];
             $user = User::where('branch_id', auth()->user()->branch->id)->get();
             foreach ($user as $user) {
