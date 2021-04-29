@@ -310,6 +310,7 @@ class StockController extends Controller
             ->get();
         return response()->json($customer);
     }
+    
     public function autocompleteClient(Request $request)
     {
         $client = Customer::where("customer", "LIKE", "%{$request->id}%")
