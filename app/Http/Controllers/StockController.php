@@ -858,12 +858,12 @@ class StockController extends Controller
                 $add->status = 'in';
                 $add->serial = '-';
                 $add->user_id = auth()->user()->id;
-                $log = new UserLog;
-                $log->activity = "Add $item->item to stocks." ;
-                $log->user_id = auth()->user()->id;
-                $log->save();
-                $data = $add->save();
+                $add->save();
             }
+            $log = new UserLog;
+            $log->activity = "Add $request->qty $item->UOM of $item->item to stocks." ;
+            $log->user_id = auth()->user()->id;
+            $data = $log->save();
         }else{
             $add = new Stock;
             $add->category_id = $request->cat;
@@ -878,6 +878,7 @@ class StockController extends Controller
             $log->save();
             $data = $add->save();
         }
+                
         return response()->json($data);
     }
     public function import(Request $request)
