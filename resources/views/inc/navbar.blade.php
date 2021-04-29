@@ -34,6 +34,11 @@
                         <a style="padding-right:8px; padding-left:8px" class="nav-link {{ Request::is('stocks') ? 'active' : '' }}" href="{{ route('stocks.index') }}">Warehouse Stock</a>
                     </li>
                 @endif
+                @if(auth()->user()->hasanyrole('Warehouse Manager', 'Head', 'Tech', 'Encoder'))
+                    <li class="nav-item">
+                        <a style="padding-right:8px; padding-left:8px" class="nav-link {{ Request::is('stocks') ? 'active' : '' }}" href="{{ route('stocks.index') }}">Stocks</a>
+                    </li>
+                @endif
                 <li class="nav-item">
                     <a style="padding-right:8px; padding-left:8px" class="nav-link {{ Request::is('request') ? 'active' : '' }}" href="{{ route('stock.index') }}">Stock Request</a>
                 </li>
@@ -41,11 +46,6 @@
                 <li class="nav-item">
                     <a style="padding-right:8px; padding-left:8px" class="nav-link {{ Request::is('resolved') ? 'active' : '' }}" href="{{ route('resolved.index') }}">Resolved</a>
                 </li>
-                @endif
-                @if(auth()->user()->hasanyrole('Warehouse Manager', 'Head', 'Tech', 'Encoder'))
-                    <li class="nav-item">
-                        <a style="padding-right:8px; padding-left:8px" class="nav-link {{ Request::is('stocks') ? 'active' : '' }}" href="{{ route('stocks.index') }}">Stocks</a>
-                    </li>
                 @endif
                 
                 @if(auth()->user()->branch->branch != 'Warehouse' && auth()->user()->branch->branch != 'Main-Office')

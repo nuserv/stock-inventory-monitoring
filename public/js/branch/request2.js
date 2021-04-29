@@ -447,7 +447,7 @@ $(document).on('keyup', '#client', function(){
             });
             op+=' ';
             customer.forEach(value => {
-                op+='<option data-value="'+value.id+'" value="'+value.customer.toUpperCase()+'"></option>';
+                op+='<option data-value="'+value.id+'" value="'+value.customer.toUpperCase().replace(/&quot;/g, '\"').replace(/&amp;/g, '\&')+'"></option>';
             });
             $("#client-name").find('option').remove().end().append(op);
             
@@ -461,9 +461,37 @@ $(document).on('keyup', '#client', function(){
         }
     });
 });
+
+/*$( "#customer" ).autocomplete({
+    source: function( request, response ) {
+      // Fetch data
+      $.ajax({
+        url:"customer-autocomplate",
+        type: 'post',
+        dataType: "json",
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="ctok"]').attr('content')
+        },
+        data: {
+            client: client,
+            search: request.term
+        },
+        success: function( data ) {
+           response( data );
+        }
+      });
+    },
+    select: function (event, ui) {
+       $('#customer').val(ui.item.customer_branch);
+       $('##customer-id').val(ui.item.id); 
+       return false;
+    }
+  });*/
+
 $(document).on('keyup', '#customer', function(){
     var id = $(this).val();
     var op = " ";
+    
     if ($('#client-id').val()) {
         var client = $('#client-id').val();
     }else{
@@ -484,7 +512,7 @@ $(document).on('keyup', '#customer', function(){
             });
             op+=' ';
             customer.forEach(value => {
-                op+='<option data-value="'+value.id+'" value="'+value.customer_branch.toUpperCase()+'"></option>';
+                op+='<option data-value="'+value.id+'" value="'+value.customer_branch.toUpperCase().replace(/&quot;/g, '\"').replace(/&amp;/g, '\&')+'"></option>';
             });
             $("#customer-name").find('option').remove().end().append(op);
             $('#customer-id').val($('#customer-name [value="'+$('#customer').val()+'"]').data('value'));
@@ -497,3 +525,4 @@ $(document).on('keyup', '#customer', function(){
         }
     });
 });
+

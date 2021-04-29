@@ -56,8 +56,8 @@ $(document).ready(function()
         }else{
             $('.ticketno').show();
             $('#clientrows').show();
-            $('#clients').val(trdata.client);
-            $('#customers').val(trdata.customer);
+            $('#clients').val(trdata.client.replace(/&quot;/g, '\"').replace(/&amp;/g, '\&'));
+            $('#customers').val(trdata.customer.replace(/&quot;/g, '\"').replace(/&amp;/g, '\&'));
             $('#tickets').val(trdata.ticket);
         }
         $('table.requestDetails').dataTable().fnDestroy();
