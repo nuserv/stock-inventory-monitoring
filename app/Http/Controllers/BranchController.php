@@ -69,7 +69,7 @@ class BranchController extends Controller
             ->groupBy('stocks.items_id')
             ->get();
         if ($request->data != 1) {
-            return DataTables::of(Category::query()->orderBy('category'))
+            return DataTables::of(Category::query()->orderBy('category')->get())
             ->addColumn('stock_out', function ($category) use ($id){
                     
                 if (auth()->user()->branch->branch == 'Warehouse' && $id == 1) {
@@ -110,7 +110,7 @@ class BranchController extends Controller
             })
             ->make(true);
         }else{ 
-            $stock = Item::query()->where('category_id', $request->category);
+            $stock = Item::query()->where('category_id', $request->category)->get();
             return DataTables::of($stock)
             ->addColumn('available', function ($item) use ($id){
                 if (auth()->user()->branch->id == 1 && $id == 1) {

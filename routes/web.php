@@ -12,6 +12,9 @@
 */
 
 Auth::routes();
+
+Route::get('login', 'Auth\LoginController@showLoginForm')->name('login')->middleware('checkBrowser');
+
 Route::get('/forget-password', 'ForgotPasswordController@getEmail');
 Route::post('/forget-password', 'ForgotPasswordController@postEmail');
 Route::get('/reset-password/{token}', 'ResetPasswordController@getPassword');

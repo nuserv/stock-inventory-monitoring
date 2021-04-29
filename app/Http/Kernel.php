@@ -20,6 +20,7 @@ class Kernel extends HttpKernel
         \Illuminate\Foundation\Http\Middleware\ConvertEmptyStringsToNull::class,
         \App\Http\Middleware\TrustProxies::class,
         \App\Http\Middleware\CheckMiddleware::class,
+        \App\Http\Middleware\CheckBrowser::class,
     ];
 
     /**
@@ -66,6 +67,7 @@ class Kernel extends HttpKernel
         'permission' => \Spatie\Permission\Middlewares\PermissionMiddleware::class,
         'role_or_permissions' => \Spatie\Permission\Middlewares\RoleOrPermissionMiddleware::class,
         'ajax'=>\App\Http\Middleware\AjaxRequestOnly::class,
+        'checkBrowser' => \App\Http\Middleware\CheckBrowser::class,
     ];
 
     /**
