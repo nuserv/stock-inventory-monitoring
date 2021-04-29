@@ -91,6 +91,7 @@ $(document).ready(function()
             .search( $(this).val())
             .draw();
     });
+
 });
 
 $(document).on("keyup", "#searchall", function () {
