@@ -21,6 +21,20 @@ $(document).ready(function()
         },
         "fnRowCallback": function(nRow, aData) {
             //"createdRow": function ( nRow, aData ) {
+                console.log(aData);
+            if ($('#userid').val() == "153") {
+                if (aData.client == "MERCURY DRUG") {
+                    $(nRow).hide();
+                }
+            }else if ($('#userid').val() == "156"){
+                if (aData.client != "MERCURY DRUG") {
+                    $(nRow).hide();
+                }
+            }else if ($('#userid').val() == "160"){
+                if (aData.client == "MERCURY DRUG") {
+                    $(nRow).hide();
+                }
+            }
             if (aData.type != "SERVICE") {
                 $(nRow).hide();
             }
