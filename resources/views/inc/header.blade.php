@@ -1,5 +1,5 @@
 <div class="d-flex">
-    <img class="p-2 align-self-end" src="/idsi.png" alt="idsi.png" style="width: auto; height: 90px;">
+    <a href="{{route('home.index')}}"><img class="p-2 align-self-end" src="/idsi.png" alt="idsi.png" style="width: auto; height: 90px;"></a>
     <h3 class="p-2 align-self-end" style="color: #0d1a80; font-family: arial; font-weight: bold;">SERVICE CENTER STOCK MONITORING SYSTEM</h3>
     @auth
     <div class="p-2 ml-auto align-self-end d-flex" id="branchid" branchid="{{ auth()->user()->branch->id}}">

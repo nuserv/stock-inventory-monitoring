@@ -98,6 +98,7 @@ $(document).on('click', '#prcBtn', function(){
             requestgo = false;
         }
     }
+    
  
     for(var i=0;i<rowcount;i++){
         if (rowselected[i].uom == 'Unit') {

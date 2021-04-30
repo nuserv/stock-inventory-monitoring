@@ -18,6 +18,7 @@ use App\Branch;
 use App\User;
 use App\Initial;
 use App\UserLog;
+use Illuminate\Support\Str;
 use Mail;
 use Auth;
 class StockRequestController extends Controller
@@ -274,6 +275,10 @@ class StockRequestController extends Controller
             $category = Category::where('id', $RequestedItem->items->category_id)->first();
             return mb_strtoupper($category->category);
         })
+        ->addColumn('cat_same', function (RequestedItem $RequestedItem){
+            $category = Warehouse::where('status', 'in')->where('category_id', $RequestedItem->items->category_id)->count();
+            return $category;
+        })
         ->addColumn('uom', function (RequestedItem $RequestedItem){
             $uom = Item::select('UOM as uom')->where('id', $RequestedItem->items->id)->first();
             return $uom->uom;
@@ -303,6 +308,21 @@ class StockRequestController extends Controller
             }
         })
         ->addColumn('stock', function (RequestedItem $RequestedItem){
+            $cat = Item::select('category_id','category')
+                ->join('categories', 'categories.id', 'category_id')
+                ->where('items.id', $RequestedItem->items->id)->first();
+            $contains = Str::contains(strtolower($cat->category), 'kit');
+            if ($contains) {
+                $data = Warehouse::where('category_id', $cat->category_id)->where('status', 'in')->count();
+                $uom = Item::select('UOM as uom')->where('id', $RequestedItem->items->id)->first();
+                if ($data == 0) {
+                    $stock = 0;
+                }else{
+                    $stock = $data;
+                }
+                return $stock;
+            }
+
             $data = Warehouse::select(\DB::raw('SUM(CASE WHEN status = \'in\' THEN 1 ELSE 0 END) as stock'))
                 ->where('status', 'in')
                 ->where('items_id',$RequestedItem->items->id)
@@ -316,6 +336,24 @@ class StockRequestController extends Controller
             return $stock;
         })
         ->addColumn('stockuom', function (RequestedItem $RequestedItem){
+            $cat = Item::select('category_id','category')
+                ->join('categories', 'categories.id', 'category_id')
+                ->where('items.id', $RequestedItem->items->id)->first();
+            $contains = Str::contains(strtolower($cat->category), 'kit');
+            if ($contains) {
+                $data = Warehouse::where('category_id', $cat->category_id)->where('status', 'in')->count();
+                $uom = Item::select('UOM as uom')->where('id', $RequestedItem->items->id)->first();
+                if ($data == 0) {
+                    $stock = 0;
+                }else{
+                    $stock = $data;
+                }
+                if ($stock != 1) {
+                    return $stock. ' ' . $uom->uom.'s';
+                }else{
+                    return $stock. ' ' . $uom->uom;
+                }
+            }
             $uom = Item::select('UOM as uom')->where('id', $RequestedItem->items->id)->first();
             $data = Warehouse::select(\DB::raw('SUM(CASE WHEN status = \'in\' THEN 1 ELSE 0 END) as stock'))
                 ->where('status', 'in')
