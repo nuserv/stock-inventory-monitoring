@@ -122,7 +122,7 @@ class UserController extends Controller
         $validator = Validator::make($request->all(), [
             'first_name' => ['required', 'string', 'min:3', 'max:255'],
             'last_name' => ['required', 'string', 'min:3', 'max:255'],
-            'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
+            'email' => 'required|regex:/(.+)@(.+)\.(.+)/i|unique:users',
             'role' => ['required', 'string'],
             'status' => ['required', 'string']
             //'password' => ['required', 'string', 'min:1', 'confirmed'],
@@ -175,7 +175,7 @@ class UserController extends Controller
         $validator = Validator::make($request->all(), [
             'first_name' => ['required', 'string', 'min:3', 'max:255'],
             'last_name' => ['required', 'string', 'min:3', 'max:255'],
-            'email' => ['required', 'string', 'email', 'max:255'],
+            'email' => 'required|regex:/(.+)@(.+)\.(.+)/i',
             'branch' => ['required', 'string'],
             'area' => ['required', 'string'],
             'role' => ['required', 'string'],
