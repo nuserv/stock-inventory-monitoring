@@ -326,6 +326,7 @@ $(document).ready(function()
                         serverSide: false,
                         ajax: "/requests/"+trdata.request_no,
                         columns: [
+                            { data: 'cat_name', name:'cat_name'},
                             { data: 'item_name', name:'item_name'},
                             { data: 'qty', name:'qty', "width": "25%"},
                             { data: 'stockuom', name:'stockuom', "width": "25%"}
@@ -351,6 +352,7 @@ $(document).ready(function()
                         serverSide: false,
                         ajax: "/requests/"+trdata.request_no,
                         columns: [
+                            { data: 'cat_name', name:'cat_name'},
                             { data: 'item_name', name:'item_name'},
                             { data: 'qty', name:'qty', "width": "25%"},
                             { data: 'stockuom', name:'stockuom', "width": "25%"}

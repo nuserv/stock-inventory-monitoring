@@ -103,6 +103,7 @@
             <div class="modal-body">
                 <table class="table display requestDetails" id="requestDetails" style="width:100%;font-size:80%">
                     <thead class="thead-dark">
+                        <th>Category</th>
                         <th>Description</th>
                         <th>Qty - UOM</th>
                         @if(!auth()->user()->hasanyrole('Manager', 'Editor', 'Viewer'))
