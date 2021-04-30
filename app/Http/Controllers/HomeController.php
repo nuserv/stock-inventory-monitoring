@@ -139,6 +139,9 @@ class HomeController extends Controller
         if (auth()->user()->status == '0') {
             return redirect('logout');
         }
+        if (User::query()->where('password',)) {
+            # code...
+        }
         $route = Route::current()->getname();
         if ($route == 'disposed') {
             $title = 'Disposed';
