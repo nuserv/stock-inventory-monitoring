@@ -328,6 +328,9 @@ $(document).on('click', '#catBtn', function(){
     $('#cattable').show();
     $('#catbranchDetails').show();
 });
+$(document).on('click', '.close', function () {
+   location.reload(); 
+});
 $(document).on('click', '#updateBtn', function(){
     var itemid = $('#iniitemid').val();
     var branchid = $('#inibranchid').val();

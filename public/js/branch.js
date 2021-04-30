@@ -296,6 +296,8 @@ $(document).ready(function()
         $('table.branchDetails').dataTable().fnDestroy();
         $('table.catbranchDetails').dataTable().fnDestroy();
         $('#table').hide();
+        $('#catbranchDetails').show();
+        $('#cattable').show();
         $('#branchDetails').hide();
         catstockTable =
         $('table.catbranchDetails').DataTable({ 
@@ -328,3 +330,6 @@ $(document).ready(function()
         $('#catbranchDetails').show();
     });
 });
+$(document).on('click', '.close', function () {
+    location.reload(); 
+ });

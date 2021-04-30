@@ -303,7 +303,9 @@ $(document).on('click', '#branchDetails tr', function(){
     $('#item-qty').val(trdata.initial.split(" ")[0]);
     $('#updateModal').modal('show');
 });
-
+$(document).on('click', '.close', function () {
+    location.reload(); 
+ });
 
 
 $(document).on('click', '#catBtn', function(){
