@@ -53,7 +53,7 @@ $(document).on('click', '.sub_Btn', function(){
             if (q<=w) {
                 if ($.inArray(q, uomarray) == -1){
                     if ($('#serial'+q).val()) {
-                        if($('#serial'+q).val() == "N/A" || $('#serial'+q).val() == "n/a") {
+                        if($('#serial'+q).val().toLowerCase() == "n/a" || $('#serial'+q).val().toLowerCase() == "none" || $('#serial'+q).val().toLowerCase() == "faded") {
                             $.ajax({
                                 url: 'checkserial',
                                 headers: {
@@ -62,7 +62,7 @@ $(document).on('click', '.sub_Btn', function(){
                                 dataType: 'json',
                                 type: 'get',
                                 data: {
-                                    item: $('#item'+q).val(),
+                                    item: $('#desc'+q).val(),
                                 },
                                 success: function (data) {
                                     if (data != "allowed") {
@@ -94,7 +94,7 @@ $(document).on('click', '.sub_Btn', function(){
                             dataType: 'json',
                             type: 'PUT',
                             data: {
-                                item: $('#item'+q).val(),
+                                item: $('#desc'+q).val(),
                                 serial: $('#serial'+q).val(),
                                 reqno: $('#sreqno').val(),
                                 branchid: bID,
@@ -114,7 +114,7 @@ $(document).on('click', '.sub_Btn', function(){
                             dataType: 'json',
                             type: 'PUT',
                             data: {
-                                item: $('#item'+q).val(),
+                                item: $('#desc'+q).val(),
                             },
                             error: function (data) {
                                 alert(data.responseText);
@@ -133,7 +133,7 @@ $(document).on('click', '.sub_Btn', function(){
                         type: 'GET',
                         data: {
                             reqno: $('#sreqno').val(),
-                            itemid: $('#item'+q).val()
+                            itemid: $('#desc'+q).val()
                         },
                         success:function(data)
                         {
@@ -154,7 +154,7 @@ $(document).on('click', '.sub_Btn', function(){
                             dataType: 'json',
                             type: 'PUT',
                             data: {
-                                item: $('#item'+q).val(),
+                                item: $('#desc'+q).val(),
                                 serial: "N/A",
                                 reqno: $('#sreqno').val(),
                                 branchid: bID,
@@ -175,7 +175,7 @@ $(document).on('click', '.sub_Btn', function(){
                             dataType: 'json',
                             type: 'PUT',
                             data: {
-                                item: $('#item'+q).val(),
+                                item: $('#desc'+q).val(),
                             },
                             error: function (data) {
                                 alert(data.responseText);

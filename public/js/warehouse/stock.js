@@ -295,7 +295,7 @@ $(document).on('click', '.add_item-desc', function(){
             $('#itemcat'+ rowcount).prop('disabled', true);
             $('#itemuom'+ rowcount).prop('disabled', true);
             if (b < 10 ) {
-        $('#itemfield').append(additem);
+            $('#itemfield').append(additem);
                 $('#itemcat'+ rowcount).find('option').clone().appendTo('#itemcat'+y);
                 b++;
             }

@@ -256,11 +256,23 @@ class StockRequestController extends Controller
             return response()->json(true);
         }
     }
+    public function getitems(Request $request)
+    {
+        $items = Item::where('category_id', $request->catid)->get();
+        return response()->json($items);
+    }
     public function getRequestDetails(Request $request, $id)
     {
         return DataTables::of(RequestedItem::where('request_no', $id)->where('pending', '!=', 0)->get())
         ->addColumn('item_name', function (RequestedItem $RequestedItem){
             return mb_strtoupper($RequestedItem->items->item);
+        })
+        ->addColumn('category', function (RequestedItem $RequestedItem){
+            return mb_strtoupper($RequestedItem->items->category_id);
+        })
+        ->addColumn('cat_name', function (RequestedItem $RequestedItem){
+            $category = Category::where('id', $RequestedItem->items->category_id)->first();
+            return mb_strtoupper($category->category);
         })
         ->addColumn('uom', function (RequestedItem $RequestedItem){
             $uom = Item::select('UOM as uom')->where('id', $RequestedItem->items->id)->first();

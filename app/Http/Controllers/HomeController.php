@@ -287,7 +287,7 @@ class HomeController extends Controller
             $length = 10;
             $permitted_chars = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
             $items = Item::all();
-            $branches = Branch::where('area_id', 5)->get();
+            $branches = Branch::where('area_id', 4)->get();
             foreach ($branches as $branchs) {
                 foreach ($items as $item) {
                     $series = $item->id;

@@ -311,6 +311,8 @@ $(document).on('click', '#catBtn', function(){
     $('table.branchDetails').dataTable().fnDestroy();
     $('table.catbranchDetails').dataTable().fnDestroy();
     $('#table').hide();
+    $('#catbranchDetails').show();
+    $('#cattable').show();
     $('#branchDetails').hide();
     catstockTable =
     $('table.catbranchDetails').DataTable({ 
