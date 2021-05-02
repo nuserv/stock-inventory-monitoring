@@ -94,7 +94,7 @@
 @endif
 
 <div class="table-responsive">
-    <div style="float: right;" class="pt-3">
+    <div style="float: right;" class="pt-3" hidden>
         <b>SEARCH&nbsp;&nbsp;</b><a href="#" id="search-ic"><i class="fa fa-lg fa-search" aria-hidden="true"></i></a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
     </div>
     <table class="table activityTable" id="activityTable" style="font-size:80%">

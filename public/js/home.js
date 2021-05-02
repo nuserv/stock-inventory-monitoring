@@ -32,16 +32,7 @@ $(document).ready(function()
             { data: 'activity', name:'activity'}
         ]
     });
-
-    $('#search-ic').on("click", function () { 
-        for ( var i=0 ; i<=4 ; i++ ) {
-            $('.fl-'+i).val('');
-            table
-            .columns(i).search( '' )
-            .draw();
-        }
-        $('.tbsearch').toggle();
-    });
+    $('.tbsearch').show();
 
     $('.filter-input').keyup(function() { 
         table.column( $(this).data('column'))
