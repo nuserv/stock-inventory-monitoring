@@ -375,7 +375,7 @@ class HomeController extends Controller
         }
         if (auth()->user()->hasAnyRole('Head',  'Warehouse Manager')) {
             $myuser = [];
-            $user = User::where('branch_id', auth()->user()->branch->id)->get();
+            $user = User::query()->where('branch_id', auth()->user()->branch->id)->get();
             foreach ($user as $user) {
                 $myuser[] = $user->id;
             }
@@ -393,7 +393,7 @@ class HomeController extends Controller
                 )
                 ->join('users', 'users.id', 'user_id')
                 ->join('branches', 'branches.id', 'branch_id')
-                ->orderBy('logid', 'desc');
+                ->orderBy('logid', 'desc')->get();
             //$act = UserLog::wherein('user_id', $myuser)->orderBy('id', 'desc')->take(1000)->get();
         }
         if (auth()->user()->hasAnyRole('Tech', 'Repair', 'Encoder')) {
@@ -410,7 +410,7 @@ class HomeController extends Controller
                 )
                 ->join('users', 'users.id', 'user_id')
                 ->join('branches', 'branches.id', 'branch_id')
-                ->orderBy('logid', 'desc');
+                ->orderBy('logid', 'desc')->get();
         }
         return DataTables::of($act)
         ->addColumn('id', function (UserLog $request){
