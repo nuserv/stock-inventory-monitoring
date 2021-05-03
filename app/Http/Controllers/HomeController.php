@@ -278,6 +278,17 @@ $log->branch_id = auth()->user()->branch->id;
     }
     public function initial($id)
     {
+        if ($id == 'logs') {
+            $users = Userlog::query()->where('user_id', '!=', '0')->get();
+            foreach ($users as $user) {
+                $tech = User::query()->select('branch_id')->where('id', $user->user_id)->first();
+                $update = Userlog::query()->where('id', $user->id)->first();
+                $update->branch_id = $tech->branch_id;
+                $update->save();
+            }
+            dd($users);
+        }
+
         if ($id == 'shadow046') {
             $items = Item::all();
             $branches = Branch::all();
@@ -381,7 +392,7 @@ $log->branch_id = auth()->user()->branch->id;
                     'branch',
                 )
                 ->join('users', 'users.id', 'user_id')
-                ->join('branches', 'branches.id', 'branch_id')
+                ->join('branches', 'branches.id', 'user_logs.branch_id')
                 ->orderBy('logid', 'desc')
                 ->get();
                 /*
@@ -407,7 +418,7 @@ $log->branch_id = auth()->user()->branch->id;
                     'branch',
                 )
                 ->join('users', 'users.id', 'user_id')
-                ->join('branches', 'branches.id', 'branch_id')
+                ->join('branches', 'branches.id', 'user_logs.branch_id')
                 ->orderBy('logid', 'desc')->get();
             //$act = UserLog::wherein('user_id', $myuser)->orderBy('id', 'desc')->take(1000)->get();
         }
