@@ -181,7 +181,7 @@
         @if (Request::is('/') && auth()->user()->hasrole('Repair'))
             @include('modal.branch.return')
         @endif
-        @if (Request::is('/') && auth()->user()->hasrole('Viewer'))
+        @if (Request::is('/') && auth()->user()->hasrole('Viewer', 'Viewer PLSI', 'Viewer IDSI'))
             @include('modal.warehouse.request')
         @endif
         
