@@ -196,7 +196,7 @@ class HomeController extends Controller
             $responder->delete();
         }
 
-        if (auth()->user()->hasrole('Viewer')) {
+        if (auth()->user()->hasanyrole('Viewer', 'Viewer PLSI', 'Viewer IDSI')) {
             return view('pages.pending', compact('title'));
         }
 

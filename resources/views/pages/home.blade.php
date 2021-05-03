@@ -112,14 +112,8 @@
                 <td>
                     <input type="text" class="form-control filter-input fl-3" placeholder="search.." data-column="3" style="border: 1px solid black;" />
                 </td>
-                <td>
-                    <input type="text" class="form-control filter-input fl-4" placeholder="search.." data-column="4" style="border: 1px solid black;" />
-                </td>
             </tr>
             <tr>
-                <th>
-                    ID
-                </th>
                 <th>
                     DATE & TIME
                 </th>

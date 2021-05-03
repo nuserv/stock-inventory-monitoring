@@ -10,7 +10,7 @@ $(document).ready(function()
         "pageLength": 25,
         "order": [ 0, 'desc' ],
         processing: true,
-        serverSide: true,
+        serverSide: false,
         ajax: {
             url: 'activity',
             error: function(data) {
@@ -19,13 +19,7 @@ $(document).ready(function()
                 }
             }
         },
-        "columnDefs": [
-        {
-            "targets": [ 0 ],
-            "visible": false
-        }],
         columns: [
-            { data: 'id', name:'id'},
             { data: 'date', name:'date',"width": "14%"},
             { data: 'fullname', name:'fullname',"width": "14%"},
             { data: 'branch', name:'branch',"width": "14%"},
