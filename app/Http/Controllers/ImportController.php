@@ -64,7 +64,7 @@ class ImportController extends Controller
                             $log->save();
                         }else{
                             $error = 1;
-                            array_push($itemswitherror, $value[0]);
+                            array_push($itemswitherror, $value[0].'n/a');
                         }
                     }
                 }else{
