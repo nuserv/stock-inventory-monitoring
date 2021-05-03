@@ -80,3 +80,6 @@ $(document).on("click", "#sub_Btn", function(){
         }
     });
 });
+$(document).on("click", ".cancel", function(){
+    location.reload();
+});
