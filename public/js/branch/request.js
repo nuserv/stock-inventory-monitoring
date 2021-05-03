@@ -661,6 +661,11 @@ $(document).ready(function()
         }
         $('#requestModal').modal('show');
     });
+    $('#reqBtn').prop('disabled', true);
+
+    setTimeout(function() { 
+        $('#reqBtn').prop('disabled', false);
+    }, 10000);
     $('table.intransitDetails').DataTable().on('select', function () {
         var rowselected = intransittable.rows( { selected: true } ).data();
         if(rowselected.length > 0){

@@ -1004,7 +1004,7 @@ class StockController extends Controller
             $update->status = 'replacement';
             $update->user_id = auth()->user()->id;
             $update->save();
-            $item = Item::where('id', $update->items_id)->first();
+            $item = Item::where('id', $request->ids)->first();
             $defective = new Defective;
             $defective->branch_id = auth()->user()->branch->id;
             $defective->user_id = auth()->user()->branch->id;
