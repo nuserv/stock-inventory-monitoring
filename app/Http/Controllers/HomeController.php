@@ -60,6 +60,7 @@ class HomeController extends Controller
         $item->item = $request->item;
         $item->save();
         $log = new UserLog;
+$log->branch_id = auth()->user()->branch->id;
         $log->activity = auth()->user()->name.' '.auth()->user()->lastname.' update '.$items->item.' to '.$item->item.'.';
         $log->user_id = auth()->user()->id;
         $data = $log->save();
@@ -71,6 +72,7 @@ class HomeController extends Controller
         $items = Item::where('id', $request->item)->first();
         $item = Item::where('id', $request->item)->update(['n_a' => $request->stat]);
         $log = new UserLog;
+$log->branch_id = auth()->user()->branch->id;
         $log->activity = auth()->user()->name.' '.auth()->user()->lastname.' update '.$items->item.'.';
         $log->user_id = auth()->user()->id;
         $data = $log->save();

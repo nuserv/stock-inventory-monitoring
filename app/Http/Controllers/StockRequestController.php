@@ -591,6 +591,7 @@ class StockRequestController extends Controller
             $reqno->ticket = $request->ticket;
             $reqno->type = $request->type;
             $log = new UserLog;
+$log->branch_id = auth()->user()->branch->id;
             $log->activity = "Create Stock Request no. $request->reqno";
             $log->user_id = auth()->user()->id;
             $reqno->save();
@@ -677,6 +678,7 @@ class StockRequestController extends Controller
             $stock->status = 'in';
             $stock->save();
             $log = new UserLog;
+$log->branch_id = auth()->user()->branch->id;
             $log->activity = "Received $items->item(S/N: $preparedItems->serial) with Request no. $request->reqno ";
             $log->user_id = auth()->user()->id;
             $log->save();
@@ -764,6 +766,7 @@ class StockRequestController extends Controller
         $new->serial = $request->new;
         $new->save();
         $log = new UserLog;
+$log->branch_id = auth()->user()->branch->id;
         $log->activity = "Change $serial->item serial number from $serial->serial to $new->serial";
         $log->user_id = auth()->user()->id;
         $data = $log->save();
@@ -842,6 +845,7 @@ class StockRequestController extends Controller
             $prep->user_id = auth()->user()->id;
             $prep->save();
             $log = new UserLog;
+$log->branch_id = auth()->user()->branch->id;
             $log->activity = "Schedule $scheditem->item(S/N: $request->serial) with Request no. $request->reqno ";
             $log->user_id = auth()->user()->id;
             $data = $log->save();
@@ -853,6 +857,7 @@ class StockRequestController extends Controller
         $delete = StockRequest::where('request_no', $request->reqno)->where('status', 'PENDING')->first();
         $delete->status = 'DELETED';
         $log = new UserLog;
+$log->branch_id = auth()->user()->branch->id;
         $log->activity = "Delete request no. $request->reqno" ;
         $log->user_id = auth()->user()->id;
         $log->save();

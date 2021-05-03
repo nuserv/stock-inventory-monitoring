@@ -41,6 +41,7 @@ class ImportController extends Controller
                         $add->status = 'in';
                         $add->save();
                         $log = new UserLog;
+$log->branch_id = auth()->user()->branch->id;
                         $log->activity = "Add $items->item with serial no. $add->serial to stocks" ;
                         $log->user_id = auth()->user()->id;
                         $log->save();
@@ -59,6 +60,7 @@ class ImportController extends Controller
                             $add->status = 'in';
                             $add->save();
                             $log = new UserLog;
+$log->branch_id = auth()->user()->branch->id;
                             $log->activity = "Add $items->item with serial no. $add->serial to stocks" ;
                             $log->user_id = auth()->user()->id;
                             $log->save();
@@ -104,6 +106,7 @@ class ImportController extends Controller
                             $add->serial = '-';
                             $add->status = 'in';
                             $log = new UserLog;
+$log->branch_id = auth()->user()->branch->id;
                             $log->activity = "Add $items->item to stocks." ;
                             $log->user_id = auth()->user()->id;
                             $log->save();

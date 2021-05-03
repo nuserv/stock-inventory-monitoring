@@ -548,6 +548,7 @@ class StockController extends Controller
             $pmitem = Item::where('id', $pmdb->items_id)->first();
             $pmcustomer = CustomerBranch::where('id', $request->customerid)->first();
             $log = new UserLog;
+$log->branch_id = auth()->user()->branch->id;
             $log->activity = "PM Service in $pmitem->item(defective) with serial no. $request->serial from $pmcustomer->customer_branch." ;
             $log->user_id = auth()->user()->id;
             $log->save();
@@ -556,6 +557,7 @@ class StockController extends Controller
             $pmitem = Item::where('id', $pmdb->items_id)->first();
             $pmcustomer = CustomerBranch::where('id', $request->customerid)->first();
             $log = new UserLog;
+$log->branch_id = auth()->user()->branch->id;
             $log->activity = "PM Service in $pmitem->item(good) with serial no. $request->serial from $pmcustomer->customer_branch." ;
             $log->user_id = auth()->user()->id;
             $log->save();
@@ -598,11 +600,13 @@ class StockController extends Controller
                 $pmitem = Item::where('id', $pmdb->items_id)->first();
                 $pmcustomer = CustomerBranch::where('id', $request->customerid)->first();
                 $log = new UserLog;
+$log->branch_id = auth()->user()->branch->id;
                 $log->activity = "PM Service in $pmitem->item(defective) with serial no. $request->serial from $pmcustomer->customer_branch." ;
                 $log->user_id = auth()->user()->id;
                 $log->save();
             }else{
                 $log = new UserLog;
+$log->branch_id = auth()->user()->branch->id;
                 $log->activity = "Service in $item->item(defective) with serial no. $request->serial from $customer->customer_branch." ;
                 $log->user_id = auth()->user()->id;
                 $log->save();
@@ -613,11 +617,13 @@ class StockController extends Controller
                 $pmitem = Item::where('id', $pmdb->items_id)->first();
                 $pmcustomer = CustomerBranch::where('id', $request->customerid)->first();
                 $log = new UserLog;
+$log->branch_id = auth()->user()->branch->id;
                 $log->activity = "Service in $pmitem->item(good) with serial no. $request->serial from $pmcustomer->customer_branch." ;
                 $log->user_id = auth()->user()->id;
                 $log->save();
             }else{
                 $log = new UserLog;
+$log->branch_id = auth()->user()->branch->id;
                 $log->activity = "Service in $item->item(good) with serial no. $stock->serial from $customer->customer_branch." ;
                 $log->user_id = auth()->user()->id;
                 $log->save();
@@ -683,6 +689,7 @@ class StockController extends Controller
         $item = Item::where('id', $request->item)->first();
         $customer = Customerbranch::where('id', $request->customer)->first();
         $log = new UserLog;
+$log->branch_id = auth()->user()->branch->id;
         $log->activity = "Pull-out $item->item(S/N: $request->serial) from $customer->customer_branch." ;
         $log->user_id = auth()->user()->id;
         $log->save();
@@ -711,6 +718,7 @@ class StockController extends Controller
         $addtostoc->status = 'in';
         $addtostoc->save();
         $log = new UserLog;
+$log->branch_id = auth()->user()->branch->id;
         $log->user_id = auth()->user()->id;
         $log->activity = "Repaired $request->item(S/N: $defect->serial).";
         $data = $defect->delete();
@@ -731,6 +739,7 @@ class StockController extends Controller
 
         if ($request->replace == 1) {
             $log = new UserLog;
+$log->branch_id = auth()->user()->branch->id;
             $log->user_id = auth()->user()->id;
             $log->activity = "Use $request->item(S/N: $request->serial) to repair $request->repairitem(S/N: $request->repairserial).";
             $log->save();
@@ -748,11 +757,13 @@ class StockController extends Controller
             $addtostock->save();
             $forrepair->delete();
             $log = new UserLog;
+$log->branch_id = auth()->user()->branch->id;
             $log->user_id = auth()->user()->id;
             $log->activity = "Repaired $request->repairitem(S/N: $request->repairserial).";
             $data = $def->save();
         }else{
             $log = new UserLog;
+$log->branch_id = auth()->user()->branch->id;
             $log->user_id = auth()->user()->id;
             $log->activity = "Marked $request->item(S/N: $request->serial) as defective.";
             $log->save();
@@ -788,6 +799,7 @@ class StockController extends Controller
             $message->cc($allemails); 
         });*/
         $log = new UserLog;
+$log->branch_id = auth()->user()->branch->id;
         $log->activity = "Request $item->item to $branch->branch." ;
         $log->user_id = auth()->user()->id;
         $log->save();
@@ -807,6 +819,7 @@ class StockController extends Controller
         $stock->customer_branches_id = $request->customer;
         $stock->user_id = auth()->user()->id;
         $log = new UserLog;
+$log->branch_id = auth()->user()->branch->id;
         $log->activity = "Service out $item->item(S/N: $request->serial) to $customer->customer_branch." ;
         $log->user_id = auth()->user()->id;
         $log->save();
@@ -842,6 +855,7 @@ class StockController extends Controller
         $preventive->serial = $request->serial;
         $preventive->save();
         $log = new UserLog;
+$log->branch_id = auth()->user()->branch->id;
         $log->activity = "PM Service out $item->item(S/N: $request->serial) to $customer->customer_branch." ;
         $log->user_id = auth()->user()->id;
         $log->save();
@@ -862,6 +876,7 @@ class StockController extends Controller
                 $add->save();
             }
             $log = new UserLog;
+$log->branch_id = auth()->user()->branch->id;
             $log->activity = "Add $request->qty $item->UOM of $item->item to stocks." ;
             $log->user_id = auth()->user()->id;
             $data = $log->save();
@@ -874,6 +889,7 @@ class StockController extends Controller
             $add->serial = $request->serial;
             $add->status = 'in';
             $log = new UserLog;
+$log->branch_id = auth()->user()->branch->id;
             $log->activity = "Add $item->item with serial no. $request->serial to stocks" ;
             $log->user_id = auth()->user()->id;
             $log->save();
@@ -926,6 +942,7 @@ class StockController extends Controller
                     $stock->branch_id = auth()->user()->branch_id;
                     $stock->serial = $serial;
                     $log = new UserLog;
+$log->branch_id = auth()->user()->branch->id;
                     $log->activity = "Import $item->item with serial no. $serial." ;
                     $log->user_id = auth()->user()->id;
                     $log->save();
@@ -996,6 +1013,7 @@ class StockController extends Controller
             $defective->status = 'For return';
             $defective->save();
             $log = new UserLog;
+$log->branch_id = auth()->user()->branch->id;
             $log->activity = "Service-in $item->item(S/N: $request->serial) from $customer->customer_branch." ;
             $log->user_id = auth()->user()->id;
             $data = $log->save();
@@ -1014,6 +1032,7 @@ class StockController extends Controller
             $defective->status = 'For return';
             $defective->save();
             $log = new UserLog;
+$log->branch_id = auth()->user()->branch->id;
             $log->activity = "Replaced $item->item(S/N: $request->serial) from $customer->customer_branch." ;
             $log->user_id = auth()->user()->id;
             $data = $log->save();
@@ -1039,6 +1058,7 @@ class StockController extends Controller
             $defective->status = 'For return';
             $defective->save();
             $log = new UserLog;
+$log->branch_id = auth()->user()->branch->id;
             $log->activity = "Replaced $item->item(S/N: $request->serial) from $customer->customer_branch." ;
             $log->user_id = auth()->user()->id;
             $data = $log->save();
@@ -1057,6 +1077,7 @@ class StockController extends Controller
             $defective->status = 'For return';
             $defective->save();
             $log = new UserLog;
+$log->branch_id = auth()->user()->branch->id;
             $log->activity = "Replaced $item->item(S/N: $request->serial) from $customer->customer_branch." ;
             $log->user_id = auth()->user()->id;
             $data = $log->save();
