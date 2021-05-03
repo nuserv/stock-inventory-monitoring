@@ -28,7 +28,7 @@ class DefectiveController extends Controller
         
         $title = 'Defective Unit/Parts';
         $users = User::all();
-        if (auth()->user()->hasanyrole('Viewer')) {
+        if (auth()->user()->hasanyrole('Viewer', 'Viewer PLSI', 'Viewer IDSI')) {
             return redirect('/');
         }
 

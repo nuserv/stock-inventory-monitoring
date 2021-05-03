@@ -31,7 +31,7 @@ class StockController extends Controller
     }
     public function index()
     {
-        if (auth()->user()->hasanyrole( 'Repair', 'Returns Manager', 'Viewer')) {
+        if (auth()->user()->hasanyrole( 'Repair', 'Returns Manager', 'Viewer', 'Viewer PLSI', 'Viewer IDSI')) {
             return redirect('/');
         }
         $title = 'Stocks';

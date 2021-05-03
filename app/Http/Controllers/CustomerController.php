@@ -17,7 +17,7 @@ class CustomerController extends Controller
     }
     public function index()
     {
-        if (auth()->user()->hasanyrole('Repair', 'Returns Manager', 'Viewer')) {
+        if (auth()->user()->hasanyrole('Repair', 'Returns Manager', 'Viewer', 'Viewer PLSI', 'Viewer IDSI')) {
             return redirect('/');
         }
         $title = 'Customers';
