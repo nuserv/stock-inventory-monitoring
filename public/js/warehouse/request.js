@@ -1244,6 +1244,31 @@ $(document).on("keyup", "#editserial", function () {
     }else{
         $('#serial_btn').prop('disabled', false);
     }
+    if ($(this).val().toLowerCase() ==  "n/a" || $(this).val().toLowerCase() ==  "faded" || $(this).val().toLowerCase() ==  "none") {
+        $.ajax({
+            url: 'checkserial',
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="ctok"]').attr('content')
+            },
+            dataType: 'json',
+            type: 'get',
+            async: false,
+            data: {
+                item: $('#editserial').val(),
+            },
+            success: function (data) {
+                if (data != "allowed") {
+                    $('#editserial').val(serialnum);
+                    $('#serial_btn').prop('disabled', true);
+                    alert('n/a not allowed!')
+                }
+            },
+            error: function (data) {
+                alert(data.responseText);
+                return false;
+            }
+        });
+    }
 });
 
 var th = ['','thousand','million', 'billion','trillion'];
