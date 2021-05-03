@@ -111,7 +111,6 @@ class ImportController extends Controller
                         }
                     }
                 }elseif (!$items) {
-    
                     $error = 1;
                     array_push($itemswitherror, $value[0]);
                 }

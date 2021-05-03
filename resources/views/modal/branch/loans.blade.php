@@ -47,7 +47,7 @@
                 <hr>
                 <div class="row no-margin" id="loanrow1">
                     <div class="col-md-8 form-group">
-                        <select id="loanserial1" class="form-control loanserial" row_count="1">
+                        <select id="loanserial1" class="form-control loanserial" row_count="1" style="border: 1px solid black;">
                             <option selected disabled>select serial</option>
                         </select>
                     </div>

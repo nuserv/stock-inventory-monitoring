@@ -292,6 +292,7 @@ $(document).on('click', '#branchDetails tr', function(){
 $(document).on('click', '#catBtn', function(){
     $('#catBtn').hide();
     $('table.branchDetails').dataTable().fnDestroy();
+    $('table.catbranchDetails').dataTable().fnDestroy();
     $('#catbranchDetails').show();
     $('#cattable').show();
     $('#table').hide();

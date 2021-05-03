@@ -58,10 +58,10 @@
             <thead class="thead-dark">
                 <tr class="tbsearch" style="display:none">
                     <td>
-                        <input type="text" class="form-control filter-input fl-0" data-column="0" placeholder="Search description"/>
+                        <input type="text" class="form-control filter-input fl-0" data-column="0" placeholder="Search description" style="border: 1px solid black;"/>
                     </td>
                     <td>
-                        <input type="text" class="form-control filter-input fl-1" data-column="1" placeholder="Search quantity"/>
+                        <input type="text" class="form-control filter-input fl-1" data-column="1" placeholder="Search quantity" style="border: 1px solid black;"/>
                     </td>
                 </tr>
                 <tr>

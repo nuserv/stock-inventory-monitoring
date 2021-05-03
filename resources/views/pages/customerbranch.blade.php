@@ -12,16 +12,16 @@
         <thead class="thead-dark">
             <tr class="tbsearch" style="display:none">
                 <td>
-                    <input type="text" class="form-control filter-input fl-0" data-column="0" />
+                    <input type="text" class="form-control filter-input fl-0" data-column="0" style="border: 1px solid black;" />
                 </td>
                 <td>
-                    <input type="text" class="form-control filter-input fl-1" data-column="1" />
+                    <input type="text" class="form-control filter-input fl-1" data-column="1" style="border: 1px solid black;" />
                 </td>
                 <td>
-                    <input type="text" class="form-control filter-input fl-2" data-column="2" />
+                    <input type="text" class="form-control filter-input fl-2" data-column="2" style="border: 1px solid black;" />
                 </td>
                 <td>
-                    <input type="text" class="form-control filter-input fl-3" data-column="3" />
+                    <input type="text" class="form-control filter-input fl-3" data-column="3" style="border: 1px solid black;" />
                 </td>
             </tr>
             <tr>

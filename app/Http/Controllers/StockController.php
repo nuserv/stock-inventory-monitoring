@@ -484,18 +484,18 @@ class StockController extends Controller
     }
     public function checkService(Request $request)
     {
-        $initials = Initial::where('branch_id', auth()->user()->branch->id)
+        $initials = Initial::query()->where('branch_id', auth()->user()->branch->id)
                     ->join('items', 'items.id', '=', 'items_id')
                     ->join('categories', 'categories.id', '=', 'items.category_id')
                     ->orderBy('category')
                     ->get();
         $cat = array();
         foreach ($initials as $initial) {
-            $count = Stock::where('stocks.status', 'in')
+            $count = Stock::query()->where('stocks.status', 'in')
                 ->where('branch_id', auth()->user()->branch->id)
                 ->where('items_id', $initial->items_id)->count();
             if ($count == "0") {
-                $category = Item::select('items.category_id as id', 'categories.category')
+                $category = Item::query()->select('items.category_id as id', 'categories.category')
                     ->where('items.id', $initial->items_id)
                     ->join('categories', 'categories.id', '=', 'category_id')
                     ->first();
