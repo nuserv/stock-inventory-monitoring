@@ -662,10 +662,12 @@ $(document).ready(function()
         $('#requestModal').modal('show');
     });
     $('#reqBtn').prop('disabled', true);
+    $('#loading').show();
 
     setTimeout(function() { 
         $('#reqBtn').prop('disabled', false);
-    }, 10000);
+        $('#loading').hide();
+    }, 5000);
     $('table.intransitDetails').DataTable().on('select', function () {
         var rowselected = intransittable.rows( { selected: true } ).data();
         if(rowselected.length > 0){
