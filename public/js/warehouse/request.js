@@ -10,6 +10,7 @@ var save = 0;
 var pcount = 0;
 var requestdetails;
 var intransitdets;
+var prepared_id;
 var stat = "notok";
 var pending = 0;
 var check = false;
@@ -604,7 +605,7 @@ $(document).ready(function()
                         "columnDefs": [
                             {   
                                 "render": function ( data, type, row, meta ) {
-                                        return '<button id="editBtn" class="btn-primary editBtn" serial_num="'+data.serial+'">Edit Serial</button>';
+                                        return '<button id="editBtn" class="btn-primary editBtn" serial_num="'+data.serial+'" prepared_id="'+data.items_id+'">Edit Serial</button>';
                                 },
                                 "defaultContent": '',
                                 "data": null,
@@ -631,7 +632,7 @@ $(document).ready(function()
                         "columnDefs": [
                             {   
                                 "render": function ( data, type, row, meta ) {
-                                        return '<button id="editBtn" class="btn-primary editBtn" serial_num="'+data.serial+'">Edit Serial</button>';
+                                        return '<button id="editBtn" class="btn-primary editBtn" serial_num="'+data.serial+'" prepared_id="'+data.items_id+'">Edit Serial</button>';
                                 },
                                 "defaultContent": '',
                                 "data": null,
@@ -674,7 +675,7 @@ $(document).ready(function()
                         "columnDefs": [
                             {   
                                 "render": function ( data, type, row, meta ) {
-                                        return '<button id="editBtn" class="btn-primary editBtn" serial_num="'+data.serial+'">Edit Serial</button>';
+                                        return '<button id="editBtn" class="btn-primary editBtn" serial_num="'+data.serial+'" prepared_id="'+data.items_id+'">Edit Serial</button>';
                                 },
                                 "defaultContent": '',
                                 "data": null,
@@ -701,7 +702,7 @@ $(document).ready(function()
                         "columnDefs": [
                             {   
                                 "render": function ( data, type, row, meta ) {
-                                        return '<button id="editBtn" class="btn-primary editBtn" serial_num="'+data.serial+'">Edit Serial</button>';
+                                        return '<button id="editBtn" class="btn-primary editBtn" serial_num="'+data.serial+'" prepared_id="'+data.items_id+'">Edit Serial</button>';
                                 },
                                 "defaultContent": '',
                                 "data": null,
@@ -751,7 +752,7 @@ $(document).ready(function()
                         "columnDefs": [
                             {   
                                 "render": function ( data, type, row, meta ) {
-                                        return '<button id="editBtn" class="btn-primary editBtn" serial_num="'+data.serial+'">Edit Serial</button>';
+                                        return '<button id="editBtn" class="btn-primary editBtn" serial_num="'+data.serial+'" prepared_id="'+data.items_id+'">Edit Serial</button>';
                                 },
                                 "defaultContent": '',
                                 "data": null,
@@ -778,7 +779,7 @@ $(document).ready(function()
                         "columnDefs": [
                             {   
                                 "render": function ( data, type, row, meta ) {
-                                        return '<button id="editBtn" class="btn-primary editBtn" serial_num="'+data.serial+'">Edit Serial</button>';
+                                        return '<button id="editBtn" class="btn-primary editBtn" serial_num="'+data.serial+'" prepared_id="'+data.items_id+'">Edit Serial</button>';
                                 },
                                 "defaultContent": '',
                                 "data": null,
@@ -830,7 +831,7 @@ $(document).ready(function()
                         "columnDefs": [
                             {   
                                 "render": function ( data, type, row, meta ) {
-                                        return '<button id="editBtn" class="btn-primary editBtn" serial_num="'+data.serial+'">Edit Serial</button>';
+                                        return '<button id="editBtn" class="btn-primary editBtn" serial_num="'+data.serial+'" prepared_id="'+data.items_id+'">Edit Serial</button>';
                                 },
                                 "defaultContent": '',
                                 "data": null,
@@ -858,7 +859,7 @@ $(document).ready(function()
                             {   
                                 "render": function ( data, type, row, meta ) {
                                     console.log(data);
-                                        return '<button id="editBtn" class="btn-primary editBtn" serial_num="'+data.serial+'">Edit Serial</button>';
+                                        return '<button id="editBtn" class="btn-primary editBtn" serial_num="'+data.serial+'" prepared_id="'+data.items_id+'">Edit Serial</button>';
                                 },
                                 "defaultContent": '',
                                 "data": null,
@@ -908,7 +909,7 @@ $(document).ready(function()
                         "columnDefs": [
                             {   
                                 "render": function ( data, type, row, meta ) {
-                                        return '<button id="editBtn" class="btn-primary editBtn" serial_num="'+data.serial+'">Edit Serial</button>';
+                                        return '<button id="editBtn" class="btn-primary editBtn" serial_num="'+data.serial+'" prepared_id="'+data.items_id+'">Edit Serial</button>';
                                 },
                                 "defaultContent": '',
                                 "data": null,
@@ -935,7 +936,7 @@ $(document).ready(function()
                         "columnDefs": [
                             {   
                                 "render": function ( data, type, row, meta ) {
-                                        return '<button id="editBtn" class="btn-primary editBtn" serial_num="'+data.serial+'">Edit Serial</button>';
+                                        return '<button id="editBtn" class="btn-primary editBtn" serial_num="'+data.serial+'" prepared_id="'+data.items_id+'">Edit Serial</button>';
                                 },
                                 "defaultContent": '',
                                 "data": null,
@@ -1123,7 +1124,7 @@ $(document).ready(function()
                         "columnDefs": [
                             {   
                                 "render": function ( data, type, row, meta ) {
-                                        return '<button id="editBtn" class="btn-primary editBtn" serial_num="'+data.serial+'">Edit Serial</button>';
+                                        return '<button id="editBtn" class="btn-primary editBtn" serial_num="'+data.serial+'" prepared_id="'+data.items_id+'">Edit Serial</button>';
                                 },
                                 "defaultContent": '',
                                 "data": null,
@@ -1150,7 +1151,7 @@ $(document).ready(function()
                         "columnDefs": [
                             {   
                                 "render": function ( data, type, row, meta ) {
-                                        return '<button id="editBtn" class="btn-primary editBtn" serial_num="'+data.serial+'">Edit Serial</button>';
+                                        return '<button id="editBtn" class="btn-primary editBtn" serial_num="'+data.serial+'" prepared_id="'+data.items_id+'">Edit Serial</button>';
                                 },
                                 "defaultContent": '',
                                 "data": null,
@@ -1206,6 +1207,7 @@ $(document).ready(function()
 });
 
 $(document).on("click", ".editBtn", function() {
+    prepared_id = $(this).attr('prepared_id');
     serialnum = $(this).attr('serial_num');
     $('#serialModal').modal('show');
     $('#editserial').val(serialnum);
@@ -1254,7 +1256,7 @@ $(document).on("keyup", "#editserial", function () {
             type: 'get',
             async: false,
             data: {
-                item: $('#editserial').val(),
+                item: prepared_id
             },
             success: function (data) {
                 if (data != "allowed") {
