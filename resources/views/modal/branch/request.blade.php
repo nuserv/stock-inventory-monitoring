@@ -93,6 +93,7 @@
             <div class="modal-body">
                 <table class="table requestDetails" style="font-size:80%">
                     <thead class="thead-dark">
+                        <th>Category</th>
                         <th>Description</th>
                         <th>Qty</th>
                     </thead>
