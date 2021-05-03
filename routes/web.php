@@ -30,7 +30,8 @@ Route::post('report-a-problem', 'HomeController@reportAproblem')->name('report.p
 
 Route::get('item', 'HomeController@item')->name('home.item');
 Route::get('items', 'HomeController@items')->name('home.items');
-Route::any('item-update', 'HomeController@itemsUpdate')->name('Update.items');
+Route::put('items-edit', 'HomeController@itemsedit')->name('home.items.edit')->middleware('ajax');
+Route::any('item-update', 'HomeController@itemsUpdate')->name('Update.items')->middleware('ajax');
 
 
 Route::get('/', 'HomeController@index')->name('home.index');

@@ -174,6 +174,9 @@
         @if(Request::is('return'))
             @include('modal.branch.return')
         @endif
+        @if(Request::is('item'))
+            @include('modal.warehouse.items')
+        @endif
 
         @if (Request::is('/') && auth()->user()->hasrole('Repair'))
             @include('modal.branch.return')
@@ -302,8 +305,11 @@
         @if(Request::is('log') && auth()->user()->hasrole('Repair'))
             <script src="{{asset('min/?f=js/home.js')}}"></script>
         @endif
-        @if(Request::is('item'))
+        @if(Request::is('item') && auth()->user()->hasanyrole('Manager', 'Editor'))
             <script src="{{asset('min/?f=js/item.js')}}"></script>
+        @endif
+        @if(Request::is('item') && auth()->user()->hasanyrole('Warehouse Manager'))
+            <script src="{{asset('min/?f=js/warehouse/item.js')}}"></script>
         @endif
         @if(Request::is('disposed') && auth()->user()->hasrole('Returns Manager'))
             <script src="{{asset('min/?f=js/disposed.js')}}"></script>

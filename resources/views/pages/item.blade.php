@@ -20,9 +20,11 @@
                 <th>
                     Item Description
                 </th>
-                <th title="Indicate if the item is required to have a serial number. Click Yes or No.">
-                   Requires serial no.
-                </th>
+                @if(auth()->user()->hasanyrole('Manager', 'Editor'))
+                    <th title="Indicate if the item is required to have a serial number. Click Yes or No.">
+                        Requires serial no.
+                    </th>
+                @endif
             </tr>
         </thead>
     </table>

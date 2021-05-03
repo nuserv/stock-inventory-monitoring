@@ -53,6 +53,19 @@ class HomeController extends Controller
             ->join('categories', 'category_id', '=', 'categories.id');
         return DataTables::of($item)->make(true);
     }
+    public function itemsedit(Request $request)
+    {
+        $items = Item::where('id', $request->id)->first();
+        $item = Item::where('id', $request->id)->first();
+        $item->item = $request->item;
+        $item->save();
+        $log = new UserLog;
+        $log->activity = auth()->user()->name.' '.auth()->user()->lastname.' update '.$items->item.' to '.$item->item.'.';
+        $log->user_id = auth()->user()->id;
+        $data = $log->save();
+        return response()->json($data);
+
+    }
     public function itemsUpdate(Request $request)
     {   
         $items = Item::where('id', $request->item)->first();
