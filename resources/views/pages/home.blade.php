@@ -101,16 +101,16 @@
         <thead class="thead-dark">
             <tr class="tbsearch" style="display:none">
                 <td>
-                    <input type="text" class="form-control filter-input fl-0" placeholder="search.." data-column="0" style="border: 1px solid black;"/>
+                    <input type="text" class="form-control filter-input fl-0" placeholder="Date" data-column="0" style="border: 1px solid black;"/>
                 </td>
                 <td>
-                    <input type="text" class="form-control filter-input fl-1" placeholder="search.." data-column="1" style="border: 1px solid black;" />
+                    <input type="text" class="form-control filter-input fl-1" placeholder="Fullname" data-column="1" style="border: 1px solid black;" />
                 </td>
                 <td>
-                    <input type="text" class="form-control filter-input fl-2" placeholder="search.." data-column="2" style="border: 1px solid black;" />
+                    <input type="text" class="form-control filter-input fl-2" placeholder="Branch" data-column="2" style="border: 1px solid black;" />
                 </td>
                 <td>
-                    <input type="text" class="form-control filter-input fl-3" placeholder="search.." data-column="3" style="border: 1px solid black;" />
+                    <input type="text" class="form-control filter-input fl-3" placeholder="Activity" data-column="3" style="border: 1px solid black;" />
                 </td>
             </tr>
             <tr>
