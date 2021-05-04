@@ -419,7 +419,7 @@ $log->branch_id = auth()->user()->branch->id;
                 )
                 ->join('users', 'users.id', 'user_id')
                 ->join('branches', 'branches.id', 'user_logs.branch_id')
-                ->orderBy('logid', 'desc')->get();
+                ->orderBy('logid', 'asc')->get();
             //$act = UserLog::wherein('user_id', $myuser)->orderBy('id', 'desc')->take(1000)->get();
         }
         if (auth()->user()->hasAnyRole('Tech', 'Repair', 'Encoder')) {
@@ -436,7 +436,7 @@ $log->branch_id = auth()->user()->branch->id;
                 )
                 ->join('users', 'users.id', 'user_id')
                 ->join('branches', 'branches.id', 'branch_id')
-                ->orderBy('logid', 'desc')->get();
+                ->orderBy('logid', 'asc')->get();
         }
         return DataTables::of($act)
         ->addColumn('id', function (UserLog $request){
