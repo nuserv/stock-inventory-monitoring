@@ -11,10 +11,10 @@ use App\Branch;
 use App\Item;
 use App\Warehouse;
 use App\Category;
+use Carbon\Carbon;
 use App\UserLog;
 use DB;
 use Auth;
-use Carbon\Carbon;
 class DefectiveController extends Controller
 {
 
@@ -52,7 +52,7 @@ class DefectiveController extends Controller
             ->get();
         return DataTables::of($defective)
         ->addColumn('date', function (Defective $data){
-            return $data->updated_at->toFormattedDateString().' '.$data->updated_at->toTimeString();
+            return Carbon::parse($data->updated_at->toFormattedDateString().' '.$data->updated_at->toTimeString())->isoFormat('lll');
         })
         ->addColumn('category', function (Defective $data){
             $cat = Category::where('id', $data->category_id)->first();
@@ -90,7 +90,7 @@ class DefectiveController extends Controller
         }
         return DataTables::of($data)
         ->addColumn('date', function (Defective $data){
-            return $data->updated_at->toFormattedDateString().' '.$data->updated_at->toTimeString();
+            return Carbon::parse($data->updated_at->toFormattedDateString().' '.$data->updated_at->toTimeString())->isoFormat('lll');
         })
         ->addColumn('category', function (Defective $data){
             $cat = Category::where('id', $data->category_id)->first();
@@ -109,7 +109,7 @@ class DefectiveController extends Controller
             ->join('branches', 'defectives.branch_id', '=', 'branches.id');
         return DataTables::of($repair)
         ->addColumn('date', function (Defective $data){
-            return $data->updated_at->toFormattedDateString().' '.$data->updated_at->toTimeString();
+            return Carbon::parse($data->updated_at->toFormattedDateString().' '.$data->updated_at->toTimeString())->isoFormat('lll');
         })
         ->addColumn('category', function (Defective $data){
             $cat = Category::where('id', $data->category_id)->first();
@@ -125,7 +125,7 @@ class DefectiveController extends Controller
             ->join('branches', 'defectives.branch_id', '=', 'branches.id');
         return DataTables::of($disposed)
         ->addColumn('date', function (Defective $data){
-            return $data->updated_at->toFormattedDateString().' '.$data->updated_at->toTimeString();
+            return Carbon::parse($data->updated_at->toFormattedDateString().' '.$data->updated_at->toTimeString())->isoFormat('lll');
         })
         ->addColumn('mydate', function (Defective $data){
 
@@ -145,7 +145,7 @@ class DefectiveController extends Controller
             ->join('branches', 'defectives.branch_id', '=', 'branches.id');
         return DataTables::of($disposed)
         ->addColumn('date', function (Defective $data){
-            return $data->updated_at->toFormattedDateString().' '.$data->updated_at->toTimeString();
+            return Carbon::parse($data->updated_at->toFormattedDateString().' '.$data->updated_at->toTimeString())->isoFormat('lll');
         })
         ->addColumn('mydate', function (Defective $data){
 
@@ -170,7 +170,7 @@ class DefectiveController extends Controller
                 $updates->user_id = auth()->user()->id;
                 $items = Item::where('id', $updates->items_id)->first();
                 $log = new UserLog;
-$log->branch_id = auth()->user()->branch->id;
+                $log->branch_id = auth()->user()->branch->id;
                 $log->activity = "Return defective $items->item(S/N: $updates->serial) to warehouse." ;
                 $log->user_id = auth()->user()->id;
                 $log->save();
@@ -186,7 +186,7 @@ $log->branch_id = auth()->user()->branch->id;
                 $item = Item::where('id', $update->items_id)->first();
                 $branch = Branch::where('id', $update->branch_id)->first();
                 $log = new UserLog;
-$log->branch_id = auth()->user()->branch->id;
+                $log->branch_id = auth()->user()->branch->id;
                 $log->activity = "Received defective $item->item($update->serial) from $branch->branch." ;
                 $log->user_id = auth()->user()->id;
                 $log->save();
@@ -205,7 +205,7 @@ $log->branch_id = auth()->user()->branch->id;
                 $item = Item::where('id', $repaired->items_id)->first();
                 $cat = Category::where('id', $item->category_id)->first();
                 $log = new UserLog;
-$log->branch_id = auth()->user()->branch->id;
+                $log->branch_id = auth()->user()->branch->id;
                 $log->activity = "Repaired $item->item($repaired->serial) and send to Warehouse." ;
                 $log->user_id = auth()->user()->id;
                 $repaired->save();
@@ -228,7 +228,7 @@ $log->branch_id = auth()->user()->branch->id;
                 $item = Item::where('id', $pending->items_id)->first();
                 $cat = Category::where('id', $item->category_id)->first();
                 $log = new UserLog;
-$log->branch_id = auth()->user()->branch->id;
+                $log->branch_id = auth()->user()->branch->id;
                 $log->activity = "Add $item->item($pending->serial) from Repair to Stock." ;
                 $log->user_id = auth()->user()->id;
                 $pending->save();

@@ -11,6 +11,7 @@ use App\Branch;
 use App\Stock;
 use App\UserLog;
 use App\User;
+use Carbon\Carbon;
 use Mail;
 class LoanController extends Controller
 {
@@ -62,7 +63,7 @@ class LoanController extends Controller
         $merge = $loans->merge($myloans);
         return Datatables::of($merge)
         ->addColumn('date', function (Loan $request){
-            return $request->updated_at->toFormattedDateString().' '.$request->updated_at->toTimeString();
+            return Carbon::parse($request->updated_at->toFormattedDateString().' '.$request->updated_at->toTimeString())->isoFormat('lll');
         })
         ->addColumn('stat', function (Loan $request){
             if ($request->to_branch_id == auth()->user()->branch->id) {

@@ -12,6 +12,7 @@ use App\PreparedItem;
 use App\CustomerBranch;
 use App\Customer;
 use App\Pullout;
+use Carbon\Carbon;
 use App\Loan;
 use App\ServiceOut;
 use App\Branch;
@@ -144,7 +145,7 @@ class StockController extends Controller
                     ->get();
         return DataTables::of($stock)
         ->addColumn('date', function (Stock $request){
-            return $request->updated_at->toFormattedDateString().' '.$request->updated_at->toTimeString();
+            return Carbon::parse($request->updated_at->toFormattedDateString().' '.$request->updated_at->toTimeString())->isoFormat('lll');
         })
         ->addColumn('items_id', function (Stock $request){
             return $request->items_id;
@@ -192,7 +193,7 @@ class StockController extends Controller
         $stock = Pm::where('branch_id', auth()->user()->branch->id)->get();
         return DataTables::of($stock)
         ->addColumn('date', function (Pm $request){
-            return $request->updated_at->toFormattedDateString().' '.$request->updated_at->toTimeString();
+            return Carbon::parse($request->updated_at->toFormattedDateString().' '.$request->updated_at->toTimeString())->isoFormat('lll');
         })
         ->addColumn('items_id', function (Pm $request){
             return $request->items_id;

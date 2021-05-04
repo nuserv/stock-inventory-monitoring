@@ -9,6 +9,12 @@ use App\Branch;
 use App\Area;
 use Jenssegers\Agent\Agent;
 use App\User;
+use App\UserLog;
+use Carbon\Carbon;
+use Illuminate\Http\Request;
+use Auth;
+use Session;
+use Redirect;
 class LoginController extends Controller
 {
     /*
@@ -39,5 +45,24 @@ class LoginController extends Controller
     public function __construct()
     {
         $this->middleware('guest')->except('logout');
+    }
+
+    public function authenticated(Request $request, $user) {
+        $log = new UserLog;
+        $log->branch_id = auth()->user()->branch->id;
+        $log->activity = "Sign-in.";
+        $log->user_id = auth()->user()->id;
+        $log->save();
+    }
+    public function logout() {
+        $log = new UserLog;
+        $log->branch_id = auth()->user()->branch->id;
+        $log->activity = "Sign-out.";
+        $log->user_id = auth()->user()->id;
+        $log->save();
+        Auth::logout(); // logout user
+        Session::flush();
+        Redirect::back();
+        return Redirect::to('login'); //redirect back to login
     }
 }

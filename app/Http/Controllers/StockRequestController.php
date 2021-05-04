@@ -408,7 +408,7 @@ class StockRequestController extends Controller
             return $request->schedule;
         })
         ->addColumn('created_at', function (StockRequest $request){
-            return $request->created_at->toFormattedDateString().' '.$request->created_at->toTimeString();
+            return Carbon::parse($request->created_at->toFormattedDateString().' '.$request->created_at->toTimeString())->isoFormat('lll');
         })
         ->addColumn('intransit', function (StockRequest $request){
             if ($request->intransit) {

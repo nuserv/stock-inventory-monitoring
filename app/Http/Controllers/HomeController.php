@@ -443,7 +443,7 @@ $log->branch_id = auth()->user()->branch->id;
             return $request->logid;
         })
         ->addColumn('date', function (UserLog $request){
-            return $request->updated_at->toFormattedDateString(). ' '.$request->updated_at->toTimeString();
+            return Carbon::parse($request->updated_at->toFormattedDateString(). ' '.$request->updated_at->toTimeString())->isoFormat('lll');//->format('H:ia');
         })
         ->addColumn('time', function (UserLog $request){
             return $request->updated_at->toTimeString();
