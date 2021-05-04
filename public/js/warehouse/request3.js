@@ -52,11 +52,11 @@ $(document).on('click', '#save_Btn', function(){
     }
 });
 
-$(document).on('change', '.desc', function(){
+/*$(document).on('change', '.desc', function(){
     var count = $(this).attr('row_count');
     var id = $(this).val();
     $('#item' + count).val(id);
-});
+});*/
 
 $(document).on('change', '.item', function(){
     var count = $(this).attr('row_count');

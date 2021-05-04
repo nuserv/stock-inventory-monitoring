@@ -114,7 +114,7 @@ $(document).on('click', '.sub_Btn', function(){
                             dataType: 'json',
                             type: 'PUT',
                             data: {
-                                item: $('#desc'+q).val(),
+                                item: $('#item'+q).val(),
                             },
                             error: function (data) {
                                 alert(data.responseText);

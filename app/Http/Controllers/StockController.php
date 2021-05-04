@@ -865,7 +865,7 @@ $log->branch_id = auth()->user()->branch->id;
         $preventive->serial = $request->serial;
         $preventive->save();
         $log = new UserLog;
-$log->branch_id = auth()->user()->branch->id;
+        $log->branch_id = auth()->user()->branch->id;
         $log->activity = "PM Service out $item->item(S/N: $request->serial) to $customer->customer_branch." ;
         $log->user_id = auth()->user()->id;
         $log->save();
