@@ -884,9 +884,14 @@ $log->branch_id = auth()->user()->branch->id;
                 $add->user_id = auth()->user()->id;
                 $add->save();
             }
+            if ($request->qty > 1) {
+                $uom = $item->UOM.'s';
+            }else{
+                $uom = $item->UOM;
+            }
             $log = new UserLog;
             $log->branch_id = auth()->user()->branch->id;
-            $log->activity = "Add $request->qty $item->UOM of $item->item to stocks." ;
+            $log->activity = "Add $request->qty $uom of $item->item to stocks." ;
             $log->user_id = auth()->user()->id;
             $data = $log->save();
         }else{

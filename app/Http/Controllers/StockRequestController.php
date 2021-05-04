@@ -591,10 +591,11 @@ class StockRequestController extends Controller
             $reqno->ticket = $request->ticket;
             $reqno->type = $request->type;
             $log = new UserLog;
-$log->branch_id = auth()->user()->branch->id;
+            $log->branch_id = auth()->user()->branch->id;
             $log->activity = "Create Stock Request no. $request->reqno";
             $log->user_id = auth()->user()->id;
             $reqno->save();
+            
             sleep(1);
             $reqitem = RequestedItem::select('items.item', 'quantity')
                 ->where('request_no', $request->reqno)
