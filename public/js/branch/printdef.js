@@ -30,11 +30,9 @@ $(document).ready(function()
         },
         columns: [
             { data: null, defaultContent: ''},
-            { data: 'date', name:'date'},
             { data: 'category', name:'category'},
             { data: 'item', name:'item'},
-            { data: 'serial', name:'serial'},
-            { data: 'status', name:'status'}
+            { data: 'serial', name:'serial'}
         ],
         
         select: {
