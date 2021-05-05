@@ -12,11 +12,17 @@ $(document).ready(function()
             "processing": '<i class="fa fa-spinner fa-spin fa-3x fa-fw"></i><span class="sr-only">Searching...</span> ',
         },
         "pageLength": 25,
-        columnDefs: [{
+        columnDefs: [
+            {
             orderable: false,
             className: 'select-checkbox',      
             targets: 0
-        }],
+            },
+            {
+                "targets": [ 1, 5],
+                "visible": false
+            }
+        ],
         ajax: {
             url: '/printtable',
             error: function(data) {
