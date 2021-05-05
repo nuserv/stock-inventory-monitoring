@@ -61,7 +61,7 @@ class HomeController extends Controller
         $item->save();
         $log = new UserLog;
         $log->branch_id = auth()->user()->branch->id;
-        $log->activity = '\UPDATE '.$items->item.' to '.$item->item.'.';
+        $log->activity = 'UPDATE '.$items->item.' to '.$item->item.'.';
         $log->user_id = auth()->user()->id;
         $data = $log->save();
         return response()->json($data);
@@ -73,7 +73,7 @@ class HomeController extends Controller
         $item = Item::where('id', $request->item)->update(['n_a' => $request->stat]);
         $log = new UserLog;
         $log->branch_id = auth()->user()->branch->id;
-        $log->activity = '\UPDATE '.$items->item.'.';
+        $log->activity = 'UPDATE '.$items->item.'.';
         $log->user_id = auth()->user()->id;
         $data = $log->save();
         return response()->json($data);

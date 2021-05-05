@@ -592,7 +592,7 @@ class StockRequestController extends Controller
             $reqno->type = $request->type;
             $log = new UserLog;
             $log->branch_id = auth()->user()->branch->id;
-            $log->activity = "\CREATE Stock Request no. $request->reqno";
+            $log->activity = "CREATE Stock Request no. $request->reqno";
             $log->user_id = auth()->user()->id;
             $reqno->save();
             
