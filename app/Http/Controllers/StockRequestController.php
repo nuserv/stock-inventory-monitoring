@@ -743,6 +743,15 @@ $log->branch_id = auth()->user()->branch->id;
             $reqno = StockRequest::where('request_no', $request->reqno)->first();
             $reqno->status = $request->status;
             $reqno->intransit = Carbon::now()->toDateTimeString();;
+            $intransits = PreparedItem::where('request_no', $request->reqno)->get();
+            foreach ($intransits as $intransit) {
+                $item = Item::where('id', $intransit->items_id)->first();
+                $log = new UserLog;
+                $log->branch_id = auth()->user()->branch->id;
+                $log->activity = "Intransit $item->item(S/N: $intransit->serial) with Request no. $request->reqno ";
+                $log->user_id = auth()->user()->id;
+                $log->save();
+            }
             PreparedItem::where('request_no', $request->reqno)->where('intransit', 'no')->update(['intransit' => 'yes']);
             $data = $reqno->save();
             return response()->json($data);
@@ -750,14 +759,21 @@ $log->branch_id = auth()->user()->branch->id;
             $reqno = StockRequest::where('request_no', $request->reqno)->first();
             $reqno->status = $request->status;
             $reqno->intransitval = '0';
-            $reqno->intransit = Carbon::now()->toDateTimeString();;
+            $reqno->intransit = Carbon::now()->toDateTimeString();
+            $intransits = PreparedItem::where('request_no', $request->reqno)->get();
+            foreach ($intransits as $intransit) {
+                $item = Item::where('id', $intransit->items_id)->first();
+                $log = new UserLog;
+                $log->branch_id = auth()->user()->branch->id;
+                $log->activity = "Partial intransit $item->item(S/N: $intransit->serial) with Request no. $request->reqno ";
+                $log->user_id = auth()->user()->id;
+                $log->save();
+            }
             PreparedItem::where('request_no', $request->reqno)->where('intransit', 'no')->update(['intransit' => 'yes']);
             $data = $reqno->save();
-            
             return response()->json($data);
         }
     }
-    
     public function upserial(Request $request)
     {
         $serial = PreparedItem::where('serial', $request->old)
@@ -767,7 +783,7 @@ $log->branch_id = auth()->user()->branch->id;
         $new->serial = $request->new;
         $new->save();
         $log = new UserLog;
-$log->branch_id = auth()->user()->branch->id;
+        $log->branch_id = auth()->user()->branch->id;
         $log->activity = "Change $serial->item serial number from $serial->serial to $new->serial";
         $log->user_id = auth()->user()->id;
         $data = $log->save();
