@@ -408,6 +408,10 @@ $(document).on('click', '.rep_sub_Btn', function(){
     }
 });
 
+$('input[type="text"]').keyup(function() {
+    $(this).val($(this).val().replace('-',''));
+});
+
 $(document).on('keyup', '#replacementclient', function(){
     var id = $(this).val();
     var op = " ";

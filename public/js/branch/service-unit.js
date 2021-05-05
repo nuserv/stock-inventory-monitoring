@@ -163,6 +163,10 @@ $(document).on('change', '#repdesc', function(){
     $('#repserial').prop('disabled', false);
 });
 
+$('input[type="text"]').keyup(function() {
+        $(this).val($(this).val().replace('-',''));
+});
+
 $(document).on('click', '.in_sub_Btn', function(){
     if ($('#intype').val()) {
         if ($('#intype').val() == 'service-unit') {

@@ -111,3 +111,6 @@ $(document).on('change', '.desc', function(){
     $('#serial' + count).val('');
     $('#item' + count).val(id);
 });
+$('input[type="text"]').keyup(function() {
+    $(this).val().replace('-','');
+});

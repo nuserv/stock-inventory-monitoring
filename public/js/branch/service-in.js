@@ -334,3 +334,6 @@ $(document).on('change', '.poutcategory', function(){
         },
     });
 });
+$('input[type="text"]').keyup(function() {
+    $(this).val($(this).val().replace('-',''));
+});
