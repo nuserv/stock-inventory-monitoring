@@ -18,10 +18,6 @@ $(document).ready(function()
             className: 'select-checkbox',      
             targets: 0
             },
-            {
-                "targets": [ 1, 5],
-                "visible": false
-            }
         ],
         ajax: {
             url: '/printtable',

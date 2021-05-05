@@ -8,9 +8,6 @@
             <tr>
                 <th>&nbsp;</th>
                 <th>
-                    Date
-                </th>
-                <th>
                     Category
                 </th>
                 <th>
@@ -18,9 +15,6 @@
                 </th>
                 <th>
                     Serial
-                </th>
-                <th>
-                    Status
                 </th>
             </tr>
         </thead>
