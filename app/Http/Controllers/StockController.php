@@ -551,7 +551,7 @@ class StockController extends Controller
             $pmcustomer = CustomerBranch::where('id', $request->customerid)->first();
             $log = new UserLog;
 $log->branch_id = auth()->user()->branch->id;
-            $log->activity = "PM Service in $pmitem->item(defective) with serial no. $request->serial from $pmcustomer->customer_branch." ;
+            $log->activity = "PM SERVICE IN $pmitem->item(defective) with serial no. $request->serial from $pmcustomer->customer_branch." ;
             $log->user_id = auth()->user()->id;
             $log->save();
         }else{
@@ -560,7 +560,7 @@ $log->branch_id = auth()->user()->branch->id;
             $pmcustomer = CustomerBranch::where('id', $request->customerid)->first();
             $log = new UserLog;
 $log->branch_id = auth()->user()->branch->id;
-            $log->activity = "PM Service in $pmitem->item(good) with serial no. $request->serial from $pmcustomer->customer_branch." ;
+            $log->activity = "PM SERVICE IN $pmitem->item(good) with serial no. $request->serial from $pmcustomer->customer_branch." ;
             $log->user_id = auth()->user()->id;
             $log->save();
         }
@@ -603,13 +603,13 @@ $log->branch_id = auth()->user()->branch->id;
                 $pmcustomer = CustomerBranch::where('id', $request->customerid)->first();
                 $log = new UserLog;
 $log->branch_id = auth()->user()->branch->id;
-                $log->activity = "PM Service in $pmitem->item(defective) with serial no. $request->serial from $pmcustomer->customer_branch." ;
+                $log->activity = "PM SERVICE IN $pmitem->item(defective) with serial no. $request->serial from $pmcustomer->customer_branch." ;
                 $log->user_id = auth()->user()->id;
                 $log->save();
             }else{
                 $log = new UserLog;
 $log->branch_id = auth()->user()->branch->id;
-                $log->activity = "Service in $item->item(defective) with serial no. $request->serial from $customer->customer_branch." ;
+                $log->activity = "SERVICE IN $item->item(defective) with serial no. $request->serial from $customer->customer_branch." ;
                 $log->user_id = auth()->user()->id;
                 $log->save();
             }
@@ -620,13 +620,13 @@ $log->branch_id = auth()->user()->branch->id;
                 $pmcustomer = CustomerBranch::where('id', $request->customerid)->first();
                 $log = new UserLog;
 $log->branch_id = auth()->user()->branch->id;
-                $log->activity = "Service in $pmitem->item(good) with serial no. $request->serial from $pmcustomer->customer_branch." ;
+                $log->activity = "SERVICE IN $pmitem->item(good) with serial no. $request->serial from $pmcustomer->customer_branch." ;
                 $log->user_id = auth()->user()->id;
                 $log->save();
             }else{
                 $log = new UserLog;
 $log->branch_id = auth()->user()->branch->id;
-                $log->activity = "Service in $item->item(good) with serial no. $stock->serial from $customer->customer_branch." ;
+                $log->activity = "SERVICE IN $item->item(good) with serial no. $stock->serial from $customer->customer_branch." ;
                 $log->user_id = auth()->user()->id;
                 $log->save();
             }
@@ -824,7 +824,7 @@ $log->branch_id = auth()->user()->branch->id;
         $stock->user_id = auth()->user()->id;
         $log = new UserLog;
         $log->branch_id = auth()->user()->branch->id;
-        $log->activity = "Service out $item->item(S/N: $request->serial) to $customer->customer_branch." ;
+        $log->activity = "SERVICE OUT $item->item(S/N: $request->serial) to $customer->customer_branch." ;
         $log->user_id = auth()->user()->id;
         $log->save();
         $serviceout = new ServiceOut;
