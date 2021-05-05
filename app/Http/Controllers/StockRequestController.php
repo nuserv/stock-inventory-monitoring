@@ -862,24 +862,11 @@ $log->branch_id = auth()->user()->branch->id;
             $prep->intransit = 'no';
             $prep->user_id = auth()->user()->id;
             $data = $prep->save();
-            if ($scheditem->UOM == "Unit") {
-                $log = new UserLog;
-                $log->branch_id = auth()->user()->branch->id;
-                $log->activity = "SCHEDULED $scheditem->item(S/N: $request->serial) with Request no. $request->reqno ";
-                $log->user_id = auth()->user()->id;
-                $log->save();
-            }else{
-                $userlog = UserLog::where('user_id', auth()->user()->id)->orderBy('id', 'DESC')->first();
-                $contains = Str::contains($userlog->activity, $scheditem->item);
-                if (!$contains) {
-                    $log = new UserLog;
-                    $log->branch_id = auth()->user()->branch->id;
-                    $log->activity = "SCHEDULED $scheditem->item($request->qty $scheditem->UOM) with Request no. $request->reqno ";
-                    $log->user_id = auth()->user()->id;
-                    $log->save();
-                }
-            }
-            
+            $log = new UserLog;
+            $log->branch_id = auth()->user()->branch->id;
+            $log->activity = "SCHEDULED $scheditem->item(S/N: $request->serial) with Request no. $request->reqno ";
+            $log->user_id = auth()->user()->id;
+            $log->save();
         }
         return response()->json($data);
     }
