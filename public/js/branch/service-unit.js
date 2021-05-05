@@ -148,6 +148,7 @@ $(document).on('keyup', '#repserial', function(){
     }else{
         $('#in_sub_Btn').prop('disabled', true);
     }
+    $(this).val($(this).val().replace('-',''));
 });
 
 $(document).on('change', '#instatus', function(){
