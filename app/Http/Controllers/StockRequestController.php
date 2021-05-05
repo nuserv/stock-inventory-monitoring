@@ -748,7 +748,7 @@ $log->branch_id = auth()->user()->branch->id;
                 $item = Item::where('id', $intransit->items_id)->first();
                 $log = new UserLog;
                 $log->branch_id = auth()->user()->branch->id;
-                $log->activity = "Intransit $item->item(S/N: $intransit->serial) with Request no. $request->reqno ";
+                $log->activity = "INTRANSIT $item->item(S/N: $intransit->serial) with Request no. $request->reqno ";
                 $log->user_id = auth()->user()->id;
                 $log->save();
             }
@@ -765,7 +765,7 @@ $log->branch_id = auth()->user()->branch->id;
                 $item = Item::where('id', $intransit->items_id)->first();
                 $log = new UserLog;
                 $log->branch_id = auth()->user()->branch->id;
-                $log->activity = "Partial intransit $item->item(S/N: $intransit->serial) with Request no. $request->reqno ";
+                $log->activity = "PARTIAL INTRANSIT $item->item(S/N: $intransit->serial) with Request no. $request->reqno ";
                 $log->user_id = auth()->user()->id;
                 $log->save();
             }
@@ -864,7 +864,7 @@ $log->branch_id = auth()->user()->branch->id;
             $prep->save();
             $log = new UserLog;
             $log->branch_id = auth()->user()->branch->id;
-            $log->activity = "Schedule $scheditem->item(S/N: $request->serial) with Request no. $request->reqno ";
+            $log->activity = "SCHEDULED $scheditem->item(S/N: $request->serial) with Request no. $request->reqno ";
             $log->user_id = auth()->user()->id;
             $data = $log->save();
         }
