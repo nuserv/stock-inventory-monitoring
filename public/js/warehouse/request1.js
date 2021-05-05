@@ -6,7 +6,7 @@ $('table.requestDetails').DataTable().on('select', function () {
             if (rowselected[i].stock == 0) {
                 $('#prcBtn').prop('disabled', true);
                 requestdetails.rows( { selected: true } ).deselect();
-                alert(rowselected[i].item_name+' is of stock!')
+                alert(rowselected[i].item_name+' is out of stock!')
                 return false;
             }else{
                 $('#prcBtn').prop('disabled', false);
