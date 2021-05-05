@@ -876,7 +876,7 @@ $log->branch_id = auth()->user()->branch->id;
         $delete->status = 'DELETED';
         $log = new UserLog;
 $log->branch_id = auth()->user()->branch->id;
-        $log->activity = "\DELETE request no. $request->reqno" ;
+        $log->activity = "DELETE request no. $request->reqno" ;
         $log->user_id = auth()->user()->id;
         $log->save();
         $data = $delete->save();

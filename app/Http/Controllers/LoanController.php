@@ -169,7 +169,7 @@ $log->branch_id = auth()->user()->branch->id;
         $delete->status = $request->status;
         $log = new UserLog;
         $log->branch_id = auth()->user()->branch->id;
-        $log->activity = "\DELETE $item->item loan request to $branch->branch";
+        $log->activity = "DELETE $item->item loan request to $branch->branch";
         $log->user_id = auth()->user()->id;
         $log->save();
         $data = $delete->save();
