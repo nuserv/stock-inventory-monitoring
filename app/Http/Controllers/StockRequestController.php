@@ -870,11 +870,11 @@ $log->branch_id = auth()->user()->branch->id;
                 $data = $log->save();
             }else{
                 $userlog = UserLog::where('user_id', auth()->user()->id)->orderBy('id', 'DESC')->first();
-                $contains = Str::contains(strtolower($userlog->activity), $scheditem->item);
+                $contains = Str::contains(strtolower($userlog->activity), strtolower($scheditem->item));
                 if (!$contains) {
                     $log = new UserLog;
                     $log->branch_id = auth()->user()->branch->id;
-                    $log->activity = "SCHEDULED $scheditem->item($request->qty $item->UOM) with Request no. $request->reqno ";
+                    $log->activity = "SCHEDULED $scheditem->item($request->qty $scheditem->UOM) with Request no. $request->reqno ";
                     $log->user_id = auth()->user()->id;
                     $data = $log->save();
                 }
