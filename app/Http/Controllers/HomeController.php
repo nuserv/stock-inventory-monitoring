@@ -163,7 +163,7 @@ class HomeController extends Controller
             return view('pages.disposed', compact('title'));
         }
         
-        $title = 'Dashboard';
+        $title = 'Service Center Stock Monitoring System';
         $mail = StockRequest::wherein('status', ['4', 'INCOMPLETE'])->where( 'updated_at', '<', Carbon::now()->subDays(5))->first();
         //dd($mail);
         if ($mail) {
