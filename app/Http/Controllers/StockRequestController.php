@@ -870,7 +870,7 @@ $log->branch_id = auth()->user()->branch->id;
                 $log->save();
             }else{
                 $userlog = UserLog::where('user_id', auth()->user()->id)->orderBy('id', 'DESC')->first();
-                $contains = Str::contains(strtolower($userlog->activity), strtolower($scheditem->item));
+                $contains = Str::contains($userlog->activity, $scheditem->item);
                 if (!$contains) {
                     $log = new UserLog;
                     $log->branch_id = auth()->user()->branch->id;
