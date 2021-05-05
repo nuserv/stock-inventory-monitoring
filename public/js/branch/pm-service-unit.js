@@ -234,6 +234,40 @@ $(document).on('click', '.in_sub_Btn', function(){
         alert('Please select Client branch!');
     }
 });
+$(document).on('keyup', '#repserial', function(){
+    if ($(this).val() && $(this).val().length >= 3) {
+        if ($(this).val().toLowerCase() ==  "n/a" || $(this).val().toLowerCase() ==  "faded" || $(this).val().toLowerCase() ==  "none") {
+            $.ajax({
+                url: 'checkserial',
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="ctok"]').attr('content')
+                },
+                dataType: 'json',
+                type: 'get',
+                async: false,
+                data: {
+                    item: $('#repdesc').val(),
+                },
+                success: function (data) {
+                    if (data != "allowed") {
+                        $('#in_sub_Btn').prop('disabled', true);
+                    }else{
+                        $('#in_sub_Btn').prop('disabled', false);
+                    }
+                },
+                error: function (data) {
+                    alert(data.responseText);
+                    return false;
+                }
+            });
+        }else{
+            $('#in_sub_Btn').prop('disabled', false);
+        }
+    }else{
+        $('#in_sub_Btn').prop('disabled', true);
+    }
+    $(this).val($(this).val().replace('-',''));
+});
 
 $(document).on('click', '.service-unit', function(){
     $('#outOptionModal .out-close').click();
