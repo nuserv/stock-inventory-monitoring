@@ -392,9 +392,7 @@ class HomeController extends Controller
                     'branch',
                 )
                 ->join('users', 'users.id', 'user_id')
-                ->join('branches', 'branches.id', 'user_logs.branch_id')
-                ->orderBy('logid', 'desc')
-                ->get();
+                ->join('branches', 'branches.id', 'user_logs.branch_id');
                 /*
                 ->take(1000)
                 ->get();*/
@@ -418,8 +416,7 @@ class HomeController extends Controller
                     'branch',
                 )
                 ->join('users', 'users.id', 'user_id')
-                ->join('branches', 'branches.id', 'user_logs.branch_id')
-                ->orderBy('logid', 'asc')->get();
+                ->join('branches', 'branches.id', 'user_logs.branch_id');
             //$act = UserLog::wherein('user_id', $myuser)->orderBy('id', 'desc')->take(1000)->get();
         }
         if (auth()->user()->hasAnyRole('Tech', 'Repair', 'Encoder')) {
@@ -435,8 +432,7 @@ class HomeController extends Controller
                     'branch',
                 )
                 ->join('users', 'users.id', 'user_id')
-                ->join('branches', 'branches.id', 'branch_id')
-                ->orderBy('logid', 'asc')->get();
+                ->join('branches', 'branches.id', 'branch_id');
         }
         return DataTables::of($act)
         ->addColumn('id', function (UserLog $request){

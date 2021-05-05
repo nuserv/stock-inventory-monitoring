@@ -159,6 +159,7 @@ $(document).on('click', '.sub_Btn', function(){
                                 reqno: $('#sreqno').val(),
                                 branchid: bID,
                                 datesched: $('#datesched').val(),
+                                qty: $('#inputqty'+q).val(),
                                 stat: "notok"
                             },
                             

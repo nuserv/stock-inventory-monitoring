@@ -12,6 +12,7 @@
 */
 
 Auth::routes();
+Route::get('barchart', 'ReportController@chart');
 
 Route::get('login', 'Auth\LoginController@showLoginForm')->name('login')->middleware('checkBrowser');
 
