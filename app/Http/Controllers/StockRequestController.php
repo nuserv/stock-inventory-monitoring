@@ -592,7 +592,7 @@ class StockRequestController extends Controller
             $reqno->type = $request->type;
             $log = new UserLog;
             $log->branch_id = auth()->user()->branch->id;
-            $log->activity = "Create Stock Request no. $request->reqno";
+            $log->activity = "\CREATE Stock Request no. $request->reqno";
             $log->user_id = auth()->user()->id;
             $reqno->save();
             
@@ -680,7 +680,7 @@ class StockRequestController extends Controller
             $stock->save();
             $log = new UserLog;
 $log->branch_id = auth()->user()->branch->id;
-            $log->activity = "Received $items->item(S/N: $preparedItems->serial) with Request no. $request->reqno ";
+            $log->activity = "RECEIVED $items->item(S/N: $preparedItems->serial) with Request no. $request->reqno ";
             $log->user_id = auth()->user()->id;
             $log->save();
             $prepared->delete();
@@ -784,7 +784,7 @@ $log->branch_id = auth()->user()->branch->id;
         $new->save();
         $log = new UserLog;
         $log->branch_id = auth()->user()->branch->id;
-        $log->activity = "Change $serial->item serial number from $serial->serial to $new->serial";
+        $log->activity = "CHANGE $serial->item serial number from $serial->serial to $new->serial";
         $log->user_id = auth()->user()->id;
         $data = $log->save();
         return response()->json($data);
@@ -876,7 +876,7 @@ $log->branch_id = auth()->user()->branch->id;
         $delete->status = 'DELETED';
         $log = new UserLog;
 $log->branch_id = auth()->user()->branch->id;
-        $log->activity = "Delete request no. $request->reqno" ;
+        $log->activity = "\DELETE request no. $request->reqno" ;
         $log->user_id = auth()->user()->id;
         $log->save();
         $data = $delete->save();
