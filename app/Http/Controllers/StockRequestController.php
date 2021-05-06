@@ -800,7 +800,7 @@ class StockRequestController extends Controller
                     $log->fullname = auth()->user()->name.' '.auth()->user()->middlename.' '.auth()->user()->lastname;
                     $log->save();
                 }
-                $count = PrepareItem::where('request_no', $request->reqno)->where('items_id', $item->id)->count();
+                $count = PreparedItem::where('request_no', $request->reqno)->where('items_id', $item->id)->count();
             }
             $pcs = 0;
             foreach ($intransits as $intransit) {
@@ -865,7 +865,7 @@ class StockRequestController extends Controller
                     $log->fullname = auth()->user()->name.' '.auth()->user()->middlename.' '.auth()->user()->lastname;
                     $log->save();
                 }
-                $count = PrepareItem::where('request_no', $request->reqno)->where('items_id', $item->id)->count();
+                $count = PreparedItem::where('request_no', $request->reqno)->where('items_id', $item->id)->count();
             }
             $pcs = 0;
             foreach ($intransits as $intransit) {
