@@ -54,7 +54,8 @@ $(document).on('click', '#rec_Btn', function(){
                             reqno : reqno,
                             id: id,
                             status: status,
-                            sched: sched
+                            sched: sched,
+                            Unit: 'yes',
                         },
                         success: function(){
                             location.reload();
@@ -95,7 +96,8 @@ $(document).on('click', '#rec_Btn', function(){
                                     reqno : reqno,
                                     id: id,
                                     status: status,
-                                    sched: sched
+                                    sched: sched,
+                                    Unit: 'no'
                                 },
                                 success: function(){
                                     location.reload();

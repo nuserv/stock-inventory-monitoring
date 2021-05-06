@@ -660,35 +660,76 @@ class StockRequestController extends Controller
     public function received(Request $request)
     {
         $data = '0';
-        foreach ($request->id as $del) {
-            $preparedItems = PreparedItem::select('prepared_items.items_id as itemid', 'prepared_items.serial as serial')
-                ->join('items', 'prepared_items.items_id', '=', 'items.id')
-                ->where('branch_id', auth()->user()->branch->id)
-                ->where('request_no', $request->reqno)
-                ->where('prepared_items.id', $del)
-                ->first();
-            $prepared = PreparedItem::where('branch_id', auth()->user()->branch->id)
-                ->where('request_no', $request->reqno)
-                ->where('prepared_items.id', $del)
-                ->first();
-            $items = Item::where('id', $preparedItems->itemid)->first();
-            $stock = new Stock;
-            $stock->category_id = $items->category_id;
-            $stock->branch_id = auth()->user()->branch->id;
-            $stock->items_id = $preparedItems->itemid;
-            $stock->user_id = auth()->user()->id;
-            $stock->serial = $preparedItems->serial;
-            $stock->status = 'in';
-            $stock->save();
-            $log = new UserLog;
-$log->branch_id = auth()->user()->branch->id;
+        if ($request->Unit == 'yes') {
+            foreach ($request->id as $del) {
+                $preparedItems = PreparedItem::select('prepared_items.items_id as itemid', 'prepared_items.serial as serial')
+                    ->join('items', 'prepared_items.items_id', '=', 'items.id')
+                    ->where('branch_id', auth()->user()->branch->id)
+                    ->where('request_no', $request->reqno)
+                    ->where('prepared_items.id', $del)
+                    ->first();
+                $prepared = PreparedItem::where('branch_id', auth()->user()->branch->id)
+                    ->where('request_no', $request->reqno)
+                    ->where('prepared_items.id', $del)
+                    ->first();
+                $items = Item::where('id', $preparedItems->itemid)->first();
+                $stock = new Stock;
+                $stock->category_id = $items->category_id;
+                $stock->branch_id = auth()->user()->branch->id;
+                $stock->items_id = $preparedItems->itemid;
+                $stock->user_id = auth()->user()->id;
+                $stock->serial = $preparedItems->serial;
+                $stock->status = 'in';
+                $stock->save();
+                $log = new UserLog;
+                $log->branch_id = auth()->user()->branch->id;
                 $log->branch = auth()->user()->branch->branch;
-            $log->activity = "RECEIVED $items->item(S/N: $preparedItems->serial) with Request no. $request->reqno ";
-            $log->user_id = auth()->user()->id;
+                $log->activity = "RECEIVED $items->item(S/N: $preparedItems->serial) with Request no. $request->reqno ";
+                $log->user_id = auth()->user()->id;
                 $log->fullname = auth()->user()->name.' '.auth()->user()->middlename.' '.auth()->user()->lastname;
+                $log->save();
+                $prepared->delete();
+            }
+        }else if ($request->Unit == 'no') {
+            $count = 0;
+            foreach ($request->id as $del) {
+                $count += 1;
+                $preparedItems = PreparedItem::select('prepared_items.items_id as itemid', 'prepared_items.serial as serial')
+                    ->join('items', 'prepared_items.items_id', '=', 'items.id')
+                    ->where('branch_id', auth()->user()->branch->id)
+                    ->where('request_no', $request->reqno)
+                    ->where('prepared_items.id', $del)
+                    ->first();
+                $prepared = PreparedItem::where('branch_id', auth()->user()->branch->id)
+                    ->where('request_no', $request->reqno)
+                    ->where('prepared_items.id', $del)
+                    ->first();
+                $items = Item::where('id', $preparedItems->itemid)->first();
+                $stock = new Stock;
+                $stock->category_id = $items->category_id;
+                $stock->branch_id = auth()->user()->branch->id;
+                $stock->items_id = $preparedItems->itemid;
+                $stock->user_id = auth()->user()->id;
+                $stock->serial = $preparedItems->serial;
+                $stock->status = 'in';
+                $stock->save();
+                $prepared->delete();
+            }
+            if ($count > 1) {
+                $pcs = $count.' pcs.';
+            }else{
+                $pcs = $count.' pc.';
+            }
+            
+            $log = new UserLog;
+            $log->branch_id = auth()->user()->branch->id;
+            $log->branch = auth()->user()->branch->branch;
+            $log->activity = "RECEIVED $items->item($pcs) with Request no. $request->reqno ";
+            $log->user_id = auth()->user()->id;
+            $log->fullname = auth()->user()->name.' '.auth()->user()->middlename.' '.auth()->user()->lastname;
             $log->save();
-            $prepared->delete();
         }
+        
         $preparedItem = PreparedItem::where('branch_id', auth()->user()->branch->id)
             ->where('request_no', $request->reqno)
             ->where('intransit', 'yes')
@@ -750,14 +791,60 @@ $log->branch_id = auth()->user()->branch->id;
             $intransits = PreparedItem::where('request_no', $request->reqno)->get();
             foreach ($intransits as $intransit) {
                 $item = Item::where('id', $intransit->items_id)->first();
+                if ($item->UOM == "Unit") {
+                    $log = new UserLog;
+                    $log->branch_id = auth()->user()->branch->id;
+                    $log->branch = auth()->user()->branch->branch;
+                    $log->activity = "INTRANSIT $item->item(S/N: $intransit->serial) with Request no. $request->reqno ";
+                    $log->user_id = auth()->user()->id;
+                    $log->fullname = auth()->user()->name.' '.auth()->user()->middlename.' '.auth()->user()->lastname;
+                    $log->save();
+                }
+                $count = PrepareItem::where('request_no', $request->reqno)->where('items_id', $item->id)->count();
+            }
+            $pcs = 0;
+            foreach ($intransits as $intransit) {
+                $item = Item::where('id', $intransit->items_id)->first();
+                if ($item->UOM == "Pc") {
+                    $pcs += 1;
+                }
+            }
+            if ($pcs > 0) {
+                if ($pcs > 1) {
+                    $pc = $pcs.' pcs.';
+                }else {
+                    $pc = $pcs.' pc.';
+                }
                 $log = new UserLog;
                 $log->branch_id = auth()->user()->branch->id;
                 $log->branch = auth()->user()->branch->branch;
-                $log->activity = "INTRANSIT $item->item(S/N: $intransit->serial) with Request no. $request->reqno ";
+                $log->activity = "INTRANSIT $item->item($pc) with Request no. $request->reqno ";
                 $log->user_id = auth()->user()->id;
                 $log->fullname = auth()->user()->name.' '.auth()->user()->middlename.' '.auth()->user()->lastname;
                 $log->save();
             }
+            $meters = 0;
+            foreach ($intransits as $intransit) {
+                $item = Item::where('id', $intransit->items_id)->first();
+                if ($item->UOM == "Meter") {
+                    $meters += 1;
+                }
+            }
+            if ($meters > 0) {
+                if ($meters > 1) {
+                    $meter = $meters.' pcs.';
+                }else {
+                    $meter = $meters.' pc.';
+                }
+                $log = new UserLog;
+                $log->branch_id = auth()->user()->branch->id;
+                $log->branch = auth()->user()->branch->branch;
+                $log->activity = "INTRANSIT $item->item($meter) with Request no. $request->reqno ";
+                $log->user_id = auth()->user()->id;
+                $log->fullname = auth()->user()->name.' '.auth()->user()->middlename.' '.auth()->user()->lastname;
+                $log->save();
+            }
+
             PreparedItem::where('request_no', $request->reqno)->where('intransit', 'no')->update(['intransit' => 'yes']);
             $data = $reqno->save();
             return response()->json($data);
@@ -769,10 +856,55 @@ $log->branch_id = auth()->user()->branch->id;
             $intransits = PreparedItem::where('request_no', $request->reqno)->get();
             foreach ($intransits as $intransit) {
                 $item = Item::where('id', $intransit->items_id)->first();
+                if ($item->UOM == "Unit") {
+                    $log = new UserLog;
+                    $log->branch_id = auth()->user()->branch->id;
+                    $log->branch = auth()->user()->branch->branch;
+                    $log->activity = "PARTIAL INTRANSIT $item->item(S/N: $intransit->serial) with Request no. $request->reqno ";
+                    $log->user_id = auth()->user()->id;
+                    $log->fullname = auth()->user()->name.' '.auth()->user()->middlename.' '.auth()->user()->lastname;
+                    $log->save();
+                }
+                $count = PrepareItem::where('request_no', $request->reqno)->where('items_id', $item->id)->count();
+            }
+            $pcs = 0;
+            foreach ($intransits as $intransit) {
+                $item = Item::where('id', $intransit->items_id)->first();
+                if ($item->UOM == "Pc") {
+                    $pcs += 1;
+                }
+            }
+            if ($pcs > 0) {
+                if ($pcs > 1) {
+                    $pc = $pcs.' pcs.';
+                }else {
+                    $pc = $pcs.' pc.';
+                }
                 $log = new UserLog;
                 $log->branch_id = auth()->user()->branch->id;
                 $log->branch = auth()->user()->branch->branch;
-                $log->activity = "PARTIAL INTRANSIT $item->item(S/N: $intransit->serial) with Request no. $request->reqno ";
+                $log->activity = "PARTIAL INTRANSIT $item->item($pc) with Request no. $request->reqno ";
+                $log->user_id = auth()->user()->id;
+                $log->fullname = auth()->user()->name.' '.auth()->user()->middlename.' '.auth()->user()->lastname;
+                $log->save();
+            }
+            $meters = 0;
+            foreach ($intransits as $intransit) {
+                $item = Item::where('id', $intransit->items_id)->first();
+                if ($item->UOM == "Meter") {
+                    $meters += 1;
+                }
+            }
+            if ($meters > 0) {
+                if ($meters > 1) {
+                    $meter = $meters.' pcs.';
+                }else {
+                    $meter = $meters.' pc.';
+                }
+                $log = new UserLog;
+                $log->branch_id = auth()->user()->branch->id;
+                $log->branch = auth()->user()->branch->branch;
+                $log->activity = "PARTIAL INTRANSIT $item->item($meter) with Request no. $request->reqno ";
                 $log->user_id = auth()->user()->id;
                 $log->fullname = auth()->user()->name.' '.auth()->user()->middlename.' '.auth()->user()->lastname;
                 $log->save();
@@ -882,9 +1014,9 @@ $log->branch_id = auth()->user()->branch->id;
                 $log->save();
             }else if ($request->start == '1') {
                 if ($request->qty > 1) {
-                    $pcs = $request->qty.'pcs.';
+                    $pcs = $request->qty.' pcs.';
                 }else{
-                    $pcs = $request->qty.'pc.';
+                    $pcs = $request->qty.' pc.';
                 }
                 $log = new UserLog;
                 $log->branch_id = auth()->user()->branch->id;
