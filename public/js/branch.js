@@ -279,6 +279,12 @@ $(document).ready(function()
                         "category": categid 
                     }
                 },
+                "columnDefs": [
+                    {
+                        "targets": [ 1 ],
+                        "visible": false
+                    }
+                ],
                 columns: [
                     { data: 'item', name:'item', "width": "17%"},
                     { data: 'initial', name:'initial', "width": "14%"},
