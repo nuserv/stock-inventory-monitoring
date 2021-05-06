@@ -99,6 +99,7 @@ $(document).on('click', '.sub_Btn', function(){
                                 reqno: $('#sreqno').val(),
                                 branchid: bID,
                                 datesched: $('#datesched').val(),
+                                start: 'go',
                                 stat: "notok"
                             },
                             error: function (data) {
@@ -160,6 +161,7 @@ $(document).on('click', '.sub_Btn', function(){
                                 branchid: bID,
                                 datesched: $('#datesched').val(),
                                 qty: $('#inputqty'+q).val(),
+                                start: f,
                                 stat: "notok"
                             },
                             

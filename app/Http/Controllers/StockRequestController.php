@@ -872,22 +872,39 @@ $log->branch_id = auth()->user()->branch->id;
             $prep->intransit = 'no';
             $prep->user_id = auth()->user()->id;
             $data = $prep->save();
-            $log = new UserLog;
-            $log->branch_id = auth()->user()->branch->id;
+            if ($request->start == 'go') {
+                $log = new UserLog;
+                $log->branch_id = auth()->user()->branch->id;
                 $log->branch = auth()->user()->branch->branch;
-            $log->activity = "SCHEDULED $scheditem->item(S/N: $request->serial) with Request no. $request->reqno ";
-            $log->user_id = auth()->user()->id;
+                $log->activity = "SCHEDULED $scheditem->item(S/N: $request->serial) with Request no. $request->reqno ";
+                $log->user_id = auth()->user()->id;
                 $log->fullname = auth()->user()->name.' '.auth()->user()->middlename.' '.auth()->user()->lastname;
-            $log->save();
+                $log->save();
+            }else if ($request->start == '1') {
+                if ($request->qty > 1) {
+                    $pcs = $request->qty.'pcs.';
+                }else{
+                    $pcs = $request->qty.'pc.';
+                }
+                $log = new UserLog;
+                $log->branch_id = auth()->user()->branch->id;
+                $log->branch = auth()->user()->branch->branch;
+                $log->activity = "SCHEDULED $scheditem->item($pcs) with Request no. $request->reqno ";
+                $log->user_id = auth()->user()->id;
+                $log->fullname = auth()->user()->name.' '.auth()->user()->middlename.' '.auth()->user()->lastname;
+                $log->save();
+            }
+            
         }
         return response()->json($data);
     }
+    
     public function dest(Request $request)
     {
         $delete = StockRequest::where('request_no', $request->reqno)->where('status', 'PENDING')->first();
         $delete->status = 'DELETED';
         $log = new UserLog;
-$log->branch_id = auth()->user()->branch->id;
+        $log->branch_id = auth()->user()->branch->id;
                 $log->branch = auth()->user()->branch->branch;
         $log->activity = "DELETE request no. $request->reqno" ;
         $log->user_id = auth()->user()->id;
