@@ -8,13 +8,6 @@ $(document).ready(function()
                 "processing": '<i class="fa fa-spinner fa-spin fa-3x fa-fw"></i>'
             },
         "pageLength": 10,
-        "order": [ 0, 'desc' ],
-        "columnDefs": [
-            {
-                "targets": [ 0 ],
-                "visible": false
-            }
-        ],
         processing: true,
         serverSide: true,
         ajax: {
@@ -26,7 +19,6 @@ $(document).ready(function()
             }
         },
         columns: [
-            { data: 'id', name:'id',"width": "14%"},
             { data: 'date', name:'date',"width": "14%"},
             { data: 'fullname', name:'fullname',"width": "14%"},
             { data: 'branch', name:'branch',"width": "14%"},

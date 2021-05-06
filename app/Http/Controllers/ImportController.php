@@ -42,10 +42,10 @@ class ImportController extends Controller
                         $add->save();
                         $log = new UserLog;
                         $log->branch_id = auth()->user()->branch->id;
-                $log->branch = auth()->user()->branch->branch;
+                    $log->branch = auth()->user()->branch->branch;
                         $log->activity = "ADD $items->item with serial no. $add->serial to stocks" ;
                         $log->user_id = auth()->user()->id;
-                $log->fullname = auth()->user()->name.' '.auth()->user()->middlename.' '.auth()->user()->lastname;
+                    $log->fullname = auth()->user()->name.' '.auth()->user()->middlename.' '.auth()->user()->lastname;
                         $log->save();
                     }else{
                         if ($items->n_a == 'yes') {
@@ -63,10 +63,10 @@ class ImportController extends Controller
                             $add->save();
                             $log = new UserLog;
                             $log->branch_id = auth()->user()->branch->id;
-                $log->branch = auth()->user()->branch->branch;
+                            $log->branch = auth()->user()->branch->branch;
                             $log->activity = "ADD $items->item with serial no. $add->serial to stocks" ;
                             $log->user_id = auth()->user()->id;
-                $log->fullname = auth()->user()->name.' '.auth()->user()->middlename.' '.auth()->user()->lastname;
+                            $log->fullname = auth()->user()->name.' '.auth()->user()->middlename.' '.auth()->user()->lastname;
                             $log->save();
                         }else{
                             $error = 1;

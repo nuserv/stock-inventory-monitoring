@@ -394,7 +394,7 @@ class HomeController extends Controller
     public function activity()
     {
         if (auth()->user()->hasAnyRole('Editor',  'Manager')) {
-            $act = UserLog::query();
+            $act = UserLog::query()->orderBy('id', 'DESC');
                 /*
                 ->take(1000)
                 ->get();*/
@@ -407,17 +407,14 @@ class HomeController extends Controller
             }
             
             $act = Userlog::query()
-                ->wherein('user_id', $myuser);
+                ->wherein('user_id', $myuser)->orderBy('id', 'DESC');
             //$act = UserLog::wherein('user_id', $myuser)->orderBy('id', 'desc')->take(1000)->get();
         }
         if (auth()->user()->hasAnyRole('Tech', 'Repair', 'Encoder')) {
             $act = UserLog::query()
-                ->where('user_id', auth()->user()->id);
+                ->where('user_id', auth()->user()->id)->orderBy('id', 'DESC');
         }
         return DataTables::of($act)
-        ->addColumn('id', function (UserLog $request){
-            return $request->logid;
-        })
         ->addColumn('date', function (UserLog $request){
             return Carbon::parse($request->created_at)->isoFormat('lll');//->format('H:ia');
         })
