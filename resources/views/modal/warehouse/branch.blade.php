@@ -56,7 +56,7 @@
                                     </td>
                                 <tr>
                                     <th>DESCRIPTION</th>
-                                    @if (auth()->user()->hasanyrole('Editor', 'Manager', 'Warehouse Manager', 'Encoder'))
+                                    @if (auth()->user()->hasanyrole('Editor', 'Manager', 'Warehouse Manager', 'Encoder','Viewer', 'Viewer PLSI', 'Viewer IDSI'))
                                         <th>INITIAL STOCK</th>
                                         <th>DEFECTIVE</th>
                                     @endif
@@ -75,7 +75,7 @@
                                     </td>
                                 <tr>
                                     <th>Category</th>
-                                    @if (auth()->user()->hasanyrole('Editor', 'Manager', 'Warehouse Manager', 'Encoder'))
+                                    @if (auth()->user()->hasanyrole('Editor', 'Manager', 'Warehouse Manager', 'Encoder','Viewer', 'Viewer PLSI', 'Viewer IDSI'))
                                         <th>DEFECTIVE</th>
                                     @endif
                                     <th>AVAILABLE</th>

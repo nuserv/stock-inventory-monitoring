@@ -215,7 +215,7 @@
             @if (auth()->user()->hasAnyrole('Head', 'Tech'))
                 <script src="{{asset('min/?f=js/branch/branch.js')}}"></script>
             @endif
-            @if (auth()->user()->hasanyrole('Editor', 'Manager'))
+            @if (auth()->user()->hasanyrole('Editor', 'Manager', 'Viewer', 'Viewer PLSI', 'Viewer IDSI'))
                 <script src="{{asset('min/?f=js/branch.js')}}"></script>
             @endif
         @endif

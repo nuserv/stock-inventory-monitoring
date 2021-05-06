@@ -496,13 +496,17 @@ $(document).ready(function()
                         },
                         processing: true,
                         serverSide: true,
-                        ajax: "/requests/"+trdata.request_no,
+                        ajax: {
+                            "url": "/requests/"+trdata.request_no,
+                            error: function (data) {
+                                alert(data.responseText);
+                            }
+                        },
                         columns: [
                             { data: 'cat_name', name:'cat_name'},
                             { data: 'item_name', name:'item_name'},
-                            { data: 'qty', name:'qty'},
-                            { data: 'stock', name:'stock'}
-                        ]
+                            { data: 'qty', name:'qty'}
+                        ],
                     });
                 }else if (penreq > 10) {
                     $('table.requestDetails').dataTable().fnDestroy();
@@ -518,8 +522,7 @@ $(document).ready(function()
                         columns: [
                             { data: 'cat_name', name:'cat_name'},
                             { data: 'item_name', name:'item_name'},
-                            { data: 'qty', name:'qty'},
-                            { data: 'stock', name:'stock'}
+                            { data: 'qty', name:'qty'}
                         ]
                     });
                 }
