@@ -171,8 +171,10 @@ class DefectiveController extends Controller
                 $items = Item::where('id', $updates->items_id)->first();
                 $log = new UserLog;
                 $log->branch_id = auth()->user()->branch->id;
+                $log->branch = auth()->user()->branch->branch;
                 $log->activity = "RETURN defective $items->item(S/N: $updates->serial) to warehouse." ;
                 $log->user_id = auth()->user()->id;
+                $log->fullname = auth()->user()->name.' '.auth()->user()->middlename.' '.auth()->user()->lastname;
                 $log->save();
                 $updates->save();
             }
@@ -187,8 +189,10 @@ class DefectiveController extends Controller
                 $branch = Branch::where('id', $update->branch_id)->first();
                 $log = new UserLog;
                 $log->branch_id = auth()->user()->branch->id;
+                $log->branch = auth()->user()->branch->branch;
                 $log->activity = "RECEIVED defective $item->item($update->serial) from $branch->branch." ;
                 $log->user_id = auth()->user()->id;
+                $log->fullname = auth()->user()->name.' '.auth()->user()->middlename.' '.auth()->user()->lastname;
                 $log->save();
                 $update->status = "For repair";
                 $update->user_id = auth()->user()->id;
@@ -206,8 +210,10 @@ class DefectiveController extends Controller
                 $cat = Category::where('id', $item->category_id)->first();
                 $log = new UserLog;
                 $log->branch_id = auth()->user()->branch->id;
+                $log->branch = auth()->user()->branch->branch;
                 $log->activity = "REPAIRED $item->item($repaired->serial) and send to Warehouse." ;
                 $log->user_id = auth()->user()->id;
+                $log->fullname = auth()->user()->name.' '.auth()->user()->middlename.' '.auth()->user()->lastname;
                 $repaired->save();
                 $data = $log->save();
                 return response()->json($data);
@@ -229,8 +235,10 @@ class DefectiveController extends Controller
                 $cat = Category::where('id', $item->category_id)->first();
                 $log = new UserLog;
                 $log->branch_id = auth()->user()->branch->id;
+                $log->branch = auth()->user()->branch->branch;
                 $log->activity = "ADD $item->item($pending->serial) from Repair to Stock." ;
                 $log->user_id = auth()->user()->id;
+                $log->fullname = auth()->user()->name.' '.auth()->user()->middlename.' '.auth()->user()->lastname;
                 $pending->save();
                 $data = $log->save();
                 return response()->json($data);
@@ -246,8 +254,10 @@ class DefectiveController extends Controller
                 $cat = Category::where('id', $item->category_id)->first();
                 $log = new UserLog;
                 $log->branch_id = auth()->user()->branch->id;
+                $log->branch = auth()->user()->branch->branch;
                 $log->activity = "MARKED $item->item($unreapairable->serial) as unreapairable and subject for approval." ;
                 $log->user_id = auth()->user()->id;
+                $log->fullname = auth()->user()->name.' '.auth()->user()->middlename.' '.auth()->user()->lastname;
                 $unreapairable->save();
                 $data = $log->save();
                 return response()->json($data);
@@ -261,8 +271,10 @@ class DefectiveController extends Controller
                 $cat = Category::where('id', $item->category_id)->first();
                 $log = new UserLog;
                 $log->branch_id = auth()->user()->branch->id;
+                $log->branch = auth()->user()->branch->branch;
                 $log->activity = "MARKED $item->item($unreapairable->serial) as unreapairable and ready to dispose." ;
                 $log->user_id = auth()->user()->id;
+                $log->fullname = auth()->user()->name.' '.auth()->user()->middlename.' '.auth()->user()->lastname;
                 $unreapairable->save();
                 $data = $log->save();
                 return response()->json($data);
@@ -276,8 +288,10 @@ class DefectiveController extends Controller
                 $cat = Category::where('id', $item->category_id)->first();
                 $log = new UserLog;
                 $log->branch_id = auth()->user()->branch->id;
+                $log->branch = auth()->user()->branch->branch;
                 $log->activity = "MARKED $item->item($unreapairable->serial) as dispose" ;
                 $log->user_id = auth()->user()->id;
+                $log->fullname = auth()->user()->name.' '.auth()->user()->middlename.' '.auth()->user()->lastname;
                 $unreapairable->save();
                 $data = $log->save();
                 return response()->json($data);
@@ -291,8 +305,10 @@ class DefectiveController extends Controller
                 $cat = Category::where('id', $item->category_id)->first();
                 $log = new UserLog;
                 $log->branch_id = auth()->user()->branch->id;
+                $log->branch = auth()->user()->branch->branch;
                 $log->activity = "RETURN $item->item($unreapairable->serial) to Repair" ;
                 $log->user_id = auth()->user()->id;
+                $log->fullname = auth()->user()->name.' '.auth()->user()->middlename.' '.auth()->user()->lastname;
                 $unreapairable->save();
                 $data = $log->save();
                 return response()->json($data);

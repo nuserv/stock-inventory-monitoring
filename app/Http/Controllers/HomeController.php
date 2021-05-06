@@ -61,8 +61,10 @@ class HomeController extends Controller
         $item->save();
         $log = new UserLog;
         $log->branch_id = auth()->user()->branch->id;
+                $log->branch = auth()->user()->branch->branch;
         $log->activity = 'UPDATE '.$items->item.' to '.$item->item.'.';
         $log->user_id = auth()->user()->id;
+                $log->fullname = auth()->user()->name.' '.auth()->user()->middlename.' '.auth()->user()->lastname;
         $data = $log->save();
         return response()->json($data);
 
@@ -73,8 +75,10 @@ class HomeController extends Controller
         $item = Item::where('id', $request->item)->update(['n_a' => $request->stat]);
         $log = new UserLog;
         $log->branch_id = auth()->user()->branch->id;
+                $log->branch = auth()->user()->branch->branch;
         $log->activity = 'UPDATE '.$items->item.'.';
         $log->user_id = auth()->user()->id;
+                $log->fullname = auth()->user()->name.' '.auth()->user()->middlename.' '.auth()->user()->lastname;
         $data = $log->save();
         return response()->json($data);
     }
@@ -375,7 +379,16 @@ class HomeController extends Controller
                     $ware->save();
                 }
         }
-        dd(Stock::all());
+        if ($id == 'logs') {
+            $logs = UserLog::all();
+                foreach ($logs as $log) {
+                    $newlog = UserLog::where('id', $log->id)->first();
+                    $newlog->fullname = User::where('id', $log->user_id)->first()->name.' '.User::where('id', $log->user_id)->first()->middlename.' '.User::where('id', $log->user_id)->first()->lastname;
+                    $newlog->branch = Branch::where('id', $log->branch_id)->first()->branch;
+                    $newlog->save();
+                }
+        }
+        //dd(Stock::all());
     }
     public function activity()
     {
@@ -391,7 +404,7 @@ class HomeController extends Controller
                     'branch',
                 )
                 ->join('users', 'users.id', 'user_id')
-                ->join('branches', 'branches.id', 'user_logs.branch_id');
+                ->join('branches', 'branches.id', 'user_logs.branch_id')->get();
                 /*
                 ->take(1000)
                 ->get();*/

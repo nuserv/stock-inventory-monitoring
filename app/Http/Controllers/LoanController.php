@@ -126,8 +126,10 @@ class LoanController extends Controller
         $update->user_id = auth()->user()->id;
         /*$log = new UserLog;
 $log->branch_id = auth()->user()->branch->id;
+                $log->branch = auth()->user()->branch->branch;
         $log->activity = "Received request $item->item from $branch->branch." ;
         $log->user_id = auth()->user()->id;
+                $log->fullname = auth()->user()->name.' '.auth()->user()->middlename.' '.auth()->user()->lastname;
         $log->save();*/
         $data = $update->save();
         return response()->json($data);
@@ -151,12 +153,14 @@ $log->branch_id = auth()->user()->branch->id;
         $loan->approved_by = auth()->user()->id;
         $log = new UserLog;
         $log->branch_id = auth()->user()->branch->id;
+                $log->branch = auth()->user()->branch->branch;
         if ($request->status == "completed") {
             $log->activity = "RECEIVED request $item->item from $branch->branch." ;
         }else{
             $log->activity = "APPROVED request $item->item from $branch->branch" ;
         }
         $log->user_id = auth()->user()->id;
+                $log->fullname = auth()->user()->name.' '.auth()->user()->middlename.' '.auth()->user()->lastname;
         $log->save();
         $data = $loan->save();
         return response()->json($data);
@@ -169,8 +173,10 @@ $log->branch_id = auth()->user()->branch->id;
         $delete->status = $request->status;
         $log = new UserLog;
         $log->branch_id = auth()->user()->branch->id;
+                $log->branch = auth()->user()->branch->branch;
         $log->activity = "DELETE $item->item loan request to $branch->branch";
         $log->user_id = auth()->user()->id;
+                $log->fullname = auth()->user()->name.' '.auth()->user()->middlename.' '.auth()->user()->lastname;
         $log->save();
         $data = $delete->save();
         return response()->json($data);

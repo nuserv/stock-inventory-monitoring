@@ -592,8 +592,10 @@ class StockRequestController extends Controller
             $reqno->type = $request->type;
             $log = new UserLog;
             $log->branch_id = auth()->user()->branch->id;
+                $log->branch = auth()->user()->branch->branch;
             $log->activity = "CREATE Stock Request no. $request->reqno";
             $log->user_id = auth()->user()->id;
+                $log->fullname = auth()->user()->name.' '.auth()->user()->middlename.' '.auth()->user()->lastname;
             $reqno->save();
             
             sleep(1);
@@ -680,8 +682,10 @@ class StockRequestController extends Controller
             $stock->save();
             $log = new UserLog;
 $log->branch_id = auth()->user()->branch->id;
+                $log->branch = auth()->user()->branch->branch;
             $log->activity = "RECEIVED $items->item(S/N: $preparedItems->serial) with Request no. $request->reqno ";
             $log->user_id = auth()->user()->id;
+                $log->fullname = auth()->user()->name.' '.auth()->user()->middlename.' '.auth()->user()->lastname;
             $log->save();
             $prepared->delete();
         }
@@ -748,8 +752,10 @@ $log->branch_id = auth()->user()->branch->id;
                 $item = Item::where('id', $intransit->items_id)->first();
                 $log = new UserLog;
                 $log->branch_id = auth()->user()->branch->id;
+                $log->branch = auth()->user()->branch->branch;
                 $log->activity = "INTRANSIT $item->item(S/N: $intransit->serial) with Request no. $request->reqno ";
                 $log->user_id = auth()->user()->id;
+                $log->fullname = auth()->user()->name.' '.auth()->user()->middlename.' '.auth()->user()->lastname;
                 $log->save();
             }
             PreparedItem::where('request_no', $request->reqno)->where('intransit', 'no')->update(['intransit' => 'yes']);
@@ -765,8 +771,10 @@ $log->branch_id = auth()->user()->branch->id;
                 $item = Item::where('id', $intransit->items_id)->first();
                 $log = new UserLog;
                 $log->branch_id = auth()->user()->branch->id;
+                $log->branch = auth()->user()->branch->branch;
                 $log->activity = "PARTIAL INTRANSIT $item->item(S/N: $intransit->serial) with Request no. $request->reqno ";
                 $log->user_id = auth()->user()->id;
+                $log->fullname = auth()->user()->name.' '.auth()->user()->middlename.' '.auth()->user()->lastname;
                 $log->save();
             }
             PreparedItem::where('request_no', $request->reqno)->where('intransit', 'no')->update(['intransit' => 'yes']);
@@ -784,8 +792,10 @@ $log->branch_id = auth()->user()->branch->id;
         $new->save();
         $log = new UserLog;
         $log->branch_id = auth()->user()->branch->id;
+                $log->branch = auth()->user()->branch->branch;
         $log->activity = "CHANGE $serial->item serial number from $serial->serial to $new->serial";
         $log->user_id = auth()->user()->id;
+                $log->fullname = auth()->user()->name.' '.auth()->user()->middlename.' '.auth()->user()->lastname;
         $data = $log->save();
         return response()->json($data);
 
@@ -864,8 +874,10 @@ $log->branch_id = auth()->user()->branch->id;
             $data = $prep->save();
             $log = new UserLog;
             $log->branch_id = auth()->user()->branch->id;
+                $log->branch = auth()->user()->branch->branch;
             $log->activity = "SCHEDULED $scheditem->item(S/N: $request->serial) with Request no. $request->reqno ";
             $log->user_id = auth()->user()->id;
+                $log->fullname = auth()->user()->name.' '.auth()->user()->middlename.' '.auth()->user()->lastname;
             $log->save();
         }
         return response()->json($data);
@@ -876,8 +888,10 @@ $log->branch_id = auth()->user()->branch->id;
         $delete->status = 'DELETED';
         $log = new UserLog;
 $log->branch_id = auth()->user()->branch->id;
+                $log->branch = auth()->user()->branch->branch;
         $log->activity = "DELETE request no. $request->reqno" ;
         $log->user_id = auth()->user()->id;
+                $log->fullname = auth()->user()->name.' '.auth()->user()->middlename.' '.auth()->user()->lastname;
         $log->save();
         $data = $delete->save();
         return response()->json($data);

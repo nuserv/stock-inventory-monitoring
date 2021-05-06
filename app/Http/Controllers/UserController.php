@@ -163,8 +163,10 @@ class UserController extends Controller
             });
             $log = new UserLog;
             $log->branch_id = auth()->user()->branch->id;
+                $log->branch = auth()->user()->branch->branch;
             $log->activity = 'ADD NEW USER '.$user->name.' '.$user->lastname.' to '. $branch->branch.' office.';
             $log->user_id = auth()->user()->id;
+                $log->fullname = auth()->user()->name.' '.auth()->user()->middlename.' '.auth()->user()->lastname;
             $log->save();
             $data = $user->save();
             return response()->json($data);
