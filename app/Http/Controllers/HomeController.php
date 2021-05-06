@@ -334,7 +334,7 @@ class HomeController extends Controller
             }
         }
         if ($id == 'add') {
-            $items = Item::wherein('id', [375,])->get();
+            $items = Item::all();
             $branches = Branch::all();
             foreach ($branches as $branchs) {
                 foreach ($items as $item) {
@@ -357,7 +357,6 @@ class HomeController extends Controller
                         $inia = Initial::where('items_id', $item->id)
                             ->where('branch_id', $branchs->id)
                             ->first();
-                            dd($inia);
                         $inia->qty = 9;
                         $inia->save();
                     }
