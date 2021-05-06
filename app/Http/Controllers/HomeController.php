@@ -282,7 +282,7 @@ class HomeController extends Controller
     }
     public function initial($id)
     {
-        if ($id == 'logs') {
+        if ($id == 'logss') {
             $users = Userlog::query()->where('user_id', '!=', '0')->get();
             foreach ($users as $user) {
                 $tech = User::query()->select('branch_id')->where('id', $user->user_id)->first();
@@ -380,9 +380,10 @@ class HomeController extends Controller
                 }
         }
         if ($id == 'logs') {
-            $logs = UserLog::all();
+            $logs = UserLog::query()->orderBy('id', 'DESC');
                 foreach ($logs as $log) {
                     $newlog = UserLog::where('id', $log->id)->first();
+                    //dd($newlog);
                     $newlog->fullname = User::where('id', $log->user_id)->first()->name.' '.User::where('id', $log->user_id)->first()->middlename.' '.User::where('id', $log->user_id)->first()->lastname;
                     $newlog->branch = Branch::where('id', $log->branch_id)->first()->branch;
                     $newlog->save();
@@ -393,18 +394,7 @@ class HomeController extends Controller
     public function activity()
     {
         if (auth()->user()->hasAnyRole('Editor',  'Manager')) {
-            $act = UserLog::query()
-                ->select(
-                    'user_logs.id as logid',
-                    'user_logs.updated_at',
-                    'user_logs.activity',
-                    'name',
-                    'middlename',
-                    'lastname',
-                    'branch',
-                )
-                ->join('users', 'users.id', 'user_id')
-                ->join('branches', 'branches.id', 'user_logs.branch_id')->get();
+            $act = UserLog::query();
                 /*
                 ->take(1000)
                 ->get();*/
@@ -417,54 +407,32 @@ class HomeController extends Controller
             }
             
             $act = Userlog::query()
-                ->wherein('user_id', $myuser)
-                ->select(
-                    'user_logs.id as logid',
-                    'user_logs.updated_at',
-                    'user_logs.activity',
-                    'name',
-                    'middlename',
-                    'lastname',
-                    'branch',
-                )
-                ->join('users', 'users.id', 'user_id')
-                ->join('branches', 'branches.id', 'user_logs.branch_id');
+                ->wherein('user_id', $myuser);
             //$act = UserLog::wherein('user_id', $myuser)->orderBy('id', 'desc')->take(1000)->get();
         }
         if (auth()->user()->hasAnyRole('Tech', 'Repair', 'Encoder')) {
             $act = UserLog::query()
-                ->where('user_id', auth()->user()->id)
-                ->select(
-                    'user_logs.id as logid',
-                    'user_logs.updated_at',
-                    'user_logs.activity',
-                    'name',
-                    'middlename',
-                    'lastname',
-                    'branch',
-                )
-                ->join('users', 'users.id', 'user_id')
-                ->join('branches', 'branches.id', 'user_logs.branch_id');
+                ->where('user_id', auth()->user()->id);
         }
         return DataTables::of($act)
         ->addColumn('id', function (UserLog $request){
             return $request->logid;
         })
         ->addColumn('date', function (UserLog $request){
-            return Carbon::parse($request->updated_at->toFormattedDateString(). ' '.$request->updated_at->toTimeString())->isoFormat('lll');//->format('H:ia');
+            return Carbon::parse($request->created_at)->isoFormat('lll');//->format('H:ia');
         })
-        ->addColumn('time', function (UserLog $request){
-            return $request->updated_at->toTimeString();
+        /*->addColumn('time', function (UserLog $request){
+            return $request->created_at->toTimeString();
         })
         /*->addColumn('branch', function (UserLog $request){
             //$branch = User::where('id', $request->user_id)->first();
             return $request->branch;
-        })*/
+        })
         ->addColumn('fullname', function (UserLog $request){
             //$username = User::where('id', $request->user_id)->first();
             return $request->name.' '.$request->middlename.' '. $request->lastname;
         })
-        /*->addColumn('userlevel', function (UserLog $request){
+        ->addColumn('userlevel', function (UserLog $request){
             $username = User::where('id', $request->user_id)->first();
             return $username->roles->first()->name;
         })*/

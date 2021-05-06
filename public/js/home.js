@@ -16,7 +16,7 @@ $(document).ready(function()
             }
         ],
         processing: true,
-        serverSide: false,
+        serverSide: true,
         ajax: {
             url: 'activity',
             error: function(data) {
