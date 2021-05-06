@@ -287,7 +287,7 @@ $(document).ready(function()
                 ],
                 columns: [
                     { data: 'item', name:'item', "width": "17%"},
-                    { data: 'initial', name:'initial', "width": "14%"},
+                    { data: 'initial', name:'initial'},
                     { data: 'defectives', name:'defectives', "width": "14%"},
                     { data: 'available', name:'available', "width": "14%"},
                     { data: 'stock_out', name:'stock_out', "width": "14%"}
