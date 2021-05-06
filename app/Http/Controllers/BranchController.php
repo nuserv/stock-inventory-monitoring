@@ -167,7 +167,7 @@ class BranchController extends Controller
                 ->where('branches.id', '!=', auth()->user()->branch->id)
                 ->where('branches.branch', '!=', 'Main-office')
                 ->join('areas', 'areas.id', '=', 'branches.area_id')->get();
-        }else if (auth()->user()->hasanyrole('Editor', 'Manager', 'Encoder','Viewer', 'Viewer PLSI', 'Viewer IDSI')){
+        }else if (auth()->user()->hasanyrole('Editor', 'Manager', 'Encoder', 'Viewer', 'Viewer PLSI', 'Viewer IDSI')){
             $branches = Branch::query()->select('branches.*', 'areas.area')
                 ->where('branches.id', '!=', auth()->user()->branch->id)
                 ->where('branches.branch', '!=', 'Warehouse')
