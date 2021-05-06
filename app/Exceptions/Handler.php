@@ -45,6 +45,10 @@ class Handler extends ExceptionHandler
      */
     public function render($request, Exception $exception)
     {   
+        if ($exception instanceof FatalErrorException) {
+            return Redirect::to('/CE500');
+          //  return Redirect::to('/home');
+        }
         return parent::render($request, $exception);
     }
 }
