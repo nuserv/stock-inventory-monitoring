@@ -118,6 +118,8 @@
             </tr>
             <tr>
                 <th>
+                    id
+                </th><th>
                     DATE & TIME
                 </th>
                 <th>
