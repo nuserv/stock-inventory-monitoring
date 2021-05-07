@@ -193,6 +193,32 @@ $(document).on('click', '.send_sub_Btn', function(){
     var qty = "";
     var stat = "notok";
     var reqno = $('#sreqno').val();
+    if ($('#requesttype').val() == "Stock") {
+        $.ajax({
+            url: 'checkrequest',
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="ctok"]').attr('content')
+            },
+            dataType: 'json',
+            type: 'GET',
+            async:false,
+            data: {
+                reqno : reqno,
+            },
+            success: function(data){
+                if(data != "wala pa"){
+                    reqno = data;
+                    checkrequest = 'meron';
+                }
+            },
+            error: function (data) {
+                if(data.status == 401) {
+                    window.location.href = '/login';
+                }
+                alert(data.responseText);
+            }
+        });
+    }
     if (!$('#requesttype').val()) {
         alert('Please Select request type!');
         return false;
@@ -253,7 +279,7 @@ $(document).on('click', '.send_sub_Btn', function(){
                 dataType: 'json',
                 type: 'POST',
                 data: {
-                    reqno : reqno,  
+                    reqno : reqno,
                     clientid : client,  
                     customerid : customer,  
                     ticket : ticketno,  
@@ -261,6 +287,9 @@ $(document).on('click', '.send_sub_Btn', function(){
                     stat: stat                     
                 },
                 success: function(){
+                    if (checkrequest == 'meron') {
+                        alert('ATTENTION: Your new stock request was added to your previous pending request with Request No. '+reqno);
+                    }
                     window.location.href = 'request';
                 },
                 error: function (data) {

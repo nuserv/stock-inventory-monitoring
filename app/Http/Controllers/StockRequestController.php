@@ -577,48 +577,36 @@ class StockRequestController extends Controller
         ->make(true);
     }
     public function store(Request $request)
-    {
+    {   
         if ($request->stat == 'ok') {
-            $reqno = new StockRequest;
-            $reqno->request_no = $request->reqno;
-            $reqno->user_id = auth()->user()->id;
-            $reqno->branch_id = auth()->user()->branch->id;
-            $reqno->area_id = auth()->user()->area->id;
-            $reqno->status = 'PENDING';
-            $reqno->stat = 'ACTIVE';
-            $reqno->customer_id = $request->clientid;
-            $reqno->customer_branch_id = $request->customerid;
-            $reqno->ticket = $request->ticket;
-            $reqno->type = $request->type;
-            $log = new UserLog;
-            $log->branch_id = auth()->user()->branch->id;
+            $checkreq = StockRequest::where('request_no', $request->reqno)->first();
+            if (!$checkreq) {
+                $reqno = new StockRequest;
+                $reqno->request_no = $request->reqno;
+                $reqno->user_id = auth()->user()->id;
+                $reqno->branch_id = auth()->user()->branch->id;
+                $reqno->area_id = auth()->user()->area->id;
+                $reqno->status = 'PENDING';
+                $reqno->stat = 'ACTIVE';
+                $reqno->customer_id = $request->clientid;
+                $reqno->customer_branch_id = $request->customerid;
+                $reqno->ticket = $request->ticket;
+                $reqno->type = $request->type;
+                $log = new UserLog;
+                $log->branch_id = auth()->user()->branch->id;
                 $log->branch = auth()->user()->branch->branch;
-            $log->activity = "CREATE Stock Request no. $request->reqno";
-            $log->user_id = auth()->user()->id;
+                $log->activity = "CREATE Stock Request no. $request->reqno";
+                $log->user_id = auth()->user()->id;
                 $log->fullname = auth()->user()->name.' '.auth()->user()->middlename.' '.auth()->user()->lastname;
-            $reqno->save();
-            
-            sleep(1);
-            $reqitem = RequestedItem::select('items.item', 'quantity')
-                ->where('request_no', $request->reqno)
-                ->join('items', 'items.id', '=', 'requested_items.items_id')
-                ->get();
-            $cc = User::select('email')
-                ->where('branch_id', '1')
-                ->join('model_has_roles', 'model_id', '=', 'users.id')
-                ->where('role_id', '6')
-                ->get();
-            $allemails = array();
-            $allemails[] = 'jerome.lopez.ge2018@gmail.com';
-            foreach ($cc as $email) {
-                $allemails[]=$email->email;
+                $reqno->save();
+            }else{
+                $log = new UserLog;
+                $log->branch_id = auth()->user()->branch->id;
+                $log->branch = auth()->user()->branch->branch;
+                $log->activity = "UPDATE Stock Request no. $request->reqno";
+                $log->user_id = auth()->user()->id;
+                $log->fullname = auth()->user()->name.' '.auth()->user()->middlename.' '.auth()->user()->lastname;
             }
-            /*Mail::send('mail', ['reqitem' => $reqitem, 'reqno' => $request->reqno, 'branch'=>auth()->user()->branch->branch],function( $message) use ($allemails){ 
-                $message->to('gerard.mallari@gmail.com', 'Gerald Mallari')->subject 
-                    (auth()->user()->branch->branch); 
-                $message->from('no-reply@ideaserv.com.ph', 'NO REPLY'); 
-                $message->cc($allemails); 
-            });*/
             $data = $log->save();
         }
         if ($request->stat == 'notok') {
@@ -654,6 +642,20 @@ class StockRequestController extends Controller
             $data = '1';
         }else{
             $data = '0';
+        }
+        return response()->json($data);
+    }
+    public function checkrequest(Request $request)
+    {
+        $requestno = StockRequest::where('branch_id', auth()->user()->branch->id)
+            ->where('status', 'PENDING')
+            ->where('type', 'Stock')
+            ->where('stat', 'ACTIVE')
+            ->first();
+        if ($requestno) {
+            $data = $requestno->request_no;
+        }else{
+            $data = "wala pa";
         }
         return response()->json($data);
     }

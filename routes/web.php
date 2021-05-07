@@ -122,7 +122,7 @@ Route::any('repaired', 'StockController@repaired')->middleware('ajax');
 Route::post('/branch/import', 'ImportController@branchstore');
 Route::post('/warehouse/import', 'ImportController@warestore');
 
-
+Route::get('checkrequest', 'StockRequestController@checkrequest')->middleware('ajax');
 Route::get('resolved', 'StockRequestController@resolve')->name('resolved.index');
 Route::POST('storerreceived', 'StockRequestController@received')->middleware('ajax');
 Route::get('gen', 'StockRequestController@generateRandomNumber')->middleware('ajax');
