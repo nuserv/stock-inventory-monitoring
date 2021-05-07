@@ -57,16 +57,18 @@ class LoginController extends Controller
         $log->save();
     }
     public function logout() {
-        $log = new UserLog;
-        $log->branch_id = auth()->user()->branch->id;
-                $log->branch = auth()->user()->branch->branch;
-        $log->activity = "Sign-out.";
-        $log->user_id = auth()->user()->id;
-                $log->fullname = auth()->user()->name.' '.auth()->user()->middlename.' '.auth()->user()->lastname;
-        $log->save();
-        Auth::logout(); // logout user
-        Session::flush();
-        Redirect::back();
+        if (!Auth::guest()) {
+            $log = new UserLog;
+            $log->branch_id = auth()->user()->branch->id;
+            $log->branch = auth()->user()->branch->branch;
+            $log->activity = "Sign-out.";
+            $log->user_id = auth()->user()->id;
+            $log->fullname = auth()->user()->name.' '.auth()->user()->middlename.' '.auth()->user()->lastname;
+            $log->save();
+            Auth::logout(); // logout user
+            Session::flush();
+            Redirect::back();
+        }
         return Redirect::to('login'); //redirect back to login
     }
 }
