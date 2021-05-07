@@ -625,7 +625,7 @@ $(document).on("click", "#stockTable tr", function () {
     $('#head').text(trdata.category.replace(/&quot;/g, '\"').replace(/&amp;/g, '\&'));
     stock = 
     $('table.stockDetails').DataTable({ 
-        "dom": 'rt',
+        "dom": 'lrtip',
         "language": {
             "emptyTable": "No Stock Available for this Item"
         },
