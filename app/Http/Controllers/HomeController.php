@@ -275,10 +275,19 @@ class HomeController extends Controller
     }
     public function printDefective()
     {
-        sleep(2);
-        $request = Defective::where('branch_id', auth()->user()->branch->id)->where('status', 'For receiving');
-        $title = 'Print Preview';
+        $request = Defective::query()->where('branch_id', auth()->user()->branch->id)
+            ->where('status', 'For receiving')
+            ->where('return_no', '!=', '0')
+            ->groupBy('return_no')
+            ->get();
+        $title = 'Return - For receiving';
         return view('pages.branch.print', compact('title'));
+    }
+
+    public function showret()
+    {
+        $title = 'Return - For receiving';
+        return view('pages.branch.ret', compact('title'));
     }
     public function initial($id)
     {

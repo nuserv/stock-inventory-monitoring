@@ -59,15 +59,15 @@ class UserController extends Controller
     public function getUsers()
     {
         if (auth()->user()->hasrole('Manager')) {
-            $users = User::where('id', '!=', auth()->user()->id)->get();
+            $users = User::query()->where('id', '!=', auth()->user()->id)->get();
         }else if(auth()->user()->hasrole('Editor')){
-            $users = User::select('users.*')
+            $users = User::query()->select('users.*')
                 ->where('id', '!=', auth()->user()->id)
                 ->join('model_has_roles', 'model_id', '=', 'users.id')
                 ->where('role_id', '!=', '1')
                 ->get();
         }else if(auth()->user()->hasrole('Warehouse Manager')){
-            $users = User::select('users.*')
+            $users = User::query()->select('users.*')
                 ->where('id', '!=', auth()->user()->id)
                 ->join('model_has_roles', 'model_id', '=', 'users.id')
                 ->where('branch_id', auth()->user()->branch->id)
@@ -75,7 +75,7 @@ class UserController extends Controller
                 ->where('role_id', '!=', '4')
                 ->get();
         }else{
-            $users = User::where('id', '!=', auth()->user()->id)
+            $users = User::query()->where('id', '!=', auth()->user()->id)
                 ->where('branch_id', auth()->user()->branch->id)
                 ->join('model_has_roles', 'model_id', '=', 'users.id')
                 ->where('role_id', '!=', '1')

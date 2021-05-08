@@ -60,6 +60,21 @@ class DefectiveController extends Controller
         })
         ->make(true);
     }
+
+    public function returntable()
+    {
+        $request = Defective::query()->where('branch_id', auth()->user()->branch->id)
+            ->where('status', 'For receiving')
+            ->where('return_no', '!=', '0')
+            ->groupBy('return_no')
+            ->get();
+        return DataTables::of($request)
+        ->addColumn('date', function (Defective $data){
+            return Carbon::parse($data->created_at)->isoFormat('lll');
+        })
+        ->make(true);
+        
+    }
     public function table()
     {
         $defective = Defective::query()->select('defectives.updated_at', 'defectives.category_id', 'branch_id as branchid', 'defectives.id as id', 'items.item', 'items.id as itemid', 'defectives.serial', 'defectives.status')
@@ -168,6 +183,7 @@ class DefectiveController extends Controller
                     ->first();
                 $updates->status = 'For receiving';
                 $updates->user_id = auth()->user()->id;
+                $updates->return_no = $request->ret;
                 $items = Item::where('id', $updates->items_id)->first();
                 $log = new UserLog;
                 $log->branch_id = auth()->user()->branch->id;

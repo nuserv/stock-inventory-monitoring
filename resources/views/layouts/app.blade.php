@@ -207,6 +207,9 @@
         @if(Request::is('defective/print'))
             <script src="{{asset('min/?f=js/branch/printdef.js')}}"></script>
         @endif
+        @if(Request::is('defective/retno'))
+            <script src="{{asset('min/?f=js/branch/retno.js')}}"></script>
+        @endif
 
         @if(Request::is('branch'))
             @if(auth()->user()->hasAnyrole('Warehouse Manager', 'Encoder'))

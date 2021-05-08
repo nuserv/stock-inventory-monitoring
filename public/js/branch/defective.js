@@ -1,5 +1,6 @@
 var table;
 var sub = 0;
+var retno;
 $(document).ready(function()
 {
     table =
@@ -147,7 +148,8 @@ $(document).on('click', '.printBtn', function () {
         dataType: 'json',
         type: 'PUT',
         data: {
-            id: id
+            id: id,
+            ret: retno
         },
         success:function()
         {
@@ -163,7 +165,6 @@ $(document).on('click', '.printBtn', function () {
                 if ($.inArray(table.rows( i ).data()[0].id, idss) == -1)
                 {
                     ids.push(i);
-                    
                 }
             }
             table.rows( ids ).remove().draw();
@@ -206,6 +207,15 @@ $(document).on('click', '#returnBtn', function(){
     }
     var rowcount = table.data().count();
     var status = new Array();
+    $.ajax({
+        type:'get',
+        url:'gen',
+        async: false,
+        success:function(result)
+        {
+            retno = result;
+        },
+    });
     $('.printBtn').show();
     for(var i=0;i<rowcount;i++){
         if (table.rows( i ).data()[0].status == 'For receiving')
@@ -292,7 +302,7 @@ $(document).on('click', '#returnBtn', function(){
                                     .removeClass('dataTable')
                             .css('font-size','12px') 
                                     .css('margin-top','85px')
-                            .css('margin-bottom','60px')
+                            .css('margin-bottom','120px')
                             $(doc.document.body).find('th').each(function(index){
                                 $(this).css('font-size','14px');
                                 $(this).css('color','black');

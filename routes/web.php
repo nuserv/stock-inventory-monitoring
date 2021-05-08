@@ -66,6 +66,7 @@ Route::put('cbranch_update', 'CustomerController@branchupdate')->middleware('aja
 Route::put('return-update', 'DefectiveController@update')->middleware('ajax');
 Route::get('return-table', 'DefectiveController@table');//->middleware('ajax');
 Route::get('printtable', 'DefectiveController@printtable')->middleware('ajax');
+Route::get('retno', 'DefectiveController@returntable');//->middleware('ajax');
 Route::get('return', 'DefectiveController@index')->name('return.index');
 
 Route::put('loandelete', 'LoanController@destroy')->middleware('ajax');
@@ -178,6 +179,11 @@ Route::get('print/{id}', 'HomeController@print')->name('branch.print.index');
 Route::get('getprint/{id}', 'HomeController@getprint')->middleware('ajax');
 Route::get('initial/{id}', 'HomeController@initial');//->middleware('ajax');
 Route::get('defective/print', 'HomeController@printDefective')->name('defective.print.index');
+Route::get('defective/retno', 'HomeController@showret')->name('defective.print.index');
+Route::get('retno', 'HomeController@showret')->name('defective.print.index');
+Route::get('retno/{id}', 'HomeController@retshow')->name('defective.print.index');
+
+
 
 Route::get('preventive', 'HomeController@preventive')->name('index.preventive');
 Route::get('convert', 'HomeController@convert');
