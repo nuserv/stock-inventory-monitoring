@@ -9,6 +9,7 @@ $(document).ready(function()
             },
         "pageLength": 10,
         "order": [ 0, 'desc' ],
+        
         "columnDefs": [
             {
                 "targets": [ 0 ],
@@ -30,7 +31,9 @@ $(document).ready(function()
             { data: 'date', name:'date',"width": "14%"},
             { data: 'fullname', name:'fullname',"width": "14%"},
             { data: 'branch', name:'branch',"width": "14%"},
-            { data: 'activity', name:'activity'}
+            { data: 'activity', render: function ( data, type, row ) {
+                return data.replace(/&quot;/g, '\"').replace(/&amp;/g, '\&');
+            }}
         ]
     });
     $('.tbsearch').show();
