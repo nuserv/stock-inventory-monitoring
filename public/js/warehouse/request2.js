@@ -180,6 +180,11 @@ $(document).on('click', '.sub_Btn', function(){
                             data: {
                                 item: $('#desc'+q).val(),
                             },
+                            success:function()
+                            {
+                                console.log(data);
+                                //window.location.href = '/print/'+$('#sreqno').val();
+                            },
                             error: function (data) {
                                 alert(data.responseText);
                                 return false;
@@ -214,7 +219,8 @@ $(document).on('click', '.sub_Btn', function(){
                     dataType: 'json',
                     success:function()
                     {
-                        window.location.href = '/print/'+$('#sreqno').val();
+                        console.log(data);
+                        //window.location.href = '/print/'+$('#sreqno').val();
                     },
                     error: function (data) {
                         alert(data.responseText);

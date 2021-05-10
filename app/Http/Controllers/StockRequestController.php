@@ -259,7 +259,9 @@ class StockRequestController extends Controller
     }
     public function getitems(Request $request)
     {
-        $items = Item::where('category_id', $request->catid)->get();
+        $items = Warehouse::select('items_id', 'item')->where('warehouses.category_id', $request->catid)->where('Status', 'in')
+            ->join('items', 'items.id', '=', 'items_id')->groupby('items_id')
+            ->get();
         return response()->json($items);
     }
     public function getRequestDetails(Request $request, $id)
@@ -955,22 +957,31 @@ class StockRequestController extends Controller
             $reqno->schedule = $request->datesched;
             
             $reqno->save();
-            $prepitem = PreparedItem::select('items.item', 'serial', 'branch_id')
+            $branch = StockRequest::query()->where('request_no', $request->reqno)
+                ->join('branches', 'branches.id', 'branch_id')->first()->branch;
+            $log = new UserLog;
+            $log->branch_id = auth()->user()->branch->id;
+            $log->branch = auth()->user()->branch->branch;
+            $log->activity = "SCHEDULED delivery for $branch with Request no. $request->reqno ";
+            $log->user_id = auth()->user()->id;
+            $log->fullname = auth()->user()->name.' '.auth()->user()->middlename.' '.auth()->user()->lastname;
+            $data = $log->save();
+            /*$prepitem = PreparedItem::select('items.item', 'serial', 'branch_id')
                 ->where('request_no', $request->reqno)
                 ->join('items', 'items.id', '=', 'prepared_items.items_id')
                 ->get();
             $reqbranch = PreparedItem::select('branch_id')
                 ->where('request_no', $request->reqno)
                 ->first();
-            $branch = Branch::where('id', $request->branchid)->first();
-            $email = $branch->email;
+            //$branch = Branch::where('id', $request->branchid)->first();
+            //$email = $branch->email;
             /*Mail::send('sched', ['prepitem' => $prepitem, 'sched'=>$request->datesched,'reqno' => $request->reqno,'branch' =>$branch],function( $message) use ($branch, $email){ 
                 $message->to($email, $branch->head)->subject 
                     (auth()->user()->branch->branch); 
                 $message->from('no-reply@ideaserv.com.ph', 'NO REPLY - Warehouse'); 
                 $message->cc(['emorej046@gmail.com', 'gerard.mallari@gmail.com']); 
             });*/
-            $data = true;
+            
         }else if($request->stat == 'resched'){
             if ($request->status == 'RESCHEDULED') {
                 $reqno = StockRequest::where('request_no', $request->reqno)->first();
@@ -988,47 +999,24 @@ class StockRequestController extends Controller
             $item = Warehouse::where('status', 'in')
                 ->where('items_id', $request->item)
                 ->first();
-            $item->status = 'sent';
-            $item->request_no = $request->reqno;
-            $item->branch_id = $request->branchid;
-            $item->schedule = $request->datesched;
-            $item->serial = $request->serial;
-            $item->user_id = auth()->user()->id;
-            $item->save();
-            $scheditem = Item::where('id', $request->item)->first();
-            $sched = StockRequest::where('request_no', $request->reqno)->first();
-            $prep = new PreparedItem;
-            $prep->items_id = $request->item;
-            $prep->request_no = $request->reqno;
-            $prep->serial = $request->serial;
-            $prep->branch_id = $request->branchid;
-            $prep->schedule = $request->datesched;
-            $prep->intransit = 'no';
-            $prep->user_id = auth()->user()->id;
-            $data = $prep->save();
-            if ($request->start == 'go') {
-                $log = new UserLog;
-                $log->branch_id = auth()->user()->branch->id;
-                $log->branch = auth()->user()->branch->branch;
-                $log->activity = "SCHEDULED $scheditem->item(S/N: $request->serial) with Request no. $request->reqno ";
-                $log->user_id = auth()->user()->id;
-                $log->fullname = auth()->user()->name.' '.auth()->user()->middlename.' '.auth()->user()->lastname;
-                $log->save();
-            }else if ($request->start == '1') {
-                if ($request->qty > 1) {
-                    $pcs = $request->qty.' pcs.';
-                }else{
-                    $pcs = $request->qty.' pc.';
-                }
-                $log = new UserLog;
-                $log->branch_id = auth()->user()->branch->id;
-                $log->branch = auth()->user()->branch->branch;
-                $log->activity = "SCHEDULED $scheditem->item($pcs) with Request no. $request->reqno ";
-                $log->user_id = auth()->user()->id;
-                $log->fullname = auth()->user()->name.' '.auth()->user()->middlename.' '.auth()->user()->lastname;
-                $log->save();
+            if ($item) {
+                $item->status = 'sent';
+                $item->request_no = $request->reqno;
+                $item->branch_id = $request->branchid;
+                $item->schedule = $request->datesched;
+                $item->serial = $request->serial;
+                $item->user_id = auth()->user()->id;
+                $item->save();
+                $prep = new PreparedItem;
+                $prep->items_id = $request->item;
+                $prep->request_no = $request->reqno;
+                $prep->serial = $request->serial;
+                $prep->branch_id = $request->branchid;
+                $prep->schedule = $request->datesched;
+                $prep->intransit = 'no';
+                $prep->user_id = auth()->user()->id;
+                $data = $prep->save();          
             }
-            
         }
         return response()->json($data);
     }

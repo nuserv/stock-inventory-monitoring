@@ -139,7 +139,6 @@ $(document).on('click', '#prcBtn', function(){
                         });
                     }
                         $('#item'+w).val(rowselected[i].items_id);
-                        $('#desc'+w).val(rowselected[i].items_id);
                         $('#item'+w).hide();
                 }
             }else if(rowselected[i].pending > rowselected[i].stock){
@@ -180,7 +179,6 @@ $(document).on('click', '#prcBtn', function(){
                        
                     }
                     $('#item'+w).val(rowselected[i].items_id);
-                    $('#desc'+w).val(rowselected[i].items_id);
                     $('#item'+w).hide();
                     /*$('#item'+w).val(rowselected[i].items_id);
                     $('#desc'+w).val(rowselected[i].items_id);
