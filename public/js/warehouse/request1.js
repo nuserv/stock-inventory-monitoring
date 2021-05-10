@@ -139,6 +139,7 @@ $(document).on('click', '#prcBtn', function(){
                         });
                     }
                         $('#item'+w).val(rowselected[i].items_id);
+                        $('#desc'+w).val($('#desc'+w).find('option:first').val());
                         $('#item'+w).hide();
                 }
             }else if(rowselected[i].pending > rowselected[i].stock){
@@ -179,6 +180,7 @@ $(document).on('click', '#prcBtn', function(){
                        
                     }
                     $('#item'+w).val(rowselected[i].items_id);
+                    $('#desc'+w).val($('#desc'+w).find('option:first').val());
                     $('#item'+w).hide();
                     /*$('#item'+w).val(rowselected[i].items_id);
                     $('#desc'+w).val(rowselected[i].items_id);
