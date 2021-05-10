@@ -182,7 +182,6 @@ $(document).on('click', '.sub_Btn', function(){
                             },
                             success:function()
                             {
-                                console.log(data);
                                 //window.location.href = '/print/'+$('#sreqno').val();
                             },
                             error: function (data) {
@@ -219,8 +218,7 @@ $(document).on('click', '.sub_Btn', function(){
                     dataType: 'json',
                     success:function()
                     {
-                        console.log(data);
-                        //window.location.href = '/print/'+$('#sreqno').val();
+                        window.location.href = '/print/'+$('#sreqno').val();
                     },
                     error: function (data) {
                         alert(data.responseText);
