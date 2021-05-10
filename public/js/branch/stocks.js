@@ -222,9 +222,9 @@ $(document).on('click', '#out_Btn', function(){
 $(document).on('click', '.add_item', function(){
     var rowcount = $(this).attr('btn_id');
     if ($(this).val() == 'Add Item') {
-        //if ($('#serial'+ rowcount).val().toLowerCase() == "n/a") {
-            /*$.ajax({
-                url: 'checkserial',
+        if ($('#serial'+ rowcount).val().toLowerCase().replace(/&quot;/g, '\"').replace(/&amp;/g, '\&')) {
+            $.ajax({
+                url: 'verifyserial',
                 headers: {
                     'X-CSRF-TOKEN': $('meta[name="ctok"]').attr('content')
                 },
@@ -232,51 +232,37 @@ $(document).on('click', '.add_item', function(){
                 type: 'get',
                 async: false,
                 data: {
-                    item: $('#desc'+ rowcount).val(),
+                    serial: $('#serial'+ rowcount).val().toLowerCase()
                 },
                 success: function (data) {
                     if (data != "allowed") {
-                        alert('N/A not allowed!');
+                        console.log(data);
+                        alert('Serial Number already exist!');
+                        $('#serial'+ rowcount).val('');
                         return false;
                     }else{
-                        
+                        if($('#category'+ rowcount).val() && $('#desc'+ rowcount).val() && $('#serial'+ rowcount).val()) {
+                            y++;
+                            var additem = '<div class="row no-margin" id="row'+y+'"><div class="col-md-2 form-group"><select id="category'+y+'" style="color: black" class="form-control category" row_count="'+y+'"></select></div><div class="col-md-3 form-group"><select id="desc'+y+'" style="color: black" class="form-control desc" row_count="'+y+'"><option selected disabled>select item description</option></select></div><div class="col-md-2 form-group"><input type="text" id="serial'+y+'" class="form-control serial" row_count="'+y+'" placeholder="serial number" style="color: black" onkeyup="checkserial(this)"></div><div class="col-md-1 form-group"><input type="button" class="add_item btn btn-xs btn-primary" btn_id="'+y+'" value="Add Item"></div></div>';
+                            $(this).val('Remove');
+                            $('#category'+ rowcount).prop('disabled', true);
+                            $('#desc'+ rowcount).prop('disabled', true);
+                            $('#serial'+ rowcount).prop('disabled', true);
+                            if (r < 20 ) {
+                                $('#reqfield').append(additem);
+                                $('#category'+ rowcount).find('option').clone().appendTo('#category'+y);
+                                $('#itemdiv'+ y).hide();
+                                r++;
+                            }
+                        }
                     }
                 },
                 error: function (data) {
                     alert(data.responseText);
                     return false;
                 }
-            });*/
-            if($('#category'+ rowcount).val() && $('#desc'+ rowcount).val() && $('#serial'+ rowcount).val()) {
-                y++;
-                var additem = '<div class="row no-margin" id="row'+y+'"><div class="col-md-2 form-group"><select id="category'+y+'" style="color: black" class="form-control category" row_count="'+y+'"></select></div><div class="col-md-3 form-group"><select id="desc'+y+'" style="color: black" class="form-control desc" row_count="'+y+'"><option selected disabled>select item description</option></select></div><div class="col-md-2 form-group"><input type="text" id="serial'+y+'" class="form-control serial" row_count="'+y+'" placeholder="serial number" style="color: black" onkeyup="checkserial(this)"></div><div class="col-md-1 form-group"><input type="button" class="add_item btn btn-xs btn-primary" btn_id="'+y+'" value="Add Item"></div></div>';
-                $(this).val('Remove');
-                $('#category'+ rowcount).prop('disabled', true);
-                $('#desc'+ rowcount).prop('disabled', true);
-                $('#serial'+ rowcount).prop('disabled', true);
-                if (r < 20 ) {
-                    $('#reqfield').append(additem);
-                    $('#category'+ rowcount).find('option').clone().appendTo('#category'+y);
-                    $('#itemdiv'+ y).hide();
-                    r++;
-                }
-            }
-        /*}else{
-            if($('#category'+ rowcount).val() && $('#desc'+ rowcount).val() && $('#serial'+ rowcount).val()) {
-                y++;
-                var additem = '<div class="row no-margin" id="row'+y+'"><div class="col-md-2 form-group"><select id="category'+y+'" style="color: black" class="form-control category" row_count="'+y+'"></select></div><div class="col-md-3 form-group"><select id="desc'+y+'" style="color: black" class="form-control desc" row_count="'+y+'"><option selected disabled>select item description</option></select></div><div class="col-md-2 form-group"><input type="text" id="serial'+y+'" class="form-control serial" row_count="'+y+'" value="N/A" style="color: black"></div><div class="col-md-1 form-group"><input type="button" class="add_item btn btn-xs btn-primary" btn_id="'+y+'" value="Add Item"></div></div>';
-                $(this).val('Remove');
-                $('#category'+ rowcount).prop('disabled', true);
-                $('#desc'+ rowcount).prop('disabled', true);
-                $('#serial'+ rowcount).prop('disabled', true);
-                if (r < 20 ) {
-                    $('#reqfield').append(additem);
-                    $('#category'+ rowcount).find('option').clone().appendTo('#category'+y);
-                    $('#itemdiv'+ y).hide();
-                    r++;
-                }
-            }
-        }*/
+            });
+        }
     }else{
         if (r == 20) {
             y++;

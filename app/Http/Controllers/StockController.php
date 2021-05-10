@@ -1142,4 +1142,15 @@ $log->branch_id = auth()->user()->branch->id;
             return response()->json($data);
         }
     }
+
+    public function verifyserial(Request $request)
+    {
+        $item = Stock::query()->where('serial', $request->serial)->where('Status', 'in')->first();
+        if ($item) {
+            $data = "not allowed";
+        }else {
+            $data = "allowed";
+        }
+        return response()->json($data);
+    }
 }
