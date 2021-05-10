@@ -198,63 +198,35 @@ $(document).on('click', '.in_sub_Btn', function(){
                 });
             }
         }else if ($('#intype').val() == 'replacement') {
-            if ($('#repserial').val().toLowerCase().replace(/&quot;/g, '\"').replace(/&amp;/g, '\&')) {
+            if (desc != '' && $('#repserial').val() != "") {
+                $('#service-inModal').toggle();
+                $('#loading').show();
                 $.ajax({
-                    url: 'verifyserial',
+                    url: 'rep-update',
                     headers: {
                         'X-CSRF-TOKEN': $('meta[name="ctok"]').attr('content')
                     },
                     dataType: 'json',
-                    type: 'get',
+                    type: 'PUT',
                     async: false,
                     data: {
-                        serial: $('#serial'+ rowcount).val().toLowerCase()
+                        stat: 'replace',
+                        id: $('#indescid').val(),
+                        ids: $('#repdesc').val(),
+                        serial: $('#repserial').val(),
+                        status: 'defective',
+                        custid: trdata.customer_branches_id,
+                        remarks: 'service'
                     },
-                    success: function (data) {
-                        if (data != "allowed") {
-                            console.log(data);
-                            alert('Serial Number already exist!');
-                            $('#serial'+ rowcount).val('');
-                            return false;
-                        }else{
-                            if (desc != '' && $('#repserial').val() != "") {
-                                $('#service-inModal').toggle();
-                                $('#loading').show();
-                                $.ajax({
-                                    url: 'rep-update',
-                                    headers: {
-                                        'X-CSRF-TOKEN': $('meta[name="ctok"]').attr('content')
-                                    },
-                                    dataType: 'json',
-                                    type: 'PUT',
-                                    async: false,
-                                    data: {
-                                        stat: 'replace',
-                                        id: $('#indescid').val(),
-                                        ids: $('#repdesc').val(),
-                                        serial: $('#repserial').val(),
-                                        status: 'defective',
-                                        custid: trdata.customer_branches_id,
-                                        remarks: 'service'
-                                    },
-                                    success:function()
-                                    {
-                                        location.reload();
-                                    },
-                                    error: function (data) {
-                                        alert(data.responseText);
-                                    }
-                                });
-                            }
-                        }
+                    success:function()
+                    {
+                        location.reload();
                     },
                     error: function (data) {
                         alert(data.responseText);
-                        return false;
                     }
                 });
             }
-            
         }
     }
 });
