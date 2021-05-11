@@ -130,9 +130,10 @@ $(document).on('click', '#prcBtn', function(){
                                 descOp+='<option selected disabled>select item description</option>';
                                 itemOp+='<option selected disabled>select item description</option>';
                                 itemcode.forEach(value => {
-                                    itemOp+='<option value="'+value.id+'">'+value.id+'</option>';
+                                    
                                     descOp+='<option value="'+value.id+'">'+value.item.toUpperCase()+'</option>';
                                 });
+                                itemOp+='<option value="'+rowselected[i].items_id+'">'+rowselected[i].items_id+'</option>';
                                 $("#item" + w).find('option').remove().end().append(itemOp);
                                 $("#desc" + w).find('option').remove().end().append(descOp);
                             }
@@ -169,9 +170,9 @@ $(document).on('click', '#prcBtn', function(){
                                 descOp+='<option selected disabled>select item description</option>';
                                 itemOp+='<option selected disabled>select item description</option>';
                                 itemcode.forEach(value => {
-                                    itemOp+='<option value="'+value.id+'">'+value.id+'</option>';
                                     descOp+='<option value="'+value.id+'">'+value.item.toUpperCase()+'</option>';
                                 });
+                                itemOp+='<option value="'+rowselected[i].items_id+'">'+rowselected[i].items_id+'</option>';
                                 $("#item" + w).find('option').remove().end().append(itemOp);
                                 $("#desc" + w).find('option').remove().end().append(descOp);
                                 console.log('pasok');
