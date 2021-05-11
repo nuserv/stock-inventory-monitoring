@@ -222,7 +222,7 @@ $(document).on('click', '#out_Btn', function(){
 $(document).on('click', '.add_item', function(){
     var rowcount = $(this).attr('btn_id');
     if ($(this).val() == 'Add Item') {
-        if ($('#serial'+ rowcount).val().toLowerCase().replace(/&quot;/g, '\"').replace(/&amp;/g, '\&')) {
+        if ($('#serial'+ rowcount).val().toLowerCase()) {
             $.ajax({
                 url: 'verifyserial',
                 headers: {
