@@ -1008,7 +1008,6 @@ class StockRequestController extends Controller
             $item = Warehouse::where('status', 'in')
                 ->where('items_id', $request->item)
                 ->first();
-            if ($item) {
                 $item->status = 'sent';
                 $item->request_no = $request->reqno;
                 $item->branch_id = $request->branchid;
@@ -1025,7 +1024,6 @@ class StockRequestController extends Controller
                 $prep->intransit = 'no';
                 $prep->user_id = auth()->user()->id;
                 $data = $prep->save();          
-            }
         }
         return response()->json($data);
     }

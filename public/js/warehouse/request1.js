@@ -170,7 +170,7 @@ $(document).on('click', '#prcBtn', function(){
                                 descOp+='<option selected disabled>select item description</option>';
                                 itemOp+='<option selected disabled>select item description</option>';
                                 itemcode.forEach(value => {
-                                    descOp+='<option value="'+value.id+'">'+value.item.toUpperCase()+'</option>';
+                                    descOp+='<option value="'+value.items_id+'">'+value.item.toUpperCase()+'</option>';
                                 });
                                 itemOp+='<option value="'+rowselected[i].items_id+'">'+rowselected[i].items_id+'</option>';
                                 $("#item" + w).find('option').remove().end().append(itemOp);
