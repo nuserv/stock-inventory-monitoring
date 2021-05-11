@@ -95,6 +95,12 @@
                             <input type="text" style="color: black" class="form-control form-control-sm " id="intransitsched" value="" disabled>
                         </div>
                     </div>
+                    <div class="col-md-6 form-group row" id="schedbyrow">
+                            <label for="schedby" class="col-md-5 col-form-label text-md-right">Scheduled by:</label>
+                            <div class="col-md-7">
+                                <input type="text" style="color: black" class="form-control form-control-sm " name="schedby" id="schedby" disabled>
+                            </div>
+                    </div>
                 </div>
             </div>
             <div class="container">

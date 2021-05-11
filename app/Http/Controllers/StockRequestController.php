@@ -955,7 +955,7 @@ class StockRequestController extends Controller
                 $reqno->status = $request->status;
             }
             $reqno->schedule = $request->datesched;
-            
+            $reqno->schedby = auth()->user()->name.' '.auth()->user()->lastname;
             $reqno->save();
             $branch = StockRequest::query()->where('request_no', $request->reqno)
                 ->join('branches', 'branches.id', 'branch_id')->first()->branch;
