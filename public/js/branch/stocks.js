@@ -222,7 +222,7 @@ $(document).on('click', '#out_Btn', function(){
 $(document).on('click', '.add_item', function(){
     var rowcount = $(this).attr('btn_id');
     if ($(this).val() == 'Add Item') {
-        if ($('#serial'+ rowcount).val().toLowerCase()) {
+        if ($('#serial'+ rowcount).val().toLowerCase().replace(/-/g, '')) {
             $.ajax({
                 url: 'verifyserial',
                 headers: {
@@ -247,6 +247,7 @@ $(document).on('click', '.add_item', function(){
                             $('.add_item[btn_id=\''+rowcount+'\']').val('Remove');
                             $('#category'+ rowcount).prop('disabled', true);
                             $('#desc'+ rowcount).prop('disabled', true);
+                            $('#serial'+ rowcount).val($('#serial'+ rowcount).val().toLowerCase().replace(/-/g, ''));
                             $('#serial'+ rowcount).prop('disabled', true);
                             if (r < 20 ) {
                                 $('#reqfield').append(additem);
