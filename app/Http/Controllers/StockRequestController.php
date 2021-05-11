@@ -863,13 +863,23 @@ class StockRequestController extends Controller
             $reqno->save();
             $branch = StockRequest::query()->where('request_no', $request->reqno)
                 ->join('branches', 'branches.id', 'branch_id')->first()->branch;
-            $log = new UserLog;
-            $log->branch_id = auth()->user()->branch->id;
-            $log->branch = auth()->user()->branch->branch;
-            $log->activity = "SCHEDULED delivery for $branch with Request no. $request->reqno ";
-            $log->user_id = auth()->user()->id;
-            $log->fullname = auth()->user()->name.' '.auth()->user()->middlename.' '.auth()->user()->lastname;
+            if ($branch->schedby) {
+                $log = new UserLog;
+                $log->branch_id = auth()->user()->branch->id;
+                $log->branch = auth()->user()->branch->branch;
+                $log->activity = "UPDATE SCHEDULED delivery for $branch with Request no. $request->reqno ";
+                $log->user_id = auth()->user()->id;
+                $log->fullname = auth()->user()->name.' '.auth()->user()->middlename.' '.auth()->user()->lastname;
+            }else{
+                $log = new UserLog;
+                $log->branch_id = auth()->user()->branch->id;
+                $log->branch = auth()->user()->branch->branch;
+                $log->activity = "SCHEDULED delivery for $branch with Request no. $request->reqno ";
+                $log->user_id = auth()->user()->id;
+                $log->fullname = auth()->user()->name.' '.auth()->user()->middlename.' '.auth()->user()->lastname;
+            }
             $data = $log->save();
+
             /*$prepitem = PreparedItem::select('items.item', 'serial', 'branch_id')
                 ->where('request_no', $request->reqno)
                 ->join('items', 'items.id', '=', 'prepared_items.items_id')
