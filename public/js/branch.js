@@ -302,9 +302,9 @@ $(document).ready(function()
         $('table.branchDetails').dataTable().fnDestroy();
         $('table.catbranchDetails').dataTable().fnDestroy();
         $('#table').hide();
-        $('#catbranchDetails').show();
-        $('#cattable').show();
         $('#branchDetails').hide();
+        $('#cattable').show();
+        $('#catbranchDetails').show();
         catstockTable =
         $('table.catbranchDetails').DataTable({ 
             "dom": 'rtip',
@@ -332,8 +332,7 @@ $(document).ready(function()
                 { data: 'stock_out', name:'stock_out'}
             ]
         });
-        $('#cattable').show();
-        $('#catbranchDetails').show();
+        
     });
 });
 $(document).on('click', '.close', function () {

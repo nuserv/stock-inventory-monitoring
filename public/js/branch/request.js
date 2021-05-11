@@ -9,6 +9,7 @@ var pendingreq;
 var requestno;
 var stockcat;
 var servicecat;
+var checkrequest;
 $(document).ready(function()
 {
     var d = new Date();
@@ -37,7 +38,6 @@ $(document).ready(function()
             { data: 'ticket', name:'ticket', "width": "14%"}
         ]
     });
-    
 
     $('#requestTable tbody').on('click', 'tr', function () {
         var trdata = table.row(this).data();

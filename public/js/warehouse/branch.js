@@ -311,10 +311,11 @@ $(document).on('click', '.close', function () {
 $(document).on('click', '#catBtn', function(){
     $('#catBtn').hide();
     $('table.branchDetails').dataTable().fnDestroy();
-    $('table.catbranchDetails').dataTable().fnDestroy();
+    //$('table.catbranchDetails').dataTable().fnDestroy();
     $('#table').hide();
     $('#catbranchDetails').show();
     $('#cattable').show();
+    $('#catbranchDetails').show();
     $('#branchDetails').hide();
     catstockTable =
     $('table.catbranchDetails').DataTable({ 
@@ -342,8 +343,6 @@ $(document).on('click', '#catBtn', function(){
             { data: 'stock_out', name:'stock_out'}
         ]
     });
-    $('#cattable').show();
-    $('#catbranchDetails').show();
 
 });
 

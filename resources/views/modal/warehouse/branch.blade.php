@@ -54,6 +54,14 @@
                                     <td>
                                         <input type="text" placeholder="Search item.." class="form-control mfilter-input fl-m" data-column="0" style="border: 1px solid black;"/>
                                     </td>
+                                    @if (auth()->user()->hasanyrole('Editor', 'Manager', 'Warehouse Manager', 'Encoder','Viewer', 'Viewer PLSI', 'Viewer IDSI'))
+                                        <td></td>
+                                        <td></td>
+                                    @endif
+                                    <td>
+                                    </td>
+                                    <td>
+                                    </td>
                                 <tr>
                                     <th>DESCRIPTION</th>
                                     @if (auth()->user()->hasanyrole('Editor', 'Manager', 'Warehouse Manager', 'Encoder','Viewer', 'Viewer PLSI', 'Viewer IDSI'))
@@ -73,6 +81,11 @@
                                     <td>
                                         <input type="text" placeholder="Search category.." class="form-control cfilter-input fl-c" data-column="0" style="border: 1px solid black;"/>
                                     </td>
+                                    @if (auth()->user()->hasanyrole('Editor', 'Manager', 'Warehouse Manager', 'Encoder','Viewer', 'Viewer PLSI', 'Viewer IDSI'))
+                                        <td></td>
+                                    @endif
+                                    <td></td>
+                                    <td></td>
                                 <tr>
                                     <th>Category</th>
                                     @if (auth()->user()->hasanyrole('Editor', 'Manager', 'Warehouse Manager', 'Encoder','Viewer', 'Viewer PLSI', 'Viewer IDSI'))

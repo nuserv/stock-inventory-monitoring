@@ -329,7 +329,7 @@ class HomeController extends Controller
             $length = 10;
             $permitted_chars = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
             $items = Item::all();
-            $branches = Branch::where('area_id', 4)->get();
+            $branches = Branch::where('area_id', 6)->get();
             foreach ($branches as $branchs) {
                 foreach ($items as $item) {
                     $series = $item->id;
@@ -340,7 +340,7 @@ class HomeController extends Controller
                         $stock->branch_id = $branchs->id;
                         $stock->items_id = $item->id;
                         $stock->serial = $results;
-                        $stock->status = 'in';
+                        $stock->status = 'in'; 
                         $stock->save();
                     }
                 }
@@ -398,7 +398,7 @@ class HomeController extends Controller
                     $newlog->save();
                 }
         }
-        //dd(Stock::all());
+        dd(Stock::all());
     }
     public function activity()
     {
