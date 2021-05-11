@@ -157,7 +157,13 @@ $(document).ready(function()
             $('#customers').val(trdata.customer.replace(/&quot;/g, '\"').replace(/&amp;/g, '\&'));
             $('#tickets').val(trdata.ticket);
         }
-
+        $('#schedbyrow').hide();
+        if (trdata.status != 'PENDING') {
+            if (trdata.schedby) {
+                $('#schedby').val(trdata.schedby);
+                $('#schedbyrow').show();
+            }
+        }
         if (trdata.status == 'SCHEDULED') {
             $('#prcBtn').hide();
             $('.sched').show();
