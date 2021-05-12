@@ -36,7 +36,7 @@ class ImportController extends Controller
                         if (!$value[1]) {
                             $add->serial = 'N/A';
                         }else{
-                            $add->serial = str_replace('-', '', $value[1]);
+                            $add->serial = mb_strtoupper(str_replace('-', '', preg_replace('/\s+/', '',$value[1]))));
                         }
                         $add->status = 'in';
                         $add->save();
@@ -57,7 +57,7 @@ class ImportController extends Controller
                             if (!$value[1]) {
                                 $add->serial = 'N/A';
                             }else{
-                                $add->serial = mb_strtoupper(str_replace('-', '', $value[1]));
+                                $add->serial = mb_strtoupper(str_replace('-', '', preg_replace('/\s+/', '',$value[1])));
                             }
                             $add->status = 'in';
                             $add->save();
