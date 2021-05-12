@@ -872,7 +872,8 @@ class StockRequestController extends Controller
             $reqno->save();
             $branch = StockRequest::query()->where('request_no', $request->reqno)
                 ->join('branches', 'branches.id', 'branch_id')->first()->branch;
-            if ($branch->schedby) {
+            $schedby = StockRequest::query()->where('request_no', $request->reqno)->first();
+            if ($schedby->schedby) {
                 $log = new UserLog;
                 $log->branch_id = auth()->user()->branch->id;
                 $log->branch = auth()->user()->branch->branch;

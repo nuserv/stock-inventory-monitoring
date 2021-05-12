@@ -38,7 +38,7 @@ $(document).ready(function()
                         className: 'btn btn-primary btn-icon-split buttonsToHide',
                         titleAttr: 'Submit and print preview',
                         enabled: true,
-                        autoPrint: true,
+                        autoPrint: false,
                         text: '<span class="icon text-white-50"><i class="fa fa-print" style="color:white"></i></span><span> PRINT</span>',
                         customize: function (doc) {
                             var d = new Date();
@@ -55,7 +55,7 @@ $(document).ready(function()
                                 .prepend('<div style="position:absolute; top:140;left:70%;font-size:24px"><b>Stock request no.:</b> '+$('#reqno').val()+'</div>')
                                 .prepend('<div style="position:absolute; top:170;font-size:24px"><b>Area.:</b> '+$('#area').val()+'</div>')
                                 .prepend('<div style="position:absolute; top:170;left:70%;font-size:24px"><b>Request type:</b> '+$('#requesttyp').val()+'</div>')
-                                .prepend('<div style="position:absolute; top:200;font-size:24px"><label for="textbranch"><b>Branch address:&nbsp;&nbsp;</b></label><textarea id="textbranch" style="vertical-align: top;resize: none;background: transparent;border:0 none" rows="2" cols="90" readonly>'+$('#branchaddress').val()+'</textarea></div>')
+                                .prepend('<div style="position:absolute; top:200;font-size:24px"><label for="textbranch"><b>Branch address:&nbsp;&nbsp;</b></label><textarea id="textbranch" style="vertical-align: top;resize: none;background: transparent;border:0 none" rows="3" cols="50" readonly>'+$('#branchaddress').val()+'</textarea></div>')
                                 .prepend('<div style="position:absolute; top:200;left:70%;font-size:24px"><b>Date Schedule:</b> '+$('#datesched').val()+'</div>')
                                 .prepend('<img style="position:absolute; top:400; left:300;font-size:20px;margin-botton:50px" src="'+window.location.origin+'/idsiwatermark.png">')
                             //  .prepend('<div style="position:absolute; bottom:20; left:100;">Pagina '+page.toString()+' of '+pages.toString()+'</div>');

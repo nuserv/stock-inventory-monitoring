@@ -178,7 +178,7 @@ Route::put('branch_update/{id}', 'BranchController@update')->middleware('ajax');
 Route::get('logout', '\App\Http\Controllers\Auth\LoginController@logout');
 
 Route::get('print/{id}', 'HomeController@print')->name('branch.print.index');
-Route::get('getprint/{id}', 'HomeController@getprint')->middleware('ajax');
+Route::get('getprint/{id}', 'HomeController@getprint');//->middleware('ajax');
 Route::get('initial/{id}', 'HomeController@initial');//->middleware('ajax');
 Route::get('defective/print', 'HomeController@printDefective')->name('defective.print.index');
 Route::get('defective/retno', 'HomeController@showret')->name('defective.print.index');
