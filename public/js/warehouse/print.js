@@ -38,7 +38,7 @@ $(document).ready(function()
                         className: 'btn btn-primary btn-icon-split buttonsToHide',
                         titleAttr: 'Submit and print preview',
                         enabled: true,
-                        autoPrint: false,
+                        autoPrint: true,
                         text: '<span class="icon text-white-50"><i class="fa fa-print" style="color:white"></i></span><span> PRINT</span>',
                         customize: function (doc) {
                             var d = new Date();
@@ -146,7 +146,6 @@ $(document).ready(function()
                                 var ampm = (String(d.getHours()).padStart(2, '0') < 12 || String(d.getHours()).padStart(2, '0') === 24) ? "AM" : "PM";
                                 var months = ["January","February","March","April","May","June","July","August","September","October","November","December"];
                                 $(doc.document.body)
-                                                                
                                     .prepend('<img style="position:absolute; top:10; left:20;width:100;margin-botton:50px" src="'+window.location.origin+'/idsi.png">')
                                     //.prepend('<div style="position:absolute; top:10; right:0;">My Title</div>')
                                     .prepend('<div style="position:absolute; bottom:80; left:15;font-family: arial; font-weight: bold;">Prepared By: '+$("#userlog").val()+'</div>')
@@ -186,7 +185,6 @@ $(document).ready(function()
                 }
             });
             table.buttons().container().appendTo('div.panel-heading');
-            
         },
         maxDate: new Date(new Date().getFullYear(), new Date().getMonth()+1, '31'),
         minDate: 0
