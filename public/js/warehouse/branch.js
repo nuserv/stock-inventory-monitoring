@@ -311,7 +311,7 @@ $(document).on('click', '.close', function () {
 $(document).on('click', '#catBtn', function(){
     $('#catBtn').hide();
     $('table.branchDetails').dataTable().fnDestroy();
-    //$('table.catbranchDetails').dataTable().fnDestroy();
+    $('table.catbranchDetails').dataTable().fnDestroy();
     $('#table').hide();
     $('#catbranchDetails').show();
     $('#cattable').show();
