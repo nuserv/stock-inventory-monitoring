@@ -339,6 +339,7 @@ $(document).on('click', '#catBtn', function(){
         },
         columns: [
             { data: 'category', name:'category'},
+            { data: 'defectives', name:'defectives'},
             { data: 'available', name:'available'},
             { data: 'stock_out', name:'stock_out'}
         ]
