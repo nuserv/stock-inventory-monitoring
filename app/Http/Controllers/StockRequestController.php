@@ -594,12 +594,21 @@ class StockRequestController extends Controller
                 $reqno->customer_branch_id = $request->customerid;
                 $reqno->ticket = $request->ticket;
                 $reqno->type = $request->type;
-                $log = new UserLog;
-                $log->branch_id = auth()->user()->branch->id;
-                $log->branch = auth()->user()->branch->branch;
-                $log->activity = "CREATE Stock Request no. $request->reqno";
-                $log->user_id = auth()->user()->id;
-                $log->fullname = auth()->user()->name.' '.auth()->user()->middlename.' '.auth()->user()->lastname;
+                if ($request->type == "Stock") {
+                    $log = new UserLog;
+                    $log->branch_id = auth()->user()->branch->id;
+                    $log->branch = auth()->user()->branch->branch;
+                    $log->activity = "CREATE STOCK Request no. $request->reqno";
+                    $log->user_id = auth()->user()->id;
+                    $log->fullname = auth()->user()->name.' '.auth()->user()->middlename.' '.auth()->user()->lastname;
+                }else{
+                    $log = new UserLog;
+                    $log->branch_id = auth()->user()->branch->id;
+                    $log->branch = auth()->user()->branch->branch;
+                    $log->activity = "CREATE SERVICE STOCK Request no. $request->reqno";
+                    $log->user_id = auth()->user()->id;
+                    $log->fullname = auth()->user()->name.' '.auth()->user()->middlename.' '.auth()->user()->lastname;
+                }
                 $reqno->save();
             }else{
                 $log = new UserLog;
