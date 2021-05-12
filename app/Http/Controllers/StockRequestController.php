@@ -853,6 +853,7 @@ class StockRequestController extends Controller
     {
         if ($request->stat == 'ok') {
             $reqno = StockRequest::where('request_no', $request->reqno)->first();
+            $schedby = StockRequest::query()->where('request_no', $request->reqno)->first();
             if ($reqno->status == 'PARTIAL IN TRANSIT') {
                 $reqno->intransitval = '1';
             }else {
@@ -872,7 +873,6 @@ class StockRequestController extends Controller
             $reqno->save();
             $branch = StockRequest::query()->where('request_no', $request->reqno)
                 ->join('branches', 'branches.id', 'branch_id')->first()->branch;
-            $schedby = StockRequest::query()->where('request_no', $request->reqno)->first();
             if ($schedby->schedby) {
                 $log = new UserLog;
                 $log->branch_id = auth()->user()->branch->id;
