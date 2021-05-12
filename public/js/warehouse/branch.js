@@ -261,6 +261,7 @@ $(document).on('click', '#catbranchDetails tr', function(){
     var trdata = catstockTable.row(this).data();
     categid = trdata.id;
     $('table.branchDetails').dataTable().fnDestroy();
+    $('table.catbranchDetails').dataTable().fnDestroy();
     $('#cattable').hide();
     $('#catbranchDetails').hide();
     $('#table').show();
@@ -311,7 +312,6 @@ $(document).on('click', '.close', function () {
 $(document).on('click', '#catBtn', function(){
     $('#catBtn').hide();
     $('table.branchDetails').dataTable().fnDestroy();
-    $('table.catbranchDetails').dataTable().fnDestroy();
     $('#table').hide();
     $('#catbranchDetails').show();
     $('#cattable').show();
