@@ -115,8 +115,8 @@ $(document).on('change', '#intype', function(){
     }
 });
 $(document).on('keyup', '#repserial', function(){
-    if ($(this).val() && $(this).val().length >= 3) {
-        if ($(this).val().toLowerCase() ==  "n/a" || $(this).val().toLowerCase() ==  "faded" || $(this).val().toLowerCase() ==  "none") {
+    if ($(this).val() && $(this).val().replace(/\s/g, '').length >= 4) {
+        if ($(this).val().replace(/\s/g, '').toLowerCase() ==  "n/a" || $(this).val().replace(/\s/g, '').toLowerCase() ==  "faded" || $(this).val().replace(/\s/g, '').toLowerCase() ==  "none") {
             $.ajax({
                 url: 'checkserial',
                 headers: {
