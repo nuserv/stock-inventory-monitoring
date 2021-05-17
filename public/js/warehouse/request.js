@@ -47,7 +47,7 @@ $(document).ready(function()
     table =
     $('table.requestTable').DataTable({ 
         "dom": 'lrtip',
-        "pageLength": 25,
+        "pageLength": 50,
         "language": {
             "emptyTable": "No stock request found!",
             "info": "\"Showing _START_ to _END_ of _TOTAL_ Stock Request\"",
