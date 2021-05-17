@@ -134,7 +134,7 @@ $(document).on('keyup', '#repserial', function(){
                         $('#in_sub_Btn').prop('disabled', true);
                         console.log('notallowed');
                         $('#repserial').val('');
-                        alert('N/A not Allowed!');
+                        alert('This item requires a valid serial number. If the item does not contain a serial number please contact the main office for Serial Numbers.');
                     }else{
                         $('#in_sub_Btn').prop('disabled', false);
                         console.log('not');
