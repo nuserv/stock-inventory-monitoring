@@ -66,7 +66,7 @@ $(document).on('click', '.sub_Btn', function(){
                                 },
                                 success: function (data) {
                                     if (data != "allowed") {
-                                        alert('This item requires a valid serial number. If the item does not contain a serial number please contact the main office for Serial Numbers.');
+                                        alert('This item requires a valid serial number. If the item does not contain a serial number please contact the main office to generate a new one.');
                                         $('#loading').hide();
                                         return false;
 

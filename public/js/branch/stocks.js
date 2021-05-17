@@ -669,7 +669,7 @@ function checkserial(ex) {
             success: function (data) {
                 if (data != "allowed") {
                     $('#serial'+slicena).val('');
-                    alert('This item requires a valid serial number. If the item does not contain a serial number please contact the main office for Serial Numbers.');
+                    alert('This item requires a valid serial number. If the item does not contain a serial number please contact the main office to generate a new one.');
                 }
             },
             error: function (data) {
