@@ -1268,7 +1268,7 @@ $(document).on("keyup", "#editserial", function () {
                 if (data != "allowed") {
                     $('#editserial').val(serialnum);
                     $('#serial_btn').prop('disabled', true);
-                    alert('n/a not allowed!')
+                    alert('This item requires a valid serial number. If the item does not contain a serial number please contact the main office for Serial Numbers.');
                 }
             },
             error: function (data) {

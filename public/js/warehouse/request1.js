@@ -232,7 +232,7 @@ function checkserial(ex) {
             success: function (data) {
                 if (data != "allowed") {
                     $('#serial'+slicena).val('');
-                    alert('N/A not allowed!');
+                    alert('This item requires a valid serial number. If the item does not contain a serial number please contact the main office for Serial Numbers.');
                 }
             },
             error: function (data) {
