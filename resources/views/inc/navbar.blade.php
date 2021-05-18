@@ -2,17 +2,15 @@
     <div class="navbar-collapse collapse justify-content-between align-items-center w-100">
         @auth
         <ul class="nav mr-auto">
+            <li class="nav-item">
+                <a style="padding-right:8px; padding-left:8px" class="nav-link {{ Request::is('/') ? 'active' : '' }}" href="{{ url('/') }}">Home</a>
+            </li>
             @if(auth()->user()->hasanyrole('Viewer', 'Viewer PLSI', 'Viewer IDSI'))
             <li class="nav-item">
-                    <a style="padding-right:8px; padding-left:8px" class="nav-link {{ Request::is('/') ? 'active' : '' }}" href="{{ route('home.index') }}">Stock Request</a>
+                    <a style="padding-right:8px; padding-left:8px" class="nav-link {{ Request::is('pending') ? 'active' : '' }}" href="{{ route('home.request') }}">Stock Request</a>
             </li>
             <li class="nav-item" style="margin-left:0px;margin-right:0px;">
                     <a style="padding-right:8px; padding-left:8px" class="nav-link {{ Request::is('branch') ? 'active' : '' }}" href="{{ route('branch.index') }}">Service Center</a>
-            </li>
-            @endif
-            @if(!auth()->user()->hasanyrole('Viewer', 'Viewer PLSI', 'Viewer IDSI'))
-            <li class="nav-item">
-                <a style="padding-right:8px; padding-left:8px" class="nav-link {{ Request::is('/') ? 'active' : '' }}" href="{{ url('/') }}">Home</a>
             </li>
             @endif
             @if(auth()->user()->hasrole('Returns Manager'))

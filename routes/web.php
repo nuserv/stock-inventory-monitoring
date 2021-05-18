@@ -36,6 +36,7 @@ Route::any('item-update', 'HomeController@itemsUpdate')->name('Update.items')->m
 
 
 Route::get('/', 'HomeController@index')->name('home.index');
+Route::get('/pending', 'HomeController@pending')->name('home.request');
 //Route::get('/home', 'HomeController@index')->name('home.indexs');
 Route::get('/log', 'HomeController@log')->middleware('ajax');
 Route::get('/unrepair', 'HomeController@unrepair')->name('index.unrepair');

@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Spatie\Activitylog\Models\Activity;
 use Spatie\Permission\Models\Role;
 use Yajra\DataTables\Facades\DataTables;
+use Illuminate\Support\Collection;
 use App\Mail\EmailForQueuing;
 use Route;
 use Validator;
@@ -152,15 +153,17 @@ class HomeController extends Controller
         });
         return response()->json($data);
     }
-
+    public function pending()
+    {
+        $title = "Pending";
+        return view('pages.pending', compact('title'));
+    }
     public function index()
     {
         if (auth()->user()->status == '0') {
             return redirect('logout');
         }
-        if (User::query()->where('password',)) {
-            # code...
-        }
+        
         $route = Route::current()->getname();
         if ($route == 'disposed') {
             $title = 'Disposed';
@@ -216,7 +219,8 @@ class HomeController extends Controller
         }
 
         if (auth()->user()->hasanyrole('Viewer', 'Viewer PLSI', 'Viewer IDSI')) {
-            return view('pages.pending', compact('title'));
+            return view('pages.home', compact('title'));
+            //return view('pages.pending', compact('title'));
         }
 
         if (auth()->user()->branch->branch != "Warehouse" && auth()->user()->branch->branch != 'Main-Office' && !auth()->user()->hasanyrole('Repair', 'Returns Manager')) {
@@ -401,7 +405,24 @@ class HomeController extends Controller
         dd(Stock::all());
     }
     public function activity()
-    {
+    {   
+        if (auth()->user()->hasRole('Viewer PLSI')) {
+            $act = UserLog::query()->where('activity', 'like','%mercury drug%' );
+            
+        }
+        if (auth()->user()->hasRole('Viewer IDSI')) {
+            $acts = UserLog::query()->where('activity', 'not like', '%mercury drug%' )->get();
+            $act = [];
+            foreach ($acts as $acs) {
+                if(str_contains($acs->activity, 'SERVICE')){
+                    array_push($act, $acs);
+                }
+                if(str_contains($acs->activity, 'REPLACED')){
+                    array_push($act, $acs);
+                }
+            }
+            
+        }
         if (auth()->user()->hasAnyRole('Editor',  'Manager')) {
             $act = UserLog::query();
                 /*

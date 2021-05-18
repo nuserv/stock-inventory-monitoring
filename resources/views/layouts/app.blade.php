@@ -292,11 +292,16 @@
             <script src="{{asset('min/?f=js/customerbranch.js')}}"></script>
         @endif
         
-        @if (Request::is('/') && auth()->user()->hasanyrole('Viewer', 'Viewer PLSI', 'Viewer IDSI'))
+        @if (Request::is('pending') && auth()->user()->hasanyrole('Viewer','Viewer PLSI', 'Viewer IDSI'))
             <script src="{{asset('min/?f=js/pending.js')}}"></script>
         @endif
 
-        @if(Request::is('/') && !auth()->user()->hasanyrole('Repair', 'Returns Manager', 'Viewer'))
+        @if (Request::is('/') && auth()->user()->hasanyrole('Viewer','Viewer PLSI', 'Viewer IDSI'))
+            <!--script src="{{asset('min/?f=js/pending.js')}}"></script-->
+            <script src="{{asset('min/?f=js/viewer.js')}}"></script>
+        @endif
+
+        @if(Request::is('/') && !auth()->user()->hasanyrole('Repair', 'Returns Manager', 'Viewer', 'Viewer PLSI', 'Viewer IDSI'))
             <script src="{{asset('min/?f=js/home.js')}}"></script>
         @endif
         @if (Request::is('/') && auth()->user()->hasrole('Repair'))
