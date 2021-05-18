@@ -1,11 +1,17 @@
 <nav class="nav nav-tabs navbar-expand-md">
     <div class="navbar-collapse collapse justify-content-between align-items-center w-100">
         @auth
-        <ul class="nav mr-auto">
+        <ul class="nav mr-auto">.
+            @if(!auth()->user()->hasanyrole('Viewer', 'Viewer PLSI', 'Viewer IDSI'))
             <li class="nav-item">
                 <a style="padding-right:8px; padding-left:8px" class="nav-link {{ Request::is('/') ? 'active' : '' }}" href="{{ url('/') }}">Home</a>
             </li>
+            @endif
+           
             @if(auth()->user()->hasanyrole('Viewer', 'Viewer PLSI', 'Viewer IDSI'))
+             <li class="nav-item">
+                <a style="padding-right:8px; padding-left:8px" class="nav-link {{ Request::is('/') ? 'active' : '' }}" href="{{ url('/') }}">Branch Activities</a>
+            </li>
             <li class="nav-item">
                     <a style="padding-right:8px; padding-left:8px" class="nav-link {{ Request::is('pending') ? 'active' : '' }}" href="{{ route('home.request') }}">Stock Request</a>
             </li>
