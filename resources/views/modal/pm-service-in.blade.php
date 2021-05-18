@@ -62,7 +62,7 @@
                     </div>
                     <div class="col-md-3 form-group">
                         <input type="text" id="inserial" class="form-control" style="color: black; display:none;" readonly> 
-                        <input type="text" id="repserial" class="form-control" placeholder="input serial number" style="color: black; display:none;">  
+                        <input type="text" id="repserial" class="form-control" placeholder="input serial number" style="color: black; display:none;" onkeypress="return event.charCode >= 47">  
                     </div>
                     <div class="col-md-3 form-group">
                         <select id="instatus" class="form-control intype" style="color: black;" disabled>

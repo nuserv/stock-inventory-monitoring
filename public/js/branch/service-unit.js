@@ -117,7 +117,7 @@ $(document).on('change', '#intype', function(){
 $(document).on('keyup', '#repserial', function(){
     if ($(this).val() && $(this).val().length >= 3) {
         console.log('test');
-        if ($(this).val().toLocaleLowerCase().includes('n/a') || $(this).val().toLowerCase() ==  "n/a" || $(this).val().toLowerCase() ==  "faded" || $(this).val().toLowerCase() ==  "none") {
+        if ($(this).val().toLowerCase().includes('n/a') || $(this).val().toLowerCase() ==  "n/a" || $(this).val().toLowerCase() ==  "faded" || $(this).val().toLowerCase() ==  "none") {
             $.ajax({
                 url: 'checkserial',
                 headers: {
