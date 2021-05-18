@@ -7,6 +7,7 @@ use Yajra\DataTables\Facades\DataTables;
 
 use App\CustomerBranch;
 use App\Customer;
+use Mail;
 class CustomerController extends Controller
 {
 
@@ -65,17 +66,17 @@ class CustomerController extends Controller
             $data = '0';
         }else{
             $customer = new Customer;
-            $customer->code = mb_strtolower($request->input('customer_code'));
-            $customer->customer = mb_strtolower($request->input('customer_name'));
+            $customer->code = $request->input('customer_code');
+            $customer->customer = ucwords(mb_strtolower($request->input('customer_name')));
             $customer->save();
             $data = '1';
             /*$oldbranch = Branch::where('id', $olduser->branch_id)->first();
-            $branch = Branch::where('id', $request->input('branch'))->first();
-            Mail::send('update-user', ['olduser'=>$olduser->name.' '.$olduser->middlename.' '.$olduser->lastname, 'oldlevel'=>$olduser->roles->first()->name, 'oldbranch'=>$oldbranch->branch, 'user'=>$user->name.' '.$user->middlename.' '.$user->lastname, 'level'=>$request->input('role'), 'branch'=>$branch->branch],function( $message){ 
+            $branch = Branch::where('id', $request->input('branch'))->first();*/
+            Mail::send('create-customer', ['customer'=> ucwords(mb_strtolower($request->input('customer_name'))), 'code'=> $request->input('customer_code')],function( $message){ 
                 $message->to('kdgonzales@ideaserv.com.ph', 'Kenneth Gonzales')->subject 
                     (auth()->user()->name.' '.auth()->user()->lastname.' has updated a user to Service center stock monitoring system.'); 
-                $message->from('noreply@ideaserv.com.ph', 'NO REPLY - Update User'); 
-            });*/
+                $message->from('noreply@ideaserv.com.ph', 'NO REPLY - Create Customer'); 
+            });
         }
         return response()->json($data);
     }
@@ -86,14 +87,20 @@ class CustomerController extends Controller
             $data = '0';
         }else{
             $customerbranch = new CustomerBranch;
-            $customerbranch->code = mb_strtolower($request->bcode);
+            $customerbranch->code = $request->bcode;
             $customerbranch->customer_branch = $request->bname;
             $customerbranch->customer_id = $request->bid;
             $customerbranch->address = $request->address;
             $customerbranch->contact = $request->number;
             $customerbranch->status = "1";
             $customerbranch->save();
+            $sbu = Customer::where('id', $request->bid)->first();
             $data = '1';
+            Mail::send('create-customerbranch', ['sbu'=>$sbu->code,'address'=> $request->address,'phone'=>$request->number, 'customer'=> ucwords(mb_strtolower($request->bname)), 'code'=> $request->bcode],function( $message){ 
+                $message->to('kdgonzales@ideaserv.com.ph', 'Kenneth Gonzales')->subject 
+                    (auth()->user()->name.' '.auth()->user()->lastname.' has updated a user to Service center stock monitoring system.'); 
+                $message->from('noreply@ideaserv.com.ph', 'NO REPLY - Create Customer Branch'); 
+            });
         }
         return response()->json($data);
     }
