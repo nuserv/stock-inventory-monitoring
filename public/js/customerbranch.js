@@ -49,9 +49,9 @@ $(document).on("click", "#customerbranchTable tr", function () {
     $('#saveBtn').val('Update');
     $('#myid').val(id);
     $('#branch_code').val(trdata.code);
-    $('#branch_name').val(trdata.customer_branch);
+    $('#branch_name').val(trdata.customer_branch.replace(/&quot;/g, '\"').replace(/&amp;/g, '\&'));
     $('#address').val(trdata.address.replace(/&quot;/g, '\"').replace(/&amp;/g, '\&'));
-    $('#number').val(trdata.contact);
+    $('#number').val(trdata.contact.replace(/&quot;/g, '\"').replace(/&amp;/g, '\&'));
     $('.status').show();
     if(trdata.status == "Active"){
         $('#status').val('1');
