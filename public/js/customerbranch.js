@@ -51,11 +51,8 @@ $(document).on("click", "#customerbranchTable tr", function () {
     $('#branch_code').val(trdata.code);
     $('#branch_name').val(trdata.customer_branch.replace(/&quot;/g, '\"').replace(/&amp;/g, '\&'));
     $('#address').val(trdata.address.replace(/&quot;/g, '\"').replace(/&amp;/g, '\&'));
-    if (trdata.contact.length != 0) {
-        $('#number').val(trdata.contact.replace(/&quot;/g, '\"').replace(/&amp;/g, '\&'));
-    }else{
-        $('#number').val(trdata.contact);
-    }
+    $('#number').val(trdata.contact);
+    $('#number').val($('#number').val().replace(/&quot;/g, '\"').replace(/&amp;/g, '\&'));
     $('.status').show();
     if(trdata.status == "Active"){
         $('#status').val('1');
