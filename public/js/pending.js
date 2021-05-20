@@ -64,6 +64,7 @@ $(document).ready(function()
     });
     
     $('#requestTable tbody').on('click', 'tr', function () {
+        console.log('pop');
         var trdata = table.row(this).data();
         var trsched = new Date(trdata.sched);
         requestno = trdata.request_no;
@@ -77,6 +78,13 @@ $(document).ready(function()
         $('#area').val(trdata.area);
         $('#reqbranch').val(trdata.branch_id);
         $('#requesttypes').val(trdata.type);
+        $('#schedbyrow').hide();
+        if (trdata.status != 'PENDING') {
+            if (trdata.schedby) {
+                $('#schedby').val(trdata.schedby);
+                $('#schedbyrow').show();
+            }
+        }
         if (trdata.type == "STOCK") {
             $('.ticketno').hide();
             $('#clientrows').hide();

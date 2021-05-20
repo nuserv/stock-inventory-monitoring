@@ -410,7 +410,7 @@ class HomeController extends Controller
             $act = UserLog::query()->where('activity', 'like','%mercury drug%' );
             
         }
-        if (auth()->user()->hasRole('Viewer IDSI', 'Viewer')) {
+        if (auth()->user()->hasanyRole('Viewer IDSI', 'Viewer')) {
             $acts = UserLog::query()->where('activity', 'not like', '%mercury drug%' )->get();
             $act = [];
             foreach ($acts as $acs) {
