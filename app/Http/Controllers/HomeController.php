@@ -414,7 +414,7 @@ class HomeController extends Controller
             $acts = UserLog::query()->where('activity', 'not like', '%mercury drug%' )->get();
             $act = [];
             foreach ($acts as $acs) {
-                if(str_contains($acs->activity, 'SERVICE')){
+                if(str_contains($acs->activity, 'SERVICE OUT') || str_contains($acs->activity, 'SERVICE IN')){
                     array_push($act, $acs);
                 }
                 if(str_contains($acs->activity, 'REPLACED')){
