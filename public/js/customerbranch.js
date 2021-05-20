@@ -51,7 +51,7 @@ $(document).on("click", "#customerbranchTable tr", function () {
     $('#branch_code').val(trdata.code);
     $('#branch_name').val(trdata.customer_branch.replace(/&quot;/g, '\"').replace(/&amp;/g, '\&'));
     $('#address').val(trdata.address.replace(/&quot;/g, '\"').replace(/&amp;/g, '\&'));
-    if (trdata.contact) {
+    if (trdata.contact != "") {
         $('#number').val(trdata.contact.replace(/&quot;/g, '\"').replace(/&amp;/g, '\&'));
     }else{
         $('#number').val(trdata.contact);
