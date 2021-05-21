@@ -261,7 +261,7 @@ $(document).on('keyup', '#repserial', function(){
                     return false;
                 }
             });
-        }else{
+        }else if($(this).val().match(".*\\d.*")){
             $.ajax({
                 url: 'checkserial',
                 headers: {
