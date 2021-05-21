@@ -116,7 +116,6 @@ $(document).on('change', '#intype', function(){
 });
 $(document).on('keyup', '#repserial', function(){
     if ($(this).val() && $(this).val().length >= 3) {
-        console.log('test');
         if ($(this).val().toLowerCase().includes('n/a') || $(this).val().toLowerCase() ==  "n/a" || $(this).val().toLowerCase() ==  "faded" || $(this).val().toLowerCase() ==  "none") {
             $.ajax({
                 url: 'checkserial',
@@ -128,16 +127,15 @@ $(document).on('keyup', '#repserial', function(){
                 async: false,
                 data: {
                     item: $('#repdesc').val(),
+                    type: 'na'
                 },
                 success: function (data) {
                     if (data != "allowed") {
                         $('#in_sub_Btn').prop('disabled', true);
-                        console.log('notallowed');
                         $('#repserial').val('');
                         alert('This item requires a valid serial number. If the item does not contain a serial number please contact the main office to generate a new one.');
                     }else{
                         $('#in_sub_Btn').prop('disabled', false);
-                        console.log('not');
                     }
                 },
                 error: function (data) {
@@ -146,7 +144,32 @@ $(document).on('keyup', '#repserial', function(){
                 }
             });
         }else{
-            $('#in_sub_Btn').prop('disabled', false);
+            $.ajax({
+                url: 'checkserial',
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="ctok"]').attr('content')
+                },
+                dataType: 'json',
+                type: 'get',
+                async: false,
+                data: {
+                    serial: $('#repserial').val(),
+                    type: 'check'
+                },
+                success: function (data) {
+                    if (data != "allowed") {
+                        $('#in_sub_Btn').prop('disabled', true);
+                        $('#repserial').val('');
+                        alert('The serial number you entered is already existing. Please check the serial number again.');
+                    }else{
+                        $('#in_sub_Btn').prop('disabled', false);
+                    }
+                },
+                error: function (data) {
+                    alert(data.responseText);
+                    return false;
+                }
+            });
         }
     }else{
         $('#in_sub_Btn').prop('disabled', true);
@@ -166,7 +189,6 @@ $(document).on('change', '#repdesc', function(){
     desc = $(this).val();
     $('#repserial').prop('disabled', false);
 });
-
 
 $(document).on('click', '.in_sub_Btn', function(){
     if ($('#intype').val()) {

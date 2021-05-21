@@ -18,6 +18,7 @@ use App\Branch;
 use App\User;
 use App\Initial;
 use App\UserLog;
+use App\Defective;
 use Illuminate\Support\Str;
 use Mail;
 use Auth;
@@ -691,13 +692,13 @@ class StockRequestController extends Controller
                 $stock->branch_id = auth()->user()->branch->id;
                 $stock->items_id = $preparedItems->itemid;
                 $stock->user_id = auth()->user()->id;
-                $stock->serial = $preparedItems->serial;
+                $stock->serial = mb_strtoupper($preparedItems->serial);
                 $stock->status = 'in';
                 $stock->save();
                 $log = new UserLog;
                 $log->branch_id = auth()->user()->branch->id;
                 $log->branch = auth()->user()->branch->branch;
-                $log->activity = "RECEIVED $items->item(S/N: $preparedItems->serial) with Request no. $request->reqno ";
+                $log->activity = "RECEIVED $items->item(S/N: ".mb_strtoupper($preparedItems->serial).") with Request no. $request->reqno ";
                 $log->user_id = auth()->user()->id;
                 $log->fullname = auth()->user()->name.' '.auth()->user()->middlename.' '.auth()->user()->lastname;
                 $log->save();
@@ -723,7 +724,7 @@ class StockRequestController extends Controller
                 $stock->branch_id = auth()->user()->branch->id;
                 $stock->items_id = $preparedItems->itemid;
                 $stock->user_id = auth()->user()->id;
-                $stock->serial = $preparedItems->serial;
+                $stock->serial = mb_strtoupper($preparedItems->serial);
                 $stock->status = 'in';
                 $stock->save();
                 $prepared->delete();
@@ -833,19 +834,27 @@ class StockRequestController extends Controller
     }
     public function upserial(Request $request)
     {
-        $serial = PreparedItem::where('serial', $request->old)
+        $check = Stock::where('serial', $request->new)->where('status', 'in')->first();
+        $checks = Defective::where('serial', $request->new)->where('status', 'For return')->first();
+        if ($check) {
+            $data = 'meron';
+        }else if ($checks) {
+            $data = 'meron';
+        }else{
+            $serial = PreparedItem::where('serial', $request->old)
             ->join('items', 'items.id', '=', 'items_id')
             ->first();
-        $new = PreparedItem::where('serial', $request->old)->first();
-        $new->serial = $request->new;
-        $new->save();
-        $log = new UserLog;
-        $log->branch_id = auth()->user()->branch->id;
-                $log->branch = auth()->user()->branch->branch;
-        $log->activity = "CHANGE $serial->item serial number from $serial->serial to $new->serial";
-        $log->user_id = auth()->user()->id;
-                $log->fullname = auth()->user()->name.' '.auth()->user()->middlename.' '.auth()->user()->lastname;
-        $data = $log->save();
+            $new = PreparedItem::where('serial', $request->old)->first();
+            $new->serial = $request->new;
+            $new->save();
+            $log = new UserLog;
+            $log->branch_id = auth()->user()->branch->id;
+            $log->branch = auth()->user()->branch->branch;
+            $log->activity = "CHANGE $serial->item serial number from ".mb_strtoupper($serial->serial)." to ".mb_strtoupper($new->serial).".";
+            $log->user_id = auth()->user()->id;
+            $log->fullname = auth()->user()->name.' '.auth()->user()->middlename.' '.auth()->user()->lastname;
+            $data = $log->save();
+        }
         return response()->json($data);
 
     }
@@ -936,13 +945,13 @@ class StockRequestController extends Controller
                 $item->request_no = $request->reqno;
                 $item->branch_id = $request->branchid;
                 $item->schedule = $request->datesched;
-                $item->serial = $request->serial;
+                $item->serial = mb_strtoupper($request->serial);
                 $item->user_id = auth()->user()->id;
                 $item->save();
                 $prep = new PreparedItem;
                 $prep->items_id = $request->item;
                 $prep->request_no = $request->reqno;
-                $prep->serial = $request->serial;
+                $prep->serial = mb_strtoupper($request->serial);
                 $prep->branch_id = $request->branchid;
                 $prep->schedule = $request->datesched;
                 $prep->intransit = 'no';
@@ -968,12 +977,25 @@ class StockRequestController extends Controller
     }
     public function checkserial(Request $request)
     {
-        $item = Item::where('id', $request->item)->first();
-        if ($item->n_a == "yes") {
-            $data = "allowed";
-        }else {
-            $data = "not allowed";
+        if ($request->type == 'na') {
+            $item = Item::where('id', $request->item)->first();
+            if ($item->n_a == "yes") {
+                $data = "allowed";
+            }else {
+                $data = "not allowed";
+            }
+        }else{
+            $stock = Stock::where('serial', $request->serial)->where('status', 'in')->first();
+            $def = Defective::where('serial', $request->serial)->where('status', 'For return')->first();
+            if ($stock) {
+                $data = "not allowed";
+            }else if ($def) {
+                $data = "not allowed";
+            }else{
+                $data = "allowed";
+            }
         }
+        
         return response()->json($data);
     }
 }

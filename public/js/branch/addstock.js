@@ -6,43 +6,6 @@ $(document).on('click', '.sub_Btn', function(){
     var go = 0;
     var stop = 0;
     $('#loading').show();
-    /*for(var q=1;q<=y;q++){
-        if ($('#row'+q).is(":visible")) {
-            if ($('.add_item[btn_id=\''+q+'\']').val() == 'Remove') {
-                if ($('#serial'+q).val()) {
-                    if($('#serial'+q).val() == "N/A") {
-                        $.ajax({
-                            url: 'checkserial',
-                            headers: {
-                                'X-CSRF-TOKEN': $('meta[name="ctok"]').attr('content')
-                            },
-                            dataType: 'json',
-                            type: 'get',
-                            async: false,
-                            data: {
-                                item: $('#desc'+q).val(),
-                            },
-                            success: function (data) {
-                                if (data != "allowed") {
-                                    alert('N/A not allowed!');
-                                    stop = 1;
-                                    return false;
-                                }
-                                if (q=y) {
-                                    go = 1;
-                                    should_i_go_now();
-                                }
-                            },
-                            error: function (data) {
-                                alert(data.responseText);
-                                return false;
-                            }
-                        });
-                    }
-                }
-            }
-        }
-    }*/
     for(var q=1;q<=y;q++){
         if ($('#row'+q).is(":visible")) {
             if ($('.add_item[btn_id=\''+q+'\']').val() == 'Remove') {

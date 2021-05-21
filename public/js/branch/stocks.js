@@ -654,7 +654,7 @@ function checkserial(ex) {
     var myval = ex.id;
     var slicena = myval.slice(6)
     console.log(slicena);
-    if ($('#serial'+slicena).val().toLowerCase() == 'n/a') {
+    if ($('#serial'+slicena).val().toLowerCase().includes('n/a')) {
         $.ajax({
             url: 'checkserial',
             headers: {
@@ -664,7 +664,8 @@ function checkserial(ex) {
             type: 'get',
             async: false,
             data: {
-                item: $('#desc'+slicena).val()
+                item: $('#desc'+slicena).val(),
+                type: 'na'
             },
             success: function (data) {
                 if (data != "allowed") {

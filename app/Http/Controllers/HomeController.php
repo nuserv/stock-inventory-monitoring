@@ -402,6 +402,15 @@ class HomeController extends Controller
                     $newlog->save();
                 }
         }
+
+        if ($id == 'caps') {
+            $stocks = Warehouse::all();
+            foreach ($stocks as $stock) {
+                $stock->serial = strtoupper($stock->serial);
+                $stock->save();
+            }
+        }
+
         dd(Stock::all());
     }
     public function activity()

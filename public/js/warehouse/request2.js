@@ -63,13 +63,13 @@ $(document).on('click', '.sub_Btn', function(){
                                 type: 'get',
                                 data: {
                                     item: $('#desc'+q).val(),
+                                    type: 'na'
                                 },
                                 success: function (data) {
                                     if (data != "allowed") {
                                         alert('This item requires a valid serial number. If the item does not contain a serial number please contact the main office to generate a new one.');
                                         $('#loading').hide();
                                         return false;
-
                                     }
                                 },
                                 error: function (data) {

@@ -1230,12 +1230,16 @@ $(document).on("click", "#serial_btn", function() {
         type: 'PUT',
         data: {
             old: serialnum,
-            new: $('#editserial').val()
+            new: $('#editserial').val().toUpperCase()
         },
         success: function(data) {
             console.log(data);
-            alert('Serial Number updated');
-            location.reload();
+            if (data == 'meron') {
+                alert('The serial number you entered is already existing. Please check the serial number again.');
+            }else{
+                alert('Serial Number updated');
+                location.reload();
+            }
         },
         error: function(data) {
             alert(data.responseText);

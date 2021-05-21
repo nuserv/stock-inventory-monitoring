@@ -188,7 +188,7 @@ class DefectiveController extends Controller
                 $log = new UserLog;
                 $log->branch_id = auth()->user()->branch->id;
                 $log->branch = auth()->user()->branch->branch;
-                $log->activity = "RETURN defective $items->item(S/N: $updates->serial) to warehouse." ;
+                $log->activity = "RETURN defective $items->item(S/N: ".mb_strtoupper($updates->serial).") to warehouse." ;
                 $log->user_id = auth()->user()->id;
                 $log->fullname = auth()->user()->name.' '.auth()->user()->middlename.' '.auth()->user()->lastname;
                 $log->save();
@@ -206,7 +206,7 @@ class DefectiveController extends Controller
                 $log = new UserLog;
                 $log->branch_id = auth()->user()->branch->id;
                 $log->branch = auth()->user()->branch->branch;
-                $log->activity = "RECEIVED defective $item->item($update->serial) from $branch->branch." ;
+                $log->activity = "RECEIVED defective $item->item(".mb_strtoupper($update->serial).") from $branch->branch." ;
                 $log->user_id = auth()->user()->id;
                 $log->fullname = auth()->user()->name.' '.auth()->user()->middlename.' '.auth()->user()->lastname;
                 $log->save();
@@ -227,7 +227,7 @@ class DefectiveController extends Controller
                 $log = new UserLog;
                 $log->branch_id = auth()->user()->branch->id;
                 $log->branch = auth()->user()->branch->branch;
-                $log->activity = "REPAIRED $item->item($repaired->serial) and send to Warehouse." ;
+                $log->activity = "REPAIRED $item->item(".mb_strtoupper($repaired->serial).") and send to Warehouse." ;
                 $log->user_id = auth()->user()->id;
                 $log->fullname = auth()->user()->name.' '.auth()->user()->middlename.' '.auth()->user()->lastname;
                 $repaired->save();
@@ -252,7 +252,7 @@ class DefectiveController extends Controller
                 $log = new UserLog;
                 $log->branch_id = auth()->user()->branch->id;
                 $log->branch = auth()->user()->branch->branch;
-                $log->activity = "ADD $item->item($pending->serial) from Repair to Stock." ;
+                $log->activity = "ADD $item->item(".($pending->serial).") from Repair to Stock." ;
                 $log->user_id = auth()->user()->id;
                 $log->fullname = auth()->user()->name.' '.auth()->user()->middlename.' '.auth()->user()->lastname;
                 $pending->save();
