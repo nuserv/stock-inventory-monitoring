@@ -235,7 +235,7 @@ $(document).on('click', '.in_sub_Btn', function(){
     }
 });
 $(document).on('keyup', '#repserial', function(){
-    if ($(this).val() && $(this).val().length >= 3) {
+    if ($(this).val() && $(this).val().length >= 3 && $(this).val().match(".*\\d.*")) {
         if ($(this).val().toLowerCase().includes('n/a') ==  "n/a" || $(this).val().toLowerCase() ==  "faded" || $(this).val().toLowerCase() ==  "none") {
             $.ajax({
                 url: 'checkserial',
