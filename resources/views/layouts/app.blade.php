@@ -199,7 +199,6 @@
         <script type="text/javascript" src="{{asset('js/moment.min.js')}}"></script>
         <script src="https://code.jquery.com/ui/1.11.4/jquery-ui.min.js"></script>
         
-        
         @if(Request::is('user'))
             <script src="{{asset('min/?f=js/warehouse/user.js')}}"></script>
         @endif
