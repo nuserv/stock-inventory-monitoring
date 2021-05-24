@@ -46,6 +46,7 @@
                         </div>
                     </div>
                     <br>
+                    <input type="text" placeholder="Search item.." class="form-control cfilter-input fl-c" data-column="0" style="border: 1px solid black;"/>
                     <div id="table">
                         <center><h5 id="catname"></h5></center>
                         <table class="table branchDetails" id="branchDetails" style="width: 100%;font-size:80%">
@@ -74,19 +75,24 @@
                             </thead>
                         </table>
                     </div>
+                    <div id="itemall" style="display:none">
+                        <table class="table itemsearch" id="itemsearch" style="width: 100%;font-size:80%">
+                            <thead class="thead-dark">
+                                <tr>
+                                <th>DESCRIPTION</th>
+                                @if (auth()->user()->hasanyrole('Editor', 'Manager', 'Warehouse Manager', 'Encoder','Viewer', 'Viewer PLSI', 'Viewer IDSI'))
+                                    <th>INITIAL STOCK</th>
+                                    <th>DEFECTIVE</th>
+                                @endif
+                                <th>AVAILABLE</th>
+                                <th>OUT</th>
+                                </tr>
+                            </thead>
+                        </table>
+                    </div>
                     <div id="cattable">
                         <table class="table catbranchDetails" id="catbranchDetails" style="width: 100%;font-size:80%">
                             <thead class="thead-dark">
-                                <tr class="tbsearchm">
-                                    <td>
-                                        <input type="text" placeholder="Search category.." class="form-control cfilter-input fl-c" data-column="0" style="border: 1px solid black;"/>
-                                    </td>
-                                    @if (auth()->user()->hasanyrole('Editor', 'Manager', 'Warehouse Manager', 'Encoder','Viewer', 'Viewer PLSI', 'Viewer IDSI'))
-                                        <td></td>
-                                    @endif
-                                    <td></td>
-                                    <td></td>
-                                <tr>
                                     <th>Category</th>
                                     @if (auth()->user()->hasanyrole('Editor', 'Manager', 'Warehouse Manager', 'Encoder','Viewer', 'Viewer PLSI', 'Viewer IDSI'))
                                         <th>DEFECTIVE</th>

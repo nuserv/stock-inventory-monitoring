@@ -44,7 +44,7 @@ class BranchController extends Controller
 
     public function getStocks(Request $request, $id)
     {
-        $details = DB::table('items')
+        /*$details = DB::table('items')
             ->select(
                 'stocks.id',
                 'stocks.items_id',
@@ -67,15 +67,15 @@ class BranchController extends Controller
             ->join('initials', 'initials.items_id', '=', 'items.id')
             ->where('stocks.branch_id', $id)
             ->groupBy('stocks.items_id')
-            ->get();
-        if ($request->data != 1) {
-            return DataTables::of(Category::query()->orderBy('category')->get())
+            ->get();*/
+        if ($request->data == 0) {
+            $cat = Category::query()->orderBy('category')->get();
+            return DataTables::of($cat)
             ->addColumn('stock_out', function ($category) use ($id){
-                    
                 if (auth()->user()->branch->branch == 'Warehouse' && $id == 1) {
                     $stock_out = 0;
                 }else{
-                    $stock_out = Stock::wherein('status', ['service unit', 'pm'])
+                    $stock_out = Stock::query()->wherein('status', ['service unit', 'pm'])
                         ->where('branch_id', $id)
                         ->where('category_id', $category->id)
                         ->count();
@@ -88,7 +88,7 @@ class BranchController extends Controller
                         ->where('category_id', $category->id)
                         ->count();
                 }else{
-                    $avail = Stock::where('status', 'in')
+                    $avail = Stock::query()->where('status', 'in')
                         ->where('branch_id', $id)
                         ->where('category_id', $category->id)
                         ->count();
@@ -101,7 +101,7 @@ class BranchController extends Controller
                         ->where('category_id', $category->id)
                         ->count();
                 }else{
-                    $avail = Defective::where('status', 'For return')
+                    $avail = Defective::query()->where('status', 'For return')
                         ->where('branch_id', $id)
                         ->where('category_id', $category->id)
                         ->count();
@@ -109,8 +109,8 @@ class BranchController extends Controller
                 return $avail;
             })
             ->make(true);
-        }else{ 
-            $stock = Item::query()->where('category_id', $request->category)->get();
+        }else if ($request->data == 2) {
+            $stock = Item::query()->get();
             return DataTables::of($stock)
             ->addColumn('available', function ($item) use ($id){
                 if (auth()->user()->branch->id == 1 && $id == 1) {
@@ -118,7 +118,7 @@ class BranchController extends Controller
                         ->where('items_id', $item->id)
                         ->count();
                 }else{
-                    $avail = Stock::where('status', 'in')
+                    $avail = Stock::query()->where('status', 'in')
                         ->where('branch_id', $id)
                         ->where('items_id', $item->id)
                         ->count();
@@ -131,7 +131,7 @@ class BranchController extends Controller
                         ->where('items_id', $item->id)
                         ->count();
                 }else{
-                    $avail = Defective::where('status', 'For return')
+                    $avail = Defective::query()->where('status', 'For return')
                         ->where('branch_id', $id)
                         ->where('items_id', $item->id)
                         ->count();
@@ -142,7 +142,7 @@ class BranchController extends Controller
                 if (auth()->user()->branch->id == 1 && $id == 1) {
                     $stock_out = 0;
                 }else{
-                    $stock_out = Stock::wherein('status', ['service unit', 'pm'])
+                    $stock_out = Stock::query()->wherein('status', ['service unit', 'pm'])
                         ->where('branch_id', $id)
                         ->where('items_id', $item->id)
                         ->count();
@@ -150,8 +150,59 @@ class BranchController extends Controller
                 return $stock_out.' '.$item->UOM;
             })
             ->addColumn('initial', function ($item) use ($id){
-                
-                $ini = Initial::select('qty')
+                $ini = Initial::query()->select('qty')
+                    ->where('items_id', $item->id)
+                    ->where('branch_id', $id)
+                    ->first();
+                return $ini->qty.' '.$item->UOM;
+            })
+            ->addColumn('category', function ($item) use ($id){
+                $cat = Category::query()->where('id', $item->category_id)->first();
+                return $cat->category;
+            })
+            ->make(true);
+        }else{ 
+            $stock = Item::query()->where('category_id', $request->category)->get();
+            return DataTables::of($stock)
+            ->addColumn('available', function ($item) use ($id){
+                if (auth()->user()->branch->id == 1 && $id == 1) {
+                    $avail = Warehouse::where('status', 'in')
+                        ->where('items_id', $item->id)
+                        ->count();
+                }else{
+                    $avail = Stock::query()->where('status', 'in')
+                        ->where('branch_id', $id)
+                        ->where('items_id', $item->id)
+                        ->count();
+                }
+                return $avail.' '.$item->UOM;
+            })
+            ->addColumn('defectives', function ($item) use ($id){
+                if (auth()->user()->branch->id == 1 && $id == 1) {
+                    $avail = Warehouse::where('status', 'in')
+                        ->where('items_id', $item->id)
+                        ->count();
+                }else{
+                    $avail = Defective::query()->where('status', 'For return')
+                        ->where('branch_id', $id)
+                        ->where('items_id', $item->id)
+                        ->count();
+                }
+                return $avail.' '.$item->UOM;
+            })
+            ->addColumn('stock_out', function ($item) use ($id){
+                if (auth()->user()->branch->id == 1 && $id == 1) {
+                    $stock_out = 0;
+                }else{
+                    $stock_out = Stock::query()->wherein('status', ['service unit', 'pm'])
+                        ->where('branch_id', $id)
+                        ->where('items_id', $item->id)
+                        ->count();
+                }
+                return $stock_out.' '.$item->UOM;
+            })
+            ->addColumn('initial', function ($item) use ($id){
+                $ini = Initial::query()->select('qty')
                     ->where('items_id', $item->id)
                     ->where('branch_id', $id)
                     ->first();

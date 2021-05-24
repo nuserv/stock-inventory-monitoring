@@ -1,5 +1,6 @@
 var stockTable;
 var catstockTable;
+var itemsearch;
 var table;
 var Brid;
 var iteminiid;
@@ -56,6 +57,38 @@ $(document).ready(function()
         var trdata = table.row(this).data();
         var id = trdata.id;
         Brid = trdata.id;
+        itemsearch =
+        $('table.itemsearch').DataTable({ 
+            "dom": 'rtip',
+            "language": {
+                "emptyTable": " ",
+                "processing": '<i class="fa fa-spinner fa-spin fa-3x fa-fw"></i><span class="sr-only">Searching...</span>'
+            },
+            "pageLength": 10,
+            "order": [[ 1, "asc" ]],
+            processing: true,
+            serverSide: false,
+            ajax: {
+                //"async": false,
+                "url": "/stocks/"+Brid,
+                "data": {
+                    "data": 2
+                }
+            },
+            "columnDefs": [
+                {
+                    "targets": [ 1 ],
+                    "visible": false
+                }
+            ],
+            columns: [
+                { data: 'item', name:'item', "width": "17%"},
+                { data: 'initial', name:'initial'},
+                { data: 'defectives', name:'defectives', "width": "14%"},
+                { data: 'available', name:'available', "width": "14%"},
+                { data: 'stock_out', name:'stock_out', "width": "14%"}
+            ]
+        });
         $('#catBtn').hide();
         $('table.branchDetails').dataTable().fnDestroy();
         $('table.catbranchDetails').dataTable().fnDestroy();
@@ -246,10 +279,17 @@ $(document).ready(function()
             .draw();
     });
 
-    $('.cfilter-input').on('keyup', function() { 
-        catstockTable.column($(this).data('column'))
+    $('.cfilter-input').on('keyup', function() {
+        if ($(this).val()) {
+            itemsearch.column( 0 )
             .search($(this).val())
             .draw();
+            $('#cattable').hide();
+            $('#itemall').show();
+        }else{
+            $('#cattable').show();
+            $('#itemall').hide();
+        }
     });
 
     $(document).on('click', '#catbranchDetails tr', function(){
@@ -317,7 +357,6 @@ $(document).ready(function()
             processing: true,
             serverSide: false,
             ajax: {
-                "async": false,
                 "url": "/stocks/"+Brid,
                 "data": {
                     "data": 0
