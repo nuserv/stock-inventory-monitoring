@@ -315,7 +315,7 @@ $(document).ready(function()
             "pageLength": 10,
             "order": [[ 1, "asc" ]],
             processing: true,
-            serverSide: true,
+            serverSide: false,
             ajax: {
                 "async": false,
                 "url": "/stocks/"+Brid,
