@@ -70,7 +70,7 @@ $(document).ready(function()
             "pageLength": 15,
             "order": [[ 1, "asc" ]],
             processing: true,
-            serverSide: true,
+            serverSide: false,
             ajax: {
                 "url": "/stocks/"+id,
                 "data": {
@@ -276,7 +276,7 @@ $(document).on('click', '#catbranchDetails tr', function(){
             "pageLength": 5,
             "order": [[ 1, "asc" ]],
             processing: true,
-            serverSide: true,
+            serverSide: false,
             ajax: {
                 "url": "/stocks/"+Brid,
                 "data": {
