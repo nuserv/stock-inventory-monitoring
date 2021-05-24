@@ -46,7 +46,7 @@ $(document).ready(function()
                     className: 'btn btn-primary btn-icon-split',
                     titleAttr: 'PRINT',
                     enabled: false,
-                    autoPrint: false,
+                    autoPrint: true,
                     text: '<span class="icon text-white-50"><i class="fa fa-print" style="color:white"></i></span><span> Print Preview</span>',
                     customize: function (doc) {
                         var d = new Date();
@@ -64,7 +64,7 @@ $(document).ready(function()
                             .prepend('<div style="position:absolute; top:140;font-size:24px"><b>Prepared by:</b> '+$('#userlog').val()+'</div>')
                             .prepend('<div style="position:absolute; top:170;font-size:24px"><b>Area.:</b> '+$('#areaname').val()+'</div>')
                             .prepend('<div style="position:absolute; top:140;left:70%;font-size:24px"><b>Date prepared:</b> '+months[d.getMonth()]+' '+d.getDate()+', ' +d.getFullYear()+' '+hour+':'+String(d.getMinutes()).padStart(2, '0')+ampm+'</div>')
-                            .prepend('<div style="position:absolute; top:200;font-size:24px"><label for="textbranch"><b>Branch address:&nbsp;&nbsp;</b></label><textarea id="textbranch" style="vertical-align: top;resize: none;background: transparent;border:0 none" rows="3" cols="50" readonly>'+$('#addr').val()+'</textarea></div>')
+                            .prepend('<div style="position:absolute; top:200;font-size:24px"><label for="textbranch"><b>Branch address:&nbsp;&nbsp;</b></label><textarea id="textbranch" style="vertical-align: top;resize: none;background: transparent;border:0 none" rows="3" cols="80" readonly>'+$('#addr').val()+'</textarea></div>')
                                 //  .prepend('<div style="position:absolute; bottom:20; left:100;">Pagina '+page.toString()+' of '+pages.toString()+'</div>');
                         //jsDate.toString()
                         $(doc.document.body)
@@ -75,8 +75,8 @@ $(document).ready(function()
                         $(doc.document.body).find('table')            			
                                     .removeClass('dataTable')
                             .css('font-size','24px') 
-                                    .css('margin-top','230px')
-                            .css('margin-bottom','120px')
+                                    .css('margin-top','280px')
+                            .css('margin-bottom','150px')
                             $(doc.document.body).find('th').each(function(index){
                                 $(this).css('font-size','26px');
                                 $(this).css('color','black');
