@@ -101,7 +101,7 @@
                     <div class="modal-footer">
                         <input type="button" id="editBtn" class="btn btn-primary" value="Edit">
                         <input type="submit" id="saveBtn" class="btn btn-primary" value="Save">
-                        <input type="button" class="btn btn-primary mr-auto close" data-dismiss="modal" value="Cancel">
+                        <input type="button" class="btn btn-primary mr-auto cancel" data-dismiss="modal" value="Cancel">
                     </div>
                     @endif
                 </form>

@@ -338,3 +338,6 @@ $(document).ready(function()
 $(document).on('click', '.close', function () {
     location.reload(); 
  });
+ $(document).on('click', '.cancel', function () {
+    location.reload(); 
+ });
