@@ -15,7 +15,7 @@ $(document).ready(function()
     $('#userTable').DataTable({ 
         "dom": 'lrtip',
         processing: true,
-        serverSide: true,
+        serverSide: false,
         "language": {
             "emptyTable": "No registered user to this branch"
         },
