@@ -686,6 +686,7 @@ class StockRequestController extends Controller
                     ->where('request_no', $request->reqno)
                     ->where('prepared_items.id', $del)
                     ->first();
+                $stockreq = StockRequest::where('request_no', $request->reqno)->first();
                 $items = Item::where('id', $preparedItems->itemid)->first();
                 $stock = new Stock;
                 $stock->category_id = $items->category_id;
@@ -701,6 +702,9 @@ class StockRequestController extends Controller
                 $log->activity = "RECEIVED $items->item(S/N: ".mb_strtoupper($preparedItems->serial).") with Request no. $request->reqno ";
                 $log->user_id = auth()->user()->id;
                 $log->fullname = auth()->user()->name.' '.auth()->user()->middlename.' '.auth()->user()->lastname;
+                if ($stockreq->type == "Service") {
+                    $log->service = 'yes';
+                }
                 $log->save();
                 $prepared->delete();
             }
@@ -987,12 +991,9 @@ class StockRequestController extends Controller
         }else{
                 $stock = Stock::where('serial', $request->serial)->where('status', 'in')->first();
                 $def = Defective::where('serial', $request->serial)->where('status', 'For return')->first();
-                $prepared = PreparedItem::where('serial', $request->serial)->first();
             if ($stock) {
                 $data = "not allowed";
             }else if ($def) {
-                $data = "not allowed";
-            }else if ($prepared) {
                 $data = "not allowed";
             }else{
                 $data = "allowed";
