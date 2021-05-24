@@ -31,7 +31,7 @@ $(document).ready(function()
             "processing": '<i class="fa fa-spinner fa-spin fa-3x fa-fw"></i><span class="sr-only">Searching...</span>'
         },
         processing: true,
-        serverSide: true,
+        serverSide: false,
         ajax: {
             url: 'branches',
             error: function(data) {
@@ -71,7 +71,7 @@ $(document).ready(function()
             "pageLength": 15,
             "order": [[ 1, "asc" ]],
             processing: true,
-            serverSide: true,
+            serverSide: false,
             ajax: {
                 "async": false,
                 "url": "/stocks/"+id,
@@ -270,7 +270,7 @@ $(document).ready(function()
                 "pageLength": 5,
                 "order": [[ 1, "asc" ]],
                 processing: true,
-                serverSide: true,
+                serverSide: false,
                 ajax: {
                     "async": false,
                     "url": "/stocks/"+Brid,
