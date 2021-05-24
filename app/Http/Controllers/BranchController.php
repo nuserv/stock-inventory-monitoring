@@ -109,58 +109,6 @@ class BranchController extends Controller
                 return $avail;
             })
             ->make(true);
-        }else if ($request->data == 2) {
-            $stock = Item::query()->get();
-            return DataTables::of($stock)
-            ->addColumn('available', function ($item) use ($id){
-                if (auth()->user()->branch->id == 1 && $id == 1) {
-                    $avail = Warehouse::where('status', 'in')
-                        ->where('items_id', $item->id)
-                        ->count();
-                }else{
-                    $avail = Stock::query()->where('status', 'in')
-                        ->where('branch_id', $id)
-                        ->where('items_id', $item->id)
-                        ->count();
-                }
-                return $avail.' '.$item->UOM;
-            })
-            ->addColumn('defectives', function ($item) use ($id){
-                if (auth()->user()->branch->id == 1 && $id == 1) {
-                    $avail = Warehouse::where('status', 'in')
-                        ->where('items_id', $item->id)
-                        ->count();
-                }else{
-                    $avail = Defective::query()->where('status', 'For return')
-                        ->where('branch_id', $id)
-                        ->where('items_id', $item->id)
-                        ->count();
-                }
-                return $avail.' '.$item->UOM;
-            })
-            ->addColumn('stock_out', function ($item) use ($id){
-                if (auth()->user()->branch->id == 1 && $id == 1) {
-                    $stock_out = 0;
-                }else{
-                    $stock_out = Stock::query()->wherein('status', ['service unit', 'pm'])
-                        ->where('branch_id', $id)
-                        ->where('items_id', $item->id)
-                        ->count();
-                }
-                return $stock_out.' '.$item->UOM;
-            })
-            ->addColumn('initial', function ($item) use ($id){
-                $ini = Initial::query()->select('qty')
-                    ->where('items_id', $item->id)
-                    ->where('branch_id', $id)
-                    ->first();
-                return $ini->qty.' '.$item->UOM;
-            })
-            ->addColumn('category', function ($item) use ($id){
-                $cat = Category::query()->where('id', $item->category_id)->first();
-                return $cat->category;
-            })
-            ->make(true);
         }else{ 
             $stock = Item::query()->where('category_id', $request->category)->get();
             return DataTables::of($stock)
