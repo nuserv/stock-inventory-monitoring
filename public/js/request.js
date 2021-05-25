@@ -265,9 +265,7 @@ $(document).ready(function()
                         columns: [
                             { data: 'cat_name', name:'cat_name'},
                             { data: 'item_name', name:'item_name'},
-                            { data: 'qty', name:'qty'},
-                            { data: 'stockuom', name:'stockuom'}
-
+                            { data: 'qty', name:'qty'}
                         ],
                     });
                 }else if (partreq > 10) {
@@ -284,9 +282,7 @@ $(document).ready(function()
                         columns: [
                             { data: 'cat_name', name:'cat_name'},
                             { data: 'item_name', name:'item_name'},
-                            { data: 'qty', name:'qty'},
-                            { data: 'stockuom', name:'stockuom'}
-
+                            { data: 'qty', name:'qty'}
                         ]
                     });
                 }
@@ -544,9 +540,7 @@ $(document).ready(function()
                         columns: [
                             { data: 'cat_name', name:'cat_name'},
                             { data: 'item_name', name:'item_name'},
-                            { data: 'qty', name:'qty'},
-                            { data: 'stockuom', name:'stockuom'}
-
+                            { data: 'qty', name:'qty'}
                         ]
                     });
                 }else if (penreq > 10) {
@@ -563,9 +557,7 @@ $(document).ready(function()
                         columns: [
                             { data: 'cat_name', name:'cat_name'},
                             { data: 'item_name', name:'item_name'},
-                            { data: 'qty', name:'qty'},
-                            { data: 'stockuom', name:'stockuom'}
-
+                            { data: 'qty', name:'qty'}
                         ]
                     });
                 }
