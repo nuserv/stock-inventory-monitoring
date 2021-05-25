@@ -44,6 +44,10 @@
                 <th>
                     Status
                 </th>
+                @if(auth()->user()->hasAnyRole('Repair'))
+                <th>
+                </th>
+                @endif
             </tr>
         </thead>
     </table>

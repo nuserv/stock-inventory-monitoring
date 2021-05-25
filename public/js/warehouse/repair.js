@@ -17,13 +17,27 @@ $(document).ready(function() {
                     }
                 }
             },
+            "columnDefs": [
+                {   
+                    "render": function ( data, type, row, meta ) {
+                        if (data.status == "For receiving") {
+                            return '<button class="btn-primary recBtn" return_id="'+data.id+'" stat="Received">Received</button>'
+                        }else if (data.status == "For repair") {
+                            return '<button class="btn-primary recBtn" return_id="'+data.id+'" stat="Repaired">Repaired</button>&nbsp; <button class="btn-primary recBtn" return_id="'+data.id+'" stat="Unrepairabled">Unrepairabled</button>'
+                        }
+                    },
+                    "defaultContent": '',
+                    "data": null,"width": "18%",
+                    "targets": [6]
+                }
+            ],
             columns: [{
                     data: 'date',
                     name: 'date'
                 },
                 {
                     data: 'branch',
-                    name: 'branch', "width": "14%"
+                    name: 'branch'
                 },
                 {
                     data: 'category',
@@ -50,7 +64,81 @@ $(document).ready(function() {
             .draw();
     });
 });
-$(document).on("click", "#defectiveTable tr", function() {
+
+$(document).on('click', '.recBtn', function() {
+    var returnid = $(this).attr('return_id');
+    if ($(this).attr('stat') == "Received") {
+        $.ajax({
+            url: 'return-update',
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="ctok"]').attr('content')
+            },
+            dataType: 'json',
+            type: 'PUT',
+            data: {
+                id: returnid,
+                status: 'Received'
+            },
+            success: function(data) {
+                
+                $('#loading').hide();
+            },
+            error: function(data) {
+                alert(data.responseText);
+            }
+        });
+        table
+            .row($(this).parents('tr'))
+            .remove().draw( false );
+    }else if($(this).attr('stat') == "Repaired"){
+        $.ajax({
+            url: 'return-update',
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="ctok"]').attr('content')
+            },
+            dataType: 'json',
+            type: 'PUT',
+            data: {
+                id: returnid,
+                status: 'Repaired'
+            },
+            success: function(data) {
+                $('#loading').hide();
+            },
+            error: function(data) {
+                alert(data.responseText);
+            }
+        });
+        table
+            .row($(this).parents('tr'))
+            .remove().draw( false );
+    }else if($(this).attr('stat') == "Unrepairabled"){
+        $.ajax({
+            url: 'return-update',
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="ctok"]').attr('content')
+            },
+            dataType: 'json',
+            type: 'PUT',
+            data: {
+                id: returnid,
+                status: 'Unrepairable approval'
+            },
+            success: function(data) {
+                $('#loading').hide();
+            },
+            error: function(data) {
+                alert(data.responseText);
+            }
+        });
+        table
+            .row($(this).parents('tr'))
+            .remove().draw( false );
+    }
+
+    
+});
+/*$(document).on("click", "#defectiveTable tr", function() {
     var trdata = table.row(this).data();
     $('#branch_id').val(trdata.branchid);
     $('#date').val(trdata.date);
@@ -76,7 +164,7 @@ $(document).on("click", "#defectiveTable tr", function() {
         backdrop: 'static',
         keyboard: false
     });
-});
+});*/
 
 $(document).on('click', '#submit_Btn', function() {
     if (sub > 0) {

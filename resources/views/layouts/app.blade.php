@@ -198,6 +198,8 @@
         <script type="text/javascript" src="https://code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
         <script type="text/javascript" src="{{asset('js/moment.min.js')}}"></script>
         <script src="https://code.jquery.com/ui/1.11.4/jquery-ui.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.1/Chart.min.js" charset="utf-8"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highcharts/6.0.6/highcharts.js" charset="utf-8"></script>
         
         @if(Request::is('user'))
             <script src="{{asset('min/?f=js/warehouse/user.js')}}"></script>
@@ -304,7 +306,7 @@
             <script src="{{asset('min/?f=js/home.js')}}"></script>
         @endif
         @if (Request::is('/') && auth()->user()->hasrole('Repair'))
-            <script src="{{asset('min/?f=js/warehouse/defective.js')}}"></script>
+            <script src="{{asset('min/?f=js/warehouse/repair.js')}}"></script>
         @endif
         @if (Request::is('/') && auth()->user()->hasrole('Returns Manager'))
             <script src="{{asset('min/?f=js/unrepair.js')}}"></script>
@@ -324,5 +326,11 @@
         @if(Request::is('unrepair') && auth()->user()->hasanyrole('Repair', 'Editor', 'Manager'))
             <script src="{{asset('min/?f=js/unrepair.js')}}"></script>
         @endif
+        @auth
+            @if(Request::is('reports'))
+            <script type="text/javascript" src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
+                {!! $chart->script() !!}
+            @endif
+        @endauth
     </body>
 </html>

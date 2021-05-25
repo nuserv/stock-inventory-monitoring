@@ -198,7 +198,6 @@ class DefectiveController extends Controller
         }else{
             if ($request->status == 'Received') {
                 $update = Defective::where('id', $request->id)
-                    ->where('branch_id', $request->branch)
                     ->where('status', 'For receiving')
                     ->first();
                 $item = Item::where('id', $update->items_id)->first();
@@ -217,7 +216,6 @@ class DefectiveController extends Controller
             }
             if ($request->status == 'Repaired') {
                 $repaired = Defective::where('id', $request->id)
-                    ->where('branch_id', $request->branch)
                     ->where('status', 'For repair')
                     ->first();
                 $repaired->status = "Repaired";
@@ -261,7 +259,6 @@ class DefectiveController extends Controller
             }
             if ($request->status == 'Unrepairable approval') {
                 $unreapairable = Defective::where('id', $request->id)
-                    ->where('branch_id', $request->branch)
                     ->where('status', 'For repair')
                     ->first();
                 $unreapairable->status = "Unrepairable approval";
