@@ -23,6 +23,9 @@
                 <li class="nav-item" style="margin-left:0px;margin-right:0px;">
                     <a style="padding-right:8px; padding-left:8px" class="nav-link {{ Request::is('disposed') ? 'active' : '' }}" href="{{ url('/disposed') }}">Disposed</a>
                 </li>
+                <li class="nav-item">
+                    <a style="padding-right:8px; padding-left:8px" class="nav-link {{ Request::is('request') ? 'active' : '' }}" href="{{ route('stock.index') }}">Stock Request</a>
+                </li>
             @endif
             @if(auth()->user()->hasrole('Repair'))
                 <li class="nav-item" style="margin-left:0px;margin-right:0px;">
