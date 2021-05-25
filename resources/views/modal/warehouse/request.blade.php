@@ -112,7 +112,7 @@
                         <th>Category</th>
                         <th>Description</th>
                         <th>Qty - UOM</th>
-                        @if(!auth()->user()->hasanyrole('Manager', 'Editor', 'Viewer'))
+                        @if(!auth()->user()->hasanyrole('Manager', 'Editor', 'Viewer', 'Returns Manager'))
                         <th>Stock Available</th>
                         @endif
                     </thead>
