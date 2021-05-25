@@ -1147,7 +1147,13 @@ class StockController extends Controller
     public function verifyserial(Request $request)
     {
         $item = Stock::query()->where('serial', $request->serial)->where('Status', 'in')->first();
+        $def = Defective::query()->where('serial', $request->serial)->where('Status', 'For return')->first();
+        $prep = PreparedItem::query()->where('serial', $request->serial)->first();
         if ($item) {
+            $data = "not allowed";
+        }else if ($def) {
+            $data = "not allowed";
+        }else if ($prep) {
             $data = "not allowed";
         }else {
             $data = "allowed";
