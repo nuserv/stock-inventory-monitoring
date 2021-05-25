@@ -107,6 +107,7 @@ $(document).on('click', '.sub_Btn', function(){
                                 return false;
                             }
                         });
+                        console.log('dito1');
                         $.ajax({
                             url: 'update/'+$('#sreqno').val(),
                             headers: {
@@ -115,13 +116,15 @@ $(document).on('click', '.sub_Btn', function(){
                             dataType: 'json',
                             type: 'PUT',
                             data: {
-                                item: $('#item'+q).val(),
+                                item: $('#item'+q).val()
                             },
                             error: function (data) {
+                                console.log('error');
                                 alert(data.responseText);
                                 return false;
                             }
                         });
+                        console.log('dito2');
                     }else{
                         pending++;
                     }

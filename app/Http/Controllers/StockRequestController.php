@@ -31,7 +31,7 @@ class StockRequestController extends Controller
     }
     public function index()
     {
-        if (auth()->user()->hasanyrole('Repair', 'Returns Manager', 'Viewer', 'Viewer PLSI', 'Viewer IDSI')) {
+        if (auth()->user()->hasanyrole('Repair', 'Viewer', 'Viewer PLSI', 'Viewer IDSI')) {
             return redirect('/');
         }
         $title = 'Stock Request';
@@ -708,6 +708,8 @@ class StockRequestController extends Controller
                         $log->company = 'IDSI';
                     }else if (str_contains($stockreq->ticket, 'PLS')) {
                         $log->company = 'PLSI';
+                    }else if (str_contains($stockreq->ticket, 'APS')) {
+                        $log->company = 'APSOFT';
                     }
                 }
                 $log->save();
