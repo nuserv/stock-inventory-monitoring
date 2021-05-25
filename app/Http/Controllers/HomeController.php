@@ -416,8 +416,16 @@ class HomeController extends Controller
     public function activity()
     {   
         if (auth()->user()->hasRole('Viewer PLSI')) {
-            $act = UserLog::query()->where('activity', 'like','%mercury drug%' );
-            
+            $acts = UserLog::query()->get();
+            $act = [];
+            foreach ($acts as $acs) {
+                if(str_contains(strtolower($acs->activity), 'mercury drug')){
+                    array_push($act, $acs);
+                }
+                if ($acs->service == "yes" && $acs->company == "PLSI") {
+                    array_push($act, $acs);
+                }
+            }
         }
         if (auth()->user()->hasanyRole('Viewer IDSI', 'Viewer')) {
             $acts = UserLog::query()->where('activity', 'not like', '%mercury drug%' )->get();
@@ -429,8 +437,10 @@ class HomeController extends Controller
                 if(str_contains($acs->activity, 'REPLACED')){
                     array_push($act, $acs);
                 }
+                if ($acs->service == "yes" && $acs->company == "IDSI") {
+                    array_push($act, $acs);
+                }
             }
-            
         }
         if (auth()->user()->hasAnyRole('Editor',  'Manager')) {
             $act = UserLog::query();

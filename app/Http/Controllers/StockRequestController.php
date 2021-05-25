@@ -704,6 +704,11 @@ class StockRequestController extends Controller
                 $log->fullname = auth()->user()->name.' '.auth()->user()->middlename.' '.auth()->user()->lastname;
                 if ($stockreq->type == "Service") {
                     $log->service = 'yes';
+                    if (str_contains($stockreq->ticket, 'IDS')) {
+                        $log->company = 'IDSI';
+                    }else if (str_contains($stockreq->ticket, 'PLS')) {
+                        $log->company = 'PLSI';
+                    }
                 }
                 $log->save();
                 $prepared->delete();

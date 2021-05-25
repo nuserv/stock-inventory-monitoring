@@ -721,6 +721,13 @@ $(document).ready(function()
     });
 });
 
+$(document).on('keyup', '#ticket', function () {
+    if ($(this).val().length >= 3 && !/[a-zA-Z]/i.test($(this).val())) {
+        alert('Incorrect Ticket number Format!');
+        $(this).val('');
+    }
+});
+
 $(document).on('click', '#not_rec_Btn', function(){
     $.ajax({
         url: 'notrec',
