@@ -98,7 +98,7 @@
                 @include('modal.warehouse.resched')
                 @include('modal.warehouse.serial')
             @endif
-            @if(auth()->user()->hasAnyrole('Manager', 'Editor'))
+            @if(auth()->user()->hasAnyrole('Manager', 'Editor', 'Returns Manager'))
                 @include('modal.warehouse.request')
                 @include('modal.remarks')
             @endif
@@ -231,7 +231,7 @@
                 <script src="{{asset('min/?f=js/warehouse/request2.js')}}"></script>
                 <script src="{{asset('min/?f=js/warehouse/request3.js')}}"></script>
             @endif
-            @if(auth()->user()->hasanyrole('Editor', 'Manager'))
+            @if(auth()->user()->hasanyrole('Editor', 'Manager', 'Returns Manager'))
                 <script src="{{asset('min/?f=js/request.js')}}"></script>
             @endif
             @if(auth()->user()->hasAnyrole('Head', 'Tech'))
