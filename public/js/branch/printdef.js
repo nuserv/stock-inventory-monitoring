@@ -76,7 +76,7 @@ $(document).ready(function()
                                     .removeClass('dataTable')
                             .css('font-size','24px') 
                                     .css('margin-top','280px')
-                            .css('margin-bottom','150px')
+                            .css('margin-bottom','250px')
                             $(doc.document.body).find('th').each(function(index){
                                 $(this).css('font-size','26px');
                                 $(this).css('color','black');
