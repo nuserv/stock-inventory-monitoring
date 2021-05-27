@@ -69,6 +69,25 @@
             </tr>
             <tr style="height:14pt">
                 <td width="165" style="width:143;border-top:none;border:solid #d9d9d9 1.0pt;background:white;">
+                    <p>Status:</p>
+                </td>
+                <td width="542" style="width:546pt;border-top:none;border:solid #d9d9d9 1.0pt;background:white;">
+                    <p>
+                        <span style="color:black">
+                           {{ $oldstatus }}
+                        </span>
+                    </p>
+                </td>
+                <td width="542" style="width:546pt;border-top:none;border:solid #d9d9d9 1.0pt;background:white;">
+                    <p>
+                        <span style="color:black">
+                           {{ $status }}
+                        </span>
+                    </p>
+                </td>
+            </tr>
+            <tr style="height:14pt">
+                <td width="165" style="width:143;border-top:none;border:solid #d9d9d9 1.0pt;background:white;">
                     <p>Date/Time:</p>
                 </td>
                 <td width="542" colspan="2" style="width:546pt;border-top:none;border:solid #d9d9d9 1.0pt;background:white;">

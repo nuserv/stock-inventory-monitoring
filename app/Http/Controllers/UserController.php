@@ -196,6 +196,8 @@ class UserController extends Controller
             );
             Config::set('mail', $config);
             $olduser = User::find($id);
+            $oldlevel = $olduser->roles->first()->name;
+            $oldbranch = Branch::where('id', $olduser->branch_id)->first();
             $user = User::find($id);
             $user->name = ucwords(mb_strtolower($request->input('first_name')));
             $user->lastname = ucwords(mb_strtolower($request->input('last_name')));
@@ -205,10 +207,14 @@ class UserController extends Controller
             $user->branch_id = $request->input('branch');
             $user->status = $request->input('status');
             $data = $user->save();
+            if ($request->input('status'); = 1) {
+                $stat = 'Active';
+            }else{
+                $stat = 'Inative'
+            }
             $user->syncRoles($request->input('role'));
-            $oldbranch = Branch::where('id', $olduser->branch_id)->first();
             $branch = Branch::where('id', $request->input('branch'))->first();
-            Mail::send('update-user', ['olduser'=>$olduser->name.' '.$olduser->middlename.' '.$olduser->lastname, 'oldlevel'=>$olduser->roles->first()->name, 'oldbranch'=>$oldbranch->branch, 'user'=>$user->name.' '.$user->middlename.' '.$user->lastname, 'level'=>$request->input('role'), 'branch'=>$branch->branch],function( $message){ 
+            Mail::send('update-user', ['status'=>$stat,'oldstatus'=>$olduser->status, 'olduser'=>$olduser->name.' '.$olduser->middlename.' '.$olduser->lastname, 'oldlevel'=>$oldlevel, 'oldbranch'=>$oldbranch->branch, 'user'=>$user->name.' '.$user->middlename.' '.$user->lastname, 'level'=>$request->input('role'), 'branch'=>$branch->branch],function( $message){ 
                 $message->to('kdgonzales@ideaserv.com.ph', 'Kenneth Gonzales')->subject(auth()->user()->name.' '.auth()->user()->lastname.' has updated a user to Service center stock monitoring system.'); 
                 $message->from('noreply@ideaserv.com.ph', 'Update User'); 
             });
