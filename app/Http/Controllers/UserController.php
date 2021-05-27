@@ -210,12 +210,12 @@ class UserController extends Controller
             if ($request->input('status') == 1) {
                 $stat = 'Active';
             }else{
-                $stat = 'Inative';
+                $stat = 'Inactive';
             }
             if ($olduser->status == 1) {
                 $oldstat = 'Active';
             }else{
-                $oldstat = 'Inative';
+                $oldstat = 'Inactive';
 
             }
             $user->syncRoles($request->input('role'));
