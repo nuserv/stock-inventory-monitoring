@@ -552,7 +552,7 @@ class StockController extends Controller
             $log = new UserLog;
             $log->branch_id = auth()->user()->branch->id;
             $log->branch = auth()->user()->branch->branch;
-            $log->activity = "PM SERVICE IN $pmitem->item(defective) with serial no. ".mb_strtoupper($request->serial)." from $pmcustomer->customer_branch." ;
+            $log->activity = "PM SERVICE IN - SERVICE UNIT $pmitem->item(defective) with serial no. ".mb_strtoupper($request->serial)." from $pmcustomer->customer_branch." ;
             $log->user_id = auth()->user()->id;
             $log->fullname = auth()->user()->name.' '.auth()->user()->middlename.' '.auth()->user()->lastname;
             $log->save();
@@ -563,7 +563,7 @@ class StockController extends Controller
             $log = new UserLog;
             $log->branch_id = auth()->user()->branch->id;
             $log->branch = auth()->user()->branch->branch;
-            $log->activity = "PM SERVICE IN $pmitem->item(good) with serial no. ".mb_strtoupper($request->serial)." from $pmcustomer->customer_branch." ;
+            $log->activity = "PM SERVICE IN - SERVICE UNIT $pmitem->item(good) with serial no. ".mb_strtoupper($request->serial)." from $pmcustomer->customer_branch." ;
             $log->user_id = auth()->user()->id;
             $log->fullname = auth()->user()->name.' '.auth()->user()->middlename.' '.auth()->user()->lastname;
             $log->save();
@@ -608,7 +608,7 @@ class StockController extends Controller
                 $log = new UserLog;
                 $log->branch_id = auth()->user()->branch->id;
                 $log->branch = auth()->user()->branch->branch;
-                $log->activity = "PM SERVICE IN $pmitem->item(defective) with serial no. ".mb_strtoupper($request->serial)." from $pmcustomer->customer_branch." ;
+                $log->activity = "PM SERVICE IN - SERVICE UNIT $pmitem->item(defective) with serial no. ".mb_strtoupper($request->serial)." from $pmcustomer->customer_branch." ;
                 $log->user_id = auth()->user()->id;
                 $log->fullname = auth()->user()->name.' '.auth()->user()->middlename.' '.auth()->user()->lastname;
                 $log->save();
@@ -616,7 +616,7 @@ class StockController extends Controller
                 $log = new UserLog;
                 $log->branch_id = auth()->user()->branch->id;
                 $log->branch = auth()->user()->branch->branch;
-                $log->activity = "SERVICE IN $item->item(defective) with serial no. ".mb_strtoupper($request->serial)." from $customer->customer_branch." ;
+                $log->activity = "SERVICE IN - SERVICE UNIT $item->item(defective) with serial no. ".mb_strtoupper($request->serial)." from $customer->customer_branch." ;
                 $log->user_id = auth()->user()->id;
                 $log->fullname = auth()->user()->name.' '.auth()->user()->middlename.' '.auth()->user()->lastname;
                 $log->save();
@@ -629,7 +629,7 @@ class StockController extends Controller
                 $log = new UserLog;
                 $log->branch_id = auth()->user()->branch->id;
                 $log->branch = auth()->user()->branch->branch;
-                $log->activity = "SERVICE IN $pmitem->item(good) with serial no. ".mb_strtoupper($request->serial)." from $pmcustomer->customer_branch." ;
+                $log->activity = "PM SERVICE IN - SERVICE UNIT $pmitem->item(good) with serial no. ".mb_strtoupper($request->serial)." from $pmcustomer->customer_branch." ;
                 $log->user_id = auth()->user()->id;
                 $log->fullname = auth()->user()->name.' '.auth()->user()->middlename.' '.auth()->user()->lastname;
                 $log->save();
@@ -637,7 +637,7 @@ class StockController extends Controller
                 $log = new UserLog;
                 $log->branch_id = auth()->user()->branch->id;
                 $log->branch = auth()->user()->branch->branch;
-                $log->activity = "SERVICE IN $item->item(good) with serial no. ".mb_strtoupper($stock->serial)." from $customer->customer_branch." ;
+                $log->activity = " PM SERVICE IN - SERVICE UNIT $item->item(good) with serial no. ".mb_strtoupper($stock->serial)." from $customer->customer_branch." ;
                 $log->user_id = auth()->user()->id;
                 $log->fullname = auth()->user()->name.' '.auth()->user()->middlename.' '.auth()->user()->lastname;
                 $log->save();
@@ -743,7 +743,21 @@ class StockController extends Controller
         $data = $defect->delete();
         return response()->json($data);
     }
-
+    public function pull(Request $request)
+    {
+        $pull = Stock::where('id', $request->id)->where('serial', $request->serial)->where('status', 'in')->first();
+        $pullout = new Pullout;
+        $pullout->user_id = auth()->user()->id;
+        $pullout->branch_id = auth()->user()->branch->id;
+        $pullout->category_id = $pull->category_id;
+        $pullout->items_id = $pull->items_id;
+        $pullout->serial = $request->serial;
+        $pullout->status = "pending";
+        $pull->status = "pullout";
+        $pull->save();
+        $data = $pullout->save();
+        return response()->json($data);
+    }
     public function def(Request $request)
     {
         $def = Stock::where('id', $request->id)->where('serial', $request->serial)->where('status', 'in')->first();
@@ -1065,7 +1079,7 @@ class StockController extends Controller
             $log = new UserLog;
             $log->branch_id = auth()->user()->branch->id;
             $log->branch = auth()->user()->branch->branch;
-            $log->activity = "SERVICE-IN $item->item(S/N: ".mb_strtoupper($request->serial).") from $customer->customer_branch." ;
+            $log->activity = "SERVICE IN - SERVICE UNIT $item->item(S/N: ".mb_strtoupper($request->serial).")(defective) from $customer->customer_branch." ;
             $log->user_id = auth()->user()->id;
             $log->fullname = auth()->user()->name.' '.auth()->user()->middlename.' '.auth()->user()->lastname;
             $data = $log->save();
@@ -1086,7 +1100,7 @@ class StockController extends Controller
             $log = new UserLog;
             $log->branch_id = auth()->user()->branch->id;
             $log->branch = auth()->user()->branch->branch;
-            $log->activity = "REPLACED $item->item(S/N: ".mb_strtoupper($request->serial).") from $customer->customer_branch." ;
+            $log->activity = "SERVICE IN - REPLACEMENT $item->item(S/N: ".mb_strtoupper($request->serial).") from $customer->customer_branch." ;
             $log->user_id = auth()->user()->id;
             $log->fullname = auth()->user()->name.' '.auth()->user()->middlename.' '.auth()->user()->lastname;
             $data = $log->save();
@@ -1114,7 +1128,7 @@ class StockController extends Controller
             $log = new UserLog;
             $log->branch_id = auth()->user()->branch->id;
             $log->branch = auth()->user()->branch->branch;
-            $log->activity = "REPLACED $item->item(S/N: ".mb_strtoupper($request->serial).") from $customer->customer_branch." ;
+            $log->activity = "PM SERVICE IN - SERVICE UNIT $item->item(S/N: ".mb_strtoupper($request->serial).")(defective) from $customer->customer_branch." ;
             $log->user_id = auth()->user()->id;
             $log->fullname = auth()->user()->name.' '.auth()->user()->middlename.' '.auth()->user()->lastname;
             $data = $log->save();
@@ -1135,7 +1149,7 @@ class StockController extends Controller
             $log = new UserLog;
             $log->branch_id = auth()->user()->branch->id;
             $log->branch = auth()->user()->branch->branch;
-            $log->activity = "REPLACED $item->item(S/N: ".mb_strtoupper($request->serial).") from $customer->customer_branch." ;
+            $log->activity = "PM SERVICE IN - REPLACEMENT $item->item(S/N: ".mb_strtoupper($request->serial).") from $customer->customer_branch." ;
             $log->user_id = auth()->user()->id;
             $log->fullname = auth()->user()->name.' '.auth()->user()->middlename.' '.auth()->user()->lastname;
             $data = $log->save();
