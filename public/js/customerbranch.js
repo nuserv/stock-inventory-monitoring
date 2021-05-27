@@ -50,7 +50,11 @@ $(document).on("click", "#customerbranchTable tr", function () {
     $('#myid').val(id);
     $('#branch_code').val(trdata.code);
     $('#branch_name').val(trdata.customer_branch.replace(/&quot;/g, '\"').replace(/&amp;/g, '\&'));
-    $('#address').val(trdata.address.replace(/&quot;/g, '\"').replace(/&amp;/g, '\&'));
+    if (trdata.address) {
+        $('#address').val(trdata.address.replace(/&quot;/g, '\"').replace(/&amp;/g, '\&'));
+    }else{
+        $('#address').val('');
+    }
     $('#number').val(trdata.contact);
     $('#number').val($('#number').val().replace(/&quot;/g, '\"').replace(/&amp;/g, '\&'));
     $('.status').show();
