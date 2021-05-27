@@ -210,7 +210,7 @@ class UserController extends Controller
             if ($request->input('status') == 1) {
                 $stat = 'Active';
             }else{
-                $stat = 'Inative'
+                $stat = 'Inative';
             }
             $user->syncRoles($request->input('role'));
             $branch = Branch::where('id', $request->input('branch'))->first();
