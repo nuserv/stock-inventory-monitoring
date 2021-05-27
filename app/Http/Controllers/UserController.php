@@ -207,7 +207,7 @@ class UserController extends Controller
             $user->branch_id = $request->input('branch');
             $user->status = $request->input('status');
             $data = $user->save();
-            if ($request->input('status'); = 1) {
+            if ($request->input('status') == 1) {
                 $stat = 'Active';
             }else{
                 $stat = 'Inative'
