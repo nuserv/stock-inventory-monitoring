@@ -668,6 +668,7 @@ $(document).ready(function()
         $('#reqBtn').prop('disabled', false);
         $('#loading').hide();
     }, 5000);
+    
     $('table.intransitDetails').DataTable().on('select', function () {
         var rowselected = intransittable.rows( { selected: true } ).data();
         if(rowselected.length > 0){

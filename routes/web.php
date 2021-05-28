@@ -125,6 +125,14 @@ Route::any('repaired', 'StockController@repaired')->middleware('ajax');
 
 Route::post('/branch/import', 'ImportController@branchstore');
 Route::post('/warehouse/import', 'ImportController@warestore');
+Route::put('pullout', 'StockController@pull')->middleware('ajax');
+Route::get('pullview', 'StockController@pullview')->name('pullout.index');
+Route::put('pullnr', 'StockController@pullnr')->middleware('ajax');
+Route::put('pullrec', 'StockController@pullrec')->middleware('ajax');
+Route::get('pullget', 'StockController@pullget');//->middleware('ajax');
+Route::get('pullitem', 'StockController@pullitem');//->middleware('ajax');
+Route::put('pullupdate', 'StockController@pullupdate')->middleware('ajax');
+Route::get('export', 'ImportController@export')->name('export');
 
 Route::get('checkrequest', 'StockRequestController@checkrequest')->middleware('ajax');
 Route::get('resolved', 'StockRequestController@resolve')->name('resolved.index');
@@ -191,3 +199,6 @@ Route::get('retno/{id}', 'HomeController@retshow')->name('defective.print.index'
 Route::get('preventive', 'HomeController@preventive')->name('index.preventive');
 Route::get('convert', 'HomeController@convert');
 Route::get('imp', 'HomeController@imp');
+
+
+Route::get('reports', 'ReportsController@index');

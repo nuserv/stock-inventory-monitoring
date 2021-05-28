@@ -6,15 +6,62 @@ use Illuminate\Http\Request;
 use App\Imports\WarehouseImport;
 use App\Imports\BranchImport;
 use Maatwebsite\Excel\Facades\Excel;
+use App\Exports\ExcelExport;
 use App\Item;
 use App\Customer;
 use App\CustomerBranch;
 use App\Warehouse;
 use App\Stock;
 use App\UserLog;
+use App\Initial;
+use App\Branch;
+
 
 class ImportController extends Controller
 {
+    /*<?php
+
+        namespace App\Http\Controllers;
+
+        use Illuminate\Http\Request;
+        use App\Exports\MttRegistrationsExport;
+        use Maatwebsite\Excel\Facades\Excel;
+
+        class ExcelController extends Controller
+        {
+            public function export(Request $request)
+            {
+                return Excel::download(new MttRegistrationsExport($request->id), 'MttRegistrations.xlsx');
+            }
+        }
+        */
+        /*
+        class MttRegistrationsExport implements FromCollection
+        {
+
+
+        protected $id;
+
+        function __construct($id) {
+                $this->id = $id;
+        }
+
+        /**
+        * @return \Illuminate\Support\Collection
+
+        public function collection()
+        {
+            return MttRegistration::where('lifeskill_id',$this->id)->get()([
+                'first_name', 'email'
+            ]);
+        }
+        }*/
+
+    public function export() 
+    {   
+        return Excel::download(new ExcelExport, 'Parañaque.xlsx');
+    }
+
     public function branchstore(Request $request)
     {
         $file = $request->file('upload');
@@ -92,6 +139,19 @@ class ImportController extends Controller
     
     public function warestore(Request $request)
     {
+        /*$file = $request->file('upload');
+        $import = new WarehouseImport;
+        $data = Excel::toArray($import, $file);
+        $error = 0;
+        $itemswitherror = [];
+        foreach ($data[0] as $key => $value) {
+            $items = Item::where('item', $value[0])->first();
+            $branches = Branch::query()->get();
+                foreach ($branches as $branch) {
+                    Initial::where('branch_id', $branch->id)->where('items_id', $items->id)
+                    ->update(['qty' => $value[1]]);
+                }
+        }*/
         $file = $request->file('upload');
         $import = new WarehouseImport;
         $data = Excel::toArray($import, $file);

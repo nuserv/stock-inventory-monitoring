@@ -132,6 +132,12 @@
             @endif
         @endif
 
+        @if(Request::is('pullview'))
+            @if(auth()->user()->hasAnyrole('Warehouse Manager', 'Encoder'))
+                @include('modal.warehouse.pullout')
+            @endif
+        @endif
+
         @if(Request::is('preventive'))
             @if(auth()->user()->hasAnyrole('Head', 'Tech'))
                 @include('modal.out')
@@ -242,7 +248,14 @@
         @if(Request::is('resolved'))
             <script src="{{asset('min/?f=js/resolved.js')}}"></script>
         @endif
-
+        @if(Request::is('pullview'))
+            @if (auth()->user()->hasanyrole('Head'))
+                <script src="{{asset('min/?f=js/branch/pullout.js')}}"></script>
+            @endif
+            @if (auth()->user()->hasanyrole('Warehouse Manager', 'Encoder'))
+                <script src="{{asset('min/?f=js/warehouse/pullout.js')}}"></script>
+            @endif
+        @endif
         @if(Request::is('stocks'))
             @if(auth()->user()->hasAnyrole('Warehouse Manager', 'Editor', 'Manager', 'Encoder'))
                 <script src="{{asset('min/?f=js/warehouse/stock.js')}}"></script>

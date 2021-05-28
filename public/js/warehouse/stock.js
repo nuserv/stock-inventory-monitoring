@@ -27,7 +27,6 @@ $(document).ready(function()
                 alert(data.responseText);
             }
         },
-        
         columns: [
             { data: 'category', name:'category'},
             { data: 'quantity', name:'quantity'}

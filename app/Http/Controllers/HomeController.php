@@ -11,6 +11,7 @@ use App\Mail\EmailForQueuing;
 use Route;
 use Validator;
 use App\User;
+use App\Bstock;
 use App\Branch;
 use App\Responder;
 use App\Item;
@@ -411,6 +412,22 @@ class HomeController extends Controller
             }
         }
 
+        if ($id == 'count') {
+            $items = Item::all();
+            $branches = Branch::all();
+            foreach ($items as $item) {
+                foreach ($branches as $branch) {
+                    $stock = Stock::where('items_id', $item->id)->where('status', 'in')->where('branch_id', $branch->id)->count();
+                    $bstock = new Bstock;
+                    $bstock->branch_id = $branch->id;
+                    $bstock->itemname = $item->item;
+                    $bstock->items_id = $item->id;
+                    $bstock->category_id = $item->category_id;
+                    $bstock->count = $stock;
+                    $bstock->save();
+                }
+            }
+        }
         dd(Stock::all());
     }
     public function activity()
@@ -438,6 +455,9 @@ class HomeController extends Controller
                     array_push($act, $acs);
                 }
                 if ($acs->service == "yes" && $acs->company == "IDSI") {
+                    array_push($act, $acs);
+                }
+                if ($acs->service == "yes" && $acs->company == "APSOFT") {
                     array_push($act, $acs);
                 }
             }

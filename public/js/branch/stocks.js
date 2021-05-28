@@ -192,12 +192,10 @@ $(document).on("click", "#catTable tr", function () {
 
         ]
     });
-
 });
 
 $(document).on('click', '#addStockBtn', function(){
     $('#addModal').modal({backdrop: 'static', keyboard: false});
-
 });
 
 $(document).on('click', '#importBtn', function(){
@@ -525,7 +523,6 @@ $(document).on('click', '.repret_sub_Btn', function(){
         });
     }
 });
-
          
 $(document).on('click', '#use_Btn', function(){
     repretselected = stock.rows( { selected: true } ).data();
@@ -551,10 +548,12 @@ $(document).on('click', '#use_Btn', function(){
     $('#replace-return').modal({backdrop: 'static', keyboard: false});
 });
 
+
 $('table.stockDetails').DataTable().on('select', function () {
     var rowselected = stock.rows( { selected: true } ).data();
     if(rowselected.length > 0){
         $('#def_Btn').prop('disabled', false);
+        $('#pull_Btn').prop('disabled', false);
         $('#use_Btn').prop('disabled', false);
     }
 });
@@ -564,11 +563,38 @@ $('table.stockDetails').DataTable().on('deselect', function () {
     if(rowselected.length == 0){
         $('#def_Btn').prop('disabled', true);
         $('#use_Btn').prop('disabled', true);
+        $('#pull_Btn').prop('disabled', true);
     }
 });
 
 $(document).on("click", "#def_Btn", function () {
     $('#passwordModal').modal('show');
+});
+
+$(document).on("click", "#pull_Btn", function () {
+    var datas = stock.rows( { selected: true } ).data();
+    $.ajax({
+        url: 'pullout',
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="ctok"]').attr('content')
+        },
+        dataType: 'json',
+        type: 'PUT',
+        data: {
+            id: datas[0].id,
+            serial: datas[0].serial,
+            items_id: datas[0].items_id,
+            replace: 0,
+            item: datas[0].item
+        },
+        success: function(){
+            stock.rows( { selected: true } ).remove().draw(false);
+            //location.reload(); 
+        },
+        error: function (data) {
+            alert(data.responseText);
+        }
+    });
 });
 
 $(document).on("click", "#confirm_Btn", function () {
@@ -635,7 +661,7 @@ $(document).on("click", "#stockTable tr", function () {
             "emptyTable": "No Stock Available for this Item"
         },
         processing: true,
-        serverSide: true,
+        serverSide: false,
         ajax: "/bserial/"+id,
         columns: [
             { data: 'updated_at', name:'updated_at'},

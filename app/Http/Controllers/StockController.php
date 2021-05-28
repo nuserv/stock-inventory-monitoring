@@ -7,6 +7,7 @@ use Yajra\DataTables\Facades\DataTables;
 use App\Warehouse;
 use App\Item;
 use App\Category;
+use App\Pullno;
 use App\Stock;
 use App\PreparedItem;
 use App\CustomerBranch;
@@ -30,6 +31,101 @@ class StockController extends Controller
     {
         
         $this->middleware('auth');
+    }
+    public function pullview()
+    {
+        $title = 'Pullout';
+        return view('pages.pullout', compact('title'));
+    }
+    public function pullitem(Request $request)
+    {
+        $pullout = Pullout::query()
+            ->select('pullouts.id', 'category', 'item', 'serial')
+            ->join('categories', 'categories.id', 'pullouts.category_id')
+            ->join('items', 'items.id', 'items_id')
+            ->wherein('status', ['For receiving'])
+            ->where('pullout_no', $request->pullno)
+            ->get();
+        return DataTables::of($pullout)->make(true);
+    }
+    public function pullnr(Request $request)
+    {
+        $pullno = Pullno::where('status', 'For receiving')
+            ->where('pullout_no', $request->pull_no)
+            ->update(['status' => 'Incomplete']);
+        return response()->json($pullno);
+
+    }
+    public function pullrec(Request $request)
+    {
+        foreach ($request->id as $id) {
+            $pullout= Pullout::where('status', 'For receiving')
+                ->where('id', $id)
+                ->where('pullout_no', $request->pull_no)->first();
+            $pullout->status = 'Received';
+            $pullout->save();
+                //->update(['status' => 'Received']);
+            $warehouse = new Warehouse;
+            $warehouse->items_id = $pullout->items_id;
+            $warehouse->serial = $pullout->serial;
+            $warehouse->category_id = $pullout->category_id;
+            $warehouse->status = 'in';
+            $warehouse->save();
+        }
+        $check = Pullout::where('status', 'For receiving')
+            ->where('pullout_no', $request->pull_no)->first();
+        if ($check) {
+           Pullno::where('status', 'For receiving')->where('pullout_no', $request->pull_no)->update(['status' => 'Incomplete']);
+        }else{
+           Pullno::where('status', 'For receiving')->where('pullout_no', $request->pull_no)->update(['status' => 'Completed']);
+        }
+        return response()->json($pullout);
+
+    }
+    public function pullget()
+    {
+        if (auth()->user()->hasanyrole('Warehouse Manager', 'Encoder')) {
+            $pullout = Pullno::query()
+                ->select('pullouts_no.updated_at', 'pullouts_no.status', 'pullout_no', 'branch', 'pullouts_no.status')
+                ->wherein('pullouts_no.status', ['For receiving', 'Incomplete'])
+                ->join('branches', 'branches.id', 'branch_id')
+                ->get();
+            return DataTables::of($pullout)
+                ->addColumn('updated_at', function (Pullno $pullout){
+                    return Carbon::parse($pullout->updated_at->toFormattedDateString().' '.$pullout->updated_at->toTimeString())->isoFormat('lll');
+                })
+                ->make(true);
+        }
+        if (auth()->user()->hasanyrole('Head')) {
+            $pullout = Pullout::query()
+                ->select('pullouts.updated_at', 'item', 'serial')
+                ->where('branch_id', auth()->user()->branch->id)
+                ->where('status', 'For pullout')
+                ->join('items', 'items.id', 'items_id')
+                ->get();
+            return DataTables::of($pullout)
+                ->addColumn('updated_at', function (Pullout $pullout){
+                    return Carbon::parse($pullout->updated_at->toFormattedDateString().' '.$pullout->updated_at->toTimeString())->isoFormat('lll');
+                })
+                ->make(true);
+        }
+        
+    }
+    public function pullupdate(Request $request)
+    {
+        if ($request->send == 1) {
+            $pullout = Pullout::query()
+            ->where('branch_id', auth()->user()->branch->id)
+            ->where('status', 'For pullout')
+            ->update(['status' => 'For receiving', 'pullout_no' => $request->retno]);
+            $pullno = new Pullno;
+            $pullno->user_id = auth()->user()->id;
+            $pullno->branch_id = auth()->user()->branch->id;
+            $pullno->status = 'For receiving';
+            $pullno->pullout_no = $request->retno;
+            $pullno->save();
+            return response()->json($pullno);
+        }
     }
     public function index()
     {
@@ -416,44 +512,60 @@ class StockController extends Controller
             })
             ->make(true);
         }else{
-            $stock = Stock::select('UOM','categories.category', 'stocks.items_id as items_id', 'items.item as description', \DB::raw('SUM(CASE WHEN status = \'in\' THEN 1 ELSE 0 END) as stockin'))
-                ->where('branch_id', auth()->user()->branch->id)
+            $items = Item::query()
+                ->select('items.*', 'category')
+                ->where('categories.id', $request->category)
+                ->join('categories', 'category_id', '=', 'categories.id')
+                ->get();
+            /*$stock = Stock::select('UOM','categories.category', 'stocks.items_id as items_id', 'items.item as description', \DB::raw('SUM(CASE WHEN status = \'in\' THEN 1 ELSE 0 END) as stockin'))
+                ->where('stocks.branch_id', auth()->user()->branch->id)
                 ->where('categories.id', $request->category)
                 ->join('categories', 'stocks.category_id', '=', 'categories.id')
                 ->join('items', 'stocks.items_id', '=', 'items.id')
-                ->groupBy('items_id')->get();
-            return DataTables::of($stock)
-            ->addColumn('description', function (Stock $stock){
-                return mb_strtoupper($stock->description);
+                ->groupBy('items_id')->get();*/
+            return DataTables::of($items)
+            ->addColumn('description', function (Item $items){
+                return mb_strtoupper($items->item);
             })
-            ->addColumn('stockout', function (Stock $stock){
+            ->addColumn('stockout', function (Item $items){
                 $out = Stock::wherein('status', ['service unit', 'pm'])
                     ->where('branch_id', auth()->user()->branch->id)
-                    ->where('items_id', $stock->items_id)
+                    ->where('items_id', $items->id)
                     ->count();
                 return $out;
             })
-            ->addColumn('defectives', function (Stock $stock){
+            ->addColumn('stockin', function (Item $items){
+                $in = Stock::where('status', 'in')
+                    ->where('branch_id', auth()->user()->branch->id)
+                    ->where('items_id', $items->id)
+                    ->count();
+                return $in;
+            })
+            ->addColumn('defectives', function (Item $items){
                 $defective = Defective::where('status', 'For return')
                     ->where('branch_id', auth()->user()->branch->id)
-                    ->where('items_id', $stock->items_id)
+                    ->where('items_id', $items->id)
                     ->count();
                 return $defective;
             })
-            ->addColumn('total', function (Stock $stock){
+            ->addColumn('total', function (Item $items){
                 $out = Stock::wherein('status', ['service unit', 'pm'])
                     ->where('branch_id', auth()->user()->branch->id)
-                    ->where('items_id', $stock->items_id)
+                    ->where('items_id', $items->id)
                     ->count();
                 $defective = Defective::where('status', 'For return')
                     ->where('branch_id', auth()->user()->branch->id)
-                    ->where('items_id', $stock->items_id)
+                    ->where('items_id', $items->id)
                     ->count();
-                return $stock->stockin+$out+$defective;
+                $in = Stock::where('status', 'in')
+                    ->where('branch_id', auth()->user()->branch->id)
+                    ->where('items_id', $items->id)
+                    ->count();
+                return $in+$out+$defective;
             })
-            ->addColumn('initial', function (Stock $stock){
+            ->addColumn('initial', function (Item $items){
                 $initials = Initial::select('qty')->where('branch_id', auth()->user()->branch->id)
-                    ->where('items_id', $stock->items_id)
+                    ->where('items_id', $items->id)
                     ->first();
                 return $initials->qty;
             })
@@ -752,7 +864,7 @@ class StockController extends Controller
         $pullout->category_id = $pull->category_id;
         $pullout->items_id = $pull->items_id;
         $pullout->serial = $request->serial;
-        $pullout->status = "pending";
+        $pullout->status = "For pullout";
         $pull->status = "pullout";
         $pull->save();
         $data = $pullout->save();

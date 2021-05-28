@@ -18,6 +18,7 @@
             </div>
             <div class="modal-footer">
                 <input type="button" style="display:" class="btn btn-primary use_Btn mr-auto" id="use_Btn" class="button" value="Use" disabled>
+                <input type="button" style="display:" class="btn btn-primary pull_Btn mr-auto" id="pull_Btn" class="button" value="Pullout" disabled>
                 <input type="button" class="btn btn-primary def_Btn" id="def_Btn" class="button" value="Defective" disabled>
             </div>
         </div>

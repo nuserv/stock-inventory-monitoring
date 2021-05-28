@@ -79,19 +79,29 @@
                     <a style="padding-right:8px; padding-left:8px" class="nav-link {{ Request::is('return') ? 'active' : '' }}" href="{{ route('return.index') }}">Returns</a>
                 </li>
                 @endif
+                @if(auth()->user()->hasanyrole('Head'))
+                <li class="nav-item">
+                    <a style="padding-right:8px; padding-left:8px" class="nav-link {{ Request::is('pullview') ? 'active' : '' }}" href="{{ route('pullout.index') }}">Pullouts</a>
+                </li>
+                @endif
                 @if (auth()->user()->hasanyrole('Warehouse Manager', 'Encoder'))
                     <li class="nav-item">
                         <a style="padding-right:8px; padding-left:8px" class="nav-link {{ Request::is('return') ? 'active' : '' }}" href="{{ route('return.index') }}">Repaired</a>
                     </li>
                 @endif
-                @if(auth()->user()->hasanyrole('Manager', 'Editor', 'Head', 'Warehouse Manager'))
-                    <li class="nav-item">
-                        <a style="padding-right:8px; padding-left:8px" class="nav-link {{ Request::is('user') ? 'active' : '' }}" href="{{ url('user') }}">Users</a>
-                    </li>
+                @if(auth()->user()->hasanyrole('Encoder', 'Warehouse Manager'))
+                <li class="nav-item">
+                    <a style="padding-right:8px; padding-left:8px" class="nav-link {{ Request::is('pullview') ? 'active' : '' }}" href="{{ route('pullout.index') }}">Pullouts</a>
+                </li>
                 @endif
                 @if(auth()->user()->hasanyrole('Manager', 'Editor', 'Warehouse Manager'))
                     <li class="nav-item">
                         <a style="padding-right:8px; padding-left:8px" class="nav-link {{ Request::is('item') ? 'active' : '' }}" href="{{ url('item') }}">Items</a>
+                    </li>
+                @endif
+                @if(auth()->user()->hasanyrole('Manager', 'Editor', 'Head', 'Warehouse Manager'))
+                    <li class="nav-item">
+                        <a style="padding-right:8px; padding-left:8px" class="nav-link {{ Request::is('user') ? 'active' : '' }}" href="{{ url('user') }}">Users</a>
                     </li>
                 @endif
             @endif
