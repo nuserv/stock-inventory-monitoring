@@ -164,7 +164,7 @@ return [
         Jenssegers\Agent\AgentServiceProvider::class,
         Yajra\DataTables\DataTablesServiceProvider::class,
         Maatwebsite\Excel\ExcelServiceProvider::class,
-        ConsoleTVs\Charts\ChartsServiceProvider::class,
+        //ConsoleTVs\Charts\ChartsServiceProvider::class,
         /*
          * Package Service Providers...
          */
