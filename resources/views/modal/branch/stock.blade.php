@@ -3,7 +3,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h6 class="modal-title w-100 text-center" id="head">Stock Details</h6>
-                <button class="close" data-dismiss="modal" aria-label="Close">
+                <button class="close cancel" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
