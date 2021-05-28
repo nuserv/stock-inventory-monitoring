@@ -527,6 +527,9 @@ class StockController extends Controller
             ->addColumn('description', function (Item $items){
                 return mb_strtoupper($items->item);
             })
+            ->addColumn('items_id', function (Item $items){
+                return mb_strtoupper($items->id);
+            })
             ->addColumn('stockout', function (Item $items){
                 $out = Stock::wherein('status', ['service unit', 'pm'])
                     ->where('branch_id', auth()->user()->branch->id)
