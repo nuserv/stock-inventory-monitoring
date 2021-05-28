@@ -231,7 +231,7 @@ return [
         'Agent' => Jenssegers\Agent\Facades\Agent::class,
         'DataTables' => Yajra\DataTables\Facades\DataTables::class,
         'Excel' => Maatwebsite\Excel\Facades\Excel::class,
-        'Charts' => ConsoleTVs\Charts\Charts::class,
+        //'Charts' => ConsoleTVs\Charts\Charts::class,
     ],
 
 ];
