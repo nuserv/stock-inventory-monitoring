@@ -53,7 +53,8 @@ $(document).ready(function() {
                 },
                 {
                     data: 'status',
-                    name: 'status'
+                    name: 'status',
+                    "width": "14%"
                 }
             ],
         });
