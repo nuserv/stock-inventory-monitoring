@@ -13,6 +13,7 @@ use App\Warehouse;
 use App\Category;
 use Carbon\Carbon;
 use App\UserLog;
+use App\Retno;
 use DB;
 use Auth;
 class DefectiveController extends Controller
@@ -22,6 +23,65 @@ class DefectiveController extends Controller
     {
         
         $this->middleware('auth');
+    }
+    public function returnview()
+    {
+        $title = 'Defectives';
+        return view('pages.return', compact('title'));
+    }
+
+    public function returnget()
+    {
+        if (auth()->user()->hasanyrole('Repair')) {
+            $return = Retno::query()
+                ->select('returns_no.updated_at', 'returns_no.status', 'return_no', 'branch', 'returns_no.status')
+                ->wherein('returns_no.status', ['For receiving', 'Incomplete'])
+                ->join('branches', 'branches.id', 'branch_id')
+                ->get();
+            return DataTables::of($return)
+                ->addColumn('updated_at', function (Retno $return){
+                    return Carbon::parse($return->updated_at->toFormattedDateString().' '.$return->updated_at->toTimeString())->isoFormat('lll');
+                })
+                ->make(true);
+        }
+    }
+
+    public function returnitem(Request $request)
+    {
+        $return = Defective::query()
+            ->select('defectives.id', 'category', 'item', 'serial')
+            ->join('categories', 'categories.id', 'defectives.category_id')
+            ->join('items', 'items.id', 'items_id')
+            ->wherein('status', ['For receiving'])
+            ->where('return_no', $request->retno)
+            ->get();
+        return DataTables::of($return)->make(true);
+    }
+    public function pullrec(Request $request)
+    {
+        foreach ($request->id as $id) {
+            $pullout= Pullout::where('status', 'For receiving')
+                ->where('id', $id)
+                ->where('pullout_no', $request->pull_no)->first();
+            $pullout->status = 'Received';
+            $pullout->save();
+                //->update(['status' => 'Received']);
+            $warehouse = new Warehouse;
+            $warehouse->items_id = $pullout->items_id;
+            $warehouse->serial = $pullout->serial;
+            $warehouse->category_id = $pullout->category_id;
+            $warehouse->status = 'in';
+            $warehouse->save();
+        }
+        $check = Pullout::where('status', 'For receiving')
+            ->where('pullout_no', $request->pull_no)->first();
+        if ($check) {
+           Pullno::where('status', 'For receiving')->where('pullout_no', $request->pull_no)->update(['status' => 'Incomplete']);
+        }else{
+           Pullno::where('status', 'For receiving')->where('pullout_no', $request->pull_no)->update(['status' => 'Completed']);
+        }
+        return response()->json($pullout);
+
     }
     public function index()
     {
@@ -194,6 +254,12 @@ class DefectiveController extends Controller
                 $log->save();
                 $updates->save();
             }
+            $retno = new Retno;
+            $retno->user_id = auth()->user()->id;
+            $retno->branch_id = auth()->user()->branch->id;
+            $retno->status = 'For receiving';
+            $retno->return_no = $request->ret;
+            $retno->save();
             return response()->json($updates);
         }else{
             if ($request->status == 'Received') {
@@ -212,6 +278,13 @@ class DefectiveController extends Controller
                 $update->status = "For repair";
                 $update->user_id = auth()->user()->id;
                 $data = $update->save();
+
+                $check = Defective::where('return_no', $update->return_no)->wherein('status', ['For receiving', 'Incomplete'])->first();
+                if (!$check) {
+                    Retno::where('return_no', $update->return_no)->update(['status'=>'Received']);
+                }else{
+                    Retno::where('return_no', $update->return_no)->update(['status'=>'Incomplete']);
+                }
                 return response()->json($data);
             }
             if ($request->status == 'Repaired') {

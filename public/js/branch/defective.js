@@ -319,7 +319,8 @@ $(document).on('click', '#returnBtn', function(){
                             .prepend('<div style="position:absolute; top:170;font-size:24px"><b>Area.:</b> '+$('#areaname').val()+'</div>')
                             .prepend('<div style="position:absolute; top:140;left:70%;font-size:24px"><b>Date prepared:</b> '+months[d.getMonth()]+' '+d.getDate()+', ' +d.getFullYear()+' '+hour+':'+String(d.getMinutes()).padStart(2, '0')+ampm+'</div>')
                             .prepend('<div style="position:absolute; top:200;font-size:24px"><label for="textbranch"><b>Branch address:&nbsp;&nbsp;</b></label><textarea id="textbranch" style="vertical-align: top;resize: none;background: transparent;border:0 none" rows="3" cols="80" readonly>'+$('#addr').val()+'</textarea></div>')
-                                //  .prepend('<div style="position:absolute; bottom:20; left:100;">Pagina '+page.toString()+' of '+pages.toString()+'</div>');
+                            .prepend('<div style="position:absolute; top:230;font-size:24px"><b>Return #: </b> '+retno+'</div>')
+                        //  .prepend('<div style="position:absolute; bottom:20; left:100;">Pagina '+page.toString()+' of '+pages.toString()+'</div>');
                         //jsDate.toString()
                             $(doc.document.body)
                                 //.append('<div style="position:absolute; bottom:80; left:15;font-family: arial; font-weight: bold;">Prepared By: '+$("#userlog").val()+'</div>')
@@ -329,8 +330,8 @@ $(document).on('click', '#returnBtn', function(){
                             $(doc.document.body).find('table')            			
                                 .removeClass('dataTable')
                                 .css('font-size','24px') 
-                                .css('margin-top','280px')
-                                .css('margin-bottom','250px')
+                                .css('margin-top','310px')
+                                .css('margin-bottom','310px')
                             $(doc.document.body).find('th').each(function(index){
                                 $(this).css('font-size','26px');
                                 $(this).css('color','black');

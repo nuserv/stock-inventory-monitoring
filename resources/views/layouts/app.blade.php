@@ -137,6 +137,11 @@
                 @include('modal.warehouse.pullout')
             @endif
         @endif
+        @if(Request::is('returnview'))
+            @if(auth()->user()->hasAnyrole('Repair'))
+                @include('modal.warehouse.return')
+            @endif
+        @endif
 
         @if(Request::is('preventive'))
             @if(auth()->user()->hasAnyrole('Head', 'Tech'))
@@ -254,6 +259,11 @@
             @endif
             @if (auth()->user()->hasanyrole('Warehouse Manager', 'Encoder'))
                 <script src="{{asset('min/?f=js/warehouse/pullout.js')}}"></script>
+            @endif
+        @endif
+        @if(Request::is('returnview'))
+            @if (auth()->user()->hasanyrole('Repair'))
+                <script src="{{asset('min/?f=js/warehouse/return.js')}}"></script>
             @endif
         @endif
         @if(Request::is('stocks'))
