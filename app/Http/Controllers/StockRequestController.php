@@ -774,6 +774,7 @@ class StockRequestController extends Controller
             }else{
                 $reqno->status = 'PENDING';
                 $reqno->intransitval = '0';
+                $reqno->created_at = $reqno->updated_at;
             }  
         }
         $reqno->save();
