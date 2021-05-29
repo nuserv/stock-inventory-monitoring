@@ -770,11 +770,16 @@ class StockRequestController extends Controller
         }
         if ($request->status  == "PARTIAL IN TRANSIT") {
             $reqno = StockRequest::where('request_no', $request->reqno)->first();
+            $reqpending = RequestedItem::where('request_no', $request->reqno)->where('pending', '!=', '0')->first();
             if ($preparedItem) {
                 $reqno->status = $request->status;
             }else{
-                $reqno->status = 'PENDING';
-                $reqno->intransitval = '0';
+                if ($reqpending) {
+                    $reqno->status = 'PENDING';
+                    $reqno->intransitval = '0';
+                }else{
+                    $reqno->stat = 'COMPLETED';
+                }
             }  
         }
         $reqno->save();
