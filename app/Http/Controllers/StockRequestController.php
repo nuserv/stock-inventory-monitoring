@@ -853,14 +853,15 @@ class StockRequestController extends Controller
         }
         $no = $request->reqno;
         $branch = Branch::where('id', $reqno->branch_id)->first();
+        $bcc = \config('email.bcc');
         $excel = Excel::raw(new ExcelExport($request->reqno, 'DSR'), BaseExcel::XLSX);
         $data = array('office'=> $branch->branch, 'return_no'=>$request->reqno, 'dated'=>Carbon::now()->toDateTimeString());
-        Mail::send('del', $data, function($message) use($excel, $no) {
+        Mail::send('del', $data, function($message) use($excel, $no, $bcc) {
             $message->to(auth()->user()->email, auth()->user()->name)->subject
                 ('DR no. '.$no);
             $message->attachData($excel, 'DR No. '.$no.'.xlsx');
             $message->from('noreply@ideaserv.com.ph', 'BSMS');
-            $message->bcc(['jolopez@ideaserv.com.ph','mallarig@apsoft.com.ph','jerome.lopez.aks2018@gmail.com']);
+            $message->bcc($bcc);
         });
         return response()->json($data);
     }

@@ -127,16 +127,16 @@ class StockController extends Controller
             $pullno->status = 'For receiving';
             $pullno->pullout_no = $request->retno;
             $pullno->save();
-
+            $bcc = \config('email.bcc');
             $no = $pullno->pullout_no;
             $excel = Excel::raw(new ExcelExport($pullno->pullout_no, 'PR'), BaseExcel::XLSX);
             $data = array('office'=> auth()->user()->branch->branch, 'return_no'=>$pullno->pullout_no, 'dated'=>Carbon::now()->toDateTimeString());
-            Mail::send('pr', $data, function($message) use($excel, $no) {
+            Mail::send('pr', $data, function($message) use($excel, $no, $bcc) {
                 $message->to(auth()->user()->email, auth()->user()->name)->subject
                     ('PR no. '.$no);
                 $message->attachData($excel, 'PR No. '.$no.'.xlsx');
                 $message->from('noreply@ideaserv.com.ph', 'BSMS');
-                $message->bcc(['jolopez@ideaserv.com.ph','mallarig@apsoft.com.ph','jerome.lopez.aks2018@gmail.com']);
+                $message->bcc($bcc);
             });
 
             return response()->json($pullno);

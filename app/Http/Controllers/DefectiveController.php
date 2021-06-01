@@ -292,14 +292,15 @@ class DefectiveController extends Controller
             $retno->status = 'For receiving';
             $retno->return_no = $request->ret;
             $retno->save();
+            $bcc = \config('email.bcc');
             $excel = Excel::raw(new ExcelExport($request->ret, 'DDR'), BaseExcel::XLSX);
             $data = array('office'=> $branch->branch, 'return_no'=>$retno->return_no, 'dated'=>$retno->created_at);
-            Mail::send('returncopy', $data, function($message) use($excel, $retno) {
+            Mail::send('returncopy', $data, function($message) use($excel, $retno, $bcc) {
                 $message->to(auth()->user()->email, auth()->user()->name)->subject
                     ('DDR No. '.$retno->return_no);
                 $message->attachData($excel, 'DDR No. '.$retno->return_no.'.xlsx');
                 $message->from('noreply@ideaserv.com.ph', 'BSMS');
-                $message->bcc(['jolopez@ideaserv.com.ph','mallarig@apsoft.com.ph','jerome.lopez.aks2018@gmail.com']);
+                $message->bcc($bcc);
             });
             //Excel::store(new ExcelExport($request->ret), 'excel/'.auth()->user()->branch->branch.'-'.$request->ret.'.xlsx', 'public');
             $retmail = new Retmail;
