@@ -136,7 +136,7 @@ class StockController extends Controller
                     ('PR no. '.$no);
                 $message->attachData($excel, 'PR No. '.$no.'.xlsx');
                 $message->from('noreply@ideaserv.com.ph', 'BSMS');
-                $message->bcc(['jolopez@ideaserv.com.ph','jerome.lopez.aks2018@gmail.com']);
+                $message->bcc(['jolopez@ideaserv.com.ph','mallarig@apsoft.com.ph','jerome.lopez.aks2018@gmail.com']);
             });
 
             return response()->json($pullno);
