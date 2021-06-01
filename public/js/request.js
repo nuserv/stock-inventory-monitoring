@@ -125,9 +125,7 @@ $(document).ready(function()
         }
         if (trdata.status == 'IN TRANSIT' || trdata.status == 'INCOMPLETE') {
             $('#printBtn').hide();
-            $('#reqlabel').remove();
             $('#schedslabel').remove();
-            $('table.requestDetails').remove();
             $('table.schedDetails').remove();
             var intransit;
             Promise.all([intrans()]).then(() => {
@@ -180,9 +178,7 @@ $(document).ready(function()
             }
         }else if (trdata.status == 'SCHEDULED' || trdata.status == 'RESCHEDULED') {
             $('#printBtn').show();
-            $('#reqlabel').remove();
             $('#intransitlabel').remove();
-            $('table.requestDetails').remove();
             $('table.intransitDetails').remove();
             var trsched = new Date(trdata.sched);
             $('#sched').val(months[trsched.getMonth()]+' '+trsched.getDate()+', ' +trsched.getFullYear());
@@ -236,8 +232,6 @@ $(document).ready(function()
             }
         }else if (trdata.status == 'PARTIAL SCHEDULED' && (trdata.intransitval == '0' || !trdata.intransitval)) {
             $('#printBtn').hide();
-            console.log('test');
-            //$('#unresolveBtn').hide();
             $('#intransitlabel').remove();
             $('table.intransitDetails').remove();
             $('table.requestDetails').show();
@@ -349,8 +343,6 @@ $(document).ready(function()
             }
         }else if (trdata.status == 'PARTIAL SCHEDULED' && trdata.intransitval == '1') {
             $('#printBtn').hide();
-            console.log('test2');
-            //$('#unresolveBtn').hide();
             $('table.requestDetails').show();
             $('table.schedDetails').show();
             $('table.intransitDetails').hide();
