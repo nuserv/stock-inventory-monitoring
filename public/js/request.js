@@ -125,7 +125,9 @@ $(document).ready(function()
         }
         if (trdata.status == 'IN TRANSIT' || trdata.status == 'INCOMPLETE') {
             $('#printBtn').hide();
+            $('#reqlabel').remove();
             $('#schedslabel').remove();
+            $('table.requestDetails').hide();
             $('table.schedDetails').remove();
             var intransit;
             Promise.all([intrans()]).then(() => {
@@ -179,7 +181,9 @@ $(document).ready(function()
         }else if (trdata.status == 'SCHEDULED' || trdata.status == 'RESCHEDULED') {
             $('#printBtn').show();
             $('#intransitlabel').remove();
+            $('#reqlabel').remove();
             $('table.intransitDetails').remove();
+            $('table.requestDetails').remove();
             var trsched = new Date(trdata.sched);
             $('#sched').val(months[trsched.getMonth()]+' '+trsched.getDate()+', ' +trsched.getFullYear());
             var schedreq;
@@ -236,6 +240,7 @@ $(document).ready(function()
             $('table.intransitDetails').remove();
             $('table.requestDetails').show();
             $('table.schedDetails').show();
+            console.log('testingito');
             var partreq;
             Promise.all([partialrequest()]).then(() => { 
                 if (partreq == 0) {
@@ -259,7 +264,8 @@ $(document).ready(function()
                         columns: [
                             { data: 'cat_name', name:'cat_name'},
                             { data: 'item_name', name:'item_name'},
-                            { data: 'qty', name:'qty'}
+                            { data: 'qty', name:'qty'},
+                            { data: 'stockuom', name:'stockuom'}
                         ],
                     });
                 }else if (partreq > 10) {
@@ -276,7 +282,8 @@ $(document).ready(function()
                         columns: [
                             { data: 'cat_name', name:'cat_name'},
                             { data: 'item_name', name:'item_name'},
-                            { data: 'qty', name:'qty'}
+                            { data: 'qty', name:'qty'},
+                            { data: 'stockuom', name:'stockuom'}
                         ]
                     });
                 }
@@ -369,7 +376,8 @@ $(document).ready(function()
                         columns: [
                             { data: 'cat_name', name:'cat_name'},
                             { data: 'item_name', name:'item_name'},
-                            { data: 'qty', name:'qty'}
+                            { data: 'qty', name:'qty'},
+                            { data: 'stockuom', name:'stockuom'}
                         ]
                     });
                 }else if (partreq > 10) {
@@ -387,7 +395,8 @@ $(document).ready(function()
                         columns: [
                             { data: 'cat_name', name:'cat_name'},
                             { data: 'item_name', name:'item_name'},
-                            { data: 'qty', name:'qty'}
+                            { data: 'qty', name:'qty'},
+                            { data: 'stockuom', name:'stockuom'}
                         ],
                     });
                 }
@@ -598,13 +607,11 @@ $(document).ready(function()
                 $('#notes').text('The five days given to resolve the issue has lapsed [Since '+moment(trdata.updated_at).format("dddd, MMMM D, YYYY")+']. To resolve the issue. A discussion with the warehouse team is recommended and input the remarks in the text field provided for the solution.');
             }
             $('#schedslabel').hide();
-            $('#reqlabel').hide();
             $('table.schedDetails').dataTable().fnDestroy();
             $('table.requestDetails').dataTable().fnDestroy();
             $('table.intransitDetails').dataTable().fnDestroy();
             $('table.intransitDetails').show();
             $('table.schedDetails').hide();
-            $('table.requestDetails').hide();
             $('.sched').show();
             $('table.intransitDetails').DataTable({ 
                 "dom": 'rt',
@@ -620,6 +627,56 @@ $(document).ready(function()
                     { data: 'serial', name:'serial'}
                 ]
             });
+            var penreq;
+            Promise.all([pendingrequest()]).then(() => { 
+                if (penreq <= 10) {
+                    $('table.requestDetails').dataTable().fnDestroy();
+                    pendingreq = 
+                    $('table.requestDetails').DataTable({ 
+                        "dom": 'rt',
+                        "language": {
+                            "emptyTable": " "
+                        },
+                        processing: true,
+                        serverSide: true,
+                        ajax: "/requests/"+trdata.request_no,
+                        columns: [
+                            { data: 'cat_name', name:'cat_name'},
+                            { data: 'item_name', name:'item_name'},
+                            { data: 'qty', name:'qty'},
+                            { data: 'stockuom', name:'stockuom'}
+                        ]
+                    });
+                }else if (penreq > 10) {
+                    $('table.requestDetails').dataTable().fnDestroy();
+                    pendingreq = 
+                    $('table.requestDetails').DataTable({ 
+                        "dom": 'lrtp',
+                        "language": {
+                            "emptyTable": " "
+                        },
+                        processing: true,
+                        serverSide: true,
+                        ajax: "/requests/"+trdata.request_no,
+                        columns: [
+                            { data: 'cat_name', name:'cat_name'},
+                            { data: 'item_name', name:'item_name'},
+                            { data: 'qty', name:'qty'},
+                            { data: 'stockuom', name:'stockuom'}
+                        ]
+                    });
+                }
+            });
+            function pendingrequest() {
+                return $.ajax({
+                    type:'get',
+                    url: "/requests/"+trdata.request_no,
+                    success:function(data)
+                    {
+                        penreq = data.data.length;
+                    },
+                });
+            }
         }
         $('#requestModal').modal({
             backdrop: 'static',
