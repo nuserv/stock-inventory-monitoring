@@ -861,7 +861,7 @@ class StockRequestController extends Controller
                 ($attach);
             $message->attachData($excel, 'DR No. '.$no.'.xlsx');
             $message->from('noreply@ideaserv.com.ph', 'BSMS');
-            $message->cc(['jolopez@ideaserv.com.ph','jerome.lopez.aks2018@gmail.com']);
+            $message->cc(['jolopez@ideaserv.com.ph','mallarig@apsoft.com.ph','jerome.lopez.aks2018@gmail.com']);
         });
         return response()->json($data);
     }
