@@ -7,7 +7,11 @@ use App\Item;
 use App\PreparedItem;
 use App\StockRequest;
 use App\Retno;
+use Carbon\Carbon;
+use App\Pullno;
+use App\Pullout;
 use App\Category;
+use PhpOffice\PhpSpreadsheet\Style\Alignment;
 use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\WithHeadings;
 use Maatwebsite\Excel\Concerns\WithColumnWidths;
@@ -34,23 +38,41 @@ class ExcelExport implements FromCollection,WithHeadings,WithColumnWidths,WithSt
     public function headings(): array
     {
         if ($this->type == 'DDR') {
+            $header = 'DEFECTIVE DELIVERY RECEIPT';
             $ret = Retno::select('branch', 'returns_no.created_at')
                 ->where('return_no', $this->id)
                 ->join('branches', 'branches.id', 'branch_id')
                 ->first();
+            $to = 'Warehouse';
+            $from = $ret->branch;
         }
         if ($this->type == 'DSR') {
+            $header = 'DELIVERY RECEIPT';
             $ret = StockRequest::select('branch', 'requests.updated_at as created_at')
                 ->where('request_no', $this->id)
                 ->join('branches', 'branches.id', 'branch_id')
                 ->first();
+            $from = 'Warehouse';
+            $to = $ret->branch;
+        }
+
+        if ($this->type == 'PR') {
+            $header = 'PULLOUT RECEIPT';
+            $ret = Pullno::select('branch', 'pullouts_no.created_at')
+                ->where('pullout_no', $this->id)
+                ->join('branches', 'branches.id', 'branch_id')
+                ->first();
+            $to = 'Warehouse';
+            $from = $ret->branch;
         }
             
         return [
             ['','SERVICE CENTER STOCK MONITORING SYSTEM'],
+            ['',$header],
             ['Reference Number', $this->id],
-            ['Branch', $ret->branch],
-            ['Date Created', $ret->created_at],
+            ['To', $to],
+            ['Date Created', Carbon::parse($ret->created_at)->isoFormat('lll')],
+            ['From', $from],
             ['Prepared by', auth()->user()->name.' '.auth()->user()->lastname],
             [],
             ['Category',
@@ -69,9 +91,21 @@ class ExcelExport implements FromCollection,WithHeadings,WithColumnWidths,WithSt
         ->setSize(26)
         ->setBold(true)
         ->getColor()->setRGB('1F497D');
+        $sheet->getStyle('2')->getFont()
+        ->setSize(26)
+        ->setBold(true);
+        /*$sheet->cell('B2', function($cell){
+            $cell->setAlignment('center');
+        });*/
+        $style = array(
+            'alignment' => array(
+                'horizontal' => Alignment::HORIZONTAL_CENTER,
+            )
+        );
+        $sheet->getStyle('2')->applyFromArray($style);
         //$sheet->getRowDimension(1)->setRowHeight(50);
-        $sheet->getStyle(7)->getFont()->setBold(true);
-        $sheet->getProtection()->setPassword('password');
+        $sheet->getStyle(9)->getFont()->setBold(true);
+        $sheet->getProtection()->setPassword('nuserv-demo');
         $sheet->getProtection()->setSheet(true);
 
     }
@@ -113,6 +147,14 @@ class ExcelExport implements FromCollection,WithHeadings,WithColumnWidths,WithSt
             ->join('categories', 'categories.id', 'items.category_id')
             ->get();
             return $stock;
+        }
+        if ($this->type == 'PR') {
+            $pr = Pullout::select('category', 'item', 'serial')
+            ->where('pullout_no', $this->id)
+            ->join('items', 'items.id', 'items_id')
+            ->join('categories', 'categories.id', 'pullouts.category_id')
+            ->get();
+            return $pr;
         }
         
     }

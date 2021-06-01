@@ -1,0 +1,1 @@
+<p>Attached herewith is your copy of the Pullout Receipt with Reference Number: {{$return_no}}.</p>

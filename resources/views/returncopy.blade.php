@@ -1,1 +1,1 @@
-<p>Attached herewith is your copy of the Delivery Receipt with Reference Number: {{$return_no}}.</p>
+<p>Attached herewith is your copy of the Defective Delivery Receipt with Reference Number: {{$return_no}}.</p>

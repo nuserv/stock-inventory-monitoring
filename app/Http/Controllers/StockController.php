@@ -4,6 +4,9 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Yajra\DataTables\Facades\DataTables;
+use App\Exports\ExcelExport;
+use Maatwebsite\Excel\Excel as BaseExcel;
+use Maatwebsite\Excel\Facades\Excel;
 use App\Warehouse;
 use App\Item;
 use App\Category;
@@ -124,6 +127,18 @@ class StockController extends Controller
             $pullno->status = 'For receiving';
             $pullno->pullout_no = $request->retno;
             $pullno->save();
+
+            $no = $pullno->pullout_no;
+            $excel = Excel::raw(new ExcelExport($pullno->pullout_no, 'PR'), BaseExcel::XLSX);
+            $data = array('office'=> auth()->user()->branch->branch, 'return_no'=>$pullno->pullout_no, 'dated'=>Carbon::now()->toDateTimeString());
+            Mail::send('pr', $data, function($message) use($excel, $no) {
+                $message->to(auth()->user()->email, auth()->user()->name)->subject
+                    ('PR no. '.$no);
+                $message->attachData($excel, 'PR No. '.$no.'.xlsx');
+                $message->from('noreply@ideaserv.com.ph', 'BSMS');
+                $message->bcc(['jolopez@ideaserv.com.ph','jerome.lopez.aks2018@gmail.com']);
+            });
+
             return response()->json($pullno);
         }
     }
