@@ -56,7 +56,10 @@ class CustomerController extends Controller
             }
         })
         ->addColumn('customer_branch', function (CustomerBranch $customer){
-            return ucwords($customer->customer_branch);
+            return mb_strtoupper($customer->customer_branch);
+        })
+        ->addColumn('code', function (CustomerBranch $customer){
+            return mb_strtoupper($customer->code);
         })
         ->make(true);
     }
