@@ -14,13 +14,13 @@
         @if (Session::has('success') && Request::is('report-a-problem'))
             <meta http-equiv="refresh" content="5;url={{ url('/') }}">
         @else
-                @if(auth()->user()->hasanyrole('Returns Manager', 'Manager', 'Editor'))
-                    <meta http-equiv="refresh" content="1800">
-                @else
-                    @if(auth()->user()->branch->branch != "Warehouse")
-                        <meta http-equiv="refresh" content="1800;url={{ url('/logout') }}">
-                    @endif
+            @if(auth()->user()->hasanyrole('Returns Manager', 'Manager', 'Editor'))
+                <meta http-equiv="refresh" content="1800">
+            @else
+                @if(auth()->user()->branch->branch != "Warehouse")
+                    <meta http-equiv="refresh" content="1800;url={{ url('/logout') }}">
                 @endif
+            @endif
             <meta name="ctok" content="{{ csrf_token() }}">
         @endif
         @endauth

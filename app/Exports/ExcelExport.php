@@ -4,6 +4,8 @@ namespace App\Exports;
 
 use App\Defective;
 use App\Item;
+use App\PreparedItem;
+use App\StockRequest;
 use App\Retno;
 use App\Category;
 use Maatwebsite\Excel\Concerns\FromCollection;
@@ -22,16 +24,28 @@ class ExcelExport implements FromCollection,WithHeadings,WithColumnWidths,WithSt
     */
     protected $retno;
 
-    function __construct($retno) {
+    function __construct($retno, $type) {
+
             $this->id = $retno;
+            $this->type = $type;
+
     }
     
     public function headings(): array
     {
-        $ret = Retno::select('branch', 'returns_no.created_at')
-            ->where('return_no', $this->id)
-            ->join('branches', 'branches.id', 'branch_id')
-            ->first();
+        if ($this->type == 'DDR') {
+            $ret = Retno::select('branch', 'returns_no.created_at')
+                ->where('return_no', $this->id)
+                ->join('branches', 'branches.id', 'branch_id')
+                ->first();
+        }
+        if ($this->type == 'DSR') {
+            $ret = StockRequest::select('branch', 'requests.updated_at as created_at')
+                ->where('request_no', $this->id)
+                ->join('branches', 'branches.id', 'branch_id')
+                ->first();
+        }
+            
         return [
             ['','SERVICE CENTER STOCK MONITORING SYSTEM'],
             ['Reference Number', $this->id],
@@ -65,8 +79,8 @@ class ExcelExport implements FromCollection,WithHeadings,WithColumnWidths,WithSt
     public function drawings()
     {
         $drawing = new Drawing();
-        $drawing->setName('Logo');
-        $drawing->setDescription('This is my logo');
+        $drawing->setName('IDSI');
+        $drawing->setDescription('IDSI LOGO');
         $drawing->setPath(public_path('/logo.JPG'));
         $drawing->setHeight(45);
         $drawing->setCoordinates('A1');
@@ -85,10 +99,21 @@ class ExcelExport implements FromCollection,WithHeadings,WithColumnWidths,WithSt
 
     public function collection()
     {
-        $def = Defective::select('category', 'item', 'serial')
+        if ($this->type == 'DDR') {
+            $def = Defective::select('category', 'item', 'serial')
             ->where('return_no', $this->id)
             ->join('categories', 'categories.id', 'defectives.category_id')
             ->join('items', 'items.id', 'items_id')->get();
-        return $def;
+            return $def;
+        }
+        if ($this->type == 'DSR') {
+            $stock = PreparedItem::select('category', 'item', 'serial')
+            ->where('request_no', $this->id)
+            ->join('items', 'items.id', 'items_id')
+            ->join('categories', 'categories.id', 'items.category_id')
+            ->get();
+            return $stock;
+        }
+        
     }
 }

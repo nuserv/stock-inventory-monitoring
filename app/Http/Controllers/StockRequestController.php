@@ -4,6 +4,9 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Yajra\DataTables\Facades\DataTables;
+use App\Exports\ExcelExport;
+use Maatwebsite\Excel\Excel as BaseExcel;
+use Maatwebsite\Excel\Facades\Excel;
 use Carbon\Carbon;
 use App\StockRequest;
 use App\RequestedItem;
@@ -816,6 +819,7 @@ class StockRequestController extends Controller
     }
     public function intransit(Request $request)
     {
+
         if($request->status == 'IN TRANSIT'){
             $reqno = StockRequest::where('request_no', $request->reqno)->first();
             $reqno->status = $request->status;
@@ -831,7 +835,6 @@ class StockRequestController extends Controller
 
             PreparedItem::where('request_no', $request->reqno)->where('intransit', 'no')->update(['intransit' => 'yes']);
             $data = $reqno->save();
-            return response()->json($data);
         }else if ($request->status == 'PARTIAL IN TRANSIT') {
             $reqno = StockRequest::where('request_no', $request->reqno)->first();
             $reqno->status = $request->status;
@@ -847,8 +850,20 @@ class StockRequestController extends Controller
             $log->save();
             PreparedItem::where('request_no', $request->reqno)->where('intransit', 'no')->update(['intransit' => 'yes']);
             $data = $reqno->save();
-            return response()->json($data);
         }
+        $no = $request->reqno;
+        $branch = Branch::where('id', $reqno->branch_id)->first();
+        $excel = Excel::raw(new ExcelExport($request->reqno, 'DSR'), BaseExcel::XLSX);
+        $attach = $branch->branch.'-'.$request->reqno;
+        $data = array('office'=> $branch->branch, 'return_no'=>$request->reqno, 'dated'=>Carbon::now()->toDateTimeString());
+        Mail::send('returncopy', $data, function($message) use($attach, $excel, $no) {
+            $message->to(auth()->user()->email, auth()->user()->name)->subject
+                ($attach);
+            $message->attachData($excel, 'DR No. '.$no.'.xlsx');
+            $message->from('noreply@ideaserv.com.ph', 'BSMS');
+            $message->cc(['jolopez@ideaserv.com.ph','jerome.lopez.aks2018@gmail.com']);
+        });
+        return response()->json($data);
     }
     public function upserial(Request $request)
     {

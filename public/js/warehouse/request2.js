@@ -1,4 +1,6 @@
 $(document).on('click', '#intransitBtn', function(){
+    $('#requestModal').toggle();
+    $('loading').show();
     if ($('#status').val() == 'SCHEDULED' || $('#status').val() == 'RESCHEDULED') {
         $.ajax({
             url: 'intransit',

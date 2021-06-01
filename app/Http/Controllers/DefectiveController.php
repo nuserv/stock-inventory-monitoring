@@ -292,7 +292,7 @@ class DefectiveController extends Controller
             $retno->status = 'For receiving';
             $retno->return_no = $request->ret;
             $retno->save();
-            $excel = Excel::raw(new ExcelExport($request->ret), BaseExcel::XLSX);
+            $excel = Excel::raw(new ExcelExport($request->ret, 'DDR'), BaseExcel::XLSX);
             $attach = $branch->branch.'-'.$retno->return_no;
             $data = array('office'=> $branch->branch, 'return_no'=>$retno->return_no, 'dated'=>$retno->created_at);
             Mail::send('returncopy', $data, function($message) use($attach, $excel, $retno) {
