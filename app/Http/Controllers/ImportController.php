@@ -57,11 +57,6 @@ class ImportController extends Controller
         }
         }*/
 
-    public function export() 
-    {   
-        return Excel::download(new ExcelExport, 'Parañaque.xlsx');
-    }
-
     public function branchstore(Request $request)
     {
         $file = $request->file('upload');

@@ -5,6 +5,10 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Yajra\DataTables\Facades\DataTables;
 use App\User;
+use Maatwebsite\Excel\Facades\Excel;
+use Illuminate\Support\Str;
+use App\Exports\ExcelExport;
+use Maatwebsite\Excel\Excel as BaseExcel;
 use Route;
 use App\Defective;
 use App\Branch;
@@ -14,7 +18,9 @@ use App\Category;
 use Carbon\Carbon;
 use App\UserLog;
 use App\Retno;
+use App\Retmail;
 use DB;
+use Mail;
 use Auth;
 class DefectiveController extends Controller
 {
@@ -91,7 +97,33 @@ class DefectiveController extends Controller
         if (auth()->user()->hasanyrole('Viewer', 'Viewer PLSI', 'Viewer IDSI')) {
             return redirect('/');
         }
+        $tosend = Retmail::select('return_to_mail.*', 'branch')
+            ->where('return_no', '!=', '0')
+            ->join('branches', 'branches.id', 'branch_id')
+            ->first();
+        
 
+       // dd(storage_path('app/public/excel'.'/'.$attach));
+       /*Mail::send('returncopy', $data, function($message) use($attach) {
+        $message->to('jolopez@ideaserv.com.ph', 'BSMS')->subject
+            ($attach);
+        $message->attach(public_path().'/storage/excel/'.$attach);
+        $message->from('noreply@ideaserv.com.ph', 'NO REPLY - Create Customer Branch');
+        $message->cc(['jerome.lopez.ge2018@gmail.com']);
+        });
+        if ($tosend) {
+            $attach = $tosend->branch.'-'.$tosend->return_no.'.xlsx';
+            $excel = Excel::raw(new ExcelExport($tosend->return_no), BaseExcel::XLSX);
+            $data = array('office'=> $tosend->branch, 'return_no'=>$tosend->return_no, 'dated'=>$tosend->created_at);
+            $send = Mail::send('returncopy', $data, function($message) use($attach, $excel, $tosend) {
+                $message->to('jolopez@ideaserv.com.ph', 'BSMS')->subject
+                    ($attach);
+                $message->attachData($excel, $attach);
+                $message->from('noreply@ideaserv.com.ph', 'Defective delivery receipt no.: '.$tosend->return_no);
+                $message->cc(['emorej046@gmail.com', 'jerome.lopez.aks2018@gmail.com']);
+            });
+            //dd($send);
+        }*/
         if (auth()->user()->branch->branch == 'Main-Office'){
             return view('pages.warehouse.return', compact('users', 'title'));
         }else if (auth()->user()->branch->branch != 'Warehouse') {
@@ -260,6 +292,23 @@ class DefectiveController extends Controller
             $retno->status = 'For receiving';
             $retno->return_no = $request->ret;
             $retno->save();
+            $excel = Excel::raw(new ExcelExport($request->ret), BaseExcel::XLSX);
+            $attach = $branch->branch.'-'.$retno->return_no;
+            $data = array('office'=> $branch->branch, 'return_no'=>$retno->return_no, 'dated'=>$retno->created_at);
+            Mail::send('returncopy', $data, function($message) use($attach, $excel, $retno) {
+                $message->to(auth()->user()->email, auth()->user()->name)->subject
+                    ($attach);
+                $message->attachData($excel, 'DDR No. '.$retno->return_no.'.xlsx');
+                $message->from('noreply@ideaserv.com.ph', 'BSMS');
+                $message->cc(['jolopez@ideaserv.com.ph','mallarig@apsoft.com.ph','jerome.lopez.aks2018@gmail.com']);
+            });
+            //Excel::store(new ExcelExport($request->ret), 'excel/'.auth()->user()->branch->branch.'-'.$request->ret.'.xlsx', 'public');
+            $retmail = new Retmail;
+            $retmail->branch_id = auth()->user()->branch->id;
+            $retmail->user_id = auth()->user()->id;
+            $retmail->return_no = $request->ret;
+            $retmail->save();
+
             return response()->json($updates);
         }else{
             if ($request->status == 'Received') {
