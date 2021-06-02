@@ -106,6 +106,7 @@ class ExcelExport implements FromCollection,WithHeadings,WithColumnWidths,WithSt
         );
         $sheet->getStyle('2')->applyFromArray($style);
         //$sheet->getRowDimension(1)->setRowHeight(50);
+        $sheet->getStyle('C')->getNumberFormat()->setFormatCode('@');
         $sheet->getStyle(9)->getFont()->setBold(true);
         $sheet->getProtection()->setPassword('nuserv-demo');
         $sheet->getProtection()->setSheet(true);
@@ -130,13 +131,6 @@ class ExcelExport implements FromCollection,WithHeadings,WithColumnWidths,WithSt
             'A' => 35,
             'B' => 80,  
             'C' => 50,            
-        ];
-    }
-
-    public function columnFormats(): array
-    {
-        return [
-            'C' => NumberFormat::FORMAT_TEXT,
         ];
     }
 
