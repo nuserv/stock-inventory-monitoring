@@ -245,9 +245,9 @@ $(document).on('click', '#returnBtn', function(){
                 }
             },
             "pageLength": 25,
+            "order": [[ 2, "asc" ], [ 3, "asc" ]],
             columnDefs: [
                 {
-                orderable: false,
                 className: 'select-checkbox',      
                 targets: 0,
                 visible: false
@@ -270,7 +270,6 @@ $(document).on('click', '#returnBtn', function(){
                 { data: 'serial', name:'serial'},
                 { data: 'status', name:'status'}
             ],
-            
             buttons: {
                 dom: {
                     button: {

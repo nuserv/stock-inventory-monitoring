@@ -28,6 +28,7 @@ $(document).ready(function()
                 alert(data.responseText);
             }
         },
+        "order": [[ 1, "asc" ],[ 2, "asc" ]],
         columns: [
             { data: null, defaultContent: ''},
             { data: 'category', name:'category'},
