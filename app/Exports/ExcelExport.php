@@ -19,6 +19,8 @@ use Maatwebsite\Excel\Concerns\WithStyles;
 use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
 use Maatwebsite\Excel\Concerns\WithDrawings;
 use PhpOffice\PhpSpreadsheet\Worksheet\Drawing;
+use Maatwebsite\Excel\Concerns\WithColumnFormatting;
+use PhpOffice\PhpSpreadsheet\Style\NumberFormat;
 use DB;
 
 class ExcelExport implements FromCollection,WithHeadings,WithColumnWidths,WithStyles,WithDrawings
@@ -128,6 +130,13 @@ class ExcelExport implements FromCollection,WithHeadings,WithColumnWidths,WithSt
             'A' => 35,
             'B' => 80,  
             'C' => 50,            
+        ];
+    }
+
+    public function columnFormats(): array
+    {
+        return [
+            'C' => NumberFormat::FORMAT_TEXT,
         ];
     }
 
