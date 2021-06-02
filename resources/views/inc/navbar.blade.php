@@ -2,10 +2,24 @@
     <div class="navbar-collapse collapse justify-content-between align-items-center w-100">
         @auth
         <ul class="nav mr-auto">.
-            @if(!auth()->user()->hasanyrole('Viewer', 'Viewer PLSI', 'Viewer IDSI'))
+            @if(!auth()->user()->hasanyrole('Viewer', 'Viewer PLSI', 'Viewer IDSI','Repair'))
             <li class="nav-item">
                 <a style="padding-right:8px; padding-left:8px" class="nav-link {{ Request::is('/') ? 'active' : '' }}" href="{{ url('/') }}">Home</a>
             </li>
+            @endif
+            @if(auth()->user()->hasrole('Repair'))
+                <li class="nav-item">
+                    <a style="padding-right:8px; padding-left:8px" class="nav-link {{ Request::is('/') ? 'active' : '' }}" href="{{ url('/') }}">Received</a>
+                </li>
+                <li class="nav-item" style="margin-left:0px;margin-right:0px;">
+                    <a style="padding-right:8px; padding-left:8px" class="nav-link {{ Request::is('returnview') ? 'active' : '' }}" href="{{ url('/returnview') }}">Returns</a>
+                </li>
+                <li class="nav-item" style="margin-left:0px;margin-right:0px;">
+                    <a style="padding-right:8px; padding-left:8px" class="nav-link {{ Request::is('repaired') ? 'active' : '' }}" href="{{ url('/repaired') }}">Repaired</a>
+                </li>
+                <li class="nav-item" style="margin-left:0px;margin-right:0px;">
+                    <a style="padding-right:8px; padding-left:8px" class="nav-link {{ Request::is('unrepair') ? 'active' : '' }}" href="{{ url('/unrepair') }}">Unrepairable</a>
+                </li>
             @endif
            
             @if(auth()->user()->hasanyrole('Viewer', 'Viewer PLSI', 'Viewer IDSI'))
@@ -25,14 +39,6 @@
                 </li>
                 <li class="nav-item">
                     <a style="padding-right:8px; padding-left:8px" class="nav-link {{ Request::is('request') ? 'active' : '' }}" href="{{ route('stock.index') }}">Stock Request</a>
-                </li>
-            @endif
-            @if(auth()->user()->hasrole('Repair'))
-                <li class="nav-item" style="margin-left:0px;margin-right:0px;">
-                    <a style="padding-right:8px; padding-left:8px" class="nav-link {{ Request::is('unrepair') ? 'active' : '' }}" href="{{ url('/unrepair') }}">Unrepairable</a>
-                </li>
-                <li class="nav-item" style="margin-left:0px;margin-right:0px;">
-                    <a style="padding-right:8px; padding-left:8px" class="nav-link {{ Request::is('returnview') ? 'active' : '' }}" href="{{ url('/returnview') }}">Returns</a>
                 </li>
             @endif
             @if(!auth()->user()->hasanyrole('Repair', 'Returns Manager', 'Viewer', 'Viewer PLSI', 'Viewer IDSI'))
@@ -88,9 +94,12 @@
                 </li>
                 @endif
                 @if (auth()->user()->hasanyrole('Warehouse Manager', 'Encoder'))
-                    <li class="nav-item">
+                    <!--li class="nav-item">
                         <a style="padding-right:8px; padding-left:8px" class="nav-link {{ Request::is('return') ? 'active' : '' }}" href="{{ route('return.index') }}">Repaired</a>
-                    </li>
+                    </li-->
+                    <li class="nav-item" style="margin-left:0px;margin-right:0px;">
+                    <a style="padding-right:8px; padding-left:8px" class="nav-link {{ Request::is('repaired') ? 'active' : '' }}" href="{{ url('/repaired') }}">Repaired</a>
+                </li>
                 @endif
                 @if(auth()->user()->hasanyrole('Encoder', 'Warehouse Manager'))
                 <li class="nav-item">

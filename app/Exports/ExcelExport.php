@@ -9,6 +9,7 @@ use App\StockRequest;
 use App\Retno;
 use Carbon\Carbon;
 use App\Pullno;
+use App\RepairedNo;
 use App\Pullout;
 use App\Category;
 use PhpOffice\PhpSpreadsheet\Style\Alignment;
@@ -66,6 +67,14 @@ class ExcelExport implements FromCollection,WithHeadings,WithColumnWidths,WithSt
                 ->first();
             $to = 'Warehouse';
             $from = $ret->branch;
+        }
+        if ($this->type == 'RR') {
+            $header = 'REPAIRED RECEIPT';
+            $ret = RepairedNo::select('repaired_no.created_at')
+                ->where('repaired_no', $this->id)
+                ->first();
+            $to = 'Warehouse';
+            $from = 'Repair';
         }
             
         return [
@@ -140,7 +149,10 @@ class ExcelExport implements FromCollection,WithHeadings,WithColumnWidths,WithSt
             $def = Defective::select('category', 'item', 'serial')
             ->where('return_no', $this->id)
             ->join('categories', 'categories.id', 'defectives.category_id')
-            ->join('items', 'items.id', 'items_id')->get();
+            ->join('items', 'items.id', 'items_id')
+            ->orderBy('category', 'ASC')
+            ->orderBy('item', 'ASC')
+            ->get();
             return $def;
         }
         if ($this->type == 'DSR') {
@@ -148,6 +160,8 @@ class ExcelExport implements FromCollection,WithHeadings,WithColumnWidths,WithSt
             ->where('request_no', $this->id)
             ->join('items', 'items.id', 'items_id')
             ->join('categories', 'categories.id', 'items.category_id')
+            ->orderBy('category', 'ASC')
+            ->orderBy('item', 'ASC')
             ->get();
             return $stock;
         }
@@ -156,8 +170,20 @@ class ExcelExport implements FromCollection,WithHeadings,WithColumnWidths,WithSt
             ->where('pullout_no', $this->id)
             ->join('items', 'items.id', 'items_id')
             ->join('categories', 'categories.id', 'pullouts.category_id')
+            ->orderBy('category', 'ASC')
+            ->orderBy('item', 'ASC')
             ->get();
             return $pr;
+        }
+        if ($this->type == 'RR') {
+            $rr = Defective::select('category', 'item', 'serial')
+            ->where('repaired_no', $this->id)
+            ->join('items', 'items.id', 'items_id')
+            ->join('categories', 'categories.id', 'defectives.category_id')
+            ->orderBy('category', 'ASC')
+            ->orderBy('item', 'ASC')
+            ->get();
+            return $rr;
         }
         
     }

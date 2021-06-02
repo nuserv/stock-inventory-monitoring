@@ -89,7 +89,7 @@ class StockController extends Controller
     {
         if (auth()->user()->hasanyrole('Warehouse Manager', 'Encoder')) {
             $pullout = Pullno::query()
-                ->select('pullouts_no.updated_at', 'pullouts_no.status', 'pullout_no', 'branch', 'pullouts_no.status')
+                ->select('pullouts_no.updated_at', 'pullouts_no.status', 'pullout_no', 'branch')
                 ->wherein('pullouts_no.status', ['For receiving', 'Incomplete'])
                 ->join('branches', 'branches.id', 'branch_id')
                 ->get();

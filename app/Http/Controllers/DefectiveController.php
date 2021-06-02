@@ -18,6 +18,7 @@ use App\Category;
 use Carbon\Carbon;
 use App\UserLog;
 use App\Retno;
+use App\RepairedNo;
 use App\Retmail;
 use DB;
 use Mail;
@@ -34,6 +35,11 @@ class DefectiveController extends Controller
     {
         $title = 'Defectives';
         return view('pages.return', compact('title'));
+    }
+    public function repaired()
+    {
+        $title = 'Repaired';
+        return view('pages.repaired', compact('title'));
     }
 
     public function returnget()
@@ -62,6 +68,106 @@ class DefectiveController extends Controller
             ->where('return_no', $request->retno)
             ->get();
         return DataTables::of($return)->make(true);
+    }
+    public function repaireditem(Request $request)
+    {
+        $repaired = Defective::query()
+            ->select('defectives.id', 'category', 'item', 'serial')
+            ->join('categories', 'categories.id', 'defectives.category_id')
+            ->join('items', 'items.id', 'items_id')
+            ->where('status', 'For add stock')
+            ->where('repaired_no', $request->repaired_no)
+            ->get();
+        return DataTables::of($repaired)->make(true);
+    }
+    public function repairednr(Request $request)
+    {
+        $repaired = RepairedNo::where('status', 'For receiving')
+            ->where('repaired_no', $request->repaired_no)
+            ->update(['status' => 'Incomplete']);
+        return response()->json($repaired);
+
+    }
+    public function repairedrec(Request $request)
+    {
+        foreach ($request->id as $id) {
+            $repaired_no= Defective::where('status', 'For add stock')
+                ->where('id', $id)
+                ->where('repaired_no', $request->repaired_no)->first();
+            $repaired_no->status = 'Received';
+            $repaired_no->save();
+                //->update(['status' => 'Received']);
+            $warehouse = new Warehouse;
+            $warehouse->items_id = $repaired_no->items_id;
+            $warehouse->serial = $repaired_no->serial;
+            $warehouse->category_id = $repaired_no->category_id;
+            $warehouse->status = 'in';
+            $warehouse->user_id = auth()->user()->id;
+            $warehouse->save();
+        }
+        $check = Defective::where('status', 'For add stock')
+            ->where('repaired_no', $request->repaired_no)->first();
+        if ($check) {
+            RepairedNo::where('status', 'For receiving')->where('repaired_no', $request->repaired_no)->update(['status' => 'Incomplete']);
+        }else{
+            RepairedNo::where('status', 'For receiving')->where('repaired_no', $request->repaired_no)->update(['status' => 'Completed']);
+        }
+        return response()->json($warehouse);
+
+    }
+    public function repairedget()
+    {
+        if (auth()->user()->hasanyrole('Warehouse Manager', 'Encoder')) {
+            $repaired = RepairedNo::query()
+                ->select('created_at', 'repaired_no', 'status')
+                ->wherein('status', ['For receiving', 'Incomplete'])
+                ->get();
+            return DataTables::of($repaired)
+                ->addColumn('created_at', function (RepairedNo $repaired){
+                    return Carbon::parse($repaired->created_at->toFormattedDateString().' '.$repaired->created_at->toTimeString())->isoFormat('lll');
+                })
+                ->make(true);
+        }
+        if (auth()->user()->hasanyrole('Repair')) {
+            $repaired = Defective::query()
+                ->select('defectives.updated_at', 'item', 'serial', 'category')
+                ->where('status', 'Repaired')
+                ->join('items', 'items.id', 'items_id')
+                ->join('categories', 'categories.id', 'defectives.category_id')
+                ->get();
+            return DataTables::of($repaired)
+                ->addColumn('updated_at', function (Defective $repaired){
+                    return Carbon::parse($repaired->updated_at->toFormattedDateString().' '.$repaired->updated_at->toTimeString())->isoFormat('lll');
+                })
+                ->make(true);
+        }
+        
+    }
+    public function repairedupdate(Request $request)
+    {
+        if ($request->send == 1) {
+            $defective = Defective::query()
+            ->where('status', 'Repaired')
+            ->update(['status' => 'For add stock', 'repaired_no' => $request->retno]);
+            $repaired = new RepairedNo;
+            $repaired->user_id = auth()->user()->id;
+            $repaired->status = 'For receiving';
+            $repaired->repaired_no = $request->retno;
+            $repaired->save();
+            $bcc = \config('email.bcc');
+            $no = $repaired->repaired_no;
+            $excel = Excel::raw(new ExcelExport($repaired->repaired_no, 'RR'), BaseExcel::XLSX);
+            $data = array('office'=> auth()->user()->branch->branch, 'return_no'=>$repaired->repaired_no, 'dated'=>Carbon::now()->toDateTimeString());
+            Mail::send('rr', $data, function($message) use($excel, $no, $bcc) {
+                $message->to(auth()->user()->email, auth()->user()->name)->subject
+                    ('RR no. '.$no);
+                $message->attachData($excel, 'RR No. '.$no.'.xlsx');
+                $message->from('noreply@ideaserv.com.ph', 'BSMS');
+                $message->bcc($bcc);
+            });
+
+            return response()->json($repaired);
+        }
     }
     public function pullrec(Request $request)
     {

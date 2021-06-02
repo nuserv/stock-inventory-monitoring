@@ -133,6 +133,11 @@
                 @include('modal.warehouse.pullout')
             @endif
         @endif
+         @if(Request::is('repaired'))
+            @if(auth()->user()->hasAnyrole('Warehouse Manager', 'Encoder'))
+                @include('modal.warehouse.repaired')
+            @endif
+        @endif
         @if(Request::is('returnview'))
             @if(auth()->user()->hasAnyrole('Repair'))
                 @include('modal.warehouse.return')
@@ -260,6 +265,14 @@
         @if(Request::is('returnview'))
             @if (auth()->user()->hasanyrole('Repair'))
                 <script src="{{asset('min/?f=js/warehouse/return.js')}}"></script>
+            @endif
+        @endif
+        @if(Request::is('repaired'))
+            @if (auth()->user()->hasanyrole('Repair'))
+                <script src="{{asset('min/?f=js/warehouse/repaired.js')}}"></script>
+            @endif
+            @if (auth()->user()->hasanyrole('Warehouse Manager', 'Encoder'))
+                <script src="{{asset('min/?f=js/warehouse/addtostock.js')}}"></script>
             @endif
         @endif
         @if(Request::is('stocks'))
