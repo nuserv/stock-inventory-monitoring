@@ -206,6 +206,9 @@ class DefectiveController extends Controller
         ->addColumn('status', function (Defective $data){
             return $data->status;
         })
+        ->addColumn('serial', function (Defective $data){
+            return strtoupper($data->serial);
+        })
         ->make(true);
     }
     public function unrepairable()
