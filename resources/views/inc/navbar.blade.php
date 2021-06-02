@@ -31,6 +31,9 @@
                 <li class="nav-item" style="margin-left:0px;margin-right:0px;">
                     <a style="padding-right:8px; padding-left:8px" class="nav-link {{ Request::is('unrepair') ? 'active' : '' }}" href="{{ url('/unrepair') }}">Unrepairable</a>
                 </li>
+                <li class="nav-item" style="margin-left:0px;margin-right:0px;">
+                    <a style="padding-right:8px; padding-left:8px" class="nav-link {{ Request::is('returnview') ? 'active' : '' }}" href="{{ url('/returnview') }}">Returns</a>
+                </li>
             @endif
             @if(!auth()->user()->hasanyrole('Repair', 'Returns Manager', 'Viewer', 'Viewer PLSI', 'Viewer IDSI'))
                 <li class="nav-item" style="margin-left:0px;margin-right:0px;">
