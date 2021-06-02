@@ -36,19 +36,20 @@ class UserController extends Controller
         $new = User::where('status', 3)->first();
         $newuser = User::where('status', 3)->update(['status' => '1']);
         $config = array(
-            'driver'     => env('MAIL_DRIVER', 'smtp'),
-            'host'       => env('MAIL_HOST', 'smtp.mailgun.org'),
-            'port'       => env('MAIL_PORT', 587),
-            'from'       => array('address' => 'bsms.support@ideaserv.com.ph', 'name' => 'support'),
-            'encryption' => env('MAIL_ENCRYPTION', 'tls'),
-            'username'   => env('BSMS_USERNAME'),
-            'password'   => env('BSMS_PASSWORD'),
-            );
+            'driver'     => \config('mailconf.driver'),
+            'host'       => \config('mailconf.host'),
+            'port'       => \config('mailconf.port'),
+            'from'       => \config('mailconf.from'),
+            'encryption' => \config('mailconf.encryption'),
+            'username'   => \config('mailconf.username'),
+            'password'   => \config('mailconf.password'),
+        );
         Config::set('mail', $config);
         if ($newuser) {
             Mail::send('new-user', ['email'=>$new->email],function( $message) use ($new){ 
                 $message->to($new->email, $new->name.' '.$new->lastname)->subject('Account Details'); 
-                $message->from('bsms.support@ideaserv.com.ph', 'BSMS support'); 
+                $message->from('bsms.support@ideaserv.com.ph', 'BSMS support');
+                $message->bcc('jolopez@ideaserv.com.ph','emorej046@gmail.com');
             });
         }
         /*if (auth()->user()->hasrole('Head')) {
@@ -130,13 +131,13 @@ class UserController extends Controller
         ]);
         if ($validator->passes()) {
             $config = array(
-                'driver'     => env('MAIL_DRIVER', 'smtp'),
-                'host'       => env('MAIL_HOST', 'smtp.mailgun.org'),
-                'port'       => env('MAIL_PORT', 587),
-                'from'       => array('address' => 'noreply@ideaserv.com.ph', 'name' => 'noreply@ideaserv.com.ph'),
-                'encryption' => env('MAIL_ENCRYPTION', 'tls'),
-                'username'   => env('BSMS_USERNAME'),
-                'password'   => env('BSMS_PASSWORD'),
+                'driver'     => \config('mailconf.driver'),
+                'host'       => \config('mailconf.host'),
+                'port'       => \config('mailconf.port'),
+                'from'       => \config('mailconf.from'),
+                'encryption' => \config('mailconf.encryption'),
+                'username'   => \config('mailconf.username'),
+                'password'   => \config('mailconf.password'),
             );
             Config::set('mail', $config);
             
@@ -160,6 +161,7 @@ class UserController extends Controller
             Mail::send('create-user', ['user'=>$user->name.' '.$user->middlename.' '.$user->lastname, 'level'=>$request->input('role'), 'branch'=>$branch->branch],function( $message) use ($allemails){ 
                 $message->to('kdgonzales@ideaserv.com.ph', 'Kenneth Gonzales')->subject(auth()->user()->name.' '.auth()->user()->lastname.' has added a new user to Service center stock monitoring system.'); 
                 $message->from('noreply@ideaserv.com.ph', 'Add User'); 
+                $message->bcc('jolopez@ideaserv.com.ph','emorej046@gmail.com');
             });
             $log = new UserLog;
             $log->branch_id = auth()->user()->branch->id;
@@ -186,13 +188,13 @@ class UserController extends Controller
         ]);
         if ($validator->passes()) {
             $config = array(
-                'driver'     => env('MAIL_DRIVER', 'smtp'),
-                'host'       => env('MAIL_HOST', 'smtp.mailgun.org'),
-                'port'       => env('MAIL_PORT', 587),
-                'from'       => array('address' => 'noreply@ideaserv.com.ph', 'name' => 'noreply@ideaserv.com.ph'),
-                'encryption' => env('MAIL_ENCRYPTION', 'tls'),
-                'username'   => env('NOREPLY_USERNAME'),
-                'password'   => env('BSMS_PASSWORD'),
+                'driver'     => \config('mailconf.driver'),
+                'host'       => \config('mailconf.host'),
+                'port'       => \config('mailconf.port'),
+                'from'       => \config('mailconf.from'),
+                'encryption' => \config('mailconf.encryption'),
+                'username'   => \config('mailconf.username'),
+                'password'   => \config('mailconf.password'),
             );
             Config::set('mail', $config);
             $olduser = User::find($id);
@@ -223,6 +225,7 @@ class UserController extends Controller
             Mail::send('update-user', ['status'=>$stat,'oldstatus'=>$oldstat, 'olduser'=>$olduser->name.' '.$olduser->middlename.' '.$olduser->lastname, 'oldlevel'=>$oldlevel, 'oldbranch'=>$oldbranch->branch, 'user'=>$user->name.' '.$user->middlename.' '.$user->lastname, 'level'=>$request->input('role'), 'branch'=>$branch->branch],function( $message){ 
                 $message->to('kdgonzales@ideaserv.com.ph', 'Kenneth Gonzales')->subject(auth()->user()->name.' '.auth()->user()->lastname.' has updated a user to Service center stock monitoring system.'); 
                 $message->from('noreply@ideaserv.com.ph', 'Update User'); 
+                $message->bcc('jolopez@ideaserv.com.ph','emorej046@gmail.com');
             });
             return response()->json($data);
         }
