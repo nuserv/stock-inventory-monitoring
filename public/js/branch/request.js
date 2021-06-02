@@ -9,7 +9,9 @@ var pendingreq;
 var requestno;
 var stockcat;
 var servicecat;
-var checkrequest;
+var reqno;
+var checkrequest = 'wala';
+var reqstock;
 $(document).ready(function()
 {
     var d = new Date();

@@ -625,13 +625,30 @@ class StockRequestController extends Controller
             $data = $log->save();
         }
         if ($request->stat == 'notok') {
-            $reqitem = new RequestedItem;
-            $reqitem->request_no = $request->reqno;
-            $reqitem->items_id = $request->item;
-            $reqitem->quantity = $request->qty;
-            $reqitem->pending = $request->qty;
-            $reqitem->status = 'PENDING';
-            $data = $reqitem->save();
+            if ($request->check == "meron") {
+                $meron = RequestedItem::query()->where('request_no', $request->reqno)->where('items_id', $request->item)->first();
+                if ($meron) {
+                    $meron->quantity = $meron->quantity+$request->qty;
+                    $meron->pending = $meron->pending+$request->qty;
+                    $data = $meron->save();
+                }else{
+                    $reqitem = new RequestedItem;
+                    $reqitem->request_no = $request->reqno;
+                    $reqitem->items_id = $request->item;
+                    $reqitem->quantity = $request->qty;
+                    $reqitem->pending = $request->qty;
+                    $reqitem->status = 'PENDING';
+                    $data = $reqitem->save();
+                }
+            }else {
+                $reqitem = new RequestedItem;
+                $reqitem->request_no = $request->reqno;
+                $reqitem->items_id = $request->item;
+                $reqitem->quantity = $request->qty;
+                $reqitem->pending = $request->qty;
+                $reqitem->status = 'PENDING';
+                $data = $reqitem->save();
+            }
         }
         return response()->json($data);
     }

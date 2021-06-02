@@ -183,7 +183,7 @@ class DefectiveController extends Controller
             ->join('items', 'defectives.items_id', '=', 'items.id')
             ->join('branches', 'defectives.branch_id', '=', 'branches.id')->get();
         $repair = Defective::query()->select('branches.branch', 'defectives.category_id', 'branches.id as branchid', 'defectives.updated_at', 'defectives.id as id', 'items.item', 'items.id as itemid', 'defectives.serial', 'defectives.status')
-            ->wherein('defectives.status', ['For receiving', 'For repair', 'Repaired'])
+            ->wherein('defectives.status', ['For repair', 'Repaired'])
             ->join('items', 'defectives.items_id', '=', 'items.id')
             ->join('branches', 'defectives.branch_id', '=', 'branches.id')->get();
         if (auth()->user()->branch->branch == 'Warehouse' && !auth()->user()->hasanyrole('Repair', 'Returns Manager')) {

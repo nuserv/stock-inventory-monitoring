@@ -129,6 +129,32 @@ $(document).on('click', '#reqBtn', function(){
         success:function(result)
         {
             $('#sreqno').val(result);
+            reqstock = result;
+            $.ajax({
+                url: 'checkrequest',
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="ctok"]').attr('content')
+                },
+                dataType: 'json',
+                type: 'GET',
+                async:false,
+                data: {
+                    reqno : reqno,
+                },
+                success: function(data){
+                    if(data != "wala pa"){
+                        $('#sreqno').val(data);
+                        reqno = data;
+                        checkrequest = 'meron';
+                    }
+                },
+                error: function (data) {
+                    if(data.status == 401) {
+                        window.location.href = '/login';
+                    }
+                    alert(data.responseText);
+                }
+            });
         },
     });
     $('#loading').show()
@@ -192,33 +218,7 @@ $(document).on('click', '.send_sub_Btn', function(){
     var item = "";
     var qty = "";
     var stat = "notok";
-    var reqno = $('#sreqno').val();
-    if ($('#requesttype').val() == "Stock") {
-        $.ajax({
-            url: 'checkrequest',
-            headers: {
-                'X-CSRF-TOKEN': $('meta[name="ctok"]').attr('content')
-            },
-            dataType: 'json',
-            type: 'GET',
-            async:false,
-            data: {
-                reqno : reqno,
-            },
-            success: function(data){
-                if(data != "wala pa"){
-                    reqno = data;
-                    checkrequest = 'meron';
-                }
-            },
-            error: function (data) {
-                if(data.status == 401) {
-                    window.location.href = '/login';
-                }
-                alert(data.responseText);
-            }
-        });
-    }
+    
     if (!$('#requesttype').val()) {
         alert('Please Select request type!');
         return false;
@@ -231,6 +231,9 @@ $(document).on('click', '.send_sub_Btn', function(){
     }
     $('#sendrequestModal').modal('toggle');
     $('#loading').show();
+    if ($('#requesttype').val() == "Service") {
+        reqno = reqstock;
+    }
     for(var q=1;q<=y;q++){
         if ($('#row'+q).is(":visible")) {
             if ($('.add_item[btn_id=\''+q+'\']').val() == 'Remove') {
@@ -250,7 +253,8 @@ $(document).on('click', '.send_sub_Btn', function(){
                         reqno : reqno,
                         item: item,
                         qty: qty,
-                        stat: stat                           
+                        stat: stat,
+                        check: checkrequest,                       
                     },
                     error: function (data) {
                         if(data.status == 401) {
@@ -269,6 +273,7 @@ $(document).on('click', '.send_sub_Btn', function(){
                 ticketno = $('#ticket').val();
                 client = $('#client-id').val();
                 customer = $('#customer-id').val();
+                reqno = reqstock;
             }
             stat = "ok";
             $.ajax({
@@ -449,6 +454,7 @@ $(document).on('change', '#requesttype', function(){
             catop+='<option value="'+value.id+'">'+value.category.toUpperCase()+'</option>';
         });
         $("#category1").find('option').remove().end().append(catop);
+        $('#sreqno').val(reqno);
     }else if ($(this).val() == 'Service'){
         $('#ticketrow').show();
         $('#clientrow').show();
@@ -457,6 +463,7 @@ $(document).on('change', '#requesttype', function(){
             catop+='<option value="'+value.id+'">'+value.category.toUpperCase()+'</option>';
         });
         $("#category1").find('option').remove().end().append(catop);
+        $('#sreqno').val(reqstock);
     }
 });
 $(document).on('keyup', '#client', function(){
