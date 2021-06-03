@@ -115,6 +115,7 @@ $(document).on('change', '#intype', function(){
     }
 });
 $(document).on('keyup', '#repserial', function(){
+    $(this).val($(this).val().toUpperCase());
     if ($(this).val() && $(this).val().length >= 3) {
         if ($(this).val().toLowerCase().includes('n/a') || $(this).val().toLowerCase() ==  "n/a" || $(this).val().toLowerCase() ==  "faded" || $(this).val().toLowerCase() ==  "none") {
             $.ajax({

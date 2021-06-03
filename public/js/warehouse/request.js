@@ -1253,6 +1253,7 @@ $(document).on("keyup", "#searchall", function () {
     table.search(this.value).draw();
 });
 $(document).on("keyup", "#editserial", function () {
+    $(this).val($(this).val().toUpperCase());
     if ($(this).val() == serialnum) {
         $('#serial_btn').prop('disabled', true);
     }else{
