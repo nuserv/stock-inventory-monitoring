@@ -54,7 +54,7 @@ $(document).on("click", "#defectiveTable tr", function() {
     var trdata = table.row(this).data();
     $('#branch_id').val(trdata.branchid);
     $('#date').val(trdata.date);
-    $('#description').val(trdata.item.replace(/&quot;/g, '\"').replace(/&amp;/g, '\&'));
+    $('#description').val(trdata.item.replace(/&quot;/g, '\"').replace(/&amp;/g, '\&').replace(/&AMP;/g, '\&'));
     $('#status').val(trdata.status);
     $('#myid').val(trdata.id);
     $('#serial').val(trdata.serial);

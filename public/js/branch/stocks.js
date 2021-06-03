@@ -113,7 +113,7 @@ $(document).on("click", "#searchtable tr", function () {
     var trdata = searchtable.row(this).data();
     var id = trdata.items_id;
     $('table.stockDetails').dataTable().fnDestroy();
-    $('#head').text(trdata.category.replace(/&quot;/g, '\"').replace(/&amp;/g, '\&'));
+    $('#head').text(trdata.category.replace(/&quot;/g, '\"').replace(/&amp;/g, '\&').replace(/&AMP;/g, '\&'));
     stock = 
     $('table.stockDetails').DataTable({ 
         "dom": 'rt',
@@ -147,9 +147,9 @@ $(document).on("click", "#catTable tr", function () {
     $('table.stockTable').dataTable().fnDestroy();
     $('#searchall').hide()
     $('#itemsearch').show();
-    $('#catname').text(catdata.category.replace(/&quot;/g, '\"').replace(/&amp;/g, '\&'));
+    $('#catname').text(catdata.category.replace(/&quot;/g, '\"').replace(/&amp;/g, '\&').replace(/&AMP;/g, '\&'));
     $('#catname').show();
-    $('#head').text(catdata.category.replace(/&quot;/g, '\"').replace(/&amp;/g, '\&'));
+    $('#head').text(catdata.category.replace(/&quot;/g, '\"').replace(/&amp;/g, '\&').replace(/&AMP;/g, '\&'));
     $('#catTable').hide();
     $('#ctable').hide();
     $('#stockTable').show();
@@ -653,7 +653,7 @@ $(document).on("click", "#stockTable tr", function () {
     var trdata = table.row(this).data();
     var id = trdata.items_id;
     $('table.stockDetails').dataTable().fnDestroy();
-    $('#head').text(trdata.category.replace(/&quot;/g, '\"').replace(/&amp;/g, '\&'));
+    $('#head').text(trdata.category.replace(/&quot;/g, '\"').replace(/&amp;/g, '\&').replace(/&AMP;/g, '\&'));
     stock = 
     $('table.stockDetails').DataTable({ 
         "dom": 'lrtip',

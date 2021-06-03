@@ -45,7 +45,7 @@ $(document).ready(function()
             { data: 'fullname', name:'fullname',"width": "14%"},
             { data: 'branch', name:'branch',"width": "14%"},
             { data: 'activity', render: function ( data, type, row ) {
-                return data.replace(/&quot;/g, '\"').replace(/&amp;/g, '\&');
+                return data.replace(/&quot;/g, '\"').replace(/&amp;/g, '\&').replace(/&AMP;/g, '\&');
             }}
         ]
     });

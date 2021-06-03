@@ -259,7 +259,7 @@ $(document).ready(function()
         $('#cattable').hide();
         $('#catbranchDetails').hide();
         $('#table').show();
-        $('#catname').text(trdata.category.replace(/&quot;/g, '\"').replace(/&amp;/g, '\&'));
+        $('#catname').text(trdata.category.replace(/&quot;/g, '\"').replace(/&amp;/g, '\&').replace(/&AMP;/g, '\&'));
         stockTable =
             $('table.branchDetails').DataTable({ 
                 "dom": 'rtip',

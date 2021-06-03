@@ -112,8 +112,8 @@ $(document).ready(function()
         }else{
             $('.ticketno').show();
             $('#clientrows').show();
-            $('#clients').val(trdata.client.replace(/&quot;/g, '\"').replace(/&amp;/g, '\&'));
-            $('#customers').val(trdata.customer.replace(/&quot;/g, '\"').replace(/&amp;/g, '\&'));
+            $('#clients').val(trdata.client.replace(/&quot;/g, '\"').replace(/&amp;/g, '\&').replace(/&AMP;/g, '\&'));
+            $('#customers').val(trdata.customer.replace(/&quot;/g, '\"').replace(/&amp;/g, '\&').replace(/&AMP;/g, '\&'));
             $('#tickets').val(trdata.ticket);
         }
         $('#schedbyrow').hide();
