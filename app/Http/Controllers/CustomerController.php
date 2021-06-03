@@ -63,6 +63,28 @@ class CustomerController extends Controller
         })
         ->make(true);
     }
+    public function branchtable()
+    {
+        $customer = CustomerBranch::query()->select('customer_branches.*', 'customer')
+            ->join('customers', 'customers.id', 'customer_id')
+            ->get();
+        return DataTables::of($customer)
+        ->addColumn('status', function (CustomerBranch $customer){
+            if ($customer->status == 1) {
+                return 'Active';
+            }else{
+                return 'Inactive';
+            }
+        })
+        ->addColumn('customer_branch', function (CustomerBranch $customer){
+            return mb_strtoupper($customer->customer_branch);
+        })
+        ->addColumn('code', function (CustomerBranch $customer){
+            return mb_strtoupper($customer->code);
+        })
+        
+        ->make(true);
+    }
     public function store(Request $request)
     {
         if (Customer::where('code', mb_strtolower($request->input('customer_code')))->exists() || Customer::where('customer', mb_strtolower($request->input('customer_name')))->exists()) {

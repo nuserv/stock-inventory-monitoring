@@ -54,6 +54,7 @@ Route::get('activity', 'HomeController@activity');//->middleware('ajax');
 
 
 Route::get('customerbranch-list/{id}', 'CustomerController@customerbranchtable')->middleware('ajax');
+Route::get('customerbranch', 'CustomerController@branchtable');//->middleware('ajax');
 Route::get('customer-list', 'CustomerController@customertable')->middleware('ajax');
 Route::get('customer/{id}', 'CustomerController@branchindex')->name('customerbranch.index');
 Route::get('customer', 'CustomerController@index')->name('customer.index');

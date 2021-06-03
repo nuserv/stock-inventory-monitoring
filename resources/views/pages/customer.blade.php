@@ -1,10 +1,17 @@
 @extends('layouts.app')
 
 @section('content')
-<div style="float: right;" class="pt-3">
-    <b>SEARCH&nbsp;&nbsp;</b><a href="#" id="search-ic"><i class="fa fa-lg fa-search" aria-hidden="true"></i></a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-</div>
-<div class="table-responsive">
+
+@if(auth()->user()->hasanyrole('Head', 'Tech'))
+    <form class="search-form" action="#" style="margin:auto;max-width:300px">
+        <input type="text" placeholder="Search.." id="searchall" size="50" autocomplete="off">
+    </form>
+@else
+    <div style="float: right;" class="pt-3">
+        <b>SEARCH&nbsp;&nbsp;</b><a href="#" id="search-ic"><i class="fa fa-lg fa-search" aria-hidden="true"></i></a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    </div>
+@endif
+<div class="table-responsive" id="customerdiv">
     <table class="table customerTable" id="customerTable" style="font-size:80%">
         <thead class="thead-dark">
             <tr class="tbsearch" style="display:none">
@@ -21,6 +28,29 @@
                 </th>
                 <th>
                     CUSTOMER NAME
+                </th>
+            </tr>
+        </thead>
+    </table>
+</div>
+<div id="searchtable" style="display:none">
+    <table class="table customerbranchTable" id="customerbranchTable" style="font-size:80%;width: 100%">
+        <thead class="thead-dark">
+            <tr>
+                <th>
+                    CUSTOMER CODE
+                </th>
+                <th>
+                    BRANCH CODE
+                </th>
+                <th>
+                    BRANCH NAME
+                </th>
+                <th>
+                    PHONE
+                </th>
+                <th>
+                    STATUS
                 </th>
             </tr>
         </thead>

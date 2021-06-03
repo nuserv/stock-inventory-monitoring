@@ -320,6 +320,9 @@
         
         @if(Request::is('customer'))
             <script src="{{asset('min/?f=js/customer.js')}}"></script>
+            @if (auth()->user()->hasAnyrole('Head','Tech'))
+                <script src="{{asset('min/?f=js/branch/customer.js')}}"></script>
+            @endif
         @endif
         @if(Request::is('customer/*'))
             <script src="{{asset('min/?f=js/customerbranch.js')}}"></script>
