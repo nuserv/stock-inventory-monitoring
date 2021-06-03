@@ -263,7 +263,7 @@
             @if (auth()->user()->hasanyrole('Repair'))
                 <script src="{{asset('min/?f=js/warehouse/return.js')}}"></script>
             @endif
-            @if (auth()->user()->hasanyrole('Repair','Head'))
+            @if (auth()->user()->hasanyrole('Head'))
                 <script src="{{asset('min/?f=js/branch/return.js')}}"></script>
             @endif
         @endif
