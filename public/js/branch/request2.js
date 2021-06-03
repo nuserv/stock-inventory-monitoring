@@ -130,6 +130,7 @@ $(document).on('click', '#reqBtn', function(){
         {
             $('#sreqno').val(result);
             reqstock = result;
+            reqno = result;
             $.ajax({
                 url: 'checkrequest',
                 headers: {
@@ -273,7 +274,6 @@ $(document).on('click', '.send_sub_Btn', function(){
                 ticketno = $('#ticket').val();
                 client = $('#client-id').val();
                 customer = $('#customer-id').val();
-                reqno = reqstock;
             }
             stat = "ok";
             $.ajax({

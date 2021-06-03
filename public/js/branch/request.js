@@ -730,7 +730,6 @@ $(document).on('keyup', '#ticket', function () {
         alert('Incorrect Ticket number Format!');
         $(this).val('');
     }
-    
 });
 
 $(document).on('click', '#not_rec_Btn', function(){
