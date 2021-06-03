@@ -324,8 +324,8 @@ $(document).on('click', '#returnBtn', function(){
                             $(doc.document.body)
                                 //.append('<div style="position:absolute; bottom:80; left:15;font-family: arial; font-weight: bold;">Prepared By: '+$("#userlog").val()+'</div>')
                                 //.append('<div style="position:absolute; bottom:50; left:15;font-family: arial; font-weight: bold;">Prepared Date: '+months[d.getMonth()]+' '+d.getDate()+', ' +d.getFullYear()+' '+hour+':'+String(d.getMinutes()).padStart(2, '0')+ampm+'</div>')
-                                .append('<div style="position:absolute; bottom:80; right:15;font-family: arial; font-weight: bold;font-size:24px">Received By: _____________________</div>')
-                                .append('<div style="position:absolute; bottom:50; right:15;font-family: arial; font-weight: bold;font-size:24px">Received Date: _____________________</div>')
+                                .append('<div style="position:absolute; bottom:40; right:15;font-family: arial; font-weight: bold;font-size:24px">Received By: _____________________</div>')
+                                .append('<div style="position:absolute; bottom:10; right:15;font-family: arial; font-weight: bold;font-size:24px">Received Date: _____________________</div>')
                             $(doc.document.body).find('table')            			
                                 .removeClass('dataTable')
                                 .css('font-size','24px') 
@@ -367,7 +367,7 @@ $(document).on("click", "#defectiveTable tbody tr", function () {
 });
 $(document).on('click', '#printrecBtn', function(){
     $('#loading').show();
-    window.location.href = '/defective/print';
+    window.location.href = 'returnview';
 });
 $(document).on('click', '#submit_Btn', function(){
     if (sub > 0) {

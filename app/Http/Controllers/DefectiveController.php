@@ -56,6 +56,19 @@ class DefectiveController extends Controller
                 })
                 ->make(true);
         }
+        if (auth()->user()->hasanyrole('Head')) {
+            $return = Retno::query()
+                ->select('returns_no.updated_at', 'returns_no.status', 'return_no', 'branch', 'returns_no.status')
+                ->wherein('returns_no.status', ['For receiving', 'Incomplete'])
+                ->where('branch_id', auth()->user()->branch->id)
+                ->join('branches', 'branches.id', 'branch_id')
+                ->get();
+            return DataTables::of($return)
+                ->addColumn('updated_at', function (Retno $return){
+                    return Carbon::parse($return->updated_at->toFormattedDateString().' '.$return->updated_at->toTimeString())->isoFormat('lll');
+                })
+                ->make(true);
+        }
     }
 
     public function returnitem(Request $request)

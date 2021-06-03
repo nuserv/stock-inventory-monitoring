@@ -142,6 +142,9 @@
             @if(auth()->user()->hasAnyrole('Repair'))
                 @include('modal.warehouse.return')
             @endif
+            @if(auth()->user()->hasAnyrole('Head'))
+                @include('modal.branch.return')
+            @endif
         @endif
 
         @if(Request::is('preventive'))
@@ -183,16 +186,10 @@
             @include('modal.branch.loan')
         @endif
 
-        @if(Request::is('return'))
-            @include('modal.branch.return')
-        @endif
         @if(Request::is('item'))
             @include('modal.warehouse.items')
         @endif
 
-        @if (Request::is('/') && auth()->user()->hasrole('Repair'))
-            @include('modal.branch.return')
-        @endif
         @if (Request::is('pending') && auth()->user()->hasanyrole('Viewer', 'Viewer PLSI', 'Viewer IDSI'))
             @include('modal.warehouse.request')
         @endif
@@ -265,6 +262,9 @@
         @if(Request::is('returnview'))
             @if (auth()->user()->hasanyrole('Repair'))
                 <script src="{{asset('min/?f=js/warehouse/return.js')}}"></script>
+            @endif
+            @if (auth()->user()->hasanyrole('Repair','Head'))
+                <script src="{{asset('min/?f=js/branch/return.js')}}"></script>
             @endif
         @endif
         @if(Request::is('repaired'))

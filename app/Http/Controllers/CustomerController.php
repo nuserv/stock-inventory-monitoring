@@ -82,6 +82,9 @@ class CustomerController extends Controller
         ->addColumn('code', function (CustomerBranch $customer){
             return mb_strtoupper($customer->code);
         })
+        ->addColumn('customer', function (CustomerBranch $customer){
+            return mb_strtoupper($customer->customer);
+        })
         
         ->make(true);
     }
