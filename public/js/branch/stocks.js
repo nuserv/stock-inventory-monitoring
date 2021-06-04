@@ -27,7 +27,7 @@ $(document).ready(function()
             }
         },
         processing: true,
-        serverSide: true,
+        serverSide: false,
         ajax: {
             "url": 'viewStock',
             "data": {
@@ -158,6 +158,7 @@ $(document).on("click", "#catTable tr", function () {
     $('table.stockTable').DataTable({ 
         "dom": 'lrtip',
         "language": {
+            "processing": '<i class="fa fa-spinner fa-spin fa-3x fa-fw"></i>',
             "emptyTable": " "
         },
         "pageLength": 25,
@@ -169,7 +170,7 @@ $(document).on("click", "#catTable tr", function () {
             }
         },
         processing: true,
-        serverSide: true,
+        serverSide: false,
         ajax: {
             "url": 'viewStock',
             "data": {
@@ -189,7 +190,6 @@ $(document).on("click", "#catTable tr", function () {
             { data: 'defectives', name:'defectives'},
             { data: 'total', name:'total'},
             { data: 'UOM', name:'UOM'}
-
         ]
     });
 });
