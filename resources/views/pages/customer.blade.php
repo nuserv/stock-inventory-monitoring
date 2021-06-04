@@ -38,7 +38,7 @@
         <thead class="thead-dark">
             <tr>
                 <th>
-                    CUSTOMER CODE
+                    CLIENT NAME
                 </th>
                 <th>
                     BRANCH CODE
