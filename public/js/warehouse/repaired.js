@@ -132,7 +132,9 @@ $(document).ready(function()
     }, 2000);
     
 });
-
+$(document).on('click', '#printrecBtn', function(){
+    window.location.href = 'repaired-list';
+});
 $(document).on('click', '.printBtn', function(){
     $.ajax({
         url: 'repairedupdate',
