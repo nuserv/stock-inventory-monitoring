@@ -6,12 +6,51 @@ var branchid;
 var stock;
 var cattable;
 var sub = 0;
+var reqno;
 var repretselected;
+var qty;
+var cat;
+var check;
+var item;
+var checkrequest = 'wala pa'
+
 $(document).ready(function()
 {
     branchid = $('#branchid').attr('branchid');
     $('#catTable').show();
     $('#itemsearch').hide();
+    $.ajax({
+        type:'get',
+        url:'gen',
+        success:function(result)
+        {
+            reqno = result;
+            $.ajax({
+                url: 'checkrequest',
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="ctok"]').attr('content')
+                },
+                dataType: 'json',
+                type: 'GET',
+                async:false,
+                data: {
+                    reqno : reqno,
+                },
+                success: function(data){
+                    if(data != "wala pa"){
+                        reqno = data;
+                        checkrequest = 'meron';
+                    }
+                },
+                error: function (data) {
+                    if(data.status == 401) {
+                        window.location.href = '/login';
+                    }
+                    alert(data.responseText);
+                }
+            });
+        },
+    });
     cattable =
     $('table.catTable').DataTable({ 
         "dom": 'lrtip',
@@ -142,7 +181,7 @@ $(document).on("click", "#searchtable tr", function () {
     $('#stockModal').modal();
 });
 
-$(document).on("click", "#catTable tr", function () {
+$(document).on("click", "#catTable tbody td", function () {
     var catdata = cattable.row(this).data();
     $('table.stockTable').dataTable().fnDestroy();
     $('#searchall').hide()
@@ -189,13 +228,145 @@ $(document).on("click", "#catTable tr", function () {
             { data: 'stockout', name:'stockout'},
             { data: 'defectives', name:'defectives'},
             { data: 'total', name:'total'},
-            { data: 'UOM', name:'UOM'}
+            { data: 'UOM', name:'UOM'},
+            { data: null, "render": function ( data, type, row, meta) 
+                {
+                    if($('#userlevel').val() == 'Head'){
+                        if (data.initial > data.stockin) {
+                            var items_id = data.id;
+                            $.ajax({
+                                url: 'checkrequestitem',
+                                headers: {
+                                    'X-CSRF-TOKEN': $('meta[name="ctok"]').attr('content')
+                                },
+                                dataType: 'json',
+                                type: 'GET',
+                                async:false,
+                                data: {
+                                    reqno : reqno,
+                                    items_id: items_id
+                                },
+                                success: function(thisdata){
+                                    if(thisdata != "wala pa"){
+                                        check = 'meron';
+                                    }else{
+                                        check = 'wala';
+                                    }
+                                },
+                                error: function (thisdata) {
+                                    if(thisdata.status == 401) {
+                                        window.location.href = '/login';
+                                    }
+                                    alert(thisdata.responseText);
+                                }
+                            });
+                            if (check == 'meron') {
+                                return '';
+                            }else{
+                                return '<button class="btn-primary reqBtn" req_id="'+items_id+' test="'+check+'">STOCK REQUEST</button>';
+                            }
+                        }else{
+                            return '';
+                        }
+                    }else{
+                        return '';
+                    }
+                }
+            }
         ]
     });
 });
 
 $(document).on('click', '#addStockBtn', function(){
     $('#addModal').modal({backdrop: 'static', keyboard: false});
+});
+
+
+$(document).on('click', '.reqBtn', function(){
+    var thisdata = table.row( $(this).parents('tr') ).data();
+    $('#qtyModal').modal({backdrop: 'static', keyboard: false});
+    cat = thisdata.category_id;
+    item = thisdata.items_id;
+    qty = thisdata.initial - thisdata.stockin;
+    $('#qty').attr({
+        "min" : qty
+    });
+});
+$('#req').prop('disabled', true);
+
+$(document).on('keyup', '#qty', function(){
+    if ($(this).val()) {
+        if ($(this).val() < qty) {
+            $(this).val(qty);
+        }
+        $('#req').prop('disabled', false);
+    }else{
+        $('#req').prop('disabled', true);
+    }
+});
+$(document).on('click', '#qty', function(){
+    if ($(this).val()) {
+        if ($(this).val() < qty) {
+            $(this).val(qty);
+        }
+        $('#req').prop('disabled', false);
+    }else{
+        $('#req').prop('disabled', true);
+    }
+});
+
+$(document).on('click', '#req', function(){
+    $('#loading').show();
+    $('#qtyModal').toggle();
+    $.ajax({
+        url: 'storerequest',
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="ctok"]').attr('content')
+        },
+        dataType: 'json',
+        type: 'POST',
+        data: {
+            reqno : reqno,
+            item: item,
+            qty: qty,
+            check: checkrequest,    
+            stat: 'notok'                   
+        },
+        error: function (data) {
+            if(data.status == 401) {
+                window.location.href = '/login';
+            }
+            alert(data.responseText);
+        }
+    });
+    $.ajax({
+        url: 'storerequest',
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="ctok"]').attr('content')
+        },
+        dataType: 'json',
+        type: 'POST',
+        data: {
+            reqno : reqno,
+            clientid : null,  
+            customerid : null,  
+            ticket : null,  
+            type : 'Stock',  
+            stat: 'ok'                     
+        },
+        success: function(){
+            if (checkrequest == 'meron') {
+                alert('ATTENTION: Your new stock request was added to your previous pending request with Request No. '+reqno);
+            }
+            window.location.href = 'stocks';
+        },
+        error: function (data) {
+            if(data.status == 401) {
+                window.location.href = '/login';
+            }
+            alert(data.responseText);
+        }
+    });
 });
 
 $(document).on('click', '#importBtn', function(){
@@ -649,30 +820,32 @@ $(document).on("click", "#confirm_Btn", function () {
     }
 });
 
-$(document).on("click", "#stockTable tr", function () {
-    var trdata = table.row(this).data();
-    var id = trdata.items_id;
-    $('table.stockDetails').dataTable().fnDestroy();
-    $('#head').text(trdata.category.replace(/&quot;/g, '\"').replace(/&amp;/g, '\&').replace(/&AMP;/g, '\&'));
-    stock = 
-    $('table.stockDetails').DataTable({ 
-        "dom": 'lrtip',
-        "language": {
-            "emptyTable": "No Stock Available for this Item"
-        },
-        processing: true,
-        serverSide: false,
-        ajax: "/bserial/"+id,
-        columns: [
-            { data: 'updated_at', name:'updated_at'},
-            { data: 'item', name:'item'},
-            { data: 'serial', name:'serial'}
-        ],
-        select: {
-            style: 'single'
-        }
-    });
-    $('#stockModal').modal('show');
+$(document).on("click", "#stockTable tbody td", function () {
+    if ( $(this).index() < 6 ) {
+        var trdata = table.row(this).data();
+        var id = trdata.items_id;
+        $('table.stockDetails').dataTable().fnDestroy();
+        $('#head').text(trdata.category.replace(/&quot;/g, '\"').replace(/&amp;/g, '\&').replace(/&AMP;/g, '\&'));
+        stock = 
+        $('table.stockDetails').DataTable({ 
+            "dom": 'lrtip',
+            "language": {
+                "emptyTable": "No Stock Available for this Item"
+            },
+            processing: true,
+            serverSide: false,
+            ajax: "/bserial/"+id,
+            columns: [
+                { data: 'updated_at', name:'updated_at'},
+                { data: 'item', name:'item'},
+                { data: 'serial', name:'serial'}
+            ],
+            select: {
+                style: 'single'
+            }
+        });
+        $('#stockModal').modal('show');
+    }
 });
 
 function checkserial(ex) {

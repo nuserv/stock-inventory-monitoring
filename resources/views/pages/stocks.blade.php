@@ -85,6 +85,10 @@
                     <th>
                         UOM
                     </th>
+                    @if(auth()->user()->hasanyrole('Head', 'Tech'))
+                        <th>
+                        </th>
+                    @endif
                 </tr>
             </thead>
         </table>

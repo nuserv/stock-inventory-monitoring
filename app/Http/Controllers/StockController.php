@@ -13,6 +13,7 @@ use App\Category;
 use App\Pullno;
 use App\Stock;
 use App\PreparedItem;
+use App\RequestedItem;
 use App\CustomerBranch;
 use App\Customer;
 use App\Pullout;
@@ -527,6 +528,7 @@ class StockController extends Controller
             })
             ->make(true);
         }else{
+            $req = $request->reqno;
             $items = Item::query()
                 ->select('items.*', 'category')
                 ->where('categories.id', $request->category)
@@ -586,6 +588,17 @@ class StockController extends Controller
                     ->where('items_id', $items->id)
                     ->first();
                 return $initials->qty;
+            })
+            ->addColumn('request', function (Item $items) use ($req){
+                $requestno = RequestedItem::where('items_id', $items->id)
+                    ->where('branch_id', auth()->user()->branch->id)
+                    ->where('request_no', $req)
+                    ->first();
+                if ($requestno) {
+                    return 'meron';
+                }else{
+                    return 'wala';
+                }
             })
             ->make(true);
         }

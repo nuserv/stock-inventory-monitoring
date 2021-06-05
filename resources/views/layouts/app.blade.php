@@ -165,12 +165,12 @@
                 @include('modal.branch.import')
                 @include('modal.branch.add')
                 @include('modal.branch.pull-out')
-                @include('modal.branch.in-option')
                 @include('modal.branch.good')
                 @include('modal.branch.replacement')
                 @include('modal.branch.replace-return')
                 @include('modal.branch.stock')
                 @include('modal.branch.password')
+                @include('modal.branch.qty')
             @endif
         @endif
 
@@ -281,10 +281,11 @@
             @else
                 <script src="{{asset('min/?f=js/branch/stocks.js')}}"></script>
                 <script src="{{asset('min/?f=js/branch/service-in.js')}}"></script>
+                @if(auth()->user()->hasrole('Head'))
+                    <script src="{{asset('min/?f=js/branch/addstock.js')}}"></script>
+                @endif
             @endif
-            @if(auth()->user()->hasrole('Head'))
-                <script src="{{asset('min/?f=js/branch/addstock.js')}}"></script>
-            @endif
+            
 
         @endif
 

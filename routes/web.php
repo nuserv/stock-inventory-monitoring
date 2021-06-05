@@ -146,6 +146,7 @@ Route::put('repairedupdate', 'DefectiveController@repairedupdate')->middleware('
 Route::get('export', 'ImportController@export')->name('export');
 
 Route::get('checkrequest', 'StockRequestController@checkrequest');//->middleware('ajax');
+Route::get('checkrequestitem', 'StockRequestController@checkrequestitem');//->middleware('ajax');
 Route::get('resolved', 'StockRequestController@resolve')->name('resolved.index');
 Route::POST('storerreceived', 'StockRequestController@received')->middleware('ajax');
 Route::get('gen', 'StockRequestController@generateRandomNumber')->middleware('ajax');

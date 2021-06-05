@@ -637,6 +637,7 @@ class StockRequestController extends Controller
                     $reqitem->items_id = $request->item;
                     $reqitem->quantity = $request->qty;
                     $reqitem->pending = $request->qty;
+                    $reqitem->branch_id = auth()->user()->branch->id;
                     $reqitem->status = 'PENDING';
                     $data = $reqitem->save();
                 }
@@ -687,6 +688,19 @@ class StockRequestController extends Controller
             ->first();
         if ($requestno) {
             $data = $requestno->request_no;
+        }else{
+            $data = "wala pa";
+        }
+        return response()->json($data);
+    }
+    public function checkrequestitem(Request $request)
+    {
+        $requestno = RequestedItem::where('items_id', $request->items_id)
+            ->where('branch_id', auth()->user()->branch->id)
+            ->where('request_no', $request->reqno)
+            ->first();
+        if ($requestno) {
+            $data = 'meron';
         }else{
             $data = "wala pa";
         }
