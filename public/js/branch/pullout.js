@@ -130,7 +130,9 @@ $(document).ready(function()
     }, 2000);
     
 });
-
+$(document).on('click', '#printrecBtn', function(){
+    window.location.href = 'pullviewlist';
+});
 $(document).on('click', '.printBtn', function(){
     $.ajax({
         url: 'pullupdate',
