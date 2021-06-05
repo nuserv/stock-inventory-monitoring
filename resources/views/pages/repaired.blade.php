@@ -22,9 +22,12 @@
                 </thead>
             </table>
         </div>
-        <div id="test" style="display:none">
-            <div class="printBtn pt-3" id="printBtn"></div>
-        </div>
+            <div id="test" style="display:none;width:200px">
+                <div class="printBtn pt-3" id="printBtn"></div>
+            </div>
+            <input type="button" id="printrecBtn" class="btn btn-primary ml-auto d-flex" value="VIEW RETURN LIST">
+
+        
     @endif
     @if(auth()->user()->hasanyrole('Encoder', 'Warehouse Manager'))
         <div class="table" id="repaireddiv">

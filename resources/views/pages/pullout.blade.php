@@ -20,8 +20,11 @@
                 </thead>
             </table>
         </div>
-        <div id="test" style="display:none">
+        <div id="test" style="display:none;width:200px">
             <div class="printBtn pt-3" id="printBtn"></div>
+        </div>
+        <div class="d-flex">
+            <input type="button" id="printrecBtn" class="btn btn-primary ml-auto" value="VIEW PULLOUT LIST">
         </div>
     @endif
     @if(auth()->user()->hasanyrole('Encoder', 'Warehouse Manager'))

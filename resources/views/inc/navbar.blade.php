@@ -15,7 +15,7 @@
                     <a style="padding-right:8px; padding-left:8px" class="nav-link {{ Request::is('returnview') ? 'active' : '' }}" href="{{ url('/returnview') }}">Returns</a>
                 </li>
                 <li class="nav-item" style="margin-left:0px;margin-right:0px;">
-                    <a style="padding-right:8px; padding-left:8px" class="nav-link {{ Request::is('repaired') ? 'active' : '' }}" href="{{ url('/repaired') }}">Repaired</a>
+                    <a style="padding-right:8px; padding-left:8px" class="nav-link {{ Request::is('repaired-ware') ? 'active' : '' }}" href="{{ url('/repaired-ware') }}">Repaired</a>
                 </li>
                 <li class="nav-item" style="margin-left:0px;margin-right:0px;">
                     <a style="padding-right:8px; padding-left:8px" class="nav-link {{ Request::is('unrepair') ? 'active' : '' }}" href="{{ url('/unrepair') }}">Unrepairable</a>
@@ -98,7 +98,7 @@
                         <a style="padding-right:8px; padding-left:8px" class="nav-link {{ Request::is('return') ? 'active' : '' }}" href="{{ route('return.index') }}">Repaired</a>
                     </li-->
                     <li class="nav-item" style="margin-left:0px;margin-right:0px;">
-                    <a style="padding-right:8px; padding-left:8px" class="nav-link {{ Request::is('repaired') ? 'active' : '' }}" href="{{ url('/repaired') }}">Repaired</a>
+                    <a style="padding-right:8px; padding-left:8px" class="nav-link {{ Request::is('repaired-ware') ? 'active' : '' }}" href="{{ url('/repaired-ware') }}">Repaired</a>
                 </li>
                 @endif
                 @if(auth()->user()->hasanyrole('Encoder', 'Warehouse Manager'))

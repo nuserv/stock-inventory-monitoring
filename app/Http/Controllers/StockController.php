@@ -41,6 +41,11 @@ class StockController extends Controller
         $title = 'Pullout';
         return view('pages.pullout', compact('title'));
     }
+    public function pullviewlist()
+    {
+        $title = 'Pullout list';
+        return view('pages.branch.pullout', compact('title'));
+    }
     public function pullitem(Request $request)
     {
         $pullout = Pullout::query()
@@ -86,7 +91,7 @@ class StockController extends Controller
         return response()->json($pullout);
 
     }
-    public function pullget()
+    public function pullget(Request $request)
     {
         if (auth()->user()->hasanyrole('Warehouse Manager', 'Encoder')) {
             $pullout = Pullno::query()
@@ -101,6 +106,18 @@ class StockController extends Controller
                 ->make(true);
         }
         if (auth()->user()->hasanyrole('Head')) {
+            if ($request->list == 'list') {
+                $pullout = Pullno::query()
+                ->select('pullouts_no.updated_at', 'pullouts_no.status', 'pullout_no')
+                ->wherein('pullouts_no.status', ['For receiving', 'Incomplete'])
+                ->where('branch_id', auth()->user()->branch->id)
+                ->get();
+                return DataTables::of($pullout)
+                ->addColumn('updated_at', function (Pullno $pullout){
+                    return Carbon::parse($pullout->updated_at->toFormattedDateString().' '.$pullout->updated_at->toTimeString())->isoFormat('lll');
+                })
+                ->make(true);
+            }
             $pullout = Pullout::query()
                 ->select('pullouts.updated_at', 'item', 'serial')
                 ->where('branch_id', auth()->user()->branch->id)

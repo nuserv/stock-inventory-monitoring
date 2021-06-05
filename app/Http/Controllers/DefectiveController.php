@@ -41,6 +41,11 @@ class DefectiveController extends Controller
         $title = 'Repaired';
         return view('pages.repaired', compact('title'));
     }
+    public function repairedlist()
+    {
+        $title = 'Repaired-list';
+        return view('pages.repaired-list', compact('title'));
+    }
 
     public function returnget()
     {
@@ -128,7 +133,7 @@ class DefectiveController extends Controller
         return response()->json($warehouse);
 
     }
-    public function repairedget()
+    public function repairedget(Request $request)
     {
         if (auth()->user()->hasanyrole('Warehouse Manager', 'Encoder')) {
             $repaired = RepairedNo::query()
@@ -142,6 +147,17 @@ class DefectiveController extends Controller
                 ->make(true);
         }
         if (auth()->user()->hasanyrole('Repair')) {
+            if ($request->list == 'list') {
+                $repaired = RepairedNo::query()
+                ->select('created_at', 'repaired_no', 'status')
+                ->wherein('status', ['For receiving', 'Incomplete'])
+                ->get();
+                return DataTables::of($repaired)
+                    ->addColumn('created_at', function (RepairedNo $repaired){
+                        return Carbon::parse($repaired->created_at->toFormattedDateString().' '.$repaired->created_at->toTimeString())->isoFormat('lll');
+                    })
+                    ->make(true);
+            }
             $repaired = Defective::query()
                 ->select('defectives.updated_at', 'item', 'serial', 'category')
                 ->where('status', 'Repaired')

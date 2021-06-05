@@ -132,10 +132,19 @@
                 @include('modal.warehouse.pullout')
             @endif
         @endif
-         @if(Request::is('repaired'))
+        @if(Request::is('pullviewlist'))
+            @if(auth()->user()->hasAnyrole('Head'))
+                @include('modal.warehouse.pullout')
+            @endif
+        @endif
+
+        @if(Request::is('repaired-ware'))
             @if(auth()->user()->hasAnyrole('Warehouse Manager', 'Encoder'))
                 @include('modal.warehouse.repaired')
             @endif
+        @endif
+        @if(Request::is('repaired-list'))
+            @include('modal.warehouse.repaired')
         @endif
         @if(Request::is('returnview'))
             @if(auth()->user()->hasAnyrole('Repair'))
@@ -258,6 +267,11 @@
                 <script src="{{asset('min/?f=js/warehouse/pullout.js')}}"></script>
             @endif
         @endif
+        @if(Request::is('pullviewlist'))
+            @if (auth()->user()->hasanyrole('Head'))
+                <script src="{{asset('min/?f=js/branch/pulloutlist.js')}}"></script>
+            @endif
+        @endif
         @if(Request::is('returnview'))
             @if (auth()->user()->hasanyrole('Repair'))
                 <script src="{{asset('min/?f=js/warehouse/return.js')}}"></script>
@@ -266,12 +280,17 @@
                 <script src="{{asset('min/?f=js/branch/return.js')}}"></script>
             @endif
         @endif
-        @if(Request::is('repaired'))
+        @if(Request::is('repaired-ware'))
             @if (auth()->user()->hasanyrole('Repair'))
                 <script src="{{asset('min/?f=js/warehouse/repaired.js')}}"></script>
             @endif
             @if (auth()->user()->hasanyrole('Warehouse Manager', 'Encoder'))
                 <script src="{{asset('min/?f=js/warehouse/addtostock.js')}}"></script>
+            @endif
+        @endif
+        @if(Request::is('repaired-list'))
+            @if (auth()->user()->hasanyrole('Repair'))
+                <script src="{{asset('min/?f=js/warehouse/repairedlist.js')}}"></script>
             @endif
         @endif
         @if(Request::is('stocks'))
