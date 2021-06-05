@@ -53,7 +53,7 @@
 <div class="printBtn pt-3" id="printBtn"></div>
 <div class="d-flex">
     <input type="button" id="returnBtn" class="btn btn-primary" value="CREATE LIST" disabled>
-    <input type="button" id="printrecBtn" class="btn btn-primary ml-auto" value="VIEW FOR RECEIVING">
+    <input type="button" id="printrecBtn" class="btn btn-primary ml-auto" value="VIEW RETURN LIST">
 </div>
 @endif
 
