@@ -38,7 +38,7 @@ $(document).on('click', '.out_sub_Btn', function(){
     var cat = "";
     var item = "";
     var check = 1;
-    if ($('#customer-id').val() != "") {
+    //if ($('#customer-id').val() != "") {
         $('#service-unitModal').modal('toggle');
         $('#loading').show();
         for(var q=1;q<=y;q++){
@@ -51,34 +51,52 @@ $(document).on('click', '.out_sub_Btn', function(){
                     item = $('#outdesc'+q).val();
                     serial = $('#outserial'+q).val();
                     purpose = 'service unit';
-                    client = $('#client-id').val();
-                    customer = $('#customer-id').val();
                     $.ajax({
-                        url: 'service-out',
+                        url:"getcustomerid",
+                        type:"get",
                         headers: {
                             'X-CSRF-TOKEN': $('meta[name="ctok"]').attr('content')
                         },
-                        dataType: 'json',
-                        type: 'PUT',
-                        data: {
-                            item: item,
-                            serial: serial,
-                            cat : cat,
-                            purpose: purpose,
-                            customer: customer,
-                            client: client
+                        data:{
+                            customer:$('#customer').val(),
                         },
+                        success:function(data){
+                            console.log(data.id);
+                            console.log(data.customer_id);
+                            var customer = data.id;
+                            var client = data.customer_id;
+                            $.ajax({
+                                url: 'service-out',
+                                headers: {
+                                    'X-CSRF-TOKEN': $('meta[name="ctok"]').attr('content')
+                                },
+                                dataType: 'json',
+                                type: 'PUT',
+                                data: {
+                                    item: item,
+                                    cat : cat,
+                                    purpose: purpose,
+                                    serial: serial,
+                                    customer: customer,
+                                    client: client
+                                },
+                                error: function (data) {
+                                    alert(data.responseText);
+                                }
+                            });
+                        }
                     });
+                    
                 }
             }
         }
-    }else{
+    /*}else{
         alert("Invalid Customer Name!");
         return false;
-    }
-    if (check > 1) {
+    }*/
+    /*if (check > 1) {
         window.location.href = 'service-unit';
-    }
+    }*/
 });
 
 $(document).on('change', '.outdesc', function(){
@@ -223,8 +241,11 @@ $(document).on('click', '.out_add_item', function(){
     if (r == 1) {
         $('#out_sub_Btn').prop('disabled', true);
     }else{
-        $('#out_sub_Btn').prop('disabled', false);
-
+        if ($('#cleint').val() == '') {
+            $('#out_sub_Btn').prop('disabled', true);
+        }else{
+            $('#out_sub_Btn').prop('disabled', false);
+        }
     }
 });
 
@@ -421,7 +442,7 @@ $(document).on('keyup', '#replacementcustomer', function(){
     
 });
 
-$(document).on('keyup', '#client', function(){
+/*$(document).on('keyup', '#client', function(){
     var id = $(this).val();
     var op = " ";
     $('#customer').val('');
@@ -449,7 +470,7 @@ $(document).on('keyup', '#client', function(){
     });
 });
 
-$(document).on('keyup', '#customer', function(){
+/*$(document).on('keyup', '#customer', function(){
     var id = $(this).val();
     var op = " ";
     if ($('#client-id').val()) {
@@ -478,4 +499,65 @@ $(document).on('keyup', '#customer', function(){
             $('#customer-id').val($('#customer-name [value="'+$('#customer').val()+'"]').data('value'));
         }
     });
+});*/
+
+$('#customer').keyup(function(){ 
+    var query = $(this).val();
+    var ul = '<ul class="dropdown-menu" style="display:block; position:relative">';
+    if(query != ''){
+        var _token = $('input[name="_token"]').val();
+        $.ajax({
+            url:"hint",
+            type:"get",
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="ctok"]').attr('content')
+            },
+            data:{
+                hint:query
+            },
+            success:function(data){
+                var datas = $.map(data, function(value, index) {
+                    return [value];
+                });
+                datas.forEach(value => {
+                    ul+='<li>'+value.customer_branch+'</li>';
+                });
+                console.log(ul);
+                $('#branchlist').fadeIn();  
+                $('#branchlist').html(ul);
+                $('#out_sub_Btn').prop('disabled', true);
+                $('#client').val('');  
+            }
+        });
+        
+    }
 });
+$(document).on('click', 'li', function(){  
+    var select = $(this).text();
+    $('#customer').val($(this).text());  
+    $('#branchlist').fadeOut();  
+    $.ajax({
+        url:"hint",
+        type:"get",
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="ctok"]').attr('content')
+        },
+        data:{
+            client:'yes',
+            branch: select
+        },
+        success:function(data){
+            if (data) {
+                $('#client').val(data);  
+                if (r == 1 || outsub > 0) {
+                    $('#out_sub_Btn').prop('disabled', true);
+                }else{
+                    $('#out_sub_Btn').prop('disabled', false);
+                }
+            }else{
+                $('#client').val('');  
+                $('#out_sub_Btn').prop('disabled', true);
+            }
+        }
+    });
+});  

@@ -44,6 +44,11 @@ class CustomerController extends Controller
         $customer = mb_strtoupper($customer->customer);
         return view('pages.customerbranch', compact('customer', 'title'));
     }
+    public function getid(Request $request)
+    {
+        $data = CustomerBranch::query()->where('customer_branch', $request->customer)->first();
+        return response()->json($data);
+    }
     public function customerbranchtable($id)
     {
         $customer = CustomerBranch::where('customer_id', $id)->get();
@@ -62,6 +67,20 @@ class CustomerController extends Controller
             return mb_strtoupper($customer->code);
         })
         ->make(true);
+    }
+    public function hint(Request $request)
+    {
+        if ($request->client == 'yes') {
+            $data = CustomerBranch::query()->select('customer')->where('customer_branch', $request->branch)
+                ->join('customers', 'customers.id', 'customer_id')
+                ->first();
+            return response()->json($data->customer);
+        }
+
+        $data = CustomerBranch::query()->where('customer_branch', 'LIKE', '%'.$request->hint.'%')->take(5)->get();
+        
+        return response()->json($data);
+        
     }
     public function branchtable()
     {
