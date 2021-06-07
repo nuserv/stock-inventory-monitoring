@@ -49,7 +49,7 @@ Route::get('/unrepairable', 'DefectiveController@unrepairable');//->middleware('
 
 //Route::get('service_center', 'BranchController@index');unrepairable
 //Route::get('service_units', 'HomeController@service_units');
-//Route::get('spare_parts', 'HomeController@spare_parts');
+//Route::get('spare_parts', 'HomeController@spare_parts');service-out
 Route::get('activity', 'HomeController@activity');//->middleware('ajax');
 
 

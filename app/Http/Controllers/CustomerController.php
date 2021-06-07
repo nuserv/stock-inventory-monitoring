@@ -71,13 +71,13 @@ class CustomerController extends Controller
     public function hint(Request $request)
     {
         if ($request->client == 'yes') {
-            $data = CustomerBranch::query()->select('customer')->where('customer_branch', $request->branch)
+            $data = CustomerBranch::query()->select('customer')->wherein('customer_branch', $request->branch)
                 ->join('customers', 'customers.id', 'customer_id')
                 ->first();
             return response()->json($data->customer);
         }
 
-        $data = CustomerBranch::query()->where('customer_branch', 'LIKE', '%'.$request->hint.'%')->take(5)->get();
+        $data = CustomerBranch::query()->where('customer_branch', 'LIKE', '%'.str_replace(' ','%',$request->hint).'%')->take(10)->get();
         
         return response()->json($data);
         
