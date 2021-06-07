@@ -69,6 +69,7 @@
             .legend .RED { background-color: #F1423A; }
             li:hover {
                 background-color: #4285f4;
+                color: white !important; 
             }
         </style>
     </head>
