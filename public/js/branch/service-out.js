@@ -89,14 +89,15 @@ $(document).on('click', '.out_sub_Btn', function(){
                     
                 }
             }
+            if (q==y) {
+                window.location.href = 'service-unit';
+            }
         }
     /*}else{
         alert("Invalid Customer Name!");
         return false;
     }*/
-    if (check > 1) {
-        window.location.href = 'service-unit';
-    }
+    
 });
 
 $(document).on('change', '.outdesc', function(){
