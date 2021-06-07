@@ -75,6 +75,5 @@ $(document).on('change', '.desc', function(){
     $('#item' + count).val(id);
 });
 $('input[type="text"]').keyup(function() {
-    $(this).val($(this).val().toUpperCase());
     $(this).val().replace('-','');
 });
