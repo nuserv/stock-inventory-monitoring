@@ -94,9 +94,9 @@ $(document).on('click', '.out_sub_Btn', function(){
         alert("Invalid Customer Name!");
         return false;
     }*/
-    /*if (check > 1) {
+    if (check > 1) {
         window.location.href = 'service-unit';
-    }*/
+    }
 });
 
 $(document).on('change', '.outdesc', function(){
