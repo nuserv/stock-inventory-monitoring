@@ -54,6 +54,7 @@ $(document).on('click', '.out_sub_Btn', function(){
                     $.ajax({
                         url:"getcustomerid",
                         type:"get",
+                        async:false,
                         headers: {
                             'X-CSRF-TOKEN': $('meta[name="ctok"]').attr('content')
                         },
@@ -70,6 +71,7 @@ $(document).on('click', '.out_sub_Btn', function(){
                                 headers: {
                                     'X-CSRF-TOKEN': $('meta[name="ctok"]').attr('content')
                                 },
+                                async:false,
                                 dataType: 'json',
                                 type: 'PUT',
                                 data: {
