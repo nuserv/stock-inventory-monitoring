@@ -67,6 +67,9 @@
             .legend .MAGENTA { background-color: darkmagenta; }
             .legend .GRAYROW { background-color: gray; }
             .legend .RED { background-color: #F1423A; }
+            li:hover {
+                background-color: #4285f4;
+            }
         </style>
     </head>
     <body>

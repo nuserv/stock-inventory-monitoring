@@ -45,13 +45,13 @@
                         <label class="col-md-6 col-form-label text-md-right">Client Branch Name:</label>
                         <div class="col-md-6">
                             <input type="text" style="color: black" class="form-control form-control-sm " id="customer" placeholder="client branch name" autocomplete="off">
-                            <div id="branchlist">
+                            <div id="branchlist" style="position:absolute;z-index: 10000;">
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-            <div class="modal-header">
+            <div class="modal-header" style="z-index: 100;">
                 <h6 class="modal-title w-100 text-center">ITEM DETAILS</h6>
             </div>
             <div class="modal-body" id="outfield">

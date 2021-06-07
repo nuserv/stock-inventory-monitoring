@@ -503,7 +503,7 @@ $(document).on('keyup', '#replacementcustomer', function(){
 
 $('#customer').keyup(function(){ 
     var query = $(this).val();
-    var ul = '<ul class="dropdown-menu" style="display:block; position:relative;overflow: scroll;height: 15em;">';
+    var ul = '<ul class="dropdown-menu" style="display:block; position:relative;overflow: scroll;height: 13em;z-index: 200;">';
     if(query != ''){
         var _token = $('input[name="_token"]').val();
         $.ajax({
@@ -520,7 +520,7 @@ $('#customer').keyup(function(){
                     return [value];
                 });
                 datas.forEach(value => {
-                    ul+='<li>'+value.customer_branch+'</li>';
+                    ul+='<li style="color:black">'+value.customer_branch+'</li>';
                 });
                 console.log(ul);
                 $('#branchlist').fadeIn();  
