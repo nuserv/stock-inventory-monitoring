@@ -503,7 +503,7 @@ $(document).on('keyup', '#replacementcustomer', function(){
 
 $('#customer').keyup(function(){ 
     var query = $(this).val();
-    var ul = '<ul class="dropdown-menu" style="display:block; position:relative">';
+    var ul = '<ul class="dropdown-menu" style="display:block; position:relative;overflow: scroll;height: 15em;">';
     if(query != ''){
         var _token = $('input[name="_token"]').val();
         $.ajax({

@@ -77,7 +77,7 @@ class CustomerController extends Controller
             return response()->json($data->customer);
         }
 
-        $data = CustomerBranch::query()->where('customer_branch', 'LIKE', '%'.str_replace(' ','%',$request->hint).'%')->take(10)->get();
+        $data = CustomerBranch::query()->where('customer_branch', 'LIKE', '%'.str_replace(' ','%',$request->hint).'%')->get();
         
         return response()->json($data);
         
