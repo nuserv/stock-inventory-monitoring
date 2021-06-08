@@ -3,6 +3,7 @@ var repdata;
 var outsub = 0;
 var r = 1;
 var y = 1;
+var clientselected = 'yes';
 
 $(document).on('change', '.replacementdesc', function(){
     var count = $(this).attr('row_count');
@@ -503,12 +504,31 @@ $(document).on('keyup', '#replacementcustomer', function(){
         }
     });
 });*/
+$(document).on('click', '#clientdiv', function () {
+   $('#client').prop('disabled', false);
+   if ($('#client').is(':disabled')) { 
+        clientselected = 'no';
+   }
+});
 
-$('#customer').keyup(function(){ 
+$(document).on('keyup', '#customer', function(){ 
+    var withclient = 'no';
+    var clientname = "";
+    $('#clientlist').fadeOut();  
+    if ($('#client').is(':enabled')) {
+        if ($('#client').val()) {
+            withclient = 'yes';
+            clientname = $('#client').val();
+            if (clientselected != "yes") {
+                alert("Incorrect Client Name!");
+            }
+        }else{
+            $('#client').val('');
+        }
+    }
     var query = $(this).val();
     var ul = '<ul class="dropdown-menu" style="display:block; position:relative;overflow: scroll;height: 13em;z-index: 200;">';
     if(query != ''){
-        var _token = $('input[name="_token"]').val();
         $.ajax({
             url:"hint",
             type:"get",
@@ -516,20 +536,21 @@ $('#customer').keyup(function(){
                 'X-CSRF-TOKEN': $('meta[name="ctok"]').attr('content')
             },
             data:{
-                hint:query
+                hint:query,
+                withclient: withclient,
+                clientname: clientname,
             },
             success:function(data){
                 var datas = $.map(data, function(value, index) {
                     return [value];
                 });
                 datas.forEach(value => {
-                    ul+='<li style="color:black">'+value.customer_branch+'</li>';
+                    ul+='<li style="color:black" id="licustomer">'+value.customer_branch+'</li>';
                 });
                 console.log(ul);
                 $('#branchlist').fadeIn();  
                 $('#branchlist').html(ul);
                 $('#out_sub_Btn').prop('disabled', true);
-                $('#client').val('');  
             }
         });
         
@@ -537,30 +558,69 @@ $('#customer').keyup(function(){
 });
 $(document).on('click', 'li', function(){  
     var select = $(this).text();
-    $('#customer').val($(this).text());  
-    $('#branchlist').fadeOut();  
-    $.ajax({
-        url:"hint",
-        type:"get",
-        headers: {
-            'X-CSRF-TOKEN': $('meta[name="ctok"]').attr('content')
-        },
-        data:{
-            client:'yes',
-            branch: select
-        },
-        success:function(data){
-            if (data) {
-                $('#client').val(data);  
-                if (r == 1 || outsub > 0) {
-                    $('#out_sub_Btn').prop('disabled', true);
+    var id = $(this).attr('id');
+    if (id == 'licustomer') {
+        $('#customer').val($(this).text());  
+        $('#branchlist').fadeOut();  
+        $.ajax({
+            url:"hint",
+            type:"get",
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="ctok"]').attr('content')
+            },
+            data:{
+                client:'yes',
+                branch: select
+            },
+            success:function(data){
+                if (data) {
+                    $('#client').val(data);  
+                    if (r == 1 || outsub > 0) {
+                        $('#out_sub_Btn').prop('disabled', true);
+                    }else{
+                        $('#out_sub_Btn').prop('disabled', false);
+                    }
                 }else{
-                    $('#out_sub_Btn').prop('disabled', false);
+                    $('#client').val('');  
+                    $('#out_sub_Btn').prop('disabled', true);
                 }
-            }else{
-                $('#client').val('');  
-                $('#out_sub_Btn').prop('disabled', true);
             }
-        }
-    });
-});  
+        });
+    }else{
+        clientselected = "yes";
+        $('#client').val($(this).text());  
+        $('#clientlist').fadeOut();
+        $('#out_sub_Btn').prop('disabled', true);
+    }
+    
+});
+$(document).on('keyup', '#client', function(){ 
+    var query = $(this).val();
+    clientselected = 'no';
+    $('#branchlist').fadeOut();  
+    $('#out_sub_Btn').prop('disabled', true);
+    var ul = '<ul class="dropdown-menu" style="display:block; position:relative;overflow: scroll;height: 13em;z-index: 200;">';
+    if(query != ''){
+        $.ajax({
+            url:"getclient",
+            type:"get",
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="ctok"]').attr('content')
+            },
+            data:{
+                hint:query,
+            },
+            success:function(data){
+                var datas = $.map(data, function(value, index) {
+                    return [value];
+                });
+                datas.forEach(value => {
+                    ul+='<li style="color:black" id="liclient">'+value.customer+'</li>';
+                });
+                $('#clientlist').fadeIn();  
+                $('#clientlist').html(ul);
+                $('#customer').val('');  
+            }
+        });
+    }
+});

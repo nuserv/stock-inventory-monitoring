@@ -25,11 +25,10 @@
                 <div class="row no-margin">
                     <div class="col-md-6 form-group row">
                         <label class="col-md-5 col-form-label text-md-right">Client Name:</label>
-                        <div class="col-md-7">
-                            <input type="text" list="client-name" style="color: black" class="form-control form-control-sm " id="client" placeholder="" disabled>
-                            <datalist id="client-name">
-                            </datalist>
-                            <input type="text" id="client-id" value="" hidden>
+                        <div class="col-md-7" id="clientdiv">
+                            <input type="text" style="color: black" class="form-control form-control-sm " id="client" placeholder="" autocomplete="off" disabled>
+                            <div id="clientlist" style="position:absolute;z-index: 10000;">
+                            </div>
                         </div>
                     </div>
                     <!--div class="col-md-6 form-group row">
