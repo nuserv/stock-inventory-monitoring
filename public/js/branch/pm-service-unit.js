@@ -56,6 +56,7 @@ $(document).on("click", "#sUnitTable tr", function () {
     $('#service-inModal').modal({backdrop: 'static', keyboard: false});
     $('#inclient').val(trdata.client_name);
     $('#incustomer').val(trdata.customer_name);
+    $('#outitem').val(trdata.description);
     var itemop;
     $.ajax({
         type:'get',

@@ -517,7 +517,7 @@ $(document).on('keyup', '.client', function(){
     });
 });
 
-$(document).on('keyup', '.customer', function(){
+/*$(document).on('keyup', '.customer', function(){
     var id = $(this).val();
     var rowcount = $(this).attr('customer_count');
     var op = " ";
@@ -565,37 +565,45 @@ $(document).on('keyup', '.customer', function(){
             alert(data.responseText);
         }
     });
-});
+});*/
 
 $(document).on('click', '.add_branch_btn', function(){
     var rowcount = $(this).attr('btn_id');
-    console.log($('#customer-id'+rowcount).val());
     if ($(this).val() == 'Add branch') {
-        if($('#client-id'+rowcount).val() && $('#customer-id'+rowcount).val()) {
+        if($('#client'+rowcount).val()) {
             addbranch++;
-            var addme = '<div class="row no-margin" id="divcount'+addbranch+'"><div class="col-md-4 form-group row"><label class="col-md-4 col-form-label text-md-right">Client Name:</label><div class="col-md-8"><input type="text" list="client-name" client_count="'+addbranch+'" style="color: black" class="form-control form-control-sm client" id="client'+addbranch+'" placeholder="client name" autocomplete="off"><input type="text" id="client-id'+addbranch+'" value="" hidden></div></div><div class="col-md-6 form-group row"><label class="col-md-4 col-form-label text-md-right">Client Branch Name:</label><div class="col-md-8"><input type="text" list="customer-name" customer_count="'+addbranch+'" style="color: black" class="form-control form-control-sm customer" id="customer'+addbranch+'" placeholder="client branch name" autocomplete="off"><input type="text" id="customer-id'+addbranch+'" value="" hidden></div></div><div class="col-md-2 form-group row">&nbsp;&nbsp;&nbsp;<input type="button" class="add_branch_btn btn btn-xs btn-primary" btn_id="'+addbranch+'" value="Add branch"></div></div>';
+            var addme = '<div class="row no-margin" id="divcount'+addbranch+'"><div class="col-md-4 form-group row"><label class="col-md-4 col-form-label text-md-right">Client Name:</label><div class="col-md-8"><input type="text" client_count="'+addbranch+'" style="color: black" class="form-control form-control-sm client" id="client'+addbranch+'" placeholder="client name" autocomplete="off" disabled><input type="text" id="client-id'+addbranch+'" value="" hidden></div></div><div class="col-md-6 form-group row"><label class="col-md-4 col-form-label text-md-right">Client Branch Name:</label><div class="col-md-8"><input type="text" customer_count="'+addbranch+'" style="color: black" class="form-control form-control-sm customer" id="customer'+addbranch+'" placeholder="client branch name" autocomplete="off"><div id="branchlist'+addbranch+'" style="position:absolute;z-index: 10000;"></div><input type="text" id="customer-id'+addbranch+'" value="" hidden></div></div><div class="col-md-2 form-group row">&nbsp;&nbsp;&nbsp;<input type="button" class="add_branch_btn btn btn-xs btn-primary" btn_id="'+addbranch+'" value="Add branch"></div></div>';
             $(this).val('Remove');
             $('#client'+ rowcount).prop('disabled', true);
             $('#customer'+ rowcount).prop('disabled', true);
             if (addr < 5 ) {
                 $('#branchdiv').append(addme);
                 addr++;
-                $("#customer-name").empty();
-                $("#client-name").empty();
             }
-        }else if (!$('#client-id'+rowcount).val() && !$('#customer-id'+rowcount).val()) {
-            alert('Please select the correct Client name!');
-        }else if (!$('#client-id'+rowcount).val() || !$('#customer-id'+rowcount).val()) {
+            $.ajax({
+                url:"getcustomerid",
+                type:"get",
+                async:false,
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="ctok"]').attr('content')
+                },
+                data:{
+                    customer:$('#customer'+ rowcount).val(),
+                },
+                success:function(data){
+                    $('#customer-id'+rowcount).val(data.id);
+                    $('#client-id'+rowcount).val(data.customer_id);
+                }
+            });
+        }else{
             alert('Please select the correct Client Branch name!');
         }
     }else{
         if (addr == 5) {
             addbranch++;
-            var addme = '<div class="row no-margin" id="divcount'+addbranch+'"><div class="col-md-4 form-group row"><label class="col-md-4 col-form-label text-md-right">Client Name:</label><div class="col-md-8"><input type="text" list="client-name" client_count="'+addbranch+'" style="color: black" class="form-control form-control-sm client" id="client'+addbranch+'" placeholder="client name" autocomplete="off"><input type="text" id="client-id'+addbranch+'" value="" hidden></div></div><div class="col-md-6 form-group row"><label class="col-md-4 col-form-label text-md-right">Client Branch Name:</label><div class="col-md-8"><input type="text" list="customer-name" customer_count="'+addbranch+'" style="color: black" class="form-control form-control-sm customer" id="customer'+addbranch+'" placeholder="client branch name" autocomplete="off"><input type="text" id="customer-id'+addbranch+'" value="" hidden></div></div><div class="col-md-2 form-group row">&nbsp;&nbsp;&nbsp;<input type="button" class="add_branch_btn btn btn-xs btn-primary" btn_id="'+addbranch+'" value="Add branch"></div></div>';
+            var addme = '<div class="row no-margin" id="divcount'+addbranch+'"><div class="col-md-4 form-group row"><label class="col-md-4 col-form-label text-md-right">Client Name:</label><div class="col-md-8"><input type="text" client_count="'+addbranch+'" style="color: black" class="form-control form-control-sm client" id="client'+addbranch+'" placeholder="client name" autocomplete="off" disabled><input type="text" id="client-id'+addbranch+'" value="" hidden></div></div><div class="col-md-6 form-group row"><label class="col-md-4 col-form-label text-md-right">Client Branch Name:</label><div class="col-md-8"><input type="text" customer_count="'+addbranch+'" style="color: black" class="form-control form-control-sm customer" id="customer'+addbranch+'" placeholder="client branch name" autocomplete="off"><input type="text" id="customer-id'+addbranch+'" value="" hidden></div></div><div class="col-md-2 form-group row">&nbsp;&nbsp;&nbsp;<input type="button" class="add_branch_btn btn btn-xs btn-primary" btn_id="'+addbranch+'" value="Add branch"></div></div>';
             $('#branchdiv').append(additem);
             addr++;
-            $("#customer-name").empty();
-            $("#client-name").empty();
         }
         $('#divcount'+rowcount).hide();
         $(this).val('Add Item');
@@ -607,3 +615,64 @@ $(document).on('click', '.add_branch_btn', function(){
         $('#pm_sub_Btn').prop('disabled', false);
     }
 });
+$(document).on('keyup', '.customer', function () {
+    var query = $(this).val();
+    var count = $(this).attr('customer_count');
+    var ul = '<ul class="dropdown-menu" style="display:block; position:relative;overflow: scroll;height: 13em;z-index: 200;">';
+    if(query != ''){
+        $.ajax({
+            url:"hint",
+            type:"get",
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="ctok"]').attr('content')
+            },
+            data:{
+                hint:query
+            },
+            success:function(data){
+                var datas = $.map(data, function(value, index) {
+                    return [value];
+                });
+                datas.forEach(value => {
+                    ul+='<li style="color:black" count="'+count+'">'+value.customer_branch+'</li>';
+                });
+                $('#branchlist'+count).fadeIn();  
+                $('#branchlist'+count).html(ul);
+                $('#out_sub_Btn').prop('disabled', true);
+                $('#client'+count).val('');  
+            }
+        });
+        
+    }
+});
+
+$(document).on('click', 'li', function(){  
+    var select = $(this).text();
+    var licount = $(this).attr('count');
+    $('#customer'+licount).val($(this).text());  
+    $('#branchlist'+licount).fadeOut();  
+    $.ajax({
+        url:"hint",
+        type:"get",
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="ctok"]').attr('content')
+        },
+        data:{
+            client:'yes',
+            branch: select
+        },
+        success:function(data){
+            if (data) {
+                $('#client'+licount).val(data);  
+                if (r == 1 || outsub > 0) {
+                    $('#out_sub_Btn').prop('disabled', true);
+                }else{
+                    $('#out_sub_Btn').prop('disabled', false);
+                }
+            }else{
+                $('#client'+licount).val('');  
+                $('#out_sub_Btn').prop('disabled', true);
+            }
+        }
+    });
+});  

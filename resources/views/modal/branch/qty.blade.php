@@ -11,9 +11,29 @@
             <div class="modal-body">
                 <div class="container">
                     <div class="row justify-content-center">
-                        <div class="col-md-5 form-group">
-                            <input type="number" id="qty" placeholder="Input Qty">
+                         <div class="col-md-12 form-group row">
+                            <label class="col-md-4 col-form-label text-md-right">Category:</label>
+                            <div class="col-md-8">
+                                <input type="text" style="color: black" class="form-control form-control-sm client" id="requestcategory"disabled>
+                            </div>
                         </div>
+                    </div>
+                    <div class="row justify-content-center">
+                        <div class="col-md-12 form-group row">
+                            <label class="col-md-4 col-form-label text-md-right">Item Description:</label>
+                            <div class="col-md-8">
+                                <input type="text" style="color: black" class="form-control form-control-sm client" id="requestitem"disabled>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row justify-content-center">
+                        <div class="col-md-12 form-group row">
+                            <label class="col-md-4 col-form-label text-md-right">Quantity:</label>
+                            <div class="col-md-8">
+                                <input type="number" id="qty" placeholder="Input Qty">
+                            </div>
+                        </div>
+                        <p style="color:black">The minimum quantity for this item is indicated above.</p>
                     </div>
                 </div>
             </div>

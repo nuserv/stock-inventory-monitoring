@@ -31,6 +31,12 @@
                             </select>
                         </div>
                     </div>
+                    <div class="col-md-6 form-group row">
+                        <label class="col-md-6 col-form-label text-md-right">Service Out Item:</label>
+                        <div class="col-md-6">
+                            <input type="text" style="color: black" class="form-control form-control-sm " id="outitem" readonly>
+                        </div>
+                    </div>
                 </div>
             </div>
             <div class="modal-header">

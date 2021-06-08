@@ -285,12 +285,15 @@ $(document).on('click', '#addStockBtn', function(){
 $(document).on('click', '.reqBtn', function(){
     var thisdata = table.row( $(this).parents('tr') ).data();
     $('#qtyModal').modal({backdrop: 'static', keyboard: false});
+    $('#requestcategory').val(thisdata.category);
+    $('#requestitem').val(thisdata.item);
     cat = thisdata.category_id;
     item = thisdata.items_id;
     qty = thisdata.initial - thisdata.stockin;
     $('#qty').attr({
         "min" : qty
     });
+    $('#qty').val(qty);
 });
 $('#req').prop('disabled', true);
 
@@ -318,6 +321,7 @@ $(document).on('click', '#qty', function(){
 $(document).on('click', '#req', function(){
     $('#loading').show();
     $('#qtyModal').toggle();
+    $('#qty').val('');
     $.ajax({
         url: 'storerequest',
         headers: {

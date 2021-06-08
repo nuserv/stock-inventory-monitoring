@@ -32,18 +32,16 @@
                         <div class="col-md-4 form-group row">
                             <label class="col-md-4 col-form-label text-md-right">Client Name:</label>
                             <div class="col-md-8">
-                                <input type="text" list="client-name" client_count="1" style="color: black" class="form-control form-control-sm client" id="client1" placeholder="client name" autocomplete="off">
-                                <datalist id="client-name">
-                                </datalist>
+                                <input type="text" client_count="1" style="color: black" class="form-control form-control-sm client" id="client1" placeholder="client name" autocomplete="off" disabled>
                                 <input type="text" id="client-id1" value="" hidden>
                             </div>
                         </div>
                         <div class="col-md-6 form-group row">
                             <label class="col-md-4 col-form-label text-md-right">Client Branch Name:</label>
                             <div class="col-md-8">
-                                <input type="text" list="customer-name" customer_count="1" style="color: black" class="form-control form-control-sm customer" id="customer1" placeholder="client branch name" autocomplete="off">
-                                <datalist id="customer-name">
-                                </datalist>
+                                <input type="text" customer_count="1" style="color: black" class="form-control form-control-sm customer" id="customer1" placeholder="client branch name" autocomplete="off">
+                                <div id="branchlist1" style="position:absolute;z-index: 10000;">
+                                </div>
                                 <input type="text" id="customer-id1" value="" hidden>
                             </div>
                         </div>
