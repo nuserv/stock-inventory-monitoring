@@ -38,6 +38,14 @@
                         </div>
                     </div>
                 </div>
+                <div class="row no-margin">
+                    <div class="col-md-6 form-group row">
+                        <label class="col-md-5 col-form-label text-md-right">Service out Item:</label>
+                        <div class="col-md-7">
+                            <input type="text" style="color: black" class="form-control form-control-sm " id="outitem" readonly>
+                        </div>
+                    </div>
+                </div>
             </div>
             <div class="modal-header">
                 <h6 class="modal-title w-100 text-center">ITEM DETAILS</h6>
