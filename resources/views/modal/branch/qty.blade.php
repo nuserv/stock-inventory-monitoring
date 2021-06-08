@@ -33,7 +33,7 @@
                                 <input type="number" id="qty" placeholder="Input Qty">
                             </div>
                         </div>
-                        <p style="color:black">The minimum quantity for this item is indicated above.</p>
+                        <p style="color:black">The minimum quantity for this item is indicated above. You may increase the quantity if you feel there is a need.</p>
                     </div>
                 </div>
             </div>
