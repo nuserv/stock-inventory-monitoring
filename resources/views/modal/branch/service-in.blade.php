@@ -40,7 +40,7 @@
                 </div>
                 <div class="row no-margin">
                     <div class="col-md-6 form-group row">
-                        <label class="col-md-5 col-form-label text-md-right">Service out Item:</label>
+                        <label class="col-md-5 col-form-label text-md-right">Service Out Item:</label>
                         <div class="col-md-7">
                             <input type="text" style="color: black" class="form-control form-control-sm " id="outitem" readonly>
                         </div>
