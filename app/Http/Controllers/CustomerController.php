@@ -77,14 +77,14 @@ class CustomerController extends Controller
             return response()->json($data->customer);
         }
         if ($request->withclient == "no") {
-            $data = CustomerBranch::query()->where('customer_branch', 'LIKE', '%'.str_replace(' ','%',$request->hint).'%')->orderBy('customer_branch')->get();
+            $data = CustomerBranch::query()->where('customer_branch', 'LIKE', '%'.str_replace(' ','%',$request->hint).'%')->where('status', 1)->orderBy('customer_branch')->get();
         }else if ($request->withclient == "yes") {
             if ($request->clientname == "") {
-                $data = CustomerBranch::query()->where('customer_branch', 'LIKE', '%'.str_replace(' ','%',$request->hint).'%')->orderBy('customer_branch')->get();
+                $data = CustomerBranch::query()->where('customer_branch', 'LIKE', '%'.str_replace(' ','%',$request->hint).'%')->where('status', 1)->orderBy('customer_branch')->get();
                 return response()->json($data);
             }
             $client = Customer::query()->select('id')->where('customer', $request->clientname)->first();
-            $data = CustomerBranch::query()->where('customer_id', $client->id)->where('customer_branch', 'LIKE', '%'.str_replace(' ','%',$request->hint).'%')->orderBy('customer_branch')->get();
+            $data = CustomerBranch::query()->where('customer_id', $client->id)->where('customer_branch', 'LIKE', '%'.str_replace(' ','%',$request->hint).'%')->where('status', 1)->orderBy('customer_branch')->get();
         }
         return response()->json($data);
         
