@@ -263,7 +263,7 @@ $(document).on("click", "#catTable tbody td", function () {
                             if (check == 'meron') {
                                 return '';
                             }else{
-                                return '<button class="btn-primary reqBtn" req_id="'+items_id+' test="'+check+'">STOCK REQUEST</button>';
+                                return '<button class="btn-primary reqBtn" req_id="'+items_id+' test="'+check+'">REQUEST STOCK</button>';
                             }
                         }else{
                             return '';

@@ -1,5 +1,5 @@
 <div id="qtyModal" class="modal fade">
-    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
         <div class="modal-content">
             <div class="modal-header">
                 <h6 class="modal-title w-100 text-center">Stock Request</h6>
@@ -33,13 +33,14 @@
                                 <input type="number" id="qty" placeholder="Input Qty">
                             </div>
                         </div>
-                        <p style="color:black">Base on your current stock, the minimum quantity for this item is indicated above . You may increase the quantity if you feel there is a need.</p>
+                        <p style="color:black">Base on your current stock, the minimum quantity for this item is indicated above. You may increase the quantity if you feel there is a need.</p>
                     </div>
                 </div>
             </div>
-            <div class="modal-footer">
+            
+            <div class="moday-body text-center">
                 <input type="button" class="btn btn-primary" id="req" value="SUBMIT">
-            </div>
+            </div><br>
         </div>
     </div>
 </div>
