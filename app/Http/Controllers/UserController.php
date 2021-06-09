@@ -6,8 +6,11 @@ use Illuminate\Http\Request;
 use Spatie\Permission\Models\Role;
 use Yajra\DataTables\Facades\DataTables;
 use App\User;
+use Illuminate\Support\Str;
 use App\Area;
 use App\Branch;
+use App\VerifyUser;
+use App\Mail\VerifyMail;
 use Mail;
 use App\UserLog;
 use Config;
@@ -22,7 +25,7 @@ class UserController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('auth');
+        $this->middleware(['auth']);
     }
     public function index()
     {
@@ -34,7 +37,7 @@ class UserController extends Controller
             return redirect('/');
         }
         $new = User::where('status', 3)->first();
-        $newuser = User::where('status', 3)->update(['status' => '1']);
+        $newuser = User::where('status', 3)->update(['status' => '4']);
         $config = array(
             'driver'     => \config('mailconf.driver'),
             'host'       => \config('mailconf.host'),
@@ -56,6 +59,25 @@ class UserController extends Controller
             $areas = Area::where('id', auth()->user()->area->id)->get();
         }*/
         return view('pages.user', compact('users', 'areas','roles', 'title'));
+    }
+    public function verifyUser(Request $token)
+    {
+        $verifyUser = VerifyUser::where('token', $token)->first();
+        if(isset($verifyUser) ){
+            $user = $verifyUser->user;
+            if(!$user->verified) {
+                $verifyUser->user->verified = 1;
+                $verifyUser->user->save();
+                User::where('id', $verifyUser->user_id)->update(['email_verified_at'=> now()]);
+                $status = "Your e-mail is verified. You can now login.";
+            } else {
+                User::where('id', $verifyUser->user_id)->update(['email_verified_at'=> now()]);
+                $status = "Your e-mail is already verified. You can now login.";
+            }
+        } else {
+            return redirect('/login')->with('warning', "Sorry your email cannot be identified.");
+        }
+        return redirect('/login')->with('status', $status);
     }
     public function getUsers()
     {
@@ -118,6 +140,7 @@ class UserController extends Controller
         }
         return response()->json($data);
     }
+    
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
@@ -171,9 +194,40 @@ class UserController extends Controller
                 $log->fullname = auth()->user()->name.' '.auth()->user()->middlename.' '.auth()->user()->lastname;
             $log->save();
             $data = $user->save();
+            $verifyUser = VerifyUser::create([
+                'user_id' => $user->id,
+                'token' => sha1(time())
+            ]);
+            \Mail::to($user->email)->send(new VerifyMail($user));
             return response()->json($data);
         }
         return response()->json(['error'=>$validator->errors()->first()]);
+    }
+    public function resend(Request $request)
+    {
+        $checkduplicate = User::where('email', $request->email)->first();
+        if ($checkduplicate) {
+            if ($checkduplicate->id != auth()->user()->id) {
+                $data = false;
+                return response()->json(false);
+            }
+        }
+        $verifyUser = VerifyUser::create([
+            'user_id' => auth()->user()->id,
+            'token' => sha1(time())
+        ]);
+        $user = User::where('id', auth()->user()->id)->first();
+        
+        User::where('id', auth()->user()->id)->update(['email' => $request->email]);
+        $email = $request->email;
+
+        $data = Mail::send('emails.verifyUser', ['user'=>$user],function( $message) use($email){ 
+            $message->to($email, auth()->user()->name)->subject('Email verification'); 
+            $message->from('noreply@ideaserv.com.ph', 'BSMS'); 
+            $message->cc('jerome.lopez.aks2018@gmail.com');
+        });
+        return response()->json(true);
+        //return redirect('/login')->with('status', 'We sent you an activation code. Check your email and click on the link to verify.');
     }
     public function update(Request $request, $id)
     {
@@ -208,6 +262,7 @@ class UserController extends Controller
             $user->middlename = ucwords(mb_strtolower($request->input('middle_name')));
             $user->branch_id = $request->input('branch');
             $user->status = $request->input('status');
+            $user->email_verified_at = Null;
             $data = $user->save();
             if ($request->input('status') == 1) {
                 $stat = 'Active';

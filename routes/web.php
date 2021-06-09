@@ -11,7 +11,12 @@
 |
 */
 
-Auth::routes();
+Auth::routes(['verify' => true]);
+Route::get('/email/verify', function () {
+    return view('auth.verify');
+})->middleware('auth')->name('verification.notice');
+Route::get('/user/verify/{token}', 'Auth\LoginController@verifyUser');
+Route::get('/send/verification', 'UserController@resend')->middleware(['ajax']);
 Route::get('barchart', 'ReportController@chart');
 
 Route::get('login', 'Auth\LoginController@showLoginForm')->name('login')->middleware('checkBrowser');
@@ -188,11 +193,11 @@ Route::put('update_serial', 'StockRequestController@upserial')->middleware('ajax
 Route::get('mytest', 'StockRequestController@test');//->middleware('ajax');
 Route::get('getitems', 'StockRequestController@getitems');//->middleware('ajax');
 
-Route::get('users', 'UserController@getUsers');//->middleware('ajax');
-Route::get('user', 'UserController@index')->name('user.index');
-Route::get('getBranchName', 'UserController@getBranchName')->middleware('ajax');
-Route::post('user_add', 'UserController@store')->middleware('ajax');
-Route::put('user_update/{id}', 'UserController@update')->middleware('ajax');
+Route::get('users', 'UserController@getUsers')->middleware(['ajax', 'verified']);
+Route::get('user', 'UserController@index')->name('user.index')->middleware(['verified']);
+Route::get('getBranchName', 'UserController@getBranchName')->middleware(['ajax', 'verified']);
+Route::post('user_add', 'UserController@store')->middleware(['ajax', 'verified']);
+Route::put('user_update/{id}', 'UserController@update')->middleware(['ajax', 'verified']);
 
 Route::get('stocks/{id}', 'BranchController@getStocks');//->middleware('ajax');
 Route::get('branches', 'BranchController@getBranches')->middleware('ajax');

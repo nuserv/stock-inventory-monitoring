@@ -7,7 +7,7 @@ use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Spatie\Permission\Traits\HasRoles;
 
-class User extends Authenticatable
+class User extends Authenticatable implements MustVerifyEmail
 {
     use Notifiable, HasRoles;
 
@@ -51,5 +51,9 @@ class User extends Authenticatable
     public function StockRequests()
     {
         return $this->hasmany(StockRequest::class);
+    }
+    public function verifyUser()
+    {
+    return $this->hasOne('App\VerifyUser');
     }
 }

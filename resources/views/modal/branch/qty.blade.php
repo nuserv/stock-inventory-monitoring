@@ -33,7 +33,8 @@
                                 <input type="number" id="qty" placeholder="Input Qty">
                             </div>
                         </div>
-                        <p style="color:black">Base on your current stock, the minimum quantity for this item is indicated above. You may increase the quantity if you feel there is a need.</p>
+                        <p style="color:black">Base on your current stock, the minimum quantity for this item is indicated above.</p>
+                        <p style="color:black">You may increase the quantity if you feel there is a need.</p>
                     </div>
                 </div>
             </div>

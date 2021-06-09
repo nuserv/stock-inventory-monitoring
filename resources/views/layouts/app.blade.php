@@ -35,7 +35,6 @@
         <link href="https://code.jquery.com/ui/1.11.3/themes/smoothness/jquery-ui.css" rel="Stylesheet" type="text/css" />
         <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/dt/dt-1.10.23/b-1.6.5/b-print-1.6.5/sl-1.3.1/datatables.min.css"/>
         @auth
-            <title>{{$title}}</title>
         @else
             <title>Login</title>
         @endauth
@@ -383,6 +382,9 @@
         @endif
         @if(Request::is('unrepair') && auth()->user()->hasanyrole('Repair', 'Editor', 'Manager'))
             <script src="{{asset('min/?f=js/unrepair.js')}}"></script>
+        @endif
+        @if(Request::is('email/verify'))
+            <script src="{{asset('min/?f=js/verify.js')}}"></script>
         @endif
         @auth
             @if(Request::is('reports'))
