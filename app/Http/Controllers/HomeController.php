@@ -483,23 +483,23 @@ class HomeController extends Controller
             $users = User::query()->whereHas('roles', function($q){
                 $q->where('name', 'Repair');
             })->get();
-
             $myuser = [];
+            array_push($myuser, auth()->user()->id);
             foreach ($users as $user) {
                 $myuser[] = $user->id;
             }
-            
             $logs = Userlog::query()
-                ->wherein('user_id', $myuser);
+                ->wherein('user_id', $myuser)->get();
             $acts = Userlog::query()->where('activity', 'LIKE', 'RECEIVED REPAIRED%')->get();
             //$act = UserLog::wherein('user_id', $myuser)->orderBy('id', 'desc')->take(1000)->get();
             $act = [];
-            foreach ($log as $log) {
-                array_push($act, $log);
+            foreach ($logs as $log) {
+                $act[] = $log;
             }
             foreach ($acts as $acs) {
                 array_push($act, $acs);
             }
+            $act = collect($act)->sortBy('id')->all();
         }
         if (auth()->user()->hasAnyRole('Tech', 'Repair', 'Encoder')) {
             $act = UserLog::query()
