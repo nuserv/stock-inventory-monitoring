@@ -250,7 +250,7 @@ class HomeController extends Controller
         }
     }
     public function log()
-    {
+    {   
         $title = 'Activities';
         return view('pages.home', compact('title'));
     }
@@ -478,6 +478,28 @@ class HomeController extends Controller
             $act = Userlog::query()
                 ->wherein('user_id', $myuser);
             //$act = UserLog::wherein('user_id', $myuser)->orderBy('id', 'desc')->take(1000)->get();
+        }
+        if (auth()->user()->hasAnyRole('Returns Manager')) {
+            $users = User::query()->whereHas('roles', function($q){
+                $q->where('name', 'Repair');
+            })->get();
+
+            $myuser = [];
+            foreach ($users as $user) {
+                $myuser[] = $user->id;
+            }
+            
+            $logs = Userlog::query()
+                ->wherein('user_id', $myuser);
+            $acts = Userlog::query()->where('activity', 'LIKE', 'RECEIVED REPAIRED%')->get();
+            //$act = UserLog::wherein('user_id', $myuser)->orderBy('id', 'desc')->take(1000)->get();
+            $act = [];
+            foreach ($log as $log) {
+                array_push($act, $log);
+            }
+            foreach ($acts as $acs) {
+                array_push($act, $acs);
+            }
         }
         if (auth()->user()->hasAnyRole('Tech', 'Repair', 'Encoder')) {
             $act = UserLog::query()

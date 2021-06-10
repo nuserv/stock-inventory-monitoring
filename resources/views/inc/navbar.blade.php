@@ -8,6 +8,9 @@
             </li>
             @endif
             @if(auth()->user()->hasrole('Repair'))
+                <li class="nav-item" style="margin-left:0px;margin-right:0px;">
+                    <a style="padding-right:8px; padding-left:8px" class="nav-link {{ Request::is('log') ? 'active' : '' }}" href="{{ url('/log') }}">Activity logs</a>
+                </li>
                 <li class="nav-item">
                     <a style="padding-right:8px; padding-left:8px" class="nav-link {{ Request::is('/') ? 'active' : '' }}" href="{{ url('/') }}">Received</a>
                 </li>
@@ -39,6 +42,9 @@
                 </li>
                 <li class="nav-item">
                     <a style="padding-right:8px; padding-left:8px" class="nav-link {{ Request::is('request') ? 'active' : '' }}" href="{{ route('stock.index') }}">Stock Request</a>
+                </li>
+                <li class="nav-item" style="margin-left:0px;margin-right:0px;">
+                    <a style="padding-right:8px; padding-left:8px" class="nav-link {{ Request::is('log') ? 'active' : '' }}" href="{{ url('/log') }}">Activity logs</a>
                 </li>
             @endif
             @if(!auth()->user()->hasanyrole('Repair', 'Returns Manager', 'Viewer', 'Viewer PLSI', 'Viewer IDSI'))

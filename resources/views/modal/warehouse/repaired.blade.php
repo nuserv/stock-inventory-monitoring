@@ -20,7 +20,7 @@
             <div class="modal-footer">
                 <input type="button" class="btn btn-primary mr-auto" id="not_rec_Btn" class="button" value="Not received">
                 <span id="msg">Please select an item to receive.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
-                <input type="button" class="btn btn-primary rec_Btn" id="rec_Btn" class="button" value="Received" disabled>
+                <input type="button" class="btn btn-primary" id="rec_Btn" class="button" value="Received" disabled>
             </div>
             @else
                  <div class="modal-footer">
