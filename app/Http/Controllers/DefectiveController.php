@@ -121,6 +121,7 @@ class DefectiveController extends Controller
             $warehouse->status = 'in';
             $warehouse->user_id = auth()->user()->id;
             $warehouse->save();
+            $items = Item::where('id', $repaired_no->items_id)->first();
             $log = new UserLog;
             $log->branch_id = auth()->user()->branch->id;
             $log->branch = auth()->user()->branch->branch;
