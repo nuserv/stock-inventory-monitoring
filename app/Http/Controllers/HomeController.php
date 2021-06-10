@@ -507,7 +507,7 @@ class HomeController extends Controller
             })->get();
             $myuser = [];
             array_push($myuser, auth()->user()->id);
-            foreach ($user as $user) {
+            foreach ($users as $user) {
                 $myuser[] = $user->id;
             }
             $logs = Userlog::query()
