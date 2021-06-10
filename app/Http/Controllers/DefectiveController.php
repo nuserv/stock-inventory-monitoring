@@ -125,7 +125,7 @@ class DefectiveController extends Controller
             $log = new UserLog;
             $log->branch_id = auth()->user()->branch->id;
             $log->branch = auth()->user()->branch->branch;
-            $log->activity = "RECEIVED REPAIRED $items->item(S/N: ".mb_strtoupper($updates->serial).") from repair." ;
+            $log->activity = "RECEIVED REPAIRED $items->item(S/N: ".mb_strtoupper($repaired_no->serial).") from repair." ;
             $log->user_id = auth()->user()->id;
             $log->fullname = auth()->user()->name.' '.auth()->user()->middlename.' '.auth()->user()->lastname;
             $log->save();
