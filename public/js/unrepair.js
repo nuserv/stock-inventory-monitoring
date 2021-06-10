@@ -10,7 +10,7 @@ $(document).ready(function()
             },
             "order": [[ 0, "desc", ]],
             processing: true,
-            serverSide: true,
+            serverSide: false,
             ajax: {
                 url: 'unrepairable',
             error: function(data) {

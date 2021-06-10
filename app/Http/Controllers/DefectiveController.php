@@ -357,7 +357,7 @@ class DefectiveController extends Controller
         $repair = Defective::query()->select('branches.branch', 'defectives.category_id', 'branches.id as branchid', 'defectives.updated_at', 'defectives.id as id', 'items.item', 'items.id as itemid', 'defectives.serial', 'defectives.status')
             ->wherein('defectives.status', ['Unrepairable', 'Unrepairable approval'])
             ->join('items', 'defectives.items_id', '=', 'items.id')
-            ->join('branches', 'defectives.branch_id', '=', 'branches.id');
+            ->join('branches', 'defectives.branch_id', '=', 'branches.id')->get();
         return DataTables::of($repair)
         ->addColumn('date', function (Defective $data){
             return Carbon::parse($data->updated_at->toFormattedDateString().' '.$data->updated_at->toTimeString())->isoFormat('lll');
