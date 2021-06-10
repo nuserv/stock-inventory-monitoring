@@ -54,7 +54,7 @@ class LoginController extends Controller
     public function verifyUser(Request $request, $id)
     {
         $verifyUser = VerifyUser::where('token', $id)->first();
-        
+        //dd(isset($verifyUser));
         if(isset($verifyUser) ){
             $user = $verifyUser->user;
             if(!$user->verified) {
@@ -63,7 +63,6 @@ class LoginController extends Controller
                 User::where('id', $verifyUser->user_id)->update(['email_verified_at'=> now()]);
                 $status = "Your e-mail is verified. You can now login.";
             } else {
-                User::where('id', $verifyUser->user_id)->update(['email_verified_at'=> now()]);
                 $status = "Your e-mail is already verified. You can now login.";
             }
         } else {

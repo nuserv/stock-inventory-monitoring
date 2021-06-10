@@ -361,6 +361,8 @@ $(document).on('click', '#req', function(){
         success: function(){
             if (checkrequest == 'meron') {
                 alert('ATTENTION: Your new stock request was added to your previous pending request with Request No. '+reqno);
+            }else{
+                alert('You have successfully submitted a stock request. You may check your request under STOCK REQUEST tab.');
             }
             window.location.href = 'stocks';
         },
