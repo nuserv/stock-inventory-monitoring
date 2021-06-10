@@ -61,7 +61,6 @@ class LoginController extends Controller
                 $verifyUser->user->verified = 1;
                 $verifyUser->user->save();
                 User::where('id', $verifyUser->user_id)->update(['email_verified_at'=> now()]);
-                $verifyUser->delete();
                 $status = "Your e-mail is verified. You can now login.";
             } else {
                 User::where('id', $verifyUser->user_id)->update(['email_verified_at'=> now()]);
