@@ -262,7 +262,9 @@ class UserController extends Controller
             $user->middlename = ucwords(mb_strtolower($request->input('middle_name')));
             $user->branch_id = $request->input('branch');
             $user->status = $request->input('status');
-            $user->email_verified_at = Null;
+            if ($olduser->email != $request->input('email')) {
+                $user->email_verified_at = Null;
+            }
             $data = $user->save();
             if ($request->input('status') == 1) {
                 $stat = 'Active';
