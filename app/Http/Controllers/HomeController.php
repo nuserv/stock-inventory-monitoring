@@ -502,10 +502,14 @@ class HomeController extends Controller
             $act = collect($act)->sortBy('id')->all();
         }
         if (auth()->user()->hasAnyRole('Repair')) {
-            
+            $users = User::query()->whereHas('roles', function($q){
+                $q->where('name', 'Repair');
+            })->get();
             $myuser = [];
             array_push($myuser, auth()->user()->id);
-            
+            foreach ($user as $user) {
+                $myuser[] = $user->id;
+            }
             $logs = Userlog::query()
                 ->wherein('user_id', $myuser)->get();
             $acts = Userlog::query()->where('activity', 'LIKE', 'RECEIVED REPAIRED%')->get();
