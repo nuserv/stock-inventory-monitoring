@@ -672,6 +672,7 @@ $(document).ready(function()
     }, 5000);
     
     $('table.intransitDetails').DataTable().on('select', function () {
+        
         var rowselected = intransittable.rows( { selected: true } ).data();
         if(rowselected.length > 0){
             $('#rec_Btn').prop('disabled', false);
@@ -731,7 +732,38 @@ $(document).on('keyup', '#ticket', function () {
         $(this).val('');
     }
 });
-
+$(document).on("click", "#intransitDetails tbody td", function () {
+    console.log(intransittable.row( this ).index());
+    var row = intransittable.row( this ).index();
+    var duplicate = 'no';
+        $.ajax({
+            url: 'checkserial',
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="ctok"]').attr('content')
+            },
+            dataType: 'json',
+            type: 'get',
+            async: false,
+            data: {
+                serial: intransittable.row( this ).data().serial,
+                type: 'check'
+            },
+            success: function (data) {
+                if (data != "allowed") {
+                    duplicate = 'yes';
+                    alert('The serial number you selected is already existing. Please contact the administrator.');
+                    intransittable.row( row ).deselect();
+                }
+            },
+            error: function (data) {
+                alert(data.responseText);
+                return false;
+            }
+        });
+    if (duplicate == "yes"){
+        $(this).parents("tr").css('background-color', 'red')
+    }
+});
 $(document).on('click', '#not_rec_Btn', function(){
     $.ajax({
         url: 'notrec',

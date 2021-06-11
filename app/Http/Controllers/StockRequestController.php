@@ -1049,7 +1049,7 @@ class StockRequestController extends Controller
             }
         }else{
                 $stock = Stock::where('serial', $request->serial)->where('status', 'in')->first();
-                $def = Defective::where('serial', $request->serial)->where('status', 'For return')->first();
+                $def = Defective::where('serial', $request->serial)->wherein('status', ['For return', 'For add stock', 'For receiving', 'For repair', 'Repaired'])->first();
             if ($stock) {
                 $data = "not allowed";
             }else if ($def) {

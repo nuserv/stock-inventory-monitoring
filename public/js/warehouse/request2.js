@@ -1,6 +1,49 @@
 $(document).on('click', '#intransitBtn', function(){
     $('#requestModal').toggle();
     $('loading').show();
+    $.ajax({
+        type:'get',
+        url: "/send/"+reqnumber,
+        async: false,
+        success:function(data)
+        {
+            intransitcount = data.data.length;
+        },
+    });
+    var duplicate = "no";
+    for (let index = 0; index < intransitcount; index++) {
+        if (duplicate == "yes") {
+            return false;
+        }
+        $.ajax({
+            url: 'checkserial',
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="ctok"]').attr('content')
+            },
+            dataType: 'json',
+            type: 'get',
+            async: false,
+            data: {
+                serial: scheddetails.row( index ).data().serial,
+                type: 'check'
+            },
+            success: function (data) {
+                if (data != "allowed") {
+                    alert('The serial number ('+scheddetails.row( index ).data().serial+') you entered is already existing. Please check the serial number and try again.');
+                    duplicate = 'yes';
+                    $('#requestModal').toggle();
+                    $('loading').hide();
+                }
+            },
+            error: function (data) {
+                alert(data.responseText);
+                return false;
+            }
+        });
+    }
+    if (duplicate == "yes"){
+        return false
+    }
     if ($('#status').val() == 'SCHEDULED' || $('#status').val() == 'RESCHEDULED') {
         $.ajax({
             url: 'intransit',
