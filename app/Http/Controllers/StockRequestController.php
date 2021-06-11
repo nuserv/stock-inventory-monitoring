@@ -1056,8 +1056,8 @@ class StockRequestController extends Controller
                     foreach ($checks as $check) {
                         if ($check->serial != 'N/A') {
                             $stock = Stock::where('serial', $check->serial)->where('status', 'in')->first();
-                            $def = Defective::where('serial', $check->serial)->wherein('status', ['For return', 'For add stock', 'For receiving', 'For repair', 'Repaired'])->first();
-                            if ($def) {
+                            $defs = Defective::where('serial', $check->serial)->wherein('status', ['For return', 'For add stock', 'For receiving', 'For repair', 'Repaired'])->first();
+                            if ($defs) {
                                 $meron = 1;
                                 $serial = $check->serial;
                             }else if ($stock) {
@@ -1072,9 +1072,7 @@ class StockRequestController extends Controller
             }else if ($def) {
                 $data = "not allowed";
             }else if($meron == 1){
-                $data = [];
-                $data[] = "not allowed";
-                $data[] = $serial;
+                $data = ['data' =>"not allowed", 'serial'=>$serial];
             }else{
                 $data = "allowed";
             }

@@ -3,6 +3,7 @@
 $(document).on('click', '#intransitBtn', function(){
     $('#requestModal').toggle();
     $('loading').show();
+    var duplicate = 'no';
     $.ajax({
         type:'get',
         url: "/send/"+reqnumber,
@@ -26,11 +27,12 @@ $(document).on('click', '#intransitBtn', function(){
                 type: 'check'
             },
             success: function (data) {
+                console.log(data.data);
                 if (data != "allowed") {
-                    alert('The serial number ('+data[1]+') you entered is already existing. Please check the serial number and try again.');
+                    alert('The serial number ('+data.serial+') you entered is already existing. Please check the serial number and try again.');
                     $('#requestModal').toggle();
                     $('loading').hide();
-                    return false;
+                    duplicate = 'yes';
                 }
             },
             error: function (data) {
@@ -38,7 +40,9 @@ $(document).on('click', '#intransitBtn', function(){
                 return false;
             }
         });
-    
+    if (duplicate == 'yes') {
+        return false;
+    }
     if ($('#status').val() == 'SCHEDULED' || $('#status').val() == 'RESCHEDULED') {
         $.ajax({
             url: 'intransit',
