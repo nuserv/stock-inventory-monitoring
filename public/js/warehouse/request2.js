@@ -1,3 +1,5 @@
+
+
 $(document).on('click', '#intransitBtn', function(){
     $('#requestModal').toggle();
     $('loading').show();
@@ -10,42 +12,33 @@ $(document).on('click', '#intransitBtn', function(){
             intransitcount = data.data.length;
         },
     });
-    var duplicate = "no";
-    for (let index = 0; index < intransitcount; index++) {
-        if (duplicate == "yes") {
-            return false;
-        }
-        if (scheddetails.row( index ).data().serial != 'N/A') {
-            $.ajax({
-                url: 'checkserial',
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="ctok"]').attr('content')
-                },
-                dataType: 'json',
-                type: 'get',
-                async: false,
-                data: {
-                    serial: scheddetails.row( index ).data().serial,
-                    type: 'check'
-                },
-                success: function (data) {
-                    if (data != "allowed") {
-                        alert('The serial number ('+scheddetails.row( index ).data().serial+') you entered is already existing. Please check the serial number and try again.');
-                        duplicate = 'yes';
-                        $('#requestModal').toggle();
-                        $('loading').hide();
-                    }
-                },
-                error: function (data) {
-                    alert(data.responseText);
+        $.ajax({
+            url: 'checkserial',
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="ctok"]').attr('content')
+            },
+            dataType: 'json',
+            type: 'get',
+            async: false,
+            data: {
+                serial: 'na',
+                reqno: reqnumber,
+                type: 'check'
+            },
+            success: function (data) {
+                if (data != "allowed") {
+                    alert('The serial number ('+data[1]+') you entered is already existing. Please check the serial number and try again.');
+                    $('#requestModal').toggle();
+                    $('loading').hide();
                     return false;
                 }
-            });
-        }
-    }
-    if (duplicate == "yes"){
-        return false
-    }
+            },
+            error: function (data) {
+                alert(data.responseText);
+                return false;
+            }
+        });
+    
     if ($('#status').val() == 'SCHEDULED' || $('#status').val() == 'RESCHEDULED') {
         $.ajax({
             url: 'intransit',

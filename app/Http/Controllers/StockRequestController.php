@@ -1049,11 +1049,32 @@ class StockRequestController extends Controller
             }
         }else{
                 $stock = Stock::where('serial', $request->serial)->where('status', 'in')->first();
+                $meron = 0;
                 $def = Defective::where('serial', $request->serial)->wherein('status', ['For return', 'For add stock', 'For receiving', 'For repair', 'Repaired'])->first();
+                if ($request->reqno) {
+                    $checks = PreparedItem::query()->where('request_no', $request->reqno)->get();
+                    foreach ($checks as $check) {
+                        if ($check->serial != 'N/A') {
+                            $stock = Stock::where('serial', $check->serial)->where('status', 'in')->first();
+                            $def = Defective::where('serial', $check->serial)->wherein('status', ['For return', 'For add stock', 'For receiving', 'For repair', 'Repaired'])->first();
+                            if ($def) {
+                                $meron = 1;
+                                $serial = $check->serial;
+                            }else if ($stock) {
+                                $meron = 1;
+                                $serial = $check->serial;
+                            }
+                        }
+                    }
+                }
             if ($stock) {
                 $data = "not allowed";
             }else if ($def) {
                 $data = "not allowed";
+            }else if($meron == 1){
+                $data = [];
+                $data[] = "not allowed";
+                $data[] = $serial;
             }else{
                 $data = "allowed";
             }
