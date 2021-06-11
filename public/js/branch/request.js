@@ -736,6 +736,7 @@ $(document).on("click", "#intransitDetails tbody td", function () {
     console.log(intransittable.row( this ).index());
     var row = intransittable.row( this ).index();
     var duplicate = 'no';
+    if (intransittable.row( this ).data().serial != 'N/A') {
         $.ajax({
             url: 'checkserial',
             headers: {
@@ -760,6 +761,7 @@ $(document).on("click", "#intransitDetails tbody td", function () {
                 return false;
             }
         });
+    }
     if (duplicate == "yes"){
         $(this).parents("tr").css('background-color', 'red')
     }
