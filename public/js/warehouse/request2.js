@@ -15,31 +15,33 @@ $(document).on('click', '#intransitBtn', function(){
         if (duplicate == "yes") {
             return false;
         }
-        $.ajax({
-            url: 'checkserial',
-            headers: {
-                'X-CSRF-TOKEN': $('meta[name="ctok"]').attr('content')
-            },
-            dataType: 'json',
-            type: 'get',
-            async: false,
-            data: {
-                serial: scheddetails.row( index ).data().serial,
-                type: 'check'
-            },
-            success: function (data) {
-                if (data != "allowed") {
-                    alert('The serial number ('+scheddetails.row( index ).data().serial+') you entered is already existing. Please check the serial number and try again.');
-                    duplicate = 'yes';
-                    $('#requestModal').toggle();
-                    $('loading').hide();
+        if (scheddetails.row( index ).data().serial != 'N/A') {
+            $.ajax({
+                url: 'checkserial',
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="ctok"]').attr('content')
+                },
+                dataType: 'json',
+                type: 'get',
+                async: false,
+                data: {
+                    serial: scheddetails.row( index ).data().serial,
+                    type: 'check'
+                },
+                success: function (data) {
+                    if (data != "allowed") {
+                        alert('The serial number ('+scheddetails.row( index ).data().serial+') you entered is already existing. Please check the serial number and try again.');
+                        duplicate = 'yes';
+                        $('#requestModal').toggle();
+                        $('loading').hide();
+                    }
+                },
+                error: function (data) {
+                    alert(data.responseText);
+                    return false;
                 }
-            },
-            error: function (data) {
-                alert(data.responseText);
-                return false;
-            }
-        });
+            });
+        }
     }
     if (duplicate == "yes"){
         return false
