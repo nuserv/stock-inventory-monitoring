@@ -1233,6 +1233,8 @@ $(document).on("click", "#serial_btn", function() {
         type: 'PUT',
         data: {
             old: serialnum,
+            reqno: reqnumber,
+            items_id:prepared_id,
             new: $('#editserial').val().toUpperCase()
         },
         success: function(data) {

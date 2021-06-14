@@ -43,6 +43,10 @@ class StockRequestController extends Controller
         $categories = Category::all();
         return view('pages.stock-request', compact('stocks', 'categories', 'title'));
     }
+    public function buffer(){
+        $title = 'Buffer';
+        return view('pages.buffer', compact('title'));
+    }
     public function resolve()
     {
         if (auth()->user()->hasanyrole('Repair', 'Returns Manager')) {
@@ -904,10 +908,10 @@ class StockRequestController extends Controller
         }else if ($checks) {
             $data = 'meron';
         }else{
-            $serial = PreparedItem::where('serial', $request->old)
+            $serial = PreparedItem::where('serial', $request->old)->where('request_no', $request->reqno)->where('items_id', $request->items_id)
             ->join('items', 'items.id', '=', 'items_id')
             ->first();
-            $new = PreparedItem::where('serial', $request->old)->first();
+            $new = PreparedItem::where('serial', $request->old)->where('request_no', $request->reqno)->where('items_id', $request->items_id)->first();
             $new->serial = $request->new;
             $new->save();
             $log = new UserLog;
