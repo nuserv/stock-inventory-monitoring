@@ -114,7 +114,7 @@
     @endif
 </div>
 <div class="d-flex">
-    @if(auth()->user()->hasrole('Warehouse Manager') || auth()->user()->id == 70)
+    @if(auth()->user()->hasrole('Warehouse Manager') || auth()->user()->id == 228)
         <input type="button" id="addCatBtn" class="btn btn-xs btn-primary" value="Add Category">&nbsp;&nbsp;
         <input type="button" id="addCodeBtn" class="btn btn-xs btn-primary" value="Add Item">
     @endif
