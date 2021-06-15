@@ -127,9 +127,8 @@ $(document).ready(function()
                     }
                 },
                 columns: [
-                    { data: 'schedule', name:'schedule'},
-                    { data: 'items_id', name:'items_id'},
                     { data: 'item', name:'item'},
+                    { data: 'quantity', name:'quantity'},
                     { data: 'serial', name:'serial'}
                 ],
                 buttons: {
