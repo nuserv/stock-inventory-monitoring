@@ -412,6 +412,15 @@ class HomeController extends Controller
             }
         }
 
+        if ($id == 'wareini') {
+            $items = Item::all();
+            foreach ($items as $item) {
+                $ini = new \App\WarehouseInitial;
+                $ini->items_id = $item->id;
+                $ini->save();
+            }
+        }
+
         if ($id == 'count') {
             $items = Item::all();
             $branches = Branch::all();
@@ -594,7 +603,7 @@ class HomeController extends Controller
         $stock = StockRequest::where('request_no', $id)->first();
         $consumable = PreparedItem::select('item', 'uom', 'prepared_items.id as id', 'items_id', 'request_no', 'serial', 'schedule')
             ->where('branch_id', $stock->branch_id)
-            ->where('request_no', $id)
+            ->where('request_no', $stock->request_no)
             ->where('schedule', $request->schedule)
             ->whereNotin('uom', ['Unit'])
             ->join('items', 'items.id', '=', 'items_id')
