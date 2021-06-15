@@ -118,6 +118,7 @@ $(document).ready(function()
                     dataType: 'json',
                     data: {
                         schedule: $("#datesched").val(),
+                        reqno: reqno
                     },
                     error: function(data) {
                         if(data.status == 401) {
