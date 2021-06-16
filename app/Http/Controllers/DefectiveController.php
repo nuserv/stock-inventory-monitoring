@@ -133,9 +133,9 @@ class DefectiveController extends Controller
         $check = Defective::where('status', 'For add stock')
             ->where('repaired_no', $request->repaired_no)->first();
         if ($check) {
-            RepairedNo::where('status', 'For receiving')->where('repaired_no', $request->repaired_no)->update(['status' => 'Incomplete']);
+            RepairedNo::wherein('status', ['For receiving', 'Incomplete'])->where('repaired_no', $request->repaired_no)->update(['status' => 'Incomplete']);
         }else{
-            RepairedNo::where('status', 'For receiving')->where('repaired_no', $request->repaired_no)->update(['status' => 'Completed']);
+            RepairedNo::wherein('status', ['For receiving', 'Incomplete'])->where('repaired_no', $request->repaired_no)->update(['status' => 'Completed']);
         }
         return response()->json($warehouse);
 
