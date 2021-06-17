@@ -553,7 +553,6 @@ $(document).on('keyup', '#customer', function(){
                 $('#out_sub_Btn').prop('disabled', true);
             }
         });
-        
     }
 });
 $(document).on('click', 'li', function(){  
@@ -570,7 +569,7 @@ $(document).on('click', 'li', function(){
             },
             data:{
                 client:'yes',
-                branch: select
+                branch: select.trim()
             },
             success:function(data){
                 if (data) {
