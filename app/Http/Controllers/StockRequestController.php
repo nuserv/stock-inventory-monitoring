@@ -1213,6 +1213,7 @@ class StockRequestController extends Controller
             $buffer = new Buffer;
             $buffer->user_id = auth()->user()->id;
             $buffer->category_id = $item->category_id;
+            $buffer->pending = $request->qty;
             $buffer->items_id = $request->item;
             $buffer->qty = $request->qty;
             $buffer->status = 'request';
@@ -1314,6 +1315,7 @@ class StockRequestController extends Controller
                 $stock = Stock::where('serial', $request->serial)->where('status', 'in')->first();
                 $def = Defective::where('serial', $request->serial)->wherein('status', ['For return', 'For add stock', 'For receiving', 'For repair', 'Repaired'])->first();
                 $meron = 0;
+                $checks = 'wala';
                 if ($request->reqno) {
                     $checks = PreparedItem::query()->where('request_no', $request->reqno)->get();
                     foreach ($checks as $check) {
@@ -1336,11 +1338,13 @@ class StockRequestController extends Controller
                 $data = "not allowed1";
             }else if ($def) {
                 $data = "not allowed2";
-            }else if ($checks) {
-                if($meron == 1){
-                    $data = ['data' =>"not allowed", 'serial'=>$serial];
-                }else{
-                    $data = ['data' =>"allowed"];
+            }else if ($checks != 'wala') {
+                if ($checks){
+                    if($meron == 1){
+                        $data = ['data' =>"not allowed", 'serial'=>$serial];
+                    }else{
+                        $data = ['data' =>"allowed"];
+                    }
                 }
             }else{
                 $data = "allowed";
