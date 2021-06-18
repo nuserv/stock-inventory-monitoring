@@ -492,11 +492,11 @@ class StockController extends Controller
 
             $category = Category::query()->get();
 
-            $stock = Stock::select('category_id', 'category', \DB::raw('SUM(CASE WHEN status = \'in\' THEN 1 ELSE 0 END) as stockin'))
+            /*$stock = Stock::select('category_id', 'category', \DB::raw('SUM(CASE WHEN status = \'in\' THEN 1 ELSE 0 END) as stockin'))
                 ->where('branch_id', auth()->user()->branch->id)
                 ->join('categories', 'category_id', '=', 'categories.id')
                 ->groupBy('category')
-                ->get();
+                ->get();*/
             return DataTables::of($category)
             ->addColumn('category', function (Category $stock){
                 return mb_strtoupper($stock->category);
@@ -1209,10 +1209,10 @@ class StockController extends Controller
     {
         if ($request->data != 0) {
             $category = Category::query()->get();
-            $stock = Warehouse::select('category_id', 'category', \DB::raw('SUM(CASE WHEN status = \'in\' THEN 1 ELSE 0 END) as quantity'))
+            /*$stock = Warehouse::select('category_id', 'category', \DB::raw('SUM(CASE WHEN status = \'in\' THEN 1 ELSE 0 END) as quantity'))
                 ->join('categories', 'categories.id', '=', 'category_id')
                 ->groupBy('category')
-                ->get();
+                ->get();*/
             return Datatables::of($category)
             ->addColumn('category_id', function (Category $request){
                 return mb_strtoupper($request->id);
