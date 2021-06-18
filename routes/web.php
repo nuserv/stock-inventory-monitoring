@@ -155,7 +155,18 @@ Route::put('pullupdate', 'StockController@pullupdate')->middleware('ajax');
 Route::put('repairedupdate', 'DefectiveController@repairedupdate')->middleware('ajax');
 Route::get('export', 'ImportController@export')->name('export');
 
+Route::put('bufferupdate', 'StockRequestController@bufferupdate');//->middleware('ajax');
+Route::put('bufferreceived', 'StockRequestController@bufferreceived');//->middleware('ajax');
+Route::put('buffersend', 'StockRequestController@buffersend');//->middleware('ajax');
+Route::get('buffersenditems', 'StockRequestController@buffersenditems');//->middleware('ajax');
+Route::put('bufferapproved', 'StockRequestController@bufferapproved')->middleware('ajax');
+Route::get('bufferviewlist', 'StockRequestController@bufferviewlist');
 Route::get('checkrequest', 'StockRequestController@checkrequest');//->middleware('ajax');
+Route::get('checkbuffer', 'StockRequestController@checkbuffer');//->middleware('ajax');
+Route::get('bufferitem', 'StockRequestController@bufferitem');//->middleware('ajax');
+Route::get('bufferget', 'StockRequestController@bufferget');//->middleware('ajax');
+Route::get('bufferlist', 'StockRequestController@bufferlist');//->middleware('ajax');
+Route::post('bufferstore', 'StockRequestController@bufferstore');//->middleware('ajax');
 Route::get('checkrequestitem', 'StockRequestController@checkrequestitem');//->middleware('ajax');
 Route::get('resolved', 'StockRequestController@resolve')->name('resolved.index');
 Route::POST('storerreceived', 'StockRequestController@received')->middleware('ajax');
@@ -185,6 +196,7 @@ Route::get('requests', 'StockRequestController@getRequests');//->middleware('aja
 Route::get('res', 'StockRequestController@getResolved');//->middleware('ajax');
 Route::get('pcount', 'StockRequestController@pcount')->middleware('ajax');
 Route::get('request', 'StockRequestController@index')->name('stock.index');
+Route::get('buffer', 'StockRequestController@buffer')->name('stock.buffer');
 //Route::get('view', 'StockRequestController@view')->name('stock.view');
 Route::put('update/{id}', 'StockRequestController@updateRequestDetails')->middleware('ajax');
 Route::put('notrec', 'StockRequestController@notreceived')->middleware('ajax');

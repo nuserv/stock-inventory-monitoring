@@ -16,7 +16,7 @@
                     </thead>
                 </table>
             </div>
-            @if (auth()->user()->hasanyrole('Warehouse manager', 'Encoder'))
+            @if (auth()->user()->hasanyrole('Warehouse Manager', 'Encoder'))
                 <div class="modal-footer">
                     <input type="button" class="btn btn-primary mr-auto" id="not_rec_Btn" class="button" value="Not received">
                     <span id="msg">Please select an item to receive.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>

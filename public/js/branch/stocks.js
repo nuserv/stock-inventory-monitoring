@@ -321,7 +321,6 @@ $(document).on('click', '#qty', function(){
 $(document).on('click', '#req', function(){
     $('#loading').show();
     $('#qtyModal').toggle();
-    $('#qty').val('');
     $.ajax({
         url: 'storerequest',
         headers: {
@@ -332,7 +331,7 @@ $(document).on('click', '#req', function(){
         data: {
             reqno : reqno,
             item: item,
-            qty: qty,
+            qty: $('#qty').val(),
             check: checkrequest,    
             stat: 'notok'                   
         },

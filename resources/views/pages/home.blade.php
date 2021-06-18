@@ -2,90 +2,93 @@
 
 @section('content')
     @if(!auth()->user()->hasanyrole('Repair', 'Returns Manager', 'Viewer', 'Viewer PLSI', 'Viewer IDSI'))
-        <div class="container pt-5">
-            <div class="container-fluid">
-                <div class="row">
-                    @if (!auth()->user()->hasrole('Manager', 'Editor'))
+        @if(!auth()->user()->hasanyrole('Main Warehouse Manager'))
+
+            <div class="container pt-5">
+                <div class="container-fluid">
+                    <div class="row">
+                        @if (!auth()->user()->hasrole('Manager', 'Editor'))
+                            <div class="col-sm-2">
+                                <a href="{{ route('stock.index')}}">
+                                    <div class="card bg-card">
+                                        <div class="card-body text-center">
+                                            <p class="card-text" style="font-size: 12px">STOCK REQUEST</p>
+                                            <p class="card-text">{{ $stockreq }}</p>
+                                        </div>
+                                    </div>
+                                </a>
+                            </div>
+                            @if (!auth()->user()->hasanyrole('Manager', 'Editor'))
+                            <div class="col-sm-2">
+                                <a href="{{ route('stocks.index')}}">
+                                    <div class="card bg-card">
+                                        <div class="card-body text-center">
+                                            <p class="card-text" style="font-size: 12px">STOCKS</p>
+                                            <p class="card-text">{{ $units }}</p>
+                                        </div>
+                                    </div>
+                                </a>
+                            </div>
+                            @endif
+                            <div class="col-sm-2">
+                                <a href="{{ route('return.index')}}">
+                                    <div class="card bg-card">
+                                        <div class="card-body text-center">
+                                            <p class="card-text" style="font-size: 12px">@if (auth()->user()->hasanyrole('Warehouse Manager', 'Encoder')) REPAIRED @else RETURNS @endif</p>
+                                            <p class="card-text">{{ $returns }}</p>
+                                        </div>
+                                    </div>
+                                </a>
+                            </div>
+                            @if(auth()->user()->branch->branch != 'Warehouse' && auth()->user()->branch->branch != 'Main-Office')
+                            <div class="col-sm-2">
+                                <a href="{{ route('index.service-unit')}}">
+                                    <div class="card bg-card">
+                                        <div class="card-body text-center">
+                                            <p class="card-text" style="font-size: 12px">SERVICE OUT</p>
+                                            <p class="card-text">{{ $sunits }}</p>
+                                        </div>
+                                    </div>
+                                </a>
+                            </div>
+                            <div class="col-sm-2">
+                                <a href="{{ url('loans') }}">
+                                    <div class="card @if($loans > 0)bg-card-red @else bg-card @endif">
+                                        <div class="card-body text-center">
+                                            <p class="card-text" style="font-size: 12px">LOAN REQUEST</p>
+                                            <p class="card-text">{{ $loans }}</p>
+                                        </div>
+                                    </div>
+                                </a>
+                            </div>
+                            @endif
+                        @endif
+                        @if(auth()->user()->hasanyrole('Warehouse Manager', 'Manager', 'Editor'))
                         <div class="col-sm-2">
-                            <a href="{{ route('stock.index')}}">
+                            <a href="{{ url('resolved') }}">
                                 <div class="card bg-card">
-                                    <div class="card-body text-center">
-                                        <p class="card-text" style="font-size: 12px">STOCK REQUEST</p>
-                                        <p class="card-text">{{ $stockreq }}</p>
+                                    <div class="card-body text-center" style="font-size: 12px">
+                                        <p class="card-text">RESOLVED</p>
+                                        <p class="card-text">@if($resolved > 0){{ $resolved }} @else {{ $resolved }} @endif</p>
                                     </div>
                                 </div>
                             </a>
                         </div>
-                        @if (!auth()->user()->hasanyrole('Manager', 'Editor'))
                         <div class="col-sm-2">
-                            <a href="{{ route('stocks.index')}}">
-                                <div class="card bg-card">
+                            <a href="{{ url('request') }}">
+                                <div class="card @if($unresolved > 0)bg-card-red @else bg-card @endif"">
                                     <div class="card-body text-center">
-                                        <p class="card-text" style="font-size: 12px">STOCKS</p>
-                                        <p class="card-text">{{ $units }}</p>
+                                        <p class="card-text" style="font-size: 12px">UNRESOLVED</p>
+                                        <p class="card-text">@if($unresolved > 0){{ $unresolved }} @else {{ $unresolved }} @endif</p>
                                     </div>
                                 </div>
                             </a>
                         </div>
                         @endif
-                        <div class="col-sm-2">
-                            <a href="{{ route('return.index')}}">
-                                <div class="card bg-card">
-                                    <div class="card-body text-center">
-                                        <p class="card-text" style="font-size: 12px">@if (auth()->user()->hasanyrole('Warehouse Manager', 'Encoder')) REPAIRED @else RETURNS @endif</p>
-                                        <p class="card-text">{{ $returns }}</p>
-                                    </div>
-                                </div>
-                            </a>
-                        </div>
-                        @if(auth()->user()->branch->branch != 'Warehouse' && auth()->user()->branch->branch != 'Main-Office')
-                        <div class="col-sm-2">
-                            <a href="{{ route('index.service-unit')}}">
-                                <div class="card bg-card">
-                                    <div class="card-body text-center">
-                                        <p class="card-text" style="font-size: 12px">SERVICE OUT</p>
-                                        <p class="card-text">{{ $sunits }}</p>
-                                    </div>
-                                </div>
-                            </a>
-                        </div>
-                        <div class="col-sm-2">
-                            <a href="{{ url('loans') }}">
-                                <div class="card @if($loans > 0)bg-card-red @else bg-card @endif">
-                                    <div class="card-body text-center">
-                                        <p class="card-text" style="font-size: 12px">LOAN REQUEST</p>
-                                        <p class="card-text">{{ $loans }}</p>
-                                    </div>
-                                </div>
-                            </a>
-                        </div>
-                        @endif
-                    @endif
-                    @if(auth()->user()->hasanyrole('Warehouse Manager', 'Manager', 'Editor'))
-                    <div class="col-sm-2">
-                        <a href="{{ url('resolved') }}">
-                            <div class="card bg-card">
-                                <div class="card-body text-center" style="font-size: 12px">
-                                    <p class="card-text">RESOLVED</p>
-                                    <p class="card-text">@if($resolved > 0){{ $resolved }} @else {{ $resolved }} @endif</p>
-                                </div>
-                            </div>
-                        </a>
                     </div>
-                    <div class="col-sm-2">
-                        <a href="{{ url('request') }}">
-                            <div class="card @if($unresolved > 0)bg-card-red @else bg-card @endif"">
-                                <div class="card-body text-center">
-                                    <p class="card-text" style="font-size: 12px">UNRESOLVED</p>
-                                    <p class="card-text">@if($unresolved > 0){{ $unresolved }} @else {{ $unresolved }} @endif</p>
-                                </div>
-                            </div>
-                        </a>
-                    </div>
-                    @endif
                 </div>
             </div>
-        </div>
+        @endif
         <ul class="nav nav-tabs">
             <li class="nav-item">
                 <p>USER ACTIVITIES</p>

@@ -198,7 +198,6 @@ class UserController extends Controller
                 'user_id' => $user->id,
                 'token' => sha1(time())
             ]);
-            \Mail::to($user->email)->send(new VerifyMail($user));
             return response()->json($data);
         }
         return response()->json(['error'=>$validator->errors()->first()]);

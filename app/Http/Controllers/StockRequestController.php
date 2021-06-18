@@ -9,6 +9,9 @@ use Maatwebsite\Excel\Excel as BaseExcel;
 use Maatwebsite\Excel\Facades\Excel;
 use Carbon\Carbon;
 use App\StockRequest;
+use App\BufferNo;
+use App\Buffer;
+use App\Buffersend;
 use App\RequestedItem;
 use App\PreparedItem;
 use App\Warehouse;
@@ -696,6 +699,22 @@ class StockRequestController extends Controller
         }
         return response()->json($data);
     }
+
+    public function checkbuffer(Request $request)
+    {
+        $requestno = StockRequest::where('branch_id', auth()->user()->branch->id)
+            ->where('status', 'PENDING')
+            ->where('type', 'Stock')
+            ->where('stat', 'ACTIVE')
+            ->where( 'created_at', '>', Carbon::now()->subDays(7))
+            ->first();
+        if ($requestno) {
+            $data = $requestno->request_no;
+        }else{
+            $data = "wala pa";
+        }
+        return response()->json($data);
+    }
     public function checkrequestitem(Request $request)
     {
         $requestno = RequestedItem::where('items_id', $request->items_id)
@@ -1042,6 +1061,246 @@ class StockRequestController extends Controller
         $data = $delete->save();
         return response()->json($data);
     }
+    public function bufferviewlist()
+    {
+        $title = 'Buffer Request list';
+        return view('pages.warehouse.buffer', compact('title'));
+    }
+    public function bufferupdate(Request $request)
+    {
+        if ($request->send == 1) {
+            $buffer = Buffer::query()
+            ->where('status', 'request')
+            ->update(['status' => 'For approval', 'buffers_no' => $request->retno]);
+            $buffer = new BufferNo;
+            $buffer->user_id = auth()->user()->id;
+            $buffer->status = 'For approval';
+            $buffer->buffers_no = $request->retno;
+            $buffer->save();
+            $bcc = \config('email.bcc');
+            $no = $buffer->buffers_no;
+            $table = Buffer::query()->select('category', 'item', 'qty')
+                ->where('buffers_no', $request->retno)
+                ->where('status', 'For approval')
+                ->join('categories', 'categories.id', 'buffers.category_id')
+                ->join('items', 'items.id', 'buffers.items_id')
+                ->orderBy('category', 'ASC')
+                ->orderBy('item', 'ASC')
+                ->get()->all();
+            //$excel = Excel::raw(new ExcelExport($buffer->buffers_no, 'PR'), BaseExcel::XLSX);
+            $clients = User::whereHas('roles', function($role) {
+                $role->where('name', '=', 'Returns Manager');
+            })->first();
+            $data = array('table'=> $table, 'RM'=>$clients->name, 'reference'=>$no, 'role'=>'rm');
+            Mail::send('buffer', $data, function($message) use($no, $bcc) {
+                $message->to('jolopez@ideaserv.com.ph', auth()->user()->name)->subject
+                    ('BR no. '.$no);
+                //$message->attachData($excel, 'BR No. '.$no.'.xlsx');
+                $message->from('noreply@ideaserv.com.ph', 'BSMS');
+            });
+
+            return response()->json($buffer);
+        }
+    }
+    public function bufferreceived(Request $request)
+    {
+        $count = Buffersend::where('buffers_no', $request->buffers_no)
+            ->where('items_id', $request->items_id)
+            ->where('status', 'For receiving')->count();
+        Buffersend::where('buffers_no', $request->buffers_no)
+            ->where('items_id', $request->items_id)
+            ->where('status', 'For receiving')->update(['status'=>'Received']);
+        for ($i=0; $i < $count ; $i++) { 
+            Warehouse::create([
+                'user_id' => auth()->user()->id,
+                'category_id' => $request->category_id,
+                'items_id' => $request->items_id,
+                'status' => 'in',
+            ]);
+        }
+        if ($count > 1) {
+            $itemcount = $count.'pcs.';
+        }else{
+            $itemcount = $count.'pc.';
+        }
+        $log = new UserLog;
+        $log->branch_id = auth()->user()->branch->id;
+        $log->branch = auth()->user()->branch->branch;
+        $log->activity = "RECEIVED $itemcount $request->item from Main Warehouse." ;
+        $log->user_id = auth()->user()->id;
+        $log->fullname = auth()->user()->name.' '.auth()->user()->middlename.' '.auth()->user()->lastname;
+        $log->save();
+        return response()->json($log);
+
+    }
+    public function buffersenditems(Request $request)
+    {
+        $buffer = Buffersend::query()->select('buffersend.*', 'item', 'category','category_id')
+                ->where('buffers_no', $request->buffers_no)
+                ->where('status', 'For receiving')
+                ->join('items', 'items.id', 'items_id')
+                ->join('categories', 'categories.id', 'category_id')
+                ->groupBy('items_id');
+        return DataTables::of($buffer)
+            ->addColumn('updated_at', function (Buffersend $buffer){
+                return Carbon::parse($buffer->updated_at->toFormattedDateString().' '.$buffer->updated_at->toTimeString())->isoFormat('lll');
+            })
+            ->addColumn('qty', function (Buffersend $buffer){
+                $qty = Buffersend::query()->where('status', 'For receiving')->where('buffers_no', $buffer->buffers_no)->where('items_id', $buffer->items_id)->count();
+                return $qty;
+            })
+            ->make(true);
+        
+    }
+    public function buffersend(Request $request)
+    {
+        $buffer = Buffer::query()
+                    ->where('buffers_no', $request->buffers_no)
+                    ->where('items_id', $request->items_id)->decrement('pending', $request->qty);
+        for ($i=0; $i < $request->qty ; $i++) { 
+            $buffersend = new Buffersend;
+            $buffersend->user_id = auth()->user()->id;
+            $buffersend->items_id = $request->items_id;
+            $buffersend->status = 'For receiving';
+            $buffersend->buffers_no = $request->buffers_no;
+            $buffersend->save();
+        }
+        $item = Item::query()->where('id', $request->items_id)->first();
+        $check = Buffer::query()
+                    ->where('buffers_no', $request->buffers_no)
+                    ->where('pending', '!=', 0)->first();
+            
+        if ($check) {
+            BufferNo::query()
+                ->where('buffers_no', $request->buffers_no)
+                ->update(['status'=>'Partial']);
+        }else{
+            BufferNo::query()
+                ->where('buffers_no', $request->buffers_no)
+                ->update(['status'=>'For receiving']);
+        }
+        if ($request->qty > 1) {
+            $itemcount = $request->qty.'pcs.';
+        }else{
+            $itemcount = $request->qty.'pc.';
+        }
+        $log = new UserLog;
+        $log->branch_id = auth()->user()->branch->id;
+        $log->branch = auth()->user()->branch->branch;
+        $log->activity = "DELIVERED $itemcount $item->item to Warehouse." ;
+        $log->user_id = auth()->user()->id;
+        $log->fullname = auth()->user()->name.' '.auth()->user()->middlename.' '.auth()->user()->lastname;
+        $log->save();
+        return response()->json(true);
+        
+    }
+    public function bufferstore(Request $request)
+    {
+        $item = Item::where('id', $request->item)->first();
+        $log = new UserLog;
+        $log->branch_id = auth()->user()->branch->id;
+        $log->branch = auth()->user()->branch->branch;
+        $log->activity = "ADD $item->item to buffer stock request" ;
+        $log->user_id = auth()->user()->id;
+        $log->fullname = auth()->user()->name.' '.auth()->user()->middlename.' '.auth()->user()->lastname;
+        $log->save();
+        $check = Buffer::query()->where('items_id', $item->id)->where('status', 'request')->first();
+        if ($check) {
+            $check->qty = $check->qty+$request->qty;
+            $check->user_id = auth()->user()->id;
+            $data = $check->save();
+        }else{
+            $buffer = new Buffer;
+            $buffer->user_id = auth()->user()->id;
+            $buffer->category_id = $item->category_id;
+            $buffer->items_id = $request->item;
+            $buffer->qty = $request->qty;
+            $buffer->status = 'request';
+            $data = $buffer->save();
+        }
+        return response()->json($data);
+    }
+    public function bufferget(Request $request)
+    {
+        if (auth()->user()->hasanyrole('Warehouse Manager', 'Encoder')) {
+            $buffer = Buffer::query()
+                ->select('category', 'item', 'buffers.updated_at', 'qty', 'buffers.created_at')
+                ->join('categories', 'categories.id', 'buffers.category_id')
+                ->join('items', 'items.id', 'items_id')
+                ->wherein('buffers.status', ['request'])
+                ->get();
+            return DataTables::of($buffer)
+                ->addColumn('updated_at', function (Buffer $buffer){
+                    return Carbon::parse($buffer->updated_at->toFormattedDateString().' '.$buffer->updated_at->toTimeString())->isoFormat('lll');
+                })
+                ->make(true);
+        }
+    }
+    public function bufferitem(Request $request)
+    {
+        $buffers = Buffer::query()
+            ->select('buffers.id', 'category', 'item', 'qty', 'buffers.category_id as cat_id', 'items_id', 'pending')
+            ->join('categories', 'categories.id', 'buffers.category_id')
+            ->join('items', 'items.id', 'items_id')
+            ->where('pending', '!=', 0)
+            ->wherein('status', ['For approval', 'Approved'])
+            ->where('buffers_no', $request->buffers_no)
+            ->get();
+        return DataTables::of($buffers)->make(true);
+    }
+    public function bufferapproved(Request $request)
+    {
+        BufferNo::where('status', 'For approval')->where('buffers_no', $request->buffers_no)->update(['status' => 'Pending']);
+        Buffer::where('status', 'For approval')->where('buffers_no', $request->buffers_no)->update(['status'=>'Approved']);
+        $buffer = Buffer::where('status', 'Approved')->where('buffers_no', $request->buffers_no)->get()->all();
+        $bcc = \config('email.bcc');
+        $no = $request->buffers_no;
+        $table = Buffer::query()->select('category', 'item', 'qty')
+            ->where('buffers_no', $request->buffers_no)
+            ->where('status', 'Approved')
+            ->join('categories', 'categories.id', 'buffers.category_id')
+            ->join('items', 'items.id', 'buffers.items_id')
+            ->orderBy('category', 'ASC')
+            ->orderBy('item', 'ASC')
+            ->get()->all();
+        //$excel = Excel::raw(new ExcelExport($buffer->buffers_no, 'PR'), BaseExcel::XLSX);
+        $clients = User::whereHas('roles', function($role) {
+            $role->where('name', '=', 'Main Warehouse Manager');
+        })->first();
+        $data = array('table'=> $table, 'RM'=>'test', 'reference'=>$no, 'role'=>'mwm');
+        Mail::send('buffer', $data, function($message) use($no, $bcc) {
+            $message->to('jolopez@ideaserv.com.ph', auth()->user()->name)->subject
+                ('BR no. '.$no);
+            //$message->attachData($excel, 'BR No. '.$no.'.xlsx');
+            $message->from('noreply@ideaserv.com.ph', 'BSMS');
+        });
+
+        return response()->json(true);
+
+    }
+    public function bufferlist(Request $request)
+    {
+        if (auth()->user()->hasanyrole('Warehouse Manager', 'Returns Manager')) {
+            $buffer = BufferNo::query()
+                ->wherein('status', ['For approval', 'Pending', 'Partial', 'For receiving'])
+                ->get();
+            return DataTables::of($buffer)
+                ->addColumn('updated_at', function (BufferNo $buffer){
+                    return Carbon::parse($buffer->updated_at->toFormattedDateString().' '.$buffer->updated_at->toTimeString())->isoFormat('lll');
+                })
+                ->make(true);
+        }
+        if (auth()->user()->hasanyrole('Main Warehouse Manager')) {
+            $buffer = BufferNo::query()
+                ->wherein('status', ['Pending', 'Partial', 'For receiving'])
+                ->get();
+            return DataTables::of($buffer)
+                ->addColumn('updated_at', function (BufferNo $buffer){
+                    return Carbon::parse($buffer->created_at->toFormattedDateString().' '.$buffer->created_at->toTimeString())->isoFormat('lll');
+                })
+                ->make(true);
+        }
+    }
     public function checkserial(Request $request)
     {
         if ($request->type == 'na') {
@@ -1053,8 +1312,8 @@ class StockRequestController extends Controller
             }
         }else{
                 $stock = Stock::where('serial', $request->serial)->where('status', 'in')->first();
-                $meron = 0;
                 $def = Defective::where('serial', $request->serial)->wherein('status', ['For return', 'For add stock', 'For receiving', 'For repair', 'Repaired'])->first();
+                $meron = 0;
                 if ($request->reqno) {
                     $checks = PreparedItem::query()->where('request_no', $request->reqno)->get();
                     foreach ($checks as $check) {
@@ -1068,15 +1327,21 @@ class StockRequestController extends Controller
                                 $meron = 1;
                                 $serial = $check->serial;
                             }
+                        }else{
+                            $meron = 0;
                         }
                     }
                 }
             if ($stock) {
-                $data = "not allowed";
+                $data = "not allowed1";
             }else if ($def) {
-                $data = "not allowed";
-            }else if($meron == 1){
-                $data = ['data' =>"not allowed", 'serial'=>$serial];
+                $data = "not allowed2";
+            }else if ($checks) {
+                if($meron == 1){
+                    $data = ['data' =>"not allowed", 'serial'=>$serial];
+                }else{
+                    $data = ['data' =>"allowed"];
+                }
             }else{
                 $data = "allowed";
             }

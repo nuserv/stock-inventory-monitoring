@@ -89,6 +89,7 @@ $(document).ready(function()
             roleop+='<option value="Viewer IDSI">Viewer IDSI</option>';
 
         }else if (trdata.branch_id == "1") {
+            roleop+='<option value="Main Warehouse Manager">Main Warehouse Manager</option>';
             roleop+='<option value="Warehouse Manager">Warehouse Manager</option>';
             roleop+='<option value="Returns Manager">Returns Manager</option>';
             roleop+='<option value="Encoder">Encoder</option>';
@@ -274,6 +275,7 @@ $('#branch').on('change', function () {
         op+='<option value="Viewer PLSI">Viewer PLSI</option>';
         op+='<option value="Viewer IDSI">Viewer IDSI</option>';
     }else if ($(this).val() == "1") {
+        op+='<option value="Main Warehouse Manager">Main Warehouse Manager</option>';
         op+='<option value="Warehouse Manager">Warehouse Manager</option>';
         op+='<option value="Returns Manager">Returns Manager</option>';
         op+='<option value="Encoder">Encoder</option>';

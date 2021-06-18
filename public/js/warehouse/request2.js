@@ -27,8 +27,8 @@ $(document).on('click', '#intransitBtn', function(){
                 type: 'check'
             },
             success: function (data) {
-                console.log(data.data);
-                if (data != "allowed") {
+                console.log(data);
+                if (data.data != "allowed") {
                     alert('The serial number ('+data.serial+') you entered is already existing. Please check the serial number and try again.');
                     $('#requestModal').toggle();
                     $('loading').hide();

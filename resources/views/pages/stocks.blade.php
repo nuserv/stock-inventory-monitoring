@@ -85,7 +85,7 @@
                     <th>
                         UOM
                     </th>
-                    @if(auth()->user()->hasanyrole('Head', 'Tech'))
+                    @if(auth()->user()->hasanyrole('Head', 'Tech', 'Warehouse Manager'))
                         <th>
                         </th>
                     @endif

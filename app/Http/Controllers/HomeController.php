@@ -536,6 +536,29 @@ class HomeController extends Controller
             $act = UserLog::query()
                 ->where('user_id', auth()->user()->id);
         }
+        if (auth()->user()->hasAnyRole('Main Warehouse Manager')) {
+            $users = User::query()->whereHas('roles', function($q){
+                $q->where('name', 'Warehouse Manager');
+            })->get();
+            $myuser = [];
+            array_push($myuser, auth()->user()->id);
+            foreach ($users as $user) {
+                $myuser[] = $user->id;
+            }
+            $logs = Userlog::query()
+                ->wherein('user_id', $myuser)->get();
+            $acts = Userlog::query()->where('activity', 'LIKE', '%from Main Warehouse.')->get();
+            //$act = UserLog::wherein('user_id', $myuser)->orderBy('id', 'desc')->take(1000)->get();
+            $act = [];
+            foreach ($logs as $log) {
+                $act[] = $log;
+            }
+            foreach ($acts as $acs) {
+                array_push($act, $acs);
+            }
+            $act = collect($act)->sortBy('id')->all();
+        }
+        
         return DataTables::of($act)
         ->addColumn('date', function (UserLog $request){
             return Carbon::parse($request->created_at)->isoFormat('lll');//->format('H:ia');

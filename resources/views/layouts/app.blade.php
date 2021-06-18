@@ -129,7 +129,6 @@
                 @include('modal.branch.service-in')
             @endif
         @endif
-
         @if(Request::is('pullview'))
             @if(auth()->user()->hasAnyrole('Warehouse Manager', 'Encoder'))
                 @include('modal.warehouse.pullout')
@@ -138,6 +137,12 @@
         @if(Request::is('pullviewlist'))
             @if(auth()->user()->hasAnyrole('Head'))
                 @include('modal.warehouse.pullout')
+            @endif
+        @endif
+        @if(Request::is('bufferviewlist'))
+            @if(auth()->user()->hasAnyrole('Main Warehouse Manager','Warehouse Manager', 'Returns Manager'))
+                @include('modal.warehouse.buffer')
+                @include('modal.warehouse.sendbuffer')
             @endif
         @endif
 
@@ -171,6 +176,7 @@
                 @include('modal.warehouse.category')
                 @include('modal.warehouse.item')
                 @include('modal.warehouse.import')
+                @include('modal.branch.qty')
             @endif
             @if(auth()->user()->branch->branch != 'Warehouse' && auth()->user()->branch->branch != 'Main-office')
                 @include('modal.branch.import')
@@ -262,6 +268,9 @@
         @if(Request::is('resolved'))
             <script src="{{asset('min/?f=js/resolved.js')}}"></script>
         @endif
+        @if(Request::is('buffer'))
+            <script src="{{asset('min/?f=js/warehouse/buffer.js')}}"></script>
+        @endif
         @if(Request::is('pullview'))
             @if (auth()->user()->hasanyrole('Head'))
                 <script src="{{asset('min/?f=js/branch/pullout.js')}}"></script>
@@ -273,6 +282,11 @@
         @if(Request::is('pullviewlist'))
             @if (auth()->user()->hasanyrole('Head'))
                 <script src="{{asset('min/?f=js/branch/pulloutlist.js')}}"></script>
+            @endif
+        @endif
+        @if(Request::is('bufferviewlist'))
+            @if (auth()->user()->hasanyrole('Main Warehouse Manager','Warehouse Manager', 'Returns Manager'))
+                <script src="{{asset('min/?f=js/warehouse/bufferlist.js')}}"></script>
             @endif
         @endif
         @if(Request::is('returnview'))

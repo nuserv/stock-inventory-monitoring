@@ -15,6 +15,7 @@ use App\Stock;
 use App\PreparedItem;
 use App\RequestedItem;
 use App\CustomerBranch;
+use App\WarehouseInitial;
 use App\Customer;
 use App\Pullout;
 use Carbon\Carbon;
@@ -187,6 +188,7 @@ class StockController extends Controller
         }
         return view('pages.stocks', compact('categories', 'service_units', 'customers', 'branches', 'title'));
     }
+    
     public function category(Request $request){
         $cat = Stock::where('branch_id', auth()->user()->branch->id)
             ->where('stocks.status', 'service unit')
@@ -1198,30 +1200,48 @@ class StockController extends Controller
                 ->get();
             return Datatables::of($stock)->make(true);
         }else{
+            $items = Item::query()
+                ->select('items.*', 'category')
+                ->where('categories.id', $request->category)
+                ->join('categories', 'category_id', '=', 'categories.id')
+                ->get();
+
             $stock = Warehouse::select('warehouses.id as myid', 'items.UOM', 'warehouses.category_id','items_id', \DB::raw('SUM(CASE WHEN status = \'in\' THEN 1 ELSE 0 END) as stockIN'), \DB::raw('SUM(CASE WHEN status = \'sent\' THEN 1 ELSE 0 END) as stockOUT'))
                 ->where('warehouses.category_id', $request->category)
                 ->join('items', 'items_id', '=', 'items.id')
                 ->groupBy('items_id')->get();
-            return DataTables::of($stock)
-            ->addColumn('items_id', function (Warehouse $request){
-                return $request->items_id;
+
+            return DataTables::of($items)
+            ->addColumn('items_id', function (Item $request){
+                return mb_strtoupper($request->id);
             })
-            ->addColumn('category', function (Warehouse $request){
+            ->addColumn('category', function (Item $request){
                 $cat = Category::find($request->category_id);
-                return $cat->category;
+                return mb_strtoupper($cat->category);
             })
-            ->addColumn('description', function (Warehouse $request){
-                $item = Item::where('id', $request->items_id)->first();
-                return $item->item;
+            ->addColumn('description', function (Item $request){
+                return mb_strtoupper($request->item);
             })
-            ->addColumn('StockIN', function (Warehouse $request){
-                return $request->stockIN+$request->stockOUT;
+            ->addColumn('StockIN', function (Item $request){
+                $stockIN = Warehouse::query()->where('items_id', $request->id)
+                    ->where('status', 'in')->count();
+                $stockOUT = Warehouse::query()->where('items_id', $request->id)
+                    ->where('status', 'sent')->count();
+                return $stockIN+$stockOUT;
             })
-            ->addColumn('StockOUT', function (Warehouse $request){
-                return $request->stockOUT;
+            ->addColumn('StockOUT', function (Item $request){
+                $stockOUT = Warehouse::query()->where('items_id', $request->id)
+                    ->where('status', 'sent')->count();
+                return $stockOUT;
             })
-            ->addColumn('quantity', function (Warehouse $request){
-                return $request->stockIN;
+            ->addColumn('quantity', function (Item $request){
+                $stockIN = Warehouse::query()->where('items_id', $request->id)
+                    ->where('status', 'in')->count();
+                return $stockIN;
+            })
+            ->addColumn('initial', function (Item $request){
+                $initial = WarehouseInitial::query()->select('qty')->where('items_id', $request->id)->first();
+                return $initial->qty;
             })
             ->make(true);
         }

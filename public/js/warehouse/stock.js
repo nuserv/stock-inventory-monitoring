@@ -5,10 +5,44 @@ var b = 1;
 var sub = 0;
 var cattable;
 var table;
+var reqno;
+
 $(document).ready(function()
 {
     $('#catTable').show();
     $('#itemsearch').hide();
+    $.ajax({
+        type:'get',
+        url:'gen',
+        success:function(result)
+        {
+            reqno = result;
+            $.ajax({
+                url: 'checkbuffer',
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="ctok"]').attr('content')
+                },
+                dataType: 'json',
+                type: 'GET',
+                async:false,
+                data: {
+                    reqno : reqno,
+                },
+                success: function(data){
+                    if(data != "wala pa"){
+                        reqno = data;
+                        checkrequest = 'meron';
+                    }
+                },
+                error: function (data) {
+                    if(data.status == 401) {
+                        window.location.href = '/login';
+                    }
+                    alert(data.responseText);
+                }
+            });
+        },
+    });
     cattable =
     $('table.catTable').DataTable({ 
         "dom": 'lrtip',
@@ -53,6 +87,46 @@ $(document).ready(function()
     
 });
 
+$(document).on('click', '.reqBtn', function(){
+    var thisdata = table.row( $(this).parents('tr') ).data();
+    $('#qtyModal').modal({backdrop: 'static', keyboard: false});
+    $('#requestcategory').val(thisdata.category);
+    $('#requestitem').val(thisdata.item);
+    cat = thisdata.category_id;
+    item = thisdata.items_id;
+    qty = thisdata.initial - thisdata.quantity;
+    $('#qty').attr({
+        "min" : qty
+    });
+    $('#qty').val(qty);
+});
+
+$(document).on('click', '#req', function(){
+    $('#loading').show();
+    $('#qtyModal').toggle();
+    $.ajax({
+        url: 'bufferstore',
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="ctok"]').attr('content')
+        },
+        dataType: 'json',
+        type: 'POST',
+        data: {
+            item: item,
+            qty: $('#qty').val(),
+        },
+        success: function(){
+            window.location.href = 'stocks';
+        },
+        error: function (data) {
+            if(data.status == 401) {
+                window.location.href = '/login';
+            }
+            alert(data.responseText);
+        }
+    });
+});
+
 $(document).on("click", "#catTable tr", function () {
     var catdata = cattable.row(this).data();
     $('table.stockTable').dataTable().fnDestroy();
@@ -71,6 +145,12 @@ $(document).on("click", "#catTable tr", function () {
         },
         "pageLength": 30,
         "order": [[ 1, "asc" ], [ 0, "asc" ]],
+        "fnRowCallback": function(nRow, aData) {
+            if (aData.initial > aData.quantity) {
+                $('td', nRow).css('color', 'red');
+                $('td', nRow).css('font-weight', 'bold');
+            }
+        },
         processing: true,
         serverSide: true,
         ajax: {
@@ -88,11 +168,24 @@ $(document).on("click", "#catTable tr", function () {
             { data: 'StockIN', name:'StockIN'},
             { data: 'StockOUT', name:'StockOUT'},
             { data: 'quantity', name:'quantity'},
-            { data: 'UOM', name:'UOM'}
+            { data: 'UOM', name:'UOM'},
+            { data: null, "render": function (data) 
+                {
+                    if($('#userlevel').val() == 'Warehouse Manager'){
+                        if (data.initial > data.quantity) {
+                            var items_id = data.id;
+                            return '<button class="btn-primary reqBtn" req_id="'+items_id+'">REQUEST STOCK</button>';
+                        }else{
+                            return '';
+                        }
+                    }else{
+                        return '';
+                    }
+                }
+            }
         ]
     });
 });
-
 
 $(document).on('click', '#addStockBtn', function(){
     $('#addModal').modal({backdrop: 'static', keyboard: false});
