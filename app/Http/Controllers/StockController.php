@@ -490,43 +490,55 @@ class StockController extends Controller
     {
         if ($request->data != 0) {
 
+            $category = Category::query()->get();
+
             $stock = Stock::select('category_id', 'category', \DB::raw('SUM(CASE WHEN status = \'in\' THEN 1 ELSE 0 END) as stockin'))
-                ->where('stocks.status', 'in')
                 ->where('branch_id', auth()->user()->branch->id)
                 ->join('categories', 'category_id', '=', 'categories.id')
                 ->groupBy('category')
                 ->get();
-            return DataTables::of($stock)
-            ->addColumn('category', function (Stock $stock){
+            return DataTables::of($category)
+            ->addColumn('category', function (Category $stock){
                 return mb_strtoupper($stock->category);
             })
-            ->addColumn('stockout', function (Stock $stock){
+            ->addColumn('stockout', function (Category $stock){
                 $out = Stock::wherein('status', ['service unit', 'pm'])
                     ->where('branch_id', auth()->user()->branch->id)
-                    ->where('category_id', $stock->category_id)
+                    ->where('category_id', $stock->id)
                     ->count();
                 return mb_strtoupper($out);
             })
-            ->addColumn('defectives', function (Stock $stock){
+            ->addColumn('defectives', function (Category $stock){
                 $defective = Defective::where('status', 'For return')
                     ->where('branch_id', auth()->user()->branch->id)
-                    ->where('category_id', $stock->category_id)
+                    ->where('category_id', $stock->id)
                     ->count();
                 return mb_strtoupper($defective);
             })
-            ->addColumn('total', function (Stock $stock){
+            ->addColumn('total', function (Category $stock){
                 $out = Stock::wherein('status', ['service unit', 'pm'])
                     ->where('branch_id', auth()->user()->branch->id)
-                    ->where('category_id', $stock->category_id)
+                    ->where('category_id', $stock->id)
                     ->count();
                 $defective = Defective::where('status', 'For return')
                     ->where('branch_id', auth()->user()->branch->id)
-                    ->where('category_id', $stock->category_id)
+                    ->where('category_id', $stock->id)
                     ->count();
-                return ($stock->stockin+$out+$defective);
+                $in = Stock::where('status', 'in')
+                    ->where('branch_id', auth()->user()->branch->id)
+                    ->where('category_id', $stock->id)
+                    ->count();
+                return ($in+$out+$defective);
             })
-            ->addColumn('alert', function (Stock $stock){
-                $items = Item::where('category_id', $stock->category_id)->get();
+            ->addColumn('stockin', function (Category $stock){
+                $in = Stock::where('status', 'in')
+                    ->where('branch_id', auth()->user()->branch->id)
+                    ->where('category_id', $stock->id)
+                    ->count();
+                return $in;
+            })
+            ->addColumn('alert', function (Category $stock){
+                $items = Item::where('category_id', $stock->id)->get();
                 $alert = 0;
                 foreach ($items as $item) {
                     if ($alert == 0) {
@@ -1193,11 +1205,23 @@ class StockController extends Controller
     public function show(Request $request)
     {
         if ($request->data != 0) {
+            $category = Category::query()->get();
             $stock = Warehouse::select('category_id', 'category', \DB::raw('SUM(CASE WHEN status = \'in\' THEN 1 ELSE 0 END) as quantity'))
                 ->join('categories', 'categories.id', '=', 'category_id')
                 ->groupBy('category')
                 ->get();
-            return Datatables::of($stock)->make(true);
+            return Datatables::of($category)
+            ->addColumn('category_id', function (Category $request){
+                return mb_strtoupper($request->id);
+            })
+            ->addColumn('category', function (Category $request){
+                return mb_strtoupper($request->category);
+            })
+            ->addColumn('quantity', function (Category $request){
+                $qty = Warehouse::where('category_id', $request->id)->count();
+                return $qty;
+            })
+            ->make(true);
         }else{
             $items = Item::query()
                 ->select('items.*', 'category')
