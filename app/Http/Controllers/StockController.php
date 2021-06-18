@@ -1194,7 +1194,6 @@ class StockController extends Controller
     {
         if ($request->data != 0) {
             $stock = Warehouse::select('category_id', 'category', \DB::raw('SUM(CASE WHEN status = \'in\' THEN 1 ELSE 0 END) as quantity'))
-                ->where('status', 'in')
                 ->join('categories', 'categories.id', '=', 'category_id')
                 ->groupBy('category')
                 ->get();

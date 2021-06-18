@@ -7,7 +7,7 @@ var items;
 var pull_no;
 $(document).ready(function()
 {
-    $('#test').hide();
+    $('#reqBtn').hide();
     table =
     $('table.requestTable').DataTable({ 
         "dom": 'lrtip',
@@ -38,7 +38,7 @@ $(document).ready(function()
     setTimeout(function() { 
         rowcount = table.data().count();
         if (rowcount) {
-            $('#test').show();
+            $('#reqBtn').show();
         }
         $('#loading').hide();
     }, 2000);

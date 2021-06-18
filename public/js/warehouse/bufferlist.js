@@ -44,110 +44,320 @@ $(document).ready(function()
 $(document).on("click", "#bufferTable tr", function () {
     var data = table.row(this).data();
     reqDate = data.updated_at;
-    if (data.status == "Approved") {
-        $('#approvedBtn').hide();
-    }
     $('#head').text('Request no. '+data.buffers_no);
     $('#bufferModal').modal({backdrop: 'static', keyboard: false});
     buffers_no = data.buffers_no;
-    Promise.all([bufferitems(), buffersend()]).then(() => { 
-        if (items != 0) {
-            buffer =
-                $('table.bufferitems').DataTable({ 
-                    "dom": 'lrtip',
-                    processing: true,
-                    serverSide: false,
-                    "language": {
-                        "emptyTable": "No item found!",
-                        "processing": '<i class="fa fa-spinner fa-spin fa-3x fa-fw"></i><span class="sr-only">Searching...</span> ',
-                    },
-                    "order": [ 0, "asc" ],
-                    "pageLength": 25,
-                    ajax: {
-                        url: 'bufferitem',
-                        data: {
-                            buffers_no: data.buffers_no,
-                        },
-                        error: function(data) {
-                            if(data.status == 401) {
-                                window.location.href = '/login';
-                            }
-                        }
-                    },
-                    columns: [
-                        { data: 'category', name:'category'},
-                        { data: 'item', name:'item'},
-                        { data: 'pending', name:'pending'},
-                    ]
-                });
-        }else{
-            if ($('#level').val() == "Main Warehouse Manager") {
-                buffersenditems =
-                $('table.buffersend').DataTable({ 
-                    "dom": 'lrtip',
-                    processing: true,
-                    serverSide: false,
-                    "language": {
-                        "emptyTable": "No item found!",
-                        "processing": '<i class="fa fa-spinner fa-spin fa-3x fa-fw"></i><span class="sr-only">Searching...</span> ',
-                    },
-                    "order": [ 0, "asc" ],
-                    "pageLength": 25,
-                    ajax: {
-                        url: 'buffersenditems',
-                        data: {
-                            buffers_no: data.buffers_no,
-                        },
-                        error: function(data) {
-                            if(data.status == 401) {
-                                window.location.href = '/login';
-                            }
-                        }
-                    },
-                    columns: [
-                        { data: 'category', name:'category'},
-                        { data: 'item', name:'item'},
-                        { data: 'qty', name:'qty'}
-                    ]
-                });
-            }
-            $('#receiving').show();
-            $('#prcBtn').hide();
-            buffer =
-                $('table.bufferitems').DataTable({ 
-                    "dom": 'lrtip',
-                    processing: true,
-                    serverSide: false,
-                    "language": {
-                        "emptyTable": "No item found!",
-                        "processing": '<i class="fa fa-spinner fa-spin fa-3x fa-fw"></i><span class="sr-only">Searching...</span> ',
-                    },
-                    "order": [ 0, "asc" ],
-                    "pageLength": 25,
-                    ajax: {
-                        url: 'bufferitem',
-                        data: {
-                            buffers_no: data.buffers_no,
-                        },
-                        error: function(data) {
-                            if(data.status == 401) {
-                                window.location.href = '/login';
-                            }
-                        }
-                    },
-                    columns: [
-                        { data: 'category', name:'category'},
-                        { data: 'item', name:'item'},
-                        { data: 'pending', name:'pending'},
-                    ]
-                });
-            $('table.bufferitems').dataTable().fnDestroy();
-            $('#pending').hide();
+    
+    if ($('#level').val() == 'Returns Manager') {
+        if (data.status != "For approval") {
+            $('#approvedBtn').hide();
         }
-    });
-    if ($('#level').val() != "Main Warehouse Manager") {
+        Promise.all([bufferitems(), buffersend()]).then(() => { 
+            if (items > 0) {
+                buffer =
+                    $('table.bufferitems').DataTable({ 
+                        "dom": 'lrtip',
+                        processing: true,
+                        serverSide: false,
+                        "language": {
+                            "emptyTable": "No item found!",
+                            "processing": '<i class="fa fa-spinner fa-spin fa-3x fa-fw"></i><span class="sr-only">Searching...</span> ',
+                        },
+                        "order": [ 0, "asc" ],
+                        "pageLength": 25,
+                        ajax: {
+                            url: 'bufferitem',
+                            data: {
+                                buffers_no: data.buffers_no,
+                            },
+                            error: function(data) {
+                                if(data.status == 401) {
+                                    window.location.href = '/login';
+                                }
+                            }
+                        },
+                        columns: [
+                            { data: 'category', name:'category'},
+                            { data: 'item', name:'item'},
+                            { data: 'pending', name:'pending'},
+                        ]
+                    });
+            }else{
+                buffer =
+                    $('table.bufferitems').DataTable({ 
+                        "dom": 'lrtip',
+                        processing: true,
+                        serverSide: false,
+                        "language": {
+                            "emptyTable": "No item found!",
+                            "processing": '<i class="fa fa-spinner fa-spin fa-3x fa-fw"></i><span class="sr-only">Searching...</span> ',
+                        },
+                        "order": [ 0, "asc" ],
+                        "pageLength": 25,
+                        ajax: {
+                            url: 'bufferitem',
+                            data: {
+                                buffers_no: data.buffers_no,
+                            },
+                            error: function(data) {
+                                if(data.status == 401) {
+                                    window.location.href = '/login';
+                                }
+                            }
+                        },
+                        columns: [
+                            { data: 'category', name:'category'},
+                            { data: 'item', name:'item'},
+                            { data: 'pending', name:'pending'},
+                        ]
+                    });
+                $('table.bufferitems').dataTable().fnDestroy();
+                $('#pending').hide();
+            }
+            if (senditems > 0) {
+                buffersenditems =
+                    $('table.buffersend').DataTable({ 
+                        "dom": 'lrtip',
+                        processing: true,
+                        serverSide: false,
+                        "language": {
+                            "emptyTable": "No item found!",
+                            "processing": '<i class="fa fa-spinner fa-spin fa-3x fa-fw"></i><span class="sr-only">Searching...</span> ',
+                        },
+                        "order": [ 0, "asc" ],
+                        "pageLength": 25,
+                        ajax: {
+                            url: 'buffersenditems',
+                            data: {
+                                buffers_no: data.buffers_no,
+                            },
+                            error: function(data) {
+                                if(data.status == 401) {
+                                    window.location.href = '/login';
+                                }
+                            }
+                        },
+                        columns: [
+                            { data: 'category', name:'category'},
+                            { data: 'item', name:'item'},
+                            { data: 'qty', name:'qty'}
+                        ]
+                    });
+                    //$('#receiving').show();
+                    //$('#prcBtn').hide();
+            }else{
+                $('#receiving').hide();
+            }
+        });
+    }else if ($('#level').val() == 'Main Warehouse Manager') {
+        Promise.all([bufferitems(), buffersend()]).then(() => { 
+            if (items != 0) {
+                buffer =
+                    $('table.bufferitems').DataTable({ 
+                        "dom": 'lrtip',
+                        processing: true,
+                        serverSide: false,
+                        "language": {
+                            "emptyTable": "No item found!",
+                            "processing": '<i class="fa fa-spinner fa-spin fa-3x fa-fw"></i><span class="sr-only">Searching...</span> ',
+                        },
+                        "order": [ 0, "asc" ],
+                        "pageLength": 25,
+                        ajax: {
+                            url: 'bufferitem',
+                            data: {
+                                buffers_no: data.buffers_no,
+                            },
+                            error: function(data) {
+                                if(data.status == 401) {
+                                    window.location.href = '/login';
+                                }
+                            }
+                        },
+                        columns: [
+                            { data: 'category', name:'category'},
+                            { data: 'item', name:'item'},
+                            { data: 'pending', name:'pending'},
+                        ]
+                    });
+            }else{
+                buffer =
+                    $('table.bufferitems').DataTable({ 
+                        "dom": 'lrtip',
+                        processing: true,
+                        serverSide: false,
+                        "language": {
+                            "emptyTable": "No item found!",
+                            "processing": '<i class="fa fa-spinner fa-spin fa-3x fa-fw"></i><span class="sr-only">Searching...</span> ',
+                        },
+                        "order": [ 0, "asc" ],
+                        "pageLength": 25,
+                        ajax: {
+                            url: 'bufferitem',
+                            data: {
+                                buffers_no: data.buffers_no,
+                            },
+                            error: function(data) {
+                                if(data.status == 401) {
+                                    window.location.href = '/login';
+                                }
+                            }
+                        },
+                        columns: [
+                            { data: 'category', name:'category'},
+                            { data: 'item', name:'item'},
+                            { data: 'pending', name:'pending'},
+                        ]
+                    });
+                $('table.bufferitems').dataTable().fnDestroy();
+                $('#pending').hide();
+                $('#prcBtn').hide();
+            }
+            if (senditems > 0 ) {
+                buffersenditems =
+                    $('table.buffersend').DataTable({ 
+                        "dom": 'lrtip',
+                        processing: true,
+                        serverSide: false,
+                        "language": {
+                            "emptyTable": "No item found!",
+                            "processing": '<i class="fa fa-spinner fa-spin fa-3x fa-fw"></i><span class="sr-only">Searching...</span> ',
+                        },
+                        "order": [ 0, "asc" ],
+                        "pageLength": 25,
+                        ajax: {
+                            url: 'buffersenditems',
+                            data: {
+                                buffers_no: data.buffers_no,
+                            },
+                            error: function(data) {
+                                if(data.status == 401) {
+                                    window.location.href = '/login';
+                                }
+                            }
+                        },
+                        columns: [
+                            { data: 'category', name:'category'},
+                            { data: 'item', name:'item'},
+                            { data: 'qty', name:'qty'}
+                        ]
+                    });
+                    $('#receiving').show();
+            }else{
+                $('#receiving').hide();
+            }
+        });
+        
+    }else if ($('#level').val() == 'Warehouse Manager') {
+        Promise.all([bufferitems(), buffersend()]).then(() => { 
+            if (items != 0) {
+                buffer =
+                    $('table.bufferitems').DataTable({ 
+                        "dom": 'lrtip',
+                        processing: true,
+                        serverSide: false,
+                        "language": {
+                            "emptyTable": "No item found!",
+                            "processing": '<i class="fa fa-spinner fa-spin fa-3x fa-fw"></i><span class="sr-only">Searching...</span> ',
+                        },
+                        "order": [ 0, "asc" ],
+                        "pageLength": 25,
+                        ajax: {
+                            url: 'bufferitem',
+                            data: {
+                                buffers_no: data.buffers_no,
+                            },
+                            error: function(data) {
+                                if(data.status == 401) {
+                                    window.location.href = '/login';
+                                }
+                            }
+                        },
+                        columns: [
+                            { data: 'category', name:'category'},
+                            { data: 'item', name:'item'},
+                            { data: 'pending', name:'pending'},
+                        ]
+                    });
+            }else{
+                buffer =
+                    $('table.bufferitems').DataTable({ 
+                        "dom": 'lrtip',
+                        processing: true,
+                        serverSide: false,
+                        "language": {
+                            "emptyTable": "No item found!",
+                            "processing": '<i class="fa fa-spinner fa-spin fa-3x fa-fw"></i><span class="sr-only">Searching...</span> ',
+                        },
+                        "order": [ 0, "asc" ],
+                        "pageLength": 25,
+                        ajax: {
+                            url: 'bufferitem',
+                            data: {
+                                buffers_no: data.buffers_no,
+                            },
+                            error: function(data) {
+                                if(data.status == 401) {
+                                    window.location.href = '/login';
+                                }
+                            }
+                        },
+                        columns: [
+                            { data: 'category', name:'category'},
+                            { data: 'item', name:'item'},
+                            { data: 'pending', name:'pending'},
+                        ]
+                    });
+                $('table.bufferitems').dataTable().fnDestroy();
+                $('#pending').hide();
+            }
+            if (senditems > 0 ) {
+                buffersenditems =
+                    $('table.buffersend').DataTable({ 
+                        "dom": 'lrtip',
+                        processing: true,
+                        serverSide: false,
+                        "language": {
+                            "emptyTable": "No item found!",
+                            "processing": '<i class="fa fa-spinner fa-spin fa-3x fa-fw"></i><span class="sr-only">Searching...</span> ',
+                        },
+                        "order": [ 0, "asc" ],
+                        "pageLength": 25,
+                        ajax: {
+                            url: 'buffersenditems',
+                            data: {
+                                buffers_no: data.buffers_no,
+                            },
+                            error: function(data) {
+                                if(data.status == 401) {
+                                    window.location.href = '/login';
+                                }
+                            }
+                        },
+                        columns: [
+                            { data: 'category', name:'category'},
+                            { data: 'item', name:'item'},
+                            { data: 'qty', name:'qty'},
+                            { data: null, "render": function (data) 
+                                {
+                                    return '<button class="btn-primary recBtn" req_id="'+data.items_id+'">ADD TO STOCK</button>';
+                                }
+                            }
+                        ]
+                    });
+                    $('#receiving').show();
+                    //$('#prcBtn').hide();
+            }else{
+                $('#receiving').hide();
+            }
+        });
+    }
+    
+    
+    /*if ($('#level').val() != "Main Warehouse Manager") {
         Promise.all([buffersend()]).then(() => { 
             if (senditems != 0) {
+            console.log('dito');
                 buffersenditems =
                     $('table.buffersend').DataTable({ 
                         "dom": 'lrtip',
@@ -219,7 +429,8 @@ $(document).on("click", "#bufferTable tr", function () {
                 $('#receiving').hide();
             }
         });
-    }
+        
+    }*/
     
     function bufferitems() {
         return $.ajax({
@@ -259,6 +470,7 @@ $(document).on("click", "#bufferTable tr", function () {
             }
         });
     }
+    
 });
 $(document).on('click', '.recBtn', function(){
     var thisdata = buffersenditems.row( $(this).parents('tr') ).data();

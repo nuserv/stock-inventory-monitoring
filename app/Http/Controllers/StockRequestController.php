@@ -1149,6 +1149,10 @@ class StockRequestController extends Controller
                 $qty = Buffersend::query()->where('status', 'For receiving')->where('buffers_no', $buffer->buffers_no)->where('items_id', $buffer->items_id)->count();
                 return $qty;
             })
+            ->addColumn('item', function (Buffersend $buffer){
+                
+                return strtoupper($buffer->item);
+            })
             ->make(true);
         
     }
@@ -1247,7 +1251,12 @@ class StockRequestController extends Controller
             ->wherein('status', ['For approval', 'Approved'])
             ->where('buffers_no', $request->buffers_no)
             ->get();
-        return DataTables::of($buffers)->make(true);
+        return DataTables::of($buffers)
+        
+        ->addColumn('item', function (Buffer $buffer){
+            return strtoupper($buffer->item);
+        })
+        ->make(true);
     }
     public function bufferapproved(Request $request)
     {

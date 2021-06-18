@@ -52,10 +52,8 @@
     </div>
 @endif
 @if(auth()->user()->hasAnyRole('Warehouse Manager'))
-    <div id="test" style="display:none;width:200px">
-        <input type="button" id="reqBtn" class="btn btn-primary" value="SUMBIT REQUEST STOCKS">
-    </div>
     <div class="d-flex">
+        <input type="button" id="reqBtn" class="btn btn-primary" value="SUMBIT REQUEST STOCKS">
         <input type="button" id="reqlistBtn" class="btn btn-primary ml-auto" value="VIEW REQUEST LIST">
     </div>
 @endif

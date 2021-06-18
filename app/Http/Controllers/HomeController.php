@@ -537,16 +537,9 @@ class HomeController extends Controller
                 ->where('user_id', auth()->user()->id);
         }
         if (auth()->user()->hasAnyRole('Main Warehouse Manager')) {
-            $users = User::query()->whereHas('roles', function($q){
-                $q->where('name', 'Warehouse Manager');
-            })->get();
-            $myuser = [];
-            array_push($myuser, auth()->user()->id);
-            foreach ($users as $user) {
-                $myuser[] = $user->id;
-            }
+           
             $logs = Userlog::query()
-                ->wherein('user_id', $myuser)->get();
+                ->where('user_id', auth()->user()->id)->get();
             $acts = Userlog::query()->where('activity', 'LIKE', '%from Main Warehouse.')->get();
             //$act = UserLog::wherein('user_id', $myuser)->orderBy('id', 'desc')->take(1000)->get();
             $act = [];
