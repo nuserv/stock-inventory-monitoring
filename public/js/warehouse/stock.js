@@ -137,54 +137,91 @@ $(document).on("click", "#catTable tr", function () {
     $('#catTable').hide();
     $('#ctable').hide();
     $('#stockTable').show();
-    table =
-    $('table.stockTable').DataTable({ 
-        "dom": 'rti',
-        "language": {
-            "emptyTable": " "
-        },
-        "pageLength": 30,
-        "order": [[ 1, "asc" ], [ 0, "asc" ]],
-        "fnRowCallback": function(nRow, aData) {
-            if (aData.initial > aData.quantity) {
-                $('td', nRow).css('color', 'red');
-                $('td', nRow).css('font-weight', 'bold');
-            }
-        },
-        processing: true,
-        serverSide: true,
-        ajax: {
-            "url": 'show',
-            "data": {
-                "data": 0,
-                "category": catdata.category_id 
+    if($('#userlevel').val() == 'Warehouse Manager'){
+        table =
+        $('table.stockTable').DataTable({ 
+            "dom": 'rti',
+            "language": {
+                "emptyTable": " "
             },
-            error: function (data) {
-                alert(data.responseText);
-            }
-        },
-        columns: [
-            { data: 'description', name:'description'},
-            { data: 'StockIN', name:'StockIN'},
-            { data: 'StockOUT', name:'StockOUT'},
-            { data: 'quantity', name:'quantity'},
-            { data: 'UOM', name:'UOM'},
-            { data: null, "render": function (data) 
-                {
-                    if($('#userlevel').val() == 'Warehouse Manager'){
-                        if (data.initial > data.quantity) {
-                            var items_id = data.id;
-                            return '<button class="btn-primary reqBtn" req_id="'+items_id+'">REQUEST STOCK</button>';
+            "pageLength": 30,
+            "order": [[ 1, "asc" ], [ 0, "asc" ]],
+            "fnRowCallback": function(nRow, aData) {
+                if (aData.initial > aData.quantity) {
+                    $('td', nRow).css('color', 'red');
+                    $('td', nRow).css('font-weight', 'bold');
+                }
+            },
+            processing: true,
+            serverSide: true,
+            ajax: {
+                "url": 'show',
+                "data": {
+                    "data": 0,
+                    "category": catdata.category_id 
+                },
+                error: function (data) {
+                    alert(data.responseText);
+                }
+            },
+            columns: [
+                { data: 'description', name:'description'},
+                { data: 'StockIN', name:'StockIN'},
+                { data: 'StockOUT', name:'StockOUT'},
+                { data: 'quantity', name:'quantity'},
+                { data: 'UOM', name:'UOM'},
+                { data: null, "render": function (data) 
+                    {
+                        if($('#userlevel').val() == 'Warehouse Manager'){
+                            if (data.initial > data.quantity) {
+                                var items_id = data.id;
+                                return '<button class="btn-primary reqBtn" req_id="'+items_id+'">REQUEST STOCK</button>';
+                            }else{
+                                return '';
+                            }
                         }else{
                             return '';
                         }
-                    }else{
-                        return '';
                     }
                 }
-            }
-        ]
-    });
+            ]
+        });
+    }else{
+        table =
+        $('table.stockTable').DataTable({ 
+            "dom": 'rti',
+            "language": {
+                "emptyTable": " "
+            },
+            "pageLength": 30,
+            "order": [[ 1, "asc" ], [ 0, "asc" ]],
+            "fnRowCallback": function(nRow, aData) {
+                if (aData.initial > aData.quantity) {
+                    $('td', nRow).css('color', 'red');
+                    $('td', nRow).css('font-weight', 'bold');
+                }
+            },
+            processing: true,
+            serverSide: true,
+            ajax: {
+                "url": 'show',
+                "data": {
+                    "data": 0,
+                    "category": catdata.category_id 
+                },
+                error: function (data) {
+                    alert(data.responseText);
+                }
+            },
+            columns: [
+                { data: 'description', name:'description'},
+                { data: 'StockIN', name:'StockIN'},
+                { data: 'StockOUT', name:'StockOUT'},
+                { data: 'quantity', name:'quantity'},
+                { data: 'UOM', name:'UOM'}
+            ]
+        });
+    }
 });
 
 $(document).on('click', '#addStockBtn', function(){
