@@ -500,12 +500,25 @@ class HomeController extends Controller
             $logs = Userlog::query()
                 ->wherein('user_id', $myuser)->get();
             $acts = Userlog::query()->where('activity', 'LIKE', 'RECEIVED REPAIRED%')->get();
+            $acts2 = Userlog::query()->where('activity', 'LIKE', '%buffer stock request%')->get();
+            $acts3 = Userlog::query()->where('activity', 'LIKE', 'RECEIVED%from Main Warehouse%')->get();
+            $acts4 = Userlog::query()->where('activity', 'LIKE', 'DELIVERED%to Warehouse%')->get();
+
             //$act = UserLog::wherein('user_id', $myuser)->orderBy('id', 'desc')->take(1000)->get();
             $act = [];
             foreach ($logs as $log) {
                 $act[] = $log;
             }
             foreach ($acts as $acs) {
+                array_push($act, $acs);
+            }
+            foreach ($acts2 as $acs) {
+                array_push($act, $acs);
+            }
+            foreach ($acts3 as $acs) {
+                array_push($act, $acs);
+            }
+            foreach ($acts4 as $acs) {
                 array_push($act, $acs);
             }
             $act = collect($act)->sortBy('id')->all();

@@ -31,7 +31,12 @@ $(document).ready(function()
             { data: 'updated_at', name:'updated_at'},
             { data: 'category', name:'category'},
             { data: 'item', name:'item'},
-            { data: 'qty', name:'qty'}
+            { data: 'qty', name:'qty'},
+            { data: null, "render": function (data) 
+                {
+                    return '<button class="btn-primary delBtn" req_id="'+data.reqid+'">DELETE</button>';
+                }
+            }
         ]
     });
     $('#loading').show();
@@ -46,6 +51,34 @@ $(document).ready(function()
 });
 $(document).on('click', '#reqlistBtn', function(){
     window.location.href = 'bufferviewlist';
+});
+$(document).on('click', '.delBtn', function(){
+    var reqid = $(this).attr('req_id');
+    var row =  $(this).parents('tr');
+    $('#loading').show();
+    $.ajax({
+        url: 'bufferdelete',
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="ctok"]').attr('content')
+        },
+        dataType: 'json',
+        type: 'delete',
+        data: {
+            reqid : reqid,
+        },
+        success: function(){
+            $('#loading').hide();
+            table
+                .row(row)
+                .remove().draw( false );
+        },
+        error: function (data) {
+            if(data.status == 401) {
+                window.location.href = '/login';
+            }
+            alert(data.responseText);
+        }
+    });
 });
 $(document).on("click", "#pulloutTable tr", function () {
     var data = table.row(this).data();

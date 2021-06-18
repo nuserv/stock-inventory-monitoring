@@ -150,6 +150,9 @@ $(document).on("click", "#bufferTable tr", function () {
             }
         });
     }else if ($('#level').val() == 'Main Warehouse Manager') {
+        if (data.status == 'For approval') {
+            $('#prcBtn').hide();
+        }
         Promise.all([bufferitems(), buffersend()]).then(() => { 
             if (items != 0) {
                 buffer =

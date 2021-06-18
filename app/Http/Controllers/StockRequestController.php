@@ -1118,6 +1118,10 @@ class StockRequestController extends Controller
                 'status' => 'in',
             ]);
         }
+        $check = Buffersend::query()->where('buffers_no', $request->buffers_no)->where('status', 'For receiving')->first();
+        if (!$check) {
+            BufferNo::query()->where('buffers_no', $request->buffers_no)->where('status', 'For receiving')->update(['status'=> 'Received']);
+        }
         if ($count > 1) {
             $itemcount = $count.'pcs.';
         }else{
@@ -1204,7 +1208,7 @@ class StockRequestController extends Controller
         $log = new UserLog;
         $log->branch_id = auth()->user()->branch->id;
         $log->branch = auth()->user()->branch->branch;
-        $log->activity = "ADD $item->item to buffer stock request" ;
+        $log->activity = "ADD $item->item to buffer stock request." ;
         $log->user_id = auth()->user()->id;
         $log->fullname = auth()->user()->name.' '.auth()->user()->middlename.' '.auth()->user()->lastname;
         $log->save();
@@ -1225,11 +1229,17 @@ class StockRequestController extends Controller
         }
         return response()->json($data);
     }
+    public function bufferdelete(Request $request)
+    {
+        $item = Buffer::query()->where('id',$request->reqid)->first();
+        $item->delete();
+        return response()->json($item);
+    }
     public function bufferget(Request $request)
     {
         if (auth()->user()->hasanyrole('Warehouse Manager', 'Encoder')) {
             $buffer = Buffer::query()
-                ->select('category', 'item', 'buffers.updated_at', 'qty', 'buffers.created_at')
+                ->select('category', 'item', 'buffers.updated_at', 'qty', 'buffers.created_at', 'buffers.id as reqid')
                 ->join('categories', 'categories.id', 'buffers.category_id')
                 ->join('items', 'items.id', 'items_id')
                 ->wherein('buffers.status', ['request'])
@@ -1237,6 +1247,9 @@ class StockRequestController extends Controller
             return DataTables::of($buffer)
                 ->addColumn('updated_at', function (Buffer $buffer){
                     return Carbon::parse($buffer->updated_at->toFormattedDateString().' '.$buffer->updated_at->toTimeString())->isoFormat('lll');
+                })
+                ->addColumn('item', function (Buffer $buffer){
+                    return strtoupper($buffer->item);
                 })
                 ->make(true);
         }
@@ -1302,7 +1315,7 @@ class StockRequestController extends Controller
         }
         if (auth()->user()->hasanyrole('Main Warehouse Manager')) {
             $buffer = BufferNo::query()
-                ->wherein('status', ['Pending', 'Partial', 'For receiving'])
+                ->wherein('status', ['Pending', 'Partial', 'For receiving', 'For Approval'])
                 ->get();
             return DataTables::of($buffer)
                 ->addColumn('updated_at', function (BufferNo $buffer){

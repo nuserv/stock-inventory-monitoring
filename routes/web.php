@@ -157,6 +157,7 @@ Route::get('export', 'ImportController@export')->name('export');
 
 Route::put('bufferupdate', 'StockRequestController@bufferupdate');//->middleware('ajax');
 Route::put('bufferreceived', 'StockRequestController@bufferreceived');//->middleware('ajax');
+Route::delete('bufferdelete', 'StockRequestController@bufferdelete');//->middleware('ajax');
 Route::put('buffersend', 'StockRequestController@buffersend');//->middleware('ajax');
 Route::get('buffersenditems', 'StockRequestController@buffersenditems');//->middleware('ajax');
 Route::put('bufferapproved', 'StockRequestController@bufferapproved')->middleware('ajax');

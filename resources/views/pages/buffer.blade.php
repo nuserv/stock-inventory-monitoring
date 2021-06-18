@@ -22,35 +22,11 @@
                 <th>
                     Quantity
                 </th>
+                <th></th>
             </tr>
         </thead>
     </table>
 </div>
-@if(auth()->user()->hasrole('Warehouse ManageAr'))
-    <div id="salltable" style="display: none">
-        <table class="table searchtable" id="searchtable" style="display: none;font-size:80%;width: 100%">
-            <thead class="thead-dark">
-                <tr>
-                    <th>
-                        Date
-                    </th>
-                    <th>
-                        Item Description
-                    </th>
-                    <th>
-                        Serial
-                    </th>
-                    <th>
-                        Branch
-                    </th>
-                    <th>
-                        Prepared By
-                    </th>
-                </tr>
-            </thead>
-        </table>
-    </div>
-@endif
 @if(auth()->user()->hasAnyRole('Warehouse Manager'))
     <div class="d-flex">
         <input type="button" id="reqBtn" class="btn btn-primary" value="SUMBIT REQUEST STOCKS">
