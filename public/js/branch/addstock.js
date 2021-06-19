@@ -44,7 +44,8 @@ $(document).on('change', '.category', function(){
     var descOp = " ";
     var count = $(this).attr('row_count');
     var id = $(this).val();
-    $.ajax({
+    $('#serial' + count).prop('disabled', true);
+     $.ajax({
         type:'get',
         url:'itemcode',
         data:{'id':id},
@@ -71,6 +72,7 @@ $(document).on('change', '.item', function(){
 $(document).on('change', '.desc', function(){
     var count = $(this).attr('row_count');
     var id = $(this).val();
+    $('#serial' + count).prop('disabled', false);
     $('#serial' + count).val('');
     $('#item' + count).val(id);
 });

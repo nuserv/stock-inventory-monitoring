@@ -236,6 +236,7 @@ class DefectiveController extends Controller
         
         $title = 'Defective Unit/Parts';
         $users = User::all();
+        $categories = Category::orderBy('category')->get();
         if (auth()->user()->hasanyrole('Viewer', 'Viewer PLSI', 'Viewer IDSI')) {
             return redirect('/');
         }
@@ -244,38 +245,36 @@ class DefectiveController extends Controller
             ->join('branches', 'branches.id', 'branch_id')
             ->first();
         
-
-       // dd(storage_path('app/public/excel'.'/'.$attach));
-       /*Mail::send('returncopy', $data, function($message) use($attach) {
-        $message->to('jolopez@ideaserv.com.ph', 'BSMS')->subject
-            ($attach);
-        $message->attach(public_path().'/storage/excel/'.$attach);
-        $message->from('noreply@ideaserv.com.ph', 'NO REPLY - Create Customer Branch');
-        $message->cc(['jerome.lopez.ge2018@gmail.com']);
-        });
-        if ($tosend) {
-            $attach = $tosend->branch.'-'.$tosend->return_no.'.xlsx';
-            $excel = Excel::raw(new ExcelExport($tosend->return_no), BaseExcel::XLSX);
-            $data = array('office'=> $tosend->branch, 'return_no'=>$tosend->return_no, 'dated'=>$tosend->created_at);
-            $send = Mail::send('returncopy', $data, function($message) use($attach, $excel, $tosend) {
-                $message->to('jolopez@ideaserv.com.ph', 'BSMS')->subject
-                    ($attach);
-                $message->attachData($excel, $attach);
-                $message->from('noreply@ideaserv.com.ph', 'Defective delivery receipt no.: '.$tosend->return_no);
-                $message->cc(['emorej046@gmail.com', 'jerome.lopez.aks2018@gmail.com']);
-            });
-            //dd($send);
-        }*/
         if (auth()->user()->branch->branch == 'Main-Office'){
             return view('pages.warehouse.return', compact('users', 'title'));
         }else if (auth()->user()->branch->branch != 'Warehouse') {
             if (auth()->user()->hasrole('Tech')) {
                 return redirect('/');
             }
-            return view('pages.branch.return', compact('users', 'title'));
+            return view('pages.branch.return', compact('users', 'title', 'categories'));
         }else{
             return view('pages.warehouse.return', compact('users', 'title'));
         }
+    }
+    public function conversion(Request $request)
+    {
+        $defective = new Defective;
+        $defective->branch_id = auth()->user()->branch->id;
+        $defective->user_id = auth()->user()->id;
+        $defective->category_id = $request->category;
+        $defective->items_id = $request->item;
+        $defective->serial = $request->serial;
+        $defective->status = 'For return';
+        $defective->save();
+        
+        $log = new UserLog;
+        $log->branch_id = auth()->user()->branch->id;
+        $log->branch = auth()->user()->branch->branch;
+        $log->user_id = auth()->user()->id;
+        $log->fullname = auth()->user()->name.' '.auth()->user()->middlename.' '.auth()->user()->lastname;
+        $log->activity = "ADD $request->item(S/N: ".mb_strtoupper($request->serial).") from Conversion.";
+        $log->save();
+        return response()->json($log);
     }
     public function printtable()
     {
@@ -325,7 +324,7 @@ class DefectiveController extends Controller
             ->join('items', 'defectives.items_id', '=', 'items.id')
             ->join('branches', 'defectives.branch_id', '=', 'branches.id')->get();
         $repair = Defective::query()->select('branches.branch', 'defectives.category_id', 'branches.id as branchid', 'defectives.updated_at', 'defectives.id as id', 'items.item', 'items.id as itemid', 'defectives.serial', 'defectives.status')
-            ->wherein('defectives.status', ['For repair', 'Repaired'])
+            ->wherein('defectives.status', ['For repair', 'Repaired', 'Conversion'])
             ->join('items', 'defectives.items_id', '=', 'items.id')
             ->join('branches', 'defectives.branch_id', '=', 'branches.id')->get();
         if (auth()->user()->branch->branch == 'Warehouse' && !auth()->user()->hasanyrole('Repair', 'Returns Manager')) {
@@ -460,20 +459,26 @@ class DefectiveController extends Controller
                 $update = Defective::where('id', $request->id)
                     ->where('status', 'For receiving')
                     ->first();
+                
                 $item = Item::where('id', $update->items_id)->first();
                 $branch = Branch::where('id', $update->branch_id)->first();
                 $log = new UserLog;
                 $log->branch_id = auth()->user()->branch->id;
                 $log->branch = auth()->user()->branch->branch;
-                $log->activity = "RECEIVED defective $item->item(".mb_strtoupper($update->serial).") from $branch->branch." ;
+                if ($branch->branch == "Conversion") {
+                    $log->activity = "RECEIVED $item->item(".mb_strtoupper($update->serial).") from $branch->branch." ;
+                    $update->status = "Conversion";
+                }else{
+                    $log->activity = "RECEIVED defective $item->item(".mb_strtoupper($update->serial).") from $branch->branch." ;
+                    $update->status = "For repair";
+                }
                 $log->user_id = auth()->user()->id;
                 $log->fullname = auth()->user()->name.' '.auth()->user()->middlename.' '.auth()->user()->lastname;
                 $log->save();
-                $update->status = "For repair";
                 $update->user_id = auth()->user()->id;
                 $data = $update->save();
 
-                $check = Defective::where('return_no', $update->return_no)->wherein('status', ['For receiving', 'Incomplete'])->first();
+                $check = Defective::where('return_no', $update->return_no)->where('status', 'For receiving')->first();
                 if (!$check) {
                     Retno::where('return_no', $update->return_no)->update(['status'=>'Received']);
                 }else{

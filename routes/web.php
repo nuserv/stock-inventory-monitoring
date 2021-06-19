@@ -75,6 +75,7 @@ Route::get('verifyserial', 'StockController@verifyserial');//->middleware('ajax'
 
 
 
+Route::put('conversion', 'DefectiveController@conversion')->middleware('ajax');
 Route::put('return-update', 'DefectiveController@update')->middleware('ajax');
 Route::get('return-table', 'DefectiveController@table');//->middleware('ajax');
 Route::get('printtable', 'DefectiveController@printtable')->middleware('ajax');

@@ -1357,9 +1357,9 @@ class StockRequestController extends Controller
                     }
                 }
             if ($stock) {
-                $data = "not allowed1";
+                $data = "not allowed";
             }else if ($def) {
-                $data = "not allowed2";
+                $data = "not allowed";
             }else if ($checks != 'wala') {
                 if ($checks){
                     if($meron == 1){

@@ -24,6 +24,8 @@ $(document).ready(function() {
                             return '<button class="btn-primary recBtn" return_id="'+data.id+'" stat="Received">Received</button>';
                         }else if (data.status == "For repair") {
                             return '<button class="btn-primary recBtn" return_id="'+data.id+'" stat="Repaired">Repaired</button>&nbsp; <button class="btn-primary recBtn" return_id="'+data.id+'" stat="Unrepairabled">Unrepairabled</button>';
+                        }else if (data.status == "Conversion") {
+                            return '<button class="btn-primary recBtn" return_id="'+data.id+'" stat="Repaired">Repaired</button>&nbsp; <button class="btn-primary recBtn" return_id="'+data.id+'" stat="Unrepairabled">Unrepairabled</button>';
                         }
                     },
                     "defaultContent": '',

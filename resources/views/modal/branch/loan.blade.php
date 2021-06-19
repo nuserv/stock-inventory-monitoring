@@ -29,7 +29,7 @@
                             <select style="color: black" class="form-control form-control-sm " id="loanbranch">
                                 <option selected disabled>select branch</option>
                                 @foreach ($branches as $branch)
-                                @if ($branch->branch != "Warehouse")
+                                @if ($branch->branch != "Warehouse" || $branch->branch != "Conversion")
                                 <option value="{{ $branch->id }}">{{ $branch->branch }}</option>
                                 @endif
                                 @endforeach

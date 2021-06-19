@@ -207,6 +207,10 @@
             @include('modal.warehouse.items')
         @endif
 
+        @if(Request::is('return'))
+            @include('modal.branch.add')
+        @endif
+
         @if (Request::is('pending') && auth()->user()->hasanyrole('Viewer', 'Viewer PLSI', 'Viewer IDSI'))
             @include('modal.warehouse.request')
         @endif
@@ -351,6 +355,9 @@
             @endif
             @if (auth()->user()->hasAnyrole('Head', 'Tech'))
                 <script src="{{asset('min/?f=js/branch/defective.js')}}"></script>
+            @endif
+             @if (auth()->user()->branch->branch == 'Conversion')
+                <script src="{{asset('min/?f=js/branch/conversion.js')}}"></script>
             @endif
         @endif
         
