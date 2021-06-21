@@ -84,7 +84,11 @@ class DefectiveController extends Controller
             ->wherein('status', ['For receiving'])
             ->where('return_no', $request->retno)
             ->get();
-        return DataTables::of($return)->make(true);
+        return DataTables::of($return)
+        ->addColumn('serial', function (Defective $data){
+            return strtoupper($data->serial);
+        })
+        ->make(true);
     }
     public function repaireditem(Request $request)
     {
@@ -455,6 +459,23 @@ class DefectiveController extends Controller
 
             return response()->json($updates);
         }else{
+            if ($request->edit == "yes") {
+                $defective = Defective::query()->where('id', $request->id)
+                    ->wherein('status', 'For receiving')
+                    ->where('serial', $request->old)
+                    ->first();
+                $defective->serial = $request->new;
+                $defective->save();
+                $item = Item::query()->where('id', $defective->items_id)->first();
+                $log = new UserLog;
+                $log->branch_id = auth()->user()->branch->id;
+                $log->branch = auth()->user()->branch->branch;
+                $log->activity = "CHANGE $item->item serial number from ".mb_strtoupper($request->old)." to ".mb_strtoupper($request->new).".";
+                $log->user_id = auth()->user()->id;
+                $log->fullname = auth()->user()->name.' '.auth()->user()->middlename.' '.auth()->user()->lastname;
+                $data = $log->save();
+                return response()->json($data);
+            }
             if ($request->status == 'Received') {
                 $update = Defective::where('id', $request->id)
                     ->where('status', 'For receiving')

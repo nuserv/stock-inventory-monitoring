@@ -1267,6 +1267,12 @@ class StockController extends Controller
             })
             ->addColumn('initial', function (Item $request){
                 $initial = WarehouseInitial::query()->select('qty')->where('items_id', $request->id)->first();
+                if (!$initial) {
+                    $initial = new WarehouseInitial;
+                    $initial->qty = 10;
+                    $initial->items_id = $request->id;
+                    $initial->save();
+                }
                 return $initial->qty;
             })
             ->make(true);

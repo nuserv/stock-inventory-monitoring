@@ -5,6 +5,8 @@ var rowcount;
 var returns;
 var items;
 var ret_no;
+var editserial_id;
+var serialnum;
 $(document).ready(function()
 {
     table =
@@ -68,11 +70,49 @@ $(document).on("click", "#returnTable tr", function () {
                 { data: 'serial', name:'serial'},
                 { data: null, "render": function ( data, type, row, meta) 
                     {
-                        return '<button class="btn-primary recBtn" return_id="'+data.id+'" stat="Received">Received</button>';
+                        return '<button class="btn-primary editBtn" serial_num="'+data.serial+'" return_id="'+data.id+'" stat="Received">Edit Serial</button>&nbsp;&nbsp;<button class="btn-primary recBtn" return_id="'+data.id+'" stat="Received">Received</button>';
                     }
                 }
             ]
         });
+});
+$(document).on("keyup", "#editserial", function () {
+    $(this).val($(this).val().toUpperCase());
+    if ($(this).val() == serialnum) {
+        $('#serial_btn').prop('disabled', true);
+    }else{
+        $('#serial_btn').prop('disabled', false);
+    }
+});
+$(document).on("click", "#serial_btn", function() {
+    $.ajax({
+        url: 'return-update',
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="ctok"]').attr('content')
+        },
+        dataType: 'json',
+        type: 'PUT',
+        data: {
+            id: editserial_id,
+            edit: 'yes',
+            new: $('#editserial').val().toUpperCase(),
+            old: serialnum
+        },
+        success: function(data) {
+            alert('Serial Number updated');
+            location.reload();
+        },
+        error: function(data) {
+            alert(data.responseText);
+        }
+    });
+});
+$(document).on('click', '.editBtn', function() {
+    editserial_id = $(this).attr('return_id');
+    serialnum = $(this).attr('serial_num');
+    $('#serialModal').modal('show');
+    $('#editserial').val(serialnum);
+    $('#serial_btn').prop('disabled', true);
 });
 $(document).on('click', '.recBtn', function() {
     var returnid = $(this).attr('return_id');

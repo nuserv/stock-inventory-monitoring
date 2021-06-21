@@ -140,7 +140,7 @@ $(document).on("click", "#catTable tr", function () {
     if($('#userlevel').val() == 'Warehouse Manager'){
         table =
         $('table.stockTable').DataTable({ 
-            "dom": 'rti',
+            "dom": 'rtip',
             "language": {
                 "emptyTable": " "
             },

@@ -157,6 +157,7 @@
         @if(Request::is('returnview'))
             @if(auth()->user()->hasAnyrole('Repair'))
                 @include('modal.warehouse.return')
+                @include('modal.warehouse.serial')
             @endif
             @if(auth()->user()->hasAnyrole('Head'))
                 @include('modal.branch.return')
