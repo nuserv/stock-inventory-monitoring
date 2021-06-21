@@ -460,7 +460,7 @@ $(document).on('click', '#returnBtn', function(){
                                     $(doc.document.body)
                                     .prepend('<img style="position:absolute; top:10; left:20;width:100;margin-botton:50px" src="'+window.location.origin+'/idsi.png">')
                                     //.prepend('<div style="position:absolute; top:10; right:0;">My Title</div>')
-                                    .prepend('<div style="position:absolute; top:90; width:100%;left:40%;font-size:28px;font-weight: bold"><b></b>CONVERSION DELIVERY RECEIPT<b></b></div>')
+                                    .prepend('<div style="position:absolute; top:90; width:100%;left:30%;font-size:28px;font-weight: bold">CONVERSION DELIVERY RECEIPT</div>')
                                     //.prepend('<div style="position:absolute; top:90;margin: auto;font-size:16px;color: #0d1a80; font-family: arial; font-weight: bold;">Delivery receipt of defective units from '+$('#branchname').val()+'</div>')
                                     .prepend('<div style="position:absolute; top:40; left:125;font-size:28px;color: #0d1a80; font-family: arial; font-weight: bold;">SERVICE CENTER STOCK MONITORING SYSTEM</div>')
                                     .prepend('<img style="position:absolute; top:400; left:300;font-size:20px;margin-botton:50px" src="'+window.location.origin+'/idsiwatermark.png">')
