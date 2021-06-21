@@ -919,9 +919,11 @@ class StockRequestController extends Controller
         return response()->json($data);
     }
     public function upserial(Request $request)
-    {
-        $check = Stock::where('serial', $request->new)->where('status', 'in')->first();
-        $checks = Defective::where('serial', $request->new)->where('status', 'For return')->first();
+    {   
+        if ($request->new != "N/A") {
+            $check = Stock::where('serial', $request->new)->where('status', 'in')->first();
+            $checks = Defective::where('serial', $request->new)->where('status', 'For return')->first();
+        }
         if ($check) {
             $data = 'meron';
         }else if ($checks) {
