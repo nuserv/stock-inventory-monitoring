@@ -461,7 +461,7 @@ class DefectiveController extends Controller
         }else{
             if ($request->edit == "yes") {
                 $defective = Defective::query()->where('id', $request->id)
-                    ->wherein('status', 'For receiving')
+                    ->where('status', 'For receiving')
                     ->where('serial', $request->old)
                     ->first();
                 $defective->serial = $request->new;
