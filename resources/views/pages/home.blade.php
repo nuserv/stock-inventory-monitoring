@@ -3,7 +3,7 @@
 @section('content')
     @if(!auth()->user()->hasanyrole('Repair', 'Returns Manager', 'Viewer', 'Viewer PLSI', 'Viewer IDSI'))
         @if(!auth()->user()->hasanyrole('Main Warehouse Manager'))
-            @if (!auth()->user()->branch->branch == "Conversion")
+            @if (auth()->user()->branch->branch != "Conversion")
                 <div class="container pt-5">
                     <div class="container-fluid">
                         <div class="row">
