@@ -1356,11 +1356,7 @@ class StockRequestController extends Controller
                         }
                     }
                 }
-            if ($stock) {
-                $data = "not allowed";
-            }else if ($def) {
-                $data = "not allowed";
-            }else if ($checks != 'wala') {
+            if ($checks != 'wala') {
                 if ($checks){
                     if($meron == 1){
                         $data = ['data' =>"not allowed", 'serial'=>$serial];
@@ -1368,6 +1364,10 @@ class StockRequestController extends Controller
                         $data = ['data' =>"allowed"];
                     }
                 }
+            }else if ($stock) {
+                $data = "not allowed1";
+            }else if ($def) {
+                $data = "not allowed2";
             }else{
                 $data = "allowed";
             }
