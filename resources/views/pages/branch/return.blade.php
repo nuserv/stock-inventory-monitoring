@@ -40,9 +40,6 @@
                     <td>
                         <input type="text" class="form-control filter-input fl-3" data-column="3" />
                     </td>
-                    <td>
-                        <input type="text" class="form-control filter-input fl-4" data-column="4" />
-                    </td>
                 @endif
             </tr>
             <tr>
@@ -61,9 +58,11 @@
                 <th>
                     Serial
                 </th>
+                @if (auth()->user()->branch->branch != 'Conversion')
                 <th>
                     Status
                 </th>
+                @endif
             </tr>
         </thead>
     </table>

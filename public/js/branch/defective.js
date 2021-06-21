@@ -419,8 +419,7 @@ $(document).on('click', '#returnBtn', function(){
                         { data: 'date', name:'date'},
                         { data: 'category', name:'category'},
                         { data: 'item', name:'item'},
-                        { data: 'serial', name:'serial'},
-                        { data: 'status', name:'status'}
+                        { data: 'serial', name:'serial'}
                     ],
                     buttons: {
                         dom: {
@@ -462,15 +461,15 @@ $(document).on('click', '#returnBtn', function(){
                                     $(doc.document.body)
                                     .prepend('<img style="position:absolute; top:10; left:20;width:100;margin-botton:50px" src="'+window.location.origin+'/idsi.png">')
                                     //.prepend('<div style="position:absolute; top:10; right:0;">My Title</div>')
-                                    .prepend('<div style="position:absolute; top:90; width:100%;left:40%;font-size:28px;font-weight: bold"><b></b>DEFECTIVE ITEMS DELIVERY RECEIPT<b></b></div>')
+                                    .prepend('<div style="position:absolute; top:90; width:100%;left:40%;font-size:28px;font-weight: bold"><b></b>CONVERSION DELIVERY RECEIPT<b></b></div>')
                                     //.prepend('<div style="position:absolute; top:90;margin: auto;font-size:16px;color: #0d1a80; font-family: arial; font-weight: bold;">Delivery receipt of defective units from '+$('#branchname').val()+'</div>')
                                     .prepend('<div style="position:absolute; top:40; left:125;font-size:28px;color: #0d1a80; font-family: arial; font-weight: bold;">SERVICE CENTER STOCK MONITORING SYSTEM</div>')
                                     .prepend('<img style="position:absolute; top:400; left:300;font-size:20px;margin-botton:50px" src="'+window.location.origin+'/idsiwatermark.png">')
                                     .prepend('<div style="position:absolute; top:140;font-size:24px"><b>Prepared by:</b> '+$('#userlog').val()+'</div>')
-                                    .prepend('<div style="position:absolute; top:170;font-size:24px"><b>Area.:</b> '+$('#areaname').val()+'</div>')
-                                    .prepend('<div style="position:absolute; top:140;left:70%;font-size:24px"><b>Date prepared:</b> '+months[d.getMonth()]+' '+d.getDate()+', ' +d.getFullYear()+' '+hour+':'+String(d.getMinutes()).padStart(2, '0')+ampm+'</div>')
-                                    .prepend('<div style="position:absolute; top:200;font-size:24px"><label for="textbranch"><b>Branch address:&nbsp;&nbsp;</b></label><textarea id="textbranch" style="vertical-align: top;resize: none;background: transparent;border:0 none" rows="3" cols="80" readonly>'+$('#addr').val()+'</textarea></div>')
-                                    .prepend('<div style="position:absolute; top:230;font-size:24px"><b>Return #: </b> '+retno+'</div>')
+                                    //.prepend('<div style="position:absolute; top:170;font-size:24px"><b>Area.:</b> '+$('#areaname').val()+'</div>')
+                                    .prepend('<div style="position:absolute; top:140;left:60%;font-size:24px"><b>Date prepared:</b> '+months[d.getMonth()]+' '+d.getDate()+', ' +d.getFullYear()+' '+hour+':'+String(d.getMinutes()).padStart(2, '0')+ampm+'</div>')
+                                    //.prepend('<div style="position:absolute; top:200;font-size:24px"><label for="textbranch"><b>Branch address:&nbsp;&nbsp;</b></label><textarea id="textbranch" style="vertical-align: top;resize: none;background: transparent;border:0 none" rows="3" cols="80" readonly>'+$('#addr').val()+'</textarea></div>')
+                                    .prepend('<div style="position:absolute; top:170;font-size:24px"><b>Return #: </b> '+retno+'</div>')
                                 //  .prepend('<div style="position:absolute; bottom:20; left:100;">Pagina '+page.toString()+' of '+pages.toString()+'</div>');
                                 //jsDate.toString()
                                     $(doc.document.body)
