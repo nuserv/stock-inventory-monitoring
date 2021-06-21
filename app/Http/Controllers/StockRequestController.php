@@ -920,7 +920,10 @@ class StockRequestController extends Controller
     }
     public function upserial(Request $request)
     {   
-        if ($request->new != "N/A") {
+        if ($request->new == "N/A") {
+            $check = Stock::where('serial', 'walangserial')->where('status', 'in')->first();
+            $checks = Defective::where('serial', 'walangserial')->where('status', 'For return')->first();
+        }else{
             $check = Stock::where('serial', $request->new)->where('status', 'in')->first();
             $checks = Defective::where('serial', $request->new)->where('status', 'For return')->first();
         }
