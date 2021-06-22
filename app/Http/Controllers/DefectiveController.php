@@ -441,15 +441,28 @@ class DefectiveController extends Controller
             $retno->return_no = $request->ret;
             $retno->save();
             $bcc = \config('email.bcc');
-            $excel = Excel::raw(new ExcelExport($request->ret, 'DDR'), BaseExcel::XLSX);
-            $data = array('office'=> $branch->branch, 'return_no'=>$retno->return_no, 'dated'=>$retno->created_at);
-            Mail::send('returncopy', $data, function($message) use($excel, $retno, $bcc) {
-                $message->to(auth()->user()->email, auth()->user()->name)->subject
-                    ('DDR No. '.$retno->return_no);
-                $message->attachData($excel, 'DDR No. '.$retno->return_no.'.xlsx');
-                $message->from('noreply@ideaserv.com.ph', 'BSMS');
-                $message->bcc($bcc);
-            });
+            if (auth()->user()->branch->branch != "Conversion") {
+                $excel = Excel::raw(new ExcelExport($request->ret, 'DDR'), BaseExcel::XLSX);
+                $data = array('office'=> $branch->branch, 'return_no'=>$retno->return_no, 'dated'=>$retno->created_at);
+                Mail::send('returncopy', $data, function($message) use($excel, $retno, $bcc) {
+                    $message->to(auth()->user()->email, auth()->user()->name)->subject
+                        ('DDR No. '.$retno->return_no);
+                    $message->attachData($excel, 'DDR No. '.$retno->return_no.'.xlsx');
+                    $message->from('noreply@ideaserv.com.ph', 'BSMS');
+                    $message->bcc($bcc);
+                });
+            }else{
+                $excel = Excel::raw(new ExcelExport($request->ret, 'CDR'), BaseExcel::XLSX);
+                $data = array('office'=> $branch->branch, 'return_no'=>$retno->return_no, 'dated'=>$retno->created_at);
+                Mail::send('returncopy', $data, function($message) use($excel, $retno, $bcc) {
+                    $message->to(auth()->user()->email, auth()->user()->name)->subject
+                        ('CDR No. '.$retno->return_no);
+                    $message->attachData($excel, 'CDR No. '.$retno->return_no.'.xlsx');
+                    $message->from('noreply@ideaserv.com.ph', 'BSMS');
+                    $message->bcc($bcc);
+                });
+            }
+
             //Excel::store(new ExcelExport($request->ret), 'excel/'.auth()->user()->branch->branch.'-'.$request->ret.'.xlsx', 'public');
             $retmail = new Retmail;
             $retmail->branch_id = auth()->user()->branch->id;

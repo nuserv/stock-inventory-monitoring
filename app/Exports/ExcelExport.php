@@ -49,6 +49,15 @@ class ExcelExport implements FromCollection,WithHeadings,WithColumnWidths,WithSt
             $to = 'Warehouse';
             $from = $ret->branch;
         }
+        if ($this->type == 'CDR') {
+            $header = 'CONVERSION DELIVERY RECEIPT';
+            $ret = Retno::select('branch', 'returns_no.created_at')
+                ->where('return_no', $this->id)
+                ->join('branches', 'branches.id', 'branch_id')
+                ->first();
+            $to = 'Warehouse';
+            $from = $ret->branch;
+        }
         if ($this->type == 'DSR') {
             $header = 'DELIVERY RECEIPT';
             $ret = StockRequest::select('branch', 'requests.updated_at as created_at')
@@ -145,6 +154,18 @@ class ExcelExport implements FromCollection,WithHeadings,WithColumnWidths,WithSt
 
     public function collection()
     {
+        
+        if ($this->type == 'CDR') {
+            $conversion = Defective::select('category', 'item', 'serial')
+            ->where('return_no', $this->id)
+            ->join('categories', 'categories.id', 'defectives.category_id')
+            ->join('items', 'items.id', 'items_id')
+            ->orderBy('category', 'ASC')
+            ->orderBy('item', 'ASC')
+            ->get();
+            return $conversion;
+        }
+
         if ($this->type == 'DDR') {
             $def = Defective::select('category', 'item', 'serial')
             ->where('return_no', $this->id)
@@ -155,6 +176,7 @@ class ExcelExport implements FromCollection,WithHeadings,WithColumnWidths,WithSt
             ->get();
             return $def;
         }
+
         if ($this->type == 'DSR') {
             $stock = PreparedItem::select('category', 'item', 'serial')
             ->where('request_no', $this->id)
