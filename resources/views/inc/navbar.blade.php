@@ -51,9 +51,9 @@
                 <li class="nav-item" style="margin-left:0px;margin-right:0px;">
                     <a style="padding-right:8px; padding-left:8px" class="nav-link {{ Request::is('log') ? 'active' : '' }}" href="{{ url('/log') }}">Activity Logs</a>
                 </li>
-                <!--li class="nav-item" style="margin-left:0px;margin-right:0px;">
+                <li class="nav-item" style="margin-left:0px;margin-right:0px;">
                     <a style="padding-right:8px; padding-left:8px" class="nav-link {{ Request::is('bufferviewlist') ? 'active' : '' }}" href="{{ url('/bufferviewlist') }}">Buffer Stock Request</a>
-                </li-->
+                </li>
             @endif
             @if(auth()->user()->hasrole('Main Warehouse Manager'))
                 <li class="nav-item" style="margin-left:0px;margin-right:0px;">
