@@ -55,7 +55,7 @@
                     <a style="padding-right:8px; padding-left:8px" class="nav-link {{ Request::is('bufferviewlist') ? 'active' : '' }}" href="{{ url('/bufferviewlist') }}">Buffer Stock Request</a>
                 </li>
             @endif
-            @if(auth()->user()->hasrole('Main Warehouse Manager'))
+            @if(auth()->user()->hasanyrole('Main Warehouse Manager'))
                 <li class="nav-item" style="margin-left:0px;margin-right:0px;">
                     <a style="padding-right:8px; padding-left:8px" class="nav-link {{ Request::is('bufferviewlist') ? 'active' : '' }}" href="{{ url('/bufferviewlist') }}">Buffer Stock Request</a>
                 </li>
@@ -137,9 +137,9 @@
                         </li>
                     @endif
                     @if(auth()->user()->hasanyrole('Warehouse Manager'))
-                        <!--li class="nav-item">
+                        <li class="nav-item">
                             <a style="padding-right:8px; padding-left:8px" class="nav-link {{ Request::is('buffer') ? 'active' : '' }}" href="{{ url('buffer') }}">Buffer Stock Request</a>
-                        </li-->
+                        </li>
                     @endif
                 @endif
             @endif
