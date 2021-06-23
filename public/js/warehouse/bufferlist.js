@@ -355,86 +355,7 @@ $(document).on("click", "#bufferTable tr", function () {
             }
         });
     }
-    
-    
-    /*if ($('#level').val() != "Main Warehouse Manager") {
-        Promise.all([buffersend()]).then(() => { 
-            if (senditems != 0) {
-            console.log('dito');
-                buffersenditems =
-                    $('table.buffersend').DataTable({ 
-                        "dom": 'lrtip',
-                        processing: true,
-                        serverSide: false,
-                        "language": {
-                            "emptyTable": "No item found!",
-                            "processing": '<i class="fa fa-spinner fa-spin fa-3x fa-fw"></i><span class="sr-only">Searching...</span> ',
-                        },
-                        "order": [ 0, "asc" ],
-                        "pageLength": 25,
-                        ajax: {
-                            url: 'buffersenditems',
-                            data: {
-                                buffers_no: data.buffers_no,
-                            },
-                            error: function(data) {
-                                if(data.status == 401) {
-                                    window.location.href = '/login';
-                                }
-                            }
-                        },
-                        columns: [
-                            { data: 'category', name:'category'},
-                            { data: 'item', name:'item'},
-                            { data: 'qty', name:'qty'},
-                            { data: null, "render": function (data) 
-                                {
-                                    return '<button class="btn-primary recBtn" req_id="'+data.items_id+'">ADD TO STOCK</button>';
-                                }
-                        }
-                        ]
-                    });
-            }else{
-                buffersenditems =
-                    $('table.buffersend').DataTable({ 
-                        "dom": 'lrtip',
-                        processing: true,
-                        serverSide: false,
-                        "language": {
-                            "emptyTable": "No item found!",
-                            "processing": '<i class="fa fa-spinner fa-spin fa-3x fa-fw"></i><span class="sr-only">Searching...</span> ',
-                        },
-                        "order": [ 0, "asc" ],
-                        "pageLength": 25,
-                        ajax: {
-                            url: 'buffersenditems',
-                            data: {
-                                buffers_no: data.buffers_no,
-                            },
-                            error: function(data) {
-                                if(data.status == 401) {
-                                    window.location.href = '/login';
-                                }
-                            }
-                        },
-                        columns: [
-                            { data: 'category', name:'category'},
-                            { data: 'item', name:'item'},
-                            { data: 'qty', name:'qty'},
-                            { data: null, "render": function (data) 
-                                {
-                                    return '<button class="btn-primary recBtn" req_id="'+data.items_id+'">ADD TO STOCK</button>';
-                                }
-                        }
-                        ]
-                    });
-                $('table.buffersend').dataTable().fnDestroy();
-                $('#receiving').hide();
-            }
-        });
-        
-    }*/
-    
+  
     function bufferitems() {
         return $.ajax({
             type:'get',
@@ -493,11 +414,14 @@ $(document).on('click', '.recBtn', function(){
             item: thisdata.item,
             category_id: thisdata.category_id
         },
-        success: function(){
+        success: function(data){
             $('#loading').hide();
             buffersenditems
                 .row(row)
                 .remove().draw( false );
+            if (data == "go") {
+                location.reload();
+            }
         },
         error: function (data) {
             if(data.status == 401) {

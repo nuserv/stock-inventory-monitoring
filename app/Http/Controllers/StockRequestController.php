@@ -1123,9 +1123,11 @@ class StockRequestController extends Controller
                 'status' => 'in',
             ]);
         }
+        $go = 'not ok';
         $check = Buffersend::query()->where('buffers_no', $request->buffers_no)->where('status', 'For receiving')->first();
         if (!$check) {
             BufferNo::query()->where('buffers_no', $request->buffers_no)->where('status', 'For receiving')->update(['status'=> 'Received']);
+            $go = 'ok';
         }
         if ($count > 1) {
             $itemcount = $count.'pcs.';
@@ -1139,7 +1141,7 @@ class StockRequestController extends Controller
         $log->user_id = auth()->user()->id;
         $log->fullname = auth()->user()->name.' '.auth()->user()->middlename.' '.auth()->user()->lastname;
         $log->save();
-        return response()->json($log);
+        return response()->json($go);
 
     }
     public function buffersenditems(Request $request)
