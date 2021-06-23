@@ -1280,7 +1280,7 @@ class StockRequestController extends Controller
     }
     public function bufferapproved(Request $request)
     {
-        BufferNo::where('status', 'For approval')->where('buffers_no', $request->buffers_no)->update(['status' => 'Pending']);
+        BufferNo::where('status', 'For approval')->where('buffers_no', $request->buffers_no)->update(['status' => 'Approved']);
         Buffer::where('status', 'For approval')->where('buffers_no', $request->buffers_no)->update(['status'=>'Approved']);
         $buffer = Buffer::where('status', 'Approved')->where('buffers_no', $request->buffers_no)->get()->all();
         $bcc = \config('email.bcc');
@@ -1312,7 +1312,7 @@ class StockRequestController extends Controller
     {
         if (auth()->user()->hasanyrole('Warehouse Manager', 'Returns Manager')) {
             $buffer = BufferNo::query()
-                ->wherein('status', ['For approval', 'Pending', 'Partial', 'For receiving'])
+                ->wherein('status', ['For approval', 'Approved', 'Partial', 'For receiving'])
                 ->get();
             return DataTables::of($buffer)
                 ->addColumn('updated_at', function (BufferNo $buffer){
@@ -1322,7 +1322,7 @@ class StockRequestController extends Controller
         }
         if (auth()->user()->hasanyrole('Main Warehouse Manager')) {
             $buffer = BufferNo::query()
-                ->wherein('status', ['Pending', 'Partial', 'For receiving', 'For Approval'])
+                ->wherein('status', ['Approved', 'Partial', 'For receiving', 'For Approval'])
                 ->get();
             return DataTables::of($buffer)
                 ->addColumn('updated_at', function (BufferNo $buffer){
