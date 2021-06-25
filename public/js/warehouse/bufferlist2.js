@@ -63,6 +63,8 @@ $(document).on('click', '#prcBtn', function(){
     $('#loading').show();
     $('#sreqno').val(buffers_no);
     $('#sdate').val(reqDate);
+    console.log(user);
+    $('#reqby').val(user);
     $('table.sendDetails').DataTable({ 
         "dom": 'lrtip',
         processing: true,

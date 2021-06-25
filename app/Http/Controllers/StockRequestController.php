@@ -1318,6 +1318,9 @@ class StockRequestController extends Controller
                 ->addColumn('updated_at', function (BufferNo $buffer){
                     return Carbon::parse($buffer->updated_at->toFormattedDateString().' '.$buffer->updated_at->toTimeString())->isoFormat('lll');
                 })
+                ->addColumn('user', function (BufferNo $buffer){
+                    return strtoupper(User::query()->where('id', $buffer->user_id)->first());
+                })
                 ->make(true);
         }
         if (auth()->user()->hasanyrole('Main Warehouse Manager')) {
@@ -1327,6 +1330,9 @@ class StockRequestController extends Controller
             return DataTables::of($buffer)
                 ->addColumn('updated_at', function (BufferNo $buffer){
                     return Carbon::parse($buffer->created_at->toFormattedDateString().' '.$buffer->created_at->toTimeString())->isoFormat('lll');
+                })
+                ->addColumn('user', function (BufferNo $buffer){
+                    return strtoupper(User::query()->where('id', $buffer->user_id)->first()->name.' '.User::query()->where('id', $buffer->user_id)->first()->lastname);
                 })
                 ->make(true);
         }

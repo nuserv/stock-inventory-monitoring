@@ -12,7 +12,7 @@
                     {{ csrf_field() }}
                     <div class="row no-margin">
                         <div class="col-md-6 form-group row">
-                            <label for="bname" style="color: black" class="col-md-5 col-form-label text-md-right">Date requested:</label>
+                            <label for="date" style="color: black" class="col-md-5 col-form-label text-md-right">Date requested:</label>
                             <div class="col-md-7">
                                 <input type="text" style="color: black" class="form-control form-control-sm " name="date" id="sdate" disabled>
                             </div>
@@ -21,6 +21,14 @@
                             <label for="reqno" class="col-md-4 col-form-label text-md-right">Request no.:</label>
                             <div class="col-md-8">
                                 <input type="text" style="color: black" class="form-control form-control-sm " name="reqno" id="sreqno" placeholder="1-001" disabled>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row no-margin">
+                        <div class="col-md-6 form-group row">
+                            <label for="reqby" style="color: black" class="col-md-5 col-form-label text-md-right">Date requested:</label>
+                            <div class="col-md-7">
+                                <input type="text" style="color: black" class="form-control form-control-sm " name="reqby" id="reqby" disabled>
                             </div>
                         </div>
                     </div>

@@ -9,6 +9,8 @@ var reqDetails;
 var reqDate;
 var senditems;
 var buffersenditems;
+var user;
+
 $(document).ready(function()
 {
     table =
@@ -43,6 +45,7 @@ $(document).ready(function()
 });
 $(document).on("click", "#bufferTable tr", function () {
     var data = table.row(this).data();
+    user = data.user;
     reqDate = data.updated_at;
     $('#head').text('Request no. '+data.buffers_no);
     $('#bufferModal').modal({backdrop: 'static', keyboard: false});
