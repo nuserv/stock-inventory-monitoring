@@ -27,7 +27,7 @@
         </thead>
     </table>
 </div>
-@if(auth()->user()->hasAnyRole('Warehouse Manager'))
+@if(auth()->user()->hasAnyRole('Warehouse Manager') || auth()->user()->id == 228 || auth()->user()->id == 110)
     <div class="d-flex">
         <input type="button" id="reqBtn" class="btn btn-primary" value="SUMBIT REQUEST STOCKS">
         <input type="button" id="reqlistBtn" class="btn btn-primary ml-auto" value="VIEW REQUEST LIST">

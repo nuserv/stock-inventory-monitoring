@@ -140,7 +140,7 @@
             @endif
         @endif
         @if(Request::is('bufferviewlist'))
-            @if(auth()->user()->hasAnyrole('Main Warehouse Manager','Warehouse Manager', 'Returns Manager'))
+            @if(auth()->user()->hasAnyrole('Main Warehouse Manager','Warehouse Manager', 'Returns Manager') || auth()->user()->id == 228 || auth()->user()->id == 110)
                 @include('modal.warehouse.buffer')
                 @include('modal.warehouse.sendbuffer')
             @endif
@@ -290,8 +290,9 @@
             @endif
         @endif
         @if(Request::is('bufferviewlist'))
-            @if (auth()->user()->hasanyrole('Main Warehouse Manager','Warehouse Manager', 'Returns Manager'))
+            @if (auth()->user()->hasanyrole('Main Warehouse Manager','Warehouse Manager', 'Returns Manager') || auth()->user()->id == 228 || auth()->user()->id == 110)
                 <script src="{{asset('min/?f=js/warehouse/bufferlist.js')}}"></script>
+                <script src="{{asset('min/?f=js/warehouse/bufferlist2.js')}}"></script>
             @endif
         @endif
         @if(Request::is('returnview'))
@@ -318,6 +319,7 @@
         @if(Request::is('stocks'))
             @if(auth()->user()->hasAnyrole('Warehouse Manager', 'Editor', 'Manager', 'Encoder'))
                 <script src="{{asset('min/?f=js/warehouse/stock.js')}}"></script>
+                <script src="{{asset('min/?f=js/warehouse/stock2.js')}}"></script>
             @else
                 <script src="{{asset('min/?f=js/branch/stocks.js')}}"></script>
                 <script src="{{asset('min/?f=js/branch/service-in.js')}}"></script>
