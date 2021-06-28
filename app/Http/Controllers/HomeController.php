@@ -224,7 +224,7 @@ class HomeController extends Controller
             //return view('pages.pending', compact('title'));
         }
 
-        if (auth()->user()->branch->branch != "Warehouse" && auth()->user()->branch->branch != 'Main-Office' && !auth()->user()->hasanyrole('Repair', 'Returns Manager')) {
+        if (auth()->user()->branch->branch != "Warehouse" && auth()->user()->branch->branch != 'Main-Office' && !auth()->user()->hasanyrole('Repair', 'Warehouse Administrator')) {
             $units = Stock::where('status', 'in')->where('branch_id', auth()->user()->branch->id)->count();
             $returns = Defective::wherein('status', ['For return', 'For receiving'])->where('branch_id', auth()->user()->branch->id)->count();
             $stockreq = StockRequest::where('branch_id', auth()->user()->branch->id)
@@ -236,7 +236,7 @@ class HomeController extends Controller
             return view('pages.home', compact('stockreq', 'units', 'returns', 'sunits', 'title', 'loans'));
         }else if (auth()->user()->hasrole('Repair')){
             return view('pages.warehouse.return', compact('title'));
-        }else if (auth()->user()->hasrole('Returns Manager')){
+        }else if (auth()->user()->hasrole('Warehouse Administrator')){
             return view('pages.unrepair', compact('title'));
         }else{
             $stockreq = StockRequest::where('status', 'PENDING')
@@ -488,7 +488,7 @@ class HomeController extends Controller
                 ->wherein('user_id', $myuser);
             //$act = UserLog::wherein('user_id', $myuser)->orderBy('id', 'desc')->take(1000)->get();
         }
-        if (auth()->user()->hasAnyRole('Returns Manager')) {
+        if (auth()->user()->hasAnyRole('Warehouse Administrator')) {
             $users = User::query()->whereHas('roles', function($q){
                 $q->where('name', 'Repair');
             })->get();

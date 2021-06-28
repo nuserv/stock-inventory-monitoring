@@ -91,7 +91,7 @@ $(document).ready(function()
         }else if (trdata.branch_id == "1") {
             roleop+='<option value="Main Warehouse Manager">Main Warehouse Manager</option>';
             roleop+='<option value="Warehouse Manager">Warehouse Manager</option>';
-            roleop+='<option value="Returns Manager">Returns Manager</option>';
+            roleop+='<option value="Warehouse Administrator">Warehouse Administrator</option>';
             roleop+='<option value="Encoder">Encoder</option>';
             roleop+='<option value="Repair">Repair</option>';
         }else{
@@ -277,7 +277,7 @@ $('#branch').on('change', function () {
     }else if ($(this).val() == "1") {
         op+='<option value="Main Warehouse Manager">Main Warehouse Manager</option>';
         op+='<option value="Warehouse Manager">Warehouse Manager</option>';
-        op+='<option value="Returns Manager">Returns Manager</option>';
+        op+='<option value="Warehouse Administrator">Warehouse Administrator</option>';
         op+='<option value="Encoder">Encoder</option>';
         op+='<option value="Repair">Repair</option>';
     }else{

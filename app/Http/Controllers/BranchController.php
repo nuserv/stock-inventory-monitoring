@@ -26,7 +26,7 @@ class BranchController extends Controller
     }
     public function index()
     {
-        if (auth()->user()->hasanyrole('Repair', 'Returns Manager')) {
+        if (auth()->user()->hasanyrole('Repair', 'Warehouse Administrator')) {
             return redirect('/');
         }
         $branch = Branch::all()->sortBy('branch');

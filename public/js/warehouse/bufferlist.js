@@ -51,7 +51,7 @@ $(document).on("click", "#bufferTable tr", function () {
     $('#bufferModal').modal({backdrop: 'static', keyboard: false});
     buffers_no = data.buffers_no;
     
-    if ($('#level').val() == 'Returns Manager') {
+    if ($('#level').val() == 'Warehouse Administrator') {
         if (data.status != "For approval") {
             $('#approvedBtn').hide();
         }

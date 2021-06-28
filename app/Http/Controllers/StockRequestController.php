@@ -52,7 +52,7 @@ class StockRequestController extends Controller
     }
     public function resolve()
     {
-        if (auth()->user()->hasanyrole('Repair', 'Returns Manager')) {
+        if (auth()->user()->hasanyrole('Repair', 'Warehouse Administrator')) {
             return redirect('/');
         }
         $title = 'Stock Request';
@@ -1094,7 +1094,7 @@ class StockRequestController extends Controller
                 ->get()->all();
             //$excel = Excel::raw(new ExcelExport($buffer->buffers_no, 'PR'), BaseExcel::XLSX);
             $clients = User::whereHas('roles', function($role) {
-                $role->where('name', '=', 'Returns Manager');
+                $role->where('name', '=', 'Warehouse Administrator');
             })->first();
             $data = array('table'=> $table, 'RM'=>$clients->name, 'reference'=>$no, 'role'=>'rm');
             Mail::send('buffer', $data, function($message) use($no, $bcc) {
@@ -1310,7 +1310,7 @@ class StockRequestController extends Controller
     }
     public function bufferlist(Request $request)
     {
-        if (auth()->user()->hasanyrole('Warehouse Manager', 'Returns Manager') || auth()->user()->id == 228 || auth()->user()->id == 110) {
+        if (auth()->user()->hasanyrole('Warehouse Manager', 'Warehouse Administrator') || auth()->user()->id == 228 || auth()->user()->id == 110) {
             $buffer = BufferNo::query()
                 ->wherein('status', ['For approval', 'Approved', 'Partial', 'For receiving'])
                 ->get();

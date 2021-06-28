@@ -28,7 +28,7 @@ $(document).ready(function()
                 { data: 'status', name:'status'}
             ]
         });
-    }else if ($('#userlevel').val() == 'Returns Manager'){
+    }else if ($('#userlevel').val() == 'Warehouse Administrator'){
         table =
         $('table.unrepairTable').DataTable({ 
             "dom": 'lrtip',
