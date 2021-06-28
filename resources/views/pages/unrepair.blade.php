@@ -7,7 +7,7 @@
     </div-->
     <table class="table unrepairTable" id="unrepairTable" style="font-size:80%">
         <thead class="thead-dark">
-            <tr class="tbsearch" style="display:none">
+            <tr class="tbsearch">
                 <td>
                     <input type="text" class="form-control filter-input fl-0" data-column="0" />
                 </td>

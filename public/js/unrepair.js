@@ -8,7 +8,7 @@ $(document).ready(function()
             "language": {
                 "emptyTable": " "
             },
-            "order": [[ 0, "desc", ]],
+            "order": [[ 0, "asc", ]],
             processing: true,
             serverSide: false,
             ajax: {
@@ -35,9 +35,9 @@ $(document).ready(function()
             "language": {
                 "emptyTable": "No data found!"
             },
-            "order": [[ 0, "desc", ]],
+            "order": [[ 0, "asc", ]],
             processing: true,
-            serverSide: true,
+            serverSide: false,
             ajax: {
                 url: 'unrepairable',
             error: function(data) {
@@ -65,7 +65,8 @@ $(document).ready(function()
                 { data: 'category', name:'category'},
                 { data: 'item', name:'item'},
                 { data: 'serial', name:'serial'},
-                { data: 'status', name:'status'}
+                { data: 'status', name:'status'},
+                { data: null,  "width": "20%"}
             ]
         });
     }
