@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
-    @if(!auth()->user()->hasanyrole('Repair', 'Returns Manager', 'Viewer', 'Viewer PLSI', 'Viewer IDSI'))
+    @if(!auth()->user()->hasanyrole('Repair', 'Warehouse Administrator', 'Viewer', 'Viewer PLSI', 'Viewer IDSI'))
         @if(!auth()->user()->hasanyrole('Main Warehouse Manager'))
             @if (auth()->user()->branch->branch != "Conversion")
                 <div class="container pt-5">

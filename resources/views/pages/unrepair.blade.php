@@ -11,7 +11,7 @@
                 <td>
                     <input type="text" class="form-control filter-input fl-0" data-column="0" />
                 </td>
-                @if(!auth()->user()->hasrole('Returns Manager'))
+                @if(!auth()->user()->hasrole('Warehouse Administrator'))
                 <td>
                     <input type="text" class="form-control filter-input fl-1" data-column="1" />
                 </td>
@@ -33,7 +33,7 @@
                 <th>
                     Date
                 </th>
-                @if(!auth()->user()->hasrole('Returns Manager'))
+                @if(!auth()->user()->hasrole('Warehouse Administrator'))
                 <th>
                     Branch
                 </th>
@@ -50,7 +50,7 @@
                 <th>
                     Status
                 </th>
-                @if(auth()->user()->hasrole('Returns Manager'))
+                @if(auth()->user()->hasrole('Warehouse Administrator'))
                     <th>
                     </th>
                 @endif

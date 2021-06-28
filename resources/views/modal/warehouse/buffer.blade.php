@@ -51,7 +51,7 @@
                     </div>
                 </div>
             @endif
-            @if (auth()->user()->hasanyrole('Returns Manager'))
+            @if (auth()->user()->hasanyrole('Warehouse Administrator'))
                 <div class="modal-footer">
                     <div class="d-flex"> 
                         <input type="button" id="approvedBtn" class="btn btn-primary" value="APPROVE" >

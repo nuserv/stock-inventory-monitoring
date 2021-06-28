@@ -10,7 +10,7 @@
                 <th>
                     Date
                 </th>
-                @if(!auth()->user()->hasrole('Returns Manager'))
+                @if(!auth()->user()->hasrole('Warehouse Administrator'))
                 <th>
                     Branch
                 </th>
@@ -35,7 +35,7 @@
                 <th>
                     Date
                 </th>
-                @if(!auth()->user()->hasrole('Returns Manager'))
+                @if(!auth()->user()->hasrole('Warehouse Administrator'))
                 <th>
                     Branch
                 </th>

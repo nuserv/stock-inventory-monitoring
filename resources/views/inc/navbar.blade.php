@@ -41,7 +41,7 @@
                     <a style="padding-right:8px; padding-left:8px" class="nav-link {{ Request::is('branch') ? 'active' : '' }}" href="{{ route('branch.index') }}">Service Center</a>
             </li>
             @endif
-            @if(auth()->user()->hasrole('Returns Manager'))
+            @if(auth()->user()->hasrole('Warehouse Administrator'))
                 <li class="nav-item" style="margin-left:0px;margin-right:0px;">
                     <a style="padding-right:8px; padding-left:8px" class="nav-link {{ Request::is('disposed') ? 'active' : '' }}" href="{{ url('/disposed') }}">Disposed</a>
                 </li>
@@ -60,7 +60,7 @@
                     <a style="padding-right:8px; padding-left:8px" class="nav-link {{ Request::is('bufferviewlist') ? 'active' : '' }}" href="{{ url('/bufferviewlist') }}">Buffer Stock Request</a>
                 </li>
             @endif
-            @if(!auth()->user()->hasanyrole('Repair', 'Returns Manager','Main Warehouse Manager', 'Viewer', 'Viewer PLSI', 'Viewer IDSI'))
+            @if(!auth()->user()->hasanyrole('Repair', 'Warehouse Administrator','Main Warehouse Manager', 'Viewer', 'Viewer PLSI', 'Viewer IDSI'))
                 @if (auth()->user()->branch->branch != "Conversion")
                     <li class="nav-item" style="margin-left:0px;margin-right:0px;">
                         <a style="padding-right:8px; padding-left:8px" class="nav-link {{ Request::is('branch') ? 'active' : '' }}" href="{{ route('branch.index') }}">Service Center</a>
@@ -103,7 +103,7 @@
                             <a style="padding-right:8px; padding-left:8px" class="nav-link {{ Request::is('loans') ? 'active' : '' }}" href="{{ route('loans') }}">Loans</a>
                         </li>
                     @endif
-                    @if(!auth()->user()->hasanyrole('Tech', 'Warehouse Manager', 'Encoder'))
+                    @if(!auth()->user()->hasanyrole('Tech', 'Warehouse Manager', 'Encoder', 'Editor'))
                     <li class="nav-item">
                         <a style="padding-right:8px; padding-left:8px" class="nav-link {{ Request::is('return') ? 'active' : '' }}" href="{{ route('return.index') }}">Returns</a>
                     </li>

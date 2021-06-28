@@ -122,7 +122,7 @@
                         <th>Description</th>
                         <th>Qty - UOM</th>
                         <th>Serial</th>
-                        @if(!auth()->user()->hasanyrole('Manager', 'Editor', 'Viewer', 'Returns Manager'))
+                        @if(!auth()->user()->hasanyrole('Manager', 'Editor', 'Viewer', 'Warehouse Administrator'))
                         <th></th>
                         @endif
                     </thead>
@@ -135,7 +135,7 @@
                         <th>Description</th>
                         <th>Qty - UOM</th>
                         <th>Serial</th>
-                         @if(!auth()->user()->hasanyrole('Manager', 'Editor', 'Viewer', 'Returns Manager'))
+                         @if(!auth()->user()->hasanyrole('Manager', 'Editor', 'Viewer', 'Warehouse Administrator'))
                         <th></th>
                         @endif
                     </thead>

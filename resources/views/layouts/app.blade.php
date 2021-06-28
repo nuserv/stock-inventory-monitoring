@@ -14,7 +14,7 @@
         @if (Session::has('success') && Request::is('report-a-problem'))
             <meta http-equiv="refresh" content="5;url={{ url('/') }}">
         @else
-            @if(auth()->user()->hasanyrole('Returns Manager', 'Manager', 'Editor'))
+            @if(auth()->user()->hasanyrole('Warehouse Administrator', 'Manager', 'Editor'))
                 <meta http-equiv="refresh" content="1800">
             @else
                 @if(auth()->user()->branch->branch != "Warehouse")
@@ -97,7 +97,7 @@
                 @include('modal.warehouse.resched')
                 @include('modal.warehouse.serial')
             @endif
-            @if(auth()->user()->hasAnyrole('Manager', 'Editor', 'Returns Manager'))
+            @if(auth()->user()->hasAnyrole('Manager', 'Editor', 'Warehouse Administrator'))
                 @include('modal.warehouse.request')
                 @include('modal.remarks')
             @endif
@@ -140,7 +140,7 @@
             @endif
         @endif
         @if(Request::is('bufferviewlist'))
-            @if(auth()->user()->hasAnyrole('Main Warehouse Manager','Warehouse Manager', 'Returns Manager') || auth()->user()->id == 228 || auth()->user()->id == 110)
+            @if(auth()->user()->hasAnyrole('Main Warehouse Manager','Warehouse Manager', 'Warehouse Administrator') || auth()->user()->id == 228 || auth()->user()->id == 110)
                 @include('modal.warehouse.buffer')
                 @include('modal.warehouse.sendbuffer')
             @endif
@@ -262,7 +262,7 @@
                 <script src="{{asset('min/?f=js/warehouse/request2.js')}}"></script>
                 <script src="{{asset('min/?f=js/warehouse/request3.js')}}"></script>
             @endif
-            @if(auth()->user()->hasanyrole('Editor', 'Manager', 'Returns Manager'))
+            @if(auth()->user()->hasanyrole('Editor', 'Manager', 'Warehouse Administrator'))
                 <script src="{{asset('min/?f=js/request.js')}}"></script>
             @endif
             @if(auth()->user()->hasAnyrole('Head', 'Tech'))
@@ -290,7 +290,7 @@
             @endif
         @endif
         @if(Request::is('bufferviewlist'))
-            @if (auth()->user()->hasanyrole('Main Warehouse Manager','Warehouse Manager', 'Returns Manager') || auth()->user()->id == 228 || auth()->user()->id == 110)
+            @if (auth()->user()->hasanyrole('Main Warehouse Manager','Warehouse Manager', 'Warehouse Administrator') || auth()->user()->id == 228 || auth()->user()->id == 110)
                 <script src="{{asset('min/?f=js/warehouse/bufferlist.js')}}"></script>
                 <script src="{{asset('min/?f=js/warehouse/bufferlist2.js')}}"></script>
             @endif
@@ -383,16 +383,16 @@
             <script src="{{asset('min/?f=js/viewer.js')}}"></script>
         @endif
 
-        @if(Request::is('/') && !auth()->user()->hasanyrole('Repair', 'Returns Manager', 'Viewer', 'Viewer PLSI', 'Viewer IDSI'))
+        @if(Request::is('/') && !auth()->user()->hasanyrole('Repair', 'Warehouse Administrator', 'Viewer', 'Viewer PLSI', 'Viewer IDSI'))
             <script src="{{asset('min/?f=js/home.js')}}"></script>
         @endif
         @if (Request::is('/') && auth()->user()->hasrole('Repair'))
             <script src="{{asset('min/?f=js/warehouse/repair.js')}}"></script>
         @endif
-        @if (Request::is('/') && auth()->user()->hasrole('Returns Manager'))
+        @if (Request::is('/') && auth()->user()->hasrole('Warehouse Administrator'))
             <script src="{{asset('min/?f=js/unrepair.js')}}"></script>
         @endif
-        @if(Request::is('log') && auth()->user()->hasanyrole('Repair', 'Returns Manager'))
+        @if(Request::is('log') && auth()->user()->hasanyrole('Repair', 'Warehouse Administrator'))
             <script src="{{asset('min/?f=js/home.js')}}"></script>
         @endif
         @if(Request::is('item') && auth()->user()->hasanyrole('Manager', 'Editor'))
@@ -401,7 +401,7 @@
         @if(Request::is('item') && auth()->user()->hasanyrole('Warehouse Manager'))
             <script src="{{asset('min/?f=js/warehouse/item.js')}}"></script>
         @endif
-        @if(Request::is('disposed') && auth()->user()->hasrole('Returns Manager'))
+        @if(Request::is('disposed') && auth()->user()->hasrole('Warehouse Administrator'))
             <script src="{{asset('min/?f=js/disposed.js')}}"></script>
         @endif
         @if(Request::is('unrepair') && auth()->user()->hasanyrole('Repair', 'Editor', 'Manager'))
