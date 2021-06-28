@@ -70,7 +70,7 @@ $(document).on("click", "#returnTable tr", function () {
                 { data: 'serial', name:'serial'},
                 { data: null, "render": function ( data, type, row, meta) 
                     {
-                        return '<button class="btn-primary editBtn" serial_num="'+data.serial+'" return_id="'+data.id+'" stat="Received">Edit Serial</button>&nbsp;&nbsp;<button class="btn-primary recBtn" return_id="'+data.id+'" stat="Received">Received</button>';
+                        return '<button class="btn-primary editBtn" item="'+data.items_id+'" serial_num="'+data.serial+'" return_id="'+data.id+'" stat="Received">Edit Serial</button>&nbsp;&nbsp;<button class="btn-primary recBtn" return_id="'+data.id+'" stat="Received">Received</button>';
                     }
                 }
             ]
@@ -78,13 +78,10 @@ $(document).on("click", "#returnTable tr", function () {
 });
 $(document).on("keyup", "#editserial", function () {
     $(this).val($(this).val().toUpperCase());
-    if ($(this).val() == serialnum) {
-        $('#serial_btn').prop('disabled', true);
-    }else{
-        $('#serial_btn').prop('disabled', false);
-    }
+    
 });
 $(document).on("click", "#serial_btn", function() {
+    $('#loading').show();
     $.ajax({
         url: 'return-update',
         headers: {
@@ -96,23 +93,57 @@ $(document).on("click", "#serial_btn", function() {
             id: editserial_id,
             edit: 'yes',
             new: $('#editserial').val().toUpperCase(),
-            old: serialnum
+            old: serialnum,
+            type:'put',
+            itemid: $('#item').val()
         },
         success: function(data) {
             alert('Serial Number updated');
             location.reload();
         },
         error: function(data) {
-            alert(data.responseText);
+            console.log(data);
+            // alert(data.responseText);
         }
     });
 });
 $(document).on('click', '.editBtn', function() {
     editserial_id = $(this).attr('return_id');
     serialnum = $(this).attr('serial_num');
-    $('#serialModal').modal('show');
+    items_id = $(this).attr('item');
+    console.log(items_id);
+    var codeOp = " ";
+    $.ajax({
+        url: 'return-update',
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="ctok"]').attr('content')
+        },
+        dataType: 'json',
+        type: 'get',
+        data: {
+            id: editserial_id,
+            edit: 'yes',
+            old: serialnum,
+            type:'get'
+        },
+        success: function(data) {
+            console.log(data);
+            var itemcode = $.map(data, function(value, index) {
+                return [value];
+            });
+            codeOp+='<option selected disabled>select item description</option>';
+            itemcode.forEach(value => {
+                codeOp+='<option value="'+value.id+'">'+value.item.toUpperCase()+'</option>';
+            });
+            $("#item").find('option').remove().end().append(codeOp);
+            $('#item').val(items_id);
+            $('#serialModal').modal('show');
+        },
+        error: function(data) {
+            alert(data.responseText);
+        }
+    });
     $('#editserial').val(serialnum);
-    $('#serial_btn').prop('disabled', true);
 });
 $(document).on('click', '.recBtn', function() {
     var returnid = $(this).attr('return_id');

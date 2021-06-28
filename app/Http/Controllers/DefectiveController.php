@@ -78,7 +78,7 @@ class DefectiveController extends Controller
     public function returnitem(Request $request)
     {
         $return = Defective::query()
-            ->select('defectives.id', 'category', 'item', 'serial')
+            ->select('defectives.id', 'category', 'item', 'serial', 'items_id')
             ->join('categories', 'categories.id', 'defectives.category_id')
             ->join('items', 'items.id', 'items_id')
             ->wherein('status', ['For receiving'])
@@ -473,21 +473,65 @@ class DefectiveController extends Controller
             return response()->json($updates);
         }else{
             if ($request->edit == "yes") {
+                $old = Defective::query()->where('id', $request->id)
+                    ->where('status', 'For receiving')
+                    ->where('serial', $request->old)
+                    ->first();
                 $defective = Defective::query()->where('id', $request->id)
                     ->where('status', 'For receiving')
                     ->where('serial', $request->old)
                     ->first();
+                if ($request->type == "get") {
+                    $items = Item::query()->select('id','item')->where('category_id', $defective->category_id)->get();
+                    return response()->json($items);
+                }
                 $defective->serial = $request->new;
+                $defective->items_id = $request->itemid;
                 $defective->save();
-                $item = Item::query()->where('id', $defective->items_id)->first();
-                $log = new UserLog;
-                $log->branch_id = auth()->user()->branch->id;
-                $log->branch = auth()->user()->branch->branch;
-                $log->activity = "CHANGE $item->item serial number from ".mb_strtoupper($request->old)." to ".mb_strtoupper($request->new).".";
-                $log->user_id = auth()->user()->id;
-                $log->fullname = auth()->user()->name.' '.auth()->user()->middlename.' '.auth()->user()->lastname;
-                $data = $log->save();
-                return response()->json($data);
+                if ($old->serial != $request->new && $old->items_id != $request->itemid) {
+                    $itemold = Item::query()->where('id', $old->items_id)->first();
+                    $itemnew = Item::query()->where('id', $request->itemid)->first();
+                    $log = new UserLog;
+                    $log->branch_id = auth()->user()->branch->id;
+                    $log->branch = auth()->user()->branch->branch;
+                    $log->activity = "CHANGE $itemold->item serial number from ".mb_strtoupper($request->old)." to ".mb_strtoupper($request->new).".";
+                    $log->user_id = auth()->user()->id;
+                    $log->fullname = auth()->user()->name.' '.auth()->user()->middlename.' '.auth()->user()->lastname;
+                    $log->save();
+                    $log = new UserLog;
+                    $log->branch_id = auth()->user()->branch->id;
+                    $log->branch = auth()->user()->branch->branch;
+                    $log->activity = "CHANGE $itemold->item(".mb_strtoupper($request->new).") item description to $itemnew->item.";
+                    $log->user_id = auth()->user()->id;
+                    $log->fullname = auth()->user()->name.' '.auth()->user()->middlename.' '.auth()->user()->lastname;
+                    $log->save();
+                    return response()->json($log);
+                }
+
+                if ($old->serial != $request->new) {
+                    $itemold = Item::query()->where('id', $old->items_id)->first();
+                    $log = new UserLog;
+                    $log->branch_id = auth()->user()->branch->id;
+                    $log->branch = auth()->user()->branch->branch;
+                    $log->activity = "CHANGE $itemold->item serial number from ".mb_strtoupper($old->serial)." to ".mb_strtoupper($request->new).".";
+                    $log->user_id = auth()->user()->id;
+                    $log->fullname = auth()->user()->name.' '.auth()->user()->middlename.' '.auth()->user()->lastname;
+                    $data = $log->save();
+                    return response()->json($data);
+                }
+
+                if ($old->items_id != $request->itemid) {
+                    $itemold = Item::query()->where('id', $old->items_id)->first();
+                    $itemnew = Item::query()->where('id', $request->itemid)->first();
+                    $log = new UserLog;
+                    $log->branch_id = auth()->user()->branch->id;
+                    $log->branch = auth()->user()->branch->branch;
+                    $log->activity = "CHANGE $itemold->item(".mb_strtoupper($request->old).") item description to $itemnew->item.";
+                    $log->user_id = auth()->user()->id;
+                    $log->fullname = auth()->user()->name.' '.auth()->user()->middlename.' '.auth()->user()->lastname;
+                    $log->save();
+                    return response()->json($log);
+                }
             }
             if ($request->status == 'Received') {
                 $update = Defective::where('id', $request->id)

@@ -13,6 +13,13 @@
                         <input type="text" class="form-control" id="editserial" style="color:black">
                     </div>
                 </div>
+                <div class="row no-margin">
+                    <div class="col-md-12 form-group">
+                        <select id="item" style="color: black" class="form-control item">
+                            <option selected disabled>select item description</option>
+                        </select>
+                    </div>
+                </div>
             </div>
             <hr>
             <div class="modal-footer">
