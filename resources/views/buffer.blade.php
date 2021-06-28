@@ -1,9 +1,9 @@
 <p>Hi {{ $RM }}</p>
 @if ($role == 'rm')
-    <p>Please find below the details of the Stock Request with Reference No. {{ $reference}} for you approval. Kindly click on the link below to access the system: </p>
+    <p>Please find below the details of the Stock Request with Reference No. {{ $reference}} for your approval. Kindly click on the link below to access the system: </p>
     <p><b><a href="{{url('bufferviewlist')}}" target="_blank">{{url('bufferviewlist')}}</a></b>
 @else
-    <p>Please find below the details of the Stock Request with Reference No. {{ $reference}} for you processing. Kindly click on the link below to process the request: </p>
+    <p>Please find below the details of the Stock Request with Reference No. {{ $reference}} for processing. Kindly click on the link below to process the request: </p>
     <p><b><a href="{{url('bufferviewlist')}}" target="_blank">{{url('bufferviewlist')}}</a></b></p>
 @endif
 <table style='border: 1px solid black'>
