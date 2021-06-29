@@ -488,20 +488,21 @@ class DefectiveController extends Controller
                 $defective->serial = $request->new;
                 $defective->items_id = $request->itemid;
                 $defective->save();
+                $branch = Branch::query->select('branch')->where('id', $defective->branch_id)->first();
                 if ($old->serial != $request->new && $old->items_id != $request->itemid) {
                     $itemold = Item::query()->where('id', $old->items_id)->first();
                     $itemnew = Item::query()->where('id', $request->itemid)->first();
                     $log = new UserLog;
                     $log->branch_id = auth()->user()->branch->id;
                     $log->branch = auth()->user()->branch->branch;
-                    $log->activity = "CHANGE $itemold->item serial number from ".mb_strtoupper($request->old)." to ".mb_strtoupper($request->new).".";
+                    $log->activity = "CHANGE $branch->branch $itemold->item serial number from ".mb_strtoupper($request->old)." to ".mb_strtoupper($request->new).".";
                     $log->user_id = auth()->user()->id;
                     $log->fullname = auth()->user()->name.' '.auth()->user()->middlename.' '.auth()->user()->lastname;
                     $log->save();
                     $log = new UserLog;
                     $log->branch_id = auth()->user()->branch->id;
                     $log->branch = auth()->user()->branch->branch;
-                    $log->activity = "CHANGE $itemold->item(".mb_strtoupper($request->new).") item description to $itemnew->item.";
+                    $log->activity = "CHANGE $branch->branch $itemold->item(".mb_strtoupper($request->new).") item description to $itemnew->item.";
                     $log->user_id = auth()->user()->id;
                     $log->fullname = auth()->user()->name.' '.auth()->user()->middlename.' '.auth()->user()->lastname;
                     $log->save();
@@ -513,7 +514,7 @@ class DefectiveController extends Controller
                     $log = new UserLog;
                     $log->branch_id = auth()->user()->branch->id;
                     $log->branch = auth()->user()->branch->branch;
-                    $log->activity = "CHANGE $itemold->item serial number from ".mb_strtoupper($old->serial)." to ".mb_strtoupper($request->new).".";
+                    $log->activity = "CHANGE $branch->branch $itemold->item serial number from ".mb_strtoupper($old->serial)." to ".mb_strtoupper($request->new).".";
                     $log->user_id = auth()->user()->id;
                     $log->fullname = auth()->user()->name.' '.auth()->user()->middlename.' '.auth()->user()->lastname;
                     $data = $log->save();
@@ -526,7 +527,7 @@ class DefectiveController extends Controller
                     $log = new UserLog;
                     $log->branch_id = auth()->user()->branch->id;
                     $log->branch = auth()->user()->branch->branch;
-                    $log->activity = "CHANGE $itemold->item(".mb_strtoupper($request->old).") item description to $itemnew->item.";
+                    $log->activity = "CHANGE $branch->branch $itemold->item(".mb_strtoupper($request->old).") item description to $itemnew->item.";
                     $log->user_id = auth()->user()->id;
                     $log->fullname = auth()->user()->name.' '.auth()->user()->middlename.' '.auth()->user()->lastname;
                     $log->save();
