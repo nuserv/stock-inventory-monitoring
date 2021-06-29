@@ -488,7 +488,7 @@ class DefectiveController extends Controller
                 $defective->serial = $request->new;
                 $defective->items_id = $request->itemid;
                 $defective->save();
-                $branch = Branch::query->select('branch')->where('id', $defective->branch_id)->first();
+                $branch = Branch::query()->select('branch')->where('id', $defective->branch_id)->first();
                 if ($old->serial != $request->new && $old->items_id != $request->itemid) {
                     $itemold = Item::query()->where('id', $old->items_id)->first();
                     $itemnew = Item::query()->where('id', $request->itemid)->first();
