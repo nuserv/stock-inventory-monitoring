@@ -5,7 +5,7 @@
     <div style="float: right;" class="pt-3">
         <b>SEARCH&nbsp;&nbsp;</b><a href="#" id="search-ic"><i class="fa fa-lg fa-search" aria-hidden="true"></i></a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
     </div>
-    <table class="table defectiveTable" id="defectiveTable" style="font-size:80%">
+    <table class="table-hover table defectiveTable" id="defectiveTable" style="font-size:80%">
         <thead class="thead-dark">
             <tr class="tbsearch" style="display:none">
                 @if (auth()->user()->branch->branch != 'Conversion')

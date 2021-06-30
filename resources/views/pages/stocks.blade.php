@@ -27,7 +27,7 @@
 </div>
 <div class="table-responsive">
     <div id="ctable">
-        <table class="table catTable" id="catTable" style="font-size:80%">
+        <table class="table-hover table catTable" id="catTable" style="font-size:80%">
             <thead class="thead-dark">
                 <tr>
                     <th>
@@ -54,7 +54,7 @@
     
     <div id="stable">
         <center><h5 id="catname"></h5></center>
-        <table class="table stockTable" id="stockTable" style="display: none;font-size:80%">
+        <table class="table-hover table stockTable" id="stockTable" style="display: none;font-size:80%">
             <thead class="thead-dark">
                 <tr class="tbsearch" style="display:none">
                     <td>
@@ -95,7 +95,7 @@
     </div>
     @if(auth()->user()->hasanyrole('Head', 'Tech'))
     <div id="salltable" style="display: none">
-        <table class="table searchtable" id="searchtable" style="display: none;font-size:80%;width: 100%">
+        <table class="table-hover table searchtable" id="searchtable" style="display: none;font-size:80%;width: 100%">
             <thead class="thead-dark">
                 <tr>
                     <th>

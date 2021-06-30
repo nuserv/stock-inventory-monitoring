@@ -91,7 +91,7 @@
                 <h5 class="modal-title w-100 text-center" id="reqlabel">REQUEST DETAILS</h5>
             </div>
             <div class="modal-body">
-                <table class="table requestDetails" style="font-size:80%">
+                <table class="table-hover table requestDetails" style="font-size:80%">
                     <thead class="thead-dark">
                         <th>Category</th>
                         <th>Description</th>
@@ -100,7 +100,7 @@
                 </table>
                 <br>
                 <h5 class="modal-title w-100 text-center" id='schedslabel'>SCHEDULED ITEM DETAILS</h5>
-                <table class="table schedDetails" id="schedDetails" style="font-size:80%">
+                <table class="table-hover table schedDetails" id="schedDetails" style="font-size:80%">
                     <thead class="thead-dark">
                         <th>Delivery Schedule</th>
                         <th>Description</th>
@@ -110,7 +110,7 @@
                 </table>
                 <br>
                 <h5 class="modal-title w-100 text-center" id='intransitlabel'>INTRANSIT ITEM DETAILS</h5>
-                <table class="table intransitDetails" id="intransitDetails" style="font-size:80%">
+                <table class="table-hover table intransitDetails" id="intransitDetails" style="font-size:80%">
                     <thead class="thead-dark">
                         <th>Delivery Schedule</th>
                         <th>Description</th>

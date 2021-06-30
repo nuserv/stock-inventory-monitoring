@@ -36,7 +36,7 @@
                 <div>
                     <h5 class="modal-title w-100 text-center">REQUEST DETAILS</h5>
                 </div>
-                <table class="table sendDetails" style="height: 150px;width:100%;font-size:80%">
+                <table class="table-hover table sendDetails" style="height: 150px;width:100%;font-size:80%">
                     <thead class="thead-dark">
                         <th>Category</th>
                         <th>Description</th>

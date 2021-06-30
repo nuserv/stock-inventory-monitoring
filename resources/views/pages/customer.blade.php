@@ -12,7 +12,7 @@
     </div>
 @endif
 <div class="table-responsive" id="customerdiv">
-    <table class="table customerTable" id="customerTable" style="font-size:80%">
+    <table class="table-hover table customerTable" id="customerTable" style="font-size:80%">
         <thead class="thead-dark">
             <tr class="tbsearch" style="display:none">
                 <td>
@@ -34,7 +34,7 @@
     </table>
 </div>
 <div id="searchtable" style="display:none">
-    <table class="table customerbranchTable" id="customerbranchTable" style="font-size:80%;width: 100%">
+    <table class="table-hover table customerbranchTable" id="customerbranchTable" style="font-size:80%;width: 100%">
         <thead class="thead-dark">
             <tr>
                 <th>

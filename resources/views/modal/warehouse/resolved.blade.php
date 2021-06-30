@@ -113,7 +113,7 @@
             </div>
             <div class="modal-body">
                 <h5 class="modal-title w-100 text-center" id='intransitlabel'>RESOLVED ITEM DETAILS</h5>
-                <table class="table intransitDetails" style="width:100%;font-size:80%">
+                <table class="table-hover table intransitDetails" style="width:100%;font-size:80%">
                     <thead class="thead-dark">
                         <th>Item Code</th>
                         <th>Description</th>

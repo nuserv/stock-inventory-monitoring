@@ -4,7 +4,7 @@
 
 <br><div><input type="button" class="btn btn-primary" id="generate" value="Reports"><input type="text" id="searchall" style="float: right;margin-right: 20px;" placeholder="Search.." autocomplete="off"></div><br>
 <div class="table-responsive">
-    <table class="table disposedTable" id="disposedTable" style="font-size:80%">
+    <table class="table-hover table disposedTable" id="disposedTable" style="font-size:80%">
         <thead class="thead-dark">
             <tr>
                 <th>
@@ -28,7 +28,7 @@
         </thead>
     </table>
     <div class="dtables" id="tables" style="display:none">
-    <table class="table disposedsTable" id="disposedsTable" style="font-size:80%" >
+    <table class="table-hover table disposedsTable" id="disposedsTable" style="font-size:80%" >
         <thead class="thead-dark">
             <tr>
                 <th></th>

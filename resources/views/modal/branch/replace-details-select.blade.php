@@ -40,7 +40,7 @@
                     </div>
                 </div>
                 <div id="table">
-                    <table class="table replacement1Details">
+                    <table class="table-hover table replacement1Details">
                         <thead class="thead-dark">
                             <th>Date</th>
                             <th>Category</th>

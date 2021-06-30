@@ -48,7 +48,7 @@
                     <br>
                     <div id="table">
                         <center><h5 id="catname"></h5></center>
-                        <table class="table branchDetails" id="branchDetails" style="width: 100%;font-size:80%">
+                        <table class="table-hover table branchDetails" id="branchDetails" style="width: 100%;font-size:80%">
                             <thead class="thead-dark">
                                 <tr class="tbsearchm">
                                     <td>
@@ -75,7 +75,7 @@
                         </table>
                     </div>
                     <div id="cattable">
-                        <table class="table catbranchDetails" id="catbranchDetails" style="width: 100%;font-size:80%">
+                        <table class="table-hover table catbranchDetails" id="catbranchDetails" style="width: 100%;font-size:80%">
                             <thead class="thead-dark">
                                 <tr class="tbsearchm">
                                     <td>

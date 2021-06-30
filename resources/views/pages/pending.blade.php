@@ -2,7 +2,7 @@
 
 @section('content')
 <div class="table" id="requestdiv">
-    <table class="table requestTable" id="requestTable" style="font-size:80%">
+    <table class="table-hover table requestTable" id="requestTable" style="font-size:80%">
         <thead class="thead-dark">
             <tr class="tbsearch">
                 <td>

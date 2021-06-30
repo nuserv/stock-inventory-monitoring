@@ -8,7 +8,7 @@
                 </button>
             </div>
             <div class="modal-body">
-                <table class="table repaireditems" id="repaireditems" style="width:100%">
+                <table class="table-hover table repaireditems" id="repaireditems" style="width:100%">
                     <thead class="thead-dark">
                         <th>Category</th>
                         <th>Item Description</th>

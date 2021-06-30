@@ -51,7 +51,7 @@
                 <h6 class="modal-title w-100 text-center">ITEM DETAILS</h6>
             </div>
             <div class="modal-body" id="infield">
-                <table class="table requestDetails">
+                <table class="table-hover table requestDetails">
                     <thead class="thead-dark">
                         <th>Service type</th>
                         <th>Description</th>

@@ -3,7 +3,7 @@
 @section('content')
     @if(auth()->user()->hasanyrole('Repair','Head'))
         <div class="table" id="returndiv">
-            <table class="table returnTable" id="returnTable" style="font-size:80%">
+            <table class="table-hover table returnTable" id="returnTable" style="font-size:80%">
                 <thead class="thead-dark">
                     <tr>
                         <th>

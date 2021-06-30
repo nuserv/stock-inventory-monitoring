@@ -7,7 +7,7 @@
     </form>
 @endif
 <div class="table" id="requestdiv">
-    <table class="table requestTable" id="requestTable" style="font-size:80%">
+    <table class="table-hover table requestTable" id="requestTable" style="font-size:80%">
         <thead class="thead-dark">
             <tr>
                 @if(auth()->user()->hasAnyrole('Warehouse Manager', 'Encoder', 'Editor', 'Manager', 'Warehouse Administrator'))
@@ -41,7 +41,7 @@
 </div>
 @if(auth()->user()->hasrole('Warehouse Manager'))
     <div id="salltable" style="display: none">
-        <table class="table searchtable" id="searchtable" style="display: none;font-size:80%;width: 100%">
+        <table class="table-hover table searchtable" id="searchtable" style="display: none;font-size:80%;width: 100%">
             <thead class="thead-dark">
                 <tr>
                     <th>

@@ -15,7 +15,7 @@
                     <h6 class="modal-title w-100 text-center" id="head">Pending Requested items</h6>
                 </div>
                 <div class="modal-body">
-                    <table class="table bufferitems" id="bufferitems" style="width:100%">
+                    <table class="table-hover table bufferitems" id="bufferitems" style="width:100%">
                         <thead class="thead-dark">
                             <th>Category</th>
                             <th>Item Description</th>
@@ -31,7 +31,7 @@
                     <h6 class="modal-title w-100 text-center">For receiving items</h6>
                 </div>
                 <div class="modal-body">
-                    <table class="table buffersend" id="buffersend" style="width:100%">
+                    <table class="table-hover table buffersend" id="buffersend" style="width:100%">
                         <thead class="thead-dark">
                             <th>Category</th>
                             <th>Item Description</th>

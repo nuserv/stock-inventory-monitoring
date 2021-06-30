@@ -3,7 +3,7 @@
 @section('content')
     @if(auth()->user()->hasanyrole('Head'))
         <div class="table" id="pulloutdiv">
-            <table class="table pulloutTable" id="pulloutTable" style="font-size:80%">
+            <table class="table-hover table pulloutTable" id="pulloutTable" style="font-size:80%">
                 <thead class="thead-dark">
                     <tr>
                         <th>
@@ -29,7 +29,7 @@
     @endif
     @if(auth()->user()->hasanyrole('Encoder', 'Warehouse Manager'))
         <div class="table" id="pulloutdiv">
-            <table class="table pulloutTable" id="pulloutTable" style="font-size:80%">
+            <table class="table-hover table pulloutTable" id="pulloutTable" style="font-size:80%">
                 <thead class="thead-dark">
                     <tr>
                         <th>

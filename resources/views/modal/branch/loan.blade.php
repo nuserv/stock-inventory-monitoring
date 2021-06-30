@@ -43,7 +43,7 @@
                 <h6 class="modal-title w-100 text-center">ITEM DETAILS</h6>
             </div>
             <div class="modal-body" id="outfield">
-                <table class="table requestDetails">
+                <table class="table-hover table requestDetails">
                     <thead class="thead-dark">
                         <th>Category</th>
                         <th>Description&nbsp;&nbsp;&nbsp;&nbsp;</th>

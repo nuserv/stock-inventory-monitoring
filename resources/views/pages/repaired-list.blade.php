@@ -2,7 +2,7 @@
 
 @section('content')
     <div class="table" id="repaireddiv">
-        <table class="table repairedTable" id="repairedTable" style="font-size:80%">
+        <table class="table-hover table repairedTable" id="repairedTable" style="font-size:80%">
             <thead class="thead-dark">
                 <tr>
                     <th>

@@ -3,7 +3,7 @@
 @section('content')
 <div class="table-responsive">
     
-    <table class="table defectiveTable" id="defectiveTable" style="font-size:80%">
+    <table class="table-hover table defectiveTable" id="defectiveTable" style="font-size:80%">
         <thead class="thead-dark">
             <tr class="tbsearch">
                 <td>

@@ -10,7 +10,7 @@
     opacity: 1;
 
     }
-
+    
     input[type=number] {
     -moz-appearance: textfield;
     }

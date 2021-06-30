@@ -34,7 +34,7 @@
                     </div>
                 </div>
                 <div id="table">
-                    <table class="table replace-return" style="font-size:80%;width: 100%">
+                    <table class="table-hover table replace-return" style="font-size:80%;width: 100%">
                         <thead class="thead-dark">
                             <th></th>
                             <th>Date</th>

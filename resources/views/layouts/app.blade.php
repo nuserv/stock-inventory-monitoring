@@ -70,6 +70,9 @@
                 background-color: #4285f4;
                 color: white !important; 
             }
+            .table-hover tbody tr:hover td, .table-hover tbody tr:hover th {
+                background-color: #DCDCDC;
+            }
         </style>
     </head>
     <body>

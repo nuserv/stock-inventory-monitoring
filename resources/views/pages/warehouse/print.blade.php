@@ -49,7 +49,7 @@
     <h5 class="modal-title w-100 text-center">ITEM DETAILS</h5>
 </div>
 <div>
-    <table class="table itemDetails" style="font-size:80%">
+    <table class="table-hover table itemDetails" style="font-size:80%">
         <thead class="thead-dark">
             <th>Description</th>
             <th>Qty - UOM</th>

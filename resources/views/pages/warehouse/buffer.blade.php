@@ -2,7 +2,7 @@
 
 @section('content')
     <div class="table" id="bufferdiv">
-        <table class="table bufferTable" id="bufferTable" style="font-size:80%">
+        <table class="table-hover table bufferTable" id="bufferTable" style="font-size:80%">
             <thead class="thead-dark">
                 <tr>
                     <th>

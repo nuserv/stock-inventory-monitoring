@@ -8,7 +8,7 @@
                 </button>
             </div>
             <div class="modal-body">
-                <table class="table stockDetails" id="stockDetails" style="width:100%">
+                <table class="table-hover table stockDetails" id="stockDetails" style="width:100%">
                     <thead class="thead-dark">
                         <th>Date</th>
                         <th>Description</th>

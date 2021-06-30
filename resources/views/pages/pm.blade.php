@@ -2,7 +2,7 @@
 
 @section('content')
 <div class="table-responsive">
-    <table class="table sUnitTable" id="sUnitTable" style="font-size:80%">
+    <table class="table-hover table sUnitTable" id="sUnitTable" style="font-size:80%">
         <thead class="thead-dark">
             <tr>
                 <th>
