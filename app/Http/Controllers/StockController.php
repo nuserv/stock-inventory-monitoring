@@ -285,7 +285,7 @@ class StockController extends Controller
     {
         $billable = Billable::where('id', $request->billid)
             ->where('stocks_id', $request->stocksid)
-            ->update(['status'=>'Approved', 'user_id'=>auth()->user->id]);
+            ->update(['status'=>'Approved', 'user_id'=>auth()->user()->id]);
         return response()->json($billable);
     }
     public function prcbill(Request $request)
@@ -293,12 +293,12 @@ class StockController extends Controller
         $billable = Billable::where('id', $request->billid)
             ->where('stocks_id', $request->stocksid)
             ->where('status','Approved')
-            ->update(['status'=>$request->status, 'user_id'=>auth()->user->id]);
+            ->update(['status'=>$request->status, 'user_id'=>auth()->user()->id]);
         if ($request->status == "Completed") {
             $billable = Billable::where('id', $request->billid)
             ->where('stocks_id', $request->stocksid)
             ->where('status','Pending')
-            ->update(['status'=>$request->status, 'user_id'=>auth()->user->id]);
+            ->update(['status'=>$request->status, 'user_id'=>auth()->user()->id]);
         }
         return response()->json($billable);
         
