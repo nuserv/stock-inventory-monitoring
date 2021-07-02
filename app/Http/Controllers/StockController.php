@@ -308,7 +308,7 @@ class StockController extends Controller
         $billable = Billable::query()->where('status', '!=', 'Completed')->where('branch_id', auth()->user()->branch->id)
                     ->get();
         if (auth()->user()->hasanyrole('Warehouse Manager')) {
-            $billable = Billable::query()->where('status', '!=', 'Completed')->all();
+            $billable = Billable::query()->where('status', '!=', 'Completed')->get();
         }
         return DataTables::of($billable)
         ->addColumn('date', function (Billable $request){
