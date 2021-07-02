@@ -29,8 +29,7 @@ $(document).ready(function()
 });
 
 $(document).on('click', '#reqBtn', function(){
-    // $('#service-inModal').modal({backdrop: 'static', keyboard: false}); 
-    
+    $('#service-inModal').modal({backdrop: 'static', keyboard: false}); 
 });
 
 $(document).on('click', '#delBtn', function(e){

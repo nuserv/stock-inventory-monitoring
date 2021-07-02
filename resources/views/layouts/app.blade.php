@@ -69,12 +69,9 @@
             li:hover {
                 background-color: #4285f4;
                 color: white !important; 
+                border-radius: 4px !important;
             }
-            li:hover {
-                background-color: #4285f4;
-                border-radius: 8px !important;
-                color: white !important; 
-            }
+            
            .nav-link{
                 border: 0px solid #88f2fa !important;
                 border-radius: 4px !important;
