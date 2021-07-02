@@ -485,7 +485,7 @@ $(document).on('keyup', '#client', function(){
             });
             op+=' ';
             customer.forEach(value => {
-                op+='<option data-value="'+value.id+'" value="'+value.customer.toUpperCase().replace(/&quot;/g, '\"').replace(/&amp;/g, '\&').replace(/&AMP;/g, '\&')+'"></option>';
+                op+='<option data-value="'+value.id+'" value="'+value.customer.toUpperCase().replace(/&#039;/g, '\'').replace(/&quot;/g, '\"').replace(/&amp;/g, '\&').replace(/&AMP;/g, '\&')+'"></option>';
             });
             $("#client-name").find('option').remove().end().append(op);
             
@@ -550,7 +550,7 @@ $(document).on('keyup', '#customer', function(){
             });
             op+=' ';
             customer.forEach(value => {
-                op+='<option data-value="'+value.id+'" value="'+value.customer_branch.toUpperCase().replace(/&quot;/g, '\"').replace(/&amp;/g, '\&').replace(/&AMP;/g, '\&')+'"></option>';
+                op+='<option data-value="'+value.id+'" value="'+value.customer_branch.toUpperCase().replace(/&#039;/g, '\'').replace(/&quot;/g, '\"').replace(/&amp;/g, '\&').replace(/&AMP;/g, '\&')+'"></option>';
             });
             $("#customer-name").find('option').remove().end().append(op);
             $('#customer-id').val($('#customer-name [value="'+$('#customer').val()+'"]').data('value'));

@@ -70,6 +70,21 @@
                 background-color: #4285f4;
                 color: white !important; 
             }
+            li:hover {
+                background-color: #4285f4;
+                border-radius: 8px !important;
+                color: white !important; 
+            }
+           .nav-link{
+                border: 0px solid #88f2fa !important;
+                border-radius: 4px !important;
+                padding-right:8px !important;
+                padding-left:8px !important;
+                padding: 4px
+           }
+           .active{
+                padding: 4px 0;
+           }
             .table-hover tbody tr:hover td, .table-hover tbody tr:hover th {
                 background-color: #DCDCDC;
             }
@@ -93,6 +108,10 @@
             @endif
         @endif
 
+        @if(Request::is('billable'))
+             @include('modal.branch.billable')
+             @include('modal.branch.billable-approval')
+        @endif
         @if(Request::is('request'))
             @if(auth()->user()->hasAnyrole('Warehouse Manager', 'Encoder'))
                 @include('modal.warehouse.request')
@@ -257,7 +276,9 @@
                 <script src="{{asset('min/?f=js/branch.js')}}"></script>
             @endif
         @endif
-
+        @if(Request::is('billable'))
+            <script src="{{asset('min/?f=js/branch/billable.js')}}"></script>
+        @endif
         @if(Request::is('request'))
             @if(auth()->user()->hasAnyrole('Warehouse Manager', 'Encoder'))
                 <script src="{{asset('min/?f=js/warehouse/request.js')}}"></script>

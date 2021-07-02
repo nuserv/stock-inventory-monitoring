@@ -29,9 +29,10 @@ $(document).on('change', '.replacementdesc', function(){
 });
 
 $(document).on('click', '.out_sub_Btn', function(){
-    /*if (outsub > 0) {
+    if ($('#client').val() == "") {
+        alert('Invalid Client Name!');
         return false;
-    }*/
+    }
     if (r == 1 || outsub > 0) {
         alert('Please add item/s.');
         return false;

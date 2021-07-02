@@ -49,14 +49,14 @@ $(document).on("click", "#customerbranchTable tr", function () {
     $('#saveBtn').val('Update');
     $('#myid').val(id);
     $('#branch_code').val(trdata.code);
-    $('#branch_name').val(trdata.customer_branch.replace(/&quot;/g, '\"').replace(/&amp;/g, '\&').replace(/&AMP;/g, '\&'));
+    $('#branch_name').val(trdata.customer_branch.replace(/&#039;/g, '\'').replace(/&quot;/g, '\"').replace(/&amp;/g, '\&').replace(/&AMP;/g, '\&'));
     if (trdata.address) {
-        $('#address').val(trdata.address.replace(/&quot;/g, '\"').replace(/&amp;/g, '\&').replace(/&AMP;/g, '\&'));
+        $('#address').val(trdata.address.replace(/&#039;/g, '\'').replace(/&quot;/g, '\"').replace(/&amp;/g, '\&').replace(/&AMP;/g, '\&'));
     }else{
         $('#address').val('');
     }
     $('#number').val(trdata.contact);
-    $('#number').val($('#number').val().replace(/&quot;/g, '\"').replace(/&amp;/g, '\&').replace(/&AMP;/g, '\&'));
+    $('#number').val($('#number').val().replace(/&#039;/g, '\'').replace(/&quot;/g, '\"').replace(/&amp;/g, '\&').replace(/&AMP;/g, '\&'));
     $('.status').show();
     if(trdata.status == "Active"){
         $('#status').val('1');

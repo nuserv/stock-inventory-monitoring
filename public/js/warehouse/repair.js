@@ -145,7 +145,7 @@ $(document).on('click', '.recBtn', function() {
     var trdata = table.row(this).data();
     $('#branch_id').val(trdata.branchid);
     $('#date').val(trdata.date);
-    $('#description').val(trdata.item.replace(/&quot;/g, '\"').replace(/&amp;/g, '\&').replace(/&AMP;/g, '\&'));
+    $('#description').val(trdata.item.replace(/&#039;/g, '\'').replace(/&quot;/g, '\"').replace(/&amp;/g, '\&').replace(/&AMP;/g, '\&'));
     $('#status').val(trdata.status);
     $('#myid').val(trdata.id);
     $('#serial').val(trdata.serial);

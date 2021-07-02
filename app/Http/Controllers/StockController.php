@@ -21,6 +21,7 @@ use App\Pullout;
 use Carbon\Carbon;
 use App\Loan;
 use App\ServiceOut;
+use App\Billable;
 use App\Branch;
 use App\User;
 use App\Pm;
@@ -268,6 +269,86 @@ class StockController extends Controller
         }
         return view('pages.service-unit', compact('title', 'categories'));
     }
+    public function delbill(Request $request)
+    {
+        $billable = Billable::where('branch_id', auth()->user()->branch->id)
+            ->where('id', $request->billid)
+            ->where('stocks_id', $request->stocksid)
+            ->first();
+        $billable->delete();
+        $stock = Stock::where('id', $request->stocksid)
+            ->where('status', 'billable')
+            ->update(['status'=>'in']);
+        return response()->json($stock);
+    }
+    public function approvebill(Request $request)
+    {
+        $billable = Billable::where('id', $request->billid)
+            ->where('stocks_id', $request->stocksid)
+            ->update(['status'=>'Approved', 'user_id'=>auth()->user->id]);
+        return response()->json($billable);
+    }
+    public function prcbill(Request $request)
+    {   
+        $billable = Billable::where('id', $request->billid)
+            ->where('stocks_id', $request->stocksid)
+            ->where('status','Approved')
+            ->update(['status'=>$request->status, 'user_id'=>auth()->user->id]);
+        if ($request->status == "Completed") {
+            $billable = Billable::where('id', $request->billid)
+            ->where('stocks_id', $request->stocksid)
+            ->where('status','Pending')
+            ->update(['status'=>$request->status, 'user_id'=>auth()->user->id]);
+        }
+        return response()->json($billable);
+        
+    }
+    public function bill()
+    {
+        $billable = Billable::query()->where('status', '!=', 'Completed')->where('branch_id', auth()->user()->branch->id)
+                    ->get();
+        if (auth()->user()->hasanyrole('Warehouse Manager')) {
+            $billable = Billable::query()->where('status', '!=', 'Completed')->all();
+        }
+        return DataTables::of($billable)
+        ->addColumn('date', function (Billable $request){
+            return Carbon::parse($request->updated_at->toFormattedDateString().' '.$request->updated_at->toTimeString())->isoFormat('lll');
+        })
+        ->addColumn('description', function (Billable $request){
+            $item = Item::where('id', $request->items_id)->first();
+            return mb_strtoupper($item->item);
+        })
+        ->addColumn('serial', function (Billable $request){
+            $serial = Stock::query()->select('serial')->where('id', $request->stocks_id)->first();
+            return mb_strtoupper($serial->serial);
+        })
+        ->addColumn('client', function (Billable $request){
+            $client = CustomerBranch::select('customer_branch', 'customers.customer')
+                ->where('customer_branches.id', $request->customer_branch_id)
+                ->join('customers', 'customer_id', '=', 'customers.id')
+                ->first();
+            return ucwords(mb_strtolower($client->customer.' - '.$client->customer_branch));
+        })
+        ->addColumn('client_name', function (Billable $request){
+            $client = CustomerBranch::select('customer_branch', 'customers.customer')
+                ->where('customer_branches.id', $request->customer_branch_id)
+                ->join('customers', 'customer_id', '=', 'customers.id')
+                ->first();
+            return ucwords(mb_strtolower($client->customer));
+        })
+        ->addColumn('customer_name', function (Billable $request){
+            $client = CustomerBranch::select('customer_branch', 'customers.customer')
+                ->where('customer_branches.id', $request->customer_branch_id)
+                ->join('customers', 'customer_id', '=', 'customers.id')
+                ->first();
+            return ucwords(mb_strtolower($client->customer_branch));
+        })
+        // ->addColumn('serviceby', function (Billable $request){
+        //     $user = User::select('name', 'middlename', 'lastname')->where('id', $request->user_id)->first();
+        //     return ucwords(mb_strtolower($user->name.' '.$user->middlename.' '.$user->lastname));
+        // })
+        ->make(true);
+    }
     public function serviceUnit()
     {
         $stock = Stock::where('status', 'service unit')
@@ -360,14 +441,14 @@ class StockController extends Controller
         })
         /*->addColumn('client_name', function (Pm $request){
             $client = CustomerBranch::select('customer_branch', 'customers.customer')
-                ->where('customer_branches.id', $request->customer_branches_id)
+                ->where('customer_branches.id', $request->customer_branch_id)
                 ->join('customers', 'customer_id', '=', 'customers.id')
                 ->first();
             return ucwords(mb_strtolower($client->customer));
         })
         ->addColumn('customer_name', function (Pm $request){
             $client = CustomerBranch::select('customer_branch', 'customers.customer')
-                ->where('customer_branches.id', $request->customer_branches_id)
+                ->where('customer_branches.id', $request->customer_branch_id)
                 ->join('customers', 'customer_id', '=', 'customers.id')
                 ->first();
             return ucwords(mb_strtolower($client->customer_branch));
@@ -1047,16 +1128,28 @@ class StockController extends Controller
         $log = new UserLog;
         $log->branch_id = auth()->user()->branch->id;
         $log->branch = auth()->user()->branch->branch;
-        $log->activity = "SERVICE OUT $item->item(S/N: ".mb_strtoupper($request->serial).") to $customer->customer_branch." ;
+        if ($request->purpose == "billable") {
+            $log->activity = "SERVICE OUT BILLABLE $item->item(S/N: ".mb_strtoupper($request->serial).") to $customer->customer_branch.";
+            $serviceout = new Billable;
+            $serviceout->branch_id = auth()->user()->branch->id;
+            $serviceout->user_id = auth()->user()->id;
+            $serviceout->items_id = $request->item;
+            $serviceout->customer_branch_id = $request->customer;
+            $serviceout->status = "For approval";
+            $serviceout->stocks_id = $stock->id;
+            $serviceout->save();
+        }else{
+            $log->activity = "SERVICE OUT $item->item(S/N: ".mb_strtoupper($request->serial).") to $customer->customer_branch.";
+            $serviceout = new ServiceOut;
+            $serviceout->branch_id = auth()->user()->branch->id;
+            $serviceout->user_id = auth()->user()->id;
+            $serviceout->items_id = $request->item;
+            $serviceout->customer_branch_id = $request->customer;
+            $serviceout->save();
+        }
         $log->user_id = auth()->user()->id;
         $log->fullname = auth()->user()->name.' '.auth()->user()->middlename.' '.auth()->user()->lastname;
         $log->save();
-        $serviceout = new ServiceOut;
-        $serviceout->branch_id = auth()->user()->branch->id;
-        $serviceout->user_id = auth()->user()->id;
-        $serviceout->items_id = $request->item;
-        $serviceout->customer_branch_id = $request->customer;
-        $serviceout->save();
         $data = $stock->save();
         return response()->json($data);
     }

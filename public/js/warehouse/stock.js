@@ -131,9 +131,9 @@ $(document).on("click", "#catTable tr", function () {
     var catdata = cattable.row(this).data();
     $('table.stockTable').dataTable().fnDestroy();
     $('#itemsearch').show();
-    $('#catname').text(catdata.category.replace(/&quot;/g, '\"').replace(/&amp;/g, '\&').replace(/&AMP;/g, '\&'));
+    $('#catname').text(catdata.category.replace(/&#039;/g, '\'').replace(/&quot;/g, '\"').replace(/&amp;/g, '\&').replace(/&AMP;/g, '\&'));
     $('#catname').show();
-    $('#head').text(catdata.category.replace(/&quot;/g, '\"').replace(/&amp;/g, '\&').replace(/&AMP;/g, '\&'));
+    $('#head').text(catdata.category.replace(/&#039;/g, '\'').replace(/&quot;/g, '\"').replace(/&amp;/g, '\&').replace(/&AMP;/g, '\&'));
     $('#catTable').hide();
     $('#ctable').hide();
     $('#stockTable').show();

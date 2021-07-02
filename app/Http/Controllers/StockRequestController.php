@@ -46,6 +46,18 @@ class StockRequestController extends Controller
         $categories = Category::all();
         return view('pages.stock-request', compact('stocks', 'categories', 'title'));
     }
+    public function billable()
+    {
+        if (auth()->user()->hasanyrole('Repair', 'Viewer', 'Viewer PLSI', 'Viewer IDSI')) {
+            return redirect('/');
+        }
+        $title = 'Billable';
+        $stocks = Warehouse::select('items_id', 'serial', \DB::raw('SUM(CASE WHEN status = \'in\' THEN 1 ELSE 0 END) as stock'))
+            ->where('status', 'in')
+            ->groupBy('items_id')->get();
+        $categories = Category::all();
+        return view('pages.billable', compact('stocks', 'categories', 'title'));
+    }
     public function buffer(){
         $title = 'Buffer';
         return view('pages.buffer', compact('title'));

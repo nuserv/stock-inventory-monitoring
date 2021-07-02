@@ -58,7 +58,7 @@ Route::get('/unrepairable', 'DefectiveController@unrepairable');//->middleware('
 Route::get('activity', 'HomeController@activity');//->middleware('ajax');
 
 
-Route::get('customerbranch-list/{id}', 'CustomerController@customerbranchtable')->middleware('ajax');
+Route::get('customerbranch-list/{id}', 'CustomerController@customerbranchtable');//->middleware('ajax');
 Route::get('customerbranch', 'CustomerController@branchtable');//->middleware('ajax');
 Route::get('getcustomerid', 'CustomerController@getid');//->middleware('ajax');
 Route::get('hint', 'CustomerController@hint');//->middleware('ajax');
@@ -109,6 +109,11 @@ Route::get('bitem', 'StockController@bitem')->middleware('ajax');
 Route::get('bserial/{id}', 'StockController@bserial')->middleware('ajax');
 Route::get('service-unit', 'StockController@service')->name('index.service-unit');
 Route::get('sUnit', 'StockController@serviceUnit');//->middleware('ajax');
+Route::get('bill', 'StockController@bill');//->middleware('ajax');
+Route::any('delbill', 'StockController@delbill');//->middleware('ajax');
+Route::put('approvebill', 'StockController@approvebill');//->middleware('ajax');
+Route::any('prcbill', 'StockController@prcbill');//->middleware('ajax');
+
 Route::get('pmsUnit', 'StockController@pmserviceUnit');//->middleware('ajax');
 Route::get('pclient-autocomplete', 'StockController@pautocompleteClient')->middleware('ajax');
 //Route::get('pmclient-autocomplete', 'StockController@pmautocompleteClient')->middleware('ajax');
@@ -198,6 +203,7 @@ Route::get('requests', 'StockRequestController@getRequests');//->middleware('aja
 Route::get('res', 'StockRequestController@getResolved');//->middleware('ajax');
 Route::get('pcount', 'StockRequestController@pcount')->middleware('ajax');
 Route::get('request', 'StockRequestController@index')->name('stock.index');
+Route::get('billable', 'StockRequestController@billable')->name('stock.billable');
 Route::get('buffer', 'StockRequestController@buffer')->name('stock.buffer');
 //Route::get('view', 'StockRequestController@view')->name('stock.view');
 Route::put('update/{id}', 'StockRequestController@updateRequestDetails')->middleware('ajax');

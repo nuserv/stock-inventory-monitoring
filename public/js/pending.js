@@ -91,8 +91,8 @@ $(document).ready(function()
         }else{
             $('.ticketno').show();
             $('#clientrows').show();
-            $('#clients').val(trdata.client.replace(/&quot;/g, '\"').replace(/&amp;/g, '\&').replace(/&AMP;/g, '\&'));
-            $('#customers').val(trdata.customer.replace(/&quot;/g, '\"').replace(/&amp;/g, '\&').replace(/&AMP;/g, '\&'));
+            $('#clients').val(trdata.client.replace(/&#039;/g, '\'').replace(/&quot;/g, '\"').replace(/&amp;/g, '\&').replace(/&AMP;/g, '\&'));
+            $('#customers').val(trdata.customer.replace(/&#039;/g, '\'').replace(/&quot;/g, '\"').replace(/&amp;/g, '\&').replace(/&AMP;/g, '\&'));
             $('#tickets').val(trdata.ticket);
         }
         if (trdata.status == 'IN TRANSIT' || trdata.status == 'INCOMPLETE') {
