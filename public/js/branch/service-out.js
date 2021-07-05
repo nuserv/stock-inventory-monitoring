@@ -79,7 +79,7 @@ $(document).on('click', '.out_sub_Btn', function(){
                                 data: {
                                     item: item,
                                     cat : cat,
-                                    purpose: purpose,
+                                    purpose: 'service unit',
                                     serial: serial,
                                     customer: customer,
                                     client: client
