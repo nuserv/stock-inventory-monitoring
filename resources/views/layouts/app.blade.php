@@ -72,7 +72,7 @@
                 border-radius: 4px !important;
             }
             .nohover:hover {
-                background-color: transparent;
+                background-color: transparent !important;
             }
            .nav-link{
                 border: 0px solid #88f2fa !important;
