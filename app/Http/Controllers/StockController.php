@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Yajra\DataTables\Facades\DataTables;
 use App\Exports\ExcelExport;
+use App\Exports\BackupInventoryExport;
 use Maatwebsite\Excel\Excel as BaseExcel;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Warehouse;
@@ -161,6 +162,11 @@ class StockController extends Controller
             return response()->json($pullno);
         }
     }
+
+    public function Backupinv() 
+    {
+        return Excel::download(new BackupInventoryExport, 'Back up Inventory -'.Carbon::now()->isoFormat('lll').'.xlsx');
+    }   
     public function index()
     {
         if (auth()->user()->hasanyrole( 'Repair', 'Warehouse Administrator', 'Viewer', 'Viewer PLSI', 'Viewer IDSI')) {

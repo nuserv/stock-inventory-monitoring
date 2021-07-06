@@ -27,6 +27,7 @@
 </div>
 <div class="table-responsive">
     <div id="ctable">
+        
         <table class="table-hover table catTable" id="catTable" style="font-size:80%">
             <thead class="thead-dark">
                 <tr>
@@ -115,11 +116,19 @@
 </div>
 <br>
 <div class="d-flex">
-    @if(auth()->user()->hasrole('Warehouse Manager') || auth()->user()->id == 228 || auth()->user()->id == 110)
+    @if(auth()->user()->hasrole('Warehouse Manager') || auth()->user()->id == 228 )
         <input type="button" id="addCatBtn" class="btn btn-xs btn-primary" value="Add Category">&nbsp;&nbsp;
         <input type="button" id="addCodeBtn" class="btn btn-xs btn-primary" value="Add Item">
+        <a class="ml-auto" href="{{ route('backup-inventory') }}">
+            <input type="button" id="backupBtn" class="btn btn-xs btn-primary" value="BACK UP INVENTORY">
+        </a>
     @endif
-    @if(auth()->user()->hasAnyrole('Warehouse Manager|Head') || auth()->user()->id == 228 || auth()->user()->id == 110)
+    @if(auth()->user()->hasAnyrole('Warehouse Manager|Head') || auth()->user()->id == 228)
+        @if(auth()->user()->hasAnyrole('Head'))
+            <a class="mr-auto" href="{{ route('backup-inventory') }}">
+                <input type="button" id="backupBtn" class="btn btn-xs btn-primary" value="BACK UP INVENTORY">
+            </a>
+        @endif
         <input type="button" id="importBtn" class="btn btn-xs btn-primary ml-auto" value="IMPORT">&nbsp;&nbsp;
         <input type="button" id="addStockBtn" class="btn btn-xs btn-primary" value="ADD STOCK">
     @endif
