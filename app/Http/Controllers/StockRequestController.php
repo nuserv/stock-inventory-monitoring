@@ -918,15 +918,20 @@ class StockRequestController extends Controller
         }
         $no = $request->reqno;
         $branch = Branch::where('id', $reqno->branch_id)->first();
+        $head = User::whereHas('roles', function($role) {
+            $role->where('name', '=', 'Head');
+        })->where('branch_id', $reqno->branch_id)->where('status', 1)->first();
         $bcc = \config('email.bcc');
         $excel = Excel::raw(new ExcelExport($request->reqno, 'DSR'), BaseExcel::XLSX);
         $data = array('office'=> $branch->branch, 'return_no'=>$request->reqno, 'dated'=>Carbon::now()->toDateTimeString());
-        Mail::send('del', $data, function($message) use($excel, $no, $bcc) {
+        Mail::send('del', $data, function($message) use($excel, $no, $bcc, $head) {
             $message->to(auth()->user()->email, auth()->user()->name)->subject
                 ('DR no. '.$no);
             $message->attachData($excel, 'DR No. '.$no.'.xlsx');
             $message->from('noreply@ideaserv.com.ph', 'BSMS');
             $message->bcc($bcc);
+            $message->cc([$head->email]);
+
         });
         return response()->json($data);
     }
