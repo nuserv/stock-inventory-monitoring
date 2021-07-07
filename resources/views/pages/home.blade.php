@@ -30,6 +30,7 @@
                                     </a>
                                 </div>
                                 @endif
+                                @if (!auth()->user()->hasanyrole('Manager', 'Editor'))
                                 <div class="col-sm-2">
                                     <a href="{{ route('return.index')}}">
                                         <div class="card bg-card">
@@ -40,6 +41,7 @@
                                         </div>
                                     </a>
                                 </div>
+                                @endif
                                 @if(auth()->user()->branch->branch != 'Warehouse' && auth()->user()->branch->branch != 'Main-Office')
                                 <div class="col-sm-2">
                                     <a href="{{ route('index.service-unit')}}">
