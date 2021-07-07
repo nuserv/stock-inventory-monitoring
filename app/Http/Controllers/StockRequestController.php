@@ -994,7 +994,7 @@ class StockRequestController extends Controller
                 $log = new UserLog;
                 $log->branch_id = auth()->user()->branch->id;
                 $log->branch = auth()->user()->branch->branch;
-                $log->activity = "UPDATE SCHEDULED DELIVERY for $branch with Request no. $request->reqno ";
+                $log->activity = "UPDATE PARTIAL SCHEDULED DELIVERY for $branch with Request no. $request->reqno ";
                 $log->user_id = auth()->user()->id;
                 $log->fullname = auth()->user()->name.' '.auth()->user()->middlename.' '.auth()->user()->lastname;
             }else{
