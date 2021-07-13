@@ -230,7 +230,7 @@
         @endif
 
         @if(Request::is('return'))
-            @include('modal.branch.add')
+            @include('modal.branch.conversion')
         @endif
 
         @if (Request::is('pending') && auth()->user()->hasanyrole('Viewer', 'Viewer PLSI', 'Viewer IDSI'))
@@ -259,6 +259,9 @@
 
         @if(Request::is('defective/print'))
             <script src="{{asset('min/?f=js/branch/printdef.js')}}"></script>
+        @endif
+        @if(Request::is('POS'))
+            <script src="{{asset('min/?f=js/branch/pos.js')}}"></script>
         @endif
         @if(Request::is('defective/retno'))
             <script src="{{asset('min/?f=js/branch/retno.js')}}"></script>

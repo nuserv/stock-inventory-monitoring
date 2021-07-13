@@ -6,11 +6,14 @@
             <li class="nav-item">
                 <a class="nav-link {{ Request::is('/') ? 'active' : '' }}" href="{{ url('/') }}">Home</a>
             </li>
-            @if (auth()->user()->branch->branch == "Conversion")
-                <li class="nav-item">
-                    <a class="nav-link {{ Request::is('return') ? 'active' : '' }}" href="{{ route('return.index') }}">Returns</a>
-                </li>
-            @endif
+                @if (auth()->user()->branch->branch == "Conversion")
+                    <li class="nav-item">
+                        <a class="nav-link {{ Request::is('return') ? 'active' : '' }}" href="{{ route('return.index') }}">Returns</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link {{ Request::is('POS') ? 'active' : '' }}" href="{{ route('return.pos') }}">POS</a>
+                    </li>
+                @endif
             @endif
             @if(auth()->user()->hasrole('Repair'))
                 <li class="nav-item" style="margin-left:0px;margin-right:0px;">

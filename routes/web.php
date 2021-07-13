@@ -62,6 +62,7 @@ Route::get('customerbranch-list/{id}', 'CustomerController@customerbranchtable')
 Route::get('customerbranch', 'CustomerController@branchtable');//->middleware('ajax');
 Route::get('getcustomerid', 'CustomerController@getid');//->middleware('ajax');
 Route::get('hint', 'CustomerController@hint');//->middleware('ajax');
+Route::get('pulloutclient', 'CustomerController@pulloutclient');//->middleware('ajax');
 Route::get('getclient', 'CustomerController@getclient');//->middleware('ajax');
 Route::get('customer-list', 'CustomerController@customertable')->middleware('ajax');
 Route::get('customer/{id}', 'CustomerController@branchindex')->name('customerbranch.index');
@@ -81,6 +82,9 @@ Route::get('return-table', 'DefectiveController@table');//->middleware('ajax');
 Route::get('printtable', 'DefectiveController@printtable')->middleware('ajax');
 Route::get('retno', 'DefectiveController@returntable');//->middleware('ajax');
 Route::get('return', 'DefectiveController@index')->name('return.index');
+Route::get('POS', 'DefectiveController@pos')->name('return.pos');
+Route::get('postable', 'DefectiveController@postable')->name('return.postable');
+
 
 Route::put('loandelete', 'LoanController@destroy')->middleware('ajax');
 Route::put('loanupdate', 'LoanController@stockUpdate')->middleware('ajax');
@@ -235,7 +239,6 @@ Route::get('defective/print', 'HomeController@printDefective')->name('defective.
 Route::get('defective/retno', 'HomeController@showret')->name('defective.print.index');
 Route::get('retno', 'HomeController@showret')->name('defective.print.index');
 Route::get('retno/{id}', 'HomeController@retshow')->name('defective.print.index');
-
 
 
 Route::get('preventive', 'HomeController@preventive')->name('index.preventive');

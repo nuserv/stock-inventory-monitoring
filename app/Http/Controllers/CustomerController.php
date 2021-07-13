@@ -88,6 +88,12 @@ class CustomerController extends Controller
         return response()->json($data);
         
     }
+    public function pulloutclient(Request $request)
+    {
+        $data = CustomerBranch::query()->where('customer_id', 1)->where('customer_branch', 'LIKE', '%'.str_replace(' ','%',$request->hint).'%')->where('status', 1)->orderBy('customer_branch')->get();
+
+        return response()->json($data);
+    }
     public function getclient(Request $request)
     {
         $data = Customer::query()->where('customer', 'LIKE', '%'.str_replace(' ','%',$request->hint).'%')->orderBy('customer')->get();

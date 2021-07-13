@@ -11,6 +11,8 @@ use App\Exports\ExcelExport;
 use Maatwebsite\Excel\Excel as BaseExcel;
 use Route;
 use App\Defective;
+use App\CustomerBranch;
+use App\ConversionPos;
 use App\Branch;
 use App\Item;
 use App\Warehouse;
@@ -255,29 +257,56 @@ class DefectiveController extends Controller
             if (auth()->user()->hasrole('Tech')) {
                 return redirect('/');
             }
-            return view('pages.branch.return', compact('users', 'title', 'categories'));
+            $branches = Branch::query()->orderBy('branch', 'asc')->get();
+            return view('pages.branch.return', compact('users', 'title', 'categories', 'branches'));
         }else{
             return view('pages.warehouse.return', compact('users', 'title'));
         }
     }
     public function conversion(Request $request)
     {
-        $defective = new Defective;
-        $defective->branch_id = auth()->user()->branch->id;
-        $defective->user_id = auth()->user()->id;
-        $defective->category_id = $request->category;
-        $defective->items_id = $request->item;
-        $defective->serial = $request->serial;
-        $defective->status = 'For return';
-        $defective->save();
-        
-        $log = new UserLog;
-        $log->branch_id = auth()->user()->branch->id;
-        $log->branch = auth()->user()->branch->branch;
-        $log->user_id = auth()->user()->id;
-        $log->fullname = auth()->user()->name.' '.auth()->user()->middlename.' '.auth()->user()->lastname;
-        $log->activity = "ADD $request->item(S/N: ".mb_strtoupper($request->serial).") from Conversion.";
-        $log->save();
+        $item = Item::select('item')->where('id', $request->item)->first();
+        $cid = CustomerBranch::query()->where('customer_branch', $request->cname)->first();
+        if ($request->details == "POS") {
+                $pos = new ConversionPos;
+                $pos->user_id = auth()->user()->id;
+                $pos->bid = $request->bid;
+                $pos->customer_branches_id = $cid->id;
+                $pos->serial = $request->serial;
+                $pos->drno = $request->drno;
+                $pos->pos_model = $request->pos;
+                $pos->pullout_date = $request->pulldate;
+                $pos->save();
+                $log = new UserLog;
+                $log->branch_id = auth()->user()->branch->id;
+                $log->branch = auth()->user()->branch->branch;
+                $log->user_id = auth()->user()->id;
+                $log->fullname = auth()->user()->name.' '.auth()->user()->middlename.' '.auth()->user()->lastname;
+                $log->activity = "RECEIVED POS Model: $request->pos(S/N: $request->serial) from Conversion.";
+                $log->save();
+        }else{
+            for ($i=0; $i < $request->qty ; $i++) { 
+                $defective = new Defective;
+                $defective->branch_id = auth()->user()->branch->id;
+                $defective->user_id = auth()->user()->id;
+                $defective->category_id = $request->category;
+                $defective->items_id = $request->item;
+                $defective->serial = 'N/A';
+                $defective->status = 'For return';
+                $defective->drno = $request->drno;
+                $defective->customer_branches_id = $cid->id;
+                $defective->bid = $request->bid;
+                $defective->pullout_date = $request->pulldate;
+                $defective->save();
+                $log = new UserLog;
+                $log->branch_id = auth()->user()->branch->id;
+                $log->branch = auth()->user()->branch->branch;
+                $log->user_id = auth()->user()->id;
+                $log->fullname = auth()->user()->name.' '.auth()->user()->middlename.' '.auth()->user()->lastname;
+                $log->activity = "ADD $item->item from Conversion.";
+                $log->save();
+            }
+        }
         return response()->json($log);
     }
     public function printtable()
@@ -312,13 +341,35 @@ class DefectiveController extends Controller
         ->make(true);
         
     }
+    public function pos()
+    {
+        $title = 'POS';
+        $users = User::all();
+        return view('pages.branch.pos', compact('users', 'title'));
+    }
+    public function postable()
+    {
+        $pos = ConversionPos::all();
+        return DataTables::of($pos)
+        ->addColumn('date', function (ConversionPos $data){
+            return Carbon::parse($data->updated_at->toFormattedDateString().' '.$data->updated_at->toTimeString())->isoFormat('lll');
+        })
+        ->addColumn('customer', function (ConversionPos $data){
+            $customer  = CustomerBranch::query()->where('id', $data->customer_branches_id)->first();
+            return $customer->customer_branch;
+        })
+        ->make(true);
+
+    }
     public function table()
     {
-        $defective = Defective::query()->select('defectives.updated_at', 'defectives.category_id', 'branch_id as branchid', 'defectives.id as id', 'items.item', 'items.id as itemid', 'defectives.serial', 'defectives.status')
+        $defective = Defective::query()->select('defectives.updated_at', 'defectives.category_id', 'customer_branch', 'branch_id as branchid', 'defectives.id as id', 'items.item', 'items.id as itemid', 'defectives.serial', 'defectives.status')
             ->where('branch_id', auth()->user()->branch->id)
-            ->where('status', 'For return')
+            ->where('defectives.status', 'For return')
             ->join('items', 'defectives.items_id', '=', 'items.id')
-            ->wherein('defectives.status', ['For return', 'For receiving'])->get();
+            ->join('customer_branches', 'customer_branches_id', '=', 'customer_branches.id')
+            ->wherein('defectives.status', ['For return', 'For receiving'])
+            ->get();
         $waredef =Defective::query()->select('branches.branch', 'defectives.category_id', 'branches.id as branchid', 'defectives.updated_at', 'defectives.id as id', 'items.item', 'items.id as itemid', 'defectives.serial', 'defectives.status')
             ->where('defectives.status', 'Repaired')
             ->join('items', 'defectives.items_id', '=', 'items.id')
@@ -330,7 +381,8 @@ class DefectiveController extends Controller
         $repair = Defective::query()->select('branches.branch', 'defectives.category_id', 'branches.id as branchid', 'defectives.updated_at', 'defectives.id as id', 'items.item', 'items.id as itemid', 'defectives.serial', 'defectives.status')
             ->wherein('defectives.status', ['For repair', 'Repaired', 'Conversion'])
             ->join('items', 'defectives.items_id', '=', 'items.id')
-            ->join('branches', 'defectives.branch_id', '=', 'branches.id')->get();
+            ->join('branches', 'defectives.branch_id', '=', 'branches.id')
+            ->get();
         if (auth()->user()->branch->branch == 'Warehouse' && !auth()->user()->hasanyrole('Repair', 'Warehouse Administrator')) {
             $data = $waredef;
         }else if (auth()->user()->branch->branch == 'Warehouse' && auth()->user()->hasrole('Repair')){

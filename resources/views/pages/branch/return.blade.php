@@ -56,7 +56,11 @@
                     Item Description
                 </th>
                 <th>
-                    Serial
+                    @if (auth()->user()->branch->branch != 'Conversion')
+                        Serial
+                    @else
+                        Client
+                    @endif
                 </th>
                 @if (auth()->user()->branch->branch != 'Conversion')
                 <th>

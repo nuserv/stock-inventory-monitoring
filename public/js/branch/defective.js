@@ -3,9 +3,20 @@ var sub = 0;
 var retno;
 var r = 1;
 var y = 1;
+var posy = 1;
+var posr = 1;
 
 $(document).ready(function()
 {
+    $("#datepullout").datepicker({
+        format: 'YYYY-MM-DD',
+        minViewMode: 1,
+        autoclose: true,
+        maxDate: 0
+    });
+
+    $('#sub_Btn').prop('disabled', true);
+
     if ($('#branchname').val() != "Conversion") {
         table =
             $('table.defectiveTable').DataTable({ 
@@ -122,7 +133,7 @@ $(document).ready(function()
                     { data: 'date', name:'date'},
                     { data: 'category', name:'category'},
                     { data: 'item', name:'item'},
-                    { data: 'serial', name:'serial'}
+                    { data: 'customer_branch', name:'customer_branch'}
                 ]
             });
     }
@@ -289,6 +300,14 @@ $(document).on('click', '#returnBtn', function(){
                         className: 'select-checkbox',      
                         targets: 0,
                         visible: false
+                        },
+                        {
+                        targets: 1,
+                        visible: false
+                        },
+                        {
+                        targets: 5,
+                        visible: false
                         }
                     ],
                     ajax: {
@@ -422,6 +441,12 @@ $(document).on('click', '#returnBtn', function(){
                         { data: 'category', name:'category'},
                         { data: 'item', name:'item'},
                         { data: 'serial', name:'serial'}
+                    ],
+                    columnDefs: [
+                        {
+                        targets: 3,
+                        visible: false
+                        }
                     ],
                     buttons: {
                         dom: {
