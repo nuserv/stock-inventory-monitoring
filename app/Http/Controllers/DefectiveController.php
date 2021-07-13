@@ -363,11 +363,10 @@ class DefectiveController extends Controller
     }
     public function table()
     {
-        $defective = Defective::query()->select('defectives.updated_at', 'defectives.category_id', 'customer_branch', 'branch_id as branchid', 'defectives.id as id', 'items.item', 'items.id as itemid', 'defectives.serial', 'defectives.status')
+        $defective = Defective::query()->select('defectives.updated_at', 'defectives.category_id', 'branch_id as branchid', 'defectives.id as id', 'items.item', 'items.id as itemid', 'defectives.serial', 'defectives.status')
             ->where('branch_id', auth()->user()->branch->id)
             ->where('defectives.status', 'For return')
             ->join('items', 'defectives.items_id', '=', 'items.id')
-            ->join('customer_branches', 'customer_branches_id', '=', 'customer_branches.id')
             ->wherein('defectives.status', ['For return', 'For receiving'])
             ->get();
         $waredef =Defective::query()->select('branches.branch', 'defectives.category_id', 'branches.id as branchid', 'defectives.updated_at', 'defectives.id as id', 'items.item', 'items.id as itemid', 'defectives.serial', 'defectives.status')
