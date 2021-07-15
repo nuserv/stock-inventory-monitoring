@@ -227,7 +227,8 @@ function checkserial(ex) {
             type: 'get',
             async: false,
             data: {
-                item: $('#item'+slicena).val()
+                item: $('#item'+slicena).val(),
+                type: 'na'
             },
             success: function (data) {
                 if (data != "allowed") {
