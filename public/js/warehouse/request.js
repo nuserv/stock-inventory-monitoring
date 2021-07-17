@@ -1272,7 +1272,8 @@ $(document).on("keyup", "#editserial", function () {
             type: 'get',
             async: false,
             data: {
-                item: prepared_id
+                item: prepared_id,
+                type: 'na'
             },
             success: function (data) {
                 if (data != "allowed") {
