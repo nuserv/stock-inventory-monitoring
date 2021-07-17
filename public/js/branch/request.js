@@ -116,7 +116,7 @@ $(document).ready(function()
                         "columnDefs": [
                             {   
                                 "render": function ( data ) {
-                                    return '<button class="btn-primary delItemBtn" item_id="'+data.id+'">Delete</button>'
+                                    return '<button class="btn-primary delItemBtn" item_id="'+data.id+'">Remove</button>'
                                 },
                                 "defaultContent": '',
                                 "data": null,
@@ -143,7 +143,7 @@ $(document).ready(function()
                         "columnDefs": [
                             {   
                                 "render": function ( data ) {
-                                    return '<button class="btn-primary delItemBtn" item_id="'+data.id+'">Delete</button>'
+                                    return '<button class="btn-primary delItemBtn" item_id="'+data.id+'">Remove</button>'
                                 },
                                 "defaultContent": '',
                                 "data": null,
