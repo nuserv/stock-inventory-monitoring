@@ -83,6 +83,28 @@ $(document).ready(function()
             $('#del_Btn').attr('reqno', trdata.request_no);
             var penreq;
             Promise.all([pendingrequest()]).then(() => { 
+                if (penreq == 0) {
+                    $.ajax({
+                        url: 'remove',
+                        headers: {
+                            'X-CSRF-TOKEN': $('meta[name="ctok"]').attr('content')
+                        },
+                        dataType: 'json',
+                        type: 'DELETE',
+                        data: {
+                            reqno : trdata.request_no                    
+                        },
+                        success: function(){
+                            location.reload();
+                        },
+                        error: function (data) {
+                            if(data.status == 401) {
+                                window.location.href = '/login';
+                            }
+                            alert(data.responseText);
+                        }
+                    });
+                }
                 if (penreq <= 10) {
                     $('table.requestDetails').dataTable().fnDestroy();
                     pendingreq = 
@@ -91,6 +113,16 @@ $(document).ready(function()
                         "language": {
                             "emptyTable": " "
                         },
+                        "columnDefs": [
+                            {   
+                                "render": function ( data ) {
+                                    return '<button class="btn-primary delItemBtn" item_id="'+data.id+'">Delete</button>'
+                                },
+                                "defaultContent": '',
+                                "data": null,
+                                "targets": [3]
+                            }
+                        ],
                         processing: true,
                         serverSide: true,
                         ajax: "/requests/"+trdata.request_no,
@@ -108,6 +140,16 @@ $(document).ready(function()
                         "language": {
                             "emptyTable": " "
                         },
+                        "columnDefs": [
+                            {   
+                                "render": function ( data ) {
+                                    return '<button class="btn-primary delItemBtn" item_id="'+data.id+'">Delete</button>'
+                                },
+                                "defaultContent": '',
+                                "data": null,
+                                "targets": [3]
+                            }
+                        ],
                         processing: true,
                         serverSide: true,
                         ajax: "/requests/"+trdata.request_no,
@@ -787,6 +829,53 @@ $(document).on('click', '#not_rec_Btn', function(){
             if(data.status == 401) {
                 window.location.href = '/login';
             }
+            alert(data.responseText);
+        }
+    });
+});
+$(document).on("click", ".delItemBtn", function() {
+    var itemid = $(this).attr('item_id');
+    var row =  $(this).parents('tr');
+    $('#loading').show();
+    $.ajax({
+        url: 'requesteditems',
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="ctok"]').attr('content')
+        },
+        dataType: 'json',
+        type: 'DELETE',
+        data: {
+            id: itemid,
+        },
+        success: function(data) {
+            $('#loading').hide();
+            pendingreq
+                .row(row)
+                .remove().draw( false );
+            if (pendingreq.data().count() == 0){
+                $.ajax({
+                    url: 'remove',
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="ctok"]').attr('content')
+                    },
+                    dataType: 'json',
+                    type: 'DELETE',
+                    data: {
+                        reqno : requestno                    
+                    },
+                    success: function(){
+                        location.reload();
+                    },
+                    error: function (data) {
+                        if(data.status == 401) {
+                            window.location.href = '/login';
+                        }
+                        alert(data.responseText);
+                    }
+                });               
+            }
+        },
+        error: function(data) {
             alert(data.responseText);
         }
     });

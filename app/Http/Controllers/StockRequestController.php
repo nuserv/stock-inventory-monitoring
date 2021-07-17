@@ -286,6 +286,22 @@ class StockRequestController extends Controller
             ->get();
         return response()->json($items);
     }
+    public function requesteditems(Request $request)
+    {
+        $reqitems = RequestedItem::where('id', $request->id)->first();
+        $item = Item::where('id', $reqitems->item_id)->first();
+        $reqitems->delete();
+
+        $log = new UserLog;
+        $log->branch_id = auth()->user()->branch->id;
+        $log->branch = auth()->user()->branch->branch;
+        $log->activity = "DELETE requested $item->item.";
+        $log->user_id = auth()->user()->id;
+        $log->fullname = auth()->user()->name.' '.auth()->user()->middlename.' '.auth()->user()->lastname;
+        $log->save();
+
+        return response()->json($log);
+    }
     public function getRequestDetails(Request $request, $id)
     {
         return DataTables::of(RequestedItem::where('request_no', $id)->where('pending', '!=', 0)->get())
