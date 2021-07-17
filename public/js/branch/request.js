@@ -666,10 +666,10 @@ $(document).ready(function()
     $('#reqBtn').prop('disabled', true);
     $('#loading').show();
 
-    setTimeout(function() { 
-        $('#reqBtn').prop('disabled', false);
-        $('#loading').hide();
-    }, 5000);
+    // setTimeout(function() { 
+    //     $('#reqBtn').prop('disabled', false);
+    //     $('#loading').hide();
+    // }, 5000);
     
     $('table.intransitDetails').DataTable().on('select', function () {
         
@@ -715,6 +715,8 @@ $(document).ready(function()
                 return [value];
             });
             stockcat = category;
+            $('#reqBtn').prop('disabled', false);
+            $('#loading').hide();
         },
         error: function (data) {
             if(data.status == 401) {
