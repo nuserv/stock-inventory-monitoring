@@ -1380,28 +1380,28 @@ class StockRequestController extends Controller
                 $data = "not allowed";
             }
         }else{
-                $stock = Stock::where('serial', $request->serial)->where('status', 'in')->first();
-                $def = Defective::where('serial', $request->serial)->wherein('status', ['For return', 'For add stock', 'For receiving', 'For repair', 'Repaired'])->first();
-                $meron = 0;
-                $checks = 'wala';
-                if ($request->reqno) {
-                    $checks = PreparedItem::query()->where('request_no', $request->reqno)->get();
-                    foreach ($checks as $check) {
-                        if ($check->serial != 'N/A') {
-                            $stock = Stock::where('serial', $check->serial)->where('status', 'in')->first();
-                            $defs = Defective::where('serial', $check->serial)->wherein('status', ['For return', 'For add stock', 'For receiving', 'For repair', 'Repaired'])->first();
-                            if ($defs) {
-                                $meron = 1;
-                                $serial = $check->serial;
-                            }else if ($stock) {
-                                $meron = 1;
-                                $serial = $check->serial;
-                            }
-                        }else{
-                            $meron = 0;
+            $stock = Stock::where('serial', $request->serial)->where('status', 'in')->first();
+            $def = Defective::where('serial', $request->serial)->wherein('status', ['For return', 'For add stock', 'For receiving', 'For repair', 'Repaired'])->first();
+            $meron = 0;
+            $checks = 'wala';
+            if ($request->reqno) {
+                $checks = PreparedItem::query()->where('request_no', $request->reqno)->get();
+                foreach ($checks as $check) {
+                    if ($check->serial != 'N/A') {
+                        $stock = Stock::where('serial', $check->serial)->where('status', 'in')->first();
+                        $defs = Defective::where('serial', $check->serial)->wherein('status', ['For return', 'For add stock', 'For receiving', 'For repair', 'Repaired'])->first();
+                        if ($defs) {
+                            $meron = 1;
+                            $serial = $check->serial;
+                        }else if ($stock) {
+                            $meron = 1;
+                            $serial = $check->serial;
                         }
+                    }else{
+                        $meron = 0;
                     }
                 }
+            }
             if ($checks != 'wala') {
                 if ($checks){
                     if($meron == 1){
