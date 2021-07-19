@@ -289,8 +289,7 @@ class StockRequestController extends Controller
     public function requesteditems(Request $request)
     {
         $reqitems = RequestedItem::where('id', $request->id)->first();
-        $item = Item::where('id', $reqitems->item_id)->first();
-        $reqitems->delete();
+        $item = Item::where('id', $reqitems->items_id)->first();
 
         $log = new UserLog;
         $log->branch_id = auth()->user()->branch->id;
@@ -299,6 +298,7 @@ class StockRequestController extends Controller
         $log->user_id = auth()->user()->id;
         $log->fullname = auth()->user()->name.' '.auth()->user()->middlename.' '.auth()->user()->lastname;
         $log->save();
+        $reqitems->delete();
 
         return response()->json($log);
     }
