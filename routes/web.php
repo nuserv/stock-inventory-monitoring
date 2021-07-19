@@ -79,6 +79,7 @@ Route::get('verifyserial', 'StockController@verifyserial');//->middleware('ajax'
 Route::put('conversion', 'DefectiveController@conversion')->middleware('ajax');
 Route::any('return-update', 'DefectiveController@update')->middleware('ajax');
 Route::get('return-table', 'DefectiveController@table');//->middleware('ajax');
+Route::get('convertion-table', 'DefectiveController@convertiontable');//->middleware('ajax');
 Route::get('printtable', 'DefectiveController@printtable')->middleware('ajax');
 Route::get('retno', 'DefectiveController@returntable');//->middleware('ajax');
 Route::get('return', 'DefectiveController@index')->name('return.index');
@@ -213,6 +214,7 @@ Route::get('buffer', 'StockRequestController@buffer')->name('stock.buffer');
 Route::put('update/{id}', 'StockRequestController@updateRequestDetails')->middleware('ajax');
 Route::put('notrec', 'StockRequestController@notreceived')->middleware('ajax');
 Route::put('resolved', 'StockRequestController@resolved')->middleware('ajax');
+Route::delete('requesteditems', 'StockRequestController@requesteditems')->middleware('ajax');
 Route::put('update_serial', 'StockRequestController@upserial')->middleware('ajax');
 Route::get('mytest', 'StockRequestController@test');//->middleware('ajax');
 Route::get('getitems', 'StockRequestController@getitems');//->middleware('ajax');

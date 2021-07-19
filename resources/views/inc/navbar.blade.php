@@ -10,9 +10,6 @@
                     <li class="nav-item">
                         <a class="nav-link {{ Request::is('return') ? 'active' : '' }}" href="{{ route('return.index') }}">Returns</a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link {{ Request::is('POS') ? 'active' : '' }}" href="{{ route('return.pos') }}">POS</a>
-                    </li>
                 @endif
             @endif
             @if(auth()->user()->hasrole('Repair'))

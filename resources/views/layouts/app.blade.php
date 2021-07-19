@@ -231,6 +231,7 @@
 
         @if(Request::is('return'))
             @include('modal.branch.conversion')
+            @include('modal.branch.conversiondetails')
         @endif
 
         @if (Request::is('pending') && auth()->user()->hasanyrole('Viewer', 'Viewer PLSI', 'Viewer IDSI'))

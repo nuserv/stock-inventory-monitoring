@@ -5,6 +5,7 @@ var r = 1;
 var y = 1;
 var posy = 1;
 var posr = 1;
+var branch = "not ok";
 
 $(document).ready(function()
 {
@@ -13,6 +14,16 @@ $(document).ready(function()
         minViewMode: 1,
         autoclose: true,
         maxDate: 0
+    });
+
+    $.ajax({
+        type:'get',
+        url:'gen',
+        async: false,
+        success:function(result)
+        {
+            retno = result;
+        },
     });
 
     $('#sub_Btn').prop('disabled', true);
@@ -71,6 +82,9 @@ $(document).ready(function()
                 }
             });
 
+        if ($('#branchname').val() != "Conversion") {
+            
+        }
         $('table.defectiveTable').DataTable().on('select', function () {
             var rowselected = table.rows( { selected: true } ).data();
             if ($('#returnBtn').is(":visible")) {
@@ -108,9 +122,18 @@ $(document).ready(function()
             }
             
         });
+        var data = table.data();
+        if(data.length > 0){
+            for(var i=0;i<data.length;i++){
+                if (data[i].status == "For return") {
+                    $('#returnBtn').prop('disabled', false);
+                    return false;
+                }
+            }  
+        }
     }else{
         table =
-            $('table.defectiveTable').DataTable({ 
+            $('table.drTable').DataTable({ 
                 "dom": 'lrtip',
                 processing: true,
                 serverSide: false,
@@ -131,8 +154,9 @@ $(document).ready(function()
                 },
                 columns: [
                     { data: 'date', name:'date'},
-                    { data: 'category', name:'category'},
-                    { data: 'item', name:'item'},
+                    { data: 'drno', name:'drno'},
+                    { data: 'pullout_date', name:'pullout_date'},
+                    { data: 'branch', name:'branch'},
                     { data: 'customer_branch', name:'customer_branch'}
                 ]
             });
@@ -157,21 +181,13 @@ $(document).ready(function()
             .draw();
     });
 
-    var data = table.data();
-    if(data.length > 0){
-        for(var i=0;i<data.length;i++){
-            if (data[i].status == "For return") {
-                $('#returnBtn').prop('disabled', false);
-                return false;
-            }
-        }  
-    }
+    
     
 });
 
 
 $(document).on('click', '.printBtn', function () {
-    var data = table.rows( { selected: true } ).data()
+    // var data = table.rows( { selected: true } ).data()
     var id = new Array();
     table.rows().every( function ( rowIdx, tableLoop, rowLoop ) {
         var data = this.data();
@@ -440,9 +456,13 @@ $(document).on('click', '#returnBtn', function(){
                         { data: 'date', name:'date'},
                         { data: 'category', name:'category'},
                         { data: 'item', name:'item'},
-                        { data: 'serial', name:'serial'}
+                        { data: 'customer_branch', name:'customer_branch'}
                     ],
                     columnDefs: [
+                        {
+                        targets: 0,
+                        visible: false
+                        },
                         {
                         targets: 3,
                         visible: false
@@ -497,8 +517,8 @@ $(document).on('click', '#returnBtn', function(){
                                     .prepend('<div style="position:absolute; top:140;left:60%;font-size:24px"><b>Date prepared:</b> '+months[d.getMonth()]+' '+d.getDate()+', ' +d.getFullYear()+' '+hour+':'+String(d.getMinutes()).padStart(2, '0')+ampm+'</div>')
                                     //.prepend('<div style="position:absolute; top:200;font-size:24px"><label for="textbranch"><b>Branch address:&nbsp;&nbsp;</b></label><textarea id="textbranch" style="vertical-align: top;resize: none;background: transparent;border:0 none" rows="3" cols="80" readonly>'+$('#addr').val()+'</textarea></div>')
                                     .prepend('<div style="position:absolute; top:170;font-size:24px"><b>Reference #: </b> '+retno+'</div>')
-                                    .prepend('<div style="position:absolute; top:200;font-family: arial; font-weight: bold;font-size:24px">Received By: _____________________</div>')
-                                    .prepend('<div style="position:absolute; top:230;font-family: arial; font-weight: bold;font-size:24px">Received Date: _____________________</div>')
+                                    .prepend('<div style="position:absolute; top:200;font-family: arial;font-size:24px">Received By: _____________________</div>')
+                                    .prepend('<div style="position:absolute; top:230;font-family: arial;font-size:24px">Received Date: _____________________</div>')
                                 //  .prepend('<div style="position:absolute; bottom:20; left:100;">Pagina '+page.toString()+' of '+pages.toString()+'</div>');
                                 //jsDate.toString()
                                     // $(doc.document.body)
@@ -526,7 +546,8 @@ $(document).on('click', '#returnBtn', function(){
                                         if( selected.length === 0 || $.inArray(idx, selected) !== -1)
                                         return true;
                                         return false;
-                                    }
+                                    },
+                                    columns: [ 1, 2 ]
                                 },
                                 init: function(node) {$(node).removeClass('dt-button')},
                             }

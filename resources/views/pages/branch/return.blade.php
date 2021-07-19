@@ -77,7 +77,7 @@
 <div class="d-flex">
     <input type="button" id="returnBtn" class="btn btn-primary" value="CREATE LIST" disabled>
     @if (auth()->user()->branch->branch == 'Conversion')
-        <input type="button" id="addBtn" class="btn btn-primary ml-auto" value="ADD STOCK" >
+        <input type="button" id="addBtn" class="btn btn-primary ml-auto" value="NEW RETURN" >
     @endif
     <input type="button" id="printrecBtn" class="btn btn-primary ml-auto" value="VIEW RETURN LIST">
 </div>

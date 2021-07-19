@@ -13,6 +13,7 @@ use Route;
 use App\Defective;
 use App\CustomerBranch;
 use App\ConversionPos;
+use App\Conversion;
 use App\Branch;
 use App\Item;
 use App\Warehouse;
@@ -253,6 +254,12 @@ class DefectiveController extends Controller
         
         if (auth()->user()->branch->branch == 'Main-Office'){
             return view('pages.warehouse.return', compact('users', 'title'));
+        }else if (auth()->user()->branch->branch == 'Conversion') {
+            if (auth()->user()->hasrole('Tech')) {
+                return redirect('/');
+            }
+            $branches = Branch::query()->orderBy('branch', 'asc')->get();
+            return view('pages.branch.conversion', compact('users', 'title', 'categories', 'branches'));
         }else if (auth()->user()->branch->branch != 'Warehouse') {
             if (auth()->user()->hasrole('Tech')) {
                 return redirect('/');
@@ -267,47 +274,38 @@ class DefectiveController extends Controller
     {
         $item = Item::select('item')->where('id', $request->item)->first();
         $cid = CustomerBranch::query()->where('customer_branch', $request->cname)->first();
-        if ($request->details == "POS") {
-                $pos = new ConversionPos;
-                $pos->user_id = auth()->user()->id;
-                $pos->bid = $request->bid;
-                $pos->customer_branches_id = $cid->id;
-                $pos->serial = $request->serial;
-                $pos->drno = $request->drno;
-                $pos->pos_model = $request->pos;
-                $pos->pullout_date = $request->pulldate;
-                $pos->save();
-                $log = new UserLog;
-                $log->branch_id = auth()->user()->branch->id;
-                $log->branch = auth()->user()->branch->branch;
-                $log->user_id = auth()->user()->id;
-                $log->fullname = auth()->user()->name.' '.auth()->user()->middlename.' '.auth()->user()->lastname;
-                $log->activity = "RECEIVED POS Model: $request->pos(S/N: $request->serial) from Conversion.";
-                $log->save();
-        }else{
-            for ($i=0; $i < $request->qty ; $i++) { 
-                $defective = new Defective;
-                $defective->branch_id = auth()->user()->branch->id;
-                $defective->user_id = auth()->user()->id;
-                $defective->category_id = $request->category;
-                $defective->items_id = $request->item;
-                $defective->serial = 'N/A';
-                $defective->status = 'For return';
-                $defective->drno = $request->drno;
-                $defective->customer_branches_id = $cid->id;
-                $defective->bid = $request->bid;
-                $defective->pullout_date = $request->pulldate;
-                $defective->save();
-                $log = new UserLog;
-                $log->branch_id = auth()->user()->branch->id;
-                $log->branch = auth()->user()->branch->branch;
-                $log->user_id = auth()->user()->id;
-                $log->fullname = auth()->user()->name.' '.auth()->user()->middlename.' '.auth()->user()->lastname;
-                $log->activity = "ADD $item->item from Conversion.";
-                $log->save();
-            }
+        $defective = new Defective;
+        $defective->branch_id = auth()->user()->branch->id;
+        $defective->user_id = auth()->user()->id;
+        $defective->category_id = $request->category;
+        $defective->items_id = $request->item;
+        $defective->serial = $request->serial;
+        $defective->status = 'For return';
+        $defective->drno = $request->drno;
+        $defective->customer_branches_id = $cid->id;
+        $defective->bid = $request->branch_id;
+        $defective->pullout_date = $request->pulldate;
+        $defective->save();
+
+        if (!Conversion::query()->where('drno', $request->drno)->first()) {
+            $conversion = new Conversion;
+            $conversion->user_id = auth()->user()->id;
+            $conversion->drno = $request->drno;
+            $conversion->pullout_date = $request->pulldate;
+            $conversion->branch_id = $request->branch_id;
+            $conversion->customer_branches_id = $cid->id;
+            $conversion->status = "For return";
+            $conversion->save();
         }
-        return response()->json($log);
+        // $log = new UserLog;
+        // $log->branch_id = auth()->user()->branch->id;
+        // $log->branch = auth()->user()->branch->branch;
+        // $log->user_id = auth()->user()->id;
+        // $log->fullname = auth()->user()->name.' '.auth()->user()->middlename.' '.auth()->user()->lastname;
+        // $log->activity = "ADD $item->item from Conversion.";
+        // $log->save();
+
+        return response()->json($defective);
     }
     public function printtable()
     {
@@ -361,23 +359,46 @@ class DefectiveController extends Controller
         ->make(true);
 
     }
+    public function convertiontable(Request $request)
+    {
+        $item = Defective::query()->select('defectives.id', 'item', 'category', 'serial', 'defectives.status')
+            ->where('drno', $request->drno)
+            ->where('status', 'For return')
+            ->join('items', 'items_id', 'items.id')
+            ->join('categories', 'defectives.category_id', 'categories.id')
+            ->get();
+        return DataTables::of($item)->make(true);
+    }
     public function table()
     {
+        if (auth()->user()->branch->branch == 'Conversion') {
+            $defective = Conversion::query()->where('status', 'For return')->get();
+            return DataTables::of($defective)
+                ->addColumn('date', function (Conversion $data){
+                    return Carbon::parse($data->updated_at->toFormattedDateString().' '.$data->updated_at->toTimeString())->isoFormat('lll');
+                })
+                ->addColumn('pullout_date', function (Conversion $data){
+                    return Carbon::parse($data->pullout_date)->formatLocalized('%A, %B  %d, %Y');
+                })
+                ->addColumn('branch', function (Conversion $data){
+                    $branch = Branch::query()->where('id', $data->branch_id)->first();
+                    return $branch->branch;
+                })
+                ->addColumn('customer_branch', function (Conversion $data){
+                    $cbranch = CustomerBranch::query()->where('id', $data->customer_branches_id)->first();
+                    return $cbranch->customer_branch;
+                })
+                ->addColumn('drno', function (Conversion $data){
+                    return strtoupper($data->drno);
+                })
+                ->make(true);
+        }
         $defective = Defective::query()->select('defectives.updated_at', 'defectives.category_id', 'branch_id as branchid', 'defectives.id as id', 'items.item', 'items.id as itemid', 'defectives.serial', 'defectives.status')
             ->where('branch_id', auth()->user()->branch->id)
             ->where('defectives.status', 'For return')
             ->join('items', 'defectives.items_id', '=', 'items.id')
             ->wherein('defectives.status', ['For return', 'For receiving'])
             ->get();
-        if (auth()->user()->branch->branch == 'Conversion') {
-            $defective = Defective::query()->select('defectives.updated_at', 'defectives.category_id', 'customer_branch', 'branch_id as branchid', 'defectives.id as id', 'items.item', 'items.id as itemid', 'defectives.serial', 'defectives.status')
-            ->where('branch_id', auth()->user()->branch->id)
-            ->where('defectives.status', 'For return')
-            ->join('items', 'defectives.items_id', '=', 'items.id')
-            ->join('customer_branches', 'customer_branches_id', '=', 'customer_branches.id')
-            ->wherein('defectives.status', ['For return', 'For receiving'])
-            ->get();
-        }
         
         $waredef =Defective::query()->select('branches.branch', 'defectives.category_id', 'branches.id as branchid', 'defectives.updated_at', 'defectives.id as id', 'items.item', 'items.id as itemid', 'defectives.serial', 'defectives.status')
             ->where('defectives.status', 'Repaired')
@@ -401,6 +422,8 @@ class DefectiveController extends Controller
         }else{
             $data = $defective;
         }
+
+        
         return DataTables::of($data)
         ->addColumn('date', function (Defective $data){
             return Carbon::parse($data->updated_at->toFormattedDateString().' '.$data->updated_at->toTimeString())->isoFormat('lll');
@@ -495,6 +518,7 @@ class DefectiveController extends Controller
                 $log->save();
                 $updates->save();
             }
+            Conversion::where('drno', $updates->drno)->update(['status'=>'submitted']);
             $retno = new Retno;
             $retno->user_id = auth()->user()->id;
             $retno->branch_id = auth()->user()->branch->id;
@@ -513,7 +537,7 @@ class DefectiveController extends Controller
                     $message->bcc($bcc);
                 });
             }else{
-                $excel = Excel::raw(new ExcelExport($request->ret, 'CDR'), BaseExcel::XLSX);
+                $excel = Excel::raw(new ExcelExport($request->ret.'/'.$updates->drno, 'CDR'), BaseExcel::XLSX);
                 $data = array('office'=> $branch->branch, 'return_no'=>$retno->return_no, 'dated'=>$retno->created_at);
                 Mail::send('returncopy', $data, function($message) use($excel, $retno, $bcc) {
                     $message->to(auth()->user()->email, auth()->user()->name)->subject

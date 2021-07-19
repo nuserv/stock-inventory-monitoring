@@ -23,7 +23,7 @@
                 </div>
                 <div class="row no-margin">
                     <div class="col-md-6 form-group row">
-                        <label class="col-md-5 col-form-label text-md-right">Pullout Date:</label>
+                        <label class="col-md-5 col-form-label text-md-right">Pull out Date:</label>
                         <div class="col-md-7">
                             <input type="text" style="color: black" class="form-control form-control-sm datepicker" name="datepullout" id="datepullout" readonly="readonlyy" autocomplete="off">
                         </div>
@@ -60,25 +60,27 @@
                         </div>
                     </div>
                 </div>
-                <div class="modal-header" style="z-index: 100;">
-                    <h6 class="modal-title w-100 text-center">POS DETAILS</h6>
-                </div><br>
-                <div class="modal-body" id="posreqfield">
-                    <div class="row no-margin" id="posrow1">
-                        <div class="col-md-3 form-group">
-                            <select style="color: black" class="form-control form-control-sm " id="possel1">
-                                <option selected disabled>Select POS Model</option>
-                                <option value="4800-722">4800-722</option>
-                                <option value="4800-723">4800-723</option>
-                                <option value="4800-743">4800-743</option>
-                                <option value="4900-745">4900-745</option>
-                            </select>
-                        </div>
-                        <div class="col-md-2 form-group">
-                            <input type="text" class="form-control form-control-sm serial" id="posserial1" placeholder="Serial number" style="color: black" >
-                        </div>
-                        <div class="col-md-1 form-group">
-                            <input type="button" class="btn btn-xs btn-primary form-control-sm addpos" pos_count="1" value="Add POS">
+                <div hidden>
+                    <div class="modal-header" style="z-index: 100;">
+                        <h6 class="modal-title w-100 text-center">POS DETAILS</h6>
+                    </div><br>
+                    <div class="modal-body" id="posreqfield">
+                        <div class="row no-margin" id="posrow1">
+                            <div class="col-md-3 form-group">
+                                <select style="color: black" class="form-control form-control-sm " id="possel1">
+                                    <option selected disabled>Select POS Model</option>
+                                    <option value="4800-722">4800-722</option>
+                                    <option value="4800-723">4800-723</option>
+                                    <option value="4800-743">4800-743</option>
+                                    <option value="4900-745">4900-745</option>
+                                </select>
+                            </div>
+                            <div class="col-md-2 form-group">
+                                <input type="text" class="form-control form-control-sm serial" id="posserial1" placeholder="Serial number" style="color: black" >
+                            </div>
+                            <div class="col-md-1 form-group">
+                                <input type="button" class="btn btn-xs btn-primary form-control-sm addpos" pos_count="1" value="Add POS">
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -101,7 +103,7 @@
                             </select>
                         </div>
                         <div class="col-md-2 form-group">
-                            <input type="number" min="0" id="qty1" class="form-control qty" row_count="1" placeholder="qty" style="color: black" >
+                            <input type="text" id="serial1" class="form-control serial" row_count="1" placeholder="serial" style="color: black" disabled>
                         </div>
                         <div class="col-md-1 form-group">
                             <input type="button" class="add_item btn btn-xs btn-primary" btn_id="1" value="Add Item">

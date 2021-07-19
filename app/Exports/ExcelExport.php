@@ -52,11 +52,33 @@ class ExcelExport implements FromCollection,WithHeadings,WithColumnWidths,WithSt
         if ($this->type == 'CDR') {
             $header = 'CONVERSION DELIVERY RECEIPT';
             $ret = Retno::select('branch', 'returns_no.created_at')
-                ->where('return_no', $this->id)
+                ->where('return_no', substr($this->id, 0, strpos($this->id, '/')))
                 ->join('branches', 'branches.id', 'branch_id')
                 ->first();
+            $pullout = Defective::query()->select('pullout_date', 'branch', 'customer_branch')
+                ->join('branches', 'branches.id', 'bid')
+                ->join('customer_branches', 'customer_branches.id', 'customer_branches_id')
+                ->where('return_no', $ret->return_no)->first();
             $to = 'Warehouse';
-            $from = $ret->branch;
+            $from = $pullout->branch;
+
+            return [
+                ['','SERVICE CENTER STOCK MONITORING SYSTEM'],
+                ['',$header],
+                ['Date Created', Carbon::parse($ret->created_at)->isoFormat('lll')],
+                ['Date Pullout', $pullout->pullout_date],
+                ['Return Reference Number', substr($this->id, 0, strpos($this->id, '/'))],
+                ['DR Reference Number', substr($this->id, strpos($this->id, "/") + 1)],
+                ['Pullout from', $pullout->customer_branch],
+                ['To', $to],
+                ['From', $from],
+                ['Prepared by', auth()->user()->name.' '.auth()->user()->lastname],
+                [],
+                ['Category',
+                'Item Description',
+                'Serial'],
+            ];
+
         }
         if ($this->type == 'DSR') {
             $header = 'DELIVERY RECEIPT';
@@ -85,7 +107,8 @@ class ExcelExport implements FromCollection,WithHeadings,WithColumnWidths,WithSt
             $to = 'Warehouse';
             $from = 'Repair';
         }
-            
+        
+
         return [
             ['','SERVICE CENTER STOCK MONITORING SYSTEM'],
             ['',$header],
@@ -125,7 +148,7 @@ class ExcelExport implements FromCollection,WithHeadings,WithColumnWidths,WithSt
         $sheet->getStyle('2')->applyFromArray($style);
         //$sheet->getRowDimension(1)->setRowHeight(50);
         $sheet->getStyle('C')->getNumberFormat()->setFormatCode('@');
-        $sheet->getStyle(9)->getFont()->setBold(true);
+        $sheet->getStyle(12)->getFont()->setBold(true);
         $sheet->getProtection()->setPassword('nuserv-demo');
         $sheet->getProtection()->setSheet(true);
 
@@ -157,7 +180,7 @@ class ExcelExport implements FromCollection,WithHeadings,WithColumnWidths,WithSt
         
         if ($this->type == 'CDR') {
             $conversion = Defective::select('category', 'item', 'serial')
-            ->where('return_no', $this->id)
+            ->where('return_no', substr($this->id, 0, strpos($this->id, '/')))
             ->join('categories', 'categories.id', 'defectives.category_id')
             ->join('items', 'items.id', 'items_id')
             ->orderBy('category', 'ASC')
