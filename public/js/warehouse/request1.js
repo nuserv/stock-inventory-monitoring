@@ -242,4 +242,29 @@ function checkserial(ex) {
             }
         });
     }
+    if ($('#serial'+slicena).val().toLowerCase() != 'n/a') {
+        $.ajax({
+            url: 'checkserial',
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="ctok"]').attr('content')
+            },
+            dataType: 'json',
+            type: 'get',
+            async: false,
+            data: {
+                item: $('#item'+slicena).val(),
+                type: 'check'
+            },
+            success: function (data) {
+                if (data != "allowed") {
+                    $('#serial'+slicena).val('');
+                    alert('The serial number you selected is already existing. Please contact the administrator.');
+                }
+            },
+            error: function (data) {
+                alert(data.responseText);
+                return false;
+            }
+        });
+    }
 }
