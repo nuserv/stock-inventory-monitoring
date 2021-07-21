@@ -65,15 +65,58 @@ class DefectiveController extends Controller
         }
         if (auth()->user()->hasanyrole('Head')) {
             $return = Retno::query()
-                ->select('returns_no.updated_at', 'returns_no.status', 'return_no', 'branch', 'returns_no.status')
+                ->select('returns_no.updated_at', 'returns_no.status', 'returns_no.return_no', 'branches.branch', 'returns_no.status')
                 ->wherein('returns_no.status', ['For receiving', 'Incomplete'])
-                ->where('branch_id', auth()->user()->branch->id)
-                ->join('branches', 'branches.id', 'branch_id')
+                ->where('returns_no.branch_id', auth()->user()->branch->id)
+                ->join('branches', 'branches.id', 'returns_no.branch_id')
                 ->get();
             return DataTables::of($return)
                 ->addColumn('updated_at', function (Retno $return){
                     return Carbon::parse($return->updated_at->toFormattedDateString().' '.$return->updated_at->toTimeString())->isoFormat('lll');
                 })
+                ->addColumn('pulloutby', function (Retno $return){
+                    if (auth()->user()->branch->branch == "Conversion") {
+                        $defective = Defective::where('return_no', $return->return_no)
+                        ->join('branches', 'branches.id', 'bid')
+                        ->first();
+                        return $defective->branch;
+                    }else{
+                        return '';
+                    }
+
+                })
+                ->addColumn('customer_branch', function (Retno $return){
+                    if (auth()->user()->branch->branch == "Conversion") {
+
+                        $defective = Defective::where('return_no', $return->return_no)
+                            ->join('customer_branches', 'customer_branches.id', 'customer_branches_id')
+                            ->first();
+                        return $defective->customer_branch;
+                    }else{
+                        return '';
+                    }
+                })
+                ->addColumn('drno', function (Retno $return){
+                    if (auth()->user()->branch->branch == "Conversion") {
+
+                        $defective = Defective::where('return_no', $return->return_no)
+                            ->first();
+                        return $defective->drno;
+                    }else{
+                        return '';
+                    }
+                })
+                ->addColumn('pulloutdate', function (Retno $return){
+                    if (auth()->user()->branch->branch == "Conversion") {
+
+                        $defective = Defective::where('return_no', $return->return_no)
+                            ->first();
+                        return Carbon::parse($defective->pullout_date)->formatLocalized('%A, %B  %d, %Y');
+                    }else{
+                        return '';
+                    }
+                })
+
                 ->make(true);
         }
     }
@@ -81,10 +124,11 @@ class DefectiveController extends Controller
     public function returnitem(Request $request)
     {
         $return = Defective::query()
-            ->select('defectives.id', 'category', 'item', 'serial', 'items_id')
+            ->select('defectives.id', 'category', 'item', 'serial', 'items_id', 'name')
             ->join('categories', 'categories.id', 'defectives.category_id')
             ->join('items', 'items.id', 'items_id')
-            ->wherein('status', ['For receiving'])
+            ->join('users', 'users.id', 'user_id')
+            ->wherein('defectives.status', ['For receiving'])
             ->where('return_no', $request->retno)
             ->get();
         return DataTables::of($return)
@@ -393,10 +437,11 @@ class DefectiveController extends Controller
                 })
                 ->make(true);
         }
-        $defective = Defective::query()->select('defectives.updated_at', 'defectives.category_id', 'branch_id as branchid', 'defectives.id as id', 'items.item', 'items.id as itemid', 'defectives.serial', 'defectives.status')
-            ->where('branch_id', auth()->user()->branch->id)
+        $defective = Defective::query()->select('name','defectives.updated_at', 'defectives.category_id', 'defectives.branch_id as branchid', 'defectives.id as id', 'items.item', 'items.id as itemid', 'defectives.serial', 'defectives.status')
+            ->where('defectives.branch_id', auth()->user()->branch->id)
             ->where('defectives.status', 'For return')
             ->join('items', 'defectives.items_id', '=', 'items.id')
+            ->join('users', 'users.id', 'user_id')
             ->wherein('defectives.status', ['For return', 'For receiving'])
             ->get();
         

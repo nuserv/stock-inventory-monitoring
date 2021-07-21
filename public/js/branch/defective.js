@@ -74,6 +74,7 @@ $(document).ready(function()
                     { data: 'category', name:'category'},
                     { data: 'item', name:'item'},
                     { data: 'serial', name:'serial'},
+                    { data: 'name', name:'name'},
                     { data: 'status', name:'status'}
                 ],
                 select: {
@@ -341,6 +342,7 @@ $(document).on('click', '#returnBtn', function(){
                         { data: 'category', name:'category'},
                         { data: 'item', name:'item'},
                         { data: 'serial', name:'serial'},
+                        { data: 'name', name:'name'},
                         { data: 'status', name:'status'}
                     ],
                     buttons: {
@@ -422,7 +424,8 @@ $(document).on('click', '#returnBtn', function(){
                                         if( selected.length === 0 || $.inArray(idx, selected) !== -1)
                                         return true;
                                         return false;
-                                    }
+                                    },
+                                    columns: [ 2,3,4 ]
                                 },
                                 init: function(node) {$(node).removeClass('dt-button')},
                             }

@@ -64,6 +64,9 @@
                 </th>
                 @if (auth()->user()->branch->branch != 'Conversion')
                 <th>
+                    Service by
+                </th>
+                <th>
                     Status
                 </th>
                 @endif
