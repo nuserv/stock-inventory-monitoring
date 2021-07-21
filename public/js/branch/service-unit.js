@@ -189,6 +189,18 @@ $(document).on('change', '#instatus', function(){
 
 $(document).on('change', '#repdesc', function(){
     desc = $(this).val();
+    var trim = /[a-zA-Z]+/g;
+    var string = $('#repdesc option:selected').text().match(trim);
+    var str = '';
+    for (let index = 0; index < string.length; index++) {
+        if (str != '') {
+            str = str+string[index];
+        }else{
+            str = string[index];
+        }
+    }
+    console.log(str.slice(0,4));
+    
     $('#repserial').prop('disabled', false);
 });
 

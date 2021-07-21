@@ -302,9 +302,21 @@ class StockController extends Controller
             ->update(['status'=>$request->status, 'user_id'=>auth()->user()->id]);
         if ($request->status == "Completed") {
             $billable = Billable::where('id', $request->billid)
-            ->where('stocks_id', $request->stocksid)
-            ->where('status','Pending')
-            ->update(['status'=>$request->status, 'user_id'=>auth()->user()->id]);
+                ->where('stocks_id', $request->stocksid)
+                ->where('status','Pending')
+                ->update(['status'=>$request->status, 'user_id'=>auth()->user()->id]);
+
+            $no = $request->billid;
+            $bcc = \config('email.bcc');
+            $excel = Excel::raw(new ExcelExport($request->billid, 'bill'), BaseExcel::XLSX);
+            $data = array('office'=> auth()->user()->branch->branch, 'return_no'=>$request->billid, 'dated'=>Carbon::now()->toDateTimeString());
+            Mail::send('del', $data, function($message) use($excel, $no, $bcc) {
+                $message->to(auth()->user()->email, auth()->user()->name)->subject
+                    ('DR no. '.$no);
+                $message->attachData($excel, 'DR No. '.$no.'.xlsx');
+                $message->from('noreply@ideaserv.com.ph', 'BSMS');
+                $message->bcc($bcc);
+            });
         }
         return response()->json($billable);
         

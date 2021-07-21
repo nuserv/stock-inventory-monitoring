@@ -6,6 +6,7 @@ use App\Defective;
 use App\Item;
 use App\PreparedItem;
 use App\StockRequest;
+use App\Billable;
 use App\Retno;
 use Carbon\Carbon;
 use App\Pullno;
@@ -108,7 +109,26 @@ class ExcelExport implements FromCollection,WithHeadings,WithColumnWidths,WithSt
             $from = 'Repair';
         }
         
+        if ($this->type == 'bill') {
+            $header = 'DELIVERY RECEIPT';
+            $billid = Billable::select('branch', 'billable.updated_at', 'customer_branch')
+                ->where('billable.id', $this->id)
+                ->join('branches', 'branches.id', 'branch_id')
+                ->join('customer_branches', 'customer_branches.id', 'customer_branch_id')
+                ->first();
 
+            return [
+                ['','SERVICE CENTER STOCK MONITORING SYSTEM'],
+                ['',$header],
+                ['Date Completed', Carbon::parse($billid->updated_at)->isoFormat('lll')],
+                ['Service by', auth()->user()->branch->branch.' - '.auth()->user()->name.' '.auth()->user()->lastname],
+                ['Client Name', $billid->customer_branch],
+                [],
+                ['Category',
+                'Item Description',
+                'Serial'],
+            ];
+        }
         return [
             ['','SERVICE CENTER STOCK MONITORING SYSTEM'],
             ['',$header],
@@ -148,7 +168,13 @@ class ExcelExport implements FromCollection,WithHeadings,WithColumnWidths,WithSt
         $sheet->getStyle('2')->applyFromArray($style);
         //$sheet->getRowDimension(1)->setRowHeight(50);
         $sheet->getStyle('C')->getNumberFormat()->setFormatCode('@');
-        $sheet->getStyle(12)->getFont()->setBold(true);
+        if ($this->type == 'CDR') {
+            $sheet->getStyle(12)->getFont()->setBold(true);
+        }else if ($this->type == 'bill') {
+            $sheet->getStyle(7)->getFont()->setBold(true);
+        }else{
+            $sheet->getStyle(9)->getFont()->setBold(true);
+        }
         $sheet->getProtection()->setPassword('nuserv-demo');
         $sheet->getProtection()->setSheet(true);
 
@@ -187,6 +213,18 @@ class ExcelExport implements FromCollection,WithHeadings,WithColumnWidths,WithSt
             ->orderBy('item', 'ASC')
             ->get();
             return $conversion;
+        }
+
+        if ($this->type == 'bill') {
+            $billable = Billable::select('category', 'item', 'serial')
+            ->where('billable.id', $this->id)
+            ->join('items', 'items.id', 'billable.items_id')
+            ->join('categories', 'categories.id', 'items.category_id')
+            ->orderBy('category', 'ASC')
+            ->orderBy('item', 'ASC')
+            ->join('stocks', 'stocks.id', 'stocks_id')
+            ->get();
+            return $billable;
         }
 
         if ($this->type == 'DDR') {
