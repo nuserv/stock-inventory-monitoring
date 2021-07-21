@@ -208,7 +208,7 @@ $(document).on('click', '.in_sub_Btn', function(e){
     if ($('#intype').val()) {
         if ($('#intype').val() == 'service-unit') {
             if (status != '') {
-                if(confirm('Please make sure your entry is correct. Click CANCEL to review your entries. Click OK to SUBMIT your entry.')) {
+                if(confirm('Please make sure you input the correct item and serial number. Click CANCEL to review your entry. Click OK if you are sure that your entry is correct to SUBMIT.')) {
                     e.preventDefault();
                     $('#service-inModal').toggle();
                     $('#loading').show();
@@ -241,7 +241,7 @@ $(document).on('click', '.in_sub_Btn', function(e){
             }
         }else if ($('#intype').val() == 'replacement') {
             if (desc != '' && $('#repserial').val() != "") {
-                if(confirm('Please make sure your entry is correct. Click CANCEL to review your entries. Click OK to SUBMIT your entry.')) {
+                if(confirm('Please make sure you input the correct item and serial number. Click CANCEL to review your entry. Click OK if you are sure that your entry is correct to SUBMIT.')) {
                     e.preventDefault();
                     $('#service-inModal').toggle();
                     $('#loading').show();
