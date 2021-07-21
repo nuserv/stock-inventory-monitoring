@@ -204,7 +204,7 @@ $(document).on('change', '#repdesc', function(){
     $('#repserial').prop('disabled', false);
 });
 
-$(document).on('click', '.in_sub_Btn', function(){
+$(document).on('click', '.in_sub_Btn', function(e){
     if ($('#intype').val()) {
         if ($('#intype').val() == 'service-unit') {
             if (status != '') {
