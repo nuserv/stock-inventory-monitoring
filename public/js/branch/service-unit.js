@@ -189,17 +189,17 @@ $(document).on('change', '#instatus', function(){
 
 $(document).on('change', '#repdesc', function(){
     desc = $(this).val();
-    var trim = /[a-zA-Z]+/g;
-    var string = $('#repdesc option:selected').text().match(trim);
-    var str = '';
-    for (let index = 0; index < string.length; index++) {
-        if (str != '') {
-            str = str+string[index];
-        }else{
-            str = string[index];
-        }
-    }
-    console.log(str.slice(0,4));
+    // var trim = /[a-zA-Z]+/g;
+    // var string = $('#repdesc option:selected').text().match(trim);
+    // var str = '';
+    // for (let index = 0; index < string.length; index++) {
+    //     if (str != '') {
+    //         str = str+string[index];
+    //     }else{
+    //         str = string[index];
+    //     }
+    // }
+    // console.log(str.slice(0,4));
     
     $('#repserial').prop('disabled', false);
 });
@@ -208,63 +208,69 @@ $(document).on('click', '.in_sub_Btn', function(){
     if ($('#intype').val()) {
         if ($('#intype').val() == 'service-unit') {
             if (status != '') {
-                $('#service-inModal').toggle();
-               $('#loading').show();
-               console.log($('#indescid').val());
-               //return false;
-                $.ajax({
-                    url: 'service-in',
-                    headers: {
-                        'X-CSRF-TOKEN': $('meta[name="ctok"]').attr('content')
-                    },
-                    dataType: 'json',
-                    type: 'PUT',
-                    data: {
-                        stat: 'sunit',
-                        id: $('#indescid').val(),
-                        serial: $('#inserial').val(),
-                        status: status,
-                        custid: trdata.customer_branches_id,
-                        remarks: 'service'
-                    },
-                    success:function(data)
-                    {
-                        location.reload();
-                    },
-                    error: function (data) {
-                        alert(data.responseText);
-                    }
-                });
+                if(confirm('Please make sure your entry is correct. Click CANCEL to review your entries. Click OK to SUBMIT your entry.')) {
+                    e.preventDefault();
+                    $('#service-inModal').toggle();
+                    $('#loading').show();
+                    console.log($('#indescid').val());
+                    //return false;
+                    $.ajax({
+                        url: 'service-in',
+                        headers: {
+                            'X-CSRF-TOKEN': $('meta[name="ctok"]').attr('content')
+                        },
+                        dataType: 'json',
+                        type: 'PUT',
+                        data: {
+                            stat: 'sunit',
+                            id: $('#indescid').val(),
+                            serial: $('#inserial').val(),
+                            status: status,
+                            custid: trdata.customer_branches_id,
+                            remarks: 'service'
+                        },
+                        success:function(data)
+                        {
+                            location.reload();
+                        },
+                        error: function (data) {
+                            alert(data.responseText);
+                        }
+                    });
+                }
             }
         }else if ($('#intype').val() == 'replacement') {
             if (desc != '' && $('#repserial').val() != "") {
-                $('#service-inModal').toggle();
-                $('#loading').show();
-                $.ajax({
-                    url: 'rep-update',
-                    headers: {
-                        'X-CSRF-TOKEN': $('meta[name="ctok"]').attr('content')
-                    },
-                    dataType: 'json',
-                    type: 'PUT',
-                    async: false,
-                    data: {
-                        stat: 'replace',
-                        id: $('#indescid').val(),
-                        ids: $('#repdesc').val(),
-                        serial: $('#repserial').val(),
-                        status: 'defective',
-                        custid: trdata.customer_branches_id,
-                        remarks: 'service'
-                    },
-                    success:function()
-                    {
-                        location.reload();
-                    },
-                    error: function (data) {
-                        alert(data.responseText);
-                    }
-                });
+                if(confirm('Please make sure your entry is correct. Click CANCEL to review your entries. Click OK to SUBMIT your entry.')) {
+                    e.preventDefault();
+                    $('#service-inModal').toggle();
+                    $('#loading').show();
+                    $.ajax({
+                        url: 'rep-update',
+                        headers: {
+                            'X-CSRF-TOKEN': $('meta[name="ctok"]').attr('content')
+                        },
+                        dataType: 'json',
+                        type: 'PUT',
+                        async: false,
+                        data: {
+                            stat: 'replace',
+                            id: $('#indescid').val(),
+                            ids: $('#repdesc').val(),
+                            serial: $('#repserial').val(),
+                            status: 'defective',
+                            custid: trdata.customer_branches_id,
+                            remarks: 'service'
+                        },
+                        success:function()
+                        {
+                            location.reload();
+                        },
+                        error: function (data) {
+                            alert(data.responseText);
+                        }
+                    });
+                }
             }
         }
     }
