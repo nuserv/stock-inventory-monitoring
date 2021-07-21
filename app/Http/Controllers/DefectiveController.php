@@ -440,7 +440,7 @@ class DefectiveController extends Controller
         $defective = Defective::query()->select('user_id','defectives.updated_at', 'defectives.category_id', 'defectives.branch_id as branchid', 'defectives.id as id', 'items.item', 'items.id as itemid', 'defectives.serial', 'defectives.status')
             ->where('defectives.branch_id', auth()->user()->branch->id)
             ->join('items', 'defectives.items_id', '=', 'items.id')
-            ->wherein('defectives.status', ['For return', 'For receiving'])
+            ->where('defectives.status', 'For return')
             ->get();
         $waredef =Defective::query()->select('branches.branch', 'defectives.category_id', 'branches.id as branchid', 'defectives.updated_at', 'defectives.id as id', 'items.item', 'items.id as itemid', 'defectives.serial', 'defectives.status')
             ->where('defectives.status', 'Repaired')
