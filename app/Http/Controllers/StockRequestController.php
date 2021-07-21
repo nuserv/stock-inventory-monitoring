@@ -1413,7 +1413,7 @@ class StockRequestController extends Controller
             }else if ($stock) {
                 $data = "not allowed";
             }else if ($def) {
-                $data = "not allowed";
+                $data = ['data'=>"not allowed", 'retno'=>$def->return_no];
             }else{
                 $data = "allowed";
             }
