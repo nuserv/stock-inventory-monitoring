@@ -437,14 +437,11 @@ class DefectiveController extends Controller
                 })
                 ->make(true);
         }
-        $defective = Defective::query()->select('name','defectives.updated_at', 'defectives.category_id', 'defectives.branch_id as branchid', 'defectives.id as id', 'items.item', 'items.id as itemid', 'defectives.serial', 'defectives.status')
+        $defective = Defective::query()->select('user_id','defectives.updated_at', 'defectives.category_id', 'defectives.branch_id as branchid', 'defectives.id as id', 'items.item', 'items.id as itemid', 'defectives.serial', 'defectives.status')
             ->where('defectives.branch_id', auth()->user()->branch->id)
-            ->where('defectives.status', 'For return')
             ->join('items', 'defectives.items_id', '=', 'items.id')
-            ->join('users', 'users.id', 'user_id')
             ->wherein('defectives.status', ['For return', 'For receiving'])
             ->get();
-        
         $waredef =Defective::query()->select('branches.branch', 'defectives.category_id', 'branches.id as branchid', 'defectives.updated_at', 'defectives.id as id', 'items.item', 'items.id as itemid', 'defectives.serial', 'defectives.status')
             ->where('defectives.status', 'Repaired')
             ->join('items', 'defectives.items_id', '=', 'items.id')
@@ -467,7 +464,6 @@ class DefectiveController extends Controller
         }else{
             $data = $defective;
         }
-
         
         return DataTables::of($data)
         ->addColumn('date', function (Defective $data){
@@ -482,6 +478,12 @@ class DefectiveController extends Controller
         })
         ->addColumn('serial', function (Defective $data){
             return strtoupper($data->serial);
+        })
+        ->addColumn('name', function (Defective $data){
+            $user = User::where('id', $data->user_id)->first();
+            if ($user) {
+                return $user->name;
+            }
         })
         ->make(true);
     }
