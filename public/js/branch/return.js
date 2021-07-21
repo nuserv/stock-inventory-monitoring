@@ -150,7 +150,8 @@ $(document).on("click", "#returnTable tr", function () {
                                 if( selected.length === 0 || $.inArray(idx, selected) !== -1)
                                 return true;
                                 return false;
-                            }
+                            },
+                            columns: [ 0, 1, 2 ]
                         },
                         init: function(node) {$(node).removeClass('dt-button')},
                     }

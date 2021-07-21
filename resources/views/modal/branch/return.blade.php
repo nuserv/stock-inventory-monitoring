@@ -8,6 +8,7 @@
                 </button>
             </div>
             <div class="modal-body">
+            @if(auth()->user()->branch->branch == 'Conversion')
             <div class="row no-margin">
                 <div class="col-md-6 form-group row">
                         <label class="col-md-5 col-form-label text-md-right">Pull out Date:</label>
@@ -22,6 +23,7 @@
                         </div>
                     </div>
                 </div>
+            </div>
             <div class="row no-margin">
                 <div class="col-md-6 form-group row">
                         <label class="col-md-5 col-form-label text-md-right">Branch:</label>
@@ -35,7 +37,10 @@
                             <input type="text" style="color: black" class="form-control form-control-sm " id="refno" readonly>
                         </div>
                     </div>
-                </div><br>
+                </div>
+            </div>
+            @endif
+            <br>
                 <table class="table-hover table returnitems" id="returnitems" style="width:100%">
                     <thead class="thead-dark">
                         <th>Category</th>
@@ -46,7 +51,6 @@
                         @endif
                     </thead>
                 </table>
-            </div>
             <div class="modal-footer">
                 <div class="printBtn pt-3" id="printBtn"></div>
             </div>
