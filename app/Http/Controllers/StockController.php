@@ -349,10 +349,10 @@ class StockController extends Controller
                 ->first();
             return ucwords(mb_strtolower($client->customer_branch));
         })
-        // ->addColumn('serviceby', function (Billable $request){
-        //     $user = User::select('name', 'middlename', 'lastname')->where('id', $request->user_id)->first();
-        //     return ucwords(mb_strtolower($user->name.' '.$user->middlename.' '.$user->lastname));
-        // })
+        ->addColumn('serviceby', function (Billable $request){
+            $user = User::select('name', 'middlename', 'lastname')->where('id', $request->user_id)->first();
+            return ucwords(mb_strtolower($user->name.' '.$user->middlename.' '.$user->lastname));
+        })
         ->make(true);
     }
     public function serviceUnit()

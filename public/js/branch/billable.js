@@ -136,10 +136,14 @@ $(document).on("click", "#billableTable tr", function () {
     $('#indate').val(trdata.date);
     $('#outstatus').val(trdata.status);
     if ($('#userlevel').val() == 'Warehouse Manager') {
+        $('#inengr').val(trdata.serviceby);
         if (trdata.status == "Approved") {
             $('#approveBtn').remove();
         }
     }else{
+
+        $('#inengr').val(trdata.serviceby);
+
         if (trdata.status == "Approved") {
             $('#delBtn').remove();
             $('#doneBtn').remove();
@@ -308,6 +312,7 @@ $(document).on("click", "#billableTable tr", function () {
             $('.prcBtn').remove();
             $('#doneBtn').remove();
             $('#printBtn').remove();
+            $('#inengr').val(trdata.serviceby)
         }
     }
 });

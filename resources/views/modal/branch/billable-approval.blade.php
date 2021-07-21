@@ -18,7 +18,7 @@
                     <div class="col-md-6 form-group row">
                         <label class="col-md-6 col-form-label text-md-right">Service Engineer:</label>
                         <div class="col-md-6">
-                            <input type="text" style="color: black" class="form-control form-control-sm " id="inengr" value="{{ mb_strtoupper(auth()->user()->name) }}" readonly>
+                            <input type="text" style="color: black" class="form-control form-control-sm " id="inengr" readonly>
                         </div>
                     </div>
                 </div>
