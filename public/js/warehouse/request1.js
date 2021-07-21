@@ -257,7 +257,7 @@ function checkserial(ex) {
                     type: 'check'
                 },
                 success: function (data) {
-                    if (data.data != "allowed") {
+                    if (data != "allowed") {
                         $('#serial'+slicena).val('');
                         alert('The serial number you selected is already existing('+data.retno+'). Please contact the administrator.');
                     }
