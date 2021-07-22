@@ -208,7 +208,7 @@ $(document).on('click', '.in_sub_Btn', function(e){
     if ($('#intype').val()) {
         if ($('#intype').val() == 'service-unit') {
             if (status != '') {
-                if(confirm('Please make sure you input the correct item and serial number. Click CANCEL to review your entry. Click OK if you are sure that your entry is correct to SUBMIT.')) {
+                if(confirm('Please make sure you input the correct item and serial number.\nClick CANCEL to review your entry.\nClick OK if you are sure that your entry is correct to SUBMIT.')) {
                     e.preventDefault();
                     $('#service-inModal').toggle();
                     $('#loading').show();
