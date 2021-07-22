@@ -41,6 +41,7 @@ $(document).on('click', '.out_sub_Btn', function(){
     var item = "";
     var check = 1;
     //if ($('#customer-id').val() != "") {
+    if(confirm('Please make sure you selected the CORRECT ITEM and SERIAL NUMBER.\nClick CANCEL to review your entry.\nClick OK if you are sure that your entry is correct to SUBMIT.')) {
         $('#service-unitModal').modal('toggle');
         $('#loading').show();
         for(var q=1;q<=y;q++){
@@ -97,6 +98,7 @@ $(document).on('click', '.out_sub_Btn', function(){
                 window.location.href = 'service-unit';
             }
         }
+    }
     /*}else{
         alert("Invalid Customer Name!");
         return false;
