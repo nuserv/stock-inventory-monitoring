@@ -149,7 +149,7 @@ Route::put('pullout', 'StockController@pull')->middleware('ajax');
 Route::get('pullview', 'StockController@pullview')->name('pullout.index');
 Route::get('pullviewlist', 'StockController@pullviewlist');
 Route::get('returnview', 'DefectiveController@returnview')->name('return.view');
-Route::get('repaired-ware', 'DefectiveController@repaired')->name('repaired.view');
+Route::get('repaired-ware', 'DefectiveController@repaired')->name('repaired.list');
 Route::get('repaired-list', 'DefectiveController@repairedlist')->name('repaired.view');
 Route::put('pullnr', 'StockController@pullnr')->middleware('ajax');
 Route::put('repairednr', 'DefectiveController@repairednr')->middleware('ajax');

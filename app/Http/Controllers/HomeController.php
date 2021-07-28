@@ -25,6 +25,7 @@ use App\Stock;
 use App\Defective;
 use App\Customer;
 use App\CustomerBranch;
+use App\RepairedNo;
 use DB;
 use App\UserLog;
 use Carbon\Carbon;
@@ -243,7 +244,7 @@ class HomeController extends Controller
                 ->where('stat', '=', 'ACTIVE')
                 ->count();
             $units = Warehouse::where('status', 'in')->count();
-            $returns = Defective::where('status', 'Repaired')->count();
+            $returns = RepairedNo::where('status', 'For receiving')->count();
             $unresolved = StockRequest::where('status', 'UNRESOLVED')->where('stat', 'ACTIVE')->count();
             $resolved = StockRequest::where('status', 'UNRESOLVED')->where('stat', 'RESOLVED')->count();
             return view('pages.home', compact('stockreq', 'units', 'returns', 'title', 'unresolved', 'resolved'));
