@@ -259,7 +259,7 @@ function checkserial(ex) {
                 success: function (data) {
                     if (data != "allowed") {
                         $('#serial'+slicena).val('');
-                        alert('The serial number you selected is already existing('+data.retno+'). Please contact the administrator.');
+                        alert('The serial number you selected is already existing. Please contact the administrator.');
                     }
                 },
                 error: function (data) {
