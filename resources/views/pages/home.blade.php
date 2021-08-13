@@ -32,7 +32,7 @@
                                 @endif
                                 @if (!auth()->user()->hasanyrole('Manager', 'Editor'))
                                 <div class="col-sm-2">
-                                    <a href="{{ route('repaired.list')}}">
+                                    <a href=@if (auth()->user()->hasanyrole("Warehouse Manager", "Encoder")) {{ route('repaired.list')}} @else {{ route('return.index')}} @endif>
                                         <div class="card bg-card">
                                             <div class="card-body text-center">
                                                 <p class="card-text" style="font-size: 12px">@if (auth()->user()->hasanyrole('Warehouse Manager', 'Encoder')) REPAIRED @else RETURNS @endif</p>
