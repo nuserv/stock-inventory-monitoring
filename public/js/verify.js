@@ -38,6 +38,4 @@ $(document).ready( function() { // Wait until document is fully parsed
             else return false;
         else return false;
     }
-    
-    
 });

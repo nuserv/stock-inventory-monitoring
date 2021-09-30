@@ -178,7 +178,7 @@ $(document).ready(function()
             $.ajax({
                 type: "POST",
                 url: "branch_add",
-                headers: {
+                headers: { 
                     'X-CSRF-TOKEN': $('meta[name="ctok"]').attr('content')
                 },
                 data: $('#branchForm').serialize(),

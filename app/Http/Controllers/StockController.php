@@ -12,6 +12,7 @@ use App\Warehouse;
 use App\Item;
 use App\Category;
 use App\Pullno;
+use App\PmSched;
 use App\Stock;
 use App\PreparedItem;
 use App\RequestedItem;
@@ -32,6 +33,7 @@ use App\Defective;
 use App\UserLog;
 use DB;
 use Auth;
+
 class StockController extends Controller
 {
     public function __construct()
@@ -1195,6 +1197,10 @@ class StockController extends Controller
             }else{
                 $customers = $customers.','.$value;
             }
+            PmSched::where('customer_id', $value)
+                ->where('branch_id', auth()->user()->branch->id)
+                ->where('Status', '!=', 'Completed')
+                ->update(['Status'=>'Completed', 'user_id'=>auth()->user()->id]);
         }
         $preventive->customer_ids = $customers;
         $preventive->serial = $request->serial;

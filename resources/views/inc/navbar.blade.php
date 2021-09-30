@@ -97,13 +97,20 @@
                         <a class="nav-link {{ Request::is('resolved') ? 'active' : '' }}" href="{{ route('resolved.index') }}">Resolved</a>
                     </li>
                     @endif
-                    
+                    @if (auth()->user()->hasanyrole('Manager', 'Editor'))
+                        <li class="nav-item">
+                            <a class="nav-link {{ Request::is('schedule') ? 'active' : '' }} {{ Request::is('pmlist') ? 'active' : '' }}" href="{{ route('index.schedule') }}">PM Schedule</a>
+                        </li>
+                    @endif
                     @if(auth()->user()->branch->branch != 'Warehouse' && auth()->user()->branch->branch != 'Main-Office')
                         <li class="nav-item">
                             <a class="nav-link {{ Request::is('service-unit') ? 'active' : '' }}" href="{{ route('index.service-unit') }}">Service IN / OUT</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link {{ Request::is('preventive') ? 'active' : '' }}" href="{{ route('index.preventive') }}">PM</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link {{ Request::is('schedule') ? 'active' : '' }} {{ Request::is('pmlist') ? 'active' : '' }}" href="{{ route('index.schedule') }}">PM Schedule</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link {{ Request::is('billable') ? 'active' : '' }}" href="{{ route('stock.billable') }}">Billable</a>

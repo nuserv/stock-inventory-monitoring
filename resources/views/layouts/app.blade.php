@@ -34,6 +34,8 @@
         <link href="https://cdn.datatables.net/buttons/1.5.1/css/buttons.dataTables.css" rel="stylesheet" type="text/css" />
         <link href="https://code.jquery.com/ui/1.11.3/themes/smoothness/jquery-ui.css" rel="Stylesheet" type="text/css" />
         <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/dt/dt-1.10.23/b-1.6.5/b-print-1.6.5/sl-1.3.1/datatables.min.css"/>
+        <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/dt/jszip-2.5.0/dt-1.11.2/af-2.3.7/b-2.0.0/b-colvis-2.0.0/b-html5-2.0.0/b-print-2.0.0/cr-1.5.4/date-1.1.1/fc-3.3.3/fh-3.1.9/kt-2.6.4/r-2.2.9/rg-1.1.3/rr-1.2.8/sc-2.0.5/sb-1.2.1/sp-1.4.0/datatables.min.css"/>
+ 
         @auth
         @else
             <title>Login</title>
@@ -111,6 +113,15 @@
              @include('modal.branch.billable')
              @include('modal.branch.billable-approval')
         @endif
+
+        @if(Request::is('schedule'))
+             @include('modal.pmsched')
+        @endif
+
+        @if(Request::is('pmlist'))
+             @include('modal.branch.export')
+        @endif
+
         @if(Request::is('request'))
             @if(auth()->user()->hasAnyrole('Warehouse Manager', 'Encoder'))
                 @include('modal.warehouse.request')
@@ -247,15 +258,30 @@
         <script src="https://cdn.datatables.net/1.10.24/js/jquery.dataTables.min.js"></script>
         <script src="https://cdn.datatables.net/buttons/1.6.5/js/dataTables.buttons.min.js"></script>
         <script src="https://cdn.datatables.net/select/1.3.3/js/dataTables.select.min.js"></script>
-        <script type="text/javascript" src="https://cdn.datatables.net/v/dt/dt-1.10.23/b-1.6.5/b-print-1.6.5/sl-1.3.1/datatables.min.js"></script>
+        {{-- <script type="text/javascript" src="https://cdn.datatables.net/v/dt/dt-1.10.23/b-1.6.5/b-print-1.6.5/sl-1.3.1/datatables.min.js"></script> --}}
         <script type="text/javascript" src="https://code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
         <script type="text/javascript" src="{{asset('js/moment.min.js')}}"></script>
         <script src="https://code.jquery.com/ui/1.11.4/jquery-ui.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.1/Chart.min.js" charset="utf-8"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/highcharts/6.0.6/highcharts.js" charset="utf-8"></script>
-        
+        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/pdfmake.min.js"></script>
+        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/vfs_fonts.js"></script>
+        <script type="text/javascript" src="https://cdn.datatables.net/v/dt/jszip-2.5.0/dt-1.11.2/af-2.3.7/b-2.0.0/b-colvis-2.0.0/b-html5-2.0.0/b-print-2.0.0/cr-1.5.4/date-1.1.1/fc-3.3.3/fh-3.1.9/kt-2.6.4/r-2.2.9/rg-1.1.3/rr-1.2.8/sc-2.0.5/sb-1.2.1/sp-1.4.0/sl-1.3.3/datatables.min.js"></script>
+
         @if(Request::is('user'))
             <script src="{{asset('min/?f=js/warehouse/user.js')}}"></script>
+        @endif
+
+        @if(Request::is('schedule'))
+            @if (auth()->user()->hasanyrole('Manager', 'Editor'))
+                <script src="{{asset('min/?f=js/pmschedmanager.js')}}"></script>
+            @else
+                <script src="{{asset('min/?f=js/pmsched.js')}}"></script>
+            @endif
+        @endif
+
+        @if(Request::is('pmlist'))
+            <script src="{{asset('min/?f=js/pmdone.js')}}"></script>
         @endif
 
         @if(Request::is('defective/print'))

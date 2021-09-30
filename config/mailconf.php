@@ -6,5 +6,5 @@ return [
     'from'       => array('address' => 'bsms.support@ideaserv.com.ph', 'name' => 'support'),
     'encryption' => env('MAIL_ENCRYPTION', 'tls'),
     'username'   => env('BSMS_USERNAME'),
-    'password'   => env('BSMS_PASSWORD'),
+    'password'   => env('BSMS_PASSWORD')
 ];

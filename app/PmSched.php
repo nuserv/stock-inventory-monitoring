@@ -4,8 +4,8 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class ConversionPos extends Model
+class PmSched extends Model
 {
     protected $guarded = [];
-    protected $table = 'conversion_pos';
+    protected $table = 'pm_sched';
 }

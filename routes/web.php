@@ -19,6 +19,20 @@ Route::get('/user/verify/{token}', 'Auth\LoginController@verifyUser');
 Route::get('/send/verification', 'UserController@resend')->middleware(['ajax']);
 Route::get('barchart', 'ReportController@chart');
 
+
+Route::get('schedule', 'PreventiveController@index')->name('index.schedule');
+Route::post('schedule', 'PreventiveController@Store');
+Route::get('scheduled', 'PreventiveController@show');
+Route::get('pmlist', 'PreventiveController@list');
+Route::get('pmlistdata', 'PreventiveController@data');
+Route::get('export', 'PreventiveController@ExportData');
+Route::get('getpm', 'PreventiveController@getpm');
+Route::get('genpm', 'PreventiveController@genpm');
+Route::get('getbranch', 'PreventiveController@getbranch');
+Route::get('checkfsr', 'PreventiveController@checkfsr');
+
+
+
 Route::get('login', 'Auth\LoginController@showLoginForm')->name('login')->middleware('checkBrowser');
 
 Route::get('/forget-password', 'ForgotPasswordController@getEmail');
@@ -164,7 +178,7 @@ Route::get('repaireditem', 'DefectiveController@repaireditem');//->middleware('a
 Route::get('returnitem', 'DefectiveController@returnitem');//->middleware('ajax');
 Route::put('pullupdate', 'StockController@pullupdate')->middleware('ajax');
 Route::put('repairedupdate', 'DefectiveController@repairedupdate')->middleware('ajax');
-Route::get('export', 'ImportController@export')->name('export');
+// Route::get('export', 'ImportController@export')->name('export');
 
 Route::put('bufferupdate', 'StockRequestController@bufferupdate');//->middleware('ajax');
 Route::put('bufferreceived', 'StockRequestController@bufferreceived');//->middleware('ajax');
