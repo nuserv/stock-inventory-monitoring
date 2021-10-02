@@ -191,7 +191,7 @@ $(document).ready(function()
             table.buttons().container().appendTo('div.panel-heading');
         },
         maxDate: new Date(new Date().getFullYear(), new Date().getMonth()+1, '31'),
-        minDate: 0
+        minDate: -7
     });
 });
 
