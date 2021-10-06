@@ -32,7 +32,9 @@
                     <div class="col-md-6 form-group row">
                         <label class="col-md-6 col-form-label text-md-right">FSR No.:</label>
                         <div class="col-md-6">
-                            <input type="text" onkeypress="return event.charCode >= 48 && event.charCode <= 57" onpaste="return false" maxlength="10" style="color: black" class="form-control form-control-sm " id="fsrno" placeholder="Fsr No." autocomplete="off">
+                            <input type="text" title="PM Date is required." style="color: black" class="form-control form-control-sm " id="fsrno" placeholder="Fsr No." autocomplete="off" readonly="readonly">
+                            <div id="fsrlist" style="position:absolute;z-index: 10000;">
+                            </div>
                         </div>
                     </div>
                 </div>

@@ -4,13 +4,36 @@ var branchCode;
 $(document).ready(function()
 {
     $("#datesched").datepicker({
-        // onSelect: function(dateText, inst) { 
-        //     if ($('#fsrno').val().length != 10) {
-        //         $('#saveBtn').prop('disabled', true);
-        //     }else{
-        //         $('#saveBtn').prop('disabled', false);
-        //     }
-        // },
+        onSelect: function(dateText, inst) { 
+            var ul = '<ul class="dropdown-menu" style="display:block; position:relative;overflow: scroll;height: 13em;z-index: 200;">';
+            $.ajax({
+                url:"getfsr",
+                type:"get",
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="ctok"]').attr('content')
+                },
+                data:{
+                    date:$('#datesched').val(),
+                    branchCode: branchCode
+                },
+                success:function(data){
+                    console.log(data);
+                    var datas = $.map(data, function(value, index) {
+                        return [value];
+                    });
+
+                    datas.forEach(value => {
+                        ul+='<li style="color:black">'+value.fsr_num+'</li>';
+                    });
+                    if (data.length == 0) {
+                        alert('No Data Found, Please Upload the FSR')
+                    }else if (data.length > 0 && data.length == 1) {
+                        console.log('dito');
+                        $('#fsrno').val(data[0].fsr_num);
+                    }
+                }
+            });
+        },
         format: 'YYYY-MM-DD',
         minViewMode: 1,
         autoclose: true,
@@ -27,11 +50,11 @@ $(document).ready(function()
     $('table.pmTable').DataTable({ 
         "dom": 'lrtip',
         "language": {
-            "emptyTable": " ",
+            "emptyTable": 'No data found.',
             "processing": '<i class="fa fa-spinner fa-spin fa-3x fa-fw"></i><span class="sr-only">Searching...</span>'
         },
         processing: true,
-        serverSide: false,
+        serverSide: true,
         ajax: {
             url: 'scheduled',
             error: function(data) {
@@ -69,22 +92,54 @@ $(document).on('click', '#prevBtn', function () {
    window.location.href = '/pmlist';
 });
 
-$(document).on('keyup', '#customer', function(){ 
-    var withclient = 'no';
-    var clientname = "";
-    $('#clientlist').fadeOut();  
-    if ($('#client').is(':enabled')) {
-        if ($('#client').val()) {
-            withclient = 'yes';
-            clientname = $('#client').val();
-            if (clientselected != "yes") {
-                alert("Incorrect Client Name!");
-            }
-        }else{
-            $('#client').val('');
-        }
-    }
-    var query = $(this).val();
+// $(document).on('keyup', '#customer', function(){ 
+//     var withclient = 'no';
+//     var clientname = "";
+//     $('#clientlist').fadeOut();  
+//     if ($('#client').is(':enabled')) {
+//         if ($('#client').val()) {
+//             withclient = 'yes';
+//             clientname = $('#client').val();
+//             if (clientselected != "yes") {
+//                 alert("Incorrect Client Name!");
+//             }
+//         }else{
+//             $('#client').val('');
+//         }
+//     }
+//     var query = $(this).val();
+//     var ul = '<ul class="dropdown-menu" style="display:block; position:relative;overflow: scroll;height: 13em;z-index: 200;">';
+//     if(query != ''){
+//         $.ajax({
+//             url:"hint",
+//             type:"get",
+//             headers: {
+//                 'X-CSRF-TOKEN': $('meta[name="ctok"]').attr('content')
+//             },
+//             data:{
+//                 hint:query,
+//                 withclient: withclient,
+//                 clientname: clientname,
+//             },
+//             success:function(data){
+//                 var datas = $.map(data, function(value, index) {
+//                     return [value];
+//                 });
+//                 datas.forEach(value => {
+//                     ul+='<li style="color:black" id="licustomer">'+value.customer_branch+'</li>';
+//                 });
+//                 console.log(ul);
+//                 $('#branchlist').fadeIn();  
+//                 $('#branchlist').html(ul);
+//                 $('#saveBtn').prop('disabled', true);
+//                 go = 'no';
+//             }
+//         });
+//     }
+// });
+
+
+$(document).on('keyup', '.fsrno', function () {
     var ul = '<ul class="dropdown-menu" style="display:block; position:relative;overflow: scroll;height: 13em;z-index: 200;">';
     if(query != ''){
         $.ajax({
@@ -95,25 +150,25 @@ $(document).on('keyup', '#customer', function(){
             },
             data:{
                 hint:query,
-                withclient: withclient,
-                clientname: clientname,
+                withclient: 'no'
             },
             success:function(data){
                 var datas = $.map(data, function(value, index) {
                     return [value];
                 });
                 datas.forEach(value => {
-                    ul+='<li style="color:black" id="licustomer">'+value.customer_branch+'</li>';
+                    ul+='<li style="color:black" count="'+count+'">'+value.customer_branch+'</li>';
                 });
-                console.log(ul);
-                $('#branchlist').fadeIn();  
-                $('#branchlist').html(ul);
-                $('#saveBtn').prop('disabled', true);
-                go = 'no';
+                $('#branchlist'+count).fadeIn();  
+                $('#branchlist'+count).html(ul);
+                $('#out_sub_Btn').prop('disabled', true);
+                $('#client'+count).val('');  
             }
         });
     }
 });
+
+
 $(document).on('click', '#pmTable tbody tr', function () {
     var trdata = table.row(this).data();
     branchCode = trdata.customer_branches_code;

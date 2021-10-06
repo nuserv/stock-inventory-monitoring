@@ -9,6 +9,7 @@ use App\Exports\PmSchedExport;
 use App\CustomerBranch;
 use Carbon\Carbon;
 use App\PmSched;
+use App\Fsr;
 use App\Area;
 use App\Branch;
 use App\PmBranches;
@@ -82,7 +83,7 @@ class PreventiveController extends Controller
         ]);
         $code = $customer->code*1;
         if ($save) {
-            $pmbranch = PmBranches::where('customer_branches_code', $code)->update(['quarter' => Carbon::now()->quarter]);
+            $pmbranch = PmBranches::where('customer_branches_code', $code)->update(['quarter' => Carbon::parse($save->schedule)->quarter]);
         }
         return response()->json($pmbranch);
     }
@@ -93,25 +94,58 @@ class PreventiveController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
+    public function getfsr(Request $request)
+    {
+        $reqdate = explode("/",$request->date);
+        $fsr = Fsr::query()
+            ->select('fsr_num')
+            ->join('pm_branches', DB::raw('(customer_branches_code*1)'), DB::raw('(custbrch*1)'))
+            ->where(DB::raw('(custbrch*1)'), $request->branchCode)
+            ->whereDate('fsr.txndate', '>=', $reqdate[2].'-'.$reqdate[0].'-'.$reqdate[1])
+            ->get();
+        return response()->json($fsr);
+
+    }
     public function show()
     {
         if (auth()->user()->hasanyrole('Manager', 'Editor')) {
-            $pmbranches = PmBranches::query()
+            if (Carbon::now() <= Carbon::now()->firstOfQuarter()->add(5, 'day')) {
+                $pmbranches = PmBranches::query()
                 ->select('customer_branch as client', 'pm_branches.customer_branches_code', 'branch', 'area', 'customer_branches.id as customer_id')
                 ->join('branches', 'branches.id', 'branch_id')
                 ->join('areas', 'areas.id', 'area_id')
                 ->join('customer_branches', DB::raw('(code*1)'),DB::raw('(customer_branches_code*1)'))
                 ->where('customer_id', '1')
-                ->where('quarter', '!=', Carbon::now()->quarter)
+                ->where('quarter', '!=', Carbon::now()->subquarter(2)->quarter)
                 ->get();
+            }else{
+                $pmbranches = PmBranches::query()
+                    ->select('customer_branch as client', 'pm_branches.customer_branches_code', 'branch', 'area', 'customer_branches.id as customer_id')
+                    ->join('branches', 'branches.id', 'branch_id')
+                    ->join('areas', 'areas.id', 'area_id')
+                    ->join('customer_branches', DB::raw('(code*1)'),DB::raw('(customer_branches_code*1)'))
+                    ->where('customer_id', '1')
+                    ->where('quarter', '!=', Carbon::now()->quarter)
+                    ->get();
+            }
         }else{
-            $pmbranches = PmBranches::query()
-            ->select('customer_branch as client', 'pm_branches.customer_branches_code', 'customer_branches.id as customer_id')
-            ->join('customer_branches', DB::raw('(code*1)'),DB::raw('(customer_branches_code*1)'))
-            ->where('customer_id', '1')
-            ->where('quarter', '!=', Carbon::now()->quarter)
-            ->where('branch_id', auth()->user()->branch->id)
-            ->get();
+            if (Carbon::now() <= Carbon::now()->firstOfQuarter()->add(5, 'day')) {
+                $pmbranches = PmBranches::query()
+                    ->select('customer_branch as client', 'pm_branches.customer_branches_code', 'customer_branches.id as customer_id')
+                    ->join('customer_branches', DB::raw('(code*1)'),DB::raw('(customer_branches_code*1)'))
+                    ->where('customer_id', '1')
+                    ->where('quarter', '!=', Carbon::now()->subquarter(2)->quarter)
+                    ->where('branch_id', auth()->user()->branch->id)
+                    ->get();
+            }else{
+                $pmbranches = PmBranches::query()
+                    ->select('customer_branch as client', 'pm_branches.customer_branches_code', 'customer_branches.id as customer_id')
+                    ->join('customer_branches', DB::raw('(code*1)'),DB::raw('(customer_branches_code*1)'))
+                    ->where('customer_id', '1')
+                    ->where('quarter', '!=', Carbon::now()->quarter)
+                    ->where('branch_id', auth()->user()->branch->id)
+                    ->get();
+            }
         }
         
         return DataTables::of($pmbranches)
