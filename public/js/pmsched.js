@@ -25,11 +25,10 @@ $(document).ready(function()
                     datas.forEach(value => {
                         ul+='<li style="color:black">'+value.fsr_num+'</li>';
                     });
-                    if (data.length == 0) {
-                        alert('No Data Found, Please Upload the FSR')
-                    }else if (data.length > 0 && data.length == 1) {
-                        console.log('dito');
+                    if (data.length > 0) {
                         $('#fsrno').val(data[0].fsr_num);
+                    }else{
+                        alert('You need to upload first the FSR in the FSR System before you could post here. Make sure you choose the correct branch and date of the PM for the correct FSR Number to appear.');
                     }
                 }
             });
@@ -226,7 +225,7 @@ $(document).on('click', '#saveBtn', function () {
         if ($('#datesched').val() == "") {
             alert('PM Date is Required.');
         }else if ($('#fsrno').val() == "") {
-            alert('FSR number is Required.');
+            alert('You need to upload first the FSR in the FSR System before you could post here. Make sure you choose the correct branch and date of the PM for the correct FSR Number to appear.');
         }else if ($('#fsrno').val().length != 10) {
             alert('Invalid FSR number.');
         }
