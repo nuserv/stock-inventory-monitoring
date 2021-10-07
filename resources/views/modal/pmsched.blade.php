@@ -37,6 +37,9 @@
                             </div>
                         </div>
                     </div>
+                </div><hr>
+                <div class="row no-margin">
+                    <p style="color: red"><B>NOTE:</B></p><br><p style="color: black">To be able to post the PM you made, you need first to upload the FSR in the FSR System. Once you upload it, you can choose the branch and the date of the PM and the FSR number will appear automatically.</p>
                 </div>
             </div>
             <div class="modal-footer justify-content-center">
