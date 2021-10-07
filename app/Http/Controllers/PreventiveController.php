@@ -129,22 +129,44 @@ class PreventiveController extends Controller
                     ->get();
             }
         }else{
-            if (Carbon::now() <= Carbon::now()->firstOfQuarter()->add(5, 'day')) {
-                $pmbranches = PmBranches::query()
-                    ->select('customer_branch as client', 'pm_branches.customer_branches_code', 'customer_branches.id as customer_id')
-                    ->join('customer_branches', DB::raw('(code*1)'),DB::raw('(customer_branches_code*1)'))
-                    ->where('customer_id', '1')
-                    ->where('quarter', '!=', Carbon::now()->subquarter(2)->quarter)
-                    ->where('branch_id', auth()->user()->branch->id)
-                    ->get();
+            if (auth()->user()->id == 142) {
+                if (Carbon::now() <= Carbon::now()->firstOfQuarter()->add(5, 'day')) {
+                    $pmbranches = PmBranches::query()
+                        ->select('customer_branch as client', 'pm_branches.customer_branches_code', 'customer_branches.id as customer_id')
+                        ->join('customer_branches', DB::raw('(code*1)'),DB::raw('(customer_branches_code*1)'))
+                        ->join('branches', 'branches.id', 'branch_id')
+                        ->where('customer_id', '1')
+                        ->where('quarter', '!=', Carbon::now()->subquarter(2)->quarter)
+                        ->where('area_id', 5)
+                        ->get();
+                }else{
+                    $pmbranches = PmBranches::query()
+                        ->select('customer_branch as client', 'pm_branches.customer_branches_code', 'customer_branches.id as customer_id')
+                        ->join('customer_branches', DB::raw('(code*1)'),DB::raw('(customer_branches_code*1)'))
+                        ->join('branches', 'branches.id', 'branch_id')
+                        ->where('customer_id', '1')
+                        ->where('quarter', '!=', Carbon::now()->quarter)
+                        ->where('area_id', 5)
+                        ->get();
+                }
             }else{
-                $pmbranches = PmBranches::query()
-                    ->select('customer_branch as client', 'pm_branches.customer_branches_code', 'customer_branches.id as customer_id')
-                    ->join('customer_branches', DB::raw('(code*1)'),DB::raw('(customer_branches_code*1)'))
-                    ->where('customer_id', '1')
-                    ->where('quarter', '!=', Carbon::now()->quarter)
-                    ->where('branch_id', auth()->user()->branch->id)
-                    ->get();
+                if (Carbon::now() <= Carbon::now()->firstOfQuarter()->add(5, 'day')) {
+                    $pmbranches = PmBranches::query()
+                        ->select('customer_branch as client', 'pm_branches.customer_branches_code', 'customer_branches.id as customer_id')
+                        ->join('customer_branches', DB::raw('(code*1)'),DB::raw('(customer_branches_code*1)'))
+                        ->where('customer_id', '1')
+                        ->where('quarter', '!=', Carbon::now()->subquarter(2)->quarter)
+                        ->where('branch_id', auth()->user()->branch->id)
+                        ->get();
+                }else{
+                    $pmbranches = PmBranches::query()
+                        ->select('customer_branch as client', 'pm_branches.customer_branches_code', 'customer_branches.id as customer_id')
+                        ->join('customer_branches', DB::raw('(code*1)'),DB::raw('(customer_branches_code*1)'))
+                        ->where('customer_id', '1')
+                        ->where('quarter', '!=', Carbon::now()->quarter)
+                        ->where('branch_id', auth()->user()->branch->id)
+                        ->get();
+                }
             }
         }
         
