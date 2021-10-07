@@ -3,7 +3,7 @@
 @section('content')
 <div class="table-responsive">
     <span style="font-size:130%;color:#00127f"><b>
-    @if (Carbon\Carbon::now() <= Carbon\Carbon::now()->firstOfQuarter()->add(7, 'day'))
+    @if (Carbon\Carbon::now() <= Carbon\Carbon::now()->firstOfQuarter()->add(6, 'day'))
         @if (Carbon\Carbon::now()->quarter == 1)
             4TH
         @endif
