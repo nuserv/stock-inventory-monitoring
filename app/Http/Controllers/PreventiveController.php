@@ -36,6 +36,17 @@ class PreventiveController extends Controller
         }
     }
 
+    public function ReportData(Request $request) 
+    {
+        $branch = Branch::where('id', $request->branch)->first();
+        $months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sept", "Oct", "Nov", "Dec"];
+        if (auth()->user()->hasanyrole('Manager', 'Editor')) {
+            return Excel::download(new PmSchedExport($request->year, $request->from, $request->to, $branch, $request->branch), strtoupper($branch->branch).' PM REPORT '.$months[$request->from-1].'-'.$months[$request->to-1].' '.$request->year.'.xlsx');
+        }else{
+            return Excel::download(new PmSchedExport($request->year, $request->from, $request->to, '', ''), strtoupper(auth()->user()->branch->branch).' PM REPORT '.$months[$request->from-1].'-'.$months[$request->to-1].' '.$request->year.'.xlsx');
+        }
+    }
+
     public function index()
     {
         $areas = Area::all();
@@ -109,7 +120,7 @@ class PreventiveController extends Controller
     public function show()
     {
         if (auth()->user()->hasanyrole('Manager', 'Editor')) {
-            if (Carbon::now() <= Carbon::now()->firstOfQuarter()->add(5, 'day')) {
+            if (Carbon::now() <= Carbon::now()->firstOfQuarter()->add(7, 'day')) {
                 $pmbranches = PmBranches::query()
                 ->select('customer_branch as client', 'pm_branches.customer_branches_code', 'branch', 'area', 'customer_branches.id as customer_id')
                 ->join('branches', 'branches.id', 'branch_id')
@@ -130,7 +141,7 @@ class PreventiveController extends Controller
             }
         }else{
             if (auth()->user()->id == 142) {
-                if (Carbon::now() <= Carbon::now()->firstOfQuarter()->add(5, 'day')) {
+                if (Carbon::now() <= Carbon::now()->firstOfQuarter()->add(7, 'day')) {
                     $pmbranches = PmBranches::query()
                         ->select('customer_branch as client', 'pm_branches.customer_branches_code', 'customer_branches.id as customer_id')
                         ->join('customer_branches', DB::raw('(code*1)'),DB::raw('(customer_branches_code*1)'))
@@ -150,7 +161,7 @@ class PreventiveController extends Controller
                         ->get();
                 }
             }else{
-                if (Carbon::now() <= Carbon::now()->firstOfQuarter()->add(5, 'day')) {
+                if (Carbon::now() <= Carbon::now()->firstOfQuarter()->add(7, 'day')) {
                     $pmbranches = PmBranches::query()
                         ->select('customer_branch as client', 'pm_branches.customer_branches_code', 'customer_branches.id as customer_id')
                         ->join('customer_branches', DB::raw('(code*1)'),DB::raw('(customer_branches_code*1)'))
