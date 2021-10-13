@@ -319,6 +319,15 @@ class PreventiveController extends Controller
             $branch = CustomerBranch::where('id', $sched->customer_id)->first()->customer_branch;
             return $branch;
         })
+        ->addColumn('service_center', function (PmSched $sched){
+            $service_center = Branch::where('id', $sched->branch_id)->first()->branch;
+            return $service_center;
+        })
+        ->addColumn('area', function (PmSched $sched){
+            $area_id = Branch::where('id', $sched->branch_id)->first()->area_id;
+            $area = Area::where('id', $area_id)->first()->area;
+            return $area;
+        })
 
         ->make(true);
     }
