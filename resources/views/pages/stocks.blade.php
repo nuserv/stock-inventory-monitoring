@@ -83,6 +83,11 @@
                     <th>
                         @if(auth()->user()->branch->branch != "Warehouse" && auth()->user()->branch->branch != "Main-Office")Total @else Stock Available @endif
                     </th>
+                    @if(auth()->user()->branch->branch == "Warehouse" || auth()->user()->branch->branch == "Main-Office")
+                    <th>
+                        Pending
+                    </th>
+                    @endif
                     <th>
                         UOM
                     </th>

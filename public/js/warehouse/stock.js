@@ -169,6 +169,7 @@ $(document).on("click", "#catTable tr", function () {
                 { data: 'StockIN', name:'StockIN'},
                 { data: 'StockOUT', name:'StockOUT'},
                 { data: 'quantity', name:'quantity'},
+                { data: 'pending', name:'pending'},
                 { data: 'UOM', name:'UOM'},
                 { data: null, "render": function (data) 
                     {

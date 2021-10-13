@@ -30,6 +30,8 @@ $(document).ready(function()
         },
         columns: [
             { data: 'date', name:'date'},
+            { data: 'area', name:'area'},
+            { data: 'service_center', name:'service_center'},
             { data: 'fsrno', name:'fsrno'},
             { data: 'client', name:'client'},
             { data: 'branch', name:'branch'},

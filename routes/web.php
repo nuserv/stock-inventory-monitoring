@@ -26,6 +26,7 @@ Route::get('scheduled', 'PreventiveController@show');
 Route::get('pmlist', 'PreventiveController@list');
 Route::get('pmlistdata', 'PreventiveController@data');
 Route::get('export', 'PreventiveController@ExportData');
+Route::get('report', 'PreventiveController@ReportData');
 Route::get('getpm', 'PreventiveController@getpm');
 Route::get('genpm', 'PreventiveController@genpm');
 Route::get('getbranch', 'PreventiveController@getbranch');

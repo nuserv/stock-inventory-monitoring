@@ -10,6 +10,12 @@
                     Date
                 </th>
                 <th>
+                    Area
+                </th>
+                <th>
+                    Branch
+                </th>
+                <th>
                     FSR Number
                 </th>
                 <th>
@@ -25,6 +31,12 @@
             <tr>
                 <th>
                     Date
+                </th>
+                <th>
+                    Area
+                </th>
+                <th>
+                    Branch
                 </th>
                 <th>
                     FSR Number
