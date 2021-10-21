@@ -28,7 +28,7 @@
                         </select>
                     </div>
                 </div>
-                @if (auth()->user()->hasanyrole('Manager', 'Editor'))
+                @if (auth()->user()->hasanyrole('Manager', 'Editor') || auth()->user()->id == 142 || auth()->user()->id == 134)
                 <hr>
                 <div class="row no-margin">
                     <div class="col-md-4 form-group">
