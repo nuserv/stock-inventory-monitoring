@@ -231,13 +231,13 @@ $(document).on('click', '.in_sub_Btn', function(e){
                         },
                         success:function(data)
                         {
-                            console.log(data);
-                            if (data == "bawal") {
-                                alert('You are trying to SERVICE-IN in less than 10 minutes from the time you SERVICE-OUT. Please SERVICE-OUT before you leave the office. \nKindly try again later.');
+                            // console.log(data);
+                            // if (data == "bawal") {
+                            //     alert('You are trying to SERVICE-IN in less than 10 minutes from the time you SERVICE-OUT. Please SERVICE-OUT before you leave the office. \nKindly try again later.');
+                            //     location.reload();
+                            // }else{
                                 location.reload();
-                            }else{
-                                location.reload();
-                            }
+                            // }
                         },
                         error: function (data) {
                             alert(data.responseText);
@@ -270,13 +270,13 @@ $(document).on('click', '.in_sub_Btn', function(e){
                         },
                         success:function(data)
                         {
-                            console.log(data);
-                            if (data == "bawal") {
-                                alert('You are trying to SERVICE-IN in less than 10 minutes from the time you SERVICE-OUT. Please SERVICE-OUT before you leave the office.\nKindly try again later.');
+                            // console.log(data);
+                            // if (data == "bawal") {
+                            //     alert('You are trying to SERVICE-IN in less than 10 minutes from the time you SERVICE-OUT. Please SERVICE-OUT before you leave the office.\nKindly try again later.');
+                            //     location.reload();
+                            // }else{
                                 location.reload();
-                            }else{
-                                location.reload();
-                            }
+                            // }
                         },
                         error: function (data) {
                             alert(data.responseText);
