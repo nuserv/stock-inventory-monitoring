@@ -1407,7 +1407,7 @@ class StockController extends Controller
     {
         $update = Stock::where('id', $request->id)->first();
         $customer = CustomerBranch::where('id', $request->custid)->first();
-        if ($stock->update_at <= Carbon::now()->subMinutes(15)) {
+        if ($update->update_at <= Carbon::now()->subMinutes(15)) {
             $data = "bawal";
             return response()->json($data);
         }
