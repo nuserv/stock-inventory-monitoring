@@ -860,7 +860,7 @@ class StockController extends Controller
         $item = Item::where('id', $stock->items_id)->first();
         $customer = CustomerBranch::where('id', $stock->customer_branches_id)->first();
         //return dd($stock);
-        if ($stock->update_at <= Carbon::now()->subMinutes(15)) {
+        if ($stock->updated_at <= Carbon::now()->subMinutes(15)) {
             $data = "bawal";
             return response()->json($data);
         }
@@ -1407,7 +1407,7 @@ class StockController extends Controller
     {
         $update = Stock::where('id', $request->id)->first();
         $customer = CustomerBranch::where('id', $request->custid)->first();
-        if ($update->update_at <= Carbon::now()->subMinutes(15)) {
+        if ($update->updated_at <= Carbon::now()->subMinutes(15)) {
             $data = "bawal";
             return response()->json($data);
         }
