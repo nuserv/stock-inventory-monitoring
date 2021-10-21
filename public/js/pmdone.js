@@ -136,7 +136,7 @@ $(document).on('change', '#select_area', function(){
 });
 
 $(document).on('change', '#monthto', function(){
-    if ($('#userlevel').val() == "Manager" || $('#userlevel').val() == "Editor") {
+    if ($('#userlevel').val() == "Manager" || $('#userlevel').val() == "Editor" || $('#userid').val() == 142 ||  $('#userid').val() == 134) {
         $('#select_area').prop('disabled', false);
         $('#select_area').val('select area');
         $('#select_branch').prop('disabled', true);
@@ -152,7 +152,7 @@ $(document).on('change', '#select_branch', function(){
 
 $(document).on('click', '#genBtn', function(){
     $('#loading').show();
-    if ($('#userlevel').val() == "Manager" || $('#userlevel').val() == "Editor") {
+    if ($('#userlevel').val() == "Manager" || $('#userlevel').val() == "Editor"|| $('#userid').val() == 142 ||  $('#userid').val() == 134) {
         window.location.href = 'export?year='+$('#yearselect').val()+'&from='+$('#monthselect').val()+'&to='+$('#monthto').val()+'&branch='+$('#select_branch').val();
         $('#exportModal').modal('hide');
         setTimeout(function(){
