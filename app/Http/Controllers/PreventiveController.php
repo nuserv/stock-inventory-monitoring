@@ -29,7 +29,7 @@ class PreventiveController extends Controller
     {
         $branch = Branch::where('id', $request->branch)->first();
         $months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sept", "Oct", "Nov", "Dec"];
-        if (auth()->user()->hasanyrole('Manager', 'Editor')) {
+        if (auth()->user()->hasanyrole('Manager', 'Editor') || auth()->user()->id == 142 || auth()->user()->id == 134) {
             return Excel::download(new PmSchedExport($request->year, $request->from, $request->to, $branch, $request->branch), strtoupper($branch->branch).' PM REPORT '.$months[$request->from-1].'-'.$months[$request->to-1].' '.$request->year.'.xlsx');
         }else{
             return Excel::download(new PmSchedExport($request->year, $request->from, $request->to, '', ''), strtoupper(auth()->user()->branch->branch).' PM REPORT '.$months[$request->from-1].'-'.$months[$request->to-1].' '.$request->year.'.xlsx');
