@@ -35,7 +35,27 @@
                         <select id="select_area" style="color: black" disabled>
                             <option selected disabled>select area</option>
                             @foreach ($areas as $area)
-                                <option value="{{ $area->id }}">{{ $area->area }}</option>
+                                @if (auth()->user()->id == 142)
+                                    @if ($area->area != 'TEST')
+                                        @if ($area->id == 5)
+                                            <option value="{{ $area->id }}">{{ $area->area }}</option>
+                                        @endif
+                                    @endif
+                                @endif
+                                @if (auth()->user()->id == 134)
+                                    @if ($area->area != 'TEST')
+                                        @if ($area->id == 3)
+                                            <option value="{{ $area->id }}">{{ $area->area }}</option>
+                                        @endif
+                                    @endif
+                                @endif
+                                @if (auth()->user()->id != 134)
+                                    @if (auth()->user()->id != 142)
+                                        @if ($area->area != 'TEST')
+                                            <option value="{{ $area->id }}">{{ $area->area }}</option>
+                                        @endif
+                                    @endif
+                                @endif
                             @endforeach
                         </select>
                     </div>

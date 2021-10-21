@@ -292,14 +292,14 @@ class PreventiveController extends Controller
     }
     public function data()
     {
-        $sched = PmSched::select(
-                'pm_sched.*',
-                'code',
-                'customer_branches.customer_branch')
-            ->join('customer_branches', 'customer_branches.id', 'pm_sched.customer_id')
-            ->where('branch_id', auth()->user()->branch->id)
-            ->where('pm_sched.Status', 'Completed')
-            ->get();
+        // $sched = PmSched::select(
+        //         'pm_sched.*',
+        //         'code',
+        //         'customer_branches.customer_branch')
+        //     ->join('customer_branches', 'customer_branches.id', 'pm_sched.customer_id')
+        //     ->where('branch_id', auth()->user()->branch->id)
+        //     ->where('pm_sched.Status', 'Completed')
+        //     ->get();
         if (auth()->user()->hasanyrole('Manager', 'Editor')) {
             $sched = PmSched::select(
                 'pm_sched.*',
@@ -307,6 +307,26 @@ class PreventiveController extends Controller
                 'customer_branches.customer_branch')
             ->join('customer_branches', 'customer_branches.id', 'pm_sched.customer_id')
             ->where('pm_sched.Status', 'Completed')
+            ->get();
+        }else if (auth()->user()->id == 134) {
+            $sched = PmSched::select(
+                'pm_sched.*',
+                'code',
+                'customer_branches.customer_branch')
+            ->join('customer_branches', 'customer_branches.id', 'pm_sched.customer_id')
+            ->join('branches', 'branches.id', 'branch_id')
+            ->where('pm_sched.Status', 'Completed')
+            ->where('area_id', 3)
+            ->get();
+        }else if (auth()->user()->id == 142) {
+            $sched = PmSched::select(
+                'pm_sched.*',
+                'code',
+                'customer_branches.customer_branch')
+            ->join('customer_branches', 'customer_branches.id', 'pm_sched.customer_id')
+            ->join('branches', 'branches.id', 'branch_id')
+            ->where('pm_sched.Status', 'Completed')
+            ->where('area_id', 5)
             ->get();
         }else{
             $sched = PmSched::select(

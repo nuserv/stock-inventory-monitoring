@@ -55,7 +55,7 @@ $(document).ready(function()
 $(document).on('change', '#yearselect', function(){
     var monthoption = '<option selected disabled>select month</option>';
     if ($(this).val() == year) {
-        for (let index = 9; index <= curmonth ; index++) {
+        for (let index = 10; index <= curmonth ; index++) {
             monthoption += '<option value="'+index+'">'+months[index-1]+'</option>';
         }
     }else if ($(this).val() == curyear) {
@@ -113,7 +113,11 @@ $(document).on('change', '#select_area', function(){
             branch.forEach(value => {
                 if (value.branch != "Conversion") {
                     if (value.branch != "Test Branch") {
-                        branchOp+='<option value="'+value.id+'">'+value.branch+'</option>';
+                        if (value.branch != "Main-Office") {
+                            if (value.branch != "Warehouse") {
+                                branchOp+='<option value="'+value.id+'">'+value.branch+'</option>';
+                            }
+                        }
                     }
                 }
             });

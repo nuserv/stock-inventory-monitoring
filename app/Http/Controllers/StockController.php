@@ -860,6 +860,10 @@ class StockController extends Controller
         $item = Item::where('id', $stock->items_id)->first();
         $customer = CustomerBranch::where('id', $stock->customer_branches_id)->first();
         //return dd($stock);
+        if ($stock->update_at <= Carbon::now()->subMinutes(15)) {
+            $data = "bawal";
+            return response()->json($data);
+        }
         if ($request->status == 'defective') {
             $defective = new Defective;
             $defective->branch_id = auth()->user()->branch->id;
@@ -1392,6 +1396,10 @@ class StockController extends Controller
                 }
                 return $initial->qty;
             })
+            ->addColumn('pending', function (Item $request){
+                $initial = RequestedItem::query()->where('items_id', $request->id)->sum('pending');
+                return $initial;
+            })
             ->make(true);
         }
     }
@@ -1399,6 +1407,10 @@ class StockController extends Controller
     {
         $update = Stock::where('id', $request->id)->first();
         $customer = CustomerBranch::where('id', $request->custid)->first();
+        if ($stock->update_at <= Carbon::now()->subMinutes(15)) {
+            $data = "bawal";
+            return response()->json($data);
+        }
         if ($request->stat == 'sunit') {
             $update->status = $request->status;
             $update->user_id = auth()->user()->id;
