@@ -51,9 +51,9 @@ $(document).on("click", "#sUnitTable tr", function () {
         }
     }
     $('#service-inModal').modal({backdrop: 'static', keyboard: false});
-    $('#inclient').val(trdata.client_name);
-    $('#incustomer').val(trdata.customer_name);
-    $('#outitem').val(trdata.description);
+    $('#inclient').val(trdata.client_name.replace(/&#039;/g, '\'').replace(/&quot;/g, '\"').replace(/&amp;/g, '\&').replace(/&AMP;/g, '\&'));
+    $('#incustomer').val(trdata.customer_name.replace(/&#039;/g, '\'').replace(/&quot;/g, '\"').replace(/&amp;/g, '\&').replace(/&AMP;/g, '\&'));
+    $('#outitem').val(trdata.description.replace(/&#039;/g, '\'').replace(/&quot;/g, '\"').replace(/&amp;/g, '\&').replace(/&AMP;/g, '\&'));
     var itemop;
     $.ajax({
         type:'get',
