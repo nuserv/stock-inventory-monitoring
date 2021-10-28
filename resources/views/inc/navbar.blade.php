@@ -1,7 +1,7 @@
 <nav class="nav nav-tabs navbar-expand-md">
     <div class="navbar-collapse collapse justify-content-between align-items-center w-100">
         @auth
-        <ul class="nav mr-auto" style="font-size: 14px">.
+        <ul class="nav mr-auto" style="font-size: 14px">
             @if(!auth()->user()->hasanyrole('Viewer', 'Viewer PLSI', 'Viewer IDSI','Repair'))
             <li class="nav-item">
                 <a class="nav-link {{ Request::is('/') ? 'active' : '' }}" href="{{ url('/') }}">Home</a>
@@ -164,7 +164,7 @@
             <li class="nav-item nohover" style="padding: 15px 0;">
                 <a class="nav-link {{ Request::is('report-a-problem') ? 'active' : '' }}" href="{{ url('report-a-problem') }}" style="background-color: white; color:#0d1a80; font-size: 10px;border-radius: 5px;padding: 2px 0;">&nbsp;&nbsp;REPORT A PROBLEM&nbsp;&nbsp;</a>
             </li>
-             <li class="nav-item" style="padding: 10px 0;">
+            <li class="nav-item" style="padding: 10px 0;">
                 <a href="{{route('logout')}}" class="nav-link"><b>Logout</b>&nbsp;&nbsp;<i class="fa fa-sign-out" aria-hidden="true"></i></a>
             </li>
         </ul>

@@ -35,7 +35,7 @@ class PmSchedExport implements FromCollection, WithStyles, ShouldAutoSize, WithC
     public function headings(): array
     {
         $months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
-        if (auth()->user()->hasanyrole('Manager', 'Editor')) {
+        if (auth()->user()->hasanyrole('Manager', 'Editor') || auth()->user()->id == 142 || auth()->user()->id == 134) {
             return [
                 [' ',' ',' '],
                 ['SUMMARY OF PREVENTIVE MAINTENANCE REPORT'],
@@ -63,7 +63,7 @@ class PmSchedExport implements FromCollection, WithStyles, ShouldAutoSize, WithC
 
     public function styles(Worksheet $sheet)
     {
-        if (auth()->user()->hasanyrole('Manager', 'Editor')) {
+        if (auth()->user()->hasanyrole('Manager', 'Editor') || auth()->user()->id == 142 || auth()->user()->id == 134) {
             $data = PmSched::query()
                 ->select(DB::raw("DATE_FORMAT(schedule, '%M %d, %Y') as Date"), 'code', 'customer_branch')
                 ->join('customer_branches', 'customer_branches.id', 'pm_sched.customer_id')
@@ -149,7 +149,7 @@ class PmSchedExport implements FromCollection, WithStyles, ShouldAutoSize, WithC
 
     public function collection()
     {
-        if (auth()->user()->hasanyrole('Manager', 'Editor')) {
+        if (auth()->user()->hasanyrole('Manager', 'Editor') || auth()->user()->id == 142 || auth()->user()->id == 134) {
             $data = PmSched::query()
                 ->select(DB::raw("DATE_FORMAT(schedule, '%M %d, %Y') as Date"), 'code', 'customer_branch')
                 ->join('customer_branches', 'customer_branches.id', 'pm_sched.customer_id')
