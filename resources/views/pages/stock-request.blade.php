@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
-@if(auth()->user()->hasrole('Warehouse Manager'))
+@if(auth()->user()->hasrole('Warehouse Manager','Encoder'))
     <form class="search-form" action="#" style="margin:auto;max-width:300px">
     <input type="text" placeholder="Search.." id="searchall" size="50" autocomplete="off">
     </form>
