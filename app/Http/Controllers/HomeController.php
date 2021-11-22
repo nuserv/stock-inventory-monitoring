@@ -276,10 +276,17 @@ class HomeController extends Controller
     {
         sleep(2);
         $request = StockRequest::query()
+            ->where('request_no', $id)->first();
+        if ($request->type == "Service") {
+            $request = StockRequest::query()
             ->select('requests.*', 'customer_branch')
             ->where('request_no', $id)
             ->join('customer_branches', 'customer_branches.id', 'customer_branch_id')
             ->first();
+        }
+        // if ($request->) {
+        //     # code...
+        // }
         $title = 'Print Preview';
         return view('pages.warehouse.print', compact('request', 'title'));
     }
