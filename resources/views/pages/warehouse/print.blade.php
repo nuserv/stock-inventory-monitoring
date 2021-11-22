@@ -2,6 +2,7 @@
 
 @section('content')
 <input type="text" id="requesttyp" value="{{ $request->type}}" hidden>
+<input type="text" id="customername" value="{{ $request->customer_branch }}" hidden>
 <input type="text" id="branchaddress" value="{{ \App\Branch::where('id', $request->branch_id)->first()->address }}" hidden>     
 <div class="row no-margin">
     <div class="col-md-6 form-group row">

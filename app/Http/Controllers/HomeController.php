@@ -275,7 +275,11 @@ class HomeController extends Controller
     public function print($id)
     {
         sleep(2);
-        $request = StockRequest::where('request_no', $id)->first();
+        $request = StockRequest::query()
+            ->select('requests.*', 'customer_branch')
+            ->where('request_no', $id)
+            ->join('customer_branches', 'customer_branches.id', 'customer_branch_id')
+            ->first();
         $title = 'Print Preview';
         return view('pages.warehouse.print', compact('request', 'title'));
     }
