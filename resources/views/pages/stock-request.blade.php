@@ -1,14 +1,43 @@
 @extends('layouts.app')
 
 @section('content')
-@if(auth()->user()->hasanyrole('Warehouse Manager','Encoder'))
+{{-- @if(auth()->user()->hasanyrole('Warehouse Manager','Encoder'))
     <form class="search-form" action="#" style="margin:auto;max-width:300px">
     <input type="text" placeholder="Search.." id="searchall" size="50" autocomplete="off">
     </form>
-@endif
+@endif --}}
 <div class="table" id="requestdiv">
     <table class="table-hover table requestTable" id="requestTable" style="font-size:80%">
         <thead class="thead-dark">
+            @if(auth()->user()->hasAnyrole('Warehouse Manager', 'Encoder', 'Editor', 'Manager', 'Warehouse Administrator'))
+                <tr>
+                    @if(auth()->user()->hasAnyrole('Warehouse Manager', 'Encoder', 'Editor', 'Manager', 'Warehouse Administrator'))
+                    <th>
+                        ID
+                    </th>
+                    @endif
+                    <th>
+                        DATE
+                    </th>
+                    <th>
+                        REQUESTED BY
+                    </th>
+                    @if(auth()->user()->hasAnyrole('Warehouse Manager', 'Encoder', 'Editor', 'Manager', 'Warehouse Administrator'))
+                    <th>
+                        BRANCH NAME
+                    </th>
+                    @endif
+                    <th>
+                        REQUEST TYPE
+                    </th>
+                    <th>
+                        STATUS
+                    </th>
+                    <th>
+                        TICKET NO.
+                    </th>
+                </tr>
+            @endif
             <tr>
                 @if(auth()->user()->hasAnyrole('Warehouse Manager', 'Encoder', 'Editor', 'Manager', 'Warehouse Administrator'))
                 <th>

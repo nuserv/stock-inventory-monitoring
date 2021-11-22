@@ -262,6 +262,8 @@ Route::get('preventive', 'HomeController@preventive')->name('index.preventive');
 Route::get('convert', 'HomeController@convert');
 Route::get('imp', 'HomeController@imp');
 Route::get('backup-inventory', 'StockController@Backupinv')->name('backup-inventory');
+Route::get('backup-branch', 'StockController@Backupbranch');
+
 Route::get('getfsr', 'PreventiveController@getfsr');
 
 Route::get('reports', 'ReportsController@index');

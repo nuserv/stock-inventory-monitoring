@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Yajra\DataTables\Facades\DataTables;
 use App\Exports\ExcelExport;
 use App\Exports\BackupInventoryExport;
+use App\Exports\Backup;
 use Maatwebsite\Excel\Excel as BaseExcel;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Warehouse;
@@ -168,6 +169,10 @@ class StockController extends Controller
     public function Backupinv() 
     {
         return Excel::download(new BackupInventoryExport, 'Back up Inventory -'.Carbon::now()->isoFormat('lll').'.xlsx');
+    }   
+    public function Backupbranch() 
+    {
+        return Excel::download(new Backup, 'branch.xlsx');
     }   
     public function index()
     {

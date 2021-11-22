@@ -43,7 +43,9 @@ $(document).ready(function()
     var months = ["January","February","March","April","May","June","July","August","September","October","November","December"];
     $('#date').val(months[d.getMonth()]+' '+d.getDate()+', ' +d.getFullYear()+' '+hour+':'+String(d.getMinutes()).padStart(2, '0')+ampm);
     $('#sdate').val(months[d.getMonth()]+' '+d.getDate()+', ' +d.getFullYear()+' '+hour+':'+String(d.getMinutes()).padStart(2, '0')+ampm);
-
+    $('.requestTable thead tr:eq(0) th').each( function () {
+        $(this).html('<input type="text" style="width:150px" class="column_search"/>' );
+    });
     table =
     $('table.requestTable').DataTable({ 
         "dom": 'lrtip',
@@ -114,8 +116,8 @@ $(document).ready(function()
             "targets": [ 0 ],
             "visible": false
         }],
-        processing: true,
-        serverSide: true,
+        processing: false,
+        serverSide: false,
         ajax: {
             url: 'requests',
             error: function(data) {
@@ -1212,6 +1214,13 @@ $(document).ready(function()
             { data: 'branch', name:'branch'},
             { data: 'user', name:'user'}
         ]
+    });
+
+    $('.requestTable thead').on( 'keyup', ".column_search",function () {
+        table
+            .column( $(this).parent().index()+1 )
+            .search( this.value )
+            .draw();
     });
 });
 
