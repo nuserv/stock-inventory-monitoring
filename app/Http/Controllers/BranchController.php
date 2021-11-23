@@ -218,6 +218,13 @@ class BranchController extends Controller
             $branch->phone = $request->input('mobile');
             $branch->status = $request->input('status');
             $branch->save();
+            $log = new UserLog;
+            $log->branch_id = auth()->user()->branch->id;
+            $log->branch = auth()->user()->branch->branch;
+            $log->activity = "ADD ".ucwords(mb_strtolower($request->input('branch_name'))). "to Service Center.";
+            $log->user_id = auth()->user()->id;
+            $log->fullname = auth()->user()->name.' '.auth()->user()->middlename.' '.auth()->user()->lastname;
+            $log->save();
             foreach ($items as $item) {
                 $initial = new Initial;
                 $initial->items_id = $item->id;
