@@ -97,9 +97,11 @@ $(document).on('change', '#intype', function(){
 
     }else if ($(this).val() == 'replacement') {
         $('#indesc').hide();
-        $('#repdesc').val('select item description');
+        $('#repdesc').val('');
         $('#repdesc').show();
         $('#repdesc').prop('disabled', false);
+        // $('#repdesc').prop('readonly', true);
+        $('#repdesc').click();
         $('#inserial').prop('disabled', true);
         $('#repserial').prop('disabled', true);
         $('#repserial').show();
@@ -112,7 +114,6 @@ $(document).on('change', '#intype', function(){
         $('#in_sub_Btn').prop('disabled', true);
         status = '';
         desc = '';
-
     }
 });
 $(document).on('keyup', '#repserial', function(){
@@ -187,21 +188,71 @@ $(document).on('change', '#instatus', function(){
     }
 });
 
-$(document).on('change', '#repdesc', function(){
-    desc = $(this).val();
-    // var trim = /[a-zA-Z]+/g;
-    // var string = $('#repdesc option:selected').text().match(trim);
-    // var str = '';
-    // for (let index = 0; index < string.length; index++) {
-    //     if (str != '') {
-    //         str = str+string[index];
-    //     }else{
-    //         str = string[index];
-    //     }
-    // }
-    // console.log(str.slice(0,4));
-    
-    $('#repserial').prop('disabled', false);
+$(document).on('click', '#repdesc', function(){
+    $('#in_sub_Btn').prop('disabled', true);
+    desc = '';
+    var query = trdata.category_id;
+    var ul = '<ul class="dropdown-menu" style="display:block; position:relative;overflow: scroll;height: 13em;z-index: 200;">';
+    $.ajax({
+        url:"itemcodes",
+        type:"get",
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="ctok"]').attr('content')
+        },
+        data:{
+            id:query,
+        },
+        success:function(data){
+            var datas = $.map(data, function(value, index) {
+                return [value];
+            });
+            datas.forEach(value => {
+                ul+='<li style="color:black" id="lirepdesc">'+value.item.toUpperCase()+')</li>';
+            });
+            $('#repdesclist').fadeIn();  
+            $('#repdesclist').html(ul);
+        }
+    });
+});
+
+$(document).on('keyup', '#repdesc', function(){ 
+    $('#in_sub_Btn').prop('disabled', true);
+    desc = '';
+    var query = trdata.category_id;
+    var ul = '<ul class="dropdown-menu" style="display:block; position:relative;overflow: scroll;height: 13em;z-index: 200;">';
+    $.ajax({
+        url:"itemcodes",
+        type:"get",
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="ctok"]').attr('content')
+        },
+        data:{
+            id:query,
+            item:$(this).val()
+        },
+        success:function(data){
+            var datas = $.map(data, function(value, index) {
+                return [value];
+            });
+            datas.forEach(value => {
+                ul+='<li style="color:black" id="lirepdesc">'+value.item.toUpperCase()+')</li>';
+            });
+            $('#repdesclist').fadeIn();  
+            $('#repdesclist').html(ul);
+        }
+    });
+});
+
+$(document).on('click', 'li', function(){  
+    var select = $(this).text();
+    var id = $(this).attr('id');
+    if (id == 'lirepdesc') {
+        $('#repdesc').val($(this).text());  
+        $('#repdesclist').fadeOut();  
+        desc = $(this).val();
+        $('#repserial').prop('disabled', false);
+        $('#in_sub_Btn').prop('disabled', true);
+    }
 });
 
 $(document).on('click', '.in_sub_Btn', function(e){
@@ -260,13 +311,14 @@ $(document).on('click', '.in_sub_Btn', function(e){
                         type: 'PUT',
                         async: false,
                         data: {
-                            stat: 'replace',
+                            stat: 'replacement',
                             id: $('#indescid').val(),
                             ids: $('#repdesc').val(),
                             serial: $('#repserial').val(),
                             status: 'defective',
                             custid: trdata.customer_branches_id,
-                            remarks: 'service'
+                            remarks: 'service',
+
                         },
                         success:function(data)
                         {

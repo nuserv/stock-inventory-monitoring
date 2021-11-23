@@ -68,9 +68,10 @@
                         </select>
                     </div>
                     <div class="col-md-3 form-group">
-                        <select id="repdesc" class="form-control" style="color: black;" disabled>
-                            <option selected disabled>select item description</option>
-                        </select>
+                        <div>
+                            <input id="repdesc" type="text" placeholder="select item description" class="form-control" style="color: black;" disabled>
+                            <div id="repdesclist" style="position:absolute;z-index: 10000;"></div>
+                        </div>
                         <input type="number" id="indescid" class="form-control" style="color: black; display:none;" readonly>  
                         <input type="text" id="indesc" class="form-control" style="color: black; display:none;" readonly>  
                     </div>

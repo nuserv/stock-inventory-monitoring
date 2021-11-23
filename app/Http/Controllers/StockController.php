@@ -1457,6 +1457,27 @@ class StockController extends Controller
             $log->fullname = auth()->user()->name.' '.auth()->user()->middlename.' '.auth()->user()->lastname;
             $data = $log->save();
             return response()->json($data);
+        }else if ($request->stat == 'replacement') {
+            $update->status = 'replacement';
+            $update->user_id = auth()->user()->id;
+            $update->save();
+            $item = Item::where('item', $request->ids)->first();
+            $defective = new Defective;
+            $defective->branch_id = auth()->user()->branch->id;
+            $defective->user_id = auth()->user()->id;
+            $defective->category_id = $update->category_id;
+            $defective->items_id = $item->id;
+            $defective->serial = $request->serial;
+            $defective->status = 'For return';
+            $defective->save();
+            $log = new UserLog;
+            $log->branch_id = auth()->user()->branch->id;
+            $log->branch = auth()->user()->branch->branch;
+            $log->activity = "SERVICE IN - REPLACEMENT $item->item(S/N: ".mb_strtoupper($request->serial).") from $customer->customer_branch." ;
+            $log->user_id = auth()->user()->id;
+            $log->fullname = auth()->user()->name.' '.auth()->user()->middlename.' '.auth()->user()->lastname;
+            $data = $log->save();
+            return response()->json($data);
         }
     }
     public function PMupdate(Request $request)

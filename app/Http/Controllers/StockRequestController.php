@@ -78,6 +78,13 @@ class StockRequestController extends Controller
         $data = Item::select('id', 'item')->where('category_id', $request->id)->orderBy('item')->get();
         return response()->json($data);
     }
+    public function getItemCodes(Request $request){
+        $data = Item::select('id', 'item')
+        ->where('category_id', $request->id)
+        ->where('item', 'LIKE', '%'.str_replace(' ','%',$request->item).'%')
+        ->orderBy('item')->get();
+        return response()->json($data);
+    }
     public function getCode(Request $request){
         $initials = Initial::where('branch_id', auth()->user()->branch->id)
             ->join('items', 'items_id', '=', 'items.id')
