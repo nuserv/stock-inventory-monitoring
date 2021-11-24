@@ -69,7 +69,7 @@
                     </div>
                     <div class="col-md-3 form-group">
                         <div>
-                            <input id="repdesc" type="text" placeholder="select item description" class="form-control" style="color: black;" disabled>
+                            <input id="repdesc" type="text" placeholder="select item description" autocomplete="off" class="form-control" style="color: black;" disabled>
                             <div id="repdesclist" style="position:absolute;z-index: 10000;"></div>
                         </div>
                         <input type="number" id="indescid" class="form-control" style="color: black; display:none;" readonly>  
