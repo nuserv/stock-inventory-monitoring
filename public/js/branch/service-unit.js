@@ -207,7 +207,7 @@ $(document).on('click', '#repdesc', function(){
                 return [value];
             });
             datas.forEach(value => {
-                ul+='<li style="color:black" id="lirepdesc">'+value.item.toUpperCase()+')</li>';
+                ul+='<li style="color:black" id="lirepdesc">'+value.item.toUpperCase()+'</li>';
             });
             $('#repdesclist').fadeIn();  
             $('#repdesclist').html(ul);
