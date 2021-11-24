@@ -249,7 +249,7 @@ $(document).on('click', 'li', function(){
     if (id == 'lirepdesc') {
         $('#repdesc').val($(this).text());  
         $('#repdesclist').fadeOut();  
-        desc = $(this).val();
+        desc = $(this).text();
         $('#repserial').prop('disabled', false);
         $('#in_sub_Btn').prop('disabled', true);
     }
@@ -297,6 +297,7 @@ $(document).on('click', '.in_sub_Btn', function(e){
                 }
             }
         }else if ($('#intype').val() == 'replacement') {
+            console.log(desc);
             if (desc != '' && $('#repserial').val() != "") {
                 if(confirm('Please make sure you input the correct item and serial number. Click CANCEL to review your entry. Click OK if you are sure that your entry is correct to SUBMIT.')) {
                     e.preventDefault();
