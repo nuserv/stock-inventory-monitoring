@@ -121,7 +121,7 @@ $(document).on('keyup', '#repserial', function(){
     if ($(this).val() && $(this).val().length >= 3) {
         if ($(this).val().toLowerCase().includes('n/a') || $(this).val().toLowerCase() ==  "n/a" || $(this).val().toLowerCase() ==  "faded" || $(this).val().toLowerCase() ==  "none") {
             $.ajax({
-                url: 'checkserial',
+                url: 'checkserials',
                 headers: {
                     'X-CSRF-TOKEN': $('meta[name="ctok"]').attr('content')
                 },

@@ -210,6 +210,7 @@ Route::get('itemcode', 'StockRequestController@getItemCode')->middleware('ajax')
 Route::get('itemcodes', 'StockRequestController@getItemCodes');//->middleware('ajax');
 Route::get('getcode', 'StockRequestController@getCode');//->middleware('ajax');
 Route::get('checkserial', 'StockRequestController@checkserial');//->middleware('ajax');
+Route::get('checkserials', 'StockRequestController@checkserials');//->middleware('ajax');
 Route::get('servicerequest', 'StockRequestController@servicerequest');//->middleware('ajax');
 Route::get('getuomq', 'StockRequestController@getuomq');//->middleware('ajax');
 Route::get('getcon', 'StockRequestController@getcon');//->middleware('ajax');
