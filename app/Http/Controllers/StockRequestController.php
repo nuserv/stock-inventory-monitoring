@@ -1379,7 +1379,7 @@ class StockRequestController extends Controller
     public function checkserial(Request $request)
     {
         if ($request->type == 'na') {
-            $item = Item::where('id', $request->item)->first();
+            $item = Item::where('item', $request->item)->first();
             if ($item->n_a == "yes") {
                 $data = "allowed";
             }else {
