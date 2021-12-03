@@ -55,7 +55,7 @@ class PreventiveController extends Controller
 
     public function checkfsr(Request $request)
     {
-        $fsr = PmSched::where('fsrno', $request->fsrno)->first();
+        $fsr = PmSched::query()->where('fsrno', $request->fsrno)->first();
         if ($fsr) {
             return response()->json('meron');
         }else{
@@ -94,7 +94,7 @@ class PreventiveController extends Controller
         ]);
         $code = $customer->code*1;
         if ($save) {
-            $pmbranch = PmBranches::where('customer_branches_code', $code)->update(['quarter' => Carbon::parse($save->schedule)->quarter]);
+            $pmbranch = PmBranches::query()->where('customer_branches_code', $code)->update(['quarter' => Carbon::parse($save->schedule)->quarter]);
         }
         return response()->json($pmbranch);
     }
@@ -203,7 +203,7 @@ class PreventiveController extends Controller
         
         return DataTables::of($pmbranches)
         ->addColumn('lastpm', function (PmBranches $sched){
-            $code = PmSched::where('customer_id', $sched->customer_id)->orderBy('id', 'desc')->first();
+            $code = PmSched::query()->where('customer_id', $sched->customer_id)->orderBy('id', 'desc')->first();
             if ($code) {
                 return Carbon::parse($code->schedule)->formatLocalized('%B %d, %Y');
             }
@@ -227,7 +227,7 @@ class PreventiveController extends Controller
 
     public function getbranch(Request $request)
     {
-        $branches = Branch::where('status', 1)->where('area_id', $request->areaid)->get();
+        $branches = Branch::query()->where('status', 1)->where('area_id', $request->areaid)->get();
         return response()->json($branches);
     }
     
@@ -254,7 +254,7 @@ class PreventiveController extends Controller
         if ($request->month < 10) {
             $month = '0'.$request->month;
         }
-        $sched = PmSched::select(
+        $sched = PmSched::query()->select(
                 'pm_sched.*',
                 'code',
                 'customer_branches.customer_branch')
@@ -274,17 +274,17 @@ class PreventiveController extends Controller
             return Carbon::parse($sched->schedule)->formatLocalized('%B %d, %Y');
         })
         ->addColumn('user', function (PmSched $sched){
-            $user = User::where('id', $sched->user_id)->first()->name.' '.User::where('id', $sched->user_id)->first()->lastname;
+            $user = User::query()->where('id', $sched->user_id)->first()->name.' '.User::where('id', $sched->user_id)->first()->lastname;
             return $user;
         })
         ->addColumn('client', function (PmSched $sched){
-            $client = CustomerBranch::where('customer_branches.id', $sched->customer_id)
+            $client = CustomerBranch::query()->where('customer_branches.id', $sched->customer_id)
                 ->join('customers', 'customers.id', 'customer_id')
                 ->first()->customer;
             return $client;
         })
         ->addColumn('branch', function (PmSched $sched){
-            $branch = CustomerBranch::where('id', $sched->customer_id)->first()->customer_branch;
+            $branch = CustomerBranch::query()->where('id', $sched->customer_id)->first()->customer_branch;
             return $branch;
         })
 
@@ -293,7 +293,7 @@ class PreventiveController extends Controller
     public function data()
     {
         if (auth()->user()->hasanyrole('Manager', 'Editor')) {
-            $sched = PmSched::select(
+            $sched = PmSched::query()->select(
                 'pm_sched.*',
                 'code',
                 'customer_branches.customer_branch')
@@ -302,7 +302,7 @@ class PreventiveController extends Controller
             ->whereDate('pm_sched.updated_at', '>=', Carbon::now()->subquarter(2))
             ->get();
         }else if (auth()->user()->id == 134) {
-            $sched = PmSched::select(
+            $sched = PmSched::query()->select(
                 'pm_sched.*',
                 'code',
                 'customer_branches.customer_branch')
@@ -312,7 +312,7 @@ class PreventiveController extends Controller
             ->where('area_id', 3)
             ->get();
         }else if (auth()->user()->id == 142) {
-            $sched = PmSched::select(
+            $sched = PmSched::query()->select(
                 'pm_sched.*',
                 'code',
                 'customer_branches.customer_branch')
@@ -322,7 +322,7 @@ class PreventiveController extends Controller
             ->where('area_id', 5)
             ->get();
         }else{
-            $sched = PmSched::select(
+            $sched = PmSched::query()->select(
                 'pm_sched.*',
                 'code',
                 'customer_branches.customer_branch')
@@ -339,26 +339,26 @@ class PreventiveController extends Controller
             return Carbon::parse($sched->schedule)->formatLocalized('%B %d, %Y');
         })
         ->addColumn('user', function (PmSched $sched){
-            $user = User::where('id', $sched->user_id)->first()->name.' '.User::where('id', $sched->user_id)->first()->lastname;
+            $user = User::query()->where('id', $sched->user_id)->first()->name.' '.User::where('id', $sched->user_id)->first()->lastname;
             return $user;
         })
         ->addColumn('client', function (PmSched $sched){
-            $client = CustomerBranch::where('customer_branches.id', $sched->customer_id)
+            $client = CustomerBranch::query()->where('customer_branches.id', $sched->customer_id)
                 ->join('customers', 'customers.id', 'customer_id')
                 ->first()->customer;
             return $client;
         })
         ->addColumn('branch', function (PmSched $sched){
-            $branch = CustomerBranch::where('id', $sched->customer_id)->first()->customer_branch;
+            $branch = CustomerBranch::query()->where('id', $sched->customer_id)->first()->customer_branch;
             return $branch;
         })
         ->addColumn('service_center', function (PmSched $sched){
-            $service_center = Branch::where('id', $sched->branch_id)->first()->branch;
+            $service_center = Branch::query()->where('id', $sched->branch_id)->first()->branch;
             return $service_center;
         })
         ->addColumn('area', function (PmSched $sched){
-            $area_id = Branch::where('id', $sched->branch_id)->first()->area_id;
-            $area = Area::where('id', $area_id)->first()->area;
+            $area_id = Branch::query()->where('id', $sched->branch_id)->first()->area_id;
+            $area = Area::query()->where('id', $area_id)->first()->area;
             return $area;
         })
         ->make(true);
