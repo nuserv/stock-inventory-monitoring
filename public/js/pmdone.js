@@ -295,7 +295,7 @@ $(document).on('click', '#sadadlistBtn', function () {
                         "processing": '<i class="fa fa-spinner fa-spin fa-3x fa-fw"></i><span class="sr-only">Searching...</span>'
                     },
                     processing: true,
-                    serverSide: false,
+                    serverSide: true,
                     ajax: {
                         url: 'pmlistdata',
                         error: function(data) {
