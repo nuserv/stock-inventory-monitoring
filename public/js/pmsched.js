@@ -37,7 +37,7 @@ $(document).ready(function()
         minViewMode: 1,
         autoclose: true,
         maxDate: 0,
-        minDate: -31
+        minDate: -75
     });
 
     $('#pmTable thead tr:eq(0) th').each( function () {
