@@ -29,7 +29,11 @@ $(document).ready(function()
             }
         },
         columns: [
-            { data: 'date', name:'date'},
+            { data: 'schedule',
+                render: function(data, type) {
+                    return moment(data).format('MMMM DD, YYYY');
+                }
+            },
             { data: 'area', name:'area'},
             { data: 'service_center', name:'service_center'},
             { data: 'fsrno', name:'fsrno'},
@@ -55,7 +59,7 @@ $(document).ready(function()
 $(document).on('change', '#yearselect', function(){
     var monthoption = '<option selected disabled>select month</option>';
     if ($(this).val() == year) {
-        for (let index = 10; index <= curmonth ; index++) {
+        for (let index = 10; index <= 12 ; index++) {
             monthoption += '<option value="'+index+'">'+months[index-1]+'</option>';
         }
     }else if ($(this).val() == curyear) {
