@@ -20,7 +20,48 @@ var valpartial;
 var valid = 'yes';
 var table;
 var serialnum;
+$("#datesched").on("click", function() {
+    var offsetModal = $('#sendModal').offset().top;
+    var offsetInput = $(this).offset().top;
+    var inputHeight = $(this).height();
+    var customPadding = 17; //custom modal padding (bootstrap modal)! 
+    var topDatepicker = (offsetInput + inputHeight + customPadding) - offsetModal;
+    console.log(topDatepicker);
+    $("#ui-datepicker-div").css({top: topDatepicker});
+});
+$("#resched").on("click", function() {
+    var offsetModal = $('#reschedModal').offset().top;
+    var offsetInput = $(this).offset().top;
+    var inputHeight = $(this).height();
+    var customPadding = 17; //custom modal padding (bootstrap modal)! 
+    var topDatepicker = (offsetInput + inputHeight + customPadding) - offsetModal;
+    console.log(topDatepicker);
+    $("#ui-datepicker-div").css({top: topDatepicker});
+});
+$(function() {
+    var datesched = $("#datesched").datepicker({
+        format: 'YYYY-MM-DD',
+        minViewMode: 1,
+        autoclose: true,
+        maxDate: new Date(new Date().getFullYear(), new Date().getMonth()+1, '31'),
+        minDate: 0
+    });
 
+    var resched = $("#resched").datepicker({
+        format: 'YYYY-MM-DD',
+        minViewMode: 1,
+        autoclose: true,
+        maxDate: new Date(new Date().getFullYear(), new Date().getMonth()+1, '31'),
+        minDate: 0
+    });
+    $(window).resize(function() {
+        resched.datepicker('hide');
+        $('.resched').blur();
+        datesched.datepicker('hide');
+        $('.datesched').blur();    
+    });
+
+});
 $(document).ready(function()
 {
     $("#datesched").datepicker({

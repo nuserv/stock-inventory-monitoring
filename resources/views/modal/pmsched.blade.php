@@ -16,7 +16,7 @@
                         </div>
                     </div>
                     <div class="col-md-6 form-group row">
-                        <label class="col-md-6 col-form-label text-md-right">PM Date:</label>
+                        <label class="col-md-6 col-form-label text-md-right labl">PM Date:</label>
                         <div class="col-md-6">
                             <input type="text" title="This field is required." style="color: black" class="form-control form-control-sm datepicker datesched" placeholder="Select PM Date" name="datesched" id="datesched" readonly="readonly" autocomplete="off">
                         </div>
@@ -30,11 +30,19 @@
                         </div>
                     </div>
                     <div class="col-md-6 form-group row">
-                        <label class="col-md-6 col-form-label text-md-right">FSR No.:</label>
+                        <label class="col-md-6 col-form-label text-md-right labl">FSR No.:</label>
                         <div class="col-md-6">
                             <input type="text" title="PM Date is required." style="color: black" class="form-control form-control-sm " id="fsrno" placeholder="Fsr No." autocomplete="off" readonly="readonly">
                             <div id="fsrlist" style="position:absolute;z-index: 10000;">
                             </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row no-margin">
+                    <div class="col-md-6 form-group row">
+                        <label class="col-md-5 col-form-label text-md-right conlbl">Conversion Date:</label>
+                        <div class="col-md-7">
+                            <input type="text" style="color: black;" class="form-control form-control-sm datepicker convdatesched" placeholder="Select Conversion Date" name="convdatesched" id="convdatesched" readonly="readonly" autocomplete="off">
                         </div>
                     </div>
                 </div><hr>

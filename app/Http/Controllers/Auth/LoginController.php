@@ -70,7 +70,7 @@ class LoginController extends Controller
         }
         return redirect('/login')->with('status', $status);
     }
-
+    
     public function authenticated(Request $request, $user) {
         $log = new UserLog;
         $log->branch_id = auth()->user()->branch->id;

@@ -70,6 +70,7 @@ class PmSchedExport implements FromCollection, WithStyles, ShouldAutoSize, WithC
                 ->whereYear('schedule', $this->year)
                 ->whereMonth('schedule', '>=', $this->from)
                 ->where('branch_id', $this->branch_id)
+                ->where('Status', 'Completed')
                 ->whereMonth('schedule', '<=', $this->to)
                 ->count();
         }else{
@@ -79,6 +80,7 @@ class PmSchedExport implements FromCollection, WithStyles, ShouldAutoSize, WithC
                 ->whereYear('schedule', $this->year)
                 ->whereMonth('schedule', '>=', $this->from)
                 ->where('branch_id', auth()->user()->branch->id)
+                ->where('Status', 'Completed')
                 ->whereMonth('schedule', '<=', $this->to)
                 ->count();
         }
@@ -156,6 +158,7 @@ class PmSchedExport implements FromCollection, WithStyles, ShouldAutoSize, WithC
                 ->whereYear('schedule', $this->year)
                 ->whereMonth('schedule', '>=', $this->from)
                 ->whereMonth('schedule', '<=', $this->to)
+                ->where('Status', 'Completed')
                 ->where('branch_id', $this->branch_id)
                 ->orderBy('schedule')
                 ->get()
@@ -170,6 +173,7 @@ class PmSchedExport implements FromCollection, WithStyles, ShouldAutoSize, WithC
                 ->whereYear('schedule', $this->year)
                 ->whereMonth('schedule', '>=', $this->from)
                 ->whereMonth('schedule', '<=', $this->to)
+                ->where('Status', 'Completed')
                 ->where('branch_id', auth()->user()->branch->id)
                 ->orderBy('schedule')
                 ->get()
