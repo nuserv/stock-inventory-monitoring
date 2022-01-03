@@ -85,8 +85,14 @@ $(document).on('change', '#yearselect', function(){
 
 $(document).on('change', '#monthselect', function(){
     var monthoption = '<option selected disabled>select month</option>';
-    for (let index = $(this).val(); index <= curmonth ; index++) {
-        monthoption += '<option value="'+index+'">'+months[index-1]+'</option>';
+    if (curyear != $('#yearselect').val()) {
+        for (let index = $(this).val(); index <= 12 ; index++) {
+            monthoption += '<option value="'+index+'">'+months[index-1]+'</option>';
+        }
+    }else{
+        for (let index = $(this).val(); index <= curmonth ; index++) {
+            monthoption += '<option value="'+index+'">'+months[index-1]+'</option>';
+        }
     }
     $("#monthto").find('option').remove().end().append(monthoption);
     $('#monthto').prop('disabled', false);
