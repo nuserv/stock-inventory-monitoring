@@ -184,5 +184,4 @@ class PmSchedExport implements FromCollection, WithStyles, ShouldAutoSize, WithC
         }
         return $data;
     }
-    
 }
