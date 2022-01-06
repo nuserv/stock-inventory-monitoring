@@ -13,7 +13,8 @@ $(function() {
                 },
                 data:{
                     date:$('#datesched').val(),
-                    branchCode: branchCode
+                    branchCode: branchCode,
+                    type: $('#option').val()
                 },
                 success:function(data){
                     console.log(data);
@@ -66,59 +67,12 @@ $(function() {
 });
 $(document).ready(function()
 {
-    // $("#datesched").datepicker({
-    //     onSelect: function(dateText, inst) { 
-    //         var ul = '<ul class="dropdown-menu" style="display:block; position:relative;overflow: scroll;height: 13em;z-index: 200;">';
-    //         $.ajax({
-    //             url:"getfsr",
-    //             type:"get",
-    //             headers: {
-    //                 'X-CSRF-TOKEN': $('meta[name="ctok"]').attr('content')
-    //             },
-    //             data:{
-    //                 date:$('#datesched').val(),
-    //                 branchCode: branchCode
-    //             },
-    //             success:function(data){
-    //                 console.log(data);
-    //                 var datas = $.map(data, function(value, index) {
-    //                     return [value];
-    //                 });
-
-    //                 datas.forEach(value => {
-    //                     ul+='<li style="color:black">'+value.fsr_num+'</li>';
-    //                 });
-    //                 if (data.length > 0) {
-    //                     $('#fsrno').val(data[0].fsr_num);
-    //                 }else{
-    //                     alert('You need to upload first the FSR in the FSR System before you could post here. Make sure you choose the correct branch and date of the PM for the correct FSR Number to appear.');
-    //                 }
-    //             }
-    //         });
-    //     },
-    //     format: 'YYYY-MM-DD',
-    //     minViewMode: 1,
-    //     autoclose: true,
-    //     maxDate: 0,
-    //     minDate: -75
-    // });
-
-    // $("#convdatesched").datepicker({
-    //     onSelect: function(dateText, inst) { 
-    //         var ul = '<ul class="dropdown-menu" style="display:block; position:relative;overflow: scroll;height: 13em;z-index: 200;">';
-    //     },
-    //     format: 'YYYY-MM-DD',
-    //     minViewMode: 1,
-    //     autoclose: true,
-    //     maxDate: 0,
-    //     minDate: -75
-    // });
-
     $('#pmTable thead tr:eq(0) th').each( function () {
         var title = $(this).text().trim();
         $(this).html( '<input type="text" style="width:100%" placeholder="Search '+title+'" class="column_search" />' );
     });
-
+    $('.dtsched').hide();
+    $('.fsr').hide();
     table =
     $('table.pmTable').DataTable({ 
         "dom": 'lrtip',
@@ -178,6 +132,13 @@ $(document).on("click", "#convdatesched", function() {
 });
 $(document).on("click", "#schedBtn", function() {
     $('#schedModal').modal('show');
+});
+
+$(document).on("change", "#option", function() {
+    $('.dtsched').show();
+    $('.fsr').show();
+    $('#fsrno').val('');
+    $('#datesched').val('');
 });
 
 $(document).on('click', '#clientdiv', function () {
@@ -280,86 +241,60 @@ $(document).on('click', '#convdatesched', function () {
     
 });
 $(document).on('click', '#saveBtn', function () {
-    if ($(this).val() == 'CONVERSION') {
-        $('#schedModal').modal('hide');
+    if ($('#datesched').val() != "" && $('#fsrno').val() != "" && $('#fsrno').val().length == 10) {
+        $('#loading').show();
         $.ajax({
-            url: 'schedule',
+            url: 'checkfsr',
             headers: {
                 'X-CSRF-TOKEN': $('meta[name="ctok"]').attr('content')
             },
             dataType: 'json',
-            type: 'POST',
+            type: 'get',
             data: {
-                schedule: $('#convdatesched').val(),
-                customer: $('#customer').val(),
-                customer_code: branchCode,
-                fsrno: $('#fsrno').val(),
-                type: 'C'
+                fsrno: $('#fsrno').val()
             },
             success:function(data)
             {
-                location.reload();
+                if (data == "meron") {
+                    alert('Invalid FSR number, already exist');
+                    $('#loading').hide();
+                }else{
+                    $('#schedModal').modal('hide');
+                    $.ajax({
+                        url: 'schedule',
+                        headers: {
+                            'X-CSRF-TOKEN': $('meta[name="ctok"]').attr('content')
+                        },
+                        dataType: 'json',
+                        type: 'POST',
+                        data: {
+                            schedule: $('#datesched').val(),
+                            customer: $('#customer').val(),
+                            customer_code: branchCode,
+                            fsrno: $('#fsrno').val(),
+                            type: 'P'
+                        },
+                        success:function(data)
+                        {
+                            location.reload();
+                        },
+                        error: function (data) {
+                            alert(data.responseText);
+                        }
+                    });
+                }
             },
             error: function (data) {
                 alert(data.responseText);
             }
         });
     }else{
-        if ($('#datesched').val() != "" && $('#fsrno').val() != "" && $('#fsrno').val().length == 10) {
-            $('#loading').show();
-            $.ajax({
-                url: 'checkfsr',
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="ctok"]').attr('content')
-                },
-                dataType: 'json',
-                type: 'get',
-                data: {
-                    fsrno: $('#fsrno').val()
-                },
-                success:function(data)
-                {
-                    if (data == "meron") {
-                        alert('Invalid FSR number, already exist');
-                        $('#loading').hide();
-                    }else{
-                        $('#schedModal').modal('hide');
-                        $.ajax({
-                            url: 'schedule',
-                            headers: {
-                                'X-CSRF-TOKEN': $('meta[name="ctok"]').attr('content')
-                            },
-                            dataType: 'json',
-                            type: 'POST',
-                            data: {
-                                schedule: $('#datesched').val(),
-                                customer: $('#customer').val(),
-                                customer_code: branchCode,
-                                fsrno: $('#fsrno').val(),
-                                type: 'P'
-                            },
-                            success:function(data)
-                            {
-                                location.reload();
-                            },
-                            error: function (data) {
-                                alert(data.responseText);
-                            }
-                        });
-                    }
-                },
-                error: function (data) {
-                    alert(data.responseText);
-                }
-            });
-        }else{
-            if ($('#datesched').val() == "") {
-                alert('PM Date is Required.');
-            }else if ($('#fsrno').val() == "") {
-                alert('You need to upload first the FSR in the FSR System before you could post here. Make sure you choose the correct branch and date of the PM for the correct FSR Number to appear.');
-            }else if ($('#fsrno').val().length != 10) {
-                alert('Invalid FSR number.');
-            }
+        if ($('#datesched').val() == "") {
+            alert('PM Date is Required.');
+        }else if ($('#fsrno').val() == "") {
+            alert('You need to upload first the FSR in the FSR System before you could post here. Make sure you choose the correct branch and date of the PM for the correct FSR Number to appear.');
+        }else if ($('#fsrno').val().length != 10) {
+            alert('Invalid FSR number.');
         }
     }
 });

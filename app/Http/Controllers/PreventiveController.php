@@ -124,14 +124,18 @@ class PreventiveController extends Controller
     public function getfsr(Request $request)
     {
         $reqdate = explode("/",$request->date);
+        $type = "S";
+        if ($request->type == "P") {
+            $type = "P";
+        }
         $fsr = Fsr::query()
             ->select('fsr_num')
             ->join('pm_branches', DB::raw('(customer_branches_code*1)'), DB::raw('(custbrch*1)'))
             ->where(DB::raw('(custbrch*1)'), $request->branchCode)
+            ->where('typeofwork', $type)
             ->whereDate('fsr.txndate', '=', $reqdate[2].'-'.$reqdate[0].'-'.$reqdate[1])
             ->get();
         return response()->json($fsr);
-
     }
     public function show()
     {

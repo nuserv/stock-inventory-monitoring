@@ -15,10 +15,10 @@
                             <input type="text" style="color: black" class="form-control form-control-sm " id="indate" value="{{ Carbon\Carbon::now()->toDayDateTimeString() }}" readonly>
                         </div>
                     </div>
-                    <div class="col-md-6 form-group row">
-                        <label class="col-md-6 col-form-label text-md-right labl">PM Date:</label>
+                    <div class="col-md-6 form-group row dtsched">
+                        <label class="col-md-6 col-form-label text-md-right labl">Date Scheduled:</label>
                         <div class="col-md-6">
-                            <input type="text" title="This field is required." style="color: black" class="form-control form-control-sm datepicker datesched" placeholder="Select PM Date" name="datesched" id="datesched" readonly="readonly" autocomplete="off">
+                            <input type="text" title="This field is required." style="color: black" class="form-control form-control-sm datepicker datesched" placeholder="Select Date" name="datesched" id="datesched" readonly="readonly" autocomplete="off">
                         </div>
                     </div>
                 </div>
@@ -29,7 +29,7 @@
                             <input type="text" style="color: black" class="form-control form-control-sm " id="customer" placeholder="client branch name" readonly="readonly" autocomplete="off">
                         </div>
                     </div>
-                    <div class="col-md-6 form-group row">
+                    <div class="col-md-6 form-group row fsr">
                         <label class="col-md-6 col-form-label text-md-right labl">FSR No.:</label>
                         <div class="col-md-6">
                             <input type="text" title="PM Date is required." style="color: black" class="form-control form-control-sm " id="fsrno" placeholder="Fsr No." autocomplete="off" readonly="readonly">
@@ -38,11 +38,16 @@
                         </div>
                     </div>
                 </div>
-                <div class="row no-margin" style="display:none">
+                <div class="row no-margin">
                     <div class="col-md-6 form-group row">
-                        <label class="col-md-5 col-form-label text-md-right conlbl">Conversion Date:</label>
+                        <label class="col-md-5 col-form-label text-md-right conlbl">Status:</label>
                         <div class="col-md-7">
-                            <input type="text" style="color: black;" class="form-control form-control-sm datepicker convdatesched" placeholder="Select Conversion Date" name="convdatesched" id="convdatesched" readonly="readonly" autocomplete="off">
+                            <select id="option" class="form-control" Style="color:black">
+                                <option selected disabled></option>
+                                <option value="P">Preventive Maintenance</option>
+                                <option value="C">Conversion</option>
+                                <option value="N">Newly Opened</option>
+                            </select>
                         </div>
                     </div>
                 </div><hr>
