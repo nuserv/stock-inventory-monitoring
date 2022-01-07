@@ -27,8 +27,6 @@ $(function() {
                     });
                     if (data.length > 0) {
                         $('#fsrno').val(data[0].fsr_num);
-                        $('#convdatesched').hide();
-                        $('.conlbl').hide();
                         $('#saveBtn').val('SAVE');
                     }else{
                         $('#fsrno').val('');
@@ -138,6 +136,16 @@ $(document).on("change", "#option", function() {
     $('.dtsched').show();
     $('.fsr').show();
     $('#fsrno').val('');
+    if ($(this).val() == "P") {
+        $('#datesched').attr('placeholder', 'Select PM Date');
+        $('.labl').html('PM Date:');
+    }else if ($(this).val() == "C") {
+        $('#datesched').attr('placeholder', 'Select Conversion Date');
+        $('.labl').html('Conversion Date:');
+    }else if ($(this).val() == "N") {
+        $('#datesched').attr('placeholder', 'Select Opening Date');
+        $('.labl').html('Opening Date:');
+    }
     $('#datesched').val('');
 });
 

@@ -30,7 +30,7 @@
                         </div>
                     </div>
                     <div class="col-md-6 form-group row fsr">
-                        <label class="col-md-6 col-form-label text-md-right labl">FSR No.:</label>
+                        <label class="col-md-6 col-form-label text-md-right">FSR No.:</label>
                         <div class="col-md-6">
                             <input type="text" title="PM Date is required." style="color: black" class="form-control form-control-sm " id="fsrno" placeholder="Fsr No." autocomplete="off" readonly="readonly">
                             <div id="fsrlist" style="position:absolute;z-index: 10000;">
