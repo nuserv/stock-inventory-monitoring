@@ -236,9 +236,14 @@ $(document).on('click', '.in_sub_Btn', function(){
     }
 });
 $(document).on('keyup', '#repserial', function(){
+        console.log('12');
     $(this).val($(this).val().toUpperCase());
+    console.log($(this).val().length );
     if ($(this).val() && $(this).val().length >= 3) {
-        if ($(this).val().toLowerCase().includes('n/a') ==  "n/a" || $(this).val().toLowerCase() ==  "faded" || $(this).val().toLowerCase() ==  "none") {
+        console.log('pasok');
+        console.log($(this).val().toLowerCase());
+        if ($(this).val().toLowerCase().includes('n/a') || $(this).val().toLowerCase() ==  "faded" || $(this).val().toLowerCase() ==  "none") {
+            console.log('dito');
             $.ajax({
                 url: 'checkserial',
                 headers: {
@@ -252,7 +257,10 @@ $(document).on('keyup', '#repserial', function(){
                     type: 'na'
                 },
                 success: function (data) {
+                    console.log(data);
+                    console.log('success');
                     if (data != "allowed") {
+                        console.log(data+'1');
                         $('#in_sub_Btn').prop('disabled', true);
                     }else{
                         $('#in_sub_Btn').prop('disabled', false);
