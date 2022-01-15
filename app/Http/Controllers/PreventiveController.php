@@ -313,14 +313,47 @@ class PreventiveController extends Controller
     public function data()
     {
         if (auth()->user()->hasanyrole('Manager', 'Editor')) {
-            $sched = PmSched::query()->select(
-                'pm_sched.*',
-                'code',
-                'customer_branches.customer_branch')
-            ->join('customer_branches', 'customer_branches.id', 'pm_sched.customer_id')
-            ->where('pm_sched.Status', 'Completed')
-            ->whereDate('pm_sched.updated_at', '>=', Carbon::now()->subquarter(2))
-            ->get();
+            if (auth()->user()->hasanyrole('Manager')) {
+                if (Carbon::now() >= Carbon::now()->startOfQuarter()->addDays(5)) {
+                    $sched = PmSched::query()->select(
+                        'pm_sched.*',
+                        'code',
+                        'customer_branches.customer_branch')
+                    ->join('customer_branches', 'customer_branches.id', 'pm_sched.customer_id')
+                    ->where('pm_sched.Status', 'Completed')
+                    ->whereDate('schedule', '>=', Carbon::now()->startOfQuarter())
+                    ->get();
+                }else{
+                    $sched = PmSched::query()->select(
+                        'pm_sched.*',
+                        'code',
+                        'customer_branches.customer_branch')
+                    ->join('customer_branches', 'customer_branches.id', 'pm_sched.customer_id')
+                    ->where('pm_sched.Status', 'Completed')
+                    ->whereDate('schedule', '>=', Carbon::now()->subquarter(2))
+                    ->get();
+                }
+            }else{
+                if (Carbon::now() >= Carbon::now()->startOfQuarter()->addDays(10)) {
+                    $sched = PmSched::query()->select(
+                        'pm_sched.*',
+                        'code',
+                        'customer_branches.customer_branch')
+                    ->join('customer_branches', 'customer_branches.id', 'pm_sched.customer_id')
+                    ->where('pm_sched.Status', 'Completed')
+                    ->whereDate('schedule', '>=', Carbon::now()->startOfQuarter())
+                    ->get();
+                }else{
+                    $sched = PmSched::query()->select(
+                        'pm_sched.*',
+                        'code',
+                        'customer_branches.customer_branch')
+                    ->join('customer_branches', 'customer_branches.id', 'pm_sched.customer_id')
+                    ->where('pm_sched.Status', 'Completed')
+                    ->whereDate('schedule', '>=', Carbon::now()->subquarter(2))
+                    ->get();
+                }
+            }
         }else if (auth()->user()->id == 134) {
             $sched = PmSched::query()->select(
                 'pm_sched.*',
