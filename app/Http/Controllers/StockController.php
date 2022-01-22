@@ -276,7 +276,13 @@ class StockController extends Controller
     public function service()
     {
         $title = "Service Unit";
-        $categories = Category::orderBy('category')->get();
+        $categories = Category::select('categories.id','category')
+            ->orderBy('category')
+            ->join('stocks', 'category_id','categories.id')
+            ->where('status', 'in')
+            ->where('branch_id', auth()->user()->branch->id)
+            ->groupBy('categories.id')
+            ->get();
         if (!auth()->user()->hasanyrole('Head', 'Tech')) {
             return redirect('/');
         }

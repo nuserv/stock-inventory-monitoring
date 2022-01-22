@@ -189,7 +189,7 @@ $(document).on('change', '.outcategory', function(){
     var id = $(this).val();
     $.ajax({
         type:'get',
-        url:'itemcode',
+        url:'getItemCodeServiceOut',
         data:{'id':id},
         success:function(data)
         {
