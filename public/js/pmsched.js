@@ -30,7 +30,7 @@ $(function() {
                         $('#saveBtn').val('SAVE');
                     }else{
                         $('#fsrno').val('');
-                        alert('You need to upload first the FSR in the FSR System before you could post here. Make sure you choose the correct branch and date of the PM for the correct FSR Number to appear.');
+                        swal('','You need to upload first the FSR in the FSR System before you could post here. Make sure you choose the correct branch and date of the PM for the correct FSR Number to appear.', 'error');
                     }
                 }
             });
