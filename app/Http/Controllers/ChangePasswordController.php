@@ -30,6 +30,7 @@ class ChangePasswordController extends Controller
         User::find(auth()->user()->id)->update(['password'=> Hash::make($request->new_password)]);
         return redirect()->back()->with('success', 'Password change successfully.');
     }
+    
     public function confirm(Request $request)
     {
         $user = User::where('email', $request->email)->first();

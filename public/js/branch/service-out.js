@@ -248,7 +248,7 @@ $(document).on('click', '.out_add_item', function(){
     if (r == 1) {
         $('#out_sub_Btn').prop('disabled', true);
     }else{
-        if ($('#cleint').val() == '') {
+        if ($('#client').val() == '') {
             $('#out_sub_Btn').prop('disabled', true);
         }else{
             $('#out_sub_Btn').prop('disabled', false);

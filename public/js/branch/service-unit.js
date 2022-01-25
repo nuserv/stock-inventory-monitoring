@@ -4,6 +4,7 @@ var serial = '';
 var desc = '';
 var status = '';
 var trdata;
+var repdesc;
 $(document).ready(function()
 {
     sunit = $('table.sUnitTable').DataTable({ 
@@ -247,7 +248,7 @@ $(document).on('click', 'li', function(){
     var select = $(this).text();
     var id = $(this).attr('id');
     if (id == 'lirepdesc') {
-        $('#repdesc').val($(this).text());  
+        $('#repdesc').val($(this).text());
         $('#repdesclist').fadeOut();  
         desc = $(this).text();
         $('#repserial').prop('disabled', false);
@@ -314,7 +315,7 @@ $(document).on('click', '.in_sub_Btn', function(e){
                         data: {
                             stat: 'replacement',
                             id: $('#indescid').val(),
-                            ids: $('#repdesc').val(),
+                            ids: desc,
                             serial: $('#repserial').val(),
                             status: 'defective',
                             custid: trdata.customer_branches_id,
