@@ -113,7 +113,7 @@ Route::get('loanstable', 'LoanController@table');//->middleware('ajax');
 Route::get('loans', 'LoanController@index')->name('loans');
 Route::post('loan', 'StockController@loan')->middleware('ajax');
 
-Route::any('rep-update', 'StockController@update')->middleware('ajax');
+Route::any('rep-update', 'StockController@update');//->middleware('ajax');
 Route::any('PMrep-update', 'StockController@PMupdate')->middleware('ajax');
 Route::get('searchall', 'StockController@searchall');//->middleware('ajax');
 Route::get('searchserial', 'StockController@searchserial');//->middleware('ajax');

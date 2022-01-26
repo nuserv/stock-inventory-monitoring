@@ -251,6 +251,7 @@ $(document).on('click', 'li', function(){
         $('#repdesc').val($(this).text());
         $('#repdesclist').fadeOut();  
         desc = $(this).text();
+        console.log(desc);
         $('#repserial').prop('disabled', false);
         $('#in_sub_Btn').prop('disabled', true);
     }
