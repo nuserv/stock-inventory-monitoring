@@ -255,6 +255,7 @@ $(document).on('click', '#reqBtn', function(){
         }
     });
 });
+
 $(document).on('click', '.cancel', function(){
     $('#loading').show();
     location.reload();

@@ -9,8 +9,10 @@ use Maatwebsite\Excel\Excel as BaseExcel;
 use Maatwebsite\Excel\Facades\Excel;
 use Carbon\Carbon;
 use App\StockRequest;
+use App\StockReqNo;
 use App\BufferNo;
 use App\Buffer;
+use App\StockReq;
 use App\Buffersend;
 use App\RequestedItem;
 use App\PreparedItem;
@@ -1131,6 +1133,23 @@ class StockRequestController extends Controller
             $buffer->status = 'For approval';
             $buffer->buffers_no = $request->retno;
             $buffer->save();
+            $buffer = new StockReqNo;
+            $buffer->requested_by = auth()->user()->id;
+            $buffer->status = 1;
+            $buffer->request_type = 1;
+            $buffer->request_number = $request->retno;
+            $buffer->save();
+            $requestedItems = Buffer::query()->where('buffers_no', $request->retno)->get();
+            foreach ($requestedItems as $RequestedItem) {
+                StockReq::create([
+                    'request_number'=>$request->retno,
+                    'category'=>$RequestedItem->category_id,
+                    'item'=>$RequestedItem->items_id,
+                    'quantity'=>$RequestedItem->qty,
+                    'status'=>1,
+                    'user_id'=>1
+                ]);
+            }
             $bcc = \config('email.bcc');
             $no = $buffer->buffers_no;
             $table = Buffer::query()->select('category', 'item', 'qty')
