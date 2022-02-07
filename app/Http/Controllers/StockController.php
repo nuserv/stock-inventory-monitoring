@@ -1227,7 +1227,7 @@ class StockController extends Controller
         $log->fullname = auth()->user()->name.' '.auth()->user()->middlename.' '.auth()->user()->lastname;
         $log->save();
         $data = $stock->save();
-        return response()->json($data);
+        return response()->json($log);
     }
     public function store(Request $request)
     {
