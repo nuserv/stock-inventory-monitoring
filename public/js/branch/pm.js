@@ -100,6 +100,7 @@ $(document).on('click', '.pm_sub_Btn', function(){
         return false;
     }
     if (check > 1) {
+        setTimeout(function(){location.reload()} , 2000);
         // location.reload();
     }
 });
