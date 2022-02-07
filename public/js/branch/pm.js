@@ -100,7 +100,7 @@ $(document).on('click', '.pm_sub_Btn', function(){
         return false;
     }
     if (check > 1) {
-        location.reload();
+        // location.reload();
     }
 });
 
