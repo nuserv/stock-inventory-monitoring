@@ -94,6 +94,12 @@ $(document).ready(function()
             { data: 'ticket', name:'ticket', "width": "14%"}
         ]
     });
+    $('.requestTable thead').on( 'keyup', ".column_search",function () {
+        table
+            .column( $(this).parent().index()+1 )
+            .search( this.value )
+            .draw();
+    });
     $('#requestTable tbody').on('click', 'tr', function () {
         var trdata = table.row(this).data();
         var trsched = new Date(trdata.sched);

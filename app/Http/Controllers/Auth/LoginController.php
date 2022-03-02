@@ -14,6 +14,7 @@ use App\VerifyUser;
 use App\Mail\VerifyMail;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Password;
 use Mail;
 use Auth;
 use Config;
@@ -93,6 +94,16 @@ class LoginController extends Controller
         if ($unverify) {
             \Mail::to($user->email)->send(new VerifyMail($user));
         }
+        // $credentials = ["email" => $request->email];
+        // $response = Password::sendResetLink($credentials, function (Message $message) {
+        //     $message->subject($this->getEmailSubject());
+        // });
+        // switch ($response) {
+        //     case Password::RESET_LINK_SENT:
+        //         dd('good');
+        //     case Password::INVALID_USER:
+        //         dd('ayaw');
+        // }  
     }
 
     public function logout(Request $request ) {
