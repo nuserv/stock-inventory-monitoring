@@ -1469,7 +1469,7 @@ class StockController extends Controller
                 $data = "error";
                 return response()->json($data);
             }
-            $update->status = 'service unit';
+            $update->status = 'replacement';
             $update->user_id = auth()->user()->id;
             $update->save();
             $item = Item::where('item', $request->ids)->first();
