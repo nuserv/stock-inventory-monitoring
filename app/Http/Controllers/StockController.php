@@ -1464,7 +1464,12 @@ class StockController extends Controller
             $data = $log->save();
             return response()->json($data);
         }else if ($request->stat == 'replacement') {
-            $update->status = 'replacement';
+            $item = Item::where('item', $request->ids)->first();
+            if (!$item) {
+                $data = "error";
+                return response()->json($data);
+            }
+            $update->status = 'service unit';
             $update->user_id = auth()->user()->id;
             $update->save();
             $item = Item::where('item', $request->ids)->first();
