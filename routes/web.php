@@ -41,7 +41,7 @@ Route::post('/forget-password', 'ForgotPasswordController@postEmail');
 Route::get('/reset-password/{token}', 'ResetPasswordController@getPassword');
 Route::post('/reset-password', 'ResetPasswordController@updatePassword');
 
-Route::get('change-password', 'ChangePasswordController@index');
+Route::get('change-password', 'ChangePasswordController@index')->name('password.change');
 Route::get('confirm', 'ChangePasswordController@confirm');
 Route::post('change-password', 'ChangePasswordController@store')->name('change.password');
 Route::get('report-a-problem', 'HomeController@report');

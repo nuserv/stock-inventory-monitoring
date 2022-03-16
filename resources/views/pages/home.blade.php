@@ -125,7 +125,8 @@
             <tr>
                 <th>
                     id
-                </th><th>
+                </th>
+                <th>
                     DATE & TIME
                 </th>
                 <th>

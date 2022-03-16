@@ -578,9 +578,9 @@ class HomeController extends Controller
         }
         
         return DataTables::of($act)
-        ->addColumn('date', function (UserLog $request){
-            return Carbon::parse($request->created_at)->isoFormat('lll');//->format('H:ia');
-        })
+        // ->addColumn('date', function (UserLog $request){
+        //     return $request->created_at;
+        // })
         /*->addColumn('time', function (UserLog $request){
             return $request->created_at->toTimeString();
         })

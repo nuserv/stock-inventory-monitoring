@@ -9,13 +9,6 @@ $(document).ready(function()
             },
         "pageLength": 10,
         "order": [ 0, 'desc' ],
-        
-        "columnDefs": [
-            {
-                "targets": [ 0 ],
-                "visible": false
-            }
-        ],
         processing: true,
         serverSide: true,
         ajax: {
@@ -26,9 +19,19 @@ $(document).ready(function()
                 }
             }
         },
+        columnDefs: [
+            {
+                "targets": [ 0 ],
+                "visible": false
+            },
+            {
+                "targets": [1],
+                "render": $.fn.dataTable.render.moment('YYYY-MM-DD HH:mm:ss', 'MMM. DD, YYYY, h:mm A')
+            },
+        ],
         columns: [
             { data: 'id', name:'id',"width": "14%"},
-            { data: 'date', name:'date',"width": "14%"},
+            { data: 'created_at', name:'created_at',"width": "14%"},
             { data: 'fullname', name:'fullname',"width": "14%"},
             { data: 'branch', name:'branch',"width": "14%"},
             { data: 'activity', render: function ( data, type, row ) {

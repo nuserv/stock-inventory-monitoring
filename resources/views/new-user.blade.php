@@ -27,7 +27,7 @@
     </p>
     <p style="margin-top:0cm;margin-right:0cm;margin-bottom:7.9pt;margin-left:0cm;line-height:19.5pt;background:white">
         <span style="font-family:&quot;Arial&quot;,sans-serif;color:#333333">
-            LOGIN HERE: <b><a href="https://stockmonitoring.phillogix.com.ph/">https://stockmonitoring.phillogix.com.ph/</a></b>
+            LOGIN HERE: <b><a href="{{ url('/') }}">{{ url('/') }}</a></b>
         </span>
     </p>
     <p class="MsoNormal">
