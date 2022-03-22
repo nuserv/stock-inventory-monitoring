@@ -16,6 +16,7 @@ use App\Branch;
 use App\Responder;
 use App\Item;
 use App\Loan;
+use App\Pullout;
 use App\Initial;
 use App\Warehouse;
 use App\StockRequest;
@@ -247,7 +248,9 @@ class HomeController extends Controller
             $returns = RepairedNo::where('status', 'For receiving')->count();
             $unresolved = StockRequest::where('status', 'UNRESOLVED')->where('stat', 'ACTIVE')->count();
             $resolved = StockRequest::where('status', 'UNRESOLVED')->where('stat', 'RESOLVED')->count();
-            return view('pages.home', compact('stockreq', 'units', 'returns', 'title', 'unresolved', 'resolved'));
+            $resolved = StockRequest::where('status', 'UNRESOLVED')->where('stat', 'RESOLVED')->count();
+            $pullout = Pullout::where('status', 'For receiving')->count();
+            return view('pages.home', compact('stockreq', 'units', 'returns', 'title', 'unresolved', 'resolved', 'pullout'));
         }
     }
     public function log()

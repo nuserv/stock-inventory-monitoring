@@ -10,57 +10,72 @@
                             @if (!auth()->user()->hasrole('Manager', 'Editor'))
                                 <div class="col-sm-2">
                                     <a href="{{ route('stock.index')}}">
-                                        <div class="card bg-card">
-                                            <div class="card-body text-center">
-                                                <p class="card-text" style="font-size: 12px">STOCK REQUEST</p>
-                                                <p class="card-text">{{ $stockreq }}</p>
+                                        <center>
+                                            <div class="text-center">
+                                                <img style="height: 100px;" src="{{ asset('Stock-Request.png') }}">
                                             </div>
-                                        </div>
+                                            <div class="container" style="background-color: #0d1a80; color: white; margin-bottom: 5px; line-height: 38px; height: 38px; width: 120px; text-align: center; font-size: 20px; border-radius: 30px;">
+                                                {{number_format($stockreq)}}
+                                            </div>
+                                            <strong style="color: #0d1a80; font-size: 16px;">STOCK REQUEST</strong>
+                                        </center>
                                     </a>
                                 </div>
                                 @if (!auth()->user()->hasanyrole('Manager', 'Editor'))
                                 <div class="col-sm-2">
                                     <a href="{{ route('stocks.index')}}">
-                                        <div class="card bg-card">
-                                            <div class="card-body text-center">
-                                                <p class="card-text" style="font-size: 12px">STOCKS</p>
-                                                <p class="card-text">{{ $units }}</p>
+                                        <center>
+                                            <div class="text-center">
+                                                <img style="height: 100px;" src="{{ asset('Stocks.png') }}">
                                             </div>
-                                        </div>
+                                            <div class="container" style="background-color: #0d1a80; color: white; margin-bottom: 5px; line-height: 38px; height: 38px; width: 120px; text-align: center; font-size: 20px; border-radius: 30px;">
+                                                {{number_format($units)}}
+                                            </div>
+                                            <strong style="color: #0d1a80; font-size: 16px;">STOCKS</strong>
+                                        </center>
                                     </a>
                                 </div>
                                 @endif
                                 @if (!auth()->user()->hasanyrole('Manager', 'Editor'))
                                 <div class="col-sm-2">
                                     <a href=@if (auth()->user()->hasanyrole("Warehouse Manager", "Encoder")) {{ route('repaired.list')}} @else {{ route('return.index')}} @endif>
-                                        <div class="card bg-card">
-                                            <div class="card-body text-center">
-                                                <p class="card-text" style="font-size: 12px">@if (auth()->user()->hasanyrole('Warehouse Manager', 'Encoder')) REPAIRED @else RETURNS @endif</p>
-                                                <p class="card-text">{{ $returns }}</p>
+                                        <center>
+                                            <div class="text-center">
+                                                <img style="height: 100px;" src="{{ asset('Returns.png') }}">
                                             </div>
-                                        </div>
+                                            <div class="container" style="background-color: #0d1a80; color: white; margin-bottom: 5px; line-height: 38px; height: 38px; width: 120px; text-align: center; font-size: 20px; border-radius: 30px;">
+                                                {{number_format($returns)}}
+                                            </div>
+                                            <strong style="color: #0d1a80; font-size: 16px;">@if (auth()->user()->hasanyrole('Warehouse Manager', 'Encoder')) REPAIRED @else RETURNS @endif</strong>
+                                        </center>
                                     </a>
                                 </div>
                                 @endif
                                 @if(auth()->user()->branch->branch != 'Warehouse' && auth()->user()->branch->branch != 'Main-Office')
                                 <div class="col-sm-2">
                                     <a href="{{ route('index.service-unit')}}">
-                                        <div class="card bg-card">
-                                            <div class="card-body text-center">
-                                                <p class="card-text" style="font-size: 12px">SERVICE OUT</p>
-                                                <p class="card-text">{{ $sunits }}</p>
+                                        <center>
+                                            <div class="text-center">
+                                                <img style="height: 100px;" src="{{ asset('Service-Out.png') }}">
                                             </div>
-                                        </div>
+                                            <div class="container" style="background-color: #0d1a80; color: white; margin-bottom: 5px; line-height: 38px; height: 38px; width: 120px; text-align: center; font-size: 20px; border-radius: 30px;">
+                                                {{number_format($sunits)}}
+                                            </div>
+                                            <strong style="color: #0d1a80; font-size: 16px;">SERVICE OUT</strong>
+                                        </center>
                                     </a>
                                 </div>
                                 <div class="col-sm-2">
                                     <a href="{{ url('loans') }}">
-                                        <div class="card @if($loans > 0)bg-card-red @else bg-card @endif">
-                                            <div class="card-body text-center">
-                                                <p class="card-text" style="font-size: 12px">LOAN REQUEST</p>
-                                                <p class="card-text">{{ $loans }}</p>
+                                        <center>
+                                            <div class="text-center">
+                                                <img style="height: 100px;" src="{{ asset('Loans.png') }}">
                                             </div>
-                                        </div>
+                                            <div class="container" style="background-color: #0d1a80; color: white; margin-bottom: 5px; line-height: 38px; height: 38px; width: 120px; text-align: center; font-size: 20px; border-radius: 30px;">
+                                                {{number_format($loans)}}
+                                            </div>
+                                            <strong style="color: #0d1a80; font-size: 16px;">LOAN REQUEST</strong>
+                                        </center>
                                     </a>
                                 </div>
                                 @endif
@@ -68,22 +83,28 @@
                             @if(auth()->user()->hasanyrole('Warehouse Manager', 'Manager', 'Editor'))
                             <div class="col-sm-2">
                                 <a href="{{ url('resolved') }}">
-                                    <div class="card bg-card">
-                                        <div class="card-body text-center" style="font-size: 12px">
-                                            <p class="card-text">RESOLVED</p>
-                                            <p class="card-text">@if($resolved > 0){{ $resolved }} @else {{ $resolved }} @endif</p>
+                                    <center>
+                                        <div class="text-center">
+                                            <img style="height: 100px;" src="{{ asset('Resolved.png') }}">
                                         </div>
-                                    </div>
+                                        <div class="container" style="background-color: #0d1a80; color: white; margin-bottom: 5px; line-height: 38px; height: 38px; width: 120px; text-align: center; font-size: 20px; border-radius: 30px;">
+                                            {{number_format($resolved)}}
+                                        </div>
+                                        <strong style="color: #0d1a80; font-size: 16px;">RESOLVED</strong>
+                                    </center>
                                 </a>
                             </div>
                             <div class="col-sm-2">
                                 <a href="{{ url('request') }}">
-                                    <div class="card @if($unresolved > 0)bg-card-red @else bg-card @endif"">
-                                        <div class="card-body text-center">
-                                            <p class="card-text" style="font-size: 12px">UNRESOLVED</p>
-                                            <p class="card-text">@if($unresolved > 0){{ $unresolved }} @else {{ $unresolved }} @endif</p>
+                                    <center>
+                                        <div class="text-center">
+                                            <img style="height: 100px;" src="{{ asset('Unresolve.png') }}">
                                         </div>
-                                    </div>
+                                        <div class="container" style="background-color: #0d1a80; color: white; margin-bottom: 5px; line-height: 38px; height: 38px; width: 120px; text-align: center; font-size: 20px; border-radius: 30px;">
+                                            {{number_format($unresolved)}}
+                                        </div>
+                                        <strong style="color: #0d1a80; font-size: 16px;">UNRESOLVED</strong>
+                                    </center>
                                 </a>
                             </div>
                             @endif
@@ -92,6 +113,7 @@
                 </div>
             @endif
         @endif
+        <br>
         <ul class="nav nav-tabs">
             <li class="nav-item">
                 <p>USER ACTIVITIES</p>
