@@ -107,6 +107,21 @@
                                     </center>
                                 </a>
                             </div>
+                            @if(auth()->user()->hasanyrole('Warehouse Manager'))
+                                <div class="col-sm-2">
+                                    <a href="{{ url('pullview') }}">
+                                        <center>
+                                            <div class="text-center">
+                                                <img style="height: 100px;" src="{{ asset('pull-out.png') }}">
+                                            </div>
+                                            <div class="container" style="background-color: #0d1a80; color: white; margin-bottom: 5px; line-height: 38px; height: 38px; width: 120px; text-align: center; font-size: 20px; border-radius: 30px;">
+                                                {{number_format($pullout)}}
+                                            </div>
+                                            <strong style="color: #0d1a80; font-size: 16px;">PULLOUT</strong>
+                                        </center>
+                                    </a>
+                                </div>
+                            @endif
                             @endif
                         </div>
                     </div>
