@@ -6,7 +6,7 @@
             @if (auth()->user()->branch->branch != "Conversion")
                 <div class="container pt-5">
                     <div class="container-fluid">
-                        <div class="row">
+                        <div class="row" style="zoom:60%">
                             @if (!auth()->user()->hasrole('Manager', 'Editor'))
                                 <div class="col-sm-2">
                                     <a href="{{ route('stock.index')}}">
