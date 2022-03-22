@@ -39,6 +39,16 @@ $(document).ready(function()
                 }
             }
         },*/
+        columnDefs: [
+            {
+                "targets": [ 0 ],
+                "visible": false
+            },
+            {
+                "targets": [1],
+                "render": $.fn.dataTable.render.moment('YYYY-MM-DD HH:mm:ss', 'MMM. DD, YYYY, h:mm A')
+            },
+        ],
         columns: [
             { data: 'id', name:'id',"width": "14%"},
             { data: 'date', name:'date',"width": "14%"},
