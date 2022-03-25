@@ -9,7 +9,7 @@
                         <div class="row" style="zoom:60%">
                             @if (!auth()->user()->hasrole('Manager', 'Editor'))
                                 <div class="col-sm-2">
-                                    <a href="{{ route('stock.index')}}">
+                                    <a href="{{ route('stock.index')}}" style="text-decoration: none;">
                                         <center>
                                             <div class="text-center">
                                                 <img style="height: 100px;" src="{{ asset('Stock-Request.png') }}">
@@ -23,7 +23,7 @@
                                 </div>
                                 @if (!auth()->user()->hasanyrole('Manager', 'Editor'))
                                 <div class="col-sm-2">
-                                    <a href="{{ route('stocks.index')}}">
+                                    <a href="{{ route('stocks.index')}}"  style="text-decoration: none;">
                                         <center>
                                             <div class="text-center">
                                                 <img style="height: 100px;" src="{{ asset('Stocks.png') }}">
@@ -38,7 +38,7 @@
                                 @endif
                                 @if (!auth()->user()->hasanyrole('Manager', 'Editor'))
                                 <div class="col-sm-2">
-                                    <a href=@if (auth()->user()->hasanyrole("Warehouse Manager", "Encoder")) {{ route('repaired.list')}} @else {{ route('return.index')}} @endif>
+                                    <a style="text-decoration: none;" href=@if (auth()->user()->hasanyrole("Warehouse Manager", "Encoder")) {{ route('repaired.list')}} @else {{ route('return.index')}} @endif>
                                         <center>
                                             <div class="text-center">
                                                 <img style="height: 100px;" src="{{ asset('Returns.png') }}">
@@ -53,7 +53,7 @@
                                 @endif
                                 @if(auth()->user()->branch->branch != 'Warehouse' && auth()->user()->branch->branch != 'Main-Office')
                                 <div class="col-sm-2">
-                                    <a href="{{ route('index.service-unit')}}">
+                                    <a href="{{ route('index.service-unit')}}"  style="text-decoration: none;">
                                         <center>
                                             <div class="text-center">
                                                 <img style="height: 100px;" src="{{ asset('Service-Out.png') }}">
@@ -66,7 +66,7 @@
                                     </a>
                                 </div>
                                 <div class="col-sm-2">
-                                    <a href="{{ url('loans') }}">
+                                    <a href="{{ url('loans') }}"  style="text-decoration: none;">
                                         <center>
                                             <div class="text-center">
                                                 <img style="height: 100px;" src="{{ asset('Loans.png') }}">
@@ -82,7 +82,7 @@
                             @endif
                             @if(auth()->user()->hasanyrole('Warehouse Manager', 'Manager', 'Editor'))
                             <div class="col-sm-2">
-                                <a href="{{ url('resolved') }}">
+                                <a href="{{ url('resolved') }}"  style="text-decoration: none;">
                                     <center>
                                         <div class="text-center">
                                             <img style="height: 100px;" src="{{ asset('Resolved.png') }}">
@@ -95,7 +95,7 @@
                                 </a>
                             </div>
                             <div class="col-sm-2">
-                                <a href="{{ url('request') }}">
+                                <a href="{{ url('request') }}"  style="text-decoration: none;">
                                     <center>
                                         <div class="text-center">
                                             <img style="height: 100px;" src="{{ asset('Unresolve.png') }}">
@@ -109,7 +109,7 @@
                             </div>
                             @if(auth()->user()->hasanyrole('Warehouse Manager'))
                                 <div class="col-sm-2">
-                                    <a href="{{ url('pullview') }}">
+                                    <a href="{{ url('pullview') }}"  style="text-decoration: none;">
                                         <center>
                                             <div class="text-center">
                                                 <img style="height: 100px;" src="{{ asset('pull-out.png') }}">
