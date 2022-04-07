@@ -149,7 +149,7 @@ class PreventiveController extends Controller
                         ->where('customer_id', '1')
                         ->where('quarter', '!=', Carbon::now()->subquarter(1)->quarter)
                         ->get();
-                    if (!$pmbranches) {
+                    if ($pmbranches->count() == 0) {
                         $pmbranches = PmBranches::query()
                             ->select('Conversion','customer_branch as client', 'pm_branches.customer_branches_code', 'branch', 'area', 'customer_branches.id as customer_id')
                             ->join('branches', 'branches.id', 'branch_id')
@@ -180,7 +180,7 @@ class PreventiveController extends Controller
                         ->where('quarter', '!=', Carbon::now()->subquarter(1)->quarter)
                         ->where('area_id', 5)
                         ->get();
-                    if (!$pmbranches) {
+                    if ($pmbranches->count() == 0) {
                         $pmbranches = PmBranches::query()
                         ->select('Conversion','customer_branch as client', 'pm_branches.customer_branches_code', 'customer_branches.id as customer_id')
                         ->join('customer_branches', DB::raw('(code*1)'),DB::raw('(customer_branches_code*1)'))
@@ -210,7 +210,7 @@ class PreventiveController extends Controller
                         ->where('quarter', '!=', Carbon::now()->subquarter(1)->quarter)
                         ->where('area_id', 3)
                         ->get();
-                    if (!$pmbranches) {
+                    if ($pmbranches->count() == 0) {
                         $pmbranches = PmBranches::query()
                         ->select('Conversion','customer_branch as client', 'pm_branches.customer_branches_code', 'customer_branches.id as customer_id')
                         ->join('customer_branches', DB::raw('(code*1)'),DB::raw('(customer_branches_code*1)'))
@@ -239,7 +239,7 @@ class PreventiveController extends Controller
                         ->where('quarter', '!=', Carbon::now()->subquarter(1)->quarter)
                         ->where('branch_id', auth()->user()->branch->id)
                         ->get();
-                    if (!$pmbranches) {
+                    if ($pmbranches->count() == 0) {
                         $pmbranches = PmBranches::query()
                         ->select('Conversion','customer_branch as client', 'pm_branches.customer_branches_code', 'customer_branches.id as customer_id')
                         ->join('customer_branches', DB::raw('(code*1)'),DB::raw('(customer_branches_code*1)'))
