@@ -28,11 +28,14 @@ $(document).ready(function()
                 }
             }
         },
+        columnDefs: [
+            {
+                "targets": [0],
+                "render": $.fn.dataTable.render.moment('YYYY/MM/DD', 'MMM. DD, YYYY')
+            },
+        ],
         columns: [
-            { data: 'schedule',
-                render: function(data, type) {
-                    return moment(data).format('MMMM DD, YYYY');
-                }
+            { data: 'schedule'
             },
             { data: 'area', name:'area'},
             { data: 'service_center', name:'service_center'},
