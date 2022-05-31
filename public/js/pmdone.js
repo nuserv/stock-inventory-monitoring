@@ -28,6 +28,7 @@ $(document).ready(function()
                 }
             }
         },
+        "order": [[ 0, 'desc' ]],
         columnDefs: [
             {
                 "targets": [0],
