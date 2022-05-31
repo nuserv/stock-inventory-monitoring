@@ -35,8 +35,7 @@ $(document).ready(function()
             },
         ],
         columns: [
-            { data: 'schedule'
-            },
+            { data: 'schedule'},
             { data: 'area', name:'area'},
             { data: 'service_center', name:'service_center'},
             { data: 'fsrno', name:'fsrno'},
