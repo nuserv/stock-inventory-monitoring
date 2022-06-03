@@ -46,6 +46,27 @@ class HomeController extends Controller
         return view('report', compact('title'));
     }
 
+    public function sync()
+    {
+        $pendings = StockRequest::where('status', 'PENDING')->get();
+        $count = 0;
+        foreach ($pendings as $pending) {
+            $ok = false;
+            $reques = DB::table('requested_items')->where('request_no', $pending->request_no)->get();
+            foreach ($reques as $key) {
+                if ($reques->created_at != $reques->updated_at) {
+                    if ($ok == false) {
+                        $pending->status = 'PARTIAL PENDING';
+                        $ok = true;
+                        $count++;
+                    }
+                }
+            }
+            $pending->Save();
+        }
+        return $count;
+    }
+
     public function item()
     {
         $title = 'Item List';

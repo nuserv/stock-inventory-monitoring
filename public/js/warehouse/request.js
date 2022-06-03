@@ -235,7 +235,7 @@ $(document).ready(function()
             $('#save_Btn').hide();
             var trsched = new Date(trdata.sched);
             $('#sched').val(months[trsched.getMonth()]+' '+trsched.getDate()+', ' +trsched.getFullYear());
-        }else if(trdata.status == 'PENDING'){
+        }else if(trdata.status == 'PENDING' || trdata.status == 'PARTIAL PENDING'){
             $('#prcBtn').show();
             $('.sched').hide();
             $('#sched').val('');
@@ -349,7 +349,7 @@ $(document).ready(function()
         $('table.requestDetails').dataTable().fnDestroy();
         $('table.schedDetails').dataTable().fnDestroy();
 
-        if (trdata.status == 'PENDING') {
+        if (trdata.status == 'PENDING' || trdata.status == 'PARTIAL PENDING') {
             $('#printBtn').remove();
             $('table.schedDetails').remove();
             //$('#unresolveBtn').hide();

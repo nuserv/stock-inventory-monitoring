@@ -96,6 +96,17 @@ $(document).on('click', '.sub_Btn', function(){
             if (q<=w) {
                 if ($.inArray(q, uomarray) == -1){
                     if ($('#serial'+q).val()) {
+                        for(var ab=1;ab<=w;ab++){
+                            if ($.inArray(ab, uomarray) == -1){
+                                if ($('#serial'+ab).val().toLowerCase() != "n/a") {
+                                    if ($('#serial'+q).val().toLowerCase() == $('#serial'+ab).val().toLowerCase()) {
+                                        alert('The serial number was already entered. Please enter a unique number.');
+                                        $('#loading').hide();
+                                        return false;
+                                    }
+                                } 
+                            }
+                        }
                         if($('#serial'+q).val().toLowerCase() == "n/a" || $('#serial'+q).val().toLowerCase() == "none" || $('#serial'+q).val().toLowerCase() == "faded") {
                             $.ajax({
                                 url: 'checkserial',
@@ -104,6 +115,7 @@ $(document).on('click', '.sub_Btn', function(){
                                 },
                                 dataType: 'json',
                                 type: 'get',
+                                async: false,
                                 data: {
                                     item: $('#desc'+q).val(),
                                     type: 'na'

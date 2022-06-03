@@ -177,6 +177,121 @@ $(document).ready(function()
                     }
                 });
             }
+        }else if (trdata.status == 'PARTIAL PENDING') {
+            $('table.schedDetails').hide();
+            $('table.intransitDetails').hide();
+            $('table.requestDetails').show();
+            $('.sched').hide();
+            $('#del_Btn').hide();
+                // $('#del_Btn').show();
+            if ($('#userlevel').val() != 'Head') {
+                $('#del_Btn').hide();
+            }
+            $('#msg').hide();
+            $('#rec_Btn').hide();
+            $('#schedslabel').hide();
+            $('#intransitlabel').hide();
+            $('#intransitrow').hide();
+            $('#not_rec_Btn').hide();
+            $('#del_Btn').attr('reqno', trdata.request_no);
+            var penreq;
+            Promise.all([pendingrequest()]).then(() => { 
+                if (penreq == 0) {
+                    $.ajax({
+                        url: 'remove',
+                        headers: {
+                            'X-CSRF-TOKEN': $('meta[name="ctok"]').attr('content')
+                        },
+                        dataType: 'json',
+                        type: 'DELETE',
+                        data: {
+                            reqno : trdata.request_no                    
+                        },
+                        success: function(){
+                            location.reload();
+                        },
+                        error: function (data) {
+                            if(data.status == 401) {
+                                window.location.href = '/login';
+                            }
+                            alert(data.responseText);
+                        }
+                    });
+                }
+                if (penreq <= 10) {
+                    $('table.requestDetails').dataTable().fnDestroy();
+                    pendingreq = 
+                    $('table.requestDetails').DataTable({ 
+                        "dom": 'rt',
+                        "language": {
+                            "emptyTable": " "
+                        },
+                        "columnDefs": [
+                            {   
+                                "render": function ( data ) {
+                                    return '<button class="btn-primary delItemBtn" item_id="'+data.id+'">Remove</button>'
+                                },
+                                "defaultContent": '',
+                                "data": null,
+                                "targets": [3],
+                                "visible": false
+                            }
+                        ],
+                        processing: true,
+                        serverSide: true,
+                        ajax: "/requests/"+trdata.request_no,
+                        columns: [
+                            { data: 'cat_name', name:'cat_name'},
+                            { data: 'item_name', name:'item_name'},
+                            { data: 'qty', name:'qty'}
+                        ]
+                    });
+                }else if (penreq > 10) {
+                    $('table.requestDetails').dataTable().fnDestroy();
+                    pendingreq = 
+                    $('table.requestDetails').DataTable({ 
+                        "dom": 'lrtp',
+                        "language": {
+                            "emptyTable": " "
+                        },
+                        "columnDefs": [
+                            {   
+                                "render": function ( data ) {
+                                    return '<button class="btn-primary delItemBtn" item_id="'+data.id+'">Remove</button>'
+                                },
+                                "defaultContent": '',
+                                "data": null,
+                                "targets": [3],
+                                "visible": false
+                            }
+                        ],
+                        processing: true,
+                        serverSide: true,
+                        ajax: "/requests/"+trdata.request_no,
+                        columns: [
+                            { data: 'cat_name', name:'cat_name'},
+                            { data: 'item_name', name:'item_name'},
+                            { data: 'qty', name:'qty'}
+                        ]
+                    });
+                }
+            });
+            function pendingrequest() {
+                return $.ajax({
+                    type:'get',
+                    url: "/requests/"+trdata.request_no,
+                    success:function(data)
+                    {
+                        penreq = data.data.length;
+                    },
+                    error: function (data) {
+                        if(data.status == 401) {
+                            window.location.href = '/login';
+                        }
+                        alert(data.responseText);
+                    }
+                });
+            }
         }else if(trdata.status == 'IN TRANSIT' || trdata.status == 'PARTIAL IN TRANSIT'){
             $('table.requestDetails').remove();
             $('table.schedDetails').remove();
