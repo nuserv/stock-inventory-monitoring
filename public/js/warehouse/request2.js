@@ -99,10 +99,12 @@ $(document).on('click', '.sub_Btn', function(){
                         for(var ab=1;ab<=w;ab++){
                             if ($.inArray(ab, uomarray) == -1){
                                 if ($('#serial'+ab).val().toLowerCase() != "n/a") {
-                                    if ($('#serial'+q).val().toLowerCase() == $('#serial'+ab).val().toLowerCase()) {
-                                        alert('The serial number was already entered. Please enter a unique number.');
-                                        $('#loading').hide();
-                                        return false;
+                                    if (ab != q) {
+                                        if ($('#serial'+q).val().toLowerCase() == $('#serial'+ab).val().toLowerCase()) {
+                                            alert('The serial number was already entered. Please enter a unique number.');
+                                            $('#loading').hide();
+                                            return false;
+                                        }
                                     }
                                 } 
                             }
