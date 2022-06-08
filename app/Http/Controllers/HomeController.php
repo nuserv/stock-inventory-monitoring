@@ -54,7 +54,7 @@ class HomeController extends Controller
             $ok = false;
             $reques = DB::table('requested_items')->where('request_no', $pending->request_no)->get();
             foreach ($reques as $key) {
-                if ($reques->created_at != $reques->updated_at) {
+                if ($key->created_at != $key->updated_at) {
                     if ($ok == false) {
                         $pending->status = 'PARTIAL PENDING';
                         $ok = true;
@@ -262,7 +262,7 @@ class HomeController extends Controller
         }else if (auth()->user()->hasrole('Warehouse Administrator')){
             return view('pages.unrepair', compact('title'));
         }else{
-            $stockreq = StockRequest::where('status', 'PENDING')
+            $stockreq = StockRequest::whereIN('status', ['PARTIAL PENDING','PENDING'])
                 ->where('stat', '=', 'ACTIVE')
                 ->count();
             $units = Warehouse::where('status', 'in')->count();
