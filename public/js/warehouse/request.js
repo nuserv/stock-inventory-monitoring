@@ -201,7 +201,7 @@ $(document).ready(function()
             $('#tickets').val(trdata.ticket);
         }
         $('#schedbyrow').hide();
-        if (trdata.status != 'PENDING') {
+        if (trdata.status != 'PENDING' || trdata.status != 'PARTIAL PENDING') {
             if (trdata.schedby) {
                 $('#schedby').val(trdata.schedby);
                 $('#schedbyrow').show();
