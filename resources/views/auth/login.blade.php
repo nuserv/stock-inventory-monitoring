@@ -20,7 +20,7 @@
                     @endif
                     <form method="POST" action="{{ route('login') }}">
                         @csrf
-                        <div class="mb-3">
+                        <div class="mb-4">
                             <div class="f-outline">
                                 <input id="email" type="email" class="forminput form-control @error('email') is-invalid @enderror" name="email" value="{{ old('email') }}" placeholder=" " required autocomplete="email" autofocus>
                                 <label for="email" class="formlabel form-label text-md-right">{{ __('E-Mail Address') }}</label>
@@ -31,7 +31,7 @@
                                 @enderror
                             </div>
                         </div>
-                        <div class="mb-3">
+                        <div class="mb-4">
                             <div class="f-outline">
                                 <input id="password" type="password" class="forminput form-control @error('password') is-invalid @enderror" name="password" placeholder=" " required autocomplete="current-password">
                                 <label for="password" class="formlabel form-label text-md-right">{{ __('Password') }}</label>
