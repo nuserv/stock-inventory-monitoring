@@ -50,6 +50,7 @@
             }
             .forminput{
                 background-color:white;
+                color:black;
             }
             .formlabel{
                 position:absolute;
