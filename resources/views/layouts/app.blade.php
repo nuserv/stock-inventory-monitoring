@@ -50,7 +50,7 @@
             }
             .forminput{
                 background-color:white;
-                color:black;
+                color:black !important;
             }
             .formlabel{
                 position:absolute;
@@ -72,6 +72,7 @@
                 background-color:white;
                 border-color:#0d1a80;
                 box-shadow:0 0 10px #0d1a80;
+                color:black;
             }
             .forminput:focus ~ .form-label,
             .forminput:not(:placeholder-shown).forminput:not(:focus)
