@@ -45,6 +45,49 @@
         <link rel="icon" href="{{asset('favicon.ico')}}" type="image/x-icon" />
         <link rel="shortcut icon" href="{{asset('favicon.ico')}}" type="image/x-icon" />
         <style>
+            .f-outline{
+            position:relative;
+            }
+            .forminput{
+                background-color:white;
+            }
+            .formlabel{
+                position:absolute;
+                left:0.2rem;
+                top:0.5rem;
+                padding:0 0.5rem;
+                color:black;
+                cursor:text;
+                transition: top 200ms ease-in,
+                    left 200ms ease-in,
+                    font-size 200ms ease-in;
+            }
+            .forminput:focus{
+                background-color:white;
+                border-color:#0d1a80;
+                box-shadow:0 0 10px #0d1a80;
+            }
+            .forminput:hover{
+                background-color:white;
+                border-color:#0d1a80;
+                box-shadow:0 0 10px #0d1a80;
+            }
+            .forminput:focus ~ .form-label,
+            .forminput:not(:placeholder-shown).forminput:not(:focus)
+            ~.formlabel{
+                top:-0.8rem;
+                font-size:0.8rem;
+                left:1rem;
+                color:#0d1a80;
+                background-color:white;
+            }
+            input:-webkit-autofill,
+            input:-webkit-autofill:focus {
+                transition: background-color 600000s 0s, color 600000s 0s;
+            }
+            input[data-autocompleted] {
+                background-color: transparent !important;
+            }
             #loading {
                 display: none;
                 position: absolute;
