@@ -251,7 +251,7 @@ class HomeController extends Controller
             $units = Stock::where('status', 'in')->where('branch_id', auth()->user()->branch->id)->count();
             $returns = Defective::wherein('status', ['For return', 'For receiving'])->where('branch_id', auth()->user()->branch->id)->count();
             $stockreq = StockRequest::where('branch_id', auth()->user()->branch->id)
-                ->wherein('status', ['PENDING', 'SCHEDULED'])
+                ->wherein('status', ['PARTIAL PENDING','PENDING', 'SCHEDULED'])
                 ->where('stat', '=', 'ACTIVE')
                 ->count();
             $sunits = Stock::where('status', 'service unit')->where('branch_id', auth()->user()->branch->id)->count();
