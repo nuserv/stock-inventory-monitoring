@@ -91,7 +91,7 @@
                     <th>
                         UOM
                     </th>
-                    @if(auth()->user()->hasanyrole('Head', 'Tech', 'Warehouse Manager') || auth()->user()->id == 228 || auth()->user()->id == 110)
+                    @if(auth()->user()->hasanyrole('Head', 'Tech', 'Warehouse Manager') || auth()->user()->id == 283 || auth()->user()->id == 110)
                         <th>
                         </th>
                     @endif
@@ -121,14 +121,14 @@
 </div>
 <br>
 <div class="d-flex">
-    @if(auth()->user()->hasrole('Warehouse Manager') || auth()->user()->id == 228 )
+    @if(auth()->user()->hasrole('Warehouse Manager') || auth()->user()->id == 283 )
         <input type="button" id="addCatBtn" class="btn btn-xs btn-primary" value="Add Category">&nbsp;&nbsp;
         <input type="button" id="addCodeBtn" class="btn btn-xs btn-primary" value="Add Item">
         <a class="ml-auto" href="{{ route('backup-inventory') }}">
             <input type="button" id="backupBtn" class="btn btn-xs btn-primary" value="BACK UP INVENTORY">
         </a>
     @endif
-    @if(auth()->user()->hasAnyrole('Warehouse Manager|Head') || auth()->user()->id == 228)
+    @if(auth()->user()->hasAnyrole('Warehouse Manager|Head') || auth()->user()->id == 283)
         @if(auth()->user()->hasAnyrole('Head'))
             <a class="mr-auto" href="{{ route('backup-inventory') }}">
                 <input type="button" id="backupBtn" class="btn btn-xs btn-primary" value="BACK UP INVENTORY">

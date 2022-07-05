@@ -254,7 +254,7 @@ $(document).on("click", "#bufferTable tr", function () {
             }
         });
         
-    }else if ($('#level').val() == 'Warehouse Manager' || $('#userid').val() == '228' || $('#userid').val() == '110') {
+    }else if ($('#level').val() == 'Warehouse Manager' || $('#userid').val() == '283' || $('#userid').val() == '110') {
         Promise.all([bufferitems(), buffersend()]).then(() => { 
             if (items != 0) {
                 buffer =

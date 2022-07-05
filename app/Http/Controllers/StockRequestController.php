@@ -1378,7 +1378,7 @@ class StockRequestController extends Controller
     }
     public function bufferlist(Request $request)
     {
-        if (auth()->user()->hasanyrole('Warehouse Manager', 'Warehouse Administrator') || auth()->user()->id == 228 || auth()->user()->id == 110) {
+        if (auth()->user()->hasanyrole('Warehouse Manager', 'Warehouse Administrator') || auth()->user()->id == 283 || auth()->user()->id == 110) {
             $buffer = BufferNo::query()
                 ->wherein('status', ['For approval', 'Approved', 'Partial', 'For receiving'])
                 ->get();

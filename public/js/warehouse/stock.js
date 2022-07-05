@@ -137,7 +137,7 @@ $(document).on("click", "#catTable tr", function () {
     $('#catTable').hide();
     $('#ctable').hide();
     $('#stockTable').show();
-    if($('#userlevel').val() == 'Warehouse Manager' || $('#userid').val() == '228' || $('#userid').val() == '110') {
+    if($('#userlevel').val() == 'Warehouse Manager' || $('#userid').val() == '283' || $('#userid').val() == '110') {
         table =
         $('table.stockTable').DataTable({ 
             "dom": 'rtip',

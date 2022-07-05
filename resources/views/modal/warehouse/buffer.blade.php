@@ -36,7 +36,7 @@
                             <th>Category</th>
                             <th>Item Description</th>
                             <th>Quantity</th>
-                            @if (auth()->user()->hasanyrole('Warehouse Manager') || auth()->user()->id == 228 || auth()->user()->id == 110)
+                            @if (auth()->user()->hasanyrole('Warehouse Manager') || auth()->user()->id == 283 || auth()->user()->id == 110)
                             <th></th>
                             @endif
                         </thead>

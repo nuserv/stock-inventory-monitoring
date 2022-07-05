@@ -152,7 +152,7 @@
                             <a class="nav-link {{ Request::is('user') ? 'active' : '' }}" href="{{ url('user') }}">Users</a>
                         </li>
                     @endif
-                    @if(auth()->user()->hasanyrole('Warehouse Manager') || auth()->user()->id == 228 || auth()->user()->id == 110)
+                    @if(auth()->user()->hasanyrole('Warehouse Manager') || auth()->user()->id == 283 || auth()->user()->id == 110)
                         <li class="nav-item">
                             <a class="nav-link {{ Request::is('buffer') ? 'active' : '' }}" href="{{ url('buffer') }}">Buffer Stock Request</a>
                         </li>
