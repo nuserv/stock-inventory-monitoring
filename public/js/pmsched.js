@@ -250,7 +250,7 @@ $(document).on('click', '#convdatesched', function () {
 });
 $(document).on('click', '#saveBtn', function () {
     if ($('#fsrno').val().substring(0,4) == "0200") {
-        if ($('#datesched').val() != "" && $('#fsrno').val() != "" && $('#fsrno').val().length == 10) {
+        if ($('#datesched').val() != "" && $('#fsrno').val() != "" && $('#fsrno').val().length >= 9) {
             $('#loading').show();
             $.ajax({
                 url: 'checkfsr',
