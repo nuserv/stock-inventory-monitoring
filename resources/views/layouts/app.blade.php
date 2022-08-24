@@ -330,7 +330,7 @@
             @if (auth()->user()->hasanyrole('Manager', 'Editor'))
                 <script src="{{asset('min/?f=js/pmschedmanager.js')}}"></script>
             @else
-                <script src="{{asset('min/?f=js/pmsched.js?ver=1')}}"></script>
+                <script src="{{asset('/js/pmsched.js?ver=1')}}"></script>
             @endif
         @endif
 
