@@ -93,7 +93,7 @@ $(document).on('change', '.category', function(){
 });
 
 $(document).on('click', '.cancel', function(){
-    location.reload();
+    window.location.href = '/request?branch='+$('#branch').val();
 });
 
 $(document).on('click', '#printBtn', function(){

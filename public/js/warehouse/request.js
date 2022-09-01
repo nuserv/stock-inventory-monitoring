@@ -26,7 +26,6 @@ $("#datesched").on("click", function() {
     var inputHeight = $(this).height();
     var customPadding = 17; //custom modal padding (bootstrap modal)! 
     var topDatepicker = (offsetInput + inputHeight + customPadding) - offsetModal;
-    console.log(topDatepicker);
     $("#ui-datepicker-div").css({top: topDatepicker});
 });
 $("#resched").on("click", function() {
@@ -85,14 +84,20 @@ $(document).ready(function()
     $('#date').val(months[d.getMonth()]+' '+d.getDate()+', ' +d.getFullYear()+' '+hour+':'+String(d.getMinutes()).padStart(2, '0')+ampm);
     $('#sdate').val(months[d.getMonth()]+' '+d.getDate()+', ' +d.getFullYear()+' '+hour+':'+String(d.getMinutes()).padStart(2, '0')+ampm);
     $('.requestTable thead tr:eq(0) th').each( function () {
-        $(this).html('<input type="text" style="width:150px" class="column_search"/>' );
+        var title = $(this).text();
+        if (title.includes('BRANCH NAME')) {
+            $(this).html('<input type="text" style="width:150px" id="search_branch" class="column_search"/>' );
+        }else{
+            $(this).html('<input type="text" style="width:150px" class="column_search"/>' );
+        }
     });
+    
     table =
     $('table.requestTable').DataTable({ 
         "dom": 'lrtip',
         "pageLength": 50,
         "language": {
-            "emptyTable": "No stock request found!",
+            "emptyTable": " ",
             "info": "\"Showing _START_ to _END_ of _TOTAL_ Stock Request\"",
         },
         "fnRowCallback": function(nRow, aData) {
@@ -160,7 +165,7 @@ $(document).ready(function()
         processing: false,
         serverSide: false,
         ajax: {
-            url: 'requests',
+            url: '/requests',
             error: function(data) {
                 if(data.status == 401) {
                     window.location.href = '/login';
@@ -178,6 +183,15 @@ $(document).ready(function()
         ]
     });
 
+    if(($(location).attr('pathname')+window.location.search).includes('branch') == true){
+        var url = new URL(window.location.href);
+        var branch = url.searchParams.get("branch");
+        $('#search_branch').val(branch);
+        setTimeout(function(){
+            $('#search_branch').keyup();
+        }, 200);
+    }
+    
     $('#requestTable tbody').on('click', 'tr', function () { 
         console.log('ito');
         var trdata = table.row(this).data();
