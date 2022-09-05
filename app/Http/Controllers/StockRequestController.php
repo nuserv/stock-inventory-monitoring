@@ -51,6 +51,14 @@ class StockRequestController extends Controller
 
     public function itemrequest()
     {
+        $null = RequestedItem::whereNull('branch_id')->get();
+        foreach ($null as $key) {
+            if (StockRequest::where('request_no', $key->request_no)->first()) {
+                $key->branch_id = StockRequest::where('request_no', $key->request_no)->first()->branch_id;
+                $key->Save();
+            }
+        }
+
         if (auth()->user()->hasanyrole('Repair', 'Viewer', 'Viewer PLSI', 'Viewer IDSI')) {
             return redirect('/');
         }
