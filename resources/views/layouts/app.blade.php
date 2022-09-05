@@ -367,7 +367,7 @@
         @endif
         @if(Request::is('request/*'))
             @if(auth()->user()->hasAnyrole('Warehouse Manager', 'Encoder'))
-                <script src="{{asset('min/?f=warehouse/request.js&ver1.2')}}"></script>
+                <script src="{{asset('min/?f=warehouse/request.js&ver1.3')}}"></script>
                 <script src="{{asset('min/?f=js/warehouse/request1.js')}}"></script>
                 <script src="{{asset('min/?f=js/warehouse/request2.js')}}"></script>
                 <script src="{{asset('min/?f=js/warehouse/request3.js')}}"></script>
@@ -382,7 +382,7 @@
         @endif
         @if(Request::is('request'))
             @if(auth()->user()->hasAnyrole('Warehouse Manager', 'Encoder'))
-                <script src="{{asset('min/?f=js/warehouse/request.js&ver1.2')}}"></script>
+                <script src="{{asset('min/?f=js/warehouse/request.js&ver1.3')}}"></script>
                 <script src="{{asset('min/?f=js/warehouse/request1.js')}}"></script>
                 <script src="{{asset('min/?f=js/warehouse/request2.js')}}"></script>
                 <script src="{{asset('min/?f=js/warehouse/request3.js&ver=1')}}"></script>

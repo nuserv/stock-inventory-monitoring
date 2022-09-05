@@ -125,8 +125,9 @@ class StockRequestController extends Controller
             ->join('customer_branches', 'customer_branches.id', 'customer_branch_id')
             ->join('customers', 'customers.id', 'requests.customer_id')
             ->first();
-            return response()->json($data);
         }
+        return response()->json($data);
+
     }
     
     public function branchitemdata2(Request $request){
