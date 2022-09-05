@@ -48,6 +48,139 @@ class StockRequestController extends Controller
         $categories = Category::all();
         return view('pages.stock-request', compact('stocks', 'categories', 'title'));
     }
+
+    public function itemrequest()
+    {
+        if (auth()->user()->hasanyrole('Repair', 'Viewer', 'Viewer PLSI', 'Viewer IDSI')) {
+            return redirect('/');
+        }
+        $title = 'Item Requested';
+
+        return view('pages.item-request', compact('title'));
+    }
+
+    public function requestsdata(Request $request)
+    {
+        $data = StockRequest::select(
+                'address',
+                'area',
+                'requests.area_id',
+                'branch',
+                'requests.branch_id',
+                'requests.created_at',
+                'customer_branch_id',
+                'users.email',
+                'fsr_brchcode',
+                'head',
+                'intransit',
+                'intransitval',
+                'phone',
+                'request_no',
+                'schedby',
+                'schedule',
+                'stat',
+                'requests.status',
+                'type',
+                'user_id',
+                'users.name as reqBy'
+            )
+            ->where('request_no', $request->request_no)
+            ->join('branches', 'branches.id', 'branch_id')
+            ->join('areas', 'areas.id', 'requests.area_id')
+            ->join('users', 'users.id', 'user_id')
+            ->first();
+        return response()->json($data);
+    }
+    
+    public function branchitemdata2(Request $request){
+
+        $items = RequestedItem::query()
+            ->select('requested_items.pending', 'requested_items.created_at', 'requested_items.request_no')
+            ->where('items_id', $request->items_id)
+            ->where('requested_items.branch_id', $request->branch_id)
+            ->where('requested_items.pending', '!=', '0')
+            ->join('requests', 'requests.request_no', 'requested_items.request_no')
+            // // ->where('requests.status', '!=', 'DELETED')
+            ->wherein('requests.status',  ['PARTIAL SCHEDULED', 'PARTIAL IN TRANSIT', 'PARTIAL PENDING', 'PENDING', 'INCOMPLETE', 'RESCHEDULED', 'UNRESOLVED', 'PARTIAL'])
+            ->where('stat', 'ACTIVE')
+            ->get();
+        return DataTables::of($items)
+        ->addColumn('created_at', function (RequestedItem $items){
+            return Carbon::parse($items->created_at->toFormattedDateString().' '.$items->created_at->toTimeString())->isoFormat('lll');
+        })
+        ->make(true);
+    }
+
+    public function branchitemdata(Request $request){
+
+        $items = RequestedItem::query()
+            ->select('requested_items.pending', 'branch', 'requested_items.branch_id', 'items_id', 'requests.status', 'requested_items.request_no')
+            ->where('items_id', $request->items_id)
+            ->where('requested_items.status', 'PENDING')
+            ->where('requested_items.pending', '!=', '0')
+            ->join('requests', 'requests.request_no', 'requested_items.request_no')
+            // // ->where('requests.status', '!=', 'DELETED')
+            ->wherein('requests.status',  ['PARTIAL SCHEDULED', 'PARTIAL IN TRANSIT', 'PARTIAL PENDING', 'PENDING', 'INCOMPLETE', 'RESCHEDULED', 'UNRESOLVED', 'PARTIAL'])
+            ->where('stat', 'ACTIVE')
+            ->join('branches', 'branches.id', 'requested_items.branch_id')
+            // ->groupby('branch')
+            ->get();
+        return DataTables::of($items)->make(true);
+        
+    }
+
+    public function itemrequestdata(){
+
+        return DataTables::of(
+            RequestedItem::select('requested_items.items_id', 'requested_items.request_no')
+            ->where('requested_items.status', 'PENDING')
+            ->where('requested_items.pending', '!=', 0)
+            ->join('requests', 'requests.request_no', 'requested_items.request_no')
+            ->wherein('requests.status',  ['PARTIAL SCHEDULED', 'PARTIAL IN TRANSIT', 'PARTIAL PENDING', 'PENDING', 'INCOMPLETE', 'RESCHEDULED', 'UNRESOLVED', 'PARTIAL'])
+            ->where('stat', 'ACTIVE')
+            ->groupBy('items_id')
+            ->get()
+        )
+        ->addColumn('request', function (RequestedItem $RequestedItem){
+            $sum = RequestedItem::query()
+                ->where('items_id', $RequestedItem->items_id)
+                ->where('requested_items.status', 'PENDING')
+                ->where('requested_items.pending', '!=', '0')
+                ->join('requests', 'requests.request_no', 'requested_items.request_no')
+                ->wherein('requests.status',  ['PARTIAL SCHEDULED', 'PARTIAL IN TRANSIT', 'PARTIAL PENDING', 'PENDING', 'INCOMPLETE', 'RESCHEDULED', 'UNRESOLVED', 'PARTIAL'])
+                ->where('stat', 'ACTIVE')
+                ->sum('requested_items.pending');
+            return $sum;
+        })
+        ->addColumn('item_name', function (RequestedItem $RequestedItem){
+            $item = Item::select('item')->where('items.id', $RequestedItem->items_id)->first();
+            if ($item) {
+                return mb_strtoupper($item->item);
+            }
+            return '';
+
+        })
+        ->addColumn('category', function (RequestedItem $RequestedItem){
+            $category = Item::select('category')
+                ->join('categories', 'categories.id', 'category_id')
+                ->where('items.id', $RequestedItem->items_id)
+                ->first();
+            if ($category) {
+                return mb_strtoupper($category->category);
+            }
+            return '';
+        })
+        ->addColumn('stock', function (RequestedItem $RequestedItem){
+           $stock = Warehouse::query()
+                ->where('items_id', $RequestedItem->items_id)
+                ->where('status', 'in')
+                ->count();
+            return $stock;
+        })
+        ->make(true);
+
+    }
+
     public function billable()
     {
         if (auth()->user()->hasanyrole('Repair', 'Viewer', 'Viewer PLSI', 'Viewer IDSI')) {
@@ -700,6 +833,7 @@ class StockRequestController extends Controller
                 $reqitem->items_id = $request->item;
                 $reqitem->quantity = $request->qty;
                 $reqitem->pending = $request->qty;
+                $reqitem->branch_id = auth()->user()->branch->id;
                 $reqitem->status = 'PENDING';
                 $data = $reqitem->save();
             }

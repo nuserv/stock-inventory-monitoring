@@ -278,6 +278,9 @@
         @if(Request::is('disposed'))
             @include('modal.dreports')
         @endif
+        @if(Request::is('itemrequest'))
+            @include('modal.itemrequest')
+        @endif
 
         @if(Request::is('loans'))
             @include('modal.branch.loans')
@@ -364,13 +367,13 @@
         @endif
         @if(Request::is('request/*'))
             @if(auth()->user()->hasAnyrole('Warehouse Manager', 'Encoder'))
-                <script src="{{asset('min/?f=js/warehouse/request.js')}}"></script>
+                <script src="{{asset('js/warehouse/request.js')}}"></script>
                 <script src="{{asset('min/?f=js/warehouse/request1.js')}}"></script>
                 <script src="{{asset('min/?f=js/warehouse/request2.js')}}"></script>
                 <script src="{{asset('min/?f=js/warehouse/request3.js')}}"></script>
             @endif
             @if(auth()->user()->hasanyrole('Editor', 'Manager', 'Warehouse Administrator'))
-                <script src="{{asset('min/?f=js/request.js')}}"></script>
+                <script src="{{asset('/js/request.js')}}"></script>
             @endif
             @if(auth()->user()->hasAnyrole('Head', 'Tech'))
                 <script src="{{asset('/js/branch/request.js')}}"></script>
@@ -379,7 +382,7 @@
         @endif
         @if(Request::is('request'))
             @if(auth()->user()->hasAnyrole('Warehouse Manager', 'Encoder'))
-                <script src="{{asset('min/?f=js/warehouse/request.js&ver=1')}}"></script>
+                <script src="{{asset('js/warehouse/request.js')}}"></script>
                 <script src="{{asset('min/?f=js/warehouse/request1.js')}}"></script>
                 <script src="{{asset('min/?f=js/warehouse/request2.js')}}"></script>
                 <script src="{{asset('min/?f=js/warehouse/request3.js&ver=1')}}"></script>
@@ -394,6 +397,9 @@
         @endif
         @if(Request::is('resolved'))
             <script src="{{asset('min/?f=js/resolved.js')}}"></script>
+        @endif
+        @if(Request::is('itemrequest'))
+            <script src="{{asset('min/?f=js/itemrequest.js&ver=5.1')}}"></script>
         @endif
         @if(Request::is('buffer'))
             <script src="{{asset('min/?f=js/warehouse/buffer.js')}}"></script>

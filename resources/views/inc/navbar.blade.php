@@ -89,6 +89,9 @@
                     </li>
                     @if(auth()->user()->hasanyrole('Warehouse Manager'))
                     <li class="nav-item">
+                        <a class="nav-link {{ Request::is('itemrequest') ? 'active' : '' }}" href="{{ route('stock.itemrequest') }}">Requested Items</a>
+                    </li>
+                    <li class="nav-item">
                             <a class="nav-link {{ Request::is('billable') ? 'active' : '' }}" href="{{ route('stock.billable') }}">Billable</a>
                         </li>
                     @endif
@@ -98,6 +101,9 @@
                     </li>
                     @endif
                     @if (auth()->user()->hasanyrole('Manager', 'Editor'))
+                        <li class="nav-item">
+                            <a class="nav-link {{ Request::is('itemrequest') ? 'active' : '' }}" href="{{ route('stock.itemrequest') }}">Requested Items</a>
+                        </li>
                         <li class="nav-item">
                             <a class="nav-link {{ Request::is('schedule') ? 'active' : '' }} {{ Request::is('pmlist') ? 'active' : '' }}" href="{{ route('index.schedule') }}">PM Schedule</a>
                         </li>

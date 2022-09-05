@@ -17,30 +17,13 @@ $(document).ready(function() {
                     }
                 }
             },
-            columns: [{
-                    data: 'date',
-                    name: 'date'
-                },
-                {
-                    data: 'branch',
-                    name: 'branch', "width": "14%"
-                },
-                {
-                    data: 'category',
-                    name: 'category'
-                },
-                {
-                    data: 'item',
-                    name: 'item'
-                },
-                {
-                    data: 'serial',
-                    name: 'serial'
-                },
-                {
-                    data: 'status',
-                    name: 'status'
-                }
+            columns: [
+                {data: 'date',name: 'date'},
+                {data: 'branch', name: 'branch', "width": "14%"},
+                {data: 'category',name: 'category'},
+                {data: 'item',name: 'item'},
+                {data: 'serial',name: 'serial'},
+                {data: 'status',name: 'status'}
             ],
         });
 

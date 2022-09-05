@@ -223,9 +223,14 @@ Route::get('requests/{id}', 'StockRequestController@getRequestDetails');//->midd
 Route::get('getrequests', 'StockRequestController@getReqDetails')->middleware('ajax');
 Route::get('prep/{id}', 'StockRequestController@prepitemdetails')->middleware('ajax');
 Route::get('requests', 'StockRequestController@getRequests');//->middleware('ajax');
+Route::get('requestsdata', 'StockRequestController@requestsdata');//->middleware('ajax');
 Route::get('res', 'StockRequestController@getResolved');//->middleware('ajax');
 Route::get('pcount', 'StockRequestController@pcount')->middleware('ajax');
 Route::get('request', 'StockRequestController@index')->name('stock.index');
+Route::get('itemrequest', 'StockRequestController@itemrequest')->name('stock.itemrequest');
+Route::get('itemrequestdata', 'StockRequestController@itemrequestdata')->name('stock.itemrequestdata');
+Route::get('branchitemdata', 'StockRequestController@branchitemdata')->name('stock.branchitemdata');
+Route::get('branchitemdata2', 'StockRequestController@branchitemdata2')->name('stock.branchitemdata2');
 Route::get('billable', 'StockRequestController@billable')->name('stock.billable');
 Route::get('buffer', 'StockRequestController@buffer')->name('stock.buffer');
 //Route::get('view', 'StockRequestController@view')->name('stock.view');
