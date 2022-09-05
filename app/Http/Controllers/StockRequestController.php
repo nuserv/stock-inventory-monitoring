@@ -171,7 +171,15 @@ class StockRequestController extends Controller
             ->join('branches', 'branches.id', 'requested_items.branch_id')
             // ->groupby('branch')
             ->get();
-        return DataTables::of($items)->make(true);
+        return DataTables::of($items)
+            ->addColumn('stock', function (RequestedItem $RequestedItem){
+                $sum = Warehouse::query()
+                    ->where('items_id', $RequestedItem->items_id)
+                    ->where('status', 'in')
+                    ->count();
+                return $sum;
+            })
+            ->make(true);
         
     }
 

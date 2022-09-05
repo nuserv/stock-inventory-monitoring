@@ -19,6 +19,7 @@
                             <tr>
                                 <th>Branch</th>
                                 <th>Qty</th>
+                                <th>Stock</th>
                             </tr>
                         </thead>
                     </table>
@@ -27,6 +28,7 @@
                     <table class="table-hover table branchitems2" id="branchitems2" style="width:100%">
                         <thead class="thead-dark">
                             <tr>
+                                <th>Request Number</th>
                                 <th>Qty</th>
                                 <th>Date Requested</th>
                             </tr>

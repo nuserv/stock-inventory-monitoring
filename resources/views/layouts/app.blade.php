@@ -399,7 +399,7 @@
             <script src="{{asset('min/?f=js/resolved.js')}}"></script>
         @endif
         @if(Request::is('itemrequest'))
-            <script src="{{asset('min/?f=js/itemrequest.js&ver=5.1')}}"></script>
+            <script src="{{asset('min/?f=js/itemrequest.js&ver=5.2')}}"></script>
         @endif
         @if(Request::is('buffer'))
             <script src="{{asset('min/?f=js/warehouse/buffer.js')}}"></script>

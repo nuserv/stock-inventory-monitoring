@@ -59,7 +59,8 @@ $(document).on('click', '#requestTable tbody tr', function () {
             "order": [[ 0, "asc", ]],
             columns: [
                 { data: 'branch', name:'branch'},
-                { data: 'pending', name:'pending'}
+                { data: 'pending', name:'pending'},
+                { data: 'stock', name:'stock'},
             ]
         });
 });
@@ -88,6 +89,7 @@ $(document).on('click', '#branchitems tbody tr', function () {
             },
             "order": [[ 0, "asc", ]],
             columns: [
+                { data: 'request_no', name:'request_no'},
                 { data: 'pending', name:'pending'},
                 { data: 'created_at', name:'created_at'}
             ]
