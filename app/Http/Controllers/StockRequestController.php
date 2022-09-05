@@ -61,7 +61,9 @@ class StockRequestController extends Controller
 
     public function requestsdata(Request $request)
     {
-        $data = StockRequest::select(
+            
+        if (StockRequest::where('request_no', $request->request_no)->first()->type == 'Stock') {
+            $data = StockRequest::select(
                 'address',
                 'area',
                 'requests.area_id',
@@ -89,7 +91,42 @@ class StockRequestController extends Controller
             ->join('areas', 'areas.id', 'requests.area_id')
             ->join('users', 'users.id', 'user_id')
             ->first();
-        return response()->json($data);
+        }else{
+            $data = StockRequest::select(
+                'branches.address',
+                'area',
+                'requests.area_id',
+                'branch',
+                'requests.branch_id',
+                'requests.created_at',
+                'customer_branch_id',
+                'users.email',
+                'fsr_brchcode',
+                'head',
+                'intransit',
+                'intransitval',
+                'phone',
+                'request_no',
+                'schedby',
+                'schedule',
+                'stat',
+                'requests.status',
+                'type',
+                'user_id',
+                'users.name as reqBy',
+                'customer as client',
+                'customer_branch as customer',
+                'ticket'
+            )
+            ->where('request_no', $request->request_no)
+            ->join('branches', 'branches.id', 'branch_id')
+            ->join('areas', 'areas.id', 'requests.area_id')
+            ->join('users', 'users.id', 'user_id')
+            ->join('customer_branches', 'customer_branches.id', 'customer_branch_id')
+            ->join('customers', 'customers.id', 'requests.customer_id')
+            ->first();
+            return response()->json($data);
+        }
     }
     
     public function branchitemdata2(Request $request){

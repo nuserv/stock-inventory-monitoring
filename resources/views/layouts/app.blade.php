@@ -367,13 +367,13 @@
         @endif
         @if(Request::is('request/*'))
             @if(auth()->user()->hasAnyrole('Warehouse Manager', 'Encoder'))
-                <script src="{{asset('js/warehouse/request.js')}}"></script>
+                <script src="{{asset('min/?f=warehouse/request.js&ver1.2')}}"></script>
                 <script src="{{asset('min/?f=js/warehouse/request1.js')}}"></script>
                 <script src="{{asset('min/?f=js/warehouse/request2.js')}}"></script>
                 <script src="{{asset('min/?f=js/warehouse/request3.js')}}"></script>
             @endif
             @if(auth()->user()->hasanyrole('Editor', 'Manager', 'Warehouse Administrator'))
-                <script src="{{asset('/js/request.js')}}"></script>
+                <script src="{{asset('min/?f=js/request.js')}}"></script>
             @endif
             @if(auth()->user()->hasAnyrole('Head', 'Tech'))
                 <script src="{{asset('/js/branch/request.js')}}"></script>
@@ -382,7 +382,7 @@
         @endif
         @if(Request::is('request'))
             @if(auth()->user()->hasAnyrole('Warehouse Manager', 'Encoder'))
-                <script src="{{asset('js/warehouse/request.js')}}"></script>
+                <script src="{{asset('min/?f=js/warehouse/request.js&ver1.2')}}"></script>
                 <script src="{{asset('min/?f=js/warehouse/request1.js')}}"></script>
                 <script src="{{asset('min/?f=js/warehouse/request2.js')}}"></script>
                 <script src="{{asset('min/?f=js/warehouse/request3.js&ver=1')}}"></script>
