@@ -1036,16 +1036,16 @@ class StockRequestController extends Controller
         //     'password'   => \config('mailconf.password'),
         // );
         // Config::set('mail', $config);
-        // $mail = Mail::send('delrequest', ['req'=>$req, 'stockreq'=>$stockreq, 'reason'=>$reason, 'key'=>$key],function( $message) use ($stockreq){ 
-        //     $message->to('nonoy_atizardo@yahoo.com')->subject('Approval Required for Request no. '.$stockreq->request_no); 
-        //     $message->from('noreply@ideaserv.com.ph', 'No-reply');
-        //     $message->cc('dpobien@phillogix.com.ph');
-        //     $message->bcc('jolopez@ideaserv.com.ph','emorej046@gmail.com');
-        // });
-        Mail::send('delrequest', ['req'=>$req, 'stockreq'=>$stockreq, 'reason'=>$reason, 'key'=>$key],function( $message) use ($stockreq){ 
-            $message->to('emorej046@gmail.com')->subject('Approval Required for Request no. '.$stockreq->request_no); 
+        $mail = Mail::send('delrequest', ['req'=>$req, 'stockreq'=>$stockreq, 'reason'=>$reason, 'key'=>$key],function( $message) use ($stockreq){ 
+            $message->to('nonoy_atizardo@yahoo.com')->subject('Approval Required for Request no. '.$stockreq->request_no); 
             $message->from('noreply@ideaserv.com.ph', 'No-reply');
+            $message->cc('dpobien@phillogix.com.ph');
+            $message->bcc('jolopez@ideaserv.com.ph','emorej046@gmail.com');
         });
+        // Mail::send('delrequest', ['req'=>$req, 'stockreq'=>$stockreq, 'reason'=>$reason, 'key'=>$key],function( $message) use ($stockreq){ 
+        //     $message->to('emorej046@gmail.com')->subject('Approval Required for Request no. '.$stockreq->request_no); 
+        //     $message->from('noreply@ideaserv.com.ph', 'No-reply');
+        // });
         if(count(Mail::failures()) > 0){
             return response()->json('error');
         }else{
