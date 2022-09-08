@@ -234,8 +234,10 @@ $(document).on("click", "#catTable tbody td", function () {
                     if($('#userlevel').val() == 'Head'){
                         if (data.initial > data.stockin) {
                             var items_id = data.id;
+                            var stockqty = data.stockin;
+                            var initial = data.initial;
                             $.ajax({
-                                url: 'checkrequestitem',
+                                url: 'checkrequestitemqty',
                                 headers: {
                                     'X-CSRF-TOKEN': $('meta[name="ctok"]').attr('content')
                                 },
@@ -243,14 +245,13 @@ $(document).on("click", "#catTable tbody td", function () {
                                 type: 'GET',
                                 async:false,
                                 data: {
-                                    reqno : reqno,
                                     items_id: items_id
                                 },
                                 success: function(thisdata){
-                                    if(thisdata != "wala pa"){
-                                        check = 'meron';
+                                    if(thisdata == 'yes'){
+                                        check = 'sobra';
                                     }else{
-                                        check = 'wala';
+                                        check = 'kulang';
                                     }
                                 },
                                 error: function (thisdata) {
@@ -260,7 +261,7 @@ $(document).on("click", "#catTable tbody td", function () {
                                     alert(thisdata.responseText);
                                 }
                             });
-                            if (check == 'meron') {
+                            if (check == 'sobra') {
                                 return '';
                             }else{
                                 return '<button class="btn-primary reqBtn" req_id="'+items_id+' test="'+check+'">REQUEST STOCK</button>';
@@ -281,8 +282,17 @@ $(document).on('click', '#addStockBtn', function(){
     $('#addModal').modal({backdrop: 'static', keyboard: false});
 });
 
+var reqcode;
 
 $(document).on('click', '.reqBtn', function(){
+    $.ajax({
+        type:'get',
+        url:'reqcode',
+        success:function(result)
+        {
+            reqcode = result;
+        },
+    });
     var thisdata = table.row( $(this).parents('tr') ).data();
     $('#qtyModal').modal({backdrop: 'static', keyboard: false});
     $('#requestcategory').val(thisdata.category);
@@ -291,34 +301,53 @@ $(document).on('click', '.reqBtn', function(){
     item = thisdata.items_id;
     qty = thisdata.initial - thisdata.stockin;
     $('#qty').attr({
-        "min" : qty
+        "min" : qty,
+        "max" : thisdata.initial
     });
     $('#qty').val(qty);
 });
-$('#req').prop('disabled', true);
 
-$(document).on('keyup', '#qty', function(){
-    if ($(this).val()) {
-        if ($(this).val() < qty) {
-            $(this).val(qty);
-        }
-        $('#req').prop('disabled', false);
-    }else{
-        $('#req').prop('disabled', true);
-    }
-});
-$(document).on('click', '#qty', function(){
-    if ($(this).val()) {
-        if ($(this).val() < qty) {
-            $(this).val(qty);
-        }
-        $('#req').prop('disabled', false);
-    }else{
-        $('#req').prop('disabled', true);
-    }
-});
+// $(document).on('keyup', '#qty', function(){
+//     if ($(this).val()) {
+//         if ($(this).val() < qty) {
+//             $(this).val(qty);
+//         }
+//         $('#req').prop('disabled', false);
+//     }else{
+//         $('#req').prop('disabled', true);
+//     }
+// });
+// $(document).on('click', '#qty', function(){
+//     if ($(this).val()) {
+//         if ($(this).val() < qty) {
+//             $(this).val(qty);
+//         }
+//         $('#req').prop('disabled', false);
+//     }else{
+//         $('#req').prop('disabled', true);
+//     }
+// });
 
 $(document).on('click', '#req', function(){
+    var proceed = false;
+    $.ajax({
+        type:'get',
+        url:'checkreqcode',
+        async: false,
+        data:{
+            reqcode: reqcode
+        },
+        success:function(result)
+        {
+            if (result == 'ok') {
+                proceed = true;
+            }
+        },
+    });
+    if (!proceed) {
+        alert('Request Code not match. Please Contact System Administrator.');
+        return proceed;
+    }
     $('#loading').show();
     $('#qtyModal').toggle();
     $.ajax({

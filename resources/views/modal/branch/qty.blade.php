@@ -30,15 +30,12 @@
                         <div class="col-md-12 form-group row">
                             <label class="col-md-3 col-form-label text-md-right">Quantity:</label>
                             <div class="col-md-2">
-                                <input type="number" id="qty" placeholder="Input Qty">
+                                <input type="number" id="qty" placeholder="Input Qty" readonly>
                             </div>
                         </div>
-                        <p style="color:black">Base on your current stock, the minimum quantity for this item is indicated above.</p>
-                        <p style="color:black">You may increase the quantity if you feel there is a need.</p>
                     </div>
                 </div>
             </div>
-            
             <div class="moday-body text-center">
                 <input type="button" class="btn btn-primary" id="req" value="SUBMIT">
             </div><br>

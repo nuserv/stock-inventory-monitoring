@@ -176,6 +176,7 @@
                 @include('modal.warehouse.send')
                 @include('modal.warehouse.resched')
                 @include('modal.warehouse.serial')
+                @include('modal.remarks')
             @endif
             @if(auth()->user()->hasAnyrole('Manager', 'Editor', 'Warehouse Administrator'))
                 @include('modal.warehouse.request')
@@ -367,7 +368,7 @@
         @endif
         @if(Request::is('request/*'))
             @if(auth()->user()->hasAnyrole('Warehouse Manager', 'Encoder'))
-                <script src="{{asset('min/?f=warehouse/request.js&ver1.3')}}"></script>
+                <script src="{{asset('min/?f=js/warehouse/request.js&ver1.3')}}"></script>
                 <script src="{{asset('min/?f=js/warehouse/request1.js')}}"></script>
                 <script src="{{asset('min/?f=js/warehouse/request2.js')}}"></script>
                 <script src="{{asset('min/?f=js/warehouse/request3.js')}}"></script>
@@ -382,7 +383,7 @@
         @endif
         @if(Request::is('request'))
             @if(auth()->user()->hasAnyrole('Warehouse Manager', 'Encoder'))
-                <script src="{{asset('min/?f=js/warehouse/request.js&ver1.3')}}"></script>
+                <script src="{{asset('/js/warehouse/request.js?ver1.3')}}"></script>
                 <script src="{{asset('min/?f=js/warehouse/request1.js')}}"></script>
                 <script src="{{asset('min/?f=js/warehouse/request2.js')}}"></script>
                 <script src="{{asset('min/?f=js/warehouse/request3.js&ver=1')}}"></script>

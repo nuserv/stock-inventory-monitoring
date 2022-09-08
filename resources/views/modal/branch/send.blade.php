@@ -92,7 +92,7 @@
                         </select>
                     </div>
                     <div class="col-md-1 form-group text-center">
-                        <input type="number" class="form-control" min="0" name="qty1" id="qty1" placeholder="0" style="color:black; width: 6em" disabled>
+                        <input type="number" class="form-control qty" min="0" name="qty1" id="qty1" placeholder="0" style="color:black; width: 6em" disabled>
                     </div>
                     <div class="col-md-2 form-group text-center">
                         <input type="text" class="form-control" name="uom1" id="uom1" style="color:black;"readonly>

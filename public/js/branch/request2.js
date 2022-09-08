@@ -122,7 +122,16 @@ $(document).on('click', '#rec_Btn', function(){
         });    
     }
 });
+var reqcode;
 $(document).on('click', '#reqBtn', function(){
+    $.ajax({
+        type:'get',
+        url:'reqcode',
+        success:function(result)
+        {
+            reqcode = result;
+        },
+    });
     $.ajax({
         type:'get',
         url:'gen',
@@ -166,29 +175,31 @@ $(document).on('click', '#reqBtn', function(){
             $('#requesttype').val('Service').change();
         }
     }, 3000);
-    
 });
+
 $(document).on('click', '.add_item', function(){
     var rowcount = $(this).attr('btn_id');
     if ($(this).val() == 'Add Item') {
-        if($('#qty'+rowcount).val() != 0){
-            if($('#item'+rowcount).val()){
-                y++;
-                add++;
-                var additem = '<div class="row no-margin" id="row'+y+'"><div class="col-md-2 form-group"><select id="category'+y+'" style="color: black;" class="form-control category" row_count="'+y+'"></select></div><div class="col-md-2 form-group" id="itemdiv'+y+'" style="display:none"><select id="item'+y+'" style="color: black;" class="form-control item" row_count="'+y+'"><option selected disabled>select item code</option></select></div><div class="col-md-3 form-group"><select id="desc'+y+'" class="form-control desc" style="color: black;" row_count="'+y+'"><option selected disabled>select item description</option></select></div><div class="col-md-1 form-group"><input type="number" min="0" class="form-control" style="color: black; width: 6em" name="qty'+y+'" id="qty'+y+'" placeholder="0" disabled></div><div class="col-md-2 form-group text-center"><input type="text" class="form-control" name="uom'+y+'" id="uom'+y+'" style="color:black;"readonly></div><div class="col-md-1 form-group"><input type="button" class="add_item btn btn-xs btn-primary" btn_id="'+y+'" value="Add Item"></div></div>'
-                $(this).val('Remove');
-                $('#category'+ rowcount).prop('disabled', true);
-                $('#item'+ rowcount).prop('disabled', true);
-                $('#desc'+ rowcount).prop('disabled', true);
-                $('#qty'+ rowcount).prop('disabled', true);
-                $('#reqfield').append(additem);
-                $('#category'+ rowcount).find('option').clone().appendTo('#category'+y);
-                console.log('pasok');
+        if ($('#qty'+ rowcount)) {
+            if($('#qty'+rowcount).val() != 0){
+                if($('#item'+rowcount).val()){
+                    y++;
+                    add++;
+                    var additem = '<div class="row no-margin" id="row'+y+'"><div class="col-md-2 form-group"><select id="category'+y+'" style="color: black;" class="form-control category" row_count="'+y+'"></select></div><div class="col-md-2 form-group" id="itemdiv'+y+'" style="display:none"><select id="item'+y+'" style="color: black;" class="form-control item" row_count="'+y+'"><option selected disabled>select item code</option></select></div><div class="col-md-3 form-group"><select id="desc'+y+'" class="form-control desc" style="color: black;" row_count="'+y+'"><option selected disabled>select item description</option></select></div><div class="col-md-1 form-group"><input type="number" min="0" class="form-control qty" style="color: black; width: 6em" name="qty'+y+'" id="qty'+y+'" placeholder="0" disabled></div><div class="col-md-2 form-group text-center"><input type="text" class="form-control" name="uom'+y+'" id="uom'+y+'" style="color:black;"readonly></div><div class="col-md-1 form-group"><input type="button" class="add_item btn btn-xs btn-primary" btn_id="'+y+'" value="Add Item"></div></div>'
+                    $(this).val('Remove');
+                    $('#category'+ rowcount).prop('disabled', true);
+                    $('#item'+ rowcount).prop('disabled', true);
+                    $('#desc'+ rowcount).prop('disabled', true);
+                    $('#qty'+ rowcount).prop('disabled', true);
+                    $('#reqfield').append(additem);
+                    $('#category'+ rowcount).find('option').clone().appendTo('#category'+y);
+                    console.log('pasok');
+                }else{
+                    alert("Please Select Item!");
+                }
             }else{
-                alert("Please Select Item!");
+                alert("Invalid Quantity value!");
             }
-        }else{
-            alert("Invalid Quantity value!");
         }
     }else{
         add--;
@@ -211,10 +222,31 @@ $(document).on('click', '.add_item', function(){
         $('#requesttype').prop('disabled', true);
     }
 });
+
+
 $(document).on('click', '.send_sub_Btn', function(){
     if (add == 0 || sub > 0) {
         alert('Please add item/s.');
         return false;
+    }
+    var proceed = false;
+    $.ajax({
+        type:'get',
+        url:'checkreqcode',
+        async: false,
+        data:{
+            reqcode: reqcode
+        },
+        success:function(result)
+        {
+            if (result == 'ok') {
+                proceed = true;
+            }
+        },
+    });
+    if (!proceed) {
+        alert('Request Code not match. Please Contact System Administrator.');
+        return proceed;
     }
     var item = "";
     var qty = "";
@@ -307,51 +339,122 @@ $(document).on('click', '.send_sub_Btn', function(){
         }
     }
 });
+
+$(document).on('change', '.qty', function () {
+    var maxqty = $(this).attr('max');
+    if ($(this).val() > maxqty) {
+        $(this).val(maxqty);
+    }
+});
+
+
 $(document).on('change', '.desc', function(){
     var count = $(this).attr('row_count');
     var id = $(this).val();
-    $('#item' + count).val(id);
-    $('#qty'+count).val('0');
-    $('#qty'+count).prop('disabled', false);
     $.ajax({
-        type:'get',
-        url:'uom',
-        data:{
-            id: id
+        url: 'checkrequestitemqty',
+        dataType: 'json',
+        type: 'GET',
+        async:false,
+        data: {
+            items_id: id
         },
-        success:function(data)
-        {
-            $('#uom'+count).val(data);
+        success: function(thisdata){
+            if(thisdata == 'yes'){
+                check = 'sobra';
+            }else{
+                $('#item' + count).val(id);
+                $('#qty'+count).val('0');
+                if ($('#requesttype').val() == 'Stock') {
+                    $('#qty'+count).attr({
+                        "max" : thisdata
+                    });
+                }else{
+                    $('#qty'+count).attr({
+                        "max" : '100'
+                    });
+                }
+                
+                $('#qty'+count).prop('disabled', false);
+                $.ajax({
+                    type:'get',
+                    url:'uom',
+                    data:{
+                        id: id
+                    },
+                    success:function(data)
+                    {
+                        $('#uom'+count).val(data);
+                    },
+                    error: function (data) {
+                        if(data.status == 401) {
+                            window.location.href = '/login';
+                        }
+                        alert(data.responseText);
+                    }
+                });
+            }
         },
-        error: function (data) {
-            if(data.status == 401) {
+        error: function (thisdata) {
+            if(thisdata.status == 401) {
                 window.location.href = '/login';
             }
-            alert(data.responseText);
+            alert(thisdata.responseText);
         }
     });
 });
+
 $(document).on('change', '.item', function(){
     var count = $(this).attr('row_count');
     var id = $(this).val();
-    $('#desc' + count).val(id);
-    $('#qty'+count).prop('disabled', false);
-    $('#qty'+count).val('0');
     $.ajax({
-        type:'get',
-        url:'uom',
-        data:{
-            id: id
+        url: 'checkrequestitemqty',
+        dataType: 'json',
+        type: 'GET',
+        async:false,
+        data: {
+            items_id: id
         },
-        success:function(data)
-        {
-            $('#uom'+count).val(data);
+        success: function(thisdata){
+            if(thisdata == 'yes'){
+                check = 'sobra';
+            }else{
+                $('#desc' + count).val(id);
+                $('#qty'+count).val('0');
+                if ($('#requesttype').val() == 'Stock') {
+                    $('#qty'+count).attr({
+                        "max" : thisdata
+                    });
+                }else{
+                    $('#qty'+count).attr({
+                        "max" : '100'
+                    });
+                }
+                $('#qty'+count).prop('disabled', false);
+                $.ajax({
+                    type:'get',
+                    url:'uom',
+                    data:{
+                        id: id
+                    },
+                    success:function(data)
+                    {
+                        $('#uom'+count).val(data);
+                    },
+                    error: function (data) {
+                        if(data.status == 401) {
+                            window.location.href = '/login';
+                        }
+                        alert(data.responseText);
+                    }
+                });
+            }
         },
-        error: function (data) {
-            if(data.status == 401) {
+        error: function (thisdata) {
+            if(thisdata.status == 401) {
                 window.location.href = '/login';
             }
-            alert(data.responseText);
+            alert(thisdata.responseText);
         }
     });
 });
@@ -465,6 +568,7 @@ $(document).on('change', '#requesttype', function(){
         $("#category1").find('option').remove().end().append(catop);
         $('#sreqno').val(reqstock);
     }
+    $("#qty1").val('0');
 });
 $(document).on('keyup', '#client', function(){
     var id = $(this).val();

@@ -61,6 +61,194 @@ $(function() {
     });
 
 });
+var reqid;
+$(document).on('click', '#delreqBtn', function () {
+    $('#loading').show();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+    $('html, body').css({
+        overflow: 'hidden',
+        height: '100%'
+    });
+    $('#requestModal').modal('hide');
+    setTimeout(function() {
+        $.ajax({
+            type:'get',
+            url:'/delreqdata',
+            async: false,
+            data:{
+                reason: $('#remarkstext').val(),
+                reqno: reqid
+            },
+            success:function(data)
+            {
+                if (data == 'error') {
+                    alert('Error sending request, Please contact Administrator');
+                }else{
+                    location.reload();
+                }
+            },
+            error: function (data) {
+                if(data.status == 401) {
+                    window.location.href = '/login';
+                }
+                alert(data.responseText);
+            }
+        });
+    }, 1000);
+});
+
+$(document).on('keyup', '#remarkstext', function () {
+    if ($(this).val().length > 10) {
+        $('#delreqBtn').prop('disabled', false);
+    }else{
+        $('#delreqBtn').prop('disabled', true);
+    }
+})
+
+$(document).on('click', '.delrowBtn', function () {
+    reqid = $(this).attr('id');
+    console.log(reqid);
+    var trdata;
+    reqnumber = reqid;
+    $.ajax({
+        type:'get',
+        url: "/requestsdata",
+        async: false,
+        data:{
+            request_no: reqnumber
+        },
+        success:function(data)
+        {
+            bID = data.branch_id;
+            valpartial = data.intransitval;
+            trdata = data;
+        },
+    });
+    console.log(trdata);
+    reqnumber = trdata.request_no;
+    valpartial = trdata.intransitval;
+    $('.notes').hide();
+    $('#head').text('STOCK REQUEST NO. '+trdata.request_no);
+    $('#requesttypes').val(trdata.type);
+    $('table.requestDetails').dataTable().fnDestroy();
+    $('table.schedDetails').dataTable().fnDestroy();
+    $('table.intransitDetails').dataTable().fnDestroy();
+    if (trdata.type == "Stock") {
+        $('.ticketno').hide();
+        $('#clientrows').hide();
+    }else{
+        $('.ticketno').show();
+        $('#clientrows').show();
+        $('#clients').val(trdata.client.replace(/&#039;/g, '\'').replace(/&quot;/g, '\"').replace(/&amp;/g, '\&').replace(/&AMP;/g, '\&'));
+        $('#customers').val(trdata.customer.replace(/&#039;/g, '\'').replace(/&quot;/g, '\"').replace(/&amp;/g, '\&').replace(/&AMP;/g, '\&'));
+        $('#tickets').val(trdata.ticket);
+    }
+    $('#schedbyrow').hide();
+    if (trdata.status != 'PENDING' || trdata.status != 'PARTIAL PENDING') {
+        if (trdata.schedby) {
+            $('#schedby').val(trdata.schedby);
+            $('#schedbyrow').show();
+        }
+    }
+    if(trdata.status == 'PENDING' || trdata.status == 'PARTIAL PENDING'){
+        $('#prcBtn').hide();
+        $('.sched').hide();
+        $('#sched').val('');
+        $('#printBtn').hide();
+        $('#schedbyrow').hide();
+        $('#save_Btn').hide();
+    }
+    $('#date').val(trdata.created_at);
+    $('#status').val(trdata.status);
+    $('#branch').val(trdata.branch);
+    $('#name').val(trdata.reqBy);
+    $('#area').val(trdata.area);
+    $('table.requestDetails').dataTable().fnDestroy();
+    $('table.schedDetails').dataTable().fnDestroy();
+    if (trdata.status == 'PENDING' || trdata.status == 'PARTIAL PENDING') {
+        $('#printBtn').remove();
+        $('table.schedDetails').remove();
+        $('table.requestDetails').show();
+        $('#schedslabel').remove();
+        $('#intransitlabel').remove();
+        $('table.intransitDetails').remove();
+        $('#remarksDiv').show();
+        $('#remarksDiv').empty().append('<h5 class="modal-title w-100 text-center">Reason</h5>'+
+        '<div class="row no-margin">'+
+            '<div class="col-md-12 form-group">'+
+                '<textarea type="text" class="form-control" rows="10" id="remarkstext"></textarea>'+
+            '</div>'+
+        '</div>');
+        $('#delreqBtn').show();
+        var pendreq;
+        Promise.all([pendingrequest()]).then(() => { 
+            if (pendreq <= 10) {
+                $('table.requestDetails').dataTable().fnDestroy();
+                requestdetails = 
+                $('table.requestDetails').DataTable({ 
+                    "dom": 'rt',
+                    "language": {
+                        "emptyTable": " "
+                    },
+                    "fnRowCallback": function(nRow, aData) {
+                        if (aData.validation == 'no') {
+                            valid = 'no';
+                        }
+                    },
+                    processing: true,
+                    serverSide: false,
+                    ajax: "/requests/"+trdata.request_no,
+                    columns: [
+                        { data: 'cat_name', name:'cat_name'},
+                        { data: 'item_name', name:'item_name'},
+                        { data: 'qty', name:'qty'},
+                        { data: 'stockuom', name:'stockuom'}
+                    ]
+                });
+            }else if (pendreq > 10) {
+                $('table.requestDetails').dataTable().fnDestroy();
+                requestdetails = 
+                $('table.requestDetails').DataTable({ 
+                    "dom": 'lrtp',
+                    "language": {
+                        "emptyTable": " "
+                    },
+                    "fnRowCallback": function(nRow, aData) {
+                        if (aData.validation == 'no') {
+                            valid = 'no';
+                        }
+                    },
+                    processing: true,
+                    serverSide: false,
+                    ajax: "/requests/"+trdata.request_no,
+                    columns: [
+                        { data: 'cat_name', name:'cat_name'},
+                        { data: 'item_name', name:'item_name'},
+                        { data: 'qty', name:'qty'},
+                        { data: 'stockuom', name:'stockuom'}
+                    ]
+                });
+            }
+        });
+        function pendingrequest() {
+            return $.ajax({
+                type:'get',
+                url: "/requests/"+trdata.request_no,
+                success:function(data)
+                {
+                    pendreq = data.data.length;
+                },
+            });
+        }
+    }
+    
+    $('#requestModal').modal({
+        backdrop: 'static',
+        keyboard: false
+    });
+});
+
+
 $(document).ready(function()
 {
     $("#datesched").datepicker({
@@ -179,7 +367,27 @@ $(document).ready(function()
             { data: 'branch', name:'branch',"width": "14%"},
             { data: 'type', name:'type', "width": "14%"},
             { data: 'status', name:'status', "width": "14%"},
-            { data: 'ticket', name:'ticket', "width": "14%"}
+            { data: 'ticket', name:'ticket', "width": "14%"},
+            { data: null, render: function (data, type, row ) {
+                if (row.status.includes('TRANSIT')) {
+                    return '';
+                }else if (row.status.includes('SCHEDULED')) {
+                    return '';
+                }else if (row.status == 'PENDING') {
+                    return '';
+                }else if (row.status == 'INCOMPLETE') {
+                    return '';
+                }else if (row.status == 'UNRESOLVED') {
+                    return '';
+                }else if (row.status == 'PARTIAL') {
+                    return '';
+                }else{
+                    if (row.del_req == '0') {
+                        return '<button class="btn btn-primary delrowBtn" id="'+row.request_no+'">Delete</button>'
+                    }
+                    return '';
+                }
+            }}
         ]
     });
 
@@ -215,6 +423,8 @@ $(document).ready(function()
         });
         console.log(trdata);
         $('.notes').hide();
+        $('#delreqBtn').hide();
+        $('#remarksDiv').hide();
         $('#head').text('STOCK REQUEST NO. '+trdata.request_no);
         $('#requesttypes').val(trdata.type);
         $('table.requestDetails').dataTable().fnDestroy();
@@ -1258,11 +1468,13 @@ $(document).ready(function()
 
     }
     
-    $('#requestTable tbody').on('click', 'tr', function () { 
+    $('#requestTable tbody').on('click', 'tr td:not(:nth-child(7))', function () { 
         var trdata = table.row(this).data();
         bID = trdata.branch_id
         reqnumber = trdata.request_no;
         valpartial = trdata.intransitval;
+        $('#remarksDiv').hide();
+        $('#delreqBtn').hide();
         $('.notes').hide();
         $('#head').text('STOCK REQUEST NO. '+trdata.request_no);
         $('#requesttypes').val(trdata.type);

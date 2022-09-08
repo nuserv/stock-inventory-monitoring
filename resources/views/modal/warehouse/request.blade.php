@@ -116,6 +116,9 @@
                     </thead>
                 </table>
                 <br>
+                @if(auth()->user()->hasAnyrole('Warehouse Manager', 'Encoder'))
+                    <div id="remarksDiv" style="display:none"></div>
+                @endif
                 <h5 class="modal-title w-100 text-center" id='schedslabel'>SCHEDULED ITEM DETAILS</h5>
                 <table class="table-hover table schedDetails" id="schedDetails" style="width:100%;font-size:80%">
                     <thead class="thead-dark">
@@ -146,6 +149,7 @@
             @if(auth()->user()->hasAnyrole('Warehouse Manager', 'Encoder'))
             <div class="modal-footer">
                 <input type="button" class="btn btn-primary mr-auto" id="prcBtn" class="button" value="Proceed" disabled>
+                <input type="button" class="btn btn-primary mr-auto hidden" id="delreqBtn" class="button" value="Request to Delete" disabled>
                 <input type="button" id="printBtn" class="btn btn-primary mr-auto" value="PRINT">
                 <input type="button" id="intransitBtn" class="btn btn-primary mr-auto" value="IN TRANSIT" style="display:none">
                 <input type="button" class="btn btn-primary refresh" data-dismiss="modal" id="closeBtn" value="CLOSE">

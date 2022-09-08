@@ -195,6 +195,7 @@ Route::get('bufferget', 'StockRequestController@bufferget');//->middleware('ajax
 Route::get('bufferlist', 'StockRequestController@bufferlist');//->middleware('ajax');
 Route::post('bufferstore', 'StockRequestController@bufferstore');//->middleware('ajax');
 Route::get('checkrequestitem', 'StockRequestController@checkrequestitem');//->middleware('ajax');
+Route::get('checkrequestitemqty', 'StockRequestController@checkrequestitemqty');//->middleware('ajax');
 Route::get('resolved', 'StockRequestController@resolve')->name('resolved.index');
 Route::POST('storerreceived', 'StockRequestController@received')->middleware('ajax');
 Route::get('gen', 'StockRequestController@generateRandomNumber')->middleware('ajax');
@@ -276,3 +277,11 @@ Route::get('backup-branch', 'StockController@Backupbranch');
 Route::get('getfsr', 'PreventiveController@getfsr');
 
 Route::get('reports', 'ReportsController@index');
+
+Route::get('reqcode', 'StockRequestController@reqcode');//->middleware('ajax');
+Route::get('checkreqcode', 'StockRequestController@checkreqcode');//->middleware('ajax');
+
+Route::get('delreqdata', 'StockRequestController@delreqdata');//->middleware('ajax');
+
+Route::get('delete-approval', 'StockRequestController@delapproval');//->middleware('ajax');
+Route::get('delreqapproved', 'StockRequestController@delreqapproved');//->middleware('ajax');
