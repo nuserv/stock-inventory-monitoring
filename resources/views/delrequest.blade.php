@@ -6,6 +6,14 @@
                 <td colspan="4" valign="top" style="border-top:none;border:solid black 1.0pt;background:red;"></td>
             </tr>
             <tr style="height:14pt">
+                <td style="border-top:none;border:solid black 1.0pt;background:white;">
+                    <p>Requested By: </p>
+                </td>
+                <td colspan="3" style="border-top:none;border:solid black 1.0pt;background:white;">
+                    <p>{{auth()->user()->name}} {{auth()->user()->lastname}}</p>
+                </td>
+            </tr>
+            <tr style="height:14pt">
                 <td colspan="4" valign="top" style="border-top:none;border:solid black 1.0pt;background:white;">
                     <p>Stock Request No. {{$stockreq->request_no}}</p>
                 </td>
