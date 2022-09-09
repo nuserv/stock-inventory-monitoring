@@ -1256,7 +1256,7 @@ class StockRequestController extends Controller
             $message->to(auth()->user()->email, auth()->user()->name)->subject
                 ('DR no. '.$no.'('.$branch->branch.')');
             $message->attachData($excel, 'DR No. '.$no.'.xlsx');
-            $message->from('noreply@ideaserv.com.ph', 'BSMS');
+            $message->from(auth()->user()->email, auth()->user()->name.' '.auth()->user()->lastname);
             $message->bcc($bcc);
             $message->cc($head->email);
         });
