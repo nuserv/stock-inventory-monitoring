@@ -7,7 +7,7 @@
             </tr>
             <tr style="height:14pt">
                 <td colspan="4" valign="top" style="border-top:none;border:solid black 1.0pt;background:white;">
-                    <p>Request No. {{$stockreq->request_no}}</p>
+                    <p>Stock Request No. {{$stockreq->request_no}}</p>
                 </td>
             </tr>
             <tr style="height:14pt">
