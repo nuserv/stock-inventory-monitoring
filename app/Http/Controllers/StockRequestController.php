@@ -996,24 +996,6 @@ class StockRequestController extends Controller
         return response()->json($key);
     }
 
-    public function delreqapproved(Request $request){
-        $del = StockRequest::where('code', $request->code)->update(['del_req'=> 2, 'status'=>'DELETED']);
-        return response()->json($del);
-    }
-
-    public function delapproval(Request $request){
-        $code = StockRequest::where('code', $request->code)->first();
-        if ($code) {
-            if ($code->del_req == 1) {
-                return view('pages.approval', compact('code'));
-            }else if ($code->del_req == 2) {
-                return 'Request to delete already approved';
-            }
-        }else{
-            return 'Not found!';
-        }
-    }
-
     public function delreqdata(Request $request){
         $req = RequestedItem::query()
             ->select('item as description', 'category', 'UOM', 'pending', 'items.id as items_id')
@@ -1026,6 +1008,7 @@ class StockRequestController extends Controller
         $stockreq = StockRequest::where('request_no', $request->reqno)->first();
         $reason = $request->reason;
         $key = Str::random(50);
+        $branch = Branch::where('id', $stockreq->branch_id)->first();
         // $config = array(
         //     'driver'     => \config('mailconf.driver'),
         //     'host'       => \config('mailconf.host'),
@@ -1036,16 +1019,16 @@ class StockRequestController extends Controller
         //     'password'   => \config('mailconf.password'),
         // );
         // Config::set('mail', $config);
-        $mail = Mail::send('delrequest', ['req'=>$req, 'stockreq'=>$stockreq, 'reason'=>$reason, 'key'=>$key],function( $message) use ($stockreq){ 
-            $message->to('nonoy_atizardo@yahoo.com')->subject('Approval Required for Request no. '.$stockreq->request_no); 
-            $message->from('noreply@ideaserv.com.ph', 'No-reply');
-            $message->cc('dpobien@phillogix.com.ph');
-            $message->bcc('jolopez@ideaserv.com.ph','emorej046@gmail.com');
-        });
-        // Mail::send('delrequest', ['req'=>$req, 'stockreq'=>$stockreq, 'reason'=>$reason, 'key'=>$key],function( $message) use ($stockreq){ 
-        //     $message->to('emorej046@gmail.com')->subject('Approval Required for Request no. '.$stockreq->request_no); 
-        //     $message->from('noreply@ideaserv.com.ph', 'No-reply');
+        // Mail::send('delrequest', ['req'=>$req, 'stockreq'=>$stockreq, 'reason'=>$reason, 'key'=>$key, 'branch'=>$branch->branch],function( $message) use ($stockreq){ 
+        //     $message->to('nonoy_atizardo@yahoo.com')->subject('Approval Required for Request no. '.$stockreq->request_no); 
+        //     $message->from(auth()->user()->email, 'No-reply');
+        //     $message->cc('dpobien@phillogix.com.ph');
+        //     $message->bcc('jolopez@ideaserv.com.ph','emorej046@gmail.com');
         // });
+        Mail::send('delrequest', ['req'=>$req, 'stockreq'=>$stockreq, 'reason'=>$reason, 'key'=>$key, 'branch'=>$branch->branch],function( $message) use ($stockreq){ 
+            $message->to('emorej046@gmail.com')->subject('Approval Required for Request no. '.$stockreq->request_no); 
+            $message->from(auth()->user()->email, 'No-reply');
+        });
         if(count(Mail::failures()) > 0){
             return response()->json('error');
         }else{
@@ -1259,16 +1242,16 @@ class StockRequestController extends Controller
         $bcc = \config('email.bcc');
         $excel = Excel::raw(new ExcelExport($request->reqno, 'DSR'), BaseExcel::XLSX);
         $data = array('office'=> $branch->branch, 'return_no'=>$request->reqno, 'dated'=>Carbon::now()->toDateTimeString());
-        $config = array(
-            'driver'     => \config('mailconf.driver'),
-            'host'       => \config('mailconf.host'),
-            'port'       => \config('mailconf.port'),
-            'from'       => \config('mailconf.from'),
-            'encryption' => \config('mailconf.encryption'),
-            'username'   => \config('mailconf.username'),
-            'password'   => \config('mailconf.password'),
-        );
-        Config::set('mail', $config);
+        // $config = array(
+        //     'driver'     => \config('mailconf.driver'),
+        //     'host'       => \config('mailconf.host'),
+        //     'port'       => \config('mailconf.port'),
+        //     'from'       => \config('mailconf.from'),
+        //     'encryption' => \config('mailconf.encryption'),
+        //     'username'   => \config('mailconf.username'),
+        //     'password'   => \config('mailconf.password'),
+        // );
+        // Config::set('mail', $config);
         Mail::send('del', $data, function($message) use($excel, $no, $bcc, $head, $branch) {
             $message->to(auth()->user()->email, auth()->user()->name)->subject
                 ('DR no. '.$no.'('.$branch->branch.')');
@@ -1277,6 +1260,9 @@ class StockRequestController extends Controller
             $message->bcc($bcc);
             $message->cc($head->email);
         });
+        if(count(Mail::failures()) > 0){
+            return response()->json('error');
+        }
         return response()->json($data);
     }
     public function upserial(Request $request)

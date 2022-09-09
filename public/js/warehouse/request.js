@@ -248,7 +248,6 @@ $(document).on('click', '.delrowBtn', function () {
     });
 });
 
-
 $(document).ready(function()
 {
     $("#datesched").datepicker({

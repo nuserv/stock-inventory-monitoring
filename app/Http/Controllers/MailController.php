@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Mail;
+use App\StockRequest;
 
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
@@ -37,4 +38,27 @@ class MailController extends Controller {
       });
       echo "Email Sent with attachment. Check your inbox.";
    }
+
+   public function delreqapproved(Request $request){
+      if ($request->action == 'approved') {
+          $del = StockRequest::where('code', $request->code)->update(['del_req'=> 2, 'status'=>'DELETED']);
+      }else if ($request->action == 'declined') {
+          $del = StockRequest::where('code', $request->code)->update(['del_req'=> 3]);
+      }
+      return response()->json($del);
+  }
+
+  public function delapproval(Request $request){
+      $code = StockRequest::where('code', $request->code)->first();
+      $action = $request->action;
+      if ($code) {
+          if ($code->del_req == 1) {
+              return view('pages.approval', compact('code', 'action'));
+          }else if ($code->del_req == 2) {
+              return 'Request to delete already approved';
+          }
+      }else{
+          return 'Not found!';
+      }
+  }
 }

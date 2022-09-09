@@ -12,6 +12,14 @@
             </tr>
             <tr style="height:14pt">
                 <td style="border-top:none;border:solid black 1.0pt;background:white;">
+                    <p>Branch : </p>
+                </td>
+                <td colspan="3" style="border-top:none;border:solid black 1.0pt;background:white;">
+                    <p>{{$branch}}</p>
+                </td>
+            </tr>
+            <tr style="height:14pt">
+                <td style="border-top:none;border:solid black 1.0pt;background:white;">
                     <p>Branch Date Request:</p>
                 </td>
                 <td colspan="3" style="border-top:none;border:solid black 1.0pt;background:white;">
@@ -42,13 +50,10 @@
             @endforeach
         </tbody>
     </table>
-    <p><b>Reason :</b> {{$reason}}</p>
+    <p style="font-size: 18px;"><b>Reason :</b> {{$reason}}</p>
     <hr>
-    <p>Click the button below to approve the request.</p>
-    <a href="{{ url('/') }}/delete-approval?code={{$key}}" style="cursor: pointer;"><button style="background-color:#0d1a80;color:white;cursor: pointer;">APPROVE</button></a>
-
-    <p>You may also copy this link into your browser to approve:</p>
-    <a href="{{ url('/') }}/delete-approval?code={{$key}}">{{ url('/') }}/delete-approval?code={{$key}}</a>
+    <a href="{{ url('/') }}/delete-approval?action=approve&code={{$key}}" style="cursor: pointer;"><button style="background-color:#0d1a80;color:white;cursor: pointer;">APPROVE</button></a>
+    <a href="{{ url('/') }}/delete-approval?action=decline&code={{$key}}" style="cursor: pointer;"><button style="background-color:red;color:white;cursor: pointer;">DECLINE</button></a>
     <hr>
     <p style="color:blue;"><b>This is a system-generated email. Please do not reply.</b></p>
 </div>

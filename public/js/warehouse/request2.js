@@ -54,9 +54,14 @@ $(document).on('click', '#intransitBtn', function(){
                 status: 'IN TRANSIT'
             },
             dataType: 'json',
-            success:function()
+            success:function(data)
             {
-                location.reload();
+                if (data == 'error') {
+                    alert('Send Mail Failed! Please Contact Administrator');
+                    location.reload();
+                }else{
+                    location.reload();
+                }
             },
             error: function (data) {
                 alert(data.responseText);
@@ -75,9 +80,14 @@ $(document).on('click', '#intransitBtn', function(){
                 status: 'PARTIAL IN TRANSIT'
             },
             dataType: 'json',
-            success:function()
+            success:function(data)
             {
-                location.reload();
+                if (data == 'error') {
+                    alert('Send Mail Failed! Please Contact Administrator');
+                    location.reload();
+                }else{
+                    location.reload();
+                }
             },
             error: function (data) {
                 alert(data.responseText);

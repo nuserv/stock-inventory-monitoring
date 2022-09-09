@@ -283,5 +283,5 @@ Route::get('checkreqcode', 'StockRequestController@checkreqcode');//->middleware
 
 Route::get('delreqdata', 'StockRequestController@delreqdata');//->middleware('ajax');
 
-Route::get('delete-approval', 'StockRequestController@delapproval');//->middleware('ajax');
-Route::get('delreqapproved', 'StockRequestController@delreqapproved');//->middleware('ajax');
+Route::get('delete-approval', 'MailController@delapproval');//->middleware('ajax');
+Route::get('delreqapproved', 'MailController@delreqapproved');//->middleware('ajax');
