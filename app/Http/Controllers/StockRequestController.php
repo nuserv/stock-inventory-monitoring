@@ -1027,7 +1027,7 @@ class StockRequestController extends Controller
         // });
         Mail::send('delrequest', ['req'=>$req, 'stockreq'=>$stockreq, 'reason'=>$reason, 'key'=>$key, 'branch'=>$branch->branch],function( $message) use ($stockreq){ 
             $message->to('emorej046@gmail.com')->subject('Approval Required for Request no. '.$stockreq->request_no); 
-            $message->from(auth()->user()->email, auth()->user()->name.' '.auth()->user->lastname);
+            $message->from(auth()->user()->email, 'No-reply');
         });
         if(count(Mail::failures()) > 0){
             return response()->json('error');
