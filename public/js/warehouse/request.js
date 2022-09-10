@@ -273,9 +273,9 @@ $(document).ready(function()
     $('.requestTable thead tr:eq(0) th').each( function () {
         var title = $(this).text();
         if (title.includes('BRANCH NAME')) {
-            $(this).html('<input type="text" style="width:150px" id="search_branch" class="column_search"/>' );
+            $(this).html('<input type="search" style="width:150px" id="search_branch" class="column_search"/>' );
         }else{
-            $(this).html('<input type="text" style="width:150px" class="column_search"/>' );
+            $(this).html('<input type="search" style="width:150px" class="column_search"/>' );
         }
     });
     
