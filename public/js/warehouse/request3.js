@@ -96,7 +96,7 @@ $(document).on('click', '.cancel', function(){
     if (!$('#search_branch').val()) {
         window.location.href = '/request';
     }else{
-        window.location.href = '/request?branch='+$('#branch').val();
+        window.location.href = '/request?branch='+$('#search_branch').val();
     }
 
 });
