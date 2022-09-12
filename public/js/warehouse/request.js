@@ -2555,6 +2555,13 @@ $(document).ready(function()
     });
 });
 
+$(document).on('search', '.requestTable thead .column_search', function (){
+    table
+        .column( $(this).parent().index()+1 )
+        .search( this.value )
+        .draw();
+});
+
 $(document).on("click", ".editBtn", function() {
     prepared_id = $(this).attr('prepared_id');
     serialnum = $(this).attr('serial_num');
