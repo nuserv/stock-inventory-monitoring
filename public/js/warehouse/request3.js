@@ -93,7 +93,12 @@ $(document).on('change', '.category', function(){
 });
 
 $(document).on('click', '.cancel', function(){
-    window.location.href = '/request?branch='+$('#branch').val();
+    if (!$('#search_branch').val()) {
+        window.location.href = '/request';
+    }else{
+        window.location.href = '/request?branch='+$('#branch').val();
+    }
+
 });
 
 $(document).on('click', '#printBtn', function(){
