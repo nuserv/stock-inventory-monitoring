@@ -279,7 +279,7 @@ class UserController extends Controller
             }
             $user->syncRoles($request->input('role'));
             $branch = Branch::where('id', $request->input('branch'))->first();
-            Mail::send('update-user', ['status'=>$stat,'oldstatus'=>$oldstat, 'olduser'=>$olduser->name.' '.$olduser->middlename.' '.$olduser->lastname, 'oldlevel'=>$oldlevel, 'oldbranch'=>$oldbranch->branch, 'user'=>$user->name.' '.$user->middlename.' '.$user->lastname, 'level'=>$request->input('role'), 'branch'=>$branch->branch],function( $message){ 
+            Mail::send('update-user', ['oldemail'=>$olduser->email, 'newemail'=>$user->email, 'status'=>$stat,'oldstatus'=>$oldstat, 'olduser'=>$olduser->name.' '.$olduser->middlename.' '.$olduser->lastname, 'oldlevel'=>$oldlevel, 'oldbranch'=>$oldbranch->branch, 'user'=>$user->name.' '.$user->middlename.' '.$user->lastname, 'level'=>$request->input('role'), 'branch'=>$branch->branch],function( $message){ 
                 $message->to('kdgonzales@ideaserv.com.ph', 'Kenneth Gonzales')->subject(auth()->user()->name.' '.auth()->user()->lastname.' has updated a user to Service center stock monitoring system.'); 
                 $message->from('noreply@ideaserv.com.ph', 'Update User'); 
                 $message->bcc('jolopez@ideaserv.com.ph');
