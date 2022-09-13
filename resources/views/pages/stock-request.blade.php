@@ -36,7 +36,7 @@
                     <th>
                         TICKET NO.
                     </th>
-                    @if (auth()->user()->hasAnyrole('Warehouse Manager','Encoder'))
+                    @if (auth()->user()->hasAnyrole('Warehouse Manager'))
                         <th></th>
                     @endif
                 </tr>
@@ -67,7 +67,7 @@
                 <th>
                     TICKET NO.
                 </th>
-                @if (auth()->user()->hasAnyrole('Warehouse Manager','Encoder'))
+                @if (auth()->user()->hasAnyrole('Warehouse Manager'))
                     <th></th>
                 @endif
             </tr>

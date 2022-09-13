@@ -278,117 +278,209 @@ $(document).ready(function()
             $(this).html('<input type="search" style="width:150px" class="column_search"/>' );
         }
     });
-    
-    table =
-    $('table.requestTable').DataTable({ 
-        "dom": 'lrtip',
-        "pageLength": 50,
-        "language": {
-            "emptyTable": " ",
-            "info": "\"Showing _START_ to _END_ of _TOTAL_ Stock Request\"",
-        },
-        "fnRowCallback": function(nRow, aData) {
-        //"createdRow": function ( nRow, aData ) {
-            if (aData.schedule && (aData.status == "SCHEDULED" || aData.status == "RESCHEDULED")) {
-                var scheddate = aData.schedule
-                var datesplited = scheddate.split("/");;
-                var setsched = datesplited[2]+datesplited[0]+datesplited[1];
-                var today = new Date().toISOString().slice(0,10).split('-');
-                var syncdate = today[0]+today[1]+today[2];
-                if (setsched <= syncdate) {
-                    $('td', nRow).eq(4).css('color', 'darkmagenta');
-                    $('td', nRow).eq(4).css('font-weight', 'bold');
-                }
-            }
-            if (!aData.schedule && aData.status == "PENDING" && aData.type == "SERVICE") {
-                var created = aData.leftcreatedmin;
-                if (created <= 0) {
-                    $('td', nRow).css('background-color', 'lightgray');
-                    $('td', nRow).css('font-weight', 'bold');
-                }
-            }
-            if (aData.schedule && (aData.status == "PARTIAL SCHEDULED")) {
-                var scheddate = aData.schedule
-                var datesplited = scheddate.split("/");;
-                var setsched = datesplited[2]+datesplited[0]+datesplited[1];
-                var today = new Date().toISOString().slice(0,10).split('-');
-                var syncdate = today[0]+today[1]+today[2];
-                if (setsched <= syncdate) {
-                    $('td', nRow).eq(4).css('color', 'darkmagenta');
-                    $('td', nRow).eq(4).css('font-weight', 'bold');
-                }
-            }
-            if (aData.schedule && (aData.status == "PARTIAL IN TRANSIT" && aData.intransitval == '1')) {
-                var scheddate = aData.schedule
-                var datesplited = scheddate.split("/");;
-                var setsched = datesplited[2]+datesplited[0]+datesplited[1];
-                var today = new Date().toISOString().slice(0,10).split('-');
-                var syncdate = today[0]+today[1]+today[2];
-                if (setsched <= syncdate) {
-                    $('td', nRow).eq(4).css('color', 'darkmagenta');
-                    $('td', nRow).eq(4).css('font-weight', 'bold');
-                }
-            }
-            
-            if ( aData.status == "UNRESOLVED" || aData.status == "INCOMPLETE") {        
-                $('td', nRow).eq(4).css('color', '#F1423A');
-                $('td', nRow).eq(4).css('font-weight', 'bold');
-            }
-            if (aData.type == "SERVICE" && aData.status == 'PENDING') {
-                $('td', nRow).eq(4).css('color', 'blue');
-                $('td', nRow).eq(4).css('font-weight', 'bold');
-            }
-            if (aData.type == "STOCK" && aData.status == 'PENDING') {
-                $('td', nRow).eq(4).css('color', 'GREEN');
-                $('td', nRow).eq(4).css('font-weight', 'bold');
-            }
-        },
-        "order": [ 0, 'asc'],
-        "columnDefs": [
-        {
-            "targets": [ 0 ],
-            "visible": false
-        }],
-        processing: false,
-        serverSide: false,
-        ajax: {
-            url: '/requests',
-            error: function(data) {
-                if(data.status == 401) {
-                    window.location.href = '/login';
-                }
-            }
-        },
-        columns: [
-            { data: 'id', name:'id'},
-            { data: 'created_at', name:'created_at', "width": "14%" },
-            { data: 'reqBy', name:'reqBy', "width": "14%"},
-            { data: 'branch', name:'branch',"width": "14%"},
-            { data: 'type', name:'type', "width": "14%"},
-            { data: 'status', name:'status', "width": "14%"},
-            { data: 'ticket', name:'ticket', "width": "14%"},
-            { data: null, render: function (data, type, row ) {
-                if (row.status.includes('TRANSIT')) {
-                    return '';
-                }else if (row.status.includes('SCHEDULED')) {
-                    return '';
-                }else if (row.status == 'PENDING') {
-                    return '';
-                }else if (row.status == 'INCOMPLETE') {
-                    return '';
-                }else if (row.status == 'UNRESOLVED') {
-                    return '';
-                }else if (row.status == 'PARTIAL') {
-                    return '';
-                }else{
-                    if (row.del_req == '0') {
-                        return '<button class="btn btn-primary delrowBtn" id="'+row.request_no+'">Delete</button>'
+    if ($('#level').val() == "Warehouse Manager") {
+        table =
+        $('table.requestTable').DataTable({ 
+            "dom": 'lrtip',
+            "pageLength": 50,
+            "language": {
+                "emptyTable": " ",
+                "info": "\"Showing _START_ to _END_ of _TOTAL_ Stock Request\"",
+            },
+            "fnRowCallback": function(nRow, aData) {
+            //"createdRow": function ( nRow, aData ) {
+                if (aData.schedule && (aData.status == "SCHEDULED" || aData.status == "RESCHEDULED")) {
+                    var scheddate = aData.schedule
+                    var datesplited = scheddate.split("/");;
+                    var setsched = datesplited[2]+datesplited[0]+datesplited[1];
+                    var today = new Date().toISOString().slice(0,10).split('-');
+                    var syncdate = today[0]+today[1]+today[2];
+                    if (setsched <= syncdate) {
+                        $('td', nRow).eq(4).css('color', 'darkmagenta');
+                        $('td', nRow).eq(4).css('font-weight', 'bold');
                     }
-                    return '';
                 }
-            }}
-        ]
-    });
+                if (!aData.schedule && aData.status == "PENDING" && aData.type == "SERVICE") {
+                    var created = aData.leftcreatedmin;
+                    if (created <= 0) {
+                        $('td', nRow).css('background-color', 'lightgray');
+                        $('td', nRow).css('font-weight', 'bold');
+                    }
+                }
+                if (aData.schedule && (aData.status == "PARTIAL SCHEDULED")) {
+                    var scheddate = aData.schedule
+                    var datesplited = scheddate.split("/");;
+                    var setsched = datesplited[2]+datesplited[0]+datesplited[1];
+                    var today = new Date().toISOString().slice(0,10).split('-');
+                    var syncdate = today[0]+today[1]+today[2];
+                    if (setsched <= syncdate) {
+                        $('td', nRow).eq(4).css('color', 'darkmagenta');
+                        $('td', nRow).eq(4).css('font-weight', 'bold');
+                    }
+                }
+                if (aData.schedule && (aData.status == "PARTIAL IN TRANSIT" && aData.intransitval == '1')) {
+                    var scheddate = aData.schedule
+                    var datesplited = scheddate.split("/");;
+                    var setsched = datesplited[2]+datesplited[0]+datesplited[1];
+                    var today = new Date().toISOString().slice(0,10).split('-');
+                    var syncdate = today[0]+today[1]+today[2];
+                    if (setsched <= syncdate) {
+                        $('td', nRow).eq(4).css('color', 'darkmagenta');
+                        $('td', nRow).eq(4).css('font-weight', 'bold');
+                    }
+                }
+                
+                if ( aData.status == "UNRESOLVED" || aData.status == "INCOMPLETE") {        
+                    $('td', nRow).eq(4).css('color', '#F1423A');
+                    $('td', nRow).eq(4).css('font-weight', 'bold');
+                }
+                if (aData.type == "SERVICE" && aData.status == 'PENDING') {
+                    $('td', nRow).eq(4).css('color', 'blue');
+                    $('td', nRow).eq(4).css('font-weight', 'bold');
+                }
+                if (aData.type == "STOCK" && aData.status == 'PENDING') {
+                    $('td', nRow).eq(4).css('color', 'GREEN');
+                    $('td', nRow).eq(4).css('font-weight', 'bold');
+                }
+            },
+            "order": [ 0, 'asc'],
+            "columnDefs": [
+            {
+                "targets": [ 0 ],
+                "visible": false
+            }],
+            processing: false,
+            serverSide: false,
+            ajax: {
+                url: '/requests',
+                error: function(data) {
+                    if(data.status == 401) {
+                        window.location.href = '/login';
+                    }
+                }
+            },
+            columns: [
+                { data: 'id', name:'id'},
+                { data: 'created_at', name:'created_at', "width": "14%" },
+                { data: 'reqBy', name:'reqBy', "width": "14%"},
+                { data: 'branch', name:'branch',"width": "14%"},
+                { data: 'type', name:'type', "width": "14%"},
+                { data: 'status', name:'status', "width": "14%"},
+                { data: 'ticket', name:'ticket', "width": "14%"},
+                { data: null, render: function (data, type, row ) {
+                    if (row.status.includes('TRANSIT')) {
+                        return '';
+                    }else if (row.status.includes('SCHEDULED')) {
+                        return '';
+                    }else if (row.status == 'PENDING') {
+                        return '';
+                    }else if (row.status == 'INCOMPLETE') {
+                        return '';
+                    }else if (row.status == 'UNRESOLVED') {
+                        return '';
+                    }else if (row.status == 'PARTIAL') {
+                        return '';
+                    }else{
+                        if (row.del_req == '0') {
+                            return '<button class="btn btn-primary delrowBtn" id="'+row.request_no+'">Delete</button>'
+                        }
+                        return '';
+                    }
+                }}
+            ]
+        });
+    }else{
+        table =
+        $('table.requestTable').DataTable({ 
+            "dom": 'lrtip',
+            "pageLength": 50,
+            "language": {
+                "emptyTable": " ",
+                "info": "\"Showing _START_ to _END_ of _TOTAL_ Stock Request\"",
+            },
+            "fnRowCallback": function(nRow, aData) {
+            //"createdRow": function ( nRow, aData ) {
+                if (aData.schedule && (aData.status == "SCHEDULED" || aData.status == "RESCHEDULED")) {
+                    var scheddate = aData.schedule
+                    var datesplited = scheddate.split("/");;
+                    var setsched = datesplited[2]+datesplited[0]+datesplited[1];
+                    var today = new Date().toISOString().slice(0,10).split('-');
+                    var syncdate = today[0]+today[1]+today[2];
+                    if (setsched <= syncdate) {
+                        $('td', nRow).eq(4).css('color', 'darkmagenta');
+                        $('td', nRow).eq(4).css('font-weight', 'bold');
+                    }
+                }
+                if (!aData.schedule && aData.status == "PENDING" && aData.type == "SERVICE") {
+                    var created = aData.leftcreatedmin;
+                    if (created <= 0) {
+                        $('td', nRow).css('background-color', 'lightgray');
+                        $('td', nRow).css('font-weight', 'bold');
+                    }
+                }
+                if (aData.schedule && (aData.status == "PARTIAL SCHEDULED")) {
+                    var scheddate = aData.schedule
+                    var datesplited = scheddate.split("/");;
+                    var setsched = datesplited[2]+datesplited[0]+datesplited[1];
+                    var today = new Date().toISOString().slice(0,10).split('-');
+                    var syncdate = today[0]+today[1]+today[2];
+                    if (setsched <= syncdate) {
+                        $('td', nRow).eq(4).css('color', 'darkmagenta');
+                        $('td', nRow).eq(4).css('font-weight', 'bold');
+                    }
+                }
+                if (aData.schedule && (aData.status == "PARTIAL IN TRANSIT" && aData.intransitval == '1')) {
+                    var scheddate = aData.schedule
+                    var datesplited = scheddate.split("/");;
+                    var setsched = datesplited[2]+datesplited[0]+datesplited[1];
+                    var today = new Date().toISOString().slice(0,10).split('-');
+                    var syncdate = today[0]+today[1]+today[2];
+                    if (setsched <= syncdate) {
+                        $('td', nRow).eq(4).css('color', 'darkmagenta');
+                        $('td', nRow).eq(4).css('font-weight', 'bold');
+                    }
+                }
+                
+                if ( aData.status == "UNRESOLVED" || aData.status == "INCOMPLETE") {        
+                    $('td', nRow).eq(4).css('color', '#F1423A');
+                    $('td', nRow).eq(4).css('font-weight', 'bold');
+                }
+                if (aData.type == "SERVICE" && aData.status == 'PENDING') {
+                    $('td', nRow).eq(4).css('color', 'blue');
+                    $('td', nRow).eq(4).css('font-weight', 'bold');
+                }
+                if (aData.type == "STOCK" && aData.status == 'PENDING') {
+                    $('td', nRow).eq(4).css('color', 'GREEN');
+                    $('td', nRow).eq(4).css('font-weight', 'bold');
+                }
+            },
+            "order": [ 0, 'asc'],
+            "columnDefs": [
+            {
+                "targets": [ 0 ],
+                "visible": false
+            }],
+            processing: false,
+            serverSide: false,
+            ajax: {
+                url: '/requests',
+                error: function(data) {
+                    if(data.status == 401) {
+                        window.location.href = '/login';
+                    }
+                }
+            },
+            columns: [
+                { data: 'id', name:'id'},
+                { data: 'created_at', name:'created_at', "width": "14%" },
+                { data: 'reqBy', name:'reqBy', "width": "14%"},
+                { data: 'branch', name:'branch',"width": "14%"},
+                { data: 'type', name:'type', "width": "14%"},
+                { data: 'status', name:'status', "width": "14%"},
+                { data: 'ticket', name:'ticket', "width": "14%"}
+            ]
+        });
+    }
 
     if(($(location).attr('pathname')+window.location.search).includes('branch') == true){
         var url = new URL(window.location.href);
