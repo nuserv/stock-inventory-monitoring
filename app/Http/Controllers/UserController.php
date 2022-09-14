@@ -185,7 +185,6 @@ class UserController extends Controller
                 $message->to('kdgonzales@ideaserv.com.ph', 'Kenneth Gonzales')->subject(auth()->user()->name.' '.auth()->user()->lastname.' has added a new user to Service center stock monitoring system.'); 
                 $message->from('noreply@ideaserv.com.ph', 'Add User'); 
                 $message->bcc('jolopez@ideaserv.com.ph');
-                $message->cc('dpobien@phillogix.com.ph','nonoy_atizardo@yahoo.com');
             });
             $log = new UserLog;
             $log->branch_id = auth()->user()->branch->id;
@@ -283,7 +282,6 @@ class UserController extends Controller
                 $message->to('kdgonzales@ideaserv.com.ph', 'Kenneth Gonzales')->subject(auth()->user()->name.' '.auth()->user()->lastname.' has updated a user to Service center stock monitoring system.'); 
                 $message->from('noreply@ideaserv.com.ph', 'Update User'); 
                 $message->bcc('jolopez@ideaserv.com.ph');
-                $message->cc('dpobien@phillogix.com.ph','nonoy_atizardo@yahoo.com');
             });
             return response()->json($data);
         }
