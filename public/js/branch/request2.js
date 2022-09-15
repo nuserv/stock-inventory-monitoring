@@ -342,11 +342,10 @@ $(document).on('click', '.send_sub_Btn', function(){
 
 $(document).on('change', '.qty', function () {
     var maxqty = $(this).attr('max');
-    if ($(this).val() > maxqty) {
+    if (parseInt($(this).val()) > parseInt(maxqty)) {
         $(this).val(maxqty);
     }
 });
-
 
 $(document).on('change', '.desc', function(){
     var count = $(this).attr('row_count');
