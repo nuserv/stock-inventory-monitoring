@@ -251,6 +251,7 @@ Route::put('user_update/{id}', 'UserController@update')->middleware(['ajax', 've
 
 Route::get('stocks/{id}', 'BranchController@getStocks');//->middleware('ajax');
 Route::get('branches', 'BranchController@getBranches')->middleware('ajax');
+Route::get('loanbranches', 'BranchController@getLoanBranches')->middleware('ajax');
 Route::get('branch', 'BranchController@index')->name('branch.index');
 Route::post('branch_add', 'BranchController@store')->middleware('ajax');
 Route::put('branch_ini', 'BranchController@initial')->middleware('ajax');

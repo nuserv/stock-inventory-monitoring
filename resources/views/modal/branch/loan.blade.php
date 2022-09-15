@@ -24,9 +24,20 @@
                 </div>
                 <div class="row no-margin">
                     <div class="col-md-6 form-group row">
-                        <label class="col-md-5 col-form-label text-md-right">Branch Name:</label>
+                        <label class="col-md-5 col-form-label text-md-right">Area:</label>
                         <div class="col-md-7">
-                            <select style="color: black" class="form-control form-control-sm " id="loanbranch">
+                            <select style="color: black" class="form-control form-control-sm " id="loanarea">
+                                <option selected disabled>select area</option>
+                                @foreach (\App\Area::all() as $area)
+                                <option value="{{ $area->id }}">{{ $area->area }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-6 form-group row">
+                        <label class="col-md-6 col-form-label text-md-right">Branch Name:</label>
+                        <div class="col-md-6">
+                            <select style="color: black" class="form-control form-control-sm " id="loanbranch" disabled>
                                 <option selected disabled>select branch</option>
                                 @foreach ($branches as $branch)
                                 @if ($branch->branch != "Warehouse" || $branch->branch != "Conversion")

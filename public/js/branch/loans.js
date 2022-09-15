@@ -287,6 +287,34 @@ $(document).on('click', '.cancel', function(){
     location.reload();
 });
 
+$(document).on('change', '#loanarea', function () {
+   var id = $(this).val();
+   $.ajax({
+        type:'get',
+        url:'loanbranches',
+        data:{'area_id':id},
+        success:function(data)
+        {
+            var branches = $.map(data, function(value, index) {
+                return [value];
+            });
+            var branchOp ='<option selected disabled>select branch</option>';
+            branches.forEach(value => {
+                branchOp+='<option value="'+value.id+'">'+value.branch.toUpperCase()+'</option>';
+            });
+            $("#loanbranch").find('option').remove().end().append(branchOp);
+            $('#loanbranch').prop('disabled', false);
+        },
+        error: function (data) {
+            if(data.status == 401) {
+                window.location.href = '/login';
+            }
+            alert(data.responseText);
+        }
+    });
+
+});
+
 $(document).on('change', '#loanbranch', function(){
     var id = $(this).val();
     var itemOp ='<option selected disabled>select item description</option>';

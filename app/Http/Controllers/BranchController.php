@@ -159,6 +159,14 @@ class BranchController extends Controller
             ->make(true);
         }
     }
+    public function getLoanBranches(Request $request)
+    {
+        $branches = Branch::query()
+            ->where('area_id', $request->area_id)
+            ->get();
+        return response()->json($branches);
+    }
+
     public function getBranches()
     {
         if (auth()->user()->hasrole('Warehouse Manager')) {
