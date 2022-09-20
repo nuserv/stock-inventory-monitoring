@@ -1157,6 +1157,7 @@ class StockRequestController extends Controller
                 $reqno->stat = $request->status;
             }
         }
+
         if ($request->status  == "PARTIAL IN TRANSIT") {
             $reqno = StockRequest::where('request_no', $request->reqno)->first();
             $reqpending = RequestedItem::where('request_no', $request->reqno)->where('pending', '!=', '0')->first();
@@ -1203,9 +1204,9 @@ class StockRequestController extends Controller
         $data = $notrec->save();
         return response()->json($data);
     }
+    
     public function intransit(Request $request)
     {
-
         if($request->status == 'IN TRANSIT'){
             $reqno = StockRequest::where('request_no', $request->reqno)->first();
             $reqno->status = $request->status;
