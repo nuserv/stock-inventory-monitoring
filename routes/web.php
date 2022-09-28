@@ -146,7 +146,7 @@ Route::put('service-out', 'StockController@serviceOut')->middleware('ajax');
 Route::put('pm-out', 'StockController@pmOut')->middleware('ajax');
 Route::post('pull-out', 'StockController@pullOut')->middleware('ajax');
 Route::post('upload', 'StockController@import')->name('stocks.upload');
-Route::post('additem', 'StockController@addItem')->middleware('ajax');
+Route::any('additem', 'StockController@addItem');//->middleware('ajax');
 Route::post('addcategory', 'StockController@addCategory')->middleware('ajax');
 Route::post('store', 'StockController@store');//->middleware('ajax');
 Route::get('viewStock', 'StockController@viewStocks');//->middleware('ajax');

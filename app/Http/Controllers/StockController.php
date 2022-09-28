@@ -806,7 +806,7 @@ class StockController extends Controller
         $add->item = ucwords($request->item);
         $add->UOM = ucfirst($request->uom);
         $add->n_a = 'no';
-        $additem->serialize = 'YES';
+        $add->serialize = 'YES';
         $add->save();
         $additem = new AddItem;
         $additem->category_id = $request->cat;
