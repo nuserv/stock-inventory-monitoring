@@ -11,6 +11,7 @@ use Maatwebsite\Excel\Excel as BaseExcel;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Warehouse;
 use App\Item;
+use App\Buffersend;
 use App\AddItem;
 use App\AddCategory;
 use App\Category;
@@ -814,7 +815,14 @@ class StockController extends Controller
         $additem->n_a = 'no';
         $additem->serialize = 'YES';
         $additem->save();
-        
+
+        $stocks = new Buffersend;
+        $stocks->item_id = $additem->id;
+        $stocks->user_id = auth()->user()->id;
+        $stocks->status = 'default';
+        $stocks->qty = '1';
+        $stocks->save();
+
         $branches = Branch::all();
         foreach ($branches as $branchs) {
             $initial = new Initial;
