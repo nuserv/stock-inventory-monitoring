@@ -606,7 +606,6 @@ class StockController extends Controller
         if ($request->data != 0) {
 
             $category = Category::query()->get();
-            return $category;
             /*$stock = Stock::select('category_id', 'category', \DB::raw('SUM(CASE WHEN status = \'in\' THEN 1 ELSE 0 END) as stockin'))
                 ->where('branch_id', auth()->user()->branch->id)
                 ->join('categories', 'category_id', '=', 'categories.id')
