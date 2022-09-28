@@ -12,6 +12,7 @@ use Maatwebsite\Excel\Facades\Excel;
 use App\Warehouse;
 use App\Item;
 use App\AddItem;
+use App\AddCategory;
 use App\Category;
 use App\Pullno;
 use App\PmSched;
@@ -801,14 +802,14 @@ class StockController extends Controller
     {
         $add = new Item;
         $add->category_id = $request->cat;
-        $add->item = ucfirst($request->item);
+        $add->item = ucwords($request->item);
         $add->UOM = ucfirst($request->uom);
         $add->n_a = 'no';
         $additem->serialize = 'YES';
         $add->save();
         $additem = new AddItem;
         $additem->category_id = $request->cat;
-        $additem->item = ucfirst($request->item);
+        $additem->item = ucwords($request->item);
         $additem->UOM = ucfirst($request->uom);
         $additem->n_a = 'no';
         $additem->serialize = 'YES';
@@ -957,8 +958,10 @@ class StockController extends Controller
     }
     public function addCategory(Request $request){
         $add = new Category;
-        $add->category = ucfirst($request->cat);
+        $add->category = ucwords($request->cat);
         $data = $add->save();
+        $add = new AddCategory;
+        $add->category = ucwords($request->cat);
         return response()->json($data);
     }
     public function pulldetails(Request $request, $id)
