@@ -14,10 +14,12 @@ use App\User;
 use App\Bstock;
 use App\Branch;
 use App\Responder;
+use App\AddItem;
 use App\Item;
 use App\Loan;
 use App\Pullout;
 use App\Initial;
+use App\StockReq;
 use App\Warehouse;
 use App\StockRequest;
 use App\PreparedItem;
@@ -84,6 +86,10 @@ class HomeController extends Controller
         $item = Item::where('id', $request->id)->first();
         $item->item = $request->item;
         $item->save();
+        $additem = AddItem::where('id', $request->id)->first();
+        $additem->item = $request->item;
+        $additem->save();
+
         $log = new UserLog;
         $log->branch_id = auth()->user()->branch->id;
                 $log->branch = auth()->user()->branch->branch;
@@ -97,13 +103,19 @@ class HomeController extends Controller
     public function itemsUpdate(Request $request)
     {   
         $items = Item::where('id', $request->item)->first();
-        $item = Item::where('id', $request->item)->update(['n_a' => $request->stat]);
+        if ($request->stat == 'no') {
+            $stat = 'YES';
+        }else{
+            $stat = 'NO';
+        }
+        $item = Item::where('id', $request->item)->update(['n_a' => $request->stat, 'serialize'=>$stat]);
+        $additem = AddItem::where('id', $request->item)->update(['n_a' => $request->stat, 'serialize'=>$stat]);
         $log = new UserLog;
         $log->branch_id = auth()->user()->branch->id;
-                $log->branch = auth()->user()->branch->branch;
+        $log->branch = auth()->user()->branch->branch;
         $log->activity = 'UPDATE '.$items->item.'.';
         $log->user_id = auth()->user()->id;
-                $log->fullname = auth()->user()->name.' '.auth()->user()->middlename.' '.auth()->user()->lastname;
+        $log->fullname = auth()->user()->name.' '.auth()->user()->middlename.' '.auth()->user()->lastname;
         $data = $log->save();
         return response()->json($data);
     }
@@ -184,6 +196,28 @@ class HomeController extends Controller
     }
     public function index()
     {
+
+        // foreach (Item::all() as $key ) {
+        //     if (!StockReq::where('id', $key->id)->first()) {
+        //         $serial = StockReq::where('id', $key->id)->first();
+        //         if ($key->n_a == 'no') {
+        //             $serial = 'YES';
+        //         }else{
+        //             $serial = 'NO';
+        //         }
+
+        //         Stockreq::create([
+        //             'id'=>$key->id,
+        //             'item'=>$key->item,
+        //             'category_id'=>$key->category_id,
+        //             'UOM'=>$key->UOM,
+        //             'n_a'=>$key->n_a,
+        //             'serialize'=>$serial
+        //         ]);
+        //     }
+        // }
+        // return 'done';
+
         if (auth()->user()->status == '0') {
             return redirect('logout');
         }

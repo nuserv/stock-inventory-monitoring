@@ -36,21 +36,21 @@
                             <th>Category</th>
                             <th>Item Description</th>
                             <th>Quantity</th>
-                            @if (auth()->user()->hasanyrole('Warehouse Manager') || auth()->user()->id == 283 || auth()->user()->id == 110)
+                            <th>Serial</th>
+                            {{-- @if (auth()->user()->hasanyrole('Warehouse Manager') || auth()->user()->id == 283 || auth()->user()->id == 110)
                             <th></th>
-                            @endif
+                            @endif --}}
                         </thead>
                     </table>
                 </div>
+                @if (auth()->user()->hasanyrole('Warehouse Manager'))
+                    <div class="modal-footer">
+                        <input type="button" class="btn btn-primary mr-auto" id="not_rec_Btn" class="button" value="NOT RECEIVED">
+                        <input type="button" id="rec_Btn" class="btn btn-primary" value="ADD TO STOCK" disabled>
+                    </div>
+                @endif
             </div>
 
-            @if (auth()->user()->hasanyrole('Main Warehouse Manager'))
-                <div class="modal-footer">
-                    <div class="d-flex"> 
-                        <input type="button" id="prcBtn" class="btn btn-primary" value="PROCEED" >
-                    </div>
-                </div>
-            @endif
             @if (auth()->user()->hasanyrole('Warehouse Administrator'))
                 <div class="modal-footer">
                     <div class="d-flex"> 

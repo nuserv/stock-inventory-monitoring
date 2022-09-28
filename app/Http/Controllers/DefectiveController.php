@@ -247,8 +247,8 @@ class DefectiveController extends Controller
             $data = array('office'=> auth()->user()->branch->branch, 'return_no'=>$repaired->repaired_no, 'dated'=>Carbon::now()->toDateTimeString());
             Mail::send('rr', $data, function($message) use($excel, $no, $bcc) {
                 $message->to(auth()->user()->email, auth()->user()->name)->subject
-                    ('RR no. '.$no.' '.auth()->user()->branch->branch);
-                $message->attachData($excel, 'RR No. '.$no.' '.auth()->user()->branch->branch.'.xlsx');
+                    ('RR no. '.$no);
+                $message->attachData($excel, 'RR No. '.$no.'.xlsx');
                 $message->from('noreply@ideaserv.com.ph', 'BSMS');
                 $message->bcc($bcc);
             });

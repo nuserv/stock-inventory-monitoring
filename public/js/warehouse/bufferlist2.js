@@ -1,3 +1,190 @@
+$(document).on('click', '#not_rec_Btn', function(){
+    var reqno = buffers_no;
+    $.ajax({
+        url: 'updatestat',
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="ctok"]').attr('content')
+        },
+        dataType: 'json',
+        type: 'PUT',
+        data: {
+            reqno : reqno,
+            status: 17
+        },
+        error: function (data) {
+            if(data.status == 401) {
+                window.location.href = '/login';
+            }
+            alert(data.responseText);
+        },
+        success: function(){
+            location.reload();
+        },
+    });
+});
+
+$(document).on('click', '#rec_Btn', function(){
+    var reqno = buffers_no;
+    $('#loading').show();
+    // if(dtstat == "Partial for receiving" || dtstat == "Incomplete"){
+    //     var status = "COMPLETED";
+    // }else if(dtstat == "Partial" || dtstat == "For receiving"){
+    //     var status = "PARTIAL IN TRANSIT";
+    // }
+    var datas = buffersenditems.rows( { selected: true } ).data();
+    var id = [];
+    var eachcount = 0;
+    if(datas.length > 0){
+        var mydata = $.map(datas, function(value, index) {
+            return [value];
+        });
+        if (datas.length != senditems) {
+            $.ajax({
+                url: 'updatestat',
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="ctok"]').attr('content')
+                },
+                dataType: 'json',
+                type: 'PUT',
+                data: {
+                    reqno : reqno,
+                    status: 17
+                },
+                error: function (data) {
+                    if(data.status == 401) {
+                        window.location.href = '/login';
+                    }
+                    alert(data.responseText);
+                }
+            });
+        }else{
+            if (items != 0) {
+                $.ajax({
+                    url: 'updatestat',
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="ctok"]').attr('content')
+                    },
+                    dataType: 'json',
+                    type: 'PUT',
+                    data: {
+                        reqno : reqno,
+                        status: 24
+                    },
+                    error: function (data) {
+                        if(data.status == 401) {
+                            window.location.href = '/login';
+                        }
+                        alert(data.responseText);
+                    }
+                });
+            }else{
+                $.ajax({
+                    url: 'updatestat',
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="ctok"]').attr('content')
+                    },
+                    dataType: 'json',
+                    type: 'PUT',
+                    data: {
+                        reqno : reqno,
+                        status: 8
+                    },
+                    error: function (data) {
+                        if(data.status == 401) {
+                            window.location.href = '/login';
+                        }
+                        alert(data.responseText);
+                    }
+                });
+            }
+        }
+        mydata.forEach(value => {
+            eachcount++;
+            if (value.uom == 'Unit' ) {
+                console.log(value.uom+'-'+eachcount);
+                id.push(value.id);
+                if (eachcount == datas.length) {
+                    $.ajax({
+                        url: 'storerreceived',
+                        headers: {
+                            'X-CSRF-TOKEN': $('meta[name="ctok"]').attr('content')
+                        },
+                        dataType: 'json',
+                        type: 'POST',
+                        data: {
+                            reqno : reqno,
+                            id: id,
+                            status: status,
+                            Unit: 'yes',
+                        },
+                        success: function(){
+                            location.reload();
+                        },
+                        error: function (data) {
+                            if(data.status == 401) {
+                                window.location.href = '/login';
+                            }
+                            alert(data.responseText);
+                        }
+                    });
+                }
+            }
+            else if(value.uom != 'Unit'){
+                console.log(value.uom+'--'+eachcount);
+                var itemsid = value.items_id;
+                $.ajax({
+                    type:'get',
+                    url: 'getcon',
+                    dataType: 'json',
+                    async: false,
+                    data: {
+                        reqno : reqno,
+                        itemsid: itemsid                        
+                    },
+                    success:function(data)
+                    {
+                        data.forEach(valv => {
+                            id.push(valv.id);
+                        });
+                        if (eachcount == datas.length) {
+                            $.ajax({
+                                url: 'storerreceived',
+                                headers: {
+                                    'X-CSRF-TOKEN': $('meta[name="ctok"]').attr('content')
+                                },
+                                dataType: 'json',
+                                type: 'POST',
+                                data: {
+                                    reqno : reqno,
+                                    id: id,
+                                    status: status,
+                                    Unit: 'no'
+                                },
+                                success: function(){
+                                    location.reload();
+                                },
+                                error: function (data) {
+                                    if(data.status == 401) {
+                                        window.location.href = '/login';
+                                    }
+                                    alert(data.responseText);
+                                }
+                            });
+                        }
+                    },
+                    error: function (data) {
+                        if(data.status == 401) {
+                            window.location.href = '/login';
+                        }
+                        alert(data.responseText);
+                    }
+                });
+            }
+        });    
+    }
+    
+});
+
 $(document).on('click', '.recBtn', function(){
     var thisdata = buffersenditems.row( $(this).parents('tr') ).data();
     var row =  $(this).parents('tr');

@@ -11,6 +11,7 @@ use Maatwebsite\Excel\Excel as BaseExcel;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Warehouse;
 use App\Item;
+use App\AddItem;
 use App\Category;
 use App\Pullno;
 use App\PmSched;
@@ -603,7 +604,7 @@ class StockController extends Controller
         if ($request->data != 0) {
 
             $category = Category::query()->get();
-
+            return $category;
             /*$stock = Stock::select('category_id', 'category', \DB::raw('SUM(CASE WHEN status = \'in\' THEN 1 ELSE 0 END) as stockin'))
                 ->where('branch_id', auth()->user()->branch->id)
                 ->join('categories', 'category_id', '=', 'categories.id')
@@ -803,7 +804,16 @@ class StockController extends Controller
         $add->item = ucfirst($request->item);
         $add->UOM = ucfirst($request->uom);
         $add->n_a = 'no';
+        $additem->serialize = 'YES';
         $add->save();
+        $additem = new AddItem;
+        $additem->category_id = $request->cat;
+        $additem->item = ucfirst($request->item);
+        $additem->UOM = ucfirst($request->uom);
+        $additem->n_a = 'no';
+        $additem->serialize = 'YES';
+        $additem->save();
+        
         $branches = Branch::all();
         foreach ($branches as $branchs) {
             $initial = new Initial;
@@ -812,6 +822,7 @@ class StockController extends Controller
             $initial->qty = 5;
             $data = $initial->save();
         }
+
         return response()->json($data);
     }
     public function pmservicein(Request $request)

@@ -403,7 +403,7 @@
             <script src="{{asset('min/?f=js/itemrequest.js&ver=5.2')}}"></script>
         @endif
         @if(Request::is('buffer'))
-            <script src="{{asset('min/?f=js/warehouse/buffer.js')}}"></script>
+            <script src="{{asset('min/?f=js/warehouse/buffer.js&ver=1.0')}}"></script>
         @endif
         @if(Request::is('pullview'))
             @if (auth()->user()->hasanyrole('Head'))
@@ -420,8 +420,8 @@
         @endif
         @if(Request::is('bufferviewlist'))
             @if (auth()->user()->hasanyrole('Main Warehouse Manager','Warehouse Manager', 'Warehouse Administrator') || auth()->user()->id == 283 || auth()->user()->id == 110)
-                <script src="{{asset('min/?f=js/warehouse/bufferlist.js')}}"></script>
-                <script src="{{asset('min/?f=js/warehouse/bufferlist2.js')}}"></script>
+                <script src="{{asset('min/?f=js/warehouse/bufferlist.js&ver=1.0')}}"></script>
+                <script src="{{asset('min/?f=js/warehouse/bufferlist2.js&ver=1.0')}}"></script>
             @endif
         @endif
         @if(Request::is('returnview'))

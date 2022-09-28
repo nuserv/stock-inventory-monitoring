@@ -4,9 +4,9 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Buffersend extends Model
+class BufferItem extends Model
 {
     protected $guarded = [];
     protected $connection = 'mysql1';
-    protected $table = 'stocks';
+    protected $table = 'stock_request';
 }

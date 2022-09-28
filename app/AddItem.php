@@ -10,5 +10,5 @@ class StockReq extends Model
     // protected $table = 'buffers_no';
     protected $connection = 'mysql1';
     // protected $table = 'items_clone';
-    protected $table = 'stock_request';
+    protected $table = 'items';
 }

@@ -14,6 +14,7 @@ use App\StockReqCode;
 use App\StockReqNo;
 use App\BufferNo;
 use App\Buffer;
+use App\BufferItem;
 use App\StockReq;
 use App\Buffersend;
 use App\RequestedItem;
@@ -897,7 +898,6 @@ class StockRequestController extends Controller
         return response()->json($data);
     }
 
-
     public function resolved(Request $request)
     {
         $resolve = StockRequest::where('request_no', $request->requestno)->first();
@@ -1061,74 +1061,88 @@ class StockRequestController extends Controller
         
     }
 
+    public function updatestat(Request $request)
+    {
+        $update = StockReqNo::where('request_number', $request->reqno)->update(['status'=>$request->status]);
+        if ($request->status == 17) {
+            Buffersend::where('request_number', $request->reqno)->whereIn('status', ['prep'])->update([
+                'status'=>'incomplete'
+            ]);
+        }
+        if ($request->status == 8) {
+            StockReqNo::where('request_number', $request->reqno)->update(['status'=>$request->status, 'verify'=>'Confirmed']);
+        }
+        return response()->json($update);
+    }
+
     public function received(Request $request)
     {
         $data = '0';
         if ($request->Unit == 'yes') {
             foreach ($request->id as $del) {
-                $preparedItems = PreparedItem::select('prepared_items.items_id as itemid', 'prepared_items.serial as serial')
-                    ->join('items', 'prepared_items.items_id', '=', 'items.id')
-                    ->where('branch_id', auth()->user()->branch->id)
-                    ->where('request_no', $request->reqno)
-                    ->where('prepared_items.id', $del)
-                    ->first();
-                $prepared = PreparedItem::where('branch_id', auth()->user()->branch->id)
-                    ->where('request_no', $request->reqno)
-                    ->where('prepared_items.id', $del)
-                    ->first();
-                $stockreq = StockRequest::where('request_no', $request->reqno)->first();
-                $items = Item::where('id', $preparedItems->itemid)->first();
-                $stock = new Stock;
+                Buffersend::where('id', $del)->update(['status'=>'out']);
+                $items = Item::where('id', Buffersend::where('id', $del)->first()->item_id)->first();
+                $stock = new Warehouse;
                 $stock->category_id = $items->category_id;
-                $stock->branch_id = auth()->user()->branch->id;
-                $stock->items_id = $preparedItems->itemid;
+                $stock->items_id = Buffersend::where('id', $del)->first()->item_id;
                 $stock->user_id = auth()->user()->id;
-                $stock->serial = mb_strtoupper($preparedItems->serial);
+                $stock->serial = mb_strtoupper(Buffersend::where('id', $del)->first()->serial);
                 $stock->status = 'in';
                 $stock->save();
+                
+                // $preparedItems = PreparedItem::select('prepared_items.items_id as itemid', 'prepared_items.serial as serial')
+                //     ->join('items', 'prepared_items.items_id', '=', 'items.id')
+                //     ->where('branch_id', auth()->user()->branch->id)
+                //     ->where('request_no', $request->reqno)
+                //     ->where('prepared_items.id', $del)
+                //     ->first();
+                // $prepared = PreparedItem::where('branch_id', auth()->user()->branch->id)
+                //     ->where('request_no', $request->reqno)
+                //     ->where('prepared_items.id', $del)
+                //     ->first();
+                // $stockreq = StockRequest::where('request_no', $request->reqno)->first();
+                // $items = Item::where('id', $preparedItems->itemid)->first();
                 $log = new UserLog;
                 $log->branch_id = auth()->user()->branch->id;
                 $log->branch = auth()->user()->branch->branch;
-                $log->activity = "RECEIVED $items->item(S/N: ".mb_strtoupper($preparedItems->serial).") with Request no. $request->reqno ";
+                $log->activity = "RECEIVED $items->item(S/N: ".mb_strtoupper(Buffersend::where('id', $del)->first()->serial).") with Request no. ".Buffersend::where('id', $del)->first()->request_number;
                 $log->user_id = auth()->user()->id;
                 $log->fullname = auth()->user()->name.' '.auth()->user()->middlename.' '.auth()->user()->lastname;
-                if ($stockreq->type == "Service") {
-                    $log->service = 'yes';
-                    if (str_contains($stockreq->ticket, 'IDS')) {
-                        $log->company = 'IDSI';
-                    }else if (str_contains($stockreq->ticket, 'PLS')) {
-                        $log->company = 'PLSI';
-                    }else if (str_contains($stockreq->ticket, 'APS')) {
-                        $log->company = 'APSOFT';
-                    }
-                }
                 $log->save();
-                $prepared->delete();
             }
         }else if ($request->Unit == 'no') {
             $count = 0;
             foreach ($request->id as $del) {
                 $count += 1;
-                $preparedItems = PreparedItem::select('prepared_items.items_id as itemid', 'prepared_items.serial as serial')
-                    ->join('items', 'prepared_items.items_id', '=', 'items.id')
-                    ->where('branch_id', auth()->user()->branch->id)
-                    ->where('request_no', $request->reqno)
-                    ->where('prepared_items.id', $del)
-                    ->first();
-                $prepared = PreparedItem::where('branch_id', auth()->user()->branch->id)
-                    ->where('request_no', $request->reqno)
-                    ->where('prepared_items.id', $del)
-                    ->first();
-                $items = Item::where('id', $preparedItems->itemid)->first();
-                $stock = new Stock;
+                $items = Item::where('id', Buffersend::where('id', $del)->first()->item_id)->first();
+                Buffersend::where('id', $del)->update(['status'=>'out']);
+                $stock = new Warehouse;
                 $stock->category_id = $items->category_id;
-                $stock->branch_id = auth()->user()->branch->id;
-                $stock->items_id = $preparedItems->itemid;
+                $stock->items_id = Buffersend::where('id', $del)->first()->item_id;
                 $stock->user_id = auth()->user()->id;
-                $stock->serial = mb_strtoupper($preparedItems->serial);
+                $stock->serial = mb_strtoupper(Buffersend::where('id', $del)->first()->serial);
                 $stock->status = 'in';
                 $stock->save();
-                $prepared->delete();
+                // $preparedItems = PreparedItem::select('prepared_items.items_id as itemid', 'prepared_items.serial as serial')
+                //     ->join('items', 'prepared_items.items_id', '=', 'items.id')
+                //     ->where('branch_id', auth()->user()->branch->id)
+                //     ->where('request_no', $request->reqno)
+                //     ->where('prepared_items.id', $del)
+                //     ->first();
+                // $prepared = PreparedItem::where('branch_id', auth()->user()->branch->id)
+                //     ->where('request_no', $request->reqno)
+                //     ->where('prepared_items.id', $del)
+                //     ->first();
+                // $items = Item::where('id', $preparedItems->itemid)->first();
+                // $stock = new Stock;
+                // $stock->category_id = $items->category_id;
+                // $stock->branch_id = auth()->user()->branch->id;
+                // $stock->items_id = $preparedItems->itemid;
+                // $stock->user_id = auth()->user()->id;
+                // $stock->serial = mb_strtoupper($preparedItems->serial);
+                // $stock->status = 'in';
+                // $stock->save();
+                // $prepared->delete();
             }
             if ($count > 1) {
                 $pcs = $count.' pcs.';
@@ -1139,40 +1153,40 @@ class StockRequestController extends Controller
             $log = new UserLog;
             $log->branch_id = auth()->user()->branch->id;
             $log->branch = auth()->user()->branch->branch;
-            $log->activity = "RECEIVED $items->item($pcs) with Request no. $request->reqno ";
+            $log->activity = "RECEIVED $items->item($pcs) with Request no. ".Buffersend::where('id', $del)->first()->request_number;
             $log->user_id = auth()->user()->id;
             $log->fullname = auth()->user()->name.' '.auth()->user()->middlename.' '.auth()->user()->lastname;
             $log->save();
         }
         
-        $preparedItem = PreparedItem::where('branch_id', auth()->user()->branch->id)
-            ->where('request_no', $request->reqno)
-            ->where('intransit', 'yes')
-            ->first();
-        if ($request->status == "COMPLETED") {
-            $reqno = StockRequest::where('request_no', $request->reqno)->first();
-            if ($preparedItem) {
-                $reqno->status = 'INCOMPLETE';
-            }else{
-                $reqno->stat = $request->status;
-            }
-        }
+        // $preparedItem = PreparedItem::where('branch_id', auth()->user()->branch->id)
+        //     ->where('request_no', $request->reqno)
+        //     ->where('intransit', 'yes')
+        //     ->first();
+        // if ($request->status == "COMPLETED") {
+        //     $reqno = StockRequest::where('request_no', $request->reqno)->first();
+        //     if ($preparedItem) {
+        //         $reqno->status = 'INCOMPLETE';
+        //     }else{
+        //         $reqno->stat = $request->status;
+        //     }
+        // }
 
-        if ($request->status  == "PARTIAL IN TRANSIT") {
-            $reqno = StockRequest::where('request_no', $request->reqno)->first();
-            $reqpending = RequestedItem::where('request_no', $request->reqno)->where('pending', '!=', '0')->first();
-            if ($preparedItem) {
-                $reqno->status = $request->status;
-            }else{
-                if ($reqpending) {
-                    $reqno->status = 'PARTIAL PENDING';
-                    $reqno->intransitval = '0';
-                }else{
-                    $reqno->stat = 'COMPLETED';
-                }
-            }  
-        }
-        $reqno->save();
+        // if ($request->status  == "PARTIAL IN TRANSIT") {
+        //     $reqno = StockRequest::where('request_no', $request->reqno)->first();
+        //     $reqpending = RequestedItem::where('request_no', $request->reqno)->where('pending', '!=', '0')->first();
+        //     if ($preparedItem) {
+        //         $reqno->status = $request->status;
+        //     }else{
+        //         if ($reqpending) {
+        //             $reqno->status = 'PARTIAL PENDING';
+        //             $reqno->intransitval = '0';
+        //         }else{
+        //             $reqno->stat = 'COMPLETED';
+        //         }
+        //     }  
+        // }
+        // $reqno->save();
         $data = '1';
         return response()->json($data);
         /*if ($preparedItem) {
@@ -1428,28 +1442,29 @@ class StockRequestController extends Controller
             $buffer = Buffer::query()
             ->where('status', 'request')
             ->update(['status' => 'For approval', 'buffers_no' => $request->retno]);
-            $buffer = new BufferNo;
-            $buffer->user_id = auth()->user()->id;
-            $buffer->status = 'For approval';
-            $buffer->buffers_no = $request->retno;
-            $buffer->save();
+            // $buffer = new BufferNo;
+            // $buffer->user_id = auth()->user()->id;
+            // $buffer->status = 'For approval';
+            // $buffer->buffers_no = $request->retno;
+            // $buffer->save();
+            $requestedItems = Buffer::query()->where('buffers_no', $request->retno)->get();
+            //to lance DB
             $buffer = new StockReqNo;
             $buffer->requested_by = auth()->user()->id;
-            $buffer->status = 1;
+            $buffer->status = 6;
             $buffer->request_type = 1;
+            $buffer->needdate = date('Y-m-d');
             $buffer->request_number = $request->retno;
             $buffer->save();
-            $requestedItems = Buffer::query()->where('buffers_no', $request->retno)->get();
             foreach ($requestedItems as $RequestedItem) {
                 StockReq::create([
                     'request_number'=>$request->retno,
-                    'category'=>$RequestedItem->category_id,
                     'item'=>$RequestedItem->items_id,
                     'quantity'=>$RequestedItem->qty,
-                    'status'=>1,
-                    'user_id'=>1
+                    'pending'=>$RequestedItem->qty
                 ]);
             }
+            
             $bcc = \config('email.bcc');
             $no = $buffer->buffers_no;
             $table = Buffer::query()->select('category', 'item', 'qty')
@@ -1465,12 +1480,12 @@ class StockRequestController extends Controller
                 $role->where('name', '=', 'Warehouse Administrator');
             })->first();
             $data = array('table'=> $table, 'RM'=>$clients->name, 'reference'=>$no, 'role'=>'rm');
-            Mail::send('buffer', $data, function($message) use($no, $bcc) {
-                $message->to('jolopez@ideaserv.com.ph', auth()->user()->name)->subject
-                    ('BR no. '.$no);
-                //$message->attachData($excel, 'BR No. '.$no.'.xlsx');
-                $message->from('noreply@ideaserv.com.ph', 'BSMS');
-            });
+            // Mail::send('buffer', $data, function($message) use($no, $bcc) {
+            //     $message->to('jolopez@ideaserv.com.ph', auth()->user()->name)->subject
+            //         ('BR no. '.$no);
+            //     //$message->attachData($excel, 'BR No. '.$no.'.xlsx');
+            //     $message->from('noreply@ideaserv.com.ph', 'BSMS');
+            // });
 
             return response()->json($buffer);
         }
@@ -1514,18 +1529,22 @@ class StockRequestController extends Controller
     }
     public function buffersenditems(Request $request)
     {
-        $buffer = Buffersend::query()->select('buffersend.*', 'item', 'category','category_id')
-                ->where('buffers_no', $request->buffers_no)
-                ->where('status', 'For receiving')
-                ->join('items', 'items.id', 'items_id')
+        $buffer = Buffersend::query()->select('stocks.*', 'item', 'category','category_id', 'UOM as uom')
+                ->where('request_number', $request->buffers_no)
+                ->whereIn('status', ['prep', 'incomplete'])
+                ->groupBy('item_id', 'serial')
+                ->join('items', 'items.id', 'item_id')
                 ->join('categories', 'categories.id', 'category_id')
-                ->groupBy('items_id');
+                ->get();
         return DataTables::of($buffer)
             ->addColumn('updated_at', function (Buffersend $buffer){
                 return Carbon::parse($buffer->updated_at->toFormattedDateString().' '.$buffer->updated_at->toTimeString())->isoFormat('lll');
             })
             ->addColumn('qty', function (Buffersend $buffer){
-                $qty = Buffersend::query()->where('status', 'For receiving')->where('buffers_no', $buffer->buffers_no)->where('items_id', $buffer->items_id)->count();
+                if($buffer->serial != 'N/A'){
+                    return '1';
+                }
+                $qty = Buffersend::query()->whereIn('status', ['prep', 'incomplete'])->where('request_number', $buffer->buffers_no)->where('item_id', $buffer->item_id)->count();
                 return $qty;
             })
             ->addColumn('item', function (Buffersend $buffer){
@@ -1631,76 +1650,125 @@ class StockRequestController extends Controller
     }
     public function bufferitem(Request $request)
     {
-        $buffers = Buffer::query()
-            ->select('buffers.id', 'category', 'item', 'qty', 'buffers.category_id as cat_id', 'items_id', 'pending')
-            ->join('categories', 'categories.id', 'buffers.category_id')
-            ->join('items', 'items.id', 'items_id')
+        $buffers = BufferItem::query()
+            ->select('stock_request.id', 'category', 'items.item', 'quantity', 'items.category_id as cat_id', 'stock_request.item as item_id', 'pending')
+            ->join('items', 'items.id', 'stock_request.item')
+            ->join('categories', 'categories.id', 'items.category_id')
             ->where('pending', '!=', 0)
-            ->wherein('status', ['For approval', 'Approved'])
-            ->where('buffers_no', $request->buffers_no)
+            ->where('request_number', $request->buffers_no)
             ->get();
         return DataTables::of($buffers)
         
-        ->addColumn('item', function (Buffer $buffer){
+        ->addColumn('item', function (BufferItem $buffer){
             return strtoupper($buffer->item);
         })
         ->make(true);
     }
     public function bufferapproved(Request $request)
     {
-        BufferNo::where('status', 'For approval')->where('buffers_no', $request->buffers_no)->update(['status' => 'Approved']);
+        // BufferNo::where('status', 'For approval')->where('buffers_no', $request->buffers_no)->update(['status' => 'Approved']);
         Buffer::where('status', 'For approval')->where('buffers_no', $request->buffers_no)->update(['status'=>'Approved']);
-        $buffer = Buffer::where('status', 'Approved')->where('buffers_no', $request->buffers_no)->get()->all();
-        $bcc = \config('email.bcc');
-        $no = $request->buffers_no;
-        $table = Buffer::query()->select('category', 'item', 'qty')
-            ->where('buffers_no', $request->buffers_no)
-            ->where('status', 'Approved')
-            ->join('categories', 'categories.id', 'buffers.category_id')
-            ->join('items', 'items.id', 'buffers.items_id')
-            ->orderBy('category', 'ASC')
-            ->orderBy('item', 'ASC')
-            ->get()->all();
-        //$excel = Excel::raw(new ExcelExport($buffer->buffers_no, 'PR'), BaseExcel::XLSX);
-        $clients = User::whereHas('roles', function($role) {
-            $role->where('name', '=', 'Main Warehouse Manager');
-        })->first();
-        $data = array('table'=> $table, 'RM'=>'test', 'reference'=>$no, 'role'=>'mwm');
-        Mail::send('buffer', $data, function($message) use($no, $bcc) {
-            $message->to('jolopez@ideaserv.com.ph', auth()->user()->name)->subject
-                ('BR no. '.$no);
-            //$message->attachData($excel, 'BR No. '.$no.'.xlsx');
-            $message->from('noreply@ideaserv.com.ph', 'BSMS');
-        });
+        StockReqNo::where('request_number', $request->buffers_no)->update(['status'=> 1]);
+        // $buffer = Buffer::where('status', 'Approved')->where('buffers_no', $request->buffers_no)->get()->all();
+        // $bcc = \config('email.bcc');
+        // $no = $request->buffers_no;
+        // $table = Buffer::query()->select('category', 'item', 'qty')
+        //     ->where('buffers_no', $request->buffers_no)
+        //     ->where('status', 'Approved')
+        //     ->join('categories', 'categories.id', 'buffers.category_id')
+        //     ->join('items', 'items.id', 'buffers.items_id')
+        //     ->orderBy('category', 'ASC')
+        //     ->orderBy('item', 'ASC')
+        //     ->get()->all();
+        // //$excel = Excel::raw(new ExcelExport($buffer->buffers_no, 'PR'), BaseExcel::XLSX);
+        // $clients = User::whereHas('roles', function($role) {
+        //     $role->where('name', '=', 'Main Warehouse Manager');
+        // })->first();
+        // $data = array('table'=> $table, 'RM'=>'test', 'reference'=>$no, 'role'=>'mwm');
+        // Mail::send('buffer', $data, function($message) use($no, $bcc) {
+        //     $message->to('jolopez@ideaserv.com.ph', auth()->user()->name)->subject
+        //         ('BR no. '.$no);
+        //     //$message->attachData($excel, 'BR No. '.$no.'.xlsx');
+        //     $message->from('noreply@ideaserv.com.ph', 'BSMS');
+        // });
 
         return response()->json(true);
 
     }
+
     public function bufferlist(Request $request)
     {
         if (auth()->user()->hasanyrole('Warehouse Manager', 'Warehouse Administrator') || auth()->user()->id == 283 || auth()->user()->id == 110) {
-            $buffer = BufferNo::query()
-                ->wherein('status', ['For approval', 'Approved', 'Partial', 'For receiving'])
+            $buffer = StockReqNo::query()
+                ->wherein('request_type', [6, 1, 3, 4, 24, 17])
+                ->groupby('request_number')
                 ->get();
             return DataTables::of($buffer)
-                ->addColumn('updated_at', function (BufferNo $buffer){
-                    return Carbon::parse($buffer->updated_at->toFormattedDateString().' '.$buffer->updated_at->toTimeString())->isoFormat('lll');
+                ->addColumn('status', function (StockReqNo $buffer){
+                    if ($buffer->status == 6) {
+                        return 'For Approval';
+                    }
+                    else if ($buffer->status == 1) {
+                        return 'Pending';
+                    }
+                    else if ($buffer->status == 3) {
+                        return 'For receiving';
+                    }
+                    else if ($buffer->status == 4) {
+                        return 'Partial for receiving';
+                    }
+                    else if ($buffer->status == 24) {
+                        return 'Partial pending';
+                    }
+                    else if ($buffer->status == 17) {
+                        return 'Incomplete for receiving';
+                    }
                 })
-                ->addColumn('user', function (BufferNo $buffer){
-                    return strtoupper(User::query()->where('id', $buffer->user_id)->first());
+                ->addColumn('updated_at', function (StockReqNo $buffer){
+                    return Carbon::parse($buffer->updated_at->toFormattedDateString().' '.$buffer->updated_at->toTimeString())->isoFormat('lll');
                 })
                 ->make(true);
         }
         if (auth()->user()->hasanyrole('Main Warehouse Manager')) {
-            $buffer = BufferNo::query()
-                ->wherein('status', ['Approved', 'Partial', 'For receiving', 'For Approval'])
+            // $buffer = BufferNo::query()
+            //     ->wherein('status', ['Approved', 'Partial', 'For receiving', 'For Approval'])
+            //     ->get();
+            // return DataTables::of($buffer)
+            //     ->addColumn('updated_at', function (BufferNo $buffer){
+            //         return Carbon::parse($buffer->created_at->toFormattedDateString().' '.$buffer->created_at->toTimeString())->isoFormat('lll');
+            //     })
+            //     ->addColumn('user', function (BufferNo $buffer){
+            //         return strtoupper(User::query()->where('id', $buffer->user_id)->first()->name.' '.User::query()->where('id', $buffer->user_id)->first()->lastname);
+            //     })
+            //     ->make(true);
+
+            $buffer = StockReqNo::query()
+                ->wherein('request_type', [6, 1, 3, 4, 24, 17])
+                ->groupby('request_number')
                 ->get();
             return DataTables::of($buffer)
-                ->addColumn('updated_at', function (BufferNo $buffer){
-                    return Carbon::parse($buffer->created_at->toFormattedDateString().' '.$buffer->created_at->toTimeString())->isoFormat('lll');
+                ->addColumn('status', function (StockReqNo $buffer){
+                    if ($buffer->status == 6) {
+                        return 'For Approval';
+                    }
+                    else if ($buffer->status == 1) {
+                        return 'Pending';
+                    }
+                    else if ($buffer->status == 3) {
+                        return 'For receiving';
+                    }
+                    else if ($buffer->status == 4) {
+                        return 'Partial for receiving';
+                    }
+                    else if ($buffer->status == 24) {
+                        return 'Partial pending';
+                    }
+                    else if ($buffer->status == 17) {
+                        return 'Incomplete for receiving';
+                    }
                 })
-                ->addColumn('user', function (BufferNo $buffer){
-                    return strtoupper(User::query()->where('id', $buffer->user_id)->first()->name.' '.User::query()->where('id', $buffer->user_id)->first()->lastname);
+                ->addColumn('updated_at', function (StockReqNo $buffer){
+                    return Carbon::parse($buffer->updated_at->toFormattedDateString().' '.$buffer->updated_at->toTimeString())->isoFormat('lll');
                 })
                 ->make(true);
         }

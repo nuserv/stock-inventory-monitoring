@@ -216,6 +216,7 @@ Route::get('checkserials', 'StockRequestController@checkserials');//->middleware
 Route::get('servicerequest', 'StockRequestController@servicerequest');//->middleware('ajax');
 Route::get('getuomq', 'StockRequestController@getuomq');//->middleware('ajax');
 Route::get('getcon', 'StockRequestController@getcon');//->middleware('ajax');
+Route::put('updatestat', 'StockRequestController@updatestat');//->middleware('ajax');
 //Route::get('read/{id}', 'StockRequestController@read')->name('stock.read');
 Route::delete('delete/{id}', 'StockRequestController@destroy')->middleware('ajax');
 Route::get('send/{id}', 'StockRequestController@getsendDetails');//->middleware('ajax');
