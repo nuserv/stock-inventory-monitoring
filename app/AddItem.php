@@ -4,7 +4,7 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class StockReq extends Model
+class AddItem extends Model
 {
     protected $guarded = [];
     // protected $table = 'buffers_no';
