@@ -183,6 +183,7 @@ Route::put('repairedupdate', 'DefectiveController@repairedupdate')->middleware('
 
 Route::put('bufferupdate', 'StockRequestController@bufferupdate');//->middleware('ajax');
 Route::put('bufferreceived', 'StockRequestController@bufferreceived');//->middleware('ajax');
+Route::put('buffreceived', 'StockRequestController@buffreceived');//->middleware('ajax');
 Route::delete('bufferdelete', 'StockRequestController@bufferdelete');//->middleware('ajax');
 Route::put('buffersend', 'StockRequestController@buffersend');//->middleware('ajax');
 Route::get('buffersenditems', 'StockRequestController@buffersenditems');//->middleware('ajax');

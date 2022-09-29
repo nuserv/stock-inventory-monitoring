@@ -105,7 +105,7 @@ $(document).on('click', '#rec_Btn', function(){
                 id.push(value.id);
                 if (eachcount == datas.length) {
                     $.ajax({
-                        url: 'storerreceived',
+                        url: 'buffreceived',
                         headers: {
                             'X-CSRF-TOKEN': $('meta[name="ctok"]').attr('content')
                         },
@@ -148,7 +148,7 @@ $(document).on('click', '#rec_Btn', function(){
                         });
                         if (eachcount == datas.length) {
                             $.ajax({
-                                url: 'storerreceived',
+                                url: 'buffreceived',
                                 headers: {
                                     'X-CSRF-TOKEN': $('meta[name="ctok"]').attr('content')
                                 },

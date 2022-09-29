@@ -1075,138 +1075,138 @@ class StockRequestController extends Controller
         return response()->json($update);
     }
 
-    // public function received(Request $request)
-    // {
-    //     $data = '0';
-    //     if ($request->Unit == 'yes') {
-    //         foreach ($request->id as $del) {
-    //             Buffersend::where('id', $del)->update(['status'=>'out']);
-    //             $items = Item::where('id', Buffersend::where('id', $del)->first()->item_id)->first();
-    //             $stock = new Warehouse;
-    //             $stock->category_id = $items->category_id;
-    //             $stock->items_id = Buffersend::where('id', $del)->first()->item_id;
-    //             $stock->user_id = auth()->user()->id;
-    //             $stock->serial = mb_strtoupper(Buffersend::where('id', $del)->first()->serial);
-    //             $stock->status = 'in';
-    //             $stock->save();
+    public function buffreceived(Request $request)
+    {
+        $data = '0';
+        if ($request->Unit == 'yes') {
+            foreach ($request->id as $del) {
+                Buffersend::where('id', $del)->update(['status'=>'out']);
+                $items = Item::where('id', Buffersend::where('id', $del)->first()->item_id)->first();
+                $stock = new Warehouse;
+                $stock->category_id = $items->category_id;
+                $stock->items_id = Buffersend::where('id', $del)->first()->item_id;
+                $stock->user_id = auth()->user()->id;
+                $stock->serial = mb_strtoupper(Buffersend::where('id', $del)->first()->serial);
+                $stock->status = 'in';
+                $stock->save();
                 
-    //             // $preparedItems = PreparedItem::select('prepared_items.items_id as itemid', 'prepared_items.serial as serial')
-    //             //     ->join('items', 'prepared_items.items_id', '=', 'items.id')
-    //             //     ->where('branch_id', auth()->user()->branch->id)
-    //             //     ->where('request_no', $request->reqno)
-    //             //     ->where('prepared_items.id', $del)
-    //             //     ->first();
-    //             // $prepared = PreparedItem::where('branch_id', auth()->user()->branch->id)
-    //             //     ->where('request_no', $request->reqno)
-    //             //     ->where('prepared_items.id', $del)
-    //             //     ->first();
-    //             // $stockreq = StockRequest::where('request_no', $request->reqno)->first();
-    //             // $items = Item::where('id', $preparedItems->itemid)->first();
-    //             $log = new UserLog;
-    //             $log->branch_id = auth()->user()->branch->id;
-    //             $log->branch = auth()->user()->branch->branch;
-    //             $log->activity = "RECEIVED $items->item(S/N: ".mb_strtoupper(Buffersend::where('id', $del)->first()->serial).") with Request no. ".Buffersend::where('id', $del)->first()->request_number;
-    //             $log->user_id = auth()->user()->id;
-    //             $log->fullname = auth()->user()->name.' '.auth()->user()->middlename.' '.auth()->user()->lastname;
-    //             $log->save();
-    //         }
-    //     }else if ($request->Unit == 'no') {
-    //         $count = 0;
-    //         foreach ($request->id as $del) {
-    //             $count += 1;
-    //             $items = Item::where('id', Buffersend::where('id', $del)->first()->item_id)->first();
-    //             Buffersend::where('id', $del)->update(['status'=>'out']);
-    //             $stock = new Warehouse;
-    //             $stock->category_id = $items->category_id;
-    //             $stock->items_id = Buffersend::where('id', $del)->first()->item_id;
-    //             $stock->user_id = auth()->user()->id;
-    //             $stock->serial = mb_strtoupper(Buffersend::where('id', $del)->first()->serial);
-    //             $stock->status = 'in';
-    //             $stock->save();
-    //             // $preparedItems = PreparedItem::select('prepared_items.items_id as itemid', 'prepared_items.serial as serial')
-    //             //     ->join('items', 'prepared_items.items_id', '=', 'items.id')
-    //             //     ->where('branch_id', auth()->user()->branch->id)
-    //             //     ->where('request_no', $request->reqno)
-    //             //     ->where('prepared_items.id', $del)
-    //             //     ->first();
-    //             // $prepared = PreparedItem::where('branch_id', auth()->user()->branch->id)
-    //             //     ->where('request_no', $request->reqno)
-    //             //     ->where('prepared_items.id', $del)
-    //             //     ->first();
-    //             // $items = Item::where('id', $preparedItems->itemid)->first();
-    //             // $stock = new Stock;
-    //             // $stock->category_id = $items->category_id;
-    //             // $stock->branch_id = auth()->user()->branch->id;
-    //             // $stock->items_id = $preparedItems->itemid;
-    //             // $stock->user_id = auth()->user()->id;
-    //             // $stock->serial = mb_strtoupper($preparedItems->serial);
-    //             // $stock->status = 'in';
-    //             // $stock->save();
-    //             // $prepared->delete();
-    //         }
-    //         if ($count > 1) {
-    //             $pcs = $count.' pcs.';
-    //         }else{
-    //             $pcs = $count.' pc.';
-    //         }
+                // $preparedItems = PreparedItem::select('prepared_items.items_id as itemid', 'prepared_items.serial as serial')
+                //     ->join('items', 'prepared_items.items_id', '=', 'items.id')
+                //     ->where('branch_id', auth()->user()->branch->id)
+                //     ->where('request_no', $request->reqno)
+                //     ->where('prepared_items.id', $del)
+                //     ->first();
+                // $prepared = PreparedItem::where('branch_id', auth()->user()->branch->id)
+                //     ->where('request_no', $request->reqno)
+                //     ->where('prepared_items.id', $del)
+                //     ->first();
+                // $stockreq = StockRequest::where('request_no', $request->reqno)->first();
+                // $items = Item::where('id', $preparedItems->itemid)->first();
+                $log = new UserLog;
+                $log->branch_id = auth()->user()->branch->id;
+                $log->branch = auth()->user()->branch->branch;
+                $log->activity = "RECEIVED $items->item(S/N: ".mb_strtoupper(Buffersend::where('id', $del)->first()->serial).") with Request no. ".Buffersend::where('id', $del)->first()->request_number;
+                $log->user_id = auth()->user()->id;
+                $log->fullname = auth()->user()->name.' '.auth()->user()->middlename.' '.auth()->user()->lastname;
+                $log->save();
+            }
+        }else if ($request->Unit == 'no') {
+            $count = 0;
+            foreach ($request->id as $del) {
+                $count += 1;
+                $items = Item::where('id', Buffersend::where('id', $del)->first()->item_id)->first();
+                Buffersend::where('id', $del)->update(['status'=>'out']);
+                $stock = new Warehouse;
+                $stock->category_id = $items->category_id;
+                $stock->items_id = Buffersend::where('id', $del)->first()->item_id;
+                $stock->user_id = auth()->user()->id;
+                $stock->serial = mb_strtoupper(Buffersend::where('id', $del)->first()->serial);
+                $stock->status = 'in';
+                $stock->save();
+                // $preparedItems = PreparedItem::select('prepared_items.items_id as itemid', 'prepared_items.serial as serial')
+                //     ->join('items', 'prepared_items.items_id', '=', 'items.id')
+                //     ->where('branch_id', auth()->user()->branch->id)
+                //     ->where('request_no', $request->reqno)
+                //     ->where('prepared_items.id', $del)
+                //     ->first();
+                // $prepared = PreparedItem::where('branch_id', auth()->user()->branch->id)
+                //     ->where('request_no', $request->reqno)
+                //     ->where('prepared_items.id', $del)
+                //     ->first();
+                // $items = Item::where('id', $preparedItems->itemid)->first();
+                // $stock = new Stock;
+                // $stock->category_id = $items->category_id;
+                // $stock->branch_id = auth()->user()->branch->id;
+                // $stock->items_id = $preparedItems->itemid;
+                // $stock->user_id = auth()->user()->id;
+                // $stock->serial = mb_strtoupper($preparedItems->serial);
+                // $stock->status = 'in';
+                // $stock->save();
+                // $prepared->delete();
+            }
+            if ($count > 1) {
+                $pcs = $count.' pcs.';
+            }else{
+                $pcs = $count.' pc.';
+            }
             
-    //         $log = new UserLog;
-    //         $log->branch_id = auth()->user()->branch->id;
-    //         $log->branch = auth()->user()->branch->branch;
-    //         $log->activity = "RECEIVED $items->item($pcs) with Request no. ".Buffersend::where('id', $del)->first()->request_number;
-    //         $log->user_id = auth()->user()->id;
-    //         $log->fullname = auth()->user()->name.' '.auth()->user()->middlename.' '.auth()->user()->lastname;
-    //         $log->save();
-    //     }
+            $log = new UserLog;
+            $log->branch_id = auth()->user()->branch->id;
+            $log->branch = auth()->user()->branch->branch;
+            $log->activity = "RECEIVED $items->item($pcs) with Request no. ".Buffersend::where('id', $del)->first()->request_number;
+            $log->user_id = auth()->user()->id;
+            $log->fullname = auth()->user()->name.' '.auth()->user()->middlename.' '.auth()->user()->lastname;
+            $log->save();
+        }
         
-    //     // $preparedItem = PreparedItem::where('branch_id', auth()->user()->branch->id)
-    //     //     ->where('request_no', $request->reqno)
-    //     //     ->where('intransit', 'yes')
-    //     //     ->first();
-    //     // if ($request->status == "COMPLETED") {
-    //     //     $reqno = StockRequest::where('request_no', $request->reqno)->first();
-    //     //     if ($preparedItem) {
-    //     //         $reqno->status = 'INCOMPLETE';
-    //     //     }else{
-    //     //         $reqno->stat = $request->status;
-    //     //     }
-    //     // }
+        // $preparedItem = PreparedItem::where('branch_id', auth()->user()->branch->id)
+        //     ->where('request_no', $request->reqno)
+        //     ->where('intransit', 'yes')
+        //     ->first();
+        // if ($request->status == "COMPLETED") {
+        //     $reqno = StockRequest::where('request_no', $request->reqno)->first();
+        //     if ($preparedItem) {
+        //         $reqno->status = 'INCOMPLETE';
+        //     }else{
+        //         $reqno->stat = $request->status;
+        //     }
+        // }
 
-    //     // if ($request->status  == "PARTIAL IN TRANSIT") {
-    //     //     $reqno = StockRequest::where('request_no', $request->reqno)->first();
-    //     //     $reqpending = RequestedItem::where('request_no', $request->reqno)->where('pending', '!=', '0')->first();
-    //     //     if ($preparedItem) {
-    //     //         $reqno->status = $request->status;
-    //     //     }else{
-    //     //         if ($reqpending) {
-    //     //             $reqno->status = 'PARTIAL PENDING';
-    //     //             $reqno->intransitval = '0';
-    //     //         }else{
-    //     //             $reqno->stat = 'COMPLETED';
-    //     //         }
-    //     //     }  
-    //     // }
-    //     // $reqno->save();
-    //     $data = '1';
-    //     return response()->json($data);
-    //     /*if ($preparedItem) {
-    //         $reqno = StockRequest::where('request_no', $request->reqno)->first();
-    //         if ($reqno->status == 'PARTIAL IN TRANSIT') {
-    //             $reqno->status = $request->status;
-    //         }else{
-    //             $reqno->status = 'INCOMPLETE';
-    //         }
-    //         $reqno->save();
-    //         $data = '1';
-    //     }else{
-    //         $reqno = StockRequest::where('request_no', $request->reqno)->first();
-    //         if ($reqno->status == 'PARTIAL IN TRANSIT') {
-    //             $reqno->status = 'PARTIAL';
-    //         }
-    //         $reqno->stat = $request->status;
-    //         $reqno->save();
-    //     }*/
-    // }
+        // if ($request->status  == "PARTIAL IN TRANSIT") {
+        //     $reqno = StockRequest::where('request_no', $request->reqno)->first();
+        //     $reqpending = RequestedItem::where('request_no', $request->reqno)->where('pending', '!=', '0')->first();
+        //     if ($preparedItem) {
+        //         $reqno->status = $request->status;
+        //     }else{
+        //         if ($reqpending) {
+        //             $reqno->status = 'PARTIAL PENDING';
+        //             $reqno->intransitval = '0';
+        //         }else{
+        //             $reqno->stat = 'COMPLETED';
+        //         }
+        //     }  
+        // }
+        // $reqno->save();
+        $data = '1';
+        return response()->json($data);
+        /*if ($preparedItem) {
+            $reqno = StockRequest::where('request_no', $request->reqno)->first();
+            if ($reqno->status == 'PARTIAL IN TRANSIT') {
+                $reqno->status = $request->status;
+            }else{
+                $reqno->status = 'INCOMPLETE';
+            }
+            $reqno->save();
+            $data = '1';
+        }else{
+            $reqno = StockRequest::where('request_no', $request->reqno)->first();
+            if ($reqno->status == 'PARTIAL IN TRANSIT') {
+                $reqno->status = 'PARTIAL';
+            }
+            $reqno->stat = $request->status;
+            $reqno->save();
+        }*/
+    }
 
     public function received(Request $request)
     {
