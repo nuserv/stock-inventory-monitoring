@@ -113,7 +113,7 @@
                 </table>
                 <br>
                 <h5 class="modal-title w-100 text-center" id='intransitlabel'>INTRANSIT ITEM DETAILS</h5>
-                <table class="table-hover table intransitDetails" id="intransitDetails" style="font-size:80%">
+                <table class="table-hover table intransitDetails" id="intransitDetails" style="font-size:80%;width:100%">
                     <thead class="thead-dark">
                         <th>Delivery Schedule</th>
                         <th>Description</th>
