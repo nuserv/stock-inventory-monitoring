@@ -1068,9 +1068,19 @@ class StockRequestController extends Controller
             Buffersend::where('request_number', $request->reqno)->whereIn('status', ['prep'])->update([
                 'status'=>'incomplete'
             ]);
+            $userlogs = new UserLogs;
+            $userlogs->user_id = auth()->user()->id;
+            $userlogs->activity = "RECEIVED INCOMPLETE SERVICE UNIT STOCK REQUEST: User successfully received incomplete requested items of Service Unit Stock Request No. $request->reqno.";
+            $userlogs->save();
         }
+        
         if ($request->status == 8) {
             StockReqNo::where('request_number', $request->reqno)->update(['status'=>$request->status, 'verify'=>'Confirmed']);
+            $userlogs = new UserLogs;
+            $userlogs->user_id = auth()->user()->id;
+            $userlogs->activity = "RECEIVED COMPLETE SERVICE UNIT STOCK REQUEST: User successfully received complete requested items of Service Unit Stock Request No. $request->reqno.";
+            $userlogs->save();
+
         }
         return response()->json($update);
     }
@@ -1581,7 +1591,11 @@ class StockRequestController extends Controller
                     'pending'=>$RequestedItem->qty
                 ]);
             }
-            
+            $userlogs = new UserLogs;
+            $userlogs->user_id = auth()->user()->id;
+            $userlogs->activity = "NEW SERVICE UNIT STOCK REQUEST: User successfully submitted Service Unit Stock Request No. $request->retno.";
+            $userlogs->save();
+
             $bcc = \config('email.bcc');
             $no = $buffer->buffers_no;
             $table = Buffer::query()->select('category', 'item', 'qty')
