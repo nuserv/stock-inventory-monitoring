@@ -49,12 +49,12 @@
         </style>
     </head>
     <body>
-        <div class="flex-center">
+        <div class="container-fluid">
             <div>
                 {{-- @yield('code') --}}
-                Page Not Found... <br><hr>
+                Page Not Found... 
             </div>
-
+            <br><hr>
             <div style="padding: 10px;">
                 {{-- @yield('message') --}}
                 The page you are trying to access has been moved. Please click this <a href="https://stockmonitoring.apsoft.com.ph">link</a> to proceed.
