@@ -49,7 +49,7 @@
         </style>
     </head>
     <body>
-        <div class="flex-center position-ref full-height">
+        <div class="flex-center">
             <div>
                 {{-- @yield('code') --}}
                 Page Not Found... <br><hr>
