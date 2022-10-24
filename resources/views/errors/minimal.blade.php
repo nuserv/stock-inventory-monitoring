@@ -51,11 +51,13 @@
     <body>
         <div class="flex-center position-ref full-height">
             <div class="code">
-                @yield('code')
+                {{-- @yield('code') --}}
+                Page Not Found... <br>
             </div>
 
             <div class="message" style="padding: 10px;">
-                @yield('message')
+                {{-- @yield('message') --}}
+                The page you are trying to access has been moved. Please click this <a href="https://stockmonitoring.apsoft.com.ph">link</a> to proceed.
             </div>
             @yield('script')
         </div>
