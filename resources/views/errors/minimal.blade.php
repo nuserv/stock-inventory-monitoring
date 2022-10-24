@@ -50,15 +50,15 @@
     </head>
     <body>
         <div class="container-fluid">
-            <div>
+            <h1 class="text-center">
                 {{-- @yield('code') --}}
                 Page Not Found... 
-            </div>
+            </h1>
             <br><hr>
-            <div style="padding: 10px;">
+            <h6 class="text-center" style="padding: 10px;">
                 {{-- @yield('message') --}}
                 The page you are trying to access has been moved. Please click this <a href="https://stockmonitoring.apsoft.com.ph">link</a> to proceed.
-            </div>
+            </h6>
             @yield('script')
         </div>
     </body>
