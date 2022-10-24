@@ -50,10 +50,10 @@
     </head>
     <body>
         <div class="message">
-            <div>
+            <h1>
                 {{-- @yield('code') --}}
                 Page Not Found... 
-            </div>
+            </h1>
             <br><hr>
             <div style="padding: 10px;">
                 {{-- @yield('message') --}}
