@@ -301,10 +301,10 @@ $(document).on('click', '.reqBtn', function(){
     item = thisdata.items_id;
     qty = thisdata.initial - thisdata.stockin;
     $('#qty').attr({
-        "min" : 0//qty,
-        // "max" : thisdata.initial
+        "min" : qty,
+        "max" : thisdata.initial
     });
-    $('#qty').val(0);
+    $('#qty').val(qty);
 });
 
 // $(document).on('keyup', '#qty', function(){
@@ -330,9 +330,6 @@ $(document).on('click', '.reqBtn', function(){
 
 $(document).on('click', '#req', function(){
     var proceed = false;
-    if ($('#qty').val() <= 0) {
-        return false;
-    }
     $.ajax({
         type:'get',
         url:'checkreqcode',

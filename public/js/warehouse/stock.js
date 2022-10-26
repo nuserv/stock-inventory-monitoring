@@ -88,6 +88,7 @@ $(document).ready(function()
 });
 
 $(document).on('click', '.reqBtn', function(){
+    
     var thisdata = table.row( $(this).parents('tr') ).data();
     $('#qtyModal').modal({backdrop: 'static', keyboard: false});
     $('#requestcategory').val(thisdata.category);
@@ -96,12 +97,15 @@ $(document).on('click', '.reqBtn', function(){
     item = thisdata.items_id;
     qty = thisdata.initial - thisdata.quantity;
     $('#qty').attr({
-        "min" : qty
+        "min" : 0//qty
     });
-    $('#qty').val(qty);
+    $('#qty').val(0);
 });
 
 $(document).on('click', '#req', function(){
+    if ($('#qty').val() <= 0) {
+        return false;
+    }
     $('#loading').show();
     $('#qtyModal').toggle();
     $.ajax({
