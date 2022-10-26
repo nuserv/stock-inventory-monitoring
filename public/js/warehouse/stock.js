@@ -99,6 +99,7 @@ $(document).on('click', '.reqBtn', function(){
     $('#qty').attr({
         "min" : 0//qty
     });
+    $('#qty').prop('readonly', false);
     $('#qty').val(0);
 });
 
