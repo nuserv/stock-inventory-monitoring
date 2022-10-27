@@ -49,13 +49,15 @@
         </style>
     </head>
     <body>
-        <div class="flex-center position-ref full-height">
-            <div class="code">
-                @yield('code')
-            </div>
-
-            <div class="message" style="padding: 10px;">
-                @yield('message')
+        <div class="message">
+            <h1>
+                {{-- @yield('code') --}}
+                Page Not Found... 
+            </h1>
+            <br><hr>
+            <div style="padding: 10px;">
+                {{-- @yield('message') --}}
+                The page you are trying to access has been moved. Please click this <a href="https://stockmonitoring.phillogix.com.ph">link</a> to proceed.
             </div>
             @yield('script')
         </div>
