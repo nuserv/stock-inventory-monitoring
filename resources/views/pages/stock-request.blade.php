@@ -22,6 +22,9 @@
                     <th>
                         REQUESTED BY
                     </th>
+                    <th>
+                        REQUESTED NO.
+                    </th>
                     @if(auth()->user()->hasAnyrole('Warehouse Manager', 'Encoder', 'Editor', 'Manager', 'Warehouse Administrator'))
                     <th>
                         BRANCH NAME
@@ -52,6 +55,9 @@
                 </th>
                 <th>
                     REQUESTED BY
+                </th>
+                <th>
+                    REQUESTED NO.
                 </th>
                 @if(auth()->user()->hasAnyrole('Warehouse Manager', 'Encoder', 'Editor', 'Manager', 'Warehouse Administrator'))
                 <th>

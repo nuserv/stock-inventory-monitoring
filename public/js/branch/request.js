@@ -35,6 +35,7 @@ $(document).ready(function()
         columns: [
             { data: 'created_at', name:'created_at', "width": "14%" },
             { data: 'reqBy', name:'reqBy', "width": "14%"},
+            { data: 'request_no', name:'request_no', "width": "14%"},
             { data: 'type', name:'type', "width": "14%"},
             { data: 'status', name:'status', "width": "14%"},
             { data: 'ticket', name:'ticket', "width": "14%"}
