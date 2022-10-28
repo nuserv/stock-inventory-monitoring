@@ -183,7 +183,7 @@ Route::put('repairedupdate', 'DefectiveController@repairedupdate')->middleware('
 
 Route::put('bufferupdate', 'StockRequestController@bufferupdate');//->middleware('ajax');
 Route::put('bufferreceived', 'StockRequestController@bufferreceived');//->middleware('ajax');
-Route::put('buffreceived', 'StockRequestController@buffreceived');//->middleware('ajax');
+Route::any('buffreceived', 'StockRequestController@buffreceived');//->middleware('ajax');
 Route::delete('bufferdelete', 'StockRequestController@bufferdelete');//->middleware('ajax');
 Route::put('buffersend', 'StockRequestController@buffersend');//->middleware('ajax');
 Route::get('buffersenditems', 'StockRequestController@buffersenditems');//->middleware('ajax');
@@ -217,6 +217,7 @@ Route::get('checkserials', 'StockRequestController@checkserials');//->middleware
 Route::get('servicerequest', 'StockRequestController@servicerequest');//->middleware('ajax');
 Route::get('getuomq', 'StockRequestController@getuomq');//->middleware('ajax');
 Route::get('getcon', 'StockRequestController@getcon');//->middleware('ajax');
+Route::get('getstockid', 'StockRequestController@getstockid');//->middleware('ajax');
 Route::put('updatestat', 'StockRequestController@updatestat');//->middleware('ajax');
 //Route::get('read/{id}', 'StockRequestController@read')->name('stock.read');
 Route::delete('delete/{id}', 'StockRequestController@destroy')->middleware('ajax');

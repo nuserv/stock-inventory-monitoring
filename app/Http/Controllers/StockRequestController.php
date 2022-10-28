@@ -29,6 +29,7 @@ use App\Branch;
 use App\User;
 use App\Initial;
 use App\UserLog;
+use App\UserLogs;
 use App\Defective;
 use Mail;
 use Config;
@@ -378,6 +379,12 @@ class StockRequestController extends Controller
         $data = PreparedItem::select('id')->where('request_no', $request->reqno)->where('items_id', $request->itemsid)->get();
         return response()->json($data);
     }
+
+    public function getstockid(Request $request){
+        $data = Buffersend::select('id')->where('request_number', $request->reqno)->where('item_id', $request->itemsid)->get();
+        return response()->json($data);
+    }
+
     public function getintransitDetails(Request $request, $id){
         $consumable = PreparedItem::select('uom', 'prepared_items.id as id', 'items_id', 'request_no', 'serial', 'schedule')
             ->where('request_no', $id)
@@ -1088,7 +1095,7 @@ class StockRequestController extends Controller
         }
         return response()->json($update);
     }
-
+    // stockrequest step5
     public function buffreceived(Request $request)
     {
         $data = '0';
@@ -1567,6 +1574,7 @@ class StockRequestController extends Controller
         $title = 'Buffer Request list';
         return view('pages.warehouse.buffer', compact('title'));
     }
+    //stockrequest step1
     public function bufferupdate(Request $request)
     {
         if ($request->send == 1) {
@@ -1662,8 +1670,12 @@ class StockRequestController extends Controller
         return response()->json($go);
 
     }
+
+    // stockrequest step4
     public function buffersenditems(Request $request)
     {
+        // return Buffersend::query()->whereIn('status', ['prep', 'incomplete'])->where('request_number', '28-10-2022-980')->where('item_id', '446')->count();
+
         $buffer = Buffersend::query()->select('stocks.*', 'item', 'category','category_id', 'UOM as uom')
                 ->where('request_number', $request->buffers_no)
                 ->whereIn('status', ['prep', 'incomplete'])
@@ -1676,10 +1688,10 @@ class StockRequestController extends Controller
                 return Carbon::parse($buffer->updated_at->toFormattedDateString().' '.$buffer->updated_at->toTimeString())->isoFormat('lll');
             })
             ->addColumn('qty', function (Buffersend $buffer){
-                if($buffer->serial != 'N/A'){
+                if(htmlspecialchars_decode($buffer->serial) != 'N/A'){
                     return '1';
                 }
-                $qty = Buffersend::query()->whereIn('status', ['prep', 'incomplete'])->where('request_number', $buffer->buffers_no)->where('item_id', $buffer->item_id)->count();
+                $qty = Buffersend::query()->whereIn('status', ['prep', 'incomplete'])->where('request_number', $buffer->request_number)->where('item_id', $buffer->item_id)->count();
                 return $qty;
             })
             ->addColumn('item', function (Buffersend $buffer){
@@ -1689,6 +1701,7 @@ class StockRequestController extends Controller
             ->make(true);
         
     }
+    
     public function buffersend(Request $request)
     {
         $buffer = Buffer::query()
@@ -1783,6 +1796,7 @@ class StockRequestController extends Controller
                 ->make(true);
         }
     }
+    // stockrequest step3
     public function bufferitem(Request $request)
     {
         $buffers = BufferItem::query()
@@ -1830,12 +1844,13 @@ class StockRequestController extends Controller
         return response()->json(true);
 
     }
-
+    // stockrequest step2
     public function bufferlist(Request $request)
     {
         if (auth()->user()->hasanyrole('Warehouse Manager', 'Warehouse Administrator') || auth()->user()->id == 283 || auth()->user()->id == 110) {
             $buffer = StockReqNo::query()
-                ->wherein('request_type', [6, 1, 3, 4, 24, 17])
+                ->wherein('status', [6, 1, 3, 4, 24, 17])
+                ->where('request_type', 1)
                 ->groupby('request_number')
                 ->get();
             return DataTables::of($buffer)

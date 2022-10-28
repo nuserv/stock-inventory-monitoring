@@ -110,7 +110,7 @@ $(document).on('click', '#rec_Btn', function(){
                             'X-CSRF-TOKEN': $('meta[name="ctok"]').attr('content')
                         },
                         dataType: 'json',
-                        type: 'POST',
+                        type: 'PUT',
                         data: {
                             reqno : reqno,
                             id: id,
@@ -131,10 +131,12 @@ $(document).on('click', '#rec_Btn', function(){
             }
             else if(value.uom != 'Unit'){
                 console.log(value.uom+'--'+eachcount);
-                var itemsid = value.items_id;
+                var itemsid = value.item_id;
+                console.log(itemsid);
+
                 $.ajax({
                     type:'get',
-                    url: 'getcon',
+                    url: 'getstockid',
                     dataType: 'json',
                     async: false,
                     data: {
@@ -146,6 +148,8 @@ $(document).on('click', '#rec_Btn', function(){
                         data.forEach(valv => {
                             id.push(valv.id);
                         });
+                        console.log(data);
+                        console.log(id);
                         if (eachcount == datas.length) {
                             $.ajax({
                                 url: 'buffreceived',
@@ -153,7 +157,7 @@ $(document).on('click', '#rec_Btn', function(){
                                     'X-CSRF-TOKEN': $('meta[name="ctok"]').attr('content')
                                 },
                                 dataType: 'json',
-                                type: 'POST',
+                                type: 'PUT',
                                 data: {
                                     reqno : reqno,
                                     id: id,
