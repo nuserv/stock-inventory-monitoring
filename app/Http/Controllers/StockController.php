@@ -821,7 +821,10 @@ class StockController extends Controller
         $stocks->status = 'default';
         $stocks->qty = '1';
         $stocks->save();
-
+        WarehouseInitial::create([
+            'items_id'=>$add->id,
+            'qty'=>10
+        ]);
         $branches = Branch::all();
         foreach ($branches as $branchs) {
             $initial = new Initial;
