@@ -412,6 +412,11 @@ $(document).on('change', '.desc', function(){
         });
     }
     else{
+        $('#item' + count).val(id);
+        $('#qty'+count).val('0');
+        $('#qty'+count).attr({
+            "max" : '100'
+        });
         $('#qty'+count).prop('disabled', false);
         $.ajax({
             type:'get',
