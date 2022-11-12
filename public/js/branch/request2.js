@@ -350,57 +350,144 @@ $(document).on('change', '.qty', function () {
 $(document).on('change', '.desc', function(){
     var count = $(this).attr('row_count');
     var id = $(this).val();
-    $.ajax({
-        url: 'checkrequestitemqty',
-        dataType: 'json',
-        type: 'GET',
-        async:false,
-        data: {
-            items_id: id
-        },
-        success: function(thisdata){
-            if(thisdata == 'yes'){
-                check = 'sobra';
-            }else{
-                $('#item' + count).val(id);
-                $('#qty'+count).val('0');
-                if ($('#requesttype').val() == 'Stock') {
-                    $('#qty'+count).attr({
-                        "max" : thisdata
-                    });
+    if ($('#requesttype').val() == 'Stock') {
+        $.ajax({
+            url: 'checkrequestitemqty',
+            dataType: 'json',
+            type: 'GET',
+            async:false,
+            data: {
+                items_id: id
+            },
+            success: function(thisdata){
+                if(thisdata == 'yes'){
+                    check = 'sobra';
+                    // if ($('#requesttype').val() == 'Stock') {
+                    //     $('#qty'+count).prop('disabled', true);
+                    // }
+                    // else{
+                    //     $('#qty'+count).prop('disabled', true);
+                    // }
+                    $('#qty'+count).prop('disabled', true);
+
                 }else{
-                    $('#qty'+count).attr({
-                        "max" : '100'
+                    $('#item' + count).val(id);
+                    $('#qty'+count).val('0');
+                    if ($('#requesttype').val() == 'Stock') {
+                        $('#qty'+count).attr({
+                            "max" : thisdata
+                        });
+                    }else{
+                        $('#qty'+count).attr({
+                            "max" : '100'
+                        });
+                    }
+                    
+                    $('#qty'+count).prop('disabled', false);
+                    $.ajax({
+                        type:'get',
+                        url:'uom',
+                        data:{
+                            id: id
+                        },
+                        success:function(data)
+                        {
+                            $('#uom'+count).val(data);
+                        },
+                        error: function (data) {
+                            if(data.status == 401) {
+                                window.location.href = '/login';
+                            }
+                            alert(data.responseText);
+                        }
                     });
                 }
+            },
+            error: function (thisdata) {
+                if(thisdata.status == 401) {
+                    window.location.href = '/login';
+                }
+                alert(thisdata.responseText);
+            }
+        });
+    }
+    else{
+        $('#qty'+count).prop('disabled', false);
+        $.ajax({
+            type:'get',
+            url:'uom',
+            data:{
+                id: id
+            },
+            success:function(data)
+            {
+                $('#uom'+count).val(data);
+            },
+            error: function (data) {
+                if(data.status == 401) {
+                    window.location.href = '/login';
+                }
+                alert(data.responseText);
+            }
+        });
+    }
+    // $.ajax({
+    //     url: 'checkrequestitemqty',
+    //     dataType: 'json',
+    //     type: 'GET',
+    //     async:false,
+    //     data: {
+    //         items_id: id
+    //     },
+    //     success: function(thisdata){
+    //         if(thisdata == 'yes'){
+    //             check = 'sobra';
+    //             // if ($('#requesttype').val() == 'Stock') {
+    //             //     $('#qty'+count).prop('disabled', true);
+    //             // }
+    //             // else{
+    //             //     $('#qty'+count).prop('disabled', true);
+    //             // }
+    //         }else{
+    //             $('#item' + count).val(id);
+    //             $('#qty'+count).val('0');
+    //             if ($('#requesttype').val() == 'Stock') {
+    //                 $('#qty'+count).attr({
+    //                     "max" : thisdata
+    //                 });
+    //             }else{
+    //                 $('#qty'+count).attr({
+    //                     "max" : '100'
+    //                 });
+    //             }
                 
-                $('#qty'+count).prop('disabled', false);
-                $.ajax({
-                    type:'get',
-                    url:'uom',
-                    data:{
-                        id: id
-                    },
-                    success:function(data)
-                    {
-                        $('#uom'+count).val(data);
-                    },
-                    error: function (data) {
-                        if(data.status == 401) {
-                            window.location.href = '/login';
-                        }
-                        alert(data.responseText);
-                    }
-                });
-            }
-        },
-        error: function (thisdata) {
-            if(thisdata.status == 401) {
-                window.location.href = '/login';
-            }
-            alert(thisdata.responseText);
-        }
-    });
+    //             $('#qty'+count).prop('disabled', false);
+    //             $.ajax({
+    //                 type:'get',
+    //                 url:'uom',
+    //                 data:{
+    //                     id: id
+    //                 },
+    //                 success:function(data)
+    //                 {
+    //                     $('#uom'+count).val(data);
+    //                 },
+    //                 error: function (data) {
+    //                     if(data.status == 401) {
+    //                         window.location.href = '/login';
+    //                     }
+    //                     alert(data.responseText);
+    //                 }
+    //             });
+    //         }
+    //     },
+    //     error: function (thisdata) {
+    //         if(thisdata.status == 401) {
+    //             window.location.href = '/login';
+    //         }
+    //         alert(thisdata.responseText);
+    //     }
+    // });
 });
 
 $(document).on('change', '.item', function(){

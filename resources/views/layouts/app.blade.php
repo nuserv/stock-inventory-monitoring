@@ -327,133 +327,133 @@
             <script src="/js/datetime.js"></script>
         @endauth
         @if(Request::is('user'))
-            <script src="{{asset('min/?f=js/warehouse/user.js')}}"></script>
+            <script src="{{asset('min/?f=js/warehouse/user.js')}}&version={{ \Illuminate\Support\Str::random(30) }}"></script>
         @endif
 
         @if(Request::is('schedule'))
             @if (auth()->user()->hasanyrole('Manager', 'Editor'))
-                <script src="{{asset('min/?f=js/pmschedmanager.js')}}"></script>
+                <script src="{{asset('min/?f=js/pmschedmanager.js')}}&version={{ \Illuminate\Support\Str::random(30) }}"></script>
             @else
-                <script src="{{asset('/js/pmsched.js?ver=1')}}"></script>
+                <script src="{{asset('min/?f=js/pmsched.js')}}&version={{ \Illuminate\Support\Str::random(30) }}"></script>
             @endif
         @endif
 
         @if(Request::is('pmlist'))
-            <script src="{{asset('min/?f=js/pmdone.js')}}"></script>
+            <script src="{{asset('min/?f=js/pmdone.js')}}&version={{ \Illuminate\Support\Str::random(30) }}"></script>
         @endif
 
         @if(Request::is('defective/print'))
-            <script src="{{asset('min/?f=js/branch/printdef.js')}}"></script>
+            <script src="{{asset('min/?f=js/branch/printdef.js')}}&version={{ \Illuminate\Support\Str::random(30) }}"></script>
         @endif
         @if(Request::is('POS'))
-            <script src="{{asset('min/?f=js/branch/pos.js')}}"></script>
+            <script src="{{asset('min/?f=js/branch/pos.js')}}&version={{ \Illuminate\Support\Str::random(30) }}"></script>
         @endif
         @if(Request::is('defective/retno'))
-            <script src="{{asset('min/?f=js/branch/retno.js')}}"></script>
+            <script src="{{asset('min/?f=js/branch/retno.js')}}&version={{ \Illuminate\Support\Str::random(30) }}"></script>
         @endif
 
         @if(Request::is('branch'))
             @if(auth()->user()->hasAnyrole('Warehouse Manager', 'Encoder'))
-                <script src="{{asset('min/?f=js/warehouse/branch.js')}}"></script>
+                <script src="{{asset('min/?f=js/warehouse/branch.js')}}&version={{ \Illuminate\Support\Str::random(30) }}"></script>
             @endif
             @if (auth()->user()->hasAnyrole('Head', 'Tech'))
-                <script src="{{asset('min/?f=js/branch/branch.js')}}"></script>
+                <script src="{{asset('min/?f=js/branch/branch.js')}}&version={{ \Illuminate\Support\Str::random(30) }}"></script>
             @endif
             @if (auth()->user()->hasanyrole('Editor', 'Manager', 'Viewer', 'Viewer PLSI', 'Viewer IDSI'))
-                <script src="{{asset('min/?f=js/branch.js')}}"></script>
+                <script src="{{asset('min/?f=js/branch.js')}}&version={{ \Illuminate\Support\Str::random(30) }}"></script>
             @endif
         @endif
         @if(Request::is('billable'))
-            <script src="{{asset('min/?f=js/branch/billable.js')}}"></script>
+            <script src="{{asset('min/?f=js/branch/billable.js')}}&version={{ \Illuminate\Support\Str::random(30) }}"></script>
         @endif
         @if(Request::is('request/*'))
             @if(auth()->user()->hasAnyrole('Warehouse Manager', 'Encoder'))
-                <script src="{{asset('min/?f=js/warehouse/request.js&ver2.03')}}"></script>
-                <script src="{{asset('min/?f=js/warehouse/request1.js&ver2.03')}}"></script>
-                <script src="{{asset('min/?f=js/warehouse/request2.js&ver2.03')}}"></script>
-                <script src="{{asset('min/?f=js/warehouse/request3.js&ver2.03')}}"></script>
+                <script src="{{asset('min/?f=js/warehouse/request.js')}}&version={{ \Illuminate\Support\Str::random(30) }}"></script>
+                <script src="{{asset('min/?f=js/warehouse/request1.js')}}&version={{ \Illuminate\Support\Str::random(30) }}"></script>
+                <script src="{{asset('min/?f=js/warehouse/request2.js')}}&version={{ \Illuminate\Support\Str::random(30) }}"></script>
+                <script src="{{asset('min/?f=js/warehouse/request3.js')}}&version={{ \Illuminate\Support\Str::random(30) }}"></script>
             @endif
             @if(auth()->user()->hasanyrole('Editor', 'Manager', 'Warehouse Administrator'))
-                <script src="{{asset('min/?f=js/request.js')}}"></script>
+                <script src="{{asset('min/?f=js/request.js')}}&version={{ \Illuminate\Support\Str::random(30) }}"></script>
             @endif
             @if(auth()->user()->hasAnyrole('Head', 'Tech'))
-                <script src="{{asset('/js/branch/request.js')}}"></script>
-                <script src="{{asset('/js/branch/request2.js')}}"></script>
+                <script src="{{asset('/js/branch/request.js')}}&version={{ \Illuminate\Support\Str::random(30) }}"></script>
+                <script src="{{asset('/js/branch/request2.js')}}&version={{ \Illuminate\Support\Str::random(30) }}"></script>
             @endif
         @endif
         @if(Request::is('request'))
             @if(auth()->user()->hasAnyrole('Warehouse Manager', 'Encoder'))
-                <script src="{{asset('min/?f=js/warehouse/request.js&ver2.03')}}"></script>
-                <script src="{{asset('min/?f=js/warehouse/request1.js&ver2.03')}}"></script>
-                <script src="{{asset('min/?f=js/warehouse/request2.js&ver2.03')}}"></script>
-                <script src="{{asset('min/?f=js/warehouse/request3.js&ver2.03')}}"></script>
+                <script src="{{asset('min/?f=js/warehouse/request.js')}}&version={{ \Illuminate\Support\Str::random(30) }}"></script>
+                <script src="{{asset('min/?f=js/warehouse/request1.js')}}&version={{ \Illuminate\Support\Str::random(30) }}"></script>
+                <script src="{{asset('min/?f=js/warehouse/request2.js')}}&version={{ \Illuminate\Support\Str::random(30) }}"></script>
+                <script src="{{asset('min/?f=js/warehouse/request3.js')}}&version={{ \Illuminate\Support\Str::random(30) }}"></script>
             @endif
             @if(auth()->user()->hasanyrole('Editor', 'Manager', 'Warehouse Administrator'))
-                <script src="{{asset('min/?f=js/request.js')}}"></script>
+                <script src="{{asset('min/?f=js/request.js')}}&version={{ \Illuminate\Support\Str::random(30) }}"></script>
             @endif
             @if(auth()->user()->hasAnyrole('Head', 'Tech'))
-                <script src="{{asset('/js/branch/request.js')}}"></script>
-                <script src="{{asset('/js/branch/request2.js')}}"></script>
+                <script src="{{asset('/js/branch/request.js')}}&version={{ \Illuminate\Support\Str::random(30) }}"></script>
+                <script src="{{asset('/js/branch/request2.js')}}&version={{ \Illuminate\Support\Str::random(30) }}"></script>
             @endif
         @endif
         @if(Request::is('resolved'))
-            <script src="{{asset('min/?f=js/resolved.js')}}"></script>
+            <script src="{{asset('min/?f=js/resolved.js')}}&version={{ \Illuminate\Support\Str::random(30) }}"></script>
         @endif
         @if(Request::is('itemrequest'))
-            <script src="{{asset('min/?f=js/itemrequest.js&ver=5.2')}}"></script>
+            <script src="{{asset('min/?f=js/itemrequest.js')}}&version={{ \Illuminate\Support\Str::random(30) }}"></script>
         @endif
         @if(Request::is('buffer'))
-            <script src="{{asset('min/?f=js/warehouse/buffer.js&ver=1.0')}}"></script>
+            <script src="{{asset('min/?f=js/warehouse/buffer.js')}}&version={{ \Illuminate\Support\Str::random(30) }}"></script>
         @endif
         @if(Request::is('pullview'))
             @if (auth()->user()->hasanyrole('Head'))
-                <script src="{{asset('min/?f=js/branch/pullout.js')}}"></script>
+                <script src="{{asset('min/?f=js/branch/pullout.js')}}&version={{ \Illuminate\Support\Str::random(30) }}"></script>
             @endif
             @if (auth()->user()->hasanyrole('Warehouse Manager', 'Encoder'))
-                <script src="{{asset('min/?f=js/warehouse/pullout.js')}}"></script>
+                <script src="{{asset('min/?f=js/warehouse/pullout.js')}}&version={{ \Illuminate\Support\Str::random(30) }}"></script>
             @endif
         @endif
         @if(Request::is('pullviewlist'))
             @if (auth()->user()->hasanyrole('Head'))
-                <script src="{{asset('min/?f=js/branch/pulloutlist.js')}}"></script>
+                <script src="{{asset('min/?f=js/branch/pulloutlist.js')}}&version={{ \Illuminate\Support\Str::random(30) }}"></script>
             @endif
         @endif
         @if(Request::is('bufferviewlist'))
             @if (auth()->user()->hasanyrole('Main Warehouse Manager','Warehouse Manager', 'Warehouse Administrator') || auth()->user()->id == 283 || auth()->user()->id == 110)
-                <script src="{{asset('min/?f=js/warehouse/bufferlist.js&ver=1.0')}}"></script>
-                <script src="{{asset('min/?f=js/warehouse/bufferlist2.js&ver=1.0')}}"></script>
+                <script src="{{asset('min/?f=js/warehouse/bufferlist.js')}}&version={{ \Illuminate\Support\Str::random(30) }}"></script>
+                <script src="{{asset('min/?f=js/warehouse/bufferlist2.js')}}&version={{ \Illuminate\Support\Str::random(30) }}"></script>
             @endif
         @endif
         @if(Request::is('returnview'))
             @if (auth()->user()->hasanyrole('Repair'))
-                <script src="{{asset('min/?f=js/warehouse/return.js')}}"></script>
+                <script src="{{asset('min/?f=js/warehouse/return.js')}}&version={{ \Illuminate\Support\Str::random(30) }}"></script>
             @endif
             @if (auth()->user()->hasanyrole('Head'))
-                <script src="{{asset('min/?f=js/branch/return.js')}}"></script>
+                <script src="{{asset('min/?f=js/branch/return.js')}}&version={{ \Illuminate\Support\Str::random(30) }}"></script>
             @endif
         @endif
         @if(Request::is('repaired-ware'))
             @if (auth()->user()->hasanyrole('Repair'))
-                <script src="{{asset('min/?f=js/warehouse/repaired.js')}}"></script>
+                <script src="{{asset('min/?f=js/warehouse/repaired.js')}}&version={{ \Illuminate\Support\Str::random(30) }}"></script>
             @endif
             @if (auth()->user()->hasanyrole('Warehouse Manager', 'Encoder'))
-                <script src="{{asset('min/?f=js/warehouse/addtostock.js')}}"></script>
+                <script src="{{asset('min/?f=js/warehouse/addtostock.js')}}&version={{ \Illuminate\Support\Str::random(30) }}"></script>
             @endif
         @endif
         @if(Request::is('repaired-list'))
             @if (auth()->user()->hasanyrole('Repair'))
-                <script src="{{asset('min/?f=js/warehouse/repairedlist.js')}}"></script>
+                <script src="{{asset('min/?f=js/warehouse/repairedlist.js')}}&version={{ \Illuminate\Support\Str::random(30) }}"></script>
             @endif
         @endif
         @if(Request::is('stocks'))
             @if(auth()->user()->hasAnyrole('Warehouse Manager', 'Editor', 'Manager', 'Encoder'))
-                <script src="{{asset('min/?f=js/warehouse/stock.js')}}"></script>
-                <script src="{{asset('min/?f=js/warehouse/stock2.js')}}"></script>
+                <script src="{{asset('min/?f=js/warehouse/stock.js')}}&version={{ \Illuminate\Support\Str::random(30) }}"></script>
+                <script src="{{asset('min/?f=js/warehouse/stock2.js')}}&version={{ \Illuminate\Support\Str::random(30) }}"></script>
             @else
-                <script src="{{asset('min/?f=js/branch/stocks.js')}}"></script>
-                <script src="{{asset('min/?f=js/branch/service-in.js')}}"></script>
+                <script src="{{asset('min/?f=js/branch/stocks.js')}}&version={{ \Illuminate\Support\Str::random(30) }}"></script>
+                <script src="{{asset('min/?f=js/branch/service-in.js')}}&version={{ \Illuminate\Support\Str::random(30) }}"></script>
                 @if(auth()->user()->hasrole('Head'))
-                    <script src="{{asset('min/?f=js/branch/addstock.js')}}"></script>
+                    <script src="{{asset('min/?f=js/branch/addstock.js')}}&version={{ \Illuminate\Support\Str::random(30) }}"></script>
                 @endif
             @endif
             
@@ -461,83 +461,83 @@
         @endif
 
         @if(Request::is('service-unit'))
-            <script src="{{asset('min/?f=js/branch/service-unit.js')}}"></script>
-            <script src="{{asset('min/?f=js/branch/service-out.js')}}"></script>
+            <script src="{{asset('min/?f=js/branch/service-unit.js')}}&version={{ \Illuminate\Support\Str::random(30) }}"></script>
+            <script src="{{asset('min/?f=js/branch/service-out.js')}}&version={{ \Illuminate\Support\Str::random(30) }}"></script>
         @endif
 
         @if(Request::is('preventive'))
-            <script src="{{asset('min/?f=js/branch/pm-service-unit.js')}}"></script>
-            <script src="{{asset('min/?f=js/branch/pm.js')}}"></script>
+            <script src="{{asset('min/?f=js/branch/pm-service-unit.js')}}&version={{ \Illuminate\Support\Str::random(30) }}"></script>
+            <script src="{{asset('min/?f=js/branch/pm.js')}}&version={{ \Illuminate\Support\Str::random(30) }}"></script>
         @endif
 
         @if(Request::is('print/*'))
-            <script src="{{asset('min/?f=js/warehouse/print.js')}}"></script>
+            <script src="{{asset('min/?f=js/warehouse/print.js')}}&version={{ \Illuminate\Support\Str::random(30) }}"></script>
         @endif
 
         @if(Request::is('loans'))
-            <script src="{{asset('min/?f=js/branch/loans.js')}}"></script>
+            <script src="{{asset('min/?f=js/branch/loans.js')}}&version={{ \Illuminate\Support\Str::random(30) }}"></script>
         @endif
 
         @if(Request::is('return'))
             @if(auth()->user()->hasAnyrole('Warehouse Manager', 'Encoder'))
-                <script src="{{asset('min/?f=js/warehouse/defective.js')}}"></script>
+                <script src="{{asset('min/?f=js/warehouse/defective.js')}}&version={{ \Illuminate\Support\Str::random(30) }}"></script>
             @endif
             @if(auth()->user()->hasanyrole('Editor', 'Manager'))
-                <script src="{{asset('min/?f=js/defective.js')}}"></script>
+                <script src="{{asset('min/?f=js/defective.js')}}&version={{ \Illuminate\Support\Str::random(30) }}"></script>
             @endif
             @if (auth()->user()->hasAnyrole('Head', 'Tech'))
-                <script src="{{asset('min/?f=js/branch/defective.js')}}"></script>
+                <script src="{{asset('min/?f=js/branch/defective.js')}}&version={{ \Illuminate\Support\Str::random(30) }}"></script>
             @endif
              @if (auth()->user()->branch->branch == 'Conversion')
-                <script src="{{asset('min/?f=js/branch/conversion.js')}}"></script>
+                <script src="{{asset('min/?f=js/branch/conversion.js')}}&version={{ \Illuminate\Support\Str::random(30) }}"></script>
             @endif
         @endif
         
         @if(Request::is('customer'))
-            <script src="{{asset('min/?f=js/customer.js')}}"></script>
+            <script src="{{asset('min/?f=js/customer.js')}}&version={{ \Illuminate\Support\Str::random(30) }}"></script>
             @if (auth()->user()->hasAnyrole('Head','Tech'))
-                <script src="{{asset('min/?f=js/branch/customer.js')}}"></script>
+                <script src="{{asset('min/?f=js/branch/customer.js')}}&version={{ \Illuminate\Support\Str::random(30) }}"></script>
             @endif
         @endif
         @if(Request::is('customer/*'))
-            <script src="{{asset('min/?f=js/customerbranch.js')}}"></script>
+            <script src="{{asset('min/?f=js/customerbranch.js')}}&version={{ \Illuminate\Support\Str::random(30) }}"></script>
         @endif
         
         @if (Request::is('pending') && auth()->user()->hasanyrole('Viewer','Viewer PLSI', 'Viewer IDSI'))
-            <script src="{{asset('min/?f=js/pending.js')}}"></script>
+            <script src="{{asset('min/?f=js/pending.js')}}&version={{ \Illuminate\Support\Str::random(30) }}"></script>
         @endif
 
         @if (Request::is('/') && auth()->user()->hasanyrole('Viewer','Viewer PLSI', 'Viewer IDSI'))
-            <!--script src="{{asset('min/?f=js/pending.js')}}"></script-->
-            <script src="{{asset('min/?f=js/viewer.js')}}"></script>
+            <!--script src="{{asset('min/?f=js/pending.js')}}&version={{ \Illuminate\Support\Str::random(30) }}"></script-->
+            <script src="{{asset('min/?f=js/viewer.js')}}&version={{ \Illuminate\Support\Str::random(30) }}"></script>
         @endif
 
         @if(Request::is('/') && !auth()->user()->hasanyrole('Repair', 'Warehouse Administrator', 'Viewer', 'Viewer PLSI', 'Viewer IDSI'))
-            <script src="{{asset('min/?f=js/home.js')}}"></script>
+            <script src="{{asset('min/?f=js/home.js')}}&version={{ \Illuminate\Support\Str::random(30) }}"></script>
         @endif
         @if (Request::is('/') && auth()->user()->hasrole('Repair'))
-            <script src="{{asset('min/?f=js/warehouse/repair.js')}}"></script>
+            <script src="{{asset('min/?f=js/warehouse/repair.js')}}&version={{ \Illuminate\Support\Str::random(30) }}"></script>
         @endif
         @if (Request::is('/') && auth()->user()->hasrole('Warehouse Administrator'))
-            <script src="{{asset('min/?f=js/unrepair.js')}}"></script>
+            <script src="{{asset('min/?f=js/unrepair.js')}}&version={{ \Illuminate\Support\Str::random(30) }}"></script>
         @endif
         @if(Request::is('log') && auth()->user()->hasanyrole('Repair', 'Warehouse Administrator'))
-            <script src="{{asset('min/?f=js/home.js')}}"></script>
+            <script src="{{asset('min/?f=js/home.js')}}&version={{ \Illuminate\Support\Str::random(30) }}"></script>
         @endif
         @if(Request::is('item') && auth()->user()->hasanyrole('Manager', 'Editor'))
-            <script src="{{asset('min/?f=js/item.js')}}"></script>
+            <script src="{{asset('min/?f=js/item.js')}}&version={{ \Illuminate\Support\Str::random(30) }}"></script>
         @endif
         @if(Request::is('item') && auth()->user()->hasanyrole('Warehouse Manager'))
-            <script src="{{asset('min/?f=js/warehouse/item.js')}}"></script>
+            <script src="{{asset('min/?f=js/warehouse/item.js')}}&version={{ \Illuminate\Support\Str::random(30) }}"></script>
         @endif
         @if(Request::is('disposed') && auth()->user()->hasrole('Warehouse Administrator'))
-            <script src="{{asset('min/?f=js/disposed.js')}}"></script>
+            <script src="{{asset('min/?f=js/disposed.js')}}&version={{ \Illuminate\Support\Str::random(30) }}"></script>
         @endif
         @if(Request::is('unrepair') && auth()->user()->hasanyrole('Repair', 'Editor', 'Manager'))
-            <script src="{{asset('min/?f=js/unrepair.js')}}"></script>
+            <script src="{{asset('min/?f=js/unrepair.js')}}&version={{ \Illuminate\Support\Str::random(30) }}"></script>
         @endif
         @if(Request::is('email/verify'))
-            <script src="{{asset('min/?f=js/verify.js')}}"></script>
+            <script src="{{asset('min/?f=js/verify.js')}}&version={{ \Illuminate\Support\Str::random(30) }}"></script>
         @endif
         @auth
             @if(Request::is('reports'))

@@ -51,15 +51,15 @@
     <body>
         <div class="message">
             <h1>
-                {{-- @yield('code') --}}
-                Page Not Found... 
+                @yield('code')
+                {{-- Page Not Found...  --}}
             </h1>
             <br><hr>
             <div style="padding: 10px;">
-                {{-- @yield('message') --}}
-                The page you are trying to access has been moved. Please click this <a href="https://stockmonitoring.phillogix.com.ph">link</a> to proceed.
+                @yield('message')
+                {{-- The page you are trying to access has been moved. Please click this <a href="https://stockmonitoring.phillogix.com.ph">link</a> to proceed. --}}
             </div>
-            @yield('script')
+            
         </div>
     </body>
 </html>
