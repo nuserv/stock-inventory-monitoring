@@ -377,8 +377,8 @@
                 <script src="{{asset('min/?f=js/request.js')}}&version={{ \Illuminate\Support\Str::random(30) }}"></script>
             @endif
             @if(auth()->user()->hasAnyrole('Head', 'Tech'))
-                <script src="{{asset('/js/branch/request.js')}}&version={{ \Illuminate\Support\Str::random(30) }}"></script>
-                <script src="{{asset('/js/branch/request2.js')}}&version={{ \Illuminate\Support\Str::random(30) }}"></script>
+                <script src="{{asset('min/?f=js/branch/request.js')}}&version={{ \Illuminate\Support\Str::random(30) }}"></script>
+                <script src="{{asset('min/?f=js/branch/request2.js')}}&version={{ \Illuminate\Support\Str::random(30) }}"></script>
             @endif
         @endif
         @if(Request::is('request'))
@@ -392,8 +392,8 @@
                 <script src="{{asset('min/?f=js/request.js')}}&version={{ \Illuminate\Support\Str::random(30) }}"></script>
             @endif
             @if(auth()->user()->hasAnyrole('Head', 'Tech'))
-                <script src="{{asset('/js/branch/request.js')}}&version={{ \Illuminate\Support\Str::random(30) }}"></script>
-                <script src="{{asset('/js/branch/request2.js')}}&version={{ \Illuminate\Support\Str::random(30) }}"></script>
+                <script src="{{asset('min/?f=js/branch/request.js')}}&version={{ \Illuminate\Support\Str::random(30) }}"></script>
+                <script src="{{asset('min/?f=js/branch/request2.js')}}&version={{ \Illuminate\Support\Str::random(30) }}"></script>
             @endif
         @endif
         @if(Request::is('resolved'))
