@@ -88,6 +88,7 @@ $(document).ready(function()
             { data: 'id', name:'id'},
             { data: 'created_at', name:'date', "width": "14%" },
             { data: 'reqBy', name:'reqBy', "width": "14%"},
+            { data: 'request_no', name:'request_no', "width": "14%"},
             { data: 'branch', name:'branch',"width": "14%"},
             { data: 'type', name:'type', "width": "14%"},
             { data: 'status', name:'status', "width": "14%"},
