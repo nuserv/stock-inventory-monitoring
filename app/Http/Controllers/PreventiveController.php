@@ -111,7 +111,8 @@ class PreventiveController extends Controller
                 'fsrno' => $request->fsrno,
                 'Status' => "Completed"
             ]);
-            $code = $customer->code*1;
+            // return intval('0064') ;
+            $code = intval($customer->code) * 1;
             if ($save) {
                 $pmbranch = PmBranches::query()->where('customer_branches_code', $code)->update(['quarter' => Carbon::parse($save->schedule)->quarter, 'Conversion'=>null]);
             }
