@@ -952,7 +952,13 @@ $(document).on('click', '#not_rec_Btn', function(){
 $(document).on("click", ".delItemBtn", function() {
     var itemid = $(this).attr('item_id');
     var row =  $(this).parents('tr');
+    Swal.fire(
+        'Failed!',
+        'This function is temporary unavailable.',
+        'error'
+    );
     $('#loading').show();
+    return false;
     $.ajax({
         url: 'requesteditems',
         headers: {

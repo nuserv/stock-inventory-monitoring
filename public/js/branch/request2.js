@@ -1,6 +1,12 @@
 $(document).on('click', '#del_Btn', function(){
     var reqno = $(this).attr('reqno');
+    Swal.fire(
+        'Failed!',
+        'This function is temporary unavailable.',
+        'error'
+    );
     $('#loading').show();
+    return false;
     $.ajax({
         url: 'remove',
         headers: {
@@ -22,6 +28,7 @@ $(document).on('click', '#del_Btn', function(){
         }
     });
 });
+
 $(document).on('click', '#rec_Btn', function(){
     var reqno = requestno;
     var sched = $('#sched').val();
