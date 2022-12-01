@@ -257,16 +257,6 @@ class HomeController extends Controller
                     ->join('users', 'user_id', '=', 'users.id')
                     ->first();
         if ($responder) {
-            $config = array(
-                'driver'     => env('MAIL_DRIVER', 'smtp'),
-                'host'       => env('MAIL_HOST', 'smtp.mailgun.org'),
-                'port'       => env('MAIL_PORT', 587),
-                'from'       => array('address' => 'bsms.support@ideaserv.com.ph', 'name' => 'support'),
-                'encryption' => env('MAIL_ENCRYPTION', 'tls'),
-                'username'   => env('BSMS_USERNAME'),
-                'password'   => env('BSMS_PASSWORD'),
-            );
-            Config::set('mail', $config);
             $email = $responder->email;
             $name = $responder->name. ' '. $responder->lastname;
             Mail::send('responder',['email'=>'email'], function( $message) use($email, $name){ 
