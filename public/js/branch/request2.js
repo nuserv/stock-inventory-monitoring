@@ -1,30 +1,38 @@
 $(document).on('click', '#del_Btn', function(){
     var reqno = $(this).attr('reqno');
-    Swal.fire(
-        'Failed!',
-        'This function is temporary unavailable.',
-        'error'
-    );
-    $('#loading').show();
-    return false;
-    $.ajax({
-        url: 'remove',
-        headers: {
-            'X-CSRF-TOKEN': $('meta[name="ctok"]').attr('content')
-        },
-        dataType: 'json',
-        type: 'DELETE',
-        data: {
-            reqno : reqno                     
-        },
-        success: function(){
-            location.reload();
-        },
-        error: function (data) {
-            if(data.status == 401) {
-                window.location.href = '/login';
-            }
-            alert(data.responseText);
+    Swal.fire({
+        title: "DELETE STOCK REQUEST?",
+        html: "You are about to DELETE STOCK REQUEST!<br><br><div class=\"form-group\"><textarea style=\"resize: none; border: 1px solid black;\" class=\"w3-input w-100\" id=\"reason\" name=\"reason\" rows=\"4\" maxlength=\"150\" autocomplete=\"off\" placeholder=\"Please provide a valid reason for the deletion of the requested item.\"></textarea></div>",
+        icon: "warning",
+        showCancelButton: true,
+        cancelButtonColor: '#3085d6',
+        confirmButtonColor: '#d33',
+        confirmButtonText: 'Confirm',
+        allowOutsideClick: false
+    })
+    .then((result) => {
+        if(result.isConfirmed){
+            $.ajax({
+                url: 'remove',
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="ctok"]').attr('content')
+                },
+                dataType: 'json',
+                type: 'DELETE',
+                data: {
+                    reqno : reqno,
+                    reason : $.trim($('#reason').val())                 
+                },
+                success: function(){
+                    location.reload();
+                },
+                error: function (data) {
+                    if(data.status == 401) {
+                        window.location.href = '/login';
+                    }
+                    alert(data.responseText);
+                }
+            });
         }
     });
 });
