@@ -4,7 +4,9 @@ namespace App\Exports;
   
 use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\WithHeadings;
-  
+use App\Cdm;
+use Carbon\Carbon;
+
 class CdmExport implements FromCollection, WithHeadings
 {
     protected $data;
@@ -26,7 +28,29 @@ class CdmExport implements FromCollection, WithHeadings
      */
     public function collection()
     {
-        return collect($this->data);
+        return collect($cdm = Cdm::query()
+        ->select(
+            'accountcode',
+            'src',
+            'dst',
+            'dcontext',
+            'clid',
+            'channel',
+            'dstchannel',
+            'lastapp',
+            'lastdata',
+            'calldate',
+            'answerdate',
+            'hangupdate',
+            'duration',
+            'billsec',
+            'disposition',
+            'amaflags',
+            'uniqueid',
+            'userfield'
+        )
+        ->whereBetween('calldate', [Carbon::now()->subDays(2), Carbon::now()])
+        ->get());
     }
   
     /**

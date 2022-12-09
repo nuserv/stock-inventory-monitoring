@@ -25,7 +25,7 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        $schedule->command('cdm:processor')->withoutOverlapping();
+        // $schedule->command('cdm:processor')->withoutOverlapping();
 
         // $schedule->command('inspire')
         //          ->hourly();

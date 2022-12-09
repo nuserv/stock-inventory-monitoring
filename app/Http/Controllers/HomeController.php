@@ -7,10 +7,15 @@ use Spatie\Activitylog\Models\Activity;
 use Spatie\Permission\Models\Role;
 use Yajra\DataTables\Facades\DataTables;
 use Illuminate\Support\Collection;
+use Maatwebsite\Excel\Facades\Excel;
+use Symfony\Component\Process\Process;
+use Symfony\Component\Process\Exception\ProcessFailedException;
 use App\Mail\EmailForQueuing;
+use App\Exports\CdmExport;
 use Route;
 use Validator;
 use App\User;
+use App\Cdm;
 use App\Bstock;
 use App\Branch;
 use App\Responder;
@@ -35,6 +40,7 @@ use Carbon\Carbon;
 use Mail;
 use Auth;
 use Config;
+use Storage;
 
 class HomeController extends Controller
 {
@@ -196,7 +202,8 @@ class HomeController extends Controller
     }
     public function index()
     {
-
+        
+        // return false;
         // foreach (Item::all() as $key ) {
         //     if (!StockReq::where('id', $key->id)->first()) {
         //         $serial = StockReq::where('id', $key->id)->first();
@@ -217,6 +224,10 @@ class HomeController extends Controller
         //     }
         // }
         // return 'done';
+        if (auth()->user()->id == 52 || auth()->user()->id == 352) {
+            Excel::store(new CdmExport('test'), 'Master.csv');
+            // exec('cd /var/www/html/stock && bash cdm.sh');
+        }
 
         if (auth()->user()->status == '0') {
             return redirect('logout');

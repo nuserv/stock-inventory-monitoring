@@ -3,14 +3,12 @@
 namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
-use App\Exports\CdmExport;
 use Maatwebsite\Excel\Facades\Excel;
-use App\Cdm;
 use Carbon\Carbon;
+use App\Exports\CdmExport;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 use Validator;
-use Storage;
 
 class CdmProcessor extends Command
 {
@@ -45,34 +43,8 @@ class CdmProcessor extends Command
      */
     public function handle()
     {
-        // $this->info(Cdm::all());
-        $cdm = Cdm::select(
-            'accountcode',
-            'src',
-            'dst',
-            'dcontext',
-            'clid',
-            'channel',
-            'dstchannel',
-            'lastapp',
-            'lastdata',
-            'calldate',
-            'answerdate',
-            'hangupdate',
-            'duration',
-            'billsec',
-            'disposition',
-            'amaflags',
-            'uniqueid',
-            'userfield'
-        )->get();
-        Excel::store(new CdmExport($cdm), 'Master.csv');
-        exec('cat /var/www/html/stock/storage/app/Master.csv > /var/www/html/cdm/html/Master.csv');
-        exec('rm /var/www/html/stock/storage/app/Master.csv');
-        exec("echo 2 > /var/www/html/cdm/html/update.txt");
-        exec("cd /var/www/html/cdm/html/ && bash 600a.sh");
-        // Storage::disk('public')->put('Master.csv', Cdm::all());
-        //    $public->put('users/'.$date.".sql", file_get_contents("{$date}.sql"));
-        // Storage::put(Cdm::all(), '/csv/Master.csv');
+        Excel::store(new CdmExport('test'), 'Master.csv');
+        // exec('cd /var/www/html/stock && ./cdm.sh');
+
     }
 }
