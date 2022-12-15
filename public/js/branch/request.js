@@ -949,6 +949,13 @@ $(document).on('click', '#not_rec_Btn', function(){
         }
     });
 });
+$(document).on('keyup', '#reason', function(){
+    $(".swal2-confirm").prop('disabled', true); 
+    if ($(this).val().length > 7) {
+        $(".swal2-confirm").prop('disabled', false); 
+    }
+});
+
 $(document).on("click", ".delItemBtn", function() {
     var itemid = $(this).attr('item_id');
     var row =  $(this).parents('tr');
@@ -1009,4 +1016,5 @@ $(document).on("click", ".delItemBtn", function() {
             });
         }
     });
+    $(".swal2-confirm").prop('disabled', true); 
 });
