@@ -13,16 +13,19 @@ $(document).ready(function()
 
     var table =
     $('table.requestTable').DataTable({ 
-        "dom": 'lrtp',
-        "pageLength": 50,
+        "dom": 'lrt',
+        "pageLength": 100,
         "language": {
             "emptyTable": "No data found!",
             "info": "\"Showing _START_ to _END_ of _TOTAL_ Stock Request\"",
         },
         "fnRowCallback": function(nRow, aData) {
             //"createdRow": function ( nRow, aData ) {
-                console.log(aData);
-            if ($('#userlevel').val() == "Viewer IDSI") {
+            if ($('#userid').val() == 153){
+                if (aData.category != 'yes') {
+                    $(nRow).hide();
+                }
+            }else if ($('#userlevel').val() == "Viewer IDSI") {
                 if (aData.client == "MERCURY DRUG") {
                     $(nRow).hide();
                 }

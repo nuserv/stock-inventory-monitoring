@@ -73,7 +73,7 @@ class StockRequestController extends Controller
 
     public function requestsdata(Request $request)
     {
-            
+
         if (StockRequest::where('request_no', $request->request_no)->first()->type == 'Stock') {
             $data = StockRequest::select(
                 'address',
@@ -141,7 +141,7 @@ class StockRequestController extends Controller
         return response()->json($data);
 
     }
-    
+
     public function branchitemdata2(Request $request){
 
         $items = RequestedItem::query()
@@ -184,7 +184,7 @@ class StockRequestController extends Controller
                 return $sum;
             })
             ->make(true);
-        
+
     }
 
     public function itemrequestdata(){
@@ -454,7 +454,7 @@ class StockRequestController extends Controller
         ->make(true);
     }
     public function generateRandomNumber() {
-        $random = mt_rand(1, 999); 
+        $random = mt_rand(1, 999);
         $today = Carbon::now()->format('d-m-Y');
         $number = $today.'-'.$random;
         if ($this->barcodeNumberExists($number)) {
@@ -473,7 +473,7 @@ class StockRequestController extends Controller
             return mb_strtoupper($PreparedItem->items->item);
         })
         ->make(true);
-    }   
+    }
     public function getReqDetails(Request $request)
     {
         return response()->json(RequestedItem::whereNot('status', 'delivered')->where('request_no', $request->reqno)->get());
@@ -628,7 +628,7 @@ class StockRequestController extends Controller
             }
         })
         ->make(true);
-    }   
+    }
     public function pcount(Request $request)
     {
         $stock = StockRequest::where('request_no', $request->reqno)
@@ -659,7 +659,7 @@ class StockRequestController extends Controller
             'data-status' => '{{ $status }}',
             'data-user' => '{{ $user_id }}',
         ])
-        
+
         ->addColumn('sched', function (StockRequest $request){
             return $request->schedule;
         })
@@ -740,12 +740,23 @@ class StockRequestController extends Controller
             }
             return mb_strtoupper($customer);
         })
+        ->addColumn('category', function (StockRequest $request){
+            $category = RequestedItem::select('category_id')
+                ->where('request_no', $request->request_no)
+                ->where('category_id', 26)
+                ->join('items', 'items_id', 'items.id')
+                ->first();
+            if ($category) {
+                return 'yes';
+            }
+            return 'no';
+        })
         ->make(true);
     }
     public function getResolved()
     {
         $user = auth()->user()->branch->id;
-       
+
         $stock = StockRequest::wherein('stat',  ['RESOLVED'])->get();
         return DataTables::of($stock)
         ->setRowData([
@@ -753,7 +764,7 @@ class StockRequestController extends Controller
             'data-status' => '{{ $status }}',
             'data-user' => '{{ $user_id }}',
         ])
-        
+
         ->addColumn('sched', function (StockRequest $request){
             return $request->schedule;
         })
@@ -833,7 +844,7 @@ class StockRequestController extends Controller
         ->make(true);
     }
     public function store(Request $request)
-    {   
+    {
         if ($request->stat == 'ok') {
             $checkreq = StockRequest::where('request_no', $request->reqno)->first();
             if (!$checkreq) {
@@ -1000,7 +1011,7 @@ class StockRequestController extends Controller
         }else{
             return response()->json($initial->qty-($qty+$stock));
         }
-        
+
     }
 
     public function reqcode(Request $request)
@@ -1019,7 +1030,7 @@ class StockRequestController extends Controller
             ->join('items', 'items.id', 'items_id')
             ->join('categories', 'categories.id', 'items.category_id')
             ->get();
-        
+
         $stockreq = StockRequest::where('request_no', $request->reqno)->first();
         $reason = $request->reason;
         $key = Str::random(50);
@@ -1034,14 +1045,14 @@ class StockRequestController extends Controller
         //     'password'   => \config('mailconf.password'),
         // );
         // Config::set('mail', $config);
-        Mail::send('delrequest', ['req'=>$req, 'stockreq'=>$stockreq, 'reason'=>$reason, 'key'=>$key, 'branch'=>$branch->branch],function( $message) use ($stockreq){ 
-            $message->to('nonoy_atizardo@yahoo.com')->subject('Approval Required for Request no. '.$stockreq->request_no); 
+        Mail::send('delrequest', ['req'=>$req, 'stockreq'=>$stockreq, 'reason'=>$reason, 'key'=>$key, 'branch'=>$branch->branch],function( $message) use ($stockreq){
+            $message->to('nonoy_atizardo@yahoo.com')->subject('Approval Required for Request no. '.$stockreq->request_no);
             $message->from(auth()->user()->email, auth()->user()->name);
             $message->cc('dpobien@phillogix.com.ph');
             $message->bcc('jolopez@ideaserv.com.ph');
         });
-        // Mail::send('delrequest', ['req'=>$req, 'stockreq'=>$stockreq, 'reason'=>$reason, 'key'=>$key, 'branch'=>$branch->branch],function( $message) use ($stockreq){ 
-        //     $message->to('emorej046@gmail.com')->subject('Approval Required for Request no. '.$stockreq->request_no); 
+        // Mail::send('delrequest', ['req'=>$req, 'stockreq'=>$stockreq, 'reason'=>$reason, 'key'=>$key, 'branch'=>$branch->branch],function( $message) use ($stockreq){
+        //     $message->to('emorej046@gmail.com')->subject('Approval Required for Request no. '.$stockreq->request_no);
         //     $message->from(auth()->user()->email, 'No-reply');
         // });
         if(count(Mail::failures()) > 0){
@@ -1053,7 +1064,7 @@ class StockRequestController extends Controller
             return response()->json($stockreq);
         }
         // if ($mail) {
-        //     
+        //
         // }else{
         //     dd($mail);
         // }
@@ -1070,7 +1081,7 @@ class StockRequestController extends Controller
         }else{
             return response()->json('notok');
         }
-        
+
     }
 
     public function updatestat(Request $request)
@@ -1085,7 +1096,7 @@ class StockRequestController extends Controller
             $userlogs->activity = "RECEIVED INCOMPLETE SERVICE UNIT STOCK REQUEST: User successfully received incomplete requested items of Service Unit Stock Request No. $request->reqno.";
             $userlogs->save();
         }
-        
+
         if ($request->status == 8) {
             StockReqNo::where('request_number', $request->reqno)->update(['status'=>$request->status, 'verify'=>'Confirmed']);
             $userlogs = new UserLogs;
@@ -1111,7 +1122,7 @@ class StockRequestController extends Controller
                 $stock->serial = mb_strtoupper(Buffersend::where('id', $del)->first()->serial);
                 $stock->status = 'in';
                 $stock->save();
-                
+
                 // $preparedItems = PreparedItem::select('prepared_items.items_id as itemid', 'prepared_items.serial as serial')
                 //     ->join('items', 'prepared_items.items_id', '=', 'items.id')
                 //     ->where('branch_id', auth()->user()->branch->id)
@@ -1171,7 +1182,7 @@ class StockRequestController extends Controller
             }else{
                 $pcs = $count.' pc.';
             }
-            
+
             $log = new UserLog;
             $log->branch_id = auth()->user()->branch->id;
             $log->branch = auth()->user()->branch->branch;
@@ -1180,7 +1191,7 @@ class StockRequestController extends Controller
             $log->fullname = auth()->user()->name.' '.auth()->user()->middlename.' '.auth()->user()->lastname;
             $log->save();
         }
-        
+
         // $preparedItem = PreparedItem::where('branch_id', auth()->user()->branch->id)
         //     ->where('request_no', $request->reqno)
         //     ->where('intransit', 'yes')
@@ -1206,7 +1217,7 @@ class StockRequestController extends Controller
         //         }else{
         //             $reqno->stat = 'COMPLETED';
         //         }
-        //     }  
+        //     }
         // }
         // $reqno->save();
         $data = '1';
@@ -1304,7 +1315,7 @@ class StockRequestController extends Controller
             }else{
                 $pcs = $count.' pc.';
             }
-            
+
             $log = new UserLog;
             $log->branch_id = auth()->user()->branch->id;
             $log->branch = auth()->user()->branch->branch;
@@ -1339,13 +1350,13 @@ class StockRequestController extends Controller
                 }else{
                     $reqno->stat = 'COMPLETED';
                 }
-            }  
+            }
         }
         $reqno->save();
         $data = '1';
         return response()->json($data);
     }
-    
+
     public function test(Request $request)
     {
         StockRequest::where('status', 4)->where( 'updated_at', '<', Carbon::now()->subDays(5))->update(['status' => 6]);
@@ -1357,7 +1368,7 @@ class StockRequestController extends Controller
         $data = $notrec->save();
         return response()->json($data);
     }
-    
+
     public function intransit(Request $request)
     {
         if($request->status == 'IN TRANSIT'){
@@ -1423,7 +1434,7 @@ class StockRequestController extends Controller
         return response()->json($data);
     }
     public function upserial(Request $request)
-    {   
+    {
         if ($request->new == "N/A") {
             $check = Stock::where('serial', 'walangserial')->where('status', 'in')->first();
             $checks = Defective::where('serial', 'walangserial')->where('status', 'For return')->first();
@@ -1503,13 +1514,13 @@ class StockRequestController extends Controller
                 ->first();
             //$branch = Branch::where('id', $request->branchid)->first();
             //$email = $branch->email;
-            /*Mail::send('sched', ['prepitem' => $prepitem, 'sched'=>$request->datesched,'reqno' => $request->reqno,'branch' =>$branch],function( $message) use ($branch, $email){ 
-                $message->to($email, $branch->head)->subject 
-                    (auth()->user()->branch->branch); 
-                $message->from('no-reply@ideaserv.com.ph', 'NO REPLY - Warehouse'); 
-                $message->cc(['emorej046@gmail.com', 'gerard.mallari@gmail.com']); 
+            /*Mail::send('sched', ['prepitem' => $prepitem, 'sched'=>$request->datesched,'reqno' => $request->reqno,'branch' =>$branch],function( $message) use ($branch, $email){
+                $message->to($email, $branch->head)->subject
+                    (auth()->user()->branch->branch);
+                $message->from('no-reply@ideaserv.com.ph', 'NO REPLY - Warehouse');
+                $message->cc(['emorej046@gmail.com', 'gerard.mallari@gmail.com']);
             });*/
-            
+
         }else if($request->stat == 'resched'){
             if ($request->status == 'RESCHEDULED') {
                 $reqno = StockRequest::where('request_no', $request->reqno)->first();
@@ -1551,11 +1562,11 @@ class StockRequestController extends Controller
                 $prep->schedule = $request->datesched;
                 $prep->intransit = 'no';
                 $prep->user_id = auth()->user()->id;
-                $data = $prep->save();          
+                $data = $prep->save();
         }
         return response()->json($data);
     }
-    
+
     public function dest(Request $request)
     {
         $delete = StockRequest::where('request_no', $request->reqno)->where('status', 'PENDING')->first();
@@ -1642,7 +1653,7 @@ class StockRequestController extends Controller
         Buffersend::where('buffers_no', $request->buffers_no)
             ->where('items_id', $request->items_id)
             ->where('status', 'For receiving')->update(['status'=>'Received']);
-        for ($i=0; $i < $count ; $i++) { 
+        for ($i=0; $i < $count ; $i++) {
             Warehouse::create([
                 'user_id' => auth()->user()->id,
                 'category_id' => $request->category_id,
@@ -1696,19 +1707,19 @@ class StockRequestController extends Controller
                 return $qty;
             })
             ->addColumn('item', function (Buffersend $buffer){
-                
+
                 return strtoupper($buffer->item);
             })
             ->make(true);
-        
+
     }
-    
+
     public function buffersend(Request $request)
     {
         $buffer = Buffer::query()
                     ->where('buffers_no', $request->buffers_no)
                     ->where('items_id', $request->items_id)->decrement('pending', $request->qty);
-        for ($i=0; $i < $request->qty ; $i++) { 
+        for ($i=0; $i < $request->qty ; $i++) {
             $buffersend = new Buffersend;
             $buffersend->user_id = auth()->user()->id;
             $buffersend->items_id = $request->items_id;
@@ -1720,7 +1731,7 @@ class StockRequestController extends Controller
         $check = Buffer::query()
                     ->where('buffers_no', $request->buffers_no)
                     ->where('pending', '!=', 0)->first();
-            
+
         if ($check) {
             BufferNo::query()
                 ->where('buffers_no', $request->buffers_no)
@@ -1743,7 +1754,7 @@ class StockRequestController extends Controller
         $log->fullname = auth()->user()->name.' '.auth()->user()->middlename.' '.auth()->user()->lastname;
         $log->save();
         return response()->json(true);
-        
+
     }
     public function bufferstore(Request $request)
     {
@@ -1808,7 +1819,7 @@ class StockRequestController extends Controller
             ->where('request_number', $request->buffers_no)
             ->get();
         return DataTables::of($buffers)
-        
+
         ->addColumn('item', function (BufferItem $buffer){
             return strtoupper($buffer->item);
         })
@@ -1972,7 +1983,7 @@ class StockRequestController extends Controller
                 $data = "allowed";
             }
         }
-        
+
         return response()->json($data);
     }
 
@@ -2024,7 +2035,7 @@ class StockRequestController extends Controller
                 $data = "allowed";
             }
         }
-        
+
         return response()->json($data);
     }
 }

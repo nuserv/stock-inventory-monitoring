@@ -224,10 +224,10 @@ class HomeController extends Controller
         //     }
         // }
         // return 'done';
-        if (auth()->user()->id == 52 || auth()->user()->id == 352) {
-            Excel::store(new CdmExport('test'), 'Master.csv');
-            // exec('cd /var/www/html/stock && bash cdm.sh');
-        }
+        // if (auth()->user()->id == 52 || auth()->user()->id == 310) {
+        //     Excel::store(new CdmExport('test'), 'Master.csv');
+        //     // exec('cd /var/www/html/stock && bash cdm.sh');
+        // }
 
         if (auth()->user()->status == '0') {
             return redirect('logout');
@@ -275,6 +275,11 @@ class HomeController extends Controller
                 $message->from('bsms.support@ideaserv.com.ph', 'BSMS Support Team');
             });
             $responder->delete();
+        }
+
+        if (auth()->user()->id == 153){
+            $title = "Pending";
+            return view('pages.pending', compact('title'));
         }
 
         if (auth()->user()->hasanyrole('Viewer', 'Viewer PLSI', 'Viewer IDSI')) {

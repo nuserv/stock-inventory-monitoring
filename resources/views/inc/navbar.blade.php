@@ -29,17 +29,23 @@
                     <a class="nav-link {{ Request::is('unrepair') ? 'active' : '' }}" href="{{ url('/unrepair') }}">Unrepairable</a>
                 </li>
             @endif
-           
+            
             @if(auth()->user()->hasanyrole('Viewer', 'Viewer PLSI', 'Viewer IDSI'))
-             <li class="nav-item">
-                <a class="nav-link {{ Request::is('/') ? 'active' : '' }}" href="{{ url('/') }}">Branch Activities</a>
-            </li>
-            <li class="nav-item">
-                    <a class="nav-link {{ Request::is('pending') ? 'active' : '' }}" href="{{ route('home.request') }}">Stock Request</a>
-            </li>
-            <li class="nav-item" style="margin-left:0px;margin-right:0px;">
-                    <a class="nav-link {{ Request::is('branch') ? 'active' : '' }}" href="{{ route('branch.index') }}">Service Center</a>
-            </li>
+                @if (auth()->user()->id == 153)
+                    <li class="nav-item">
+                        <a class="nav-link {{ Request::is('pending') ? 'active' : '' }}" href="{{ route('home.request') }}">Stock Request</a>
+                    </li>
+                @else
+                    <li class="nav-item">
+                        <a class="nav-link {{ Request::is('/') ? 'active' : '' }}" href="{{ url('/') }}">Branch Activities</a>
+                    </li>
+                    <li class="nav-item">
+                            <a class="nav-link {{ Request::is('pending') ? 'active' : '' }}" href="{{ route('home.request') }}">Stock Request</a>
+                    </li>
+                    <li class="nav-item" style="margin-left:0px;margin-right:0px;">
+                            <a class="nav-link {{ Request::is('branch') ? 'active' : '' }}" href="{{ route('branch.index') }}">Service Center</a>
+                    </li>
+                @endif
             @endif
             @if(auth()->user()->hasrole('Warehouse Administrator'))
                 <li class="nav-item" style="margin-left:0px;margin-right:0px;">

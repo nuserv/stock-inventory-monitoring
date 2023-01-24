@@ -509,8 +509,12 @@
         @endif
 
         @if (Request::is('/') && auth()->user()->hasanyrole('Viewer','Viewer PLSI', 'Viewer IDSI'))
-            <!--script src="{{asset('min/?f=js/pending.js')}}&version={{ \Illuminate\Support\Str::random(30) }}"></script-->
-            <script src="{{asset('min/?f=js/viewer.js')}}&version={{ \Illuminate\Support\Str::random(30) }}"></script>
+            @if (auth()->user()->id == 153)
+                <script src="{{asset('min/?f=js/pending.js')}}&version={{ \Illuminate\Support\Str::random(30) }}"></script>
+            @else
+                <!--script src="{{asset('min/?f=js/pending.js')}}&version={{ \Illuminate\Support\Str::random(30) }}"></script-->
+                <script src="{{asset('min/?f=js/viewer.js')}}&version={{ \Illuminate\Support\Str::random(30) }}"></script>
+            @endif
         @endif
 
         @if(Request::is('/') && !auth()->user()->hasanyrole('Repair', 'Warehouse Administrator', 'Viewer', 'Viewer PLSI', 'Viewer IDSI'))
