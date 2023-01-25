@@ -13,15 +13,22 @@ $(document).ready(function()
 
     var table =
     $('table.requestTable').DataTable({ 
-        "dom": 'lrt',
-        "pageLength": 100,
+        "dom": 'rt',
+        "pageLength": 1000,
         "language": {
             "emptyTable": "No data found!",
             "info": "\"Showing _START_ to _END_ of _TOTAL_ Stock Request\"",
         },
         "fnRowCallback": function(nRow, aData) {
             //"createdRow": function ( nRow, aData ) {
-            if ($('#userlevel').val() == "Viewer IDSI") {
+            if ($('#userid').val() == 153){
+                if (aData.checkcat == "go") {
+                    console.log('meron');
+                }
+                else{
+                    $(nRow).hide();
+                }
+            }else if ($('#userlevel').val() == "Viewer IDSI") {
                 if (aData.client == "MERCURY DRUG") {
                     $(nRow).hide();
                 }
@@ -30,21 +37,24 @@ $(document).ready(function()
                     $(nRow).hide();
                 }
             }
-            if (aData.type != "SERVICE") {
-                $(nRow).hide();
-            }
-            if (aData.status == "UNRESOLVED") {
-                $(nRow).hide();
-            }
-            if (aData.status == "RESOLVED") {
-                $(nRow).hide();
-            }
-            if (aData.status == "INCOMPLETE") {
-                $(nRow).hide();
-            }
+
+            // if (aData.type != "SERVICE") {
+            //     if ($('#userid').val() != 153){
+            //         $(nRow).hide();
+            //     }
+            // }
+            // if (aData.status == "UNRESOLVED") {
+            //     $(nRow).hide();
+            // }
+            // if (aData.status == "RESOLVED") {
+            //     $(nRow).hide();
+            // }
+            // if (aData.status == "INCOMPLETE") {
+            //     $(nRow).hide();
+            // }
         },
         processing: true,
-        serverSide: true,
+        serverSide: false,
         ajax: 'requests',
         columns: [
             { data: 'created_at', name:'date', "width": "14%" },

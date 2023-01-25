@@ -639,10 +639,18 @@ class StockRequestController extends Controller
     {
         $user = auth()->user()->branch->id;
         if (auth()->user()->branch->branch != 'Warehouse' && auth()->user()->branch->branch != 'Main-Office'){
-            $stock = StockRequest::wherein('status',  ['PARTIAL SCHEDULED', 'PARTIAL IN TRANSIT', 'PARTIAL PENDING', 'PENDING', 'SCHEDULED', 'INCOMPLETE', 'RESCHEDULED', 'PARTIAL', 'IN TRANSIT'])
-            ->where('stat', 'ACTIVE')
-            ->where('branch_id', $user)
-            ->get();
+            if (auth()->user()->id != 153) {
+                $stock = StockRequest::wherein('status',  ['PARTIAL SCHEDULED', 'PARTIAL IN TRANSIT', 'PARTIAL PENDING', 'PENDING', 'SCHEDULED', 'INCOMPLETE', 'RESCHEDULED', 'PARTIAL', 'IN TRANSIT'])
+                ->where('stat', 'ACTIVE')
+                ->where('branch_id', $user)
+                ->get();
+            }
+            else{
+                $stock = StockRequest::wherein('status',  ['PARTIAL SCHEDULED', 'PARTIAL IN TRANSIT', 'PARTIAL PENDING', 'PENDING', 'SCHEDULED', 'INCOMPLETE', 'RESCHEDULED', 'PARTIAL', 'IN TRANSIT'])
+                ->where('stat', 'ACTIVE')
+                ->get();
+            }
+            
         }else if(auth()->user()->hasRole('Editor', 'Manager')){
             $stock = StockRequest::wherein('status',  ['PARTIAL SCHEDULED', 'PARTIAL IN TRANSIT', 'PARTIAL PENDING', 'PENDING', 'SCHEDULED', 'INCOMPLETE', 'RESCHEDULED', 'UNRESOLVED', 'PARTIAL', 'IN TRANSIT'])
                 ->where('stat', 'ACTIVE')
@@ -740,18 +748,18 @@ class StockRequestController extends Controller
             }
             return mb_strtoupper($customer);
         })
-        // ->addColumn('category', function (StockRequest $request){
-        //     $category = RequestedItem::select('category_id')
-        //         ->where('request_no', $request->request_no)
-        //         ->where('pending', '!=', 0)
-        //         ->where('category_id', 26)
-        //         ->join('items', 'items_id', 'items.id')
-        //         ->first();
-        //     if ($category) {
-        //         return 'yes';
-        //     }
-        //     return 'no';
-        // })
+        ->addColumn('checkcat', function (StockRequest $request){
+            $category = RequestedItem::select('category_id')
+                ->where('request_no', $request->request_no)
+                ->where('pending', '!=', 0)
+                ->where('category_id', 26)
+                ->join('items', 'items_id', 'items.id')
+                ->first();
+            if ($category) {
+                return 'go';
+            }
+            return 'empty';
+        })
         ->make(true);
     }
     public function getResolved()
