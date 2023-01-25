@@ -21,11 +21,7 @@ $(document).ready(function()
         },
         "fnRowCallback": function(nRow, aData) {
             //"createdRow": function ( nRow, aData ) {
-            if ($('#userid').val() == 153){
-                if (aData.category != 'yes') {
-                    $(nRow).hide();
-                }
-            }else if ($('#userlevel').val() == "Viewer IDSI") {
+            if ($('#userlevel').val() == "Viewer IDSI") {
                 if (aData.client == "MERCURY DRUG") {
                     $(nRow).hide();
                 }
@@ -480,7 +476,7 @@ $(document).ready(function()
                     },
                 });
             }
-        }else if (trdata.status == 'PENDING') {
+        }else if (trdata.status == 'PENDING' || trdata.status == 'PARTIAL PENDING') {
             $('#prcBtn').show();
             $('.sched').hide();
             $('#sched').val('');

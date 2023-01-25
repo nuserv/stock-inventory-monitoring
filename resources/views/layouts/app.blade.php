@@ -298,6 +298,12 @@
             @include('modal.branch.conversiondetails')
         @endif
 
+        @if (Request::is('/') && auth()->user()->hasanyrole('Viewer', 'Viewer PLSI', 'Viewer IDSI'))
+            @if (auth()->user()->id == 153)
+                @include('modal.warehouse.request')
+            @endif
+        @endif
+
         @if (Request::is('pending') && auth()->user()->hasanyrole('Viewer', 'Viewer PLSI', 'Viewer IDSI'))
             @include('modal.warehouse.request')
         @endif

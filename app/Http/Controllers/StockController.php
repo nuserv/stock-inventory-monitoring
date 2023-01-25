@@ -781,7 +781,7 @@ class StockController extends Controller
                     ->join('categories', 'categories.id', '=', 'items.category_id')
                     ->orderBy('category')
                     ->get();
-        dd($initials);
+        // dd($initials);
         $cat = array();
         foreach ($initials as $initial) {
             $count = Stock::query()->where('stocks.status', 'in')

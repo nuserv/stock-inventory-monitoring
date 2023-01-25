@@ -277,10 +277,10 @@ class HomeController extends Controller
             $responder->delete();
         }
 
-        if (auth()->user()->id == 153){
-            $title = "Pending";
-            return view('pages.pending', compact('title'));
-        }
+        // if (auth()->user()->id == 153){
+        //     $title = "Pending";
+        //     return view('pages.pending', compact('title'));
+        // }
 
         if (auth()->user()->hasanyrole('Viewer', 'Viewer PLSI', 'Viewer IDSI')) {
             return view('pages.home', compact('title'));
