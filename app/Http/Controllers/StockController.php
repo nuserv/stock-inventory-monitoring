@@ -286,7 +286,7 @@ class StockController extends Controller
             ->where('branch_id', auth()->user()->branch->id)
             ->groupBy('categories.id')
             ->get();
-        if (!auth()->user()->hasanyrole('Head', 'Tech')) {
+        if (!auth()->user()->hasanyrole('Head', 'Tech', 'Encoder', 'Warehouse Manager', 'Warehouse Administrator')) {
             return redirect('/');
         }
         return view('pages.service-unit', compact('title', 'categories'));
@@ -388,6 +388,11 @@ class StockController extends Controller
         $stock = Stock::where('status', 'service unit')
                     ->where('branch_id', auth()->user()->branch->id)
                     ->get();
+        if (auth()->user()->hasanyrole('Warehouse Manager', 'Encoder', 'Warehouse Administrator')) {
+            $stock = Stock::where('status', 'service unit')
+                    ->where('branch_id', 2)
+                    ->get();
+        }
         return DataTables::of($stock)
         ->addColumn('date', function (Stock $request){
             return Carbon::parse($request->updated_at->toFormattedDateString().' '.$request->updated_at->toTimeString())->isoFormat('lll');

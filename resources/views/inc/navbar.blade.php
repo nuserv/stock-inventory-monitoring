@@ -94,10 +94,10 @@
                         <a class="nav-link {{ Request::is('request') ? 'active' : '' }}" href="{{ route('stock.index') }}">Stock Request</a>
                     </li>
                     @if(auth()->user()->hasanyrole('Warehouse Manager'))
-                    <li class="nav-item">
-                        <a class="nav-link {{ Request::is('itemrequest') ? 'active' : '' }}" href="{{ route('stock.itemrequest') }}">Requested Items</a>
-                    </li>
-                    <li class="nav-item">
+                        <li class="nav-item">
+                            <a class="nav-link {{ Request::is('itemrequest') ? 'active' : '' }}" href="{{ route('stock.itemrequest') }}">Requested Items</a>
+                        </li>
+                        <li class="nav-item">
                             <a class="nav-link {{ Request::is('billable') ? 'active' : '' }}" href="{{ route('stock.billable') }}">Billable</a>
                         </li>
                     @endif
@@ -169,6 +169,11 @@
                             <a class="nav-link {{ Request::is('buffer') ? 'active' : '' }}" href="{{ url('buffer') }}">Buffer Stock Request</a>
                         </li>
                     @endif
+                @endif
+                @if(auth()->user()->hasanyrole('Warehouse Manager', 'Encoder', 'Warehouse Administrator'))
+                    <li class="nav-item">
+                        <a class="nav-link {{ Request::is('service-unit') ? 'active' : '' }}" href="{{ route('index.service-unit') }}">Service IN / OUT</a>
+                    </li>
                 @endif
             @endif
         </ul>
