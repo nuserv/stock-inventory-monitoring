@@ -1437,7 +1437,7 @@ class StockController extends Controller
                 return $initial->qty;
             })
             ->addColumn('pending', function (Item $request){
-                $initial = RequestedItem::query()->where('items_id', $request->id)->sum('pending');
+                $initial = RequestedItem::query()->where('status','PENDING')->where('items_id', $request->id)->sum('pending');
                 return $initial;
             })
             ->make(true);

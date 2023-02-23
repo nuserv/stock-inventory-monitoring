@@ -573,6 +573,7 @@ class HomeController extends Controller
             foreach ($users as $user) {
                 $myuser[] = $user->id;
             }
+            $$acts5 = User::query()->where('branch_id', 2)->get();
             $logs = Userlog::query()
                 ->wherein('user_id', $myuser)->get();
             $acts = Userlog::query()->where('activity', 'LIKE', 'RECEIVED REPAIRED%')->get();
@@ -595,6 +596,9 @@ class HomeController extends Controller
                 array_push($act, $acs);
             }
             foreach ($acts4 as $acs) {
+                array_push($act, $acs);
+            }
+            foreach ($acts5 as $acs) {
                 array_push($act, $acs);
             }
             $act = collect($act)->sortBy('id')->all();
