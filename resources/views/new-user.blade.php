@@ -33,7 +33,7 @@
     <p class="MsoNormal">
     <span style="font-family:&quot;Arial&quot;,sans-serif;color:#333333">
         USERNAME: <b>{{$email}}</b><br>
-        TEMPORARY PASSWORD: <b>123456</b>
+        TEMPORARY PASSWORD: <b>{{$password}}</b>
     </span>
     </p>
     <p class="MsoNormal"><b>

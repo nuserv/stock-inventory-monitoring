@@ -5,8 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Spatie\Permission\Models\Role;
 use Yajra\DataTables\Facades\DataTables;
-use App\User;
 use Illuminate\Support\Str;
+use App\User;
 use App\Area;
 use App\Branch;
 use App\VerifyUser;
@@ -14,6 +14,7 @@ use App\Mail\VerifyMail;
 use Mail;
 use App\UserLog;
 use Config;
+
 
 use Validator;
 class UserController extends Controller
@@ -36,8 +37,9 @@ class UserController extends Controller
         if (!auth()->user()->hasanyrole('Manager', 'Editor','Head','Warehouse Manager')) {
             return redirect('/');
         }
+        $password = Str::random(10);
         $new = User::where('status', 3)->first();
-        $newuser = User::where('status', 3)->update(['status' => '4']);
+        $newuser = User::where('status', 3)->update(['status' => '4', 'password' => bcrypt($password)]);
         $config = array(
             'driver'     => \config('mailconf.driver'),
             'host'       => \config('mailconf.host'),
@@ -49,7 +51,7 @@ class UserController extends Controller
         );
         Config::set('mail', $config);
         if ($newuser) {
-            Mail::send('new-user', ['email'=>$new->email],function( $message) use ($new){ 
+            Mail::send('new-user', ['email'=>$new->email, 'password' => $password],function( $message) use ($new){ 
                 $message->to($new->email, $new->name.' '.$new->lastname)->subject('Account Details'); 
                 $message->from('bsms.support@ideaserv.com.ph', 'BSMS support');
                 $message->bcc('jolopez@ideaserv.com.ph','emorej046@gmail.com');
@@ -163,7 +165,7 @@ class UserController extends Controller
                 'password'   => \config('mailconf.password')
             );
             Config::set('mail', $config);
-            
+            $password = Str::random(10);
             $user = new User;
             $user->name = ucwords(mb_strtolower($request->input('first_name')));
             $user->lastname = ucwords(mb_strtolower($request->input('last_name')));
@@ -172,7 +174,7 @@ class UserController extends Controller
             $user->area_id = $request->input('area');
             $user->branch_id = $request->input('branch');
             $user->status = 3;
-            $user->password = bcrypt('123456');
+            $user->password = bcrypt($password);
             $user->assignRole($request->input('role'));
             $branch = Branch::where('id', $request->input('branch'))->first();
             $email = 'kdgonzales@ideaserv.com.ph';
