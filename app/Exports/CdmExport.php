@@ -31,7 +31,7 @@ class CdmExport implements FromCollection, WithHeadings
     {
         // dd(Carbon::createFromTime(0, 0, 0)->subDays(6));
         if (Carbon::now()->format('d') == 1) {
-            if (Carbon::now()->format('h') == 4 && Carbon::now()->format('i') > 5) {
+            if (Carbon::now()->format('h') >= 4 && Carbon::now()->format('i') > 5) {
                 $prev = DB::table('asterisk.'.Carbon::now()->subMonth()->Format('FY'))
                 ->select(
                     'accountcode',

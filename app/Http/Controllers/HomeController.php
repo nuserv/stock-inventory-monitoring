@@ -202,7 +202,6 @@ class HomeController extends Controller
     }
     public function index()
     {
-        
         // return false;
         // foreach (Item::all() as $key ) {
         //     if (!StockReq::where('id', $key->id)->first()) {
@@ -517,37 +516,39 @@ class HomeController extends Controller
     }
     public function activity()
     {   
-        if (auth()->user()->hasRole('Viewer PLSI')) {
-            $acts = UserLog::query()->get();
-            $act = [];
-            foreach ($acts as $acs) {
-                if(str_contains(strtolower($acs->activity), 'mercury drug')){
-                    array_push($act, $acs);
-                }
-                if ($acs->service == "yes" && $acs->company == "PLSI") {
-                    array_push($act, $acs);
-                }
-            }
-        }
-        if (auth()->user()->hasanyRole('Viewer IDSI', 'Viewer')) {
-            $acts = UserLog::query()->where('activity', 'not like', '%mercury drug%' )->get();
-            $act = [];
-            foreach ($acts as $acs) {
-                if(str_contains($acs->activity, 'SERVICE OUT') || str_contains($acs->activity, 'SERVICE IN')){
-                    array_push($act, $acs);
-                }
-                if(str_contains($acs->activity, 'REPLACED')){
-                    array_push($act, $acs);
-                }
-                if ($acs->service == "yes" && $acs->company == "IDSI") {
-                    array_push($act, $acs);
-                }
-                if ($acs->service == "yes" && $acs->company == "APSOFT") {
-                    array_push($act, $acs);
-                }
-            }
-        }
-        if (auth()->user()->hasAnyRole('Editor',  'Manager')) {
+        // if (auth()->user()->hasRole('Viewer PLSI')) {
+        //     $acts = UserLog::query()->get();
+        //     $act = [];
+        //     foreach ($acts as $acs) {
+        //         if(str_contains(strtolower($acs->activity), 'mercury drug')){
+        //             array_push($act, $acs);
+        //         }
+        //         if ($acs->service == "yes" && $acs->company == "PLSI") {
+        //             array_push($act, $acs);
+        //         }
+        //     }
+        // }
+        // if (auth()->user()->hasanyRole('Viewer IDSI', 'Viewer')) {
+        //     $acts = UserLog::query()
+        //         ->where('activity', 'not like', '%mercury drug%')
+        //         ->get();
+        //     $act = [];
+        //     foreach ($acts as $acs) {
+        //         if(str_contains($acs->activity, 'SERVICE OUT') || str_contains($acs->activity, 'SERVICE IN')){
+        //             array_push($act, $acs);
+        //         }
+        //         if(str_contains($acs->activity, 'REPLACED')){
+        //             array_push($act, $acs);
+        //         }
+        //         if ($acs->service == "yes" && $acs->company == "IDSI") {
+        //             array_push($act, $acs);
+        //         }
+        //         if ($acs->service == "yes" && $acs->company == "APSOFT") {
+        //             array_push($act, $acs);
+        //         }
+        //     }
+        // }
+        if (auth()->user()->hasAnyRole('Editor',  'Manager', 'Viewer IDSI', 'Viewer', 'Viewer PLSI')) {
             $act = UserLog::query();
                 /*
                 ->take(1000)

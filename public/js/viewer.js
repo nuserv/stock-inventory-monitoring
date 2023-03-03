@@ -19,7 +19,7 @@ $(document).ready(function()
             }
         ],
         processing: true,
-        serverSide: false,
+        serverSide: true,
         ajax: {
             url: 'activity',
             error: function(data) {
@@ -51,7 +51,7 @@ $(document).ready(function()
         ],
         columns: [
             { data: 'id', name:'id',"width": "14%"},
-            { data: 'date', name:'date',"width": "14%"},
+            { data: 'created_at', name:'created_at',"width": "14%"},
             { data: 'fullname', name:'fullname',"width": "14%"},
             { data: 'branch', name:'branch',"width": "14%"},
             { data: 'activity', render: function ( data, type, row ) {
