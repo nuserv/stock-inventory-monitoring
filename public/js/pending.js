@@ -67,6 +67,7 @@ $(document).ready(function()
             //     $(nRow).hide();
             // }
         },
+        ordering: false,
         processing: true,
         serverSide: false,
         ajax: 'requests',

@@ -658,6 +658,7 @@ class StockRequestController extends Controller
         }else{
             $stock = StockRequest::wherein('status',  ['PARTIAL SCHEDULED', 'PARTIAL IN TRANSIT', 'PARTIAL PENDING', 'PENDING', 'SCHEDULED', 'INCOMPLETE', 'RESCHEDULED', 'UNRESOLVED', 'PARTIAL', 'IN TRANSIT'])
                 ->where('stat', 'ACTIVE')
+                ->orderBy('id', 'desc')
                 ->get();
             //dd($stock);
         }
