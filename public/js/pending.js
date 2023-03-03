@@ -28,15 +28,29 @@ $(document).ready(function()
                 else{
                     $(nRow).hide();
                 }
-            }else if ($('#userlevel').val() == "Viewer IDSI") {
+            }
+            else if ($('#userlevel').val() == "Viewer IDSI") {
                 if (aData.client == "MERCURY DRUG") {
                     $(nRow).hide();
                 }
-            }else if ($('#userlevel').val() == "Viewer PLSI"){
+                if (aData.customer == 'NONE') {
+                    $(nRow).hide();
+                }
+            }
+            else if ($('#userlevel').val() == "Viewer") {
+                if (aData.client == "MERCURY DRUG") {
+                    $(nRow).hide();
+                }
+                if (aData.customer == 'NONE') {
+                    $(nRow).hide();
+                }
+            }
+            else if ($('#userlevel').val() == "Viewer PLSI"){
                 if (aData.client != "MERCURY DRUG") {
                     $(nRow).hide();
                 }
             }
+            
 
             // if (aData.type != "SERVICE") {
             //     if ($('#userid').val() != 153){
