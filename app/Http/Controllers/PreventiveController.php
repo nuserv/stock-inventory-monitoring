@@ -33,7 +33,7 @@ class PreventiveController extends Controller
     {
         $branch = Branch::where('id', $request->branch)->first();
         $months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sept", "Oct", "Nov", "Dec"];
-        if (auth()->user()->hasanyrole('Manager', 'Editor') || auth()->user()->id == 142 || auth()->user()->id == 134) {
+        if (auth()->user()->hasanyrole('Manager', 'Editor') || auth()->user()->id == 142 || auth()->user()->id == 134 || auth()->user()->id == 134) {
             return Excel::download(new PmSchedExport($request->year, $request->from, $request->to, $branch, $request->branch), strtoupper($branch->branch).' PM REPORT '.$months[$request->from-1].'-'.$months[$request->to-1].' '.$request->year.'.xlsx');
         }else{
             return Excel::download(new PmSchedExport($request->year, $request->from, $request->to, '', ''), strtoupper(auth()->user()->branch->branch).' PM REPORT '.$months[$request->from-1].'-'.$months[$request->to-1].' '.$request->year.'.xlsx');
@@ -44,7 +44,7 @@ class PreventiveController extends Controller
     {
         $branch = Branch::where('id', $request->branch)->first();
         $months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sept", "Oct", "Nov", "Dec"];
-        if (auth()->user()->hasanyrole('Manager', 'Editor') || auth()->user()->id == 142 || auth()->user()->id == 134) {
+        if (auth()->user()->hasanyrole('Manager', 'Editor') || auth()->user()->id == 142 || auth()->user()->id == 134 || auth()->user()->id == 164) {
             return Excel::download(new PmSchedExport($request->year, $request->from, $request->to, $branch, $request->branch), strtoupper($branch->branch).' PM REPORT '.$months[$request->from-1].'-'.$months[$request->to-1].' '.$request->year.'.xlsx');
         }else{
             return Excel::download(new PmSchedExport($request->year, $request->from, $request->to, '', ''), strtoupper(auth()->user()->branch->branch).' PM REPORT '.$months[$request->from-1].'-'.$months[$request->to-1].' '.$request->year.'.xlsx');
@@ -235,7 +235,38 @@ class PreventiveController extends Controller
                         ->where('area_id', 3)
                         ->get();
                 }
-            }else{
+            }else if (auth()->user()->id == 164) {
+                if (Carbon::now() <= Carbon::now()->firstOfQuarter()->add(7, 'day')) {
+                    $pmbranches = PmBranches::query()
+                        ->select('Conversion','customer_branch as client', 'pm_branches.customer_branches_code', 'customer_branches.id as customer_id')
+                        ->join('customer_branches', DB::raw('(code*1)'),DB::raw('(customer_branches_code*1)'))
+                        ->join('branches', 'branches.id', 'branch_id')
+                        ->where('customer_id', '1')
+                        ->where('quarter', '!=', Carbon::now()->subquarter(1)->quarter)
+                        ->where('area_id', 5)
+                        ->get();
+                    if ($pmbranches->count() == 0) {
+                        $pmbranches = PmBranches::query()
+                        ->select('Conversion','customer_branch as client', 'pm_branches.customer_branches_code', 'customer_branches.id as customer_id')
+                        ->join('customer_branches', DB::raw('(code*1)'),DB::raw('(customer_branches_code*1)'))
+                        ->join('branches', 'branches.id', 'branch_id')
+                        ->where('customer_id', '1')
+                        ->where('quarter', '!=', Carbon::now()->quarter)
+                        ->where('area_id', 5)
+                        ->get();
+                    }
+                }else{
+                    $pmbranches = PmBranches::query()
+                        ->select('Conversion','customer_branch as client', 'pm_branches.customer_branches_code', 'customer_branches.id as customer_id')
+                        ->join('customer_branches', DB::raw('(code*1)'),DB::raw('(customer_branches_code*1)'))
+                        ->join('branches', 'branches.id', 'branch_id')
+                        ->where('customer_id', '1')
+                        ->where('quarter', '!=', Carbon::now()->quarter)
+                        ->where('area_id', 3)
+                        ->get();
+                }
+            }
+            else{
                 if (Carbon::now() <= Carbon::now()->firstOfQuarter()->add(7, 'day')) {
                     $pmbranches = PmBranches::query()
                         ->select('Conversion','customer_branch as client', 'pm_branches.customer_branches_code', 'customer_branches.id as customer_id')
