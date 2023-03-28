@@ -283,7 +283,9 @@
         @if(Request::is('itemrequest'))
             @include('modal.itemrequest')
         @endif
-
+        @if(Request::is('schedule'))
+            @include('modal.addPM')
+        @endif
         @if(Request::is('loans'))
             @include('modal.branch.loans')
             @include('modal.branch.loan')

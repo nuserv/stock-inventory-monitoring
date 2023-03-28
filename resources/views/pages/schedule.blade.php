@@ -70,8 +70,10 @@
 </div><br>
 <div class="d-flex">
     @if(auth()->user()->hasAnyRole('Head', 'Tech', 'Editor', 'Manager'))
-    {{-- <input type="button" id="schedBtn" class="btn btn-xs btn-primary" value="SCHEDULE PM"> --}}
-    <input type="button" id="prevBtn" class="btn btn-xs btn-primary ml-auto" value="VIEW PREVIOUS PM">
+        @if(auth()->user()->hasAnyRole('Editor', 'Manager'))
+            <input type="button" id="addPMBtn" class="btn btn-xs btn-primary" value="ADD PM BRANCH">
+        @endif
+        <input type="button" id="prevBtn" class="btn btn-xs btn-primary ml-auto" value="VIEW PREVIOUS PM">
     @endif
 </div>
 @endsection

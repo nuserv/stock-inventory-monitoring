@@ -6,7 +6,10 @@ use Illuminate\Http\Request;
 use Yajra\DataTables\Facades\DataTables;
 
 use App\CustomerBranch;
+use Carbon\Carbon;
 use App\Customer;
+use App\PmBranches;
+use DB;
 use Mail;
 class CustomerController extends Controller
 {
@@ -99,6 +102,57 @@ class CustomerController extends Controller
         $data = Customer::query()->where('customer', 'LIKE', '%'.str_replace(' ','%',$request->hint).'%')->orderBy('customer')->get();
         return response()->json($data);
     }
+
+    public function getPmclient(Request $request)
+    {
+        $pcustomer = CustomerBranch::select('code', 'customer_branch')
+            ->where('customer_id', 1)
+            ->where(DB::raw('(code*1)'), $request->id)
+            ->first();
+        if ($pcustomer) {
+            return response()->json($pcustomer);
+        }
+        return response('none');
+    }
+
+    public function checkPmclient(Request $request)
+    {
+        if ($request->type == 'add') {
+            $pcustomer = PmBranches::where(DB::raw('(customer_branches_code*1)'), $request->id*1)
+                    ->join('branches', 'id', 'branch_id')
+                    ->first();
+            if (!$pcustomer) {
+                $branch = PmBranches::create([
+                    'customer_branches_code'=>$request->id*1,
+                    'quarter'=>Carbon::now()->subquarter(1)->quarter,
+                    'branch_id'=>$request->branch_id
+                ]);
+                return response()->json($branch);
+            }
+        }
+        else if ($request->type == 'update'){
+            $pcustomer = PmBranches::where(DB::raw('(customer_branches_code*1)'), $request->id*1)
+                    ->join('branches', 'id', 'branch_id')
+                    ->first();
+            if ($pcustomer) {
+                $pcustomer = PmBranches::where(DB::raw('(customer_branches_code*1)'), $request->id*1)
+                    ->join('branches', 'id', 'branch_id')
+                    ->update(['branch_id' => $request->branch_id]);
+                return response()->json($pcustomer);
+            }
+        }
+        else{
+            $pcustomer = PmBranches::where(DB::raw('(customer_branches_code*1)'), $request->id*1)
+                    ->join('branches', 'id', 'branch_id')
+                    ->first();
+            if ($pcustomer) {
+                return response()->json($pcustomer);
+            }
+            return response('none');
+        }
+        // return response()->json($pcustomer);
+    }
+
     public function branchtable()
     {
         $customer = CustomerBranch::query()->select('customer_branches.*', 'customer')

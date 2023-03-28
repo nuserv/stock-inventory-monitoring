@@ -147,7 +147,7 @@ class PreventiveController extends Controller
         if (auth()->user()->hasanyrole('Manager', 'Editor')) {
             if (Carbon::now() <= Carbon::now()->firstOfQuarter()->add(7, 'day')) {
                     $pmbranches = PmBranches::query()
-                        ->select('Conversion','customer_branch as client', 'pm_branches.customer_branches_code', 'branch', 'area', 'customer_branches.id as customer_id')
+                        ->select('Conversion','customer_branch as client', 'pm_branches.customer_branches_code', 'branch', 'branch_id', 'area', 'customer_branches.id as customer_id')
                         ->join('branches', 'branches.id', 'branch_id')
                         ->join('areas', 'areas.id', 'area_id')
                         ->join('customer_branches', DB::raw('(code*1)'),DB::raw('(customer_branches_code*1)'))
@@ -156,7 +156,7 @@ class PreventiveController extends Controller
                         ->get();
                     if ($pmbranches->count() == 0) {
                         $pmbranches = PmBranches::query()
-                            ->select('Conversion','customer_branch as client', 'pm_branches.customer_branches_code', 'branch', 'area', 'customer_branches.id as customer_id')
+                            ->select('Conversion','customer_branch as client', 'pm_branches.customer_branches_code', 'branch', 'branch_id', 'area', 'customer_branches.id as customer_id')
                             ->join('branches', 'branches.id', 'branch_id')
                             ->join('areas', 'areas.id', 'area_id')
                             ->join('customer_branches', DB::raw('(code*1)'),DB::raw('(customer_branches_code*1)'))
@@ -166,7 +166,7 @@ class PreventiveController extends Controller
                     }
             }else{
                 $pmbranches = PmBranches::query()
-                    ->select('Conversion','customer_branch as client', 'pm_branches.customer_branches_code', 'branch', 'area', 'customer_branches.id as customer_id')
+                    ->select('Conversion','customer_branch as client', 'pm_branches.customer_branches_code', 'branch', 'branch_id', 'area', 'customer_branches.id as customer_id')
                     ->join('branches', 'branches.id', 'branch_id')
                     ->join('areas', 'areas.id', 'area_id')
                     ->join('customer_branches', DB::raw('(code*1)'),DB::raw('(customer_branches_code*1)'))

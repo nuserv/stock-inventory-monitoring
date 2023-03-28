@@ -78,7 +78,9 @@ Route::get('customerbranch', 'CustomerController@branchtable');//->middleware('a
 Route::get('getcustomerid', 'CustomerController@getid');//->middleware('ajax');
 Route::get('hint', 'CustomerController@hint');//->middleware('ajax');
 Route::get('pulloutclient', 'CustomerController@pulloutclient');//->middleware('ajax');
-Route::get('getclient', 'CustomerController@getclient');//->middleware('ajax');
+Route::get('getclient', 'CustomerController@getclient');//->middleware('ajax');getPm-client
+Route::get('getPm-client', 'CustomerController@getPmclient');//->middleware('ajax');
+Route::get('checkPm-client', 'CustomerController@checkPmclient');//->middleware('ajax');
 Route::get('customer-list', 'CustomerController@customertable')->middleware('ajax');
 Route::get('customer/{id}', 'CustomerController@branchindex')->name('customerbranch.index');
 Route::get('customer', 'CustomerController@index')->name('customer.index');
