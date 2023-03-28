@@ -79,6 +79,10 @@ $(document).on('click', '#addPMBtn', function () {
     $('#branchesDiv').hide();
     $('#head-title').html('ADD PM BRANCH')
     $('#subBtn').val('ADD');
+    $('#subBtn').prop('disabled', true);
+    $('#branches').val('')
+    $('#customer_name').val('')
+    $('#customer_code').val('');
     $('#customer_code').prop('readonly', false);
     $('#PmModal').modal('show');
 });
@@ -126,10 +130,9 @@ $(document).on('keyup', '#customer_code', function(){
                     success:function(data)
                     {   
                         if (data == 'none') {
-                            // $('#subBtn').prop('disabled', false);
                             $('#branchesDiv').show();
                         }else{
-                            $('#note').html('Note:This customer assigned to '+data.branch+'.');
+                            $('#note').html('Note:The selected branch has been already assigned to '+data.branch+' office.');
                         }
                     },
                 });
