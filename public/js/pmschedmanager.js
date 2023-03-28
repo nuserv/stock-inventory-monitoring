@@ -89,6 +89,9 @@ $(document).on('click', '#addPMBtn', function () {
 
 
 $(document).on('keyup', '#customer_code', function(){
+    if($(this).attr('readonly')){
+        return false;
+    }
     var inputField = document.getElementById("customer_code");
     inputField.addEventListener("input", function(event) {
     var value = inputField.value;
