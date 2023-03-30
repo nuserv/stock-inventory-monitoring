@@ -95,14 +95,17 @@ class HomeController extends Controller
         $additem = AddItem::where('id', $request->id)->first();
         $additem->item = $request->item;
         $additem->save();
-
         $log = new UserLog;
         $log->branch_id = auth()->user()->branch->id;
-                $log->branch = auth()->user()->branch->branch;
+        $log->branch = auth()->user()->branch->branch;
         $log->activity = 'UPDATE '.$items->item.' to '.$item->item.'.';
         $log->user_id = auth()->user()->id;
-                $log->fullname = auth()->user()->name.' '.auth()->user()->middlename.' '.auth()->user()->lastname;
+        $log->fullname = auth()->user()->name.' '.auth()->user()->middlename.' '.auth()->user()->lastname;
         $data = $log->save();
+        Mail::raw('Update '.$items->item.' to '.$item->item.'.', function ($message) use ($items){
+            $message->to('emorej046@gmail.com');
+            $message->subject('Update123 '.$items->item);
+        });
         return response()->json($data);
 
     }
