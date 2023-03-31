@@ -79,7 +79,7 @@
                     <br><br>
                     <div class="form-group row mb-0">
                         <div class="col-md-12 offset-md-2">
-                        You may also contact us at our viber numbers below for chat support.<br><br>
+                        You may also contact us at our viber numbers below for chat support or e-mail us directly at bsms.support@ideaserv.com.ph<br><br>
                         <span><img src="/viber.png" alt="viber.png" style="width: auto; height: 50px;"></span><span> 09992206507 / 09988488624</span>
                         </div>
                     </div>
