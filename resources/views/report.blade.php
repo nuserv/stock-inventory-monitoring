@@ -55,9 +55,17 @@
                         </div-->
                         <div class="form-group row">
                             <label for="module" class="col-md-4 col-form-label text-md-right">MODULE</label>
-    
                             <div class="col-md-6">
-                                <input id="module" type="text" style="color:black" class="form-control" name="module" autocomplete="off" required >
+                                <select name="module" id="module" class="form-control status" style="color: black;">
+                                    <option selected disabled>select module</option>
+                                    <option value="Home">Home</option>
+                                    <option value="Service Center">Service Center</option>
+                                    <option value="Customer">Customer</option>
+                                    <option value="Stock">Stock</option>
+                                    <option value="Stock request">Stock request</option>
+                                    <option value="Pm Schedule">Pm Schedule</option>
+                                    <option value="User">User</option>
+                                </select>
                             </div>
                         </div>
                         <div class="form-group row">
