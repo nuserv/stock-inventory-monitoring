@@ -409,7 +409,7 @@ class PreventiveController extends Controller
                     ->get();
                 }
             }else{
-                if (Carbon::now() >= Carbon::now()->startOfQuarter()->addDays(12)) {
+                if (Carbon::now() >= Carbon::now()->startOfQuarter()->addDays(env('CUTOFF'))) {
                     $sched = PmSched::query()->select(
                         'pm_sched.*',
                         'code',
