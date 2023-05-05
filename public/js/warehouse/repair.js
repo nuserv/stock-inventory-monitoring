@@ -98,6 +98,10 @@ $(document).on('click', '.sub_Btn', function() {
     }, 500);
 });
 
+$(document).on('click', '.cancel', function () {
+    location.reload(); 
+ });
+
 $(document).on('click', '.recBtn', function() {
     var returnid = $(this).attr('return_id');
     if ($(this).attr('stat') == "Received") {
