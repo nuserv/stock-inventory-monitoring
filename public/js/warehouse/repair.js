@@ -1,5 +1,7 @@
 var table;
 var sub = 0;
+var itemid;
+var dataid;
 $(document).ready(function() {
     table =
         $('table.defectiveTable').DataTable({ 
@@ -7,8 +9,9 @@ $(document).ready(function() {
             "language": {
                 "emptyTable": "No defective unit found!"
             },
-            processing: true,
+            processing: false,
             serverSide: false,
+            autoWidth: false,
             ajax: {
                 url: 'return-table',
                 error: function(data, error, errorThrown) {
@@ -29,35 +32,17 @@ $(document).ready(function() {
                         }
                     },
                     "defaultContent": '',
-                    "data": null,"width": "18%",
+                    "data": null,"width": "19%",
                     "targets": [6]
                 }
             ],
-            columns: [{
-                    data: 'date',
-                    name: 'date'
-                },
-                {
-                    data: 'branch',
-                    name: 'branch'
-                },
-                {
-                    data: 'category',
-                    name: 'category'
-                },
-                {
-                    data: 'item',
-                    name: 'item'
-                },
-                {
-                    data: 'serial',
-                    name: 'serial'
-                },
-                {
-                    data: 'status',
-                    name: 'status',
-                    "width": "14%"
-                }
+            columns: [
+                {data: 'date',name: 'date',"width": "15%"},
+                {data: 'branch',name: 'branch',"width": "10%"},
+                {data: 'category',name: 'category',"width": "10%"},
+                {data: 'item',name: 'item',"width": "16%"},
+                {data: 'serial',name: 'serial',"width": "10%"},
+                {data: 'status',name: 'status',"width": "15%"}
             ],
         });
 
@@ -66,6 +51,51 @@ $(document).ready(function() {
             .search($(this).val())
             .draw();
     });
+});
+
+$(document).on("click", "#defectiveTable tr td:not(:nth-child(7))", function () {
+    var data = table.row(this).data();
+    if (data.item.includes("2NR Printer")) {
+        itemid = data.itemid;
+        dataid = data.id;
+        $('#updateModal').modal({backdrop: 'static', keyboard: false});
+    }
+});
+
+
+$(document).on('change', '#desc1', function() {
+    if (itemid == $(this).val()) {
+        $('#sub_Btn').prop('disabled', true);
+    }
+    else{
+        $('#sub_Btn').prop('disabled', false);
+    }
+});
+
+$(document).on('click', '.sub_Btn', function() {
+    $('#updateModal').modal('hide');
+    $('#loading').show();
+    setTimeout(() => {
+        $.ajax({
+            url: 'update-printer',
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="ctok"]').attr('content')
+            },
+            dataType: 'json',
+            type: 'PUT',
+            data: {
+                id: dataid,
+                itemid: $('#desc1').val()
+            },
+            success: function(data) {
+                location.reload();
+                $('#loading').hide();
+            },
+            error: function(data) {
+                alert(data.responseText);
+            }
+        });
+    }, 500);
 });
 
 $(document).on('click', '.recBtn', function() {

@@ -34,6 +34,7 @@ use App\Defective;
 use App\Customer;
 use App\CustomerBranch;
 use App\RepairedNo;
+use App\Pullno;
 use DB;
 use App\UserLog;
 use Carbon\Carbon;
@@ -230,7 +231,16 @@ class HomeController extends Controller
         //     Excel::store(new CdmExport('test'), 'Master.csv');
         //     // exec('cd /var/www/html/stock && bash cdm.sh');
         // }
-
+        // $pull = Pullno::where('status', 'Incomplete')->get();
+        // foreach ($pull as $key) {
+        //     $check = Pullout::where('status', 'For receiving')
+        //         ->where('pullout_no', $key->pullout_no)->count();
+        //     if ($check == 0) {
+        //         $key->status = "Completed";
+        //         $key->Save();
+        //     }
+        // }
+        // return 'done';
         if (auth()->user()->status == '0') {
             return redirect('logout');
         }
