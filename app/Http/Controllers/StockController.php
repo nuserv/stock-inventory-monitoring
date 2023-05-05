@@ -88,13 +88,14 @@ class StockController extends Controller
             $warehouse->category_id = $pullout->category_id;
             $warehouse->status = 'in';
             $warehouse->save();
-        }
-        $check = Pullout::where('status', 'For receiving')
-            ->where('pullout_no', $request->pull_no)->first();
-        if ($check) {
-           Pullno::where('status', 'For receiving')->where('pullout_no', $request->pull_no)->update(['status' => 'Incomplete']);
-        }else{
-           Pullno::where('status', 'For receiving')->where('pullout_no', $request->pull_no)->update(['status' => 'Completed']);
+
+            $check = Pullout::where('status', 'For receiving')
+                ->where('pullout_no', $request->pull_no)->first();
+            if ($check) {
+                Pullno::where('status', 'For receiving')->where('pullout_no', $request->pull_no)->update(['status' => 'Incomplete']);
+            }else{
+                Pullno::where('status', 'For receiving')->where('pullout_no', $request->pull_no)->update(['status' => 'Completed']);
+            }
         }
         return response()->json($pullout);
 

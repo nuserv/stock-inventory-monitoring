@@ -132,7 +132,7 @@ class CdmExport implements FromCollection, WithHeadings
                 )
                 ->whereDate('calldate', Carbon::now())
                 // ->whereDate('calldate', '>=', Carbon::now()->subDays('47'))
-                // ->whereBetween('calldate', [Carbon::now()->subDays('10'), Carbon::now()])
+                // ->whereBetween('calldate', [Carbon::now()->subDays('6'), Carbon::now()])
                 ->get();
             }
         }

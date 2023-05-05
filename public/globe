@@ -1,0 +1,204 @@
+import datetime
+import sys
+import time
+import random
+import psutil
+import os
+import signal
+import uuid
+import random
+#import timedelta
+from selenium import webdriver
+from selenium.webdriver.chrome.options import Options
+from selenium.common.exceptions import TimeoutException, WebDriverException
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.common.by import By
+from selenium.webdriver.support import expected_conditions as EC
+from time import sleep
+from fake_useragent import UserAgent
+from selenium.webdriver import ActionChains
+import keyboard
+from selenium.common.exceptions import NoSuchElementException
+from selenium.webdriver.common.keys import Keys
+from selenium.webdriver.common.action_chains import ActionChains
+now = datetime.datetime.now()
+#if (now.minute >= 13 and now.minute < 15) or (now.minute >= 28 and now.minute < 30) or (now.minute >= 43 and now.minute < 45) or (now.minute >=58 and now.minute <= 59):
+#	print("The server is about to refresh. Please try again at the next available minute (00, 15, 30, 45).")
+#	sys.exit()
+#else:
+current_year = datetime.date.today().year
+min_birth_year = current_year - 18  # Person should be at least 18 years old
+max_birth_year = 1985
+while True:
+    birth_year = random.randint(max_birth_year, min_birth_year)
+    birth_month = random.randint(1, 12)
+    days_in_month = (datetime.date(birth_year, 12, 31) - datetime.timedelta(days=1)).day
+    birth_day = random.randint(1, days_in_month)
+    
+    birth_date = datetime.date(birth_year, birth_month, birth_day)
+    if birth_date <= datetime.date.today() - datetime.timedelta(days=(18*365)):
+        break
+
+bday = birth_date.strftime('%Y-%m-%d')
+random_string = str(uuid.uuid4())
+last_names = ['Aguilar', 'Alcantara', 'Alvarez', 'Amador', 'Angeles', 'Antonio', 'Apostol', 'Aquino', 'Aragon', 'Asuncion', 'Baltazar', 'Bautista', 'Bello', 'Bermudez', 'Bernardo', 'Borja', 'Buenaventura', 'Burgos', 'Caballero', 'Cabral', 'Cabrera', 'Calderon', 'Cantrell', 'Capistrano', 'Cruz', 'Dela Cruz', 'Cunanan', 'Dagdag', 'Dela Rosa', 'Diaz', 'Dionisio', 'Dizon', 'Dominguez', 'Duque', 'Enriquez', 'Espinosa', 'Estrella', 'Fernandez', 'Ferrer', 'Flores', 'Fortunato', 'Francisco', 'Gonzales', 'Guevara', 'Gutierrez', 'Hernandez', 'Ibanez', 'Javier', 'Jimenez', 'Labrador', 'Lagman', 'Lara', 'Legaspi', 'Lopez', 'Luna', 'Maceda', 'Macalintal', 'Macaraeg', 'Magno', 'Mallari', 'Manalo', 'Mangalindan', 'Manuel', 'Marcelo', 'Martinez', 'Mendoza', 'Mercado', 'Natividad', 'Navarro', 'Nepomuceno', 'Ocampo', 'Ortega', 'Pablo', 'Pangilinan', 'Pascual', 'Pineda', 'Ramos', 'Reyes', 'Rivera', 'Rodriguez', 'Romero', 'Salazar', 'Sanchez', 'Santiago', 'Santos', 'Serrano', 'Sevilla', 'Sison', 'Soliman', 'Talavera', 'Tobias', 'Torres', 'Uy', 'Valencia', 'Valenzuela', 'Velasco', 'Vergara', 'Villanueva', 'Villar', 'Yap', 'Yasay', 'Ybanez', 'Zamora', 'Zarate']
+names = ['Juan', 'Pedro', 'Joaquin', 'Miguel', 'Rafael', 'Emilio', 'Jose', 'Santiago', 'Manuel', 'Andres', 'Diego', 'Luis', 'Antonio', 'Carlos', 'Benjamin', 'Fernando', 'Gabriel', 'Enrique', 'Felipe', 'Francisco', 'Hector', 'Ismael', 'Jaime', 'Julio', 'Leonardo', 'Lucas', 'Marcos', 'Mario', 'Nestor', 'Ramon', 'Ricardo', 'Roberto', 'Ruben', 'Simon', 'Tomas', 'Vicente', 'Maria', 'Ana', 'Carla', 'Carmen', 'Clara', 'Consuelo', 'Cristina', 'Dolores', 'Elena', 'Eva', 'Flor', 'Gloria', 'Imelda', 'Isabel', 'Julia', 'Luz', 'Lourdes', 'Lydia', 'Magdalena', 'Margarita', 'Marcela', 'Mariana', 'Mila', 'Natalia', 'Olivia', 'Patricia', 'Pilar', 'Rosa', 'Soledad', 'Teresa', 'Veronica', 'Victoria', 'Yolanda', 'Maria', 'Ana', 'Carla', 'Carmen', 'Clara', 'Consuelo', 'Cristina', 'Dolores', 'Elena', 'Eva', 'Flor', 'Gloria', 'Imelda', 'Isabel', 'Julia', 'Luz', 'Lourdes', 'Lydia', 'Magdalena', 'Margarita', 'Marcela', 'Mariana', 'Mila', 'Natalia', 'Olivia', 'Patricia', 'Pilar', 'Rosa', 'Soledad', 'Teresa', 'Veronica', 'Victoria', 'Yolanda', 'Juan', 'Pedro', 'Joaquin', 'Miguel', 'Rafael', 'Emilio', 'Jose', 'Santiago', 'Manuel', 'Andres', 'Diego', 'Luis', 'Antonio', 'Carlos', 'Benjamin', 'Fernando', 'Gabriel', 'Enrique', 'Felipe', 'Francisco', 'Hector', 'Ismael', 'Jaime', 'Julio', 'Leonardo', 'Lucas', 'Marcos', 'Mario', 'Nestor', 'Ramon', 'Ricardo', 'Roberto', 'Ruben', 'Simon', 'Tomas', 'Vicente', 'Ethan', 'Mia', 'Aiden', 'Emma', 'Lucas', 'Olivia', 'Liam', 'Ava', 'Noah', 'Sophia', 'Logan', 'Isabella', 'Caleb', 'Mila', 'Jackson', 'Charlotte', 'William', 'Amelia', 'Jacob', 'Abigail', 'Benjamin', 'Evelyn', 'Michael', 'Harper', 'Daniel', 'Emily', 'Matthew', 'Elizabeth', 'James', 'Avery', 'Elijah', 'Ella', 'Avery', 'Mila', 'Aiden', 'Hazel', 'David', 'Madelyn', 'Joseph', 'Eleanor', 'Levi', 'Chloe', 'Cameron', 'Evelyn', 'Luke', 'Aria', 'Henry', 'Eva', 'Dylan', 'Penelope', 'Caleb', 'Lily', 'Nathan', 'Avery', 'Isaac', 'Scarlett', 'Nicholas', 'Addison', 'Samuel', 'Aurora', 'Isaiah', 'Aaliyah', 'Owen', 'Aubrey', 'Connor', 'Audrey', 'Eli', 'Stella', 'Ryan', 'Makayla', 'Sebastian', 'Maya', 'Hunter', 'Natalie', 'Christian', 'Samantha', 'Julian', 'Victoria', 'Jonathan', 'Aria', 'Leah', 'Grace', 'Elena']
+middle_names = ['Alba', 'Belen', 'Caridad', 'Diana', 'Esperanza', 'Flor', 'Gracia', 'Hazel', 'Imelda', 'Joy', 'Karen', 'Liza', 'Margarita', 'Nina', 'Ofelia', 'Paula', 'Regina', 'Sheila', 'Tess', 'Ursula', 'Vivian', 'Wendy', 'Xenia', 'Yvette', 'Zoe', 'Alfonso', 'Carlos', 'David', 'Edgardo', 'Felipe', 'Gabriel', 'Horacio', 'Ignacio', 'Julio', 'Luis', 'Mariano', 'Nestor', 'Oscar', 'Pablo', 'Quirino', 'Rafael', 'Santos', 'Teodoro', 'Vicente', 'Xavier', 'Ysidro', 'Zeus']
+first_name = random.choice(names)
+middle_name = random.choice(middle_names)
+last_name = random.choice(last_names)
+# Prompt the user for their mobile number and OTP PIN
+zipcode = "1440"
+ID_Number = "182289535634"
+unit_number = "N/A"
+street_number = "N/A"
+subd_location = "Amana"
+
+user_agent = UserAgent()
+chrome_options = Options()
+chrome_options.add_argument("--incognito")
+chrome_options.add_argument("--headless") # run Chrome in headless mode
+chrome_options.add_argument('--no-sandbox')
+chrome_options.add_argument("--window-size=750,1500")
+chrome_options.add_argument(f'user-agent={user_agent.random}')
+chrome_options.add_argument("--start-maximized")
+chrome_options.add_argument("--my-script=" + random_string)
+# Set up the browser driver (I'm using Chrome)
+driver = webdriver.Chrome(options=chrome_options)
+# driver = webdriver.Chrome()
+# driver = webdriver.Chrome('/usr/local/bin/chromedriver', options=chrome_options)
+
+# Navigate to the website
+#url = "https://new.globe.com.ph/simreg"
+url = "https://m.gcash.com/gcashapp/gcash-promotion-web/2.0.0/index.html"
+print('Loading GCASH site...')
+driver.get(url)
+# Wait for the OTP input field to appear
+wait = WebDriverWait(driver, 10)
+start_time = time.time()
+otp_field = wait.until(EC.presence_of_element_located((By.CLASS_NAME, "mobile-input")))
+#accept_button = driver.find_element(By.CSS_SELECTOR, "button[_ngcontent-globe-estore-frontend-c345='']")
+#accept_button.click()
+current_url = driver.current_url
+# Print the current URL
+print(current_url)
+print("Name: "+first_name+"\n"+"Middle Name: "+middle_name+'\n'+"Lastname: "+last_name)
+print("Birthday: "+bday)
+phone_number = input("Please input sim number Ex. 9xxxxxxxxx:")
+pin = input("Please input mpin. xxxx:")
+while len(pin) != 4:
+    if len(pin) < 4:
+        print("MPIN should be at least 4 characters long.")
+    else:
+        print("MPIN should be exactly 4 characters long.")
+    pin = input("Please input mpin. xxxx:")
+print("SENDING OTP to sim number 0"+phone_number+".... PLEASE WAIT!!")
+# Find the input field by its ID and fill in the phone number
+otp_field.send_keys(phone_number)
+otp_field.send_keys(Keys.RETURN)
+accept_button = driver.find_element_by_xpath("//button[@accessbilityid='next-button']")
+accept_button.click()
+# Wait for the OTP fields to appear
+otp_fields = wait.until(EC.presence_of_all_elements_located((By.CSS_SELECTOR, ".ap-digital-password")))
+current_url = driver.current_url
+print(current_url)
+otp = input("Enter the OTP: ")
+print("\nCHECKING OTP.... PLEASE WAIT!!")
+otp_input = []
+for i in range(len(otp)):
+    otp_input.append(otp_fields[0].find_element_by_class_name('ap-password-focus'))
+    otp_input[i].send_keys(otp[i])
+sleep(1)
+#ac_btn = driver.find_element_by_xpath('//button[@type="button" and normalize-space()="Submit"]')
+ac_btn = driver.find_element_by_xpath("//button[@accessbilityid='submit-button']")
+ac_btn.click()
+sleep(1)
+if driver.current_url == 'https://m.gcash.com/gcashapp/gcash-promotion-web/2.0.0/index.html#/exist':
+    current_url = driver.current_url
+    print(current_url)
+    print('You already have a GCash account!')
+    sys.exit()
+else:
+    print('\nOTP verification Success.')
+sleep(1)
+html = driver.page_source
+# Write the HTML to a text file
+with open('otpsent.html', 'w') as f:
+    f.write(html)
+current_url = driver.current_url
+print(current_url)
+
+# Close the webdriver
+#driver.quit()
+#sys.exit()
+#first_name_field = wait.until(EC.presence_of_element_located((By.CLASS_NAME, 'registration')))
+#first_name_field = wait.until(EC.presence_of_element_located((By.ID, "input-firstname")))
+# Find and fill in the additional form fields
+print("SENDING DETAILS TO GCASH.... PLEASE WAIT!!")
+print("Name: "+first_name)
+#first_name_field = driver.find_element_by_xpath("//input[@accessbilityid='firstname']")
+first_name_field = driver.find_element_by_css_selector('input[accessbilityid="firstname"]')
+#first_name_field = driver.find_element(By.ID, "input-firstname")
+first_name_field.send_keys(first_name)
+sleep(1)
+print("Middle Name: "+middle_name)
+middle_name_field = driver.find_element_by_css_selector('input[accessbilityid="middlename"]')
+#middle_name_field = driver.find_element(By.ID, "input-middlename")
+middle_name_field.send_keys(middle_name)
+sleep(1)
+print("Lastname: "+last_name)
+last_name_field = driver.find_element_by_css_selector('input[accessbilityid="lastname"]')
+last_name_field.send_keys(last_name)
+sleep(1)
+print("Birthday: "+bday)
+bdate_name_field = driver.find_element_by_css_selector('input[accessbilityid="bdate"]')
+bdate_name_field.send_keys(bday)
+sleep(1)
+addr_name_field = driver.find_element_by_css_selector('input[accessbilityid="address"]')
+addr_name_field.send_keys('1643 matalino street')
+sleep(1)
+email_name_field = driver.find_element_by_css_selector('input[accessbilityid="email"]')
+email_name_field.send_keys(last_name+first_name+middle_name+"2023@gmail.com")
+sleep(1)
+accept_button = driver.find_element_by_xpath("//button[@accessbilityid='next-button']")
+#accept_button = driver.find_element(By.CLASS_NAME, "ap-button")
+accept_button.click()
+sleep(1)
+html = driver.page_source
+# Write the HTML to a text file
+with open('info.html', 'w') as f:
+    f.write(html)
+current_url = driver.current_url
+print(current_url)
+
+accpt_button = driver.find_element_by_xpath("//button[@accessbilityid='next-button']")
+#accept_button = driver.find_element(By.CLASS_NAME, "ap-button")
+accpt_button.click()
+sleep(3)
+html = driver.page_source
+# Write the HTML to a text file
+#print(driver.page_source)
+with open('confirm.html', 'w') as f:
+    f.write(html)
+
+current_url = driver.current_url
+print(current_url)
+mpin = driver.find_element_by_css_selector('input[accessbilityid="mpin"]')
+#middle_name_field = driver.find_element(By.ID, "input-middlename")
+mpin.send_keys(pin)
+sleep(1)
+vmpin = driver.find_element_by_css_selector('input[accessbilityid="verify-mpin"]')
+#middle_name_field = driver.find_element(By.ID, "input-middlename")
+vmpin.send_keys(pin)
+sleep(1)
+accept_button = driver.find_element_by_xpath("//button[@accessbilityid='next-button']")
+#accept_button = driver.find_element(By.CLASS_NAME, "ap-button")
+accept_button.click()
+sleep(1)
+html = driver.page_source
+# Write the HTML to a text file
+with open('mpin.html', 'w') as f:
+    f.write(html)
+print('success')
+driver.quit()
+sys.exit()

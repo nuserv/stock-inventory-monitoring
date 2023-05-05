@@ -1,4 +1,4 @@
-sleep 1m
+#sleep 1m
 update-alternatives --set php /usr/bin/php7.4 && cd /var/www/html/stock && php artisan cdm:processor
 if [ -e "/var/www/html/stock/storage/app/Master.csv" ]
 then

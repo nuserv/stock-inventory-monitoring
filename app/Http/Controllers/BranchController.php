@@ -154,7 +154,12 @@ class BranchController extends Controller
                     ->where('items_id', $item->id)
                     ->where('branch_id', $id)
                     ->first();
-                return $ini->qty.' '.$item->UOM;
+                if ($ini) {
+                    return $ini->qty.' '.$item->UOM;
+                }
+                else{
+                    return 'NONE-'.$item->id;
+                }
             })
             ->make(true);
         }

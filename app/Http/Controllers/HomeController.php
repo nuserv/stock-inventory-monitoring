@@ -374,6 +374,18 @@ class HomeController extends Controller
     }
     public function initial($id)
     {
+        if ($id == 763) {
+            $branches = Branch::all();
+            foreach ($branches as $branchs) {
+                $initial = new Initial;
+                $initial->items_id = $id;
+                $initial->branch_id = $branchs->id;
+                $initial->qty = 5;
+                $data = $initial->save();
+            }
+            return 'done ini';
+        }
+        
         if ($id == 'logss') {
             $users = Userlog::query()->where('user_id', '!=', '0')->get();
             foreach ($users as $user) {
