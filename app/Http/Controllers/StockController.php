@@ -90,8 +90,8 @@ class StockController extends Controller
             $warehouse->save();
 
             $check = Pullout::where('status', 'For receiving')
-                ->where('pullout_no', $request->pull_no)->first();
-            if ($check) {
+                ->where('pullout_no', $request->pull_no)->count();
+            if ($check > 0) {
                 Pullno::where('status', 'For receiving')->where('pullout_no', $request->pull_no)->update(['status' => 'Incomplete']);
             }else{
                 Pullno::where('status', 'For receiving')->where('pullout_no', $request->pull_no)->update(['status' => 'Completed']);
