@@ -102,7 +102,7 @@ Route::get('retno', 'DefectiveController@returntable');//->middleware('ajax');
 Route::get('return', 'DefectiveController@index')->name('return.index');
 Route::get('POS', 'DefectiveController@pos')->name('return.pos');
 Route::get('postable', 'DefectiveController@postable')->name('return.postable');
-Route::any('update-printer', 'DefectiveController@update_printer');
+Route::put('update-printer', 'DefectiveController@update_printer');
 
 
 Route::put('loandelete', 'LoanController@destroy')->middleware('ajax');
