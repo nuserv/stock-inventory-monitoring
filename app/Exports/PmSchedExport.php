@@ -163,14 +163,12 @@ class PmSchedExport implements FromCollection, WithStyles, ShouldAutoSize, WithC
                 ->orderBy('schedule')
                 ->get()
                 ->map(function ($branch) {
-
                     if (strpos($branch->customer_branch, 'Mercury Drug') === false) {
                         $branch->customer_branch = 'MDC ' . $branch->customer_branch;
                     }
                     else{
                         $branch->customer_branch = str_replace('Mercury Drug', 'MDC', $branch->customer_branch);
                     }
-
                     return $branch;
                 });
         }else{
