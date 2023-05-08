@@ -69,7 +69,7 @@ class BranchController extends Controller
             ->groupBy('stocks.items_id')
             ->get();*/
         if ($request->data == 0) {
-            $cat = Category::query()->orderBy('category')->get();
+            $cat = Category::query()->orderBy('category');
             return DataTables::of($cat)
             ->addColumn('stock_out', function ($category) use ($id){
                 if (auth()->user()->branch->branch == 'Warehouse' && $id == 1) {
