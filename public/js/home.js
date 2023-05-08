@@ -1,5 +1,6 @@
 $(document).ready(function()
 {
+    $('#loading').show();
     var table =
     $('table.activityTable').DataTable({ 
         "dom": 'lrtip',
@@ -9,7 +10,7 @@ $(document).ready(function()
             },
         "pageLength": 10,
         "order": [ 0, 'desc' ],
-        processing: true,
+        processing: false,
         serverSide: true,
         ajax: {
             url: 'activity',
@@ -37,7 +38,10 @@ $(document).ready(function()
             { data: 'activity', render: function ( data, type, row ) {
                 return data.replace(/&#039;/g, '\'').replace(/&quot;/g, '\"').replace(/&amp;/g, '\&').replace(/&AMP;/g, '\&');
             }}
-        ]
+        ],
+        "initComplete": function(settings, json) {
+            $('#loading').hide();
+        }
     });
     $('.tbsearch').show();
 
