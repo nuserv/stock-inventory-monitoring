@@ -631,7 +631,7 @@ class HomeController extends Controller
                 ->wherein('user_id', $users);
             $act2 = Userlog::query()
                 ->where('activity', 'LIKE', 'RECEIVED REPAIRED%');
-            $act = $act1->union($act2)->union($act3)->union($act4)->union($act5)->union($act6)
+            $act = $act1->union($act2)->union($act3)
                 ->orderByDesc('id');
         }
         
