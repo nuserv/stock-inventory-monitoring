@@ -550,21 +550,18 @@ class DefectiveController extends Controller
     }
     public function disposed()
     {
-        $disposed = Defective::query()->select('branches.branch', 'defectives.category_id', 'branches.id as branchid', 'defectives.updated_at', 'defectives.id as id', 'items.item', 'items.id as itemid', 'defectives.serial', 'defectives.status')
+        $disposed = Defective::query()->select('category','branches.branch', 'defectives.category_id', 'branches.id as branchid', 'defectives.updated_at', 'defectives.id as id', 'items.item', 'items.id as itemid', 'defectives.serial', 'defectives.status')
             ->where('defectives.status', 'Disposed')
             ->join('items', 'defectives.items_id', '=', 'items.id')
-            ->join('branches', 'defectives.branch_id', '=', 'branches.id');
+            ->join('branches', 'defectives.branch_id', '=', 'branches.id')
+            ->join('categories', 'categories.id', '=', 'defectives.category_id');
+
         return DataTables::of($disposed)
         ->addColumn('date', function (Defective $data){
             return Carbon::parse($data->updated_at->toFormattedDateString().' '.$data->updated_at->toTimeString())->isoFormat('lll');
         })
         ->addColumn('mydate', function (Defective $data){
-
             return Carbon::parse($data->updated_at)->format('m/d/Y');
-        })
-        ->addColumn('category', function (Defective $data){
-            $cat = Category::where('id', $data->category_id)->first();
-            return $cat->category;
         })
         ->make(true);
     }

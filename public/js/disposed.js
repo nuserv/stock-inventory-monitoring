@@ -41,7 +41,7 @@ $(document).ready(function()
         },
         "order": [[ 0, "desc", ]],
         processing: true,
-        serverSide: false,
+        serverSide: true,
         ajax: {
             url: 'dispose',
         error: function(data) {
