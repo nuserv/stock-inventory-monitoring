@@ -591,6 +591,7 @@ class HomeController extends Controller
         }
 
         if (auth()->user()->hasAnyRole('Editor',  'Manager', 'Viewer IDSI', 'Viewer', 'Viewer PLSI')) {
+            $threeMonthsAgo = Carbon::now()->subMonths(2);
             $results = Userlog::query()->select('created_at', 'fullname', 'branch', 'activity', 'id')
                     ->whereBetween('created_at', [$threeMonthsAgo, Carbon::now()]);
             $act = $results->orderByDesc('id')->get();
