@@ -583,8 +583,10 @@ class HomeController extends Controller
                 ->where('branch_id', auth()->user()->branch->id)
                 ->get()
                 ->pluck('id');
-
-            $act = Userlog::query()
+            $threeMonthsAgo = Carbon::now()->subMonths(2);
+            $results = Userlog::query()->select('created_at', 'fullname', 'branch', 'activity', 'id')
+                    ->whereBetween('created_at', [$threeMonthsAgo, Carbon::now()]);
+            $act = $results 
                 ->whereIn('user_id', $user)->orderByDesc('id')->get();
         }
 

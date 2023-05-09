@@ -37,7 +37,7 @@ $(document).ready(function()
             },
             "order": [[ 0, "asc", ]],
             processing: true,
-            serverSide: false,
+            serverSide: true,
             ajax: {
                 url: 'unrepairable',
             error: function(data) {
@@ -84,7 +84,7 @@ $(document).ready(function()
     });
 
     $('.filter-input').keyup(function() { 
-        table.column( $(this).data('column'))
+        table.column( $(this).data('column')-1)
             .search( $(this).val())
             .draw();
     });

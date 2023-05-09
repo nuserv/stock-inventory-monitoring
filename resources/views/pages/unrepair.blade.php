@@ -26,7 +26,7 @@
                     <input type="text" class="form-control filter-input fl-4" data-column="4" />
                 </td>
                 <td>
-                    <input type="text" class="form-control filter-input fl-4" data-column="5" />
+                    <input type="text" class="form-control filter-input fl-5" data-column="5" />
                 </td>
             </tr>
             <tr>
