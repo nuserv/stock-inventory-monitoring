@@ -575,7 +575,7 @@ class HomeController extends Controller
         // }
         if (auth()->user()->hasAnyRole('Tech', 'Encoder')) {
             $act = UserLog::query()
-                ->where('user_id', auth()->user()->id)->orderByDesc('id');
+                ->where('user_id', auth()->user()->id)->orderByDesc('id')->get();
         }
         else if (auth()->user()->hasAnyRole('Head',  'Warehouse Manager')) {
             $user = User::query()
@@ -585,17 +585,20 @@ class HomeController extends Controller
                 ->pluck('id');
 
             $act = Userlog::query()
-                ->whereIn('user_id', $user)->orderByDesc('id');
+                ->whereIn('user_id', $user)->orderByDesc('id')->get();
         }
 
         if (auth()->user()->hasAnyRole('Editor',  'Manager', 'Viewer IDSI', 'Viewer', 'Viewer PLSI')) {
-            $act = UserLog::query()->orderByDesc('id');
+            $act = UserLog::query()->orderByDesc('id')->get();
                 /*
                 ->take(1000)
                 ->get();*/
         }
         
         if (auth()->user()->hasAnyRole('Warehouse Administrator')) {
+            $threeMonthsAgo = Carbon::now()->subMonths(2);
+            $results = Userlog::query()->select('created_at', 'fullname', 'branch', 'activity', 'id')
+                ->whereBetween('created_at', [$threeMonthsAgo, Carbon::now()]);
             $users = User::query()
                 ->whereHas('roles', function($q) {
                     $q->where('name', 'Repair');
@@ -603,20 +606,13 @@ class HomeController extends Controller
                 ->pluck('id')
                 ->push(auth()->user()->id)
                 ->all();
-            $act1 = Userlog::query()
-                ->where('branch_id', 2);
-            $act2 = Userlog::query()
-                ->wherein('user_id', $users);
-            $act3 = Userlog::query()
-                ->where('activity', 'LIKE', 'RECEIVED REPAIRED%');
-            $act4 = Userlog::query()
-                ->where('activity', 'LIKE', '%buffer stock request%');
-            $act5 = Userlog::query()
-                ->where('activity', 'LIKE', 'RECEIVED%from Main Warehouse%');
-            $act6 = Userlog::query()
-                ->where('activity', 'LIKE', 'DELIVERED%to Warehouse%');
-            $act = $act1->union($act2)->union($act3)->union($act4)->union($act5)->union($act6)
-                ->orderByDesc('id');
+            $act1 = $results->where('branch_id', 2)->get();
+            $act2 = $results->wherein('user_id', $users)->get();
+            $act3 = $results->where('activity', 'LIKE', 'RECEIVED REPAIRED%')->get();
+            $act4 = $results->where('activity', 'LIKE', '%buffer stock request%')->get();
+            $act5 = $results->where('activity', 'LIKE', 'RECEIVED%from Main Warehouse%')->get();
+            $act6 = $results->where('activity', 'LIKE', 'DELIVERED%to Warehouse%')->get();
+            $act = $act1->union($act2)->union($act3)->union($act4)->union($act5)->union($act6)->sortByDesc('id');
         }
 
         if (auth()->user()->hasAnyRole('Repair')) {
@@ -628,16 +624,16 @@ class HomeController extends Controller
                 ->push(auth()->user()->id)
                 ->all();
             $act1 = Userlog::query()
-                ->wherein('user_id', $users);
+                ->wherein('user_id', $users)->get();
             $act2 = Userlog::query()
-                ->where('activity', 'LIKE', 'RECEIVED REPAIRED%');
+                ->where('activity', 'LIKE', 'RECEIVED REPAIRED%')->get();
             $act = $act1->union($act2)
                 ->orderByDesc('id');
         }
         
         if (auth()->user()->hasAnyRole('Main Warehouse Manager')) {
-            $logs = Userlog::query()->where('user_id', auth()->user()->id);
-            $acts = Userlog::query()->where('activity', 'LIKE', '%from Main Warehouse.');
+            $logs = Userlog::query()->where('user_id', auth()->user()->id)->get();
+            $acts = Userlog::query()->where('activity', 'LIKE', '%from Main Warehouse.')->get();
             $act = $acts->union($logs)->orderByDesc('id');
         }
         
