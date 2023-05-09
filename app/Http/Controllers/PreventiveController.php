@@ -381,7 +381,7 @@ class PreventiveController extends Controller
                         'customer_branches.customer_branch')
                     ->join('customer_branches', 'customer_branches.id', 'pm_sched.customer_id')
                     ->where('pm_sched.Status', 'Completed')
-                    ->whereDate('schedule', '>=', Carbon::now()->startOfQuarter());
+                    ->whereDate('schedule', '>=', Carbon::now()->startOfQuarter())->get();
                 }else{
                     $sched = PmSched::query()->select(
                         'pm_sched.*',
@@ -389,7 +389,7 @@ class PreventiveController extends Controller
                         'customer_branches.customer_branch')
                     ->join('customer_branches', 'customer_branches.id', 'pm_sched.customer_id')
                     ->where('pm_sched.Status', 'Completed')
-                    ->whereDate('schedule', '>=', Carbon::now()->subquarter(2));
+                    ->whereDate('schedule', '>=', Carbon::now()->subquarter(2))->get();
                 }
             }else{
                 if (Carbon::now() >= Carbon::now()->startOfQuarter()->addDays(env('CUTOFF'))) {
@@ -399,7 +399,7 @@ class PreventiveController extends Controller
                         'customer_branches.customer_branch')
                     ->join('customer_branches', 'customer_branches.id', 'pm_sched.customer_id')
                     ->where('pm_sched.Status', 'Completed')
-                    ->whereDate('schedule', '>=', Carbon::now()->startOfQuarter());
+                    ->whereDate('schedule', '>=', Carbon::now()->startOfQuarter())->get();
                 }else{
                     $sched = PmSched::query()->select(
                         'pm_sched.*',
@@ -407,7 +407,7 @@ class PreventiveController extends Controller
                         'customer_branches.customer_branch')
                     ->join('customer_branches', 'customer_branches.id', 'pm_sched.customer_id')
                     ->where('pm_sched.Status', 'Completed')
-                    ->whereDate('schedule', '>=', Carbon::now()->subquarter(2));
+                    ->whereDate('schedule', '>=', Carbon::now()->subquarter(2))->get();
                 }
             }
         }else if (auth()->user()->id == 134) {
@@ -418,7 +418,7 @@ class PreventiveController extends Controller
             ->join('customer_branches', 'customer_branches.id', 'pm_sched.customer_id')
             ->join('branches', 'branches.id', 'branch_id')
             ->where('pm_sched.Status', 'Completed')
-            ->where('area_id', 3);
+            ->where('area_id', 3)->get();
         }else if (auth()->user()->id == 142) {
             $sched = PmSched::query()->select(
                 'pm_sched.*',
@@ -427,7 +427,7 @@ class PreventiveController extends Controller
             ->join('customer_branches', 'customer_branches.id', 'pm_sched.customer_id')
             ->join('branches', 'branches.id', 'branch_id')
             ->where('pm_sched.Status', 'Completed')
-            ->where('area_id', 5);
+            ->where('area_id', 5)->get();
         }else{
             $sched = PmSched::query()->select(
                 'pm_sched.*',
@@ -435,7 +435,7 @@ class PreventiveController extends Controller
                 'customer_branches.customer_branch')
             ->join('customer_branches', 'customer_branches.id', 'pm_sched.customer_id')
             ->where('branch_id', auth()->user()->branch->id)
-            ->where('pm_sched.Status', 'Completed');
+            ->where('pm_sched.Status', 'Completed')->get();
         }
         return DataTables::of($sched)
         ->addColumn('user', function (PmSched $sched){
