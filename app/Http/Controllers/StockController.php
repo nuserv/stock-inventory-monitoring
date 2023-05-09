@@ -611,19 +611,15 @@ class StockController extends Controller
     {
         if ($request->data != 0) {
 
-            $category = Category::query()->get();
+            $category = Category::query()
+                ->selectRaw('UPPER(category) as category, id as category_id')
+                ->get();
             /*$stock = Stock::select('category_id', 'category', \DB::raw('SUM(CASE WHEN status = \'in\' THEN 1 ELSE 0 END) as stockin'))
                 ->where('branch_id', auth()->user()->branch->id)
                 ->join('categories', 'category_id', '=', 'categories.id')
                 ->groupBy('category')
                 ->get();*/
             return DataTables::of($category)
-            ->addColumn('category', function (Category $stock){
-                return mb_strtoupper($stock->category);
-            })
-            ->addColumn('category_id', function (Category $stock){
-                return mb_strtoupper($stock->id);
-            })
             ->addColumn('stockout', function (Category $stock){
                 $out = Stock::wherein('status', ['service unit', 'pm'])
                     ->where('branch_id', auth()->user()->branch->id)
