@@ -573,73 +573,102 @@ class HomeController extends Controller
         //         }
         //     }
         // }
-        if (auth()->user()->hasAnyRole('Tech', 'Encoder')) {
-            $act = UserLog::query()
-                ->where('user_id', auth()->user()->id)->orderByDesc('id')->get();
-        }
-        else if (auth()->user()->hasAnyRole('Head',  'Warehouse Manager')) {
-            $user = User::query()
-                ->select('id')
-                ->where('branch_id', auth()->user()->branch->id)
-                ->get()
-                ->pluck('id');
-            $threeMonthsAgo = Carbon::now()->subMonths(2);
-            $results = Userlog::query()->select('created_at', 'fullname', 'branch', 'activity', 'id')
-                    ->whereBetween('created_at', [$threeMonthsAgo, Carbon::now()]);
-            $act = $results 
-                ->whereIn('user_id', $user)->orderByDesc('id')->get();
-        }
-
         if (auth()->user()->hasAnyRole('Editor',  'Manager', 'Viewer IDSI', 'Viewer', 'Viewer PLSI')) {
-            $threeMonthsAgo = Carbon::now()->subMonths(2);
-            $results = Userlog::query()->select('created_at', 'fullname', 'branch', 'activity', 'id')
-                    ->whereBetween('created_at', [$threeMonthsAgo, Carbon::now()]);
-            $act = $results->orderByDesc('id')->get();
+            $act = UserLog::query();
                 /*
                 ->take(1000)
                 ->get();*/
         }
-        
+        if (auth()->user()->hasAnyRole('Head',  'Warehouse Manager')) {
+            $myuser = [];
+            $user = User::query()->where('branch_id', auth()->user()->branch->id)->get();
+            foreach ($user as $user) {
+                $myuser[] = $user->id;
+            }
+            
+            $act = Userlog::query()
+                ->wherein('user_id', $myuser);
+            //$act = UserLog::wherein('user_id', $myuser)->orderBy('id', 'desc')->take(1000)->get();
+        }
         if (auth()->user()->hasAnyRole('Warehouse Administrator')) {
-            $threeMonthsAgo = Carbon::now()->subMonths(2);
-            $results = Userlog::query()->select('created_at', 'fullname', 'branch', 'activity', 'id')
-                ->whereBetween('created_at', [$threeMonthsAgo, Carbon::now()]);
-            $users = User::query()
-                ->whereHas('roles', function($q) {
-                    $q->where('name', 'Repair');
-                })
-                ->pluck('id')
-                ->push(auth()->user()->id)
-                ->all();
-            $act1 = $results->where('branch_id', 2)->get();
-            $act2 = $results->wherein('user_id', $users)->get();
-            $act3 = $results->where('activity', 'LIKE', 'RECEIVED REPAIRED%')->get();
-            $act4 = $results->where('activity', 'LIKE', '%buffer stock request%')->get();
-            $act5 = $results->where('activity', 'LIKE', 'RECEIVED%from Main Warehouse%')->get();
-            $act6 = $results->where('activity', 'LIKE', 'DELIVERED%to Warehouse%')->get();
-            $act = $act1->union($act2)->union($act3)->union($act4)->union($act5)->union($act6)->sortByDesc('id');
-        }
+            $users = User::query()->whereHas('roles', function($q){
+                $q->where('name', 'Repair');
+            })->get();
+            $myuser = [];
+            array_push($myuser, auth()->user()->id);
+            foreach ($users as $user) {
+                $myuser[] = $user->id;
+            }
+            $$acts5 = User::query()->where('branch_id', 2)->get();
+            $logs = Userlog::query()
+                ->wherein('user_id', $myuser)->get();
+            $acts = Userlog::query()->where('activity', 'LIKE', 'RECEIVED REPAIRED%')->get();
+            $acts2 = Userlog::query()->where('activity', 'LIKE', '%buffer stock request%')->get();
+            $acts3 = Userlog::query()->where('activity', 'LIKE', 'RECEIVED%from Main Warehouse%')->get();
+            $acts4 = Userlog::query()->where('activity', 'LIKE', 'DELIVERED%to Warehouse%')->get();
 
-        if (auth()->user()->hasAnyRole('Repair')) {
-            $users = User::query()
-                ->whereHas('roles', function($q) {
-                    $q->where('name', 'Repair');
-                })
-                ->pluck('id')
-                ->push(auth()->user()->id)
-                ->all();
-            $act1 = Userlog::query()
-                ->wherein('user_id', $users)->get();
-            $act2 = Userlog::query()
-                ->where('activity', 'LIKE', 'RECEIVED REPAIRED%')->get();
-            $act = $act1->union($act2)
-                ->orderByDesc('id');
+            //$act = UserLog::wherein('user_id', $myuser)->orderBy('id', 'desc')->take(1000)->get();
+            $act = [];
+            foreach ($logs as $log) {
+                $act[] = $log;
+            }
+            foreach ($acts as $acs) {
+                array_push($act, $acs);
+            }
+            foreach ($acts2 as $acs) {
+                array_push($act, $acs);
+            }
+            foreach ($acts3 as $acs) {
+                array_push($act, $acs);
+            }
+            foreach ($acts4 as $acs) {
+                array_push($act, $acs);
+            }
+            foreach ($acts5 as $acs) {
+                array_push($act, $acs);
+            }
+            $act = collect($act)->sortBy('id')->all();
         }
-        
+        if (auth()->user()->hasAnyRole('Repair')) {
+            $users = User::query()->whereHas('roles', function($q){
+                $q->where('name', 'Repair');
+            })->get();
+            $myuser = [];
+            array_push($myuser, auth()->user()->id);
+            foreach ($users as $user) {
+                $myuser[] = $user->id;
+            }
+            $logs = Userlog::query()
+                ->wherein('user_id', $myuser)->get();
+            $acts = Userlog::query()->where('activity', 'LIKE', 'RECEIVED REPAIRED%')->get();
+            //$act = UserLog::wherein('user_id', $myuser)->orderBy('id', 'desc')->take(1000)->get();
+            $act = [];
+            foreach ($logs as $log) {
+                $act[] = $log;
+            }
+            foreach ($acts as $acs) {
+                array_push($act, $acs);
+            }
+            $act = collect($act)->sortBy('id')->all();
+        }
+        if (auth()->user()->hasAnyRole('Tech', 'Encoder')) {
+            $act = UserLog::query()
+                ->where('user_id', auth()->user()->id);
+        }
         if (auth()->user()->hasAnyRole('Main Warehouse Manager')) {
-            $logs = Userlog::query()->where('user_id', auth()->user()->id)->get();
+           
+            $logs = Userlog::query()
+                ->where('user_id', auth()->user()->id)->get();
             $acts = Userlog::query()->where('activity', 'LIKE', '%from Main Warehouse.')->get();
-            $act = $acts->union($logs)->orderByDesc('id');
+            //$act = UserLog::wherein('user_id', $myuser)->orderBy('id', 'desc')->take(1000)->get();
+            $act = [];
+            foreach ($logs as $log) {
+                $act[] = $log;
+            }
+            foreach ($acts as $acs) {
+                array_push($act, $acs);
+            }
+            $act = collect($act)->sortBy('id')->all();
         }
         
         return DataTables::of($act)->make(true);
