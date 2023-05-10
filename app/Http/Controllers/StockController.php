@@ -1535,7 +1535,7 @@ class StockController extends Controller
             $item = Item::where('id', $update->items_id)->first();
             $defective = new Defective;
             $defective->branch_id = auth()->user()->branch->id;
-            $defective->user_id = auth()->user()->branch->id;
+            $defective->user_id = auth()->user()->id;
             $defective->category_id = $update->category_id;
             $defective->items_id = $update->items_id;
             $defective->serial = mb_strtoupper($request->serial);
