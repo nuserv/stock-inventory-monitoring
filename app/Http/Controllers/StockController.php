@@ -610,8 +610,9 @@ class StockController extends Controller
     public function viewStocks(Request $request)
     {
         if ($request->data != 0) {
+            // $category = Category::query()->get();
             $category = Category::query()
-                ->selectRaw('UPPER(category) as category, id')
+                ->selectRaw('id, UPPER(category) as category, id as category_id')
                 ->get();
             /*$stock = Stock::select('category_id', 'category', \DB::raw('SUM(CASE WHEN status = \'in\' THEN 1 ELSE 0 END) as stockin'))
                 ->where('branch_id', auth()->user()->branch->id)
