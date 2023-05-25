@@ -29,6 +29,12 @@ $(document).ready(function()
                     $(nRow).hide();
                 }
             }
+            else if ($('#userid').val() == 326) {
+                
+            }
+            else if ($('#userid').val() == 327) {
+                
+            }
             else if ($('#userlevel').val() == "Viewer IDSI") {
                 if (aData.client == "MERCURY DRUG") {
                     $(nRow).hide();
