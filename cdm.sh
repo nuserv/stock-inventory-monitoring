@@ -1,5 +1,7 @@
 #sleep 1m
+#date -s "20230518 08:56:10"
 update-alternatives --set php /usr/bin/php7.4 && cd /var/www/html/stock && php artisan cdm:processor
+#date -s "20230518 08:56:10"
 if [ -e "/var/www/html/stock/storage/app/Master.csv" ]
 then
 mv /var/www/html/stock/storage/app/Master.csv /var/www/html/cdm/html/Master.csv

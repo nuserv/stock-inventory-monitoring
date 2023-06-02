@@ -856,7 +856,7 @@ class StockController extends Controller
                 $defective->items_id = $stock->items_id;
             }
             $defective->status = 'For return';
-            $defective->category_id = $stock->category_id;
+            $defective->category_id = $item->category_id;
             $defective->serial = mb_strtoupper($request->serial);
             $defective->save();
             $pmdb = Pm::where('id', $request->pmid)->first();
@@ -911,9 +911,9 @@ class StockController extends Controller
             $defective->status = 'For return';
             if ($request->remarks == 'pm') {
                 $pmdb = Pm::where('id', $request->pmid)->first();
-                $defective->category_id = $stock->category_id;
+                $defective->category_id = $item->category_id;
             }else{
-                $defective->category_id = $stock->category_id;
+                $defective->category_id = $item->category_id;
             }
             $defective->serial = $request->serial;
             $defective->save();
@@ -1461,7 +1461,7 @@ class StockController extends Controller
             $defective = new Defective;
             $defective->branch_id = auth()->user()->branch->id;
             $defective->user_id = auth()->user()->id;
-            $defective->category_id = $update->category_id;
+            $defective->category_id = $item->category_id;
             $defective->items_id = $update->items_id;
             $defective->serial = mb_strtoupper($request->serial);
             $defective->status = 'For return';
@@ -1482,7 +1482,7 @@ class StockController extends Controller
             $defective = new Defective;
             $defective->branch_id = auth()->user()->branch->id;
             $defective->user_id = auth()->user()->id;
-            $defective->category_id = $update->category_id;
+            $defective->category_id = $item->category_id;
             $defective->items_id = $request->ids;
             $defective->serial = $request->serial;
             $defective->status = 'For return';
@@ -1508,7 +1508,7 @@ class StockController extends Controller
             $defective = new Defective;
             $defective->branch_id = auth()->user()->branch->id;
             $defective->user_id = auth()->user()->id;
-            $defective->category_id = $update->category_id;
+            $defective->category_id = $item->category_id;
             $defective->items_id = $item->id;
             $defective->serial = $request->serial;
             $defective->status = 'For return';
@@ -1536,7 +1536,7 @@ class StockController extends Controller
             $defective = new Defective;
             $defective->branch_id = auth()->user()->branch->id;
             $defective->user_id = auth()->user()->id;
-            $defective->category_id = $update->category_id;
+            $defective->category_id = $item->category_id;
             $defective->items_id = $update->items_id;
             $defective->serial = mb_strtoupper($request->serial);
             $defective->status = 'For return';
@@ -1557,7 +1557,7 @@ class StockController extends Controller
             $defective = new Defective;
             $defective->branch_id = auth()->user()->branch->id;
             $defective->user_id = auth()->user()->id;
-            $defective->category_id = $update->category_id;
+            $defective->category_id = $item->category_id;
             $defective->items_id = $request->ids;
             $defective->serial = mb_strtoupper($request->serial);
             $defective->status = 'For return';

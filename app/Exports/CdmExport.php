@@ -54,8 +54,9 @@ class CdmExport implements FromCollection, WithHeadings
                     'userfield'
                 )
                 ->whereDate('calldate', Carbon::now())
+                // ->whereBetween('calldate', [Carbon::now()->subDays('2'), Carbon::now()])
                 ->get();
-            $current = Cdm::query()
+                $current = Cdm::query()
                 ->select(
                     'accountcode',
                     'src',
@@ -78,7 +79,7 @@ class CdmExport implements FromCollection, WithHeadings
                 )
                 ->whereDate('calldate', Carbon::now())
                 ->get();
-            $cdm = $prev->merge($current);
+                $cdm = $prev->merge($current);
             }
             
         }
@@ -131,8 +132,9 @@ class CdmExport implements FromCollection, WithHeadings
                     'userfield'
                 )
                 ->whereDate('calldate', Carbon::now())
-                // ->whereDate('calldate', '>=', Carbon::now()->subDays('13'))
-                // ->whereBetween('calldate', [Carbon::now()->subDays('6'), Carbon::now()])
+                // ->whereDate('calldate', '>=', Carbon::now()->subDays('1'))
+                // ->whereBetween('calldate', [Carbon::now()->subDays('2'), Carbon::now()])
+                // ->whereBetween('calldate', [Carbon::now()->subDays('1'), Carbon::now()])
                 ->get();
             }
         }
