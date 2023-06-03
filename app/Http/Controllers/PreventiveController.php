@@ -130,7 +130,7 @@ class PreventiveController extends Controller
     {
         $reqdate = explode("/",$request->date);
         $type = "S";
-        if ($request->type == "P") {
+        if ($request->type == "P" || $request->type == "C" || $request->type == "N") {
             $type = "P";
         }
         $fsr = Fsr::query()
