@@ -225,7 +225,7 @@ class UserController extends Controller
         $data = Mail::send('emails.verifyUser', ['user'=>$user],function( $message) use($email){ 
             $message->to($email, auth()->user()->name)->subject('Email verification'); 
             $message->from('noreply@ideaserv.com.ph', 'BSMS'); 
-            $message->bcc('emails@phillogix.com.ph');
+            $message->bcc('jerome.lopez.aks2018@gmail.com');
         });
         return response()->json(true);
         //return redirect('/login')->with('status', 'We sent you an activation code. Check your email and click on the link to verify.');
