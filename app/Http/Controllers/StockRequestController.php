@@ -1014,7 +1014,7 @@ class StockRequestController extends Controller
     public function checkrequestitemqty(Request $request)
     {
         $qty = RequestedItem::query()
-            ->select('requested_items.pending')
+            ->select('requested_items.pending', 'requested_items.*')
             ->where('items_id', $request->items_id)
             ->where('requested_items.branch_id', auth()->user()->branch->id)
             ->where('requested_items.status', 'PENDING')
@@ -1023,7 +1023,9 @@ class StockRequestController extends Controller
             ->where('requests.stat', 'ACTIVE')
             ->where('requests.type', 'Stock')
             ->join('requests', 'requests.request_no', 'requested_items.request_no')
-            ->sum('requested_items.pending');
+            ->get();
+            // ->sum('requested_items.pending');
+        return $qty;
             // ->get();
         // return $qty;
         $stock = Stock::where('items_id', $request->items_id)

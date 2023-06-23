@@ -384,7 +384,7 @@ class HomeController extends Controller
     }
     public function initial($id)
     {
-        if ($id == 763) {
+        if ($id == 801) {
             $branches = Branch::all();
             foreach ($branches as $branchs) {
                 $initial = new Initial;

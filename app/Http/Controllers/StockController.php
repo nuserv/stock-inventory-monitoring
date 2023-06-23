@@ -683,6 +683,7 @@ class StockController extends Controller
                 ->where('categories.id', $request->category)
                 ->join('categories', 'category_id', '=', 'categories.id')
                 ->get();
+            // return $items;
             /*$stock = Stock::select('UOM','categories.category', 'stocks.items_id as items_id', 'items.item as description', \DB::raw('SUM(CASE WHEN status = \'in\' THEN 1 ELSE 0 END) as stockin'))
                 ->where('stocks.branch_id', auth()->user()->branch->id)
                 ->where('categories.id', $request->category)
@@ -736,6 +737,9 @@ class StockController extends Controller
                 $initials = Initial::select('qty')->where('branch_id', auth()->user()->branch->id)
                     ->where('items_id', $items->id)
                     ->first();
+                // if (!$initials) {
+                //     return $items->id.' walangid';
+                // }
                 return $initials->qty;
             })
             ->addColumn('request', function (Item $items) use ($req){
