@@ -1023,9 +1023,9 @@ class StockRequestController extends Controller
             ->where('requests.stat', 'ACTIVE')
             ->where('requests.type', 'Stock')
             ->join('requests', 'requests.request_no', 'requested_items.request_no')
-            ->get();
-            // ->sum('requested_items.pending');
-        return $qty;
+            // ->get();
+            ->sum('requested_items.pending');
+        // return $qty;
             // ->get();
         // return $qty;
         $stock = Stock::where('items_id', $request->items_id)
