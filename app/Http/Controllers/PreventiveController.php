@@ -163,6 +163,7 @@ class PreventiveController extends Controller
                             ->where('quarter', '!=', Carbon::now()->quarter)->get();
                     }
             }else{
+
                 $pmbranches = PmBranches::query()
                     ->select('Conversion','customer_branch as client', 'pm_branches.customer_branches_code', 'branch', 'branch_id', 'area', 'customer_branches.id as customer_id')
                     ->join('branches', 'branches.id', 'branch_id')
