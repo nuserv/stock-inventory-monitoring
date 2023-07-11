@@ -104,7 +104,19 @@ class StockController extends Controller
     {
         if (auth()->user()->hasanyrole('Warehouse Manager', 'Encoder')) {
             $pullout = Pullno::query()
-                ->select('pullouts_no.updated_at', 'pullouts_no.status', 'pullout_no', 'branch')
+                ->select('pullouts_no.id', 'pullouts_no.updated_at', 'pullouts_no.status', 'pullout_no')
+                ->wherein('pullouts_no.status', ['For receiving', 'Incomplete'])
+                ->get();
+            foreach ($pullout as $key) {
+                if ($key->status == 'Incomplete') {
+                    if (!Pullout::where('pullout_no', $key->pullout_no)->where('status', 'For receiving')->first()) {
+                       $key->status = 'Completed';
+                       $key->Save();
+                    }
+                }
+            }
+            $pullout = Pullno::query()
+                ->select('pullouts_no.id', 'pullouts_no.updated_at', 'pullouts_no.status', 'pullout_no', 'branch')
                 ->wherein('pullouts_no.status', ['For receiving', 'Incomplete'])
                 ->join('branches', 'branches.id', 'branch_id')
                 ->get();
