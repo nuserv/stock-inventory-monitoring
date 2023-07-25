@@ -170,14 +170,15 @@ class StockController extends Controller
             $no = $pullno->pullout_no;
             $excel = Excel::raw(new ExcelExport($pullno->pullout_no, 'PR'), BaseExcel::XLSX);
             $data = array('office'=> auth()->user()->branch->branch, 'return_no'=>$pullno->pullout_no, 'dated'=>Carbon::now()->toDateTimeString());
-            Mail::send('pr', $data, function($message) use($excel, $no, $bcc) {
-                $message->to(auth()->user()->email, auth()->user()->name)->subject
-                    ('PR no. '.$no);
-                $message->attachData($excel, 'PR No. '.$no.'.xlsx');
-                $message->from('noreply@ideaserv.com.ph', 'BSMS');
-                $message->bcc($bcc);
-            });
-
+            if (env('MAIL') == 'yes') {
+                Mail::send('pr', $data, function($message) use($excel, $no, $bcc) {
+                    $message->to(auth()->user()->email, auth()->user()->name)->subject
+                        ('PR no. '.$no);
+                    $message->attachData($excel, 'PR No. '.$no.'.xlsx');
+                    $message->from('noreply@ideaserv.com.ph', 'BSMS');
+                    $message->bcc($bcc);
+                });
+            }
             return response()->json($pullno);
         }
     }
@@ -339,13 +340,15 @@ class StockController extends Controller
             $bcc = \config('email.bcc');
             $excel = Excel::raw(new ExcelExport($request->billid, 'bill'), BaseExcel::XLSX);
             $data = array('office'=> auth()->user()->branch->branch, 'return_no'=>$request->billid, 'dated'=>Carbon::now()->toDateTimeString());
-            Mail::send('del', $data, function($message) use($excel, $no, $bcc) {
-                $message->to(auth()->user()->email, auth()->user()->name)->subject
-                    ('DR no. '.$no);
-                $message->attachData($excel, 'DR No. '.$no.'.xlsx');
-                $message->from('noreply@ideaserv.com.ph', 'BSMS');
-                $message->bcc($bcc);
-            });
+            if (env('MAIL') == 'yes') {
+                Mail::send('del', $data, function($message) use($excel, $no, $bcc) {
+                    $message->to(auth()->user()->email, auth()->user()->name)->subject
+                        ('DR no. '.$no);
+                    $message->attachData($excel, 'DR No. '.$no.'.xlsx');
+                    $message->from('noreply@ideaserv.com.ph', 'BSMS');
+                    $message->bcc($bcc);
+                });
+            }
         }
         return response()->json($billable);
         

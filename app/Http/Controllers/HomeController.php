@@ -103,10 +103,12 @@ class HomeController extends Controller
         $log->user_id = auth()->user()->id;
         $log->fullname = auth()->user()->name.' '.auth()->user()->middlename.' '.auth()->user()->lastname;
         $data = $log->save();
-        Mail::raw('Update '.$items->item.' to '.$item->item.'.', function ($message) use ($items){
-            $message->to('emorej046@gmail.com');
-            $message->subject('Update123 '.$items->item);
-        });
+        if (env('MAIL') == 'yes') {
+            Mail::raw('Update '.$items->item.' to '.$item->item.'.', function ($message) use ($items){
+                $message->to('emorej046@gmail.com');
+                $message->subject('Update123 '.$items->item);
+            });
+        }
         return response()->json($data);
 
     }
@@ -150,17 +152,19 @@ class HomeController extends Controller
             );
             Config::set('mail', $config);
             
-            $send = Mail::send('report-a-problem', 
-                [
-                'branch'=>auth()->user()->branch->branch,
-                'module'=>$request->input('module'),
-                'email'=>auth()->user()->email,
-                'remarks'=>$request->input('remarks')
-                ],
-                function( $message) use($user, $branch, $email){ 
-                $message->to('bsms.support@ideaserv.com.ph', 'bsms.support@ideaserv.com.ph')->subject('Report A Problem'); 
-                $message->from($email, 'Report A Problem - '.$user. ' - '.$branch);
-            });
+            if (env('MAIL') == 'yes') {
+                $send = Mail::send('report-a-problem', 
+                    [
+                    'branch'=>auth()->user()->branch->branch,
+                    'module'=>$request->input('module'),
+                    'email'=>auth()->user()->email,
+                    'remarks'=>$request->input('remarks')
+                    ],
+                    function( $message) use($user, $branch, $email){ 
+                    $message->to('bsms.support@ideaserv.com.ph', 'bsms.support@ideaserv.com.ph')->subject('Report A Problem'); 
+                    $message->from($email, 'Report A Problem - '.$user. ' - '.$branch);
+                });
+            }
             $responder = new Responder;
             $responder->branch_id = auth()->user()->branch->id;
             $responder->user_id = auth()->user()->id;
@@ -193,10 +197,15 @@ class HomeController extends Controller
         Config::set('mail', $config);
         $email = auth()->user()->email;
         $name = auth()->user()->name. ' '. auth()->user()->lastname;
-        $data = Mail::send('responder', function( $message) use($email, $name){ 
-            $message->to($email, $name)->subject('Report A Problem'); 
-            $message->from('bsms.support@ideaserv.com.ph', 'BSMS Support Team');
-        });
+        if (env('MAIL') == 'yes') {
+            $data = Mail::send('responder', function( $message) use($email, $name){ 
+                $message->to($email, $name)->subject('Report A Problem'); 
+                $message->from('bsms.support@ideaserv.com.ph', 'BSMS Support Team');
+            });
+        }
+        else{
+            $data = true;
+        }
         return response()->json($data);
     }
     public function pending()
@@ -264,11 +273,16 @@ class HomeController extends Controller
                 foreach ($items as $item) {
                     $missing = Item::where('id', $item->items_id)->first();
                     $email = 'jerome.lopez.ge2018@gmail.com';
-                    $gomail = Mail::send('unresolved', ['item'=>$missing->item, 'RDate'=>$mail->created_at, 'intransit'=>$mail->intransit, 'branch'=>$branch->branch],function( $message){ 
-                        $message->to('jerome.lopez.ge2018@gmail.com', 'Jerome Lopez')->subject 
-                            ('Unresolved Issue Notification'); 
-                        $message->from('noreply@ideaserv.com.ph', 'Unresolved - NO-REPLY'); 
-                    });
+                    if (env('MAIL') == 'yes') {
+                        $gomail = Mail::send('unresolved', ['item'=>$missing->item, 'RDate'=>$mail->created_at, 'intransit'=>$mail->intransit, 'branch'=>$branch->branch],function( $message){ 
+                            $message->to('jerome.lopez.ge2018@gmail.com', 'Jerome Lopez')->subject 
+                                ('Unresolved Issue Notification'); 
+                            $message->from('noreply@ideaserv.com.ph', 'Unresolved - NO-REPLY'); 
+                        });
+                    }
+                    else{
+                        $gomail = true;
+                    }
                     if ($gomail){
                         return 'tama';
                     }
@@ -282,10 +296,12 @@ class HomeController extends Controller
         if ($responder) {
             $email = $responder->email;
             $name = $responder->name. ' '. $responder->lastname;
-            Mail::send('responder',['email'=>'email'], function( $message) use($email, $name){ 
-                $message->to($email, $name)->subject('Report A Problem'); 
-                $message->from('bsms.support@ideaserv.com.ph', 'BSMS Support Team');
-            });
+            if (env('MAIL') == 'yes') {
+                Mail::send('responder',['email'=>'email'], function( $message) use($email, $name){ 
+                    $message->to($email, $name)->subject('Report A Problem'); 
+                    $message->from('bsms.support@ideaserv.com.ph', 'BSMS Support Team');
+                });
+            }
             $responder->delete();
         }
 
