@@ -365,6 +365,7 @@ $(document).on('change', '.qty', function () {
 $(document).on('change', '.desc', function(){
     var count = $(this).attr('row_count');
     var id = $(this).val();
+    $('#qty'+count).val('0');
     if ($('#requesttype').val() == 'Stock') {
         $.ajax({
             url: 'checkrequestitemqty',
