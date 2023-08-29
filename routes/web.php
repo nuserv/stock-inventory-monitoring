@@ -252,7 +252,7 @@ Route::get('getitems', 'StockRequestController@getitems');//->middleware('ajax')
 Route::get('users', 'UserController@getUsers')->middleware(['ajax', 'verified']);
 Route::get('user', 'UserController@index')->name('user.index')->middleware(['verified']);
 Route::get('getBranchName', 'UserController@getBranchName')->middleware(['ajax', 'verified']);
-Route::post('user_add', 'UserController@store')->middleware(['ajax', 'verified']);
+Route::any('user_add', 'UserController@store');//->middleware(['ajax', 'verified']);
 Route::put('user_update/{id}', 'UserController@update')->middleware(['ajax', 'verified']);
 
 Route::get('stocks/{id}', 'BranchController@getStocks');//->middleware('ajax');

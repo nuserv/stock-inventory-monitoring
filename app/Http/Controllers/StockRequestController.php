@@ -1035,6 +1035,7 @@ class StockRequestController extends Controller
         $initial = Initial::select('qty')->where('items_id', $request->items_id)
             ->where('branch_id', auth()->user()->branch->id)
             ->first();
+            // return $qty.' '.$stock.' '.$initial->qty;
         if (($qty+$stock) >= $initial->qty ) {
             return response()->json('yes');
         }else{

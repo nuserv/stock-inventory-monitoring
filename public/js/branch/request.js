@@ -108,32 +108,62 @@ $(document).ready(function()
                 }
                 if (penreq <= 10) {
                     $('table.requestDetails').dataTable().fnDestroy();
-                    pendingreq = 
-                    $('table.requestDetails').DataTable({ 
-                        "dom": 'rt',
-                        "language": {
-                            "emptyTable": " "
-                        },
-                        "columnDefs": [
-                            {   
-                                "render": function ( data ) {
-                                    return '<button class="btn-primary delItemBtn" item_id="'+data.id+'">Remove</button>'
-                                },
-                                "defaultContent": '',
-                                "data": null,
-                                "targets": [3]
-                            }
-                        ],
-                        processing: true,
-                        serverSide: true,
-                        ajax: "/requests/"+trdata.request_no,
-                        columns: [
-                            { data: 'cat_name', name:'cat_name'},
-                            { data: 'item_name', name:'item_name'},
-                            { data: 'qty', name:'qty'}
-                        ]
-                    });
-                }else if (penreq > 10) {
+                    if (penreq <= 1) {
+                        pendingreq = 
+                        $('table.requestDetails').DataTable({ 
+                            "dom": 'rt',
+                            "language": {
+                                "emptyTable": " "
+                            },
+                            "columnDefs": [
+                                {   
+                                    "render": function ( data ) {
+                                        return ''
+                                    },
+                                    "defaultContent": '',
+                                    "data": null,
+                                    "targets": [3]
+                                }
+                            ],
+                            processing: true,
+                            serverSide: true,
+                            ajax: "/requests/"+trdata.request_no,
+                            columns: [
+                                { data: 'cat_name', name:'cat_name'},
+                                { data: 'item_name', name:'item_name'},
+                                { data: 'qty', name:'qty'}
+                            ]
+                        });
+                    }
+                    else{
+                        pendingreq = 
+                        $('table.requestDetails').DataTable({ 
+                            "dom": 'rt',
+                            "language": {
+                                "emptyTable": " "
+                            },
+                            "columnDefs": [
+                                {   
+                                    "render": function ( data ) {
+                                        return '<button class="btn-primary delItemBtn" item_id="'+data.id+'">Remove</button>'
+                                    },
+                                    "defaultContent": '',
+                                    "data": null,
+                                    "targets": [3]
+                                }
+                            ],
+                            processing: true,
+                            serverSide: true,
+                            ajax: "/requests/"+trdata.request_no,
+                            columns: [
+                                { data: 'cat_name', name:'cat_name'},
+                                { data: 'item_name', name:'item_name'},
+                                { data: 'qty', name:'qty'}
+                            ]
+                        });
+                    }
+                }
+                else if (penreq > 10) {
                     $('table.requestDetails').dataTable().fnDestroy();
                     pendingreq = 
                     $('table.requestDetails').DataTable({ 
@@ -221,32 +251,62 @@ $(document).ready(function()
                 }
                 if (penreq <= 10) {
                     $('table.requestDetails').dataTable().fnDestroy();
-                    pendingreq = 
-                    $('table.requestDetails').DataTable({ 
-                        "dom": 'rt',
-                        "language": {
-                            "emptyTable": " "
-                        },
-                        "columnDefs": [
-                            {   
-                                "render": function ( data ) {
-                                    return '<button class="btn-primary delItemBtn" item_id="'+data.id+'">Remove</button>'
-                                },
-                                "defaultContent": '',
-                                "data": null,
-                                "targets": [3],
-                                "visible": false
-                            }
-                        ],
-                        processing: true,
-                        serverSide: true,
-                        ajax: "/requests/"+trdata.request_no,
-                        columns: [
-                            { data: 'cat_name', name:'cat_name'},
-                            { data: 'item_name', name:'item_name'},
-                            { data: 'qty', name:'qty'}
-                        ]
-                    });
+                    if (penreq <= 1) {
+                        pendingreq = 
+                        $('table.requestDetails').DataTable({ 
+                            "dom": 'rt',
+                            "language": {
+                                "emptyTable": " "
+                            },
+                            "columnDefs": [
+                                {   
+                                    "render": function ( data ) {
+                                        return '';
+                                    },
+                                    "defaultContent": '',
+                                    "data": null,
+                                    "targets": [3],
+                                    "visible": false
+                                }
+                            ],
+                            processing: true,
+                            serverSide: true,
+                            ajax: "/requests/"+trdata.request_no,
+                            columns: [
+                                { data: 'cat_name', name:'cat_name'},
+                                { data: 'item_name', name:'item_name'},
+                                { data: 'qty', name:'qty'}
+                            ]
+                        });
+                    }
+                    else{
+                        pendingreq = 
+                        $('table.requestDetails').DataTable({ 
+                            "dom": 'rt',
+                            "language": {
+                                "emptyTable": " "
+                            },
+                            "columnDefs": [
+                                {   
+                                    "render": function ( data ) {
+                                        return '<button class="btn-primary delItemBtn" item_id="'+data.id+'">Remove</button>';
+                                    },
+                                    "defaultContent": '',
+                                    "data": null,
+                                    "targets": [3],
+                                    "visible": false
+                                }
+                            ],
+                            processing: true,
+                            serverSide: true,
+                            ajax: "/requests/"+trdata.request_no,
+                            columns: [
+                                { data: 'cat_name', name:'cat_name'},
+                                { data: 'item_name', name:'item_name'},
+                                { data: 'qty', name:'qty'}
+                            ]
+                        });
+                    }
                 }else if (penreq > 10) {
                     $('table.requestDetails').dataTable().fnDestroy();
                     pendingreq = 
@@ -949,11 +1009,16 @@ $(document).on('click', '#not_rec_Btn', function(){
         }
     });
 });
-$(document).on('keyup', '#reason', function(){
-    $(".swal2-confirm").prop('disabled', true); 
-    if ($(this).val().length > 7) {
+$(document).on('change', '#reason', function(){
+    if ($(this).val() == "") {
+        $(".swal2-confirm").prop('disabled', true); 
+    }
+    else{
         $(".swal2-confirm").prop('disabled', false); 
     }
+    // if ($(this).val().length > 7) {
+    //     $(".swal2-confirm").prop('disabled', false); 
+    // }
 });
 
 $(document).on("click", ".delItemBtn", function() {
@@ -961,7 +1026,7 @@ $(document).on("click", ".delItemBtn", function() {
     var row =  $(this).parents('tr');
     Swal.fire({
         title: "DELETE REQUESTED ITEM?",
-        html: "You are about to DELETE this item!<br><br><div class=\"form-group\"><textarea style=\"resize: none; border: 1px solid black;\" class=\"w3-input w-100\" id=\"reason\" name=\"reason\" rows=\"4\" maxlength=\"150\" autocomplete=\"off\" placeholder=\"Please provide a valid reason for the deletion of the requested item.\"></textarea></div>",
+        html: "You are about to DELETE this item!<br><br><div class=\"form-group\"><label for=\"reason\">Select Reason:</label><select style=\"border: 1px solid black;\" class=\"w3-select w-100\" id=\"reason\" name=\"reason\"><option value=\"\">-- Select Reason --</option><option value=\"Obsolete\">Obsolete</option><option value=\"Wrong Entry\">Wrong Entry</option></select></div>",
         icon: "warning",
         showCancelButton: true,
         cancelButtonColor: '#3085d6',
