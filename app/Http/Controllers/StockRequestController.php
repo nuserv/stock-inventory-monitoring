@@ -510,7 +510,7 @@ class StockRequestController extends Controller
         $log = new UserLog;
         $log->branch_id = auth()->user()->branch->id;
         $log->branch = auth()->user()->branch->branch;
-        $log->activity = "DELETE requested $item->item because $request->reason";
+        $log->activity = "DELETE requested $item->item - $request->reason";
         $log->user_id = auth()->user()->id;
         $log->fullname = auth()->user()->name.' '.auth()->user()->middlename.' '.auth()->user()->lastname;
         $log->save();
