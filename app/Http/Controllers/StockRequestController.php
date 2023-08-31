@@ -972,7 +972,7 @@ class StockRequestController extends Controller
             ->where('status', 'PENDING')
             ->where('type', 'Stock')
             ->where('stat', 'ACTIVE')
-            ->where( 'created_at', '>', Carbon::now()->subDays(7))
+            ->where( 'created_at', '>', Carbon::now()->subDays(60))
             ->first();
         if ($requestno) {
             $data = $requestno->request_no;
