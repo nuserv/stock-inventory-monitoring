@@ -1052,7 +1052,7 @@ $(document).on("click", ".delItemBtn", function() {
                     pendingreq
                         .row(row)
                         .remove().draw( false );
-                    if (pendingreq.data().count() <= 1){
+                    if (pendingreq.data().count() == 0){
                         $.ajax({
                             url: 'remove',
                             headers: {
@@ -1073,6 +1073,9 @@ $(document).on("click", ".delItemBtn", function() {
                                 alert(data.responseText);
                             }
                         });               
+                    }
+                    else if (pendingreq.data().count() == 1) {
+                        location.reload();
                     }
                 },
                 error: function(data) {
