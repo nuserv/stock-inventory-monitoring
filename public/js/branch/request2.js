@@ -164,7 +164,7 @@ $(document).on('click', '#reqBtn', function(){
                 type: 'GET',
                 async:false,
                 data: {
-                    reqno : reqno,
+                    reqno : reqno
                 },
                 success: function(data){
                     if(data != "wala pa"){
@@ -281,6 +281,31 @@ $(document).on('click', '.send_sub_Btn', function(){
     $('#loading').show();
     if ($('#requesttype').val() == "Service") {
         reqno = reqstock;
+        $.ajax({
+            url: 'checkrequestservice',
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="ctok"]').attr('content')
+            },
+            dataType: 'json',
+            type: 'GET',
+            async:false,
+            data: {
+                ticket : $('#ticket').val()
+            },
+            success: function(data){
+                if(data != "wala pa"){
+                    $('#sreqno').val(data);
+                    reqno = data;
+                    checkrequest = 'meron';
+                }
+            },
+            error: function (data) {
+                if(data.status == 401) {
+                    window.location.href = '/login';
+                }
+                alert(data.responseText);
+            }
+        });
     }
     for(var q=1;q<=y;q++){
         if ($('#row'+q).is(":visible")) {

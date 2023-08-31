@@ -982,6 +982,23 @@ class StockRequestController extends Controller
         return response()->json($data);
     }
 
+    public function checkrequestservice(Request $request)
+    {
+        $requestno = StockRequest::where('branch_id', auth()->user()->branch->id)
+            ->where('status', 'PENDING')
+            ->where('type', 'Service')
+            ->where('stat', 'ACTIVE')
+            ->where('ticket', $request->ticket)
+            ->where( 'created_at', '>', Carbon::now()->subDays(60))
+            ->first();
+        if ($requestno) {
+            $data = $requestno->request_no;
+        }else{
+            $data = "wala pa";
+        }
+        return response()->json($data);
+    }
+
     public function checkbuffer(Request $request)
     {
         $requestno = StockRequest::where('branch_id', auth()->user()->branch->id)

@@ -193,6 +193,7 @@ Route::get('buffersenditems', 'StockRequestController@buffersenditems');//->midd
 Route::put('bufferapproved', 'StockRequestController@bufferapproved')->middleware('ajax');
 Route::get('bufferviewlist', 'StockRequestController@bufferviewlist');
 Route::get('checkrequest', 'StockRequestController@checkrequest');//->middleware('ajax');
+Route::get('checkrequestservice', 'StockRequestController@checkrequestservice');//->middleware('ajax');
 Route::get('checkbuffer', 'StockRequestController@checkbuffer');//->middleware('ajax');
 Route::get('bufferitem', 'StockRequestController@bufferitem');//->middleware('ajax');
 Route::get('bufferget', 'StockRequestController@bufferget');//->middleware('ajax');
