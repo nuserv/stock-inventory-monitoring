@@ -123,6 +123,7 @@
                 </table>
             </div>
             <div class="modal-footer">
+                <input type="button" class="btn btn-primary mr-auto" id="addItemBtn" class="button" value="ADD">
                 <input type="button" class="btn btn-primary mr-auto" id="not_rec_Btn" class="button" value="Not received">
                 <span id="msg">Please select an item to receive.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
                 <input type="button" class="btn btn-primary del_Btn" id="del_Btn" reqno="0" class="button" value="Delete">

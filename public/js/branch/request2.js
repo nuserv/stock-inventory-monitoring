@@ -240,6 +240,9 @@ $(document).on('click', '.add_item', function(){
 
 
 $(document).on('click', '.send_sub_Btn', function(){
+    var item = "";
+    var qty = "";
+    var stat = "notok";
     if (add == 0 || sub > 0) {
         alert('Please add item/s.');
         return false;
@@ -263,22 +266,21 @@ $(document).on('click', '.send_sub_Btn', function(){
         alert('Request Code not match. Please Contact System Administrator.');
         return proceed;
     }
-    var item = "";
-    var qty = "";
-    var stat = "notok";
-    
-    if (!$('#requesttype').val()) {
-        alert('Please Select request type!');
-        return false;
-    }else if ($('#requesttype').val() == "Service" && $('#customer-id').val() == "") {
-        alert('Please Select the correct Customer Name!');
-        return false;
-    }else if ($('#requesttype').val() == "Service" && $('#ticket').val() == "") {
-        alert('Please input ticket number!');
-        return false;
+    if (!updateReq) {
+        if (!$('#requesttype').val()) {
+            alert('Please Select request type!');
+            return false;
+        }else if ($('#requesttype').val() == "Service" && $('#customer-id').val() == "") {
+            alert('Please Select the correct Customer Name!');
+            return false;
+        }else if ($('#requesttype').val() == "Service" && $('#ticket').val() == "") {
+            alert('Please input ticket number!');
+            return false;
+        }
+        $('#sendrequestModal').modal('toggle');
+        $('#loading').show();
+        
     }
-    $('#sendrequestModal').modal('toggle');
-    $('#loading').show();
     if ($('#requesttype').val() == "Service") {
         reqno = reqstock;
         $.ajax({

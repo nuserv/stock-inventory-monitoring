@@ -11,7 +11,7 @@ var stockcat;
 var servicecat;
 var reqno;
 var checkrequest = 'wala';
-var reqstock;
+var reqstock, updateReq;
 $(document).ready(function()
 {
     var d = new Date();
@@ -42,6 +42,25 @@ $(document).ready(function()
         ]
     });
 
+    $('#addItemBtn').on('click', function(){
+        $('#sendrequestModal').modal({backdrop: 'static', keyboard: false});
+        $('.requesttype').show();
+        $('#headerDiv').hide();
+        $('#StockRequestHeader').text('UPDATE STOCK REQUEST NO. '+requestno)
+        $('#requesttype').val('Service').change();
+        $('#ticket').val($('#tickets').val());
+        updateReq = true;
+        $.ajax({
+            type:'get',
+            url:'reqcode',
+            success:function(result)
+            {
+                reqcode = result;
+            },
+        });
+        reqno = requestno;
+    });
+
     $('#requestTable tbody').on('click', 'tr', function () {
         var trdata = table.row(this).data();
         dtdata = table.row(this).data();
@@ -53,6 +72,7 @@ $(document).ready(function()
         $('#name').val(trdata.reqBy);
         $('#area').val(trdata.area);
         $('#requesttypes').val(trdata.type);
+        $('#addItemBtn').hide();
         if (trdata.type == "STOCK") {
             $('.ticketno').hide();
             $('#clientrows').hide();
@@ -62,6 +82,9 @@ $(document).ready(function()
             $('#clients').val(trdata.client.replace(/&#039;/g, '\'').replace(/&quot;/g, '\"').replace(/&amp;/g, '\&').replace(/&AMP;/g, '\&'));
             $('#customers').val(trdata.customer.replace(/&#039;/g, '\'').replace(/&quot;/g, '\"').replace(/&amp;/g, '\&').replace(/&AMP;/g, '\&'));
             $('#tickets').val(trdata.ticket);
+            if (trdata.status == 'PENDING') {
+                $('#addItemBtn').show();
+            }
         }
         $('table.requestDetails').dataTable().fnDestroy();
         $('table.schedDetails').dataTable().fnDestroy();

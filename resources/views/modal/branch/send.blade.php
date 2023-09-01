@@ -2,12 +2,12 @@
     <div class="modal-dialog modal-dialog-centered modal-xl">
         <div class="modal-content">
             <div class="modal-header">
-                <h6 class="modal-title w-100 text-center">STOCK REQUEST FORM</h6>
+                <h6 class="modal-title w-100 text-center" id="StockRequestHeader">STOCK REQUEST FORM</h6>
                 <button class="close cancel" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
-            <div class="modal-body">
+            <div class="modal-body" id="headerDiv">
                 <div class="row no-margin">
                     <div class="col-md-6 form-group row">
                         <label for="bname" class="col-md-5 col-form-label text-md-right">Date requested:</label>
