@@ -195,6 +195,18 @@ class DefectiveController extends Controller
     {
         if (auth()->user()->hasanyrole('Warehouse Manager', 'Encoder')) {
             $repaired = RepairedNo::query()
+                ->select('id','created_at', 'repaired_no', 'status')
+                ->wherein('status', ['For receiving', 'Incomplete'])
+                ->get();
+            foreach ($repaired as $repair) {
+                $check = Defective::where('status', 'For add stock')
+                    ->where('repaired_no', $repair->repaired_no)->count();
+                if ($check == 0) {
+                    $repair->status = 'Completed';
+                    $repair->Save();
+                }
+            }
+            $repaired = RepairedNo::query()
                 ->select('created_at', 'repaired_no', 'status')
                 ->wherein('status', ['For receiving', 'Incomplete'])
                 ->get();
