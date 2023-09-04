@@ -17,9 +17,9 @@ class CheckBrowser
     public function handle($request, Closure $next)
     {
         $agent = new Agent();
-        if (($agent->isDesktop() && $agent->browser() != 'Chrome') || (!$agent->isDesktop())) {
-            return response()->make(view('pages.errors'));
-        }
+        // if (($agent->isDesktop() && $agent->browser() != 'Chrome') || (!$agent->isDesktop())) {
+        //     return response()->make(view('pages.errors'));
+        // }
         return $next($request);
     }
 }
