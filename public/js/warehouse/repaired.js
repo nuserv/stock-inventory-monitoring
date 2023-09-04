@@ -136,24 +136,28 @@ $(document).on('click', '#printrecBtn', function(){
     window.location.href = 'repaired-list';
 });
 $(document).on('click', '.printBtn', function(){
-    $.ajax({
-        url: 'repairedupdate',
-        headers: {
-            'X-CSRF-TOKEN': $('meta[name="ctok"]').attr('content')
-        },
-        dataType: 'json',
-        type: 'PUT',
-        data: {
-            retno: retno,
-            send: send
-        },
-        success:function(data)
-        {
-            location.reload();
-        },
-        error: function (data) {
-            alert(data.responseText);
-            return false;
-        }
-    });
+    $('#loading').show();
+    setTimeout(() => {
+        $.ajax({
+            url: 'repairedupdate',
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="ctok"]').attr('content')
+            },
+            dataType: 'json',
+            type: 'PUT',
+            data: {
+                retno: retno,
+                send: send
+            },
+            success:function(data)
+            {
+                location.reload();
+            },
+            error: function (data) {
+                alert(data.responseText);
+                return false;
+            }
+        });
+    }, 300);
+    
 });
