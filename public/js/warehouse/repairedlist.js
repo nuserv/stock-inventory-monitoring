@@ -73,7 +73,7 @@ $(document).on("click", "#repairedTable tr", function () {
             columns: [
                 { data: 'category', name:'category'},
                 { data: 'item', name:'item'},
-                { data: 'serial', name:'serial'},
+                { data: 'serial', name:'serial'}
             ],
             buttons: {
                 dom: {

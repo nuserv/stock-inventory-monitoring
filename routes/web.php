@@ -130,6 +130,7 @@ Route::get('category', 'StockController@category')->middleware('ajax');
 Route::get('bcategory', 'StockController@bcategory')->middleware('ajax');
 Route::get('bitem', 'StockController@bitem')->middleware('ajax');
 Route::get('bserial/{id}', 'StockController@bserial')->middleware('ajax');
+Route::get('get_serial', 'StockController@get_serial');//->middleware('ajax');
 Route::get('service-unit', 'StockController@service')->name('index.service-unit');
 Route::get('sUnit', 'StockController@serviceUnit');//->middleware('ajax');
 Route::get('bill', 'StockController@bill');//->middleware('ajax');

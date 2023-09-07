@@ -69,6 +69,9 @@
                 <th>
                     Status
                 </th>
+                <th>
+                    Remarks
+                </th>
                 @endif
             </tr>
         </thead>

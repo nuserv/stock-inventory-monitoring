@@ -236,14 +236,9 @@ $(document).on('click', '.in_sub_Btn', function(){
     }
 });
 $(document).on('keyup', '#repserial', function(){
-        console.log('12');
     $(this).val($(this).val().toUpperCase());
-    console.log($(this).val().length );
     if ($(this).val() && $(this).val().length >= 3) {
-        console.log('pasok');
-        console.log($(this).val().toLowerCase());
         if ($(this).val().toLowerCase().includes('n/a') || $(this).val().toLowerCase() ==  "faded" || $(this).val().toLowerCase() ==  "none") {
-            console.log('dito');
             $.ajax({
                 url: 'checkserial',
                 headers: {

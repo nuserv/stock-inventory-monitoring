@@ -46,6 +46,9 @@
                 </th>
                 @if(auth()->user()->hasAnyRole('Repair'))
                 <th>
+                    Remarks
+                </th>
+                <th>
                 </th>
                 @endif
             </tr>

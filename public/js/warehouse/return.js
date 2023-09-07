@@ -68,9 +68,10 @@ $(document).on("click", "#returnTable tr", function () {
                 { data: 'category', name:'category'},
                 { data: 'item', name:'item'},
                 { data: 'serial', name:'serial'},
+                { data: 'remarks', name:'remarks'},
                 { data: null, "render": function ( data, type, row, meta) 
                     {
-                        return '<button class="btn-primary editBtn" item="'+data.items_id+'" serial_num="'+data.serial+'" return_id="'+data.id+'" stat="Received">Edit Serial</button>&nbsp;&nbsp;<button class="btn-primary recBtn" return_id="'+data.id+'" stat="Received">Received</button>';
+                        return '<button class="btn-primary editBtn" item="'+data.items_id+'" serial_num="'+data.serial+'" return_id="'+data.id+'" stat="Received">Edit Serial</button><br><br><button class="btn-primary recBtn" return_id="'+data.id+'" stat="Received">Received</button>';
                     }
                 }
             ]

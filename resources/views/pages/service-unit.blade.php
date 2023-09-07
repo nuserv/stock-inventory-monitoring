@@ -21,15 +21,19 @@
                     Serial
                 </th>
                 <th>
+                    Status
+                </th>
+                <th>
                     Service By
                 </th>
             </tr>
         </thead>
     </table>
-</div>
+</div><br>
 <div class="d-flex">
     @if(auth()->user()->hasAnyRole('Head', 'Tech'))
-    <input type="button" id="out_Btn" class="btn btn-xs btn-primary" value="SERVICE OUT">&nbsp;
+        <input type="button" id="out_Btn" class="btn btn-xs btn-primary" value="SERVICE OUT">&nbsp;
+        <input type="button" id="in_Btn" class="btn btn-xs btn-primary mr-auto" value="SERVICE IN">;
     @endif
 </div>
 @endsection

@@ -300,10 +300,13 @@ class StockController extends Controller
             ->where('branch_id', auth()->user()->branch->id)
             ->groupBy('categories.id')
             ->get();
+        $pull_categories = Category::select('id','category')
+            ->orderBy('category')
+            ->get();
         if (!auth()->user()->hasanyrole('Head', 'Tech', 'Encoder', 'Warehouse Manager', 'Warehouse Administrator')) {
             return redirect('/');
         }
-        return view('pages.service-unit', compact('title', 'categories'));
+        return view('pages.service-unit', compact('title', 'categories', 'pull_categories'));
     }
     public function delbill(Request $request)
     {
@@ -399,13 +402,19 @@ class StockController extends Controller
         })
         ->make(true);
     }
+
+    public function get_serial(Request $request)
+    {
+        $serials = Stock::where('items_id', $request->items_id)->where('status', 'in')->get()->pluck('serial')->toArray();
+        return response()->json($serials);
+    }
     public function serviceUnit()
     {
-        $stock = Stock::where('status', 'service unit')
+        $stock = Stock::wherein('status', ['service unit', 'pull out'])
                     ->where('branch_id', auth()->user()->branch->id)
                     ->get();
         if (auth()->user()->hasanyrole('Warehouse Manager', 'Encoder', 'Warehouse Administrator')) {
-            $stock = Stock::where('status', 'service unit')
+            $stock = Stock::wherein('status', ['service unit', 'pull out'])
                     ->where('branch_id', 2)
                     ->get();
         }
@@ -415,6 +424,9 @@ class StockController extends Controller
         })
         ->addColumn('items_id', function (Stock $request){
             return $request->items_id;
+        })
+        ->addColumn('status', function (Stock $request){
+            return strtoupper($request->status);
         })
         ->addColumn('category', function (Stock $request){
             $cat = Category::find($request->category_id);
@@ -483,12 +495,18 @@ class StockController extends Controller
                         ->where('customer_branches.id', $customer)
                         ->join('customers', 'customer_id', '=', 'customers.id')
                         ->first();
+                    if (!$client) {
+                        return 'this==='.$customer;
+                    }
                     $clients = ucwords(mb_strtolower($client->customer.' - '.$client->customer_branch));
                 }else{
                     $client = CustomerBranch::select('customer_branch', 'customers.customer')
                         ->where('customer_branches.id', $customer)
                         ->join('customers', 'customer_id', '=', 'customers.id')
                         ->first();
+                        if (!$client) {
+                            return 'this==='.$customer;
+                        }
                     $clients = $clients.', '.ucwords(mb_strtolower($client->customer.' - '.$client->customer_branch));
                 }
             }
@@ -1195,20 +1213,56 @@ class StockController extends Controller
     }
     public function serviceOut(Request $request)
     {
-        $stock = Stock::where('items_id', $request->item)
-            ->where('branch_id', auth()->user()->branch->id)
-            ->where('serial', $request->serial)
-            ->where('status', 'in')
-            ->first();
         $item = Item::where('id', $request->item)->first();
         $customer = CustomerBranch::where('id', $request->customer)->first();
-        $stock->status = $request->purpose;
-        $stock->customer_branches_id = $request->customer;
-        $stock->user_id = auth()->user()->id;
+        $client = Customer::where('id', $customer->customer_id)->first();
+        if ($request->purpose == "pull out") {
+            $stock = new Stock;
+            $stock->user_id = auth()->user()->id;
+            $stock->category_id = $item->category_id;
+            $stock->branch_id = auth()->user()->branch_id;
+            $stock->items_id = $request->item;
+            $stock->itemname = $item->item;
+            $stock->serial = $request->serial;
+            $stock->status = 'pull out';
+            $stock->customer_branches_id = $request->customer;
+            $stock->Save();
+            $defective = new Defective;
+            $defective->branch_id = auth()->user()->branch->id;
+            $defective->user_id = auth()->user()->id;
+            $defective->category_id = $item->category_id;
+            $defective->items_id = $request->item;
+            $defective->serial = mb_strtoupper($request->serial);
+            $defective->status = 'For return';
+            $defective->remarks = 'Pull-out from '.$customer->customer_branch."($client->customer)";
+            $defective->save();
+        }
+        else{
+            $stock = Stock::where('items_id', $request->item)
+                ->where('branch_id', auth()->user()->branch->id)
+                ->where('serial', $request->serial)
+                ->where('status', 'in')
+                ->first();
+            $stock->status = $request->purpose;
+            $stock->customer_branches_id = $request->customer;
+            $stock->user_id = auth()->user()->id;
+        }
+        
         $log = new UserLog;
         $log->branch_id = auth()->user()->branch->id;
         $log->branch = auth()->user()->branch->branch;
-        if ($request->purpose == "billable") {
+        if ($request->purpose == "pull out") {
+            $log->activity = "SERVICE IN $item->item(S/N: ".mb_strtoupper($request->serial).") from $customer->customer_branch.";
+            $serviceout = new ServiceOut;
+            $serviceout->branch_id = auth()->user()->branch->id;
+            $serviceout->user_id = auth()->user()->id;
+            $serviceout->items_id = $request->item;
+            $serviceout->stocks_id = $stock->id;
+            $serviceout->status = 'pull out';
+            $serviceout->customer_branch_id = $request->customer;
+            $serviceout->save();
+        }
+        else if ($request->purpose == "billable") {
             $log->activity = "SERVICE OUT BILLABLE $item->item(S/N: ".mb_strtoupper($request->serial).") to $customer->customer_branch.";
             $serviceout = new Billable;
             $serviceout->branch_id = auth()->user()->branch->id;
@@ -1233,6 +1287,7 @@ class StockController extends Controller
         $data = $stock->save();
         return response()->json($data);
     }
+
     public function pmOut(Request $request)
     {
         $stock = Stock::where('items_id', $request->item)

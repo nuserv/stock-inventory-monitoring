@@ -13,6 +13,7 @@
                         <th>Category</th>
                         <th>Item Description</th>
                         <th>Serial</th>
+                        <th>Remarks</th>
                         <th></th>
                     </thead>
                 </table>

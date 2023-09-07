@@ -70,6 +70,7 @@ $(document).on("click", "#repairedTable tr", function () {
                 { data: 'category', name:'category'},
                 { data: 'item', name:'item'},
                 { data: 'serial', name:'serial'},
+                { data: 'remarks', name:'remarks'}
             ],
             select: {
                 style: 'multi'

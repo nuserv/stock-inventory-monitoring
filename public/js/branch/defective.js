@@ -75,7 +75,8 @@ $(document).ready(function()
                     { data: 'item', name:'item'},
                     { data: 'serial', name:'serial'},
                     { data: 'name', name:'name'},
-                    { data: 'status', name:'status'}
+                    { data: 'status', name:'status'},
+                    { data: 'remarks', name:'remarks'}
                 ],
                 select: {
                     style: 'single',

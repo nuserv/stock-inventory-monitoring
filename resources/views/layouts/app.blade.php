@@ -208,6 +208,7 @@
             @if(auth()->user()->hasAnyrole('Head', 'Tech'))
                 @include('modal.branch.in')
                 @include('modal.branch.out')
+                @include('modal.branch.pull-in')
                 @include('modal.branch.service-in')
             @endif
         @endif

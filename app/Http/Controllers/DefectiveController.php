@@ -124,7 +124,7 @@ class DefectiveController extends Controller
     public function returnitem(Request $request)
     {
         $return = Defective::query()
-            ->select('defectives.id', 'category', 'item', 'serial', 'items_id', 'name')
+            ->select('defectives.id', 'category', 'item', 'serial', 'items_id', 'name', 'remarks')
             ->join('categories', 'categories.id', 'defectives.category_id')
             ->join('items', 'items.id', 'items_id')
             ->join('users', 'users.id', 'user_id')
@@ -140,7 +140,7 @@ class DefectiveController extends Controller
     public function repaireditem(Request $request)
     {
         $repaired = Defective::query()
-            ->select('defectives.id', 'category', 'item', 'serial')
+            ->select('defectives.id', 'category', 'item', 'serial', 'remarks')
             ->join('categories', 'categories.id', 'defectives.category_id')
             ->join('items', 'items.id', 'items_id')
             ->where('status', 'For add stock')
@@ -470,28 +470,28 @@ class DefectiveController extends Controller
         //     ->get();
 
         if (auth()->user()->branch->branch == 'Warehouse' && !auth()->user()->hasanyrole('Repair', 'Warehouse Administrator')) {
-            $data = Defective::query()->select('category', 'users.name', 'branches.branch', 'defectives.category_id', 'branches.id as branchid', 'defectives.updated_at', 'defectives.id as id', 'items.item', 'items.id as itemid', 'defectives.serial as serial', 'defectives.status as status')
-                ->where('defectives.status', 'Repaired')
+            $data = Defective::query()->select('remarks', 'category', 'users.name', 'branches.branch', 'defectives.category_id', 'branches.id as branchid', 'defectives.updated_at', 'defectives.id as id', 'items.item', 'items.id as itemid', 'defectives.serial as serial', 'defectives.status as status')
+            ->where('defectives.status', 'Repaired')
                 ->join('items', 'defectives.items_id', 'items.id')
                 ->join('categories', 'categories.id', 'defectives.category_id')
                 ->join('users', 'users.id', 'defectives.user_id')
                 ->join('branches', 'defectives.branch_id', 'branches.id');
         }else if (auth()->user()->branch->branch == 'Warehouse' && auth()->user()->hasrole('Repair')){
-            $data = Defective::query()->select('category', 'users.name', 'branches.branch', 'defectives.category_id', 'branches.id as branchid', 'defectives.updated_at', 'defectives.id as id', 'items.item', 'items.id as itemid', 'defectives.serial as serial', 'defectives.status as status')
-                ->wherein('defectives.status', ['For repair', 'Repaired', 'Conversion'])
+            $data = Defective::query()->select('remarks', 'category', 'users.name', 'branches.branch', 'defectives.category_id', 'branches.id as branchid', 'defectives.updated_at', 'defectives.id as id', 'items.item', 'items.id as itemid', 'defectives.serial as serial', 'defectives.status as status')
+            ->wherein('defectives.status', ['For repair', 'Repaired', 'Conversion'])
                 ->join('items', 'defectives.items_id', 'items.id')
                 ->join('categories', 'categories.id', 'defectives.category_id')
                 ->join('branches', 'defectives.branch_id', 'branches.id')
                 ->join('users', 'users.id', 'defectives.user_id');
         }else if (auth()->user()->branch->branch == 'Main-Office'){
-            $data = Defective::query()->select('category', 'users.name', 'branches.branch', 'defectives.category_id', 'branches.id as branchid', 'defectives.updated_at', 'defectives.id as id', 'items.item', 'items.id as itemid', 'defectives.serial as serial', 'defectives.status as status')
-                ->wherein('defectives.status', ['Repaired', 'For Repair'])
+            $data = Defective::query()->select('remarks', 'category', 'users.name', 'branches.branch', 'defectives.category_id', 'branches.id as branchid', 'defectives.updated_at', 'defectives.id as id', 'items.item', 'items.id as itemid', 'defectives.serial as serial', 'defectives.status as status')
+            ->wherein('defectives.status', ['Repaired', 'For Repair'])
                 ->join('items', 'defectives.items_id', 'items.id')
                 ->join('categories', 'categories.id', 'defectives.category_id')
                 ->join('users', 'users.id', 'defectives.user_id')
                 ->join('branches', 'defectives.branch_id', 'branches.id');
         }else{
-            $data = Defective::query()->select('category', 'users.name', 'user_id','defectives.updated_at', 'defectives.category_id', 'defectives.branch_id as branchid', 'defectives.id as id', 'items.item', 'items.id as itemid', 'defectives.serial as serial', 'defectives.status as status')
+            $data = Defective::query()->select('remarks', 'category', 'users.name', 'user_id','defectives.updated_at', 'defectives.category_id', 'defectives.branch_id as branchid', 'defectives.id as id', 'items.item', 'items.id as itemid', 'defectives.serial as serial', 'defectives.status as status')
             ->where('defectives.branch_id', auth()->user()->branch->id)
             ->join('items', 'defectives.items_id', 'items.id')
             ->join('categories', 'categories.id', 'defectives.category_id')
@@ -502,6 +502,9 @@ class DefectiveController extends Controller
         return DataTables::of($data)
         ->addColumn('date', function (Defective $data){
             return Carbon::parse($data->updated_at->toFormattedDateString().' '.$data->updated_at->toTimeString())->isoFormat('lll');
+        })
+        ->addColumn('remarks', function (Defective $data){
+            return strtoupper($data->remarks);
         })
         ->make(true);
     }

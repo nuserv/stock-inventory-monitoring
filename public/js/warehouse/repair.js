@@ -33,7 +33,7 @@ $(document).ready(function() {
                     },
                     "defaultContent": '',
                     "data": null,"width": "19%",
-                    "targets": [6]
+                    "targets": [7]
                 }
             ],
             columns: [
@@ -42,7 +42,8 @@ $(document).ready(function() {
                 {data: 'category',name: 'category',"width": "10%"},
                 {data: 'item',name: 'item',"width": "16%"},
                 {data: 'serial',name: 'serial',"width": "10%"},
-                {data: 'status',name: 'status',"width": "15%"}
+                {data: 'status',name: 'status',"width": "15%"},
+                {data: 'remarks',name: 'remarks',"width": "15%"}
             ],
         });
 

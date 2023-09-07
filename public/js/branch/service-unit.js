@@ -23,6 +23,7 @@ $(document).ready(function()
             { data: 'category', name:'category'},
             { data: 'description', name:'description'},
             { data: 'serial', name:'serial'},
+            { data: 'status', name:'status'},
             { data: 'serviceby', name:'serviceby'}
         ]
     });
@@ -32,6 +33,10 @@ $(document).ready(function()
 
 $(document).on('click', '#out_Btn', function(){
     $('#service-unitModal').modal({backdrop: 'static', keyboard: false});
+});
+
+$(document).on('click', '#in_Btn', function(){
+    $('#pull_unitModal').modal({backdrop: 'static', keyboard: false});
 });
 
 $(document).on('click', '.in-close', function(){
@@ -51,34 +56,86 @@ $(document).on("click", "#sUnitTable tr", function () {
             return false;
         }
     }
-    $('#service-inModal').modal({backdrop: 'static', keyboard: false});
-    $('#inclient').val(trdata.client_name.replace(/&#039;/g, '\'').replace(/&quot;/g, '\"').replace(/&amp;/g, '\&').replace(/&AMP;/g, '\&'));
-    $('#incustomer').val(trdata.customer_name.replace(/&#039;/g, '\'').replace(/&quot;/g, '\"').replace(/&amp;/g, '\&').replace(/&AMP;/g, '\&'));
-    $('#outitem').val(trdata.description.replace(/&#039;/g, '\'').replace(/&quot;/g, '\"').replace(/&amp;/g, '\&').replace(/&AMP;/g, '\&'));
-    var itemop;
-    $.ajax({
-        type:'get',
-        url:'itemcode',
-        data:{'id':trdata.category_id},
-        success:function(data)
-        {
-            var itemcode = $.map(data, function(value, index) {
-                return [value];
-            });
-            itemop+='<option selected disabled>select item description</option>';
-            itemcode.forEach(value => {
-                itemop+='<option value="'+value.id+'">'+value.item.toUpperCase()+'</option>';
-            });
-            $("#repdesc").find('option').remove().end().append(itemop);
-        },
-    });
-    $('#indesc').val(trdata.description);
-    $('#indescid').val(trdata.id);
-    $('#inserial').hide();
-    $('#inserial').val(trdata.serial);
-    $('#inserial').prop('disabled', true);
-    $('#repserial').prop('disabled', true);
-    $('#repserial').show();
+    console.log(trdata.status);
+    if (trdata.status == 'PULL OUT') {
+        Swal.fire({
+            title: 'Choose an option',
+            icon: 'question',
+            showCancelButton: true,
+            confirmButtonText: 'Repaired',
+            cancelButtonText: 'Replacement'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                handleRepaired();
+            } else if (result.dismiss === Swal.DismissReason.cancel) {
+                // Fetch the select options via AJAX
+                $.ajax({
+                    url: '/get_serial', // Modify the URL to match your route
+                    type: 'GET',
+                    dataType: 'json',
+                    data:{
+                        items_id: trdata.items_id
+                    },
+                    success: function (serialOptions) {
+                        console.log(serialOptions);
+                        // When the options are fetched successfully, show the Swal modal with the options
+                        Swal.fire({
+                            title: 'Choose a Serial Number',
+                            input: 'select',
+                            inputOptions: serialOptions,
+                            showCancelButton: true,
+                            confirmButtonText: 'Submit',
+                            cancelButtonText: 'Cancel',
+                            inputValidator: (value) => {
+                                if (!value) {
+                                    return 'Serial number is required!';
+                                }
+                            }
+                        }).then((result) => {
+                            if (result.isConfirmed) {
+                                const selectedSerialNumber = result.value;
+                                handleReplacement(selectedSerialNumber);
+                            }
+                        });
+                    },
+                    error: function () {
+                        // Handle the error case
+                        Swal.fire('Error fetching serial options', '', 'error');
+                    }
+                });
+            }
+        });
+    }
+    else{
+        $('#service-inModal').modal({backdrop: 'static', keyboard: false});
+        $('#inclient').val(trdata.client_name.replace(/&#039;/g, '\'').replace(/&quot;/g, '\"').replace(/&amp;/g, '\&').replace(/&AMP;/g, '\&'));
+        $('#incustomer').val(trdata.customer_name.replace(/&#039;/g, '\'').replace(/&quot;/g, '\"').replace(/&amp;/g, '\&').replace(/&AMP;/g, '\&'));
+        $('#outitem').val(trdata.description.replace(/&#039;/g, '\'').replace(/&quot;/g, '\"').replace(/&amp;/g, '\&').replace(/&AMP;/g, '\&'));
+        var itemop;
+        $.ajax({
+            type:'get',
+            url:'itemcode',
+            data:{'id':trdata.category_id},
+            success:function(data)
+            {
+                var itemcode = $.map(data, function(value, index) {
+                    return [value];
+                });
+                itemop+='<option selected disabled>select item description</option>';
+                itemcode.forEach(value => {
+                    itemop+='<option value="'+value.id+'">'+value.item.toUpperCase()+'</option>';
+                });
+                $("#repdesc").find('option').remove().end().append(itemop);
+            },
+        });
+        $('#indesc').val(trdata.description);
+        $('#indescid').val(trdata.id);
+        $('#inserial').hide();
+        $('#inserial').val(trdata.serial);
+        $('#inserial').prop('disabled', true);
+        $('#repserial').prop('disabled', true);
+        $('#repserial').show();
+    }
 });
 
 $(document).on('change', '#intype', function(){

@@ -106,6 +106,80 @@ $(document).on('click', '.out_sub_Btn', function(){
     
 });
 
+$(document).on('click', '.pull_out_sub_Btn', function(){
+    if ($('#pull_client').val() == "") {
+        alert('Invalid Client Name!');
+        return false;
+    }
+    if (r == 1 || outsub > 0) {
+        alert('Please add item/s.');
+        return false;
+    }
+    var cat = "";
+    var item = "";
+    var check = 1;
+    if(confirm('Please make sure you selected the CORRECT ITEM and SERIAL NUMBER.\nClick CANCEL to review your entry.\nClick OK if you are sure that your entry is correct to SUBMIT.')) {
+        $('#pull_unitModal').modal('toggle');
+        $('#loading').show();
+        for(var q=1;q<=y;q++){
+            if ($('#pull_outrow'+q).is(":visible")) {
+                if ($('.pull_out_add_item[btn_id=\''+q+'\']').val() == 'Remove') {
+                    check++;
+                    outsub++;
+                    $('.pull_out_sub_Btn').prop('disabled', true)
+                    cat = $('#pull_outcategory'+q).val();
+                    item = $('#pull_outdesc'+q).val();
+                    serial = $('#pull_outserial'+q).val();
+                    purpose = 'pull out';
+                    $.ajax({
+                        url:"getcustomerid",
+                        type:"get",
+                        async:false,
+                        headers: {
+                            'X-CSRF-TOKEN': $('meta[name="ctok"]').attr('content')
+                        },
+                        data:{
+                            customer:$('#pull_customer').val(),
+                        },
+                        success:function(data){
+                            var customer = data.id;
+                            var client = data.customer_id;
+                            $.ajax({
+                                url: 'service-out',
+                                headers: {
+                                    'X-CSRF-TOKEN': $('meta[name="ctok"]').attr('content')
+                                },
+                                async:false,
+                                dataType: 'json',
+                                type: 'PUT',
+                                data: {
+                                    item: item,
+                                    cat : cat,
+                                    purpose: 'pull out',
+                                    serial: serial,
+                                    customer: customer,
+                                    client: client
+                                },
+                                error: function (data) {
+                                    alert(data.responseText);
+                                }
+                            });
+                        }
+                    });
+                    
+                }
+            }
+            if (q==y) {
+                window.location.href = 'service-unit';
+            }
+        }
+    }
+    /*}else{
+        alert("Invalid Customer Name!");
+        return false;
+    }*/
+});
+
 $(document).on('change', '.outdesc', function(){
     var count = $(this).attr('row_count');
     var id = $(this).val();
@@ -205,6 +279,95 @@ $(document).on('change', '.outcategory', function(){
     });
 });
 
+$(document).on('change', '.pull_outcategory', function(){
+    var descOp = " ";
+    var count = $(this).attr('row_count');
+    var id = $(this).val();
+    $.ajax({
+        type:'get',
+        url:'getItemCodeServiceOut',
+        data:{
+            'id':id,
+            'type': 'pull'
+        },
+        success:function(data)
+        {
+            var itemcode = $.map(data, function(value, index) {
+                return [value];
+            });
+            descOp+='<option selected disabled>select item description</option>';
+            itemcode.forEach(value => {
+                descOp+='<option value="'+value.id+'">'+value.item.toUpperCase()+'</option>';
+            });
+            $("#pull_outdesc" + count).find('option').remove().end().append(descOp);
+        },
+    });
+});
+
+$(document).on('keyup', '.pull_outserial', function(){
+    var serial = $(this).val();
+    var count = $(this).attr('row_count');
+    if ($(this).val() && $(this).val().length >= 3) {
+        if ($(this).val().toLowerCase().includes('n/a') || $(this).val().toLowerCase() ==  "faded" || $(this).val().toLowerCase() ==  "none") {
+            $.ajax({
+                url: 'checkserial',
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="ctok"]').attr('content')
+                },
+                dataType: 'json',
+                type: 'get',
+                async: false,
+                data: {
+                    item: serial,
+                    type: 'na'
+                },
+                success: function (data) {
+                    if (data != "allowed") {
+                        $('.pull_out_add_item[btn_id="' + count + '"]').prop('disabled', true);
+                    }else{
+                        $('.pull_out_add_item[btn_id="' + count + '"]').prop('disabled', false);
+                    }
+                },
+                error: function (data) {
+                    alert(data.responseText);
+                    return false;
+                }
+            });
+        }
+        else if($(this).val().match(".*\\d.*")){
+            $.ajax({
+                url: 'checkserial',
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="ctok"]').attr('content')
+                },
+                dataType: 'json',
+                type: 'get',
+                async: false,
+                data: {
+                    serial: serial,
+                    type: 'check'
+                },
+                success: function (data) {
+                    if (data != "allowed") {
+                        $('.pull_out_add_item[btn_id="' + count + '"]').prop('disabled', true);
+                        alert('The serial number you entered is already existing. Please check the serial number again.');
+                    }else{
+                        $('.pull_out_add_item[btn_id="' + count + '"]').prop('disabled', false);
+                    }
+                },
+                error: function (data) {
+                    alert(data.responseText);
+                    return false;
+                }
+            });
+        }
+    }
+    else{
+        $('.pull_out_add_item[btn_id="' + count + '"]').prop('disabled', true);
+    }
+    $(this).val($(this).val().replace('-',''));
+});
+
 $(document).on('change', '.outitem', function(){
     var count = $(this).attr('row_count');
     var id = $(this).val();        
@@ -252,6 +415,52 @@ $(document).on('click', '.out_add_item', function(){
             $('#out_sub_Btn').prop('disabled', true);
         }else{
             $('#out_sub_Btn').prop('disabled', false);
+        }
+    }
+});
+
+$(document).on('click', '.pull_out_add_item', function(){
+    var rowcount = $(this).attr('btn_id');
+    if ($(this).val() == 'Add Item') {
+        if($('#pull_outcategory'+ rowcount).val() && $('#pull_outdesc'+ rowcount).val() && $('#pull_outserial'+ rowcount).val()) {
+            y++;
+            var additem = '<div class="row no-margin" id="pull_outrow'+y+'"><div class="col-md-2 form-group"><select style="color:black" id="pull_outcategory'+y+'" class="form-control pull_outcategory" row_count="'+y+'"></select></div><div class="col-md-3 form-group"><select style="color:black" id="pull_outdesc'+y+'" class="form-control pull_outdesc" row_count="'+y+'"><option selected disabled>select item description</option></select></div><div class="col-md-2 form-group"><input type="text" style="color: black" class="form-control pull_outserial text-uppercase" row_count="'+y+'" id="pull_outserial'+y+'" autocomplete="off"></div><div class="col-md-1 form-group"><input type="button" class="pull_out_add_item btn btn-xs btn-primary" btn_id="'+y+'" value="Add Item" disabled></div></div>';
+            $(this).val('Remove');
+            $('#pull_outcategory'+ rowcount).prop('disabled', true);
+            $('#pull_outdesc'+ rowcount).prop('disabled', true);
+            $('#pull_outserial'+ rowcount).prop('disabled', true);
+            if (r < 20 ) {
+                $('#pull_outfield').append(additem);
+                $('#pull_outcategory'+ rowcount).find('option').clone().appendTo('#pull_outcategory'+y);
+                r++;
+            }
+        }
+    }else{
+        if (r == 20) {
+            y++;
+            var additem = '<div class="row no-margin" id="pull_outrow'+y+'"><div class="col-md-2 form-group"><select style="color:black" id="pull_outcategory'+y+'" class="form-control pull_outcategory" row_count="'+y+'"></select></div><div class="col-md-3 form-group"><select style="color:black" id="pull_outdesc'+y+'" class="form-control pull_outdesc" row_count="'+y+'"><option selected disabled>select item description</option></select></div><div class="col-md-2 form-group"><input type="text" style="color: black" class="form-control pull_outserial text-uppercase" row_count="'+y+'" id="pull_outserial'+y+'" autocomplete="off"></div><div class="col-md-1 form-group"><input type="button" class="pull_out_add_item btn btn-xs btn-primary" btn_id="'+y+'" value="Add Item" disabled></div></div>';
+            // var additem = '<div class="row no-margin" id="outrow'+y+'"><div class="col-md-2 form-group"><select id="outcategory'+y+'" class="form-control outcategory" row_count="'+y+'"></select></div><div class="col-md-3 form-group"><select id="outdesc'+y+'" class="form-control outdesc" row_count="'+y+'"><option selected disabled>select item description</option></select></div><div class="col-md-2 form-group"><select id="outserial'+y+'" class="form-control outserial" row_count="'+y+'" style="color: black;"><option selected disabled>select serial</option></select></div><div class="col-md-1 form-group"><input type="number" class="form-control" min="0" name="outstock'+y+'" id="outstock'+y+'" placeholder="0" style="color:black; width: 6em" disabled></div><div class="col-md-1 form-group"><input type="button" class="out_add_item btn btn-xs btn-primary" btn_id="'+y+'" value="Add Item"></div></div>';
+            $('#pull_outfield').append(additem);
+            $('#pull_outcategory'+ rowcount).find('option').clone().appendTo('#pull_outcategory'+y);
+            r++;
+        }
+        $('#pull_outcategory'+rowcount).val('select category');
+        $('#pull_outdesc'+rowcount).val('select item description');
+        $('#pull_outserial'+rowcount).val('select serial');
+        $('#pull_outcategory'+rowcount).prop('disabled', false);
+        $('#pull_outdesc'+rowcount).prop('disabled', false);
+        $('#pull_outserial'+rowcount).prop('disabled', false);
+        $('#pull_outrow'+rowcount).hide();
+        $(this).val('Add Item');
+        r--;
+    }
+    if (r == 1) {
+        $('#pull_out_sub_Btn').prop('disabled', true);
+    }else{
+        if ($('#pull_client').val() == '') {
+            $('#pull_out_sub_Btn').prop('disabled', true);
+        }else{
+            $('#pull_out_sub_Btn').prop('disabled', false);
         }
     }
 });
@@ -514,6 +723,13 @@ $(document).on('click', '#clientdiv', function () {
    }
 });
 
+$(document).on('click', '#pull_clientdiv', function () {
+    $('#pull_client').prop('disabled', false);
+    if ($('#pull_client').is(':disabled')) { 
+         clientselected = 'no';
+    }
+ });
+
 $(document).on('keyup', '#customer', function(){ 
     var withclient = 'no';
     var clientname = "";
@@ -558,10 +774,84 @@ $(document).on('keyup', '#customer', function(){
         });
     }
 });
+
+$(document).on('keyup', '#pull_customer', function(){ 
+    var withclient = 'no';
+    var clientname = "";
+    $('#pull_clientlist').fadeOut();  
+    if ($('#pull_client').is(':enabled')) {
+        if ($('#pull_client').val()) {
+            withclient = 'yes';
+            clientname = $('#pull_client').val();
+            if (clientselected != "yes") {
+                alert("Incorrect Client Name!");
+            }
+        }else{
+            $('#pull_client').val('');
+        }
+    }
+    var query = $(this).val();
+    var ul = '<ul class="dropdown-menu" style="display:block; position:relative;overflow: scroll;height: 13em;z-index: 200;">';
+    if(query != ''){
+        $.ajax({
+            url:"hint",
+            type:"get",
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="ctok"]').attr('content')
+            },
+            data:{
+                hint:query,
+                withclient: withclient,
+                clientname: clientname,
+            },
+            success:function(data){
+                var datas = $.map(data, function(value, index) {
+                    return [value];
+                });
+                datas.forEach(value => {
+                    ul+='<li style="color:black" id="pull_licustomer">'+value.customer_branch+'</li>';
+                });
+                console.log(ul);
+                $('#pull_branchlist').fadeIn();  
+                $('#pull_branchlist').html(ul);
+                $('#pull_out_sub_Btn').prop('disabled', true);
+            }
+        });
+    }
+});
+
 $(document).on('click', 'li', function(){  
     var select = $(this).text();
     var id = $(this).attr('id');
-    if (id == 'licustomer') {
+    if (id == 'pull_licustomer') {
+        $('#pull_customer').val($(this).text());  
+        $('#pull_branchlist').fadeOut();  
+        $.ajax({
+            url:"hint",
+            type:"get",
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="ctok"]').attr('content')
+            },
+            data:{
+                client:'yes',
+                branch: select.trim()
+            },
+            success:function(data){
+                if (data) {
+                    $('#pull_client').val(data);  
+                    if (r == 1 || outsub > 0) {
+                        $('#pull_out_sub_Btn').prop('disabled', true);
+                    }else{
+                        $('#pull_out_sub_Btn').prop('disabled', false);
+                    }
+                }else{
+                    $('#pull_client').val('');  
+                    $('#pull_out_sub_Btn').prop('disabled', true);
+                }
+            }
+        });
+    }
+    else if (id == 'licustomer') {
         $('#customer').val($(this).text());  
         $('#branchlist').fadeOut();  
         $.ajax({
@@ -593,9 +883,12 @@ $(document).on('click', 'li', function(){
         $('#client').val($(this).text());  
         $('#clientlist').fadeOut();
         $('#out_sub_Btn').prop('disabled', true);
+        $('#pull_client').val($(this).text());  
+        $('#pull_clientlist').fadeOut();
+        $('#pull_out_sub_Btn').prop('disabled', true);
     }
-    
 });
+
 $(document).on('keyup', '#client', function(){ 
     var query = $(this).val();
     clientselected = 'no';
@@ -622,6 +915,37 @@ $(document).on('keyup', '#client', function(){
                 $('#clientlist').fadeIn();  
                 $('#clientlist').html(ul);
                 $('#customer').val('');  
+            }
+        });
+    }
+});
+
+$(document).on('keyup', '#pull_client', function(){ 
+    var query = $(this).val();
+    clientselected = 'no';
+    $('#pull_branchlist').fadeOut();  
+    $('#pull_out_sub_Btn').prop('disabled', true);
+    var ul = '<ul class="dropdown-menu" style="display:block; position:relative;overflow: scroll;height: 13em;z-index: 200;">';
+    if(query != ''){
+        $.ajax({
+            url:"getclient",
+            type:"get",
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="ctok"]').attr('content')
+            },
+            data:{
+                hint:query,
+            },
+            success:function(data){
+                var datas = $.map(data, function(value, index) {
+                    return [value];
+                });
+                datas.forEach(value => {
+                    ul+='<li style="color:black" id="pull_liclient">'+value.customer+'</li>';
+                });
+                $('#pull_clientlist').fadeIn();  
+                $('#pull_clientlist').html(ul);
+                $('#pull_customer').val('');  
             }
         });
     }
