@@ -411,7 +411,8 @@ class StockController extends Controller
 
     public function return_to_branch(Request $request)
     {
-        $stock = Stock::where('serial', $request->serial)
+        // return $request->serial;
+        $stock = Stock::where('serial', $request->old)
             ->where('status', 'pull out')
             ->first();
         $stock->status = 'returned';

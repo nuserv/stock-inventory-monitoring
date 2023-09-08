@@ -84,6 +84,8 @@ $(document).on("click", "#sUnitTable tr", function () {
                                 type: 'PUT',
                                 data: {
                                     serial: trdata.serial,
+                                    old:trdata.serial
+
                                 },
                                 success:function(data)
                                 {
@@ -128,6 +130,7 @@ $(document).on("click", "#sUnitTable tr", function () {
                                         }
                                     }).then((result) => {
                                         if (result.isConfirmed) {
+                                            console.log($('.swal2-select option:selected').text())
                                             $.ajax({
                                                 url: 'return_to_branch',
                                                 headers: {
@@ -136,7 +139,8 @@ $(document).on("click", "#sUnitTable tr", function () {
                                                 dataType: 'json',
                                                 type: 'PUT',
                                                 data: {
-                                                    serial: result.value,
+                                                    serial: $('.swal2-select option:selected').text(),
+                                                    old:trdata.serial
                                                 },
                                                 success:function(data)
                                                 {

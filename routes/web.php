@@ -137,7 +137,7 @@ Route::get('checkpullout', 'StockController@checkpullout');//->middleware('ajax'
 Route::get('bill', 'StockController@bill');//->middleware('ajax');
 Route::any('delbill', 'StockController@delbill');//->middleware('ajax');
 Route::put('approvebill', 'StockController@approvebill');//->middleware('ajax');
-Route::put('return_to_branch', 'StockController@return_to_branch');//->middleware('ajax');
+Route::any('return_to_branch', 'StockController@return_to_branch');//->middleware('ajax');
 Route::any('prcbill', 'StockController@prcbill');//->middleware('ajax');
 
 Route::get('pmsUnit', 'StockController@pmserviceUnit');//->middleware('ajax');
