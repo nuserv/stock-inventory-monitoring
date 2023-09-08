@@ -33,7 +33,7 @@
 <div class="d-flex">
     @if(auth()->user()->hasAnyRole('Head', 'Tech'))
         <input type="button" id="out_Btn" class="btn btn-xs btn-primary" value="SERVICE OUT">&nbsp;
-        <input type="button" id="in_Btn" class="btn btn-xs btn-primary mr-auto" value="SERVICE IN">;
+        <input type="button" id="in_Btn" class="btn btn-xs btn-primary mr-auto" value="SERVICE IN - Warranty">;
     @endif
 </div>
 @endsection
