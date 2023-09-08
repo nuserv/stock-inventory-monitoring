@@ -444,6 +444,9 @@ class StockController extends Controller
                 ->where('customer_branches.id', $request->customer_branches_id)
                 ->join('customers', 'customer_id', '=', 'customers.id')
                 ->first();
+            // if (!$client) {
+            //     return 'wala--'.$request->customer_branches_id;
+            // }
             return ucwords(mb_strtolower($client->customer.' - '.$client->customer_branch));
         })
         ->addColumn('client_name', function (Stock $request){
@@ -451,6 +454,9 @@ class StockController extends Controller
                 ->where('customer_branches.id', $request->customer_branches_id)
                 ->join('customers', 'customer_id', '=', 'customers.id')
                 ->first();
+                // if (!$client) {
+                //     return 'wala--'.$request->customer_branches_id;
+                // }
             return ucwords(mb_strtolower($client->customer));
         })
         ->addColumn('customer_name', function (Stock $request){
@@ -458,6 +464,9 @@ class StockController extends Controller
                 ->where('customer_branches.id', $request->customer_branches_id)
                 ->join('customers', 'customer_id', '=', 'customers.id')
                 ->first();
+                // if (!$client) {
+                //     return 'wala--'.$request->customer_branches_id;
+                // }
             return ucwords(mb_strtolower($client->customer_branch));
         })
         ->addColumn('serviceby', function (Stock $request){
