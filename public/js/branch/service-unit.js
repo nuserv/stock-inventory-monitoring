@@ -66,8 +66,7 @@ $(document).on("click", "#sUnitTable tr", function () {
             success: function (data) {
                 if (data == 'meron') {
                     Swal.fire({
-                        title: 'Choose an option',
-                        icon: 'question',
+                        title: 'Click on the SERVICE OUT button to release the item under warranty.',
                         showCancelButton: true,
                         confirmButtonText: 'Service Out',
                         cancelButtonText: 'Cancel'
@@ -96,8 +95,7 @@ $(document).on("click", "#sUnitTable tr", function () {
                 }
                 else{
                     Swal.fire({
-                        title: 'Choose an option',
-                        icon: 'question',
+                        title: 'Click on the SERVICE OUT button to release the item under warranty.',
                         showCancelButton: true,
                         confirmButtonText: 'Service Out',
                         cancelButtonText: 'Cancel'
@@ -114,7 +112,7 @@ $(document).on("click", "#sUnitTable tr", function () {
                                     console.log(serialOptions);
                                     // When the options are fetched successfully, show the Swal modal with the options
                                     Swal.fire({
-                                        title: 'Choose a Serial Number',
+                                        title: 'Please choose the SERIAL NO. of the item under warranty.',
                                         input: 'select',
                                         inputOptions: serialOptions,
                                         showCancelButton: true,
