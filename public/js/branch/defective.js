@@ -359,7 +359,7 @@ $(document).on('click', '#returnBtn', function(){
                                 className: 'btn btn-primary',
                                 titleAttr: 'Submit and print preview',
                                 enabled: true,
-                                autoPrint: true,
+                                // autoPrint: true,
                                 text: '<span class="icon text-white-50"><i class="fa fa-print" style="color:white"></i></span><span> SUBMIT</span>',
                                 customize: function (doc) {
                                     var d = new Date();
@@ -427,7 +427,7 @@ $(document).on('click', '#returnBtn', function(){
                                         return true;
                                         return false;
                                     },
-                                    columns: [ 2,3,4 ]
+                                    columns: [ 2,3,4,7]
                                 },
                                 init: function(node) {$(node).removeClass('dt-button')},
                             }
