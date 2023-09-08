@@ -46,6 +46,7 @@
                         @if (auth()->user()->branch->branch != 'Conversion')
                             <th>Service by</th>
                         @endif
+                        <th>Remarks</th>
                     </thead>
                 </table>
             </div>

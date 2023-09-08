@@ -72,7 +72,8 @@ $(document).on("click", "#returnTable tr", function () {
                 { data: 'category', name:'category'},
                 { data: 'item', name:'item'},
                 { data: 'serial', name:'serial'},
-                { data: 'name', name:'name'}
+                { data: 'name', name:'name'},
+                { data: 'remarks', name:'remarks'}
             ],
             buttons: {
                 dom: {
@@ -151,7 +152,7 @@ $(document).on("click", "#returnTable tr", function () {
                                 return true;
                                 return false;
                             },
-                            columns: [ 0, 1, 2 ]
+                            columns: [ 0, 1, 2 ,4]
                         },
                         init: function(node) {$(node).removeClass('dt-button')},
                     }
