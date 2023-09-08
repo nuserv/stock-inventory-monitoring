@@ -359,10 +359,15 @@ class StockRequestController extends Controller
                 ->groupBy('items_id')
                 ->get();
         }else{
+            $check = Stock::where('status', 'pull out')
+                ->where('items_id', $request->id)
+                ->where('branch_id', auth()->user()->branch->id)
+                ->pluck('serial');
             $data = Stock::select(\DB::raw('SUM(CASE WHEN status = \'in\' THEN 1 ELSE 0 END) as stock'))
                 ->where('status', 'in')
                 ->where('items_id', $request->id)
                 ->where('branch_id', auth()->user()->branch->id)
+                ->whereNotin('serial', $check)
                 ->groupBy('items_id')
                 ->get();
         }
@@ -376,10 +381,15 @@ class StockRequestController extends Controller
                 ->orderBy('serial')
                 ->get();
         }else{
+            $check = Stock::where('status', 'pull out')
+                ->where('items_id', $request->id)
+                ->where('branch_id', auth()->user()->branch->id)
+                ->pluck('serial');
             $data = Stock::select('id', 'items_id', 'serial')
                 ->where('status', 'in')
                 ->where('items_id', $request->id)
                 ->where('branch_id', auth()->user()->branch->id)
+                ->whereNotin('serial', $check)
                 ->orderBy('serial')
                 ->get();
         }
