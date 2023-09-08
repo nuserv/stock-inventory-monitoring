@@ -344,7 +344,8 @@ $(document).on('click', '#returnBtn', function(){
                         { data: 'item', name:'item'},
                         { data: 'serial', name:'serial'},
                         { data: 'name', name:'name'},
-                        { data: 'status', name:'status'}
+                        { data: 'status', name:'status'},
+                        { data: 'remarks', name:'remarks'}
                     ],
                     buttons: {
                         dom: {
