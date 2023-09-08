@@ -57,6 +57,9 @@ $(document).on("click", "#sUnitTable tr", function () {
         }
     }
     if (trdata.status == 'PULL OUT') {
+        if ($('#userlevel').val() != 'Head') {
+            return false;
+        }
         $.ajax({
             url: '/checkpullout', // Modify the URL to match your route
             type: 'GET',
