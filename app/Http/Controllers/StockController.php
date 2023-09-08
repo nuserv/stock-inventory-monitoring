@@ -1216,31 +1216,29 @@ class StockController extends Controller
         $item = Item::where('id', $request->item)->first();
         $customer = CustomerBranch::where('id', $request->customer)->first();
         $client = Customer::where('id', $customer->customer_id)->first();
-        // if ($request->purpose == "pull out") {
-        //     $stock = new Stock;
-        //     $stock->user_id = auth()->user()->id;
-        //     $stock->category_id = $item->category_id;
-        //     $stock->branch_id = auth()->user()->branch_id;
-        //     $stock->items_id = $request->item;
-        //     $stock->itemname = $item->item;
-        //     $stock->serial = $request->serial;
-        //     $stock->status = 'pull out';
-        //     $stock->customer_branches_id = $request->customer;
-        //     $stock->Save();
-        //     $defective = new Defective;
-        //     $defective->branch_id = auth()->user()->branch->id;
-        //     $defective->user_id = auth()->user()->id;
-        //     $defective->category_id = $item->category_id;
-        //     $defective->items_id = $request->item;
-        //     $defective->serial = mb_strtoupper($request->serial);
-        //     $defective->status = 'For return';
-        //     $defective->remarks = 'Pull-out from '.$customer->customer_branch."($client->customer)";
-        //     $defective->save();
-        // }
-        // else{
-            
-        // }
-        $stock = Stock::where('items_id', $request->item)
+        if ($request->purpose == "pull out") {
+            $stock = new Stock;
+            $stock->user_id = auth()->user()->id;
+            $stock->category_id = $item->category_id;
+            $stock->branch_id = auth()->user()->branch_id;
+            $stock->items_id = $request->item;
+            $stock->itemname = $item->item;
+            $stock->serial = $request->serial;
+            $stock->status = 'pull out';
+            $stock->customer_branches_id = $request->customer;
+            $stock->Save();
+            $defective = new Defective;
+            $defective->branch_id = auth()->user()->branch->id;
+            $defective->user_id = auth()->user()->id;
+            $defective->category_id = $item->category_id;
+            $defective->items_id = $request->item;
+            $defective->serial = mb_strtoupper($request->serial);
+            $defective->status = 'For return';
+            $defective->remarks = 'Pull-out from '.$customer->customer_branch."($client->customer)";
+            $defective->save();
+        }
+        else{
+            $stock = Stock::where('items_id', $request->item)
                 ->where('branch_id', auth()->user()->branch->id)
                 ->where('serial', $request->serial)
                 ->where('status', 'in')
@@ -1248,6 +1246,8 @@ class StockController extends Controller
             $stock->status = $request->purpose;
             $stock->customer_branches_id = $request->customer;
             $stock->user_id = auth()->user()->id;
+        }
+        
         $log = new UserLog;
         $log->branch_id = auth()->user()->branch->id;
         $log->branch = auth()->user()->branch->branch;
