@@ -156,6 +156,7 @@ class DefectiveController extends Controller
         return response()->json($repaired);
 
     }
+    
     public function repairedrec(Request $request)
     {
         foreach ($request->id as $id) {

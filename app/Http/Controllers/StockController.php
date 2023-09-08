@@ -408,6 +408,38 @@ class StockController extends Controller
         $serials = Stock::where('items_id', $request->items_id)->where('status', 'in')->get()->pluck('serial')->toArray();
         return response()->json($serials);
     }
+
+    public function return_to_branch(Request $request)
+    {
+        $stock = Stock::where('serial', $request->serial)
+            ->where('status', 'pull out')
+            ->first();
+        $stock->status = 'returned';
+        $stock->Save();
+
+        $update = Stock::where('serial', $request->serial)
+            ->where('status', 'in')
+            ->update([
+                'status' => $stock->id
+            ]);
+
+        return response()->json($update);
+    }
+
+    public function checkpullout(Request $request)
+    {
+        $serial = Stock::where('serial', $request->serial)
+            ->where('status', 'in')
+            ->where('branch_id', auth()->user()->branch_id)
+            ->first();
+        if ($serial) {
+            return 'meron';
+        }
+        else{
+            return 'wala';
+        }
+    }
+
     public function serviceUnit()
     {
         $stock = Stock::wherein('status', ['service unit', 'pull out'])

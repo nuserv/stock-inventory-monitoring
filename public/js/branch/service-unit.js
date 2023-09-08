@@ -56,53 +56,110 @@ $(document).on("click", "#sUnitTable tr", function () {
             return false;
         }
     }
-    console.log(trdata.status);
     if (trdata.status == 'PULL OUT') {
-        Swal.fire({
-            title: 'Choose an option',
-            icon: 'question',
-            showCancelButton: true,
-            confirmButtonText: 'Repaired',
-            cancelButtonText: 'Replacement'
-        }).then((result) => {
-            if (result.isConfirmed) {
-                handleRepaired();
-            } else if (result.dismiss === Swal.DismissReason.cancel) {
-                // Fetch the select options via AJAX
-                $.ajax({
-                    url: '/get_serial', // Modify the URL to match your route
-                    type: 'GET',
-                    dataType: 'json',
-                    data:{
-                        items_id: trdata.items_id
-                    },
-                    success: function (serialOptions) {
-                        console.log(serialOptions);
-                        // When the options are fetched successfully, show the Swal modal with the options
-                        Swal.fire({
-                            title: 'Choose a Serial Number',
-                            input: 'select',
-                            inputOptions: serialOptions,
-                            showCancelButton: true,
-                            confirmButtonText: 'Submit',
-                            cancelButtonText: 'Cancel',
-                            inputValidator: (value) => {
-                                if (!value) {
-                                    return 'Serial number is required!';
+        $.ajax({
+            url: '/checkpullout', // Modify the URL to match your route
+            type: 'GET',
+            data:{
+                serial: trdata.serial
+            },
+            success: function (data) {
+                if (data == 'meron') {
+                    Swal.fire({
+                        title: 'Choose an option',
+                        icon: 'question',
+                        showCancelButton: true,
+                        confirmButtonText: 'Service Out',
+                        cancelButtonText: 'Cancel'
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            $.ajax({
+                                url: 'return_to_branch',
+                                headers: {
+                                    'X-CSRF-TOKEN': $('meta[name="ctok"]').attr('content')
+                                },
+                                dataType: 'json',
+                                type: 'PUT',
+                                data: {
+                                    serial: trdata.serial,
+                                },
+                                success:function(data)
+                                {
+                                    location.reload();
+                                },
+                                error: function (data) {
+                                    alert(data.responseText);
                                 }
-                            }
-                        }).then((result) => {
-                            if (result.isConfirmed) {
-                                const selectedSerialNumber = result.value;
-                                handleReplacement(selectedSerialNumber);
-                            }
-                        });
-                    },
-                    error: function () {
-                        // Handle the error case
-                        Swal.fire('Error fetching serial options', '', 'error');
-                    }
-                });
+                            });
+                        }
+                    });
+                }
+                else{
+                    Swal.fire({
+                        title: 'Choose an option',
+                        icon: 'question',
+                        showCancelButton: true,
+                        confirmButtonText: 'Service Out',
+                        cancelButtonText: 'Cancel'
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            $.ajax({
+                                url: '/get_serial', // Modify the URL to match your route
+                                type: 'GET',
+                                dataType: 'json',
+                                data:{
+                                    items_id: trdata.items_id
+                                },
+                                success: function (serialOptions) {
+                                    console.log(serialOptions);
+                                    // When the options are fetched successfully, show the Swal modal with the options
+                                    Swal.fire({
+                                        title: 'Choose a Serial Number',
+                                        input: 'select',
+                                        inputOptions: serialOptions,
+                                        showCancelButton: true,
+                                        confirmButtonText: 'Service Out',
+                                        cancelButtonText: 'Cancel',
+                                        inputValidator: (value) => {
+                                            if (!value) {
+                                                return 'Serial number is required!';
+                                            }
+                                        }
+                                    }).then((result) => {
+                                        if (result.isConfirmed) {
+                                            $.ajax({
+                                                url: 'return_to_branch',
+                                                headers: {
+                                                    'X-CSRF-TOKEN': $('meta[name="ctok"]').attr('content')
+                                                },
+                                                dataType: 'json',
+                                                type: 'PUT',
+                                                data: {
+                                                    serial: result.value,
+                                                },
+                                                success:function(data)
+                                                {
+                                                    location.reload();
+                                                },
+                                                error: function (data) {
+                                                    alert(data.responseText);
+                                                }
+                                            });
+                                        }
+                                    });
+                                },
+                                error: function () {
+                                    // Handle the error case
+                                    Swal.fire('Error fetching serial options', '', 'error');
+                                }
+                            });
+                        }
+                    });
+                }
+            },
+            error: function () {
+                // Handle the error case
+                Swal.fire('Error fetching serial options', '', 'error');
             }
         });
     }
