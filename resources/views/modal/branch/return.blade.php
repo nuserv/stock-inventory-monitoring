@@ -45,8 +45,8 @@
                         <th>Serial</th>
                         @if (auth()->user()->branch->branch != 'Conversion')
                             <th>Service by</th>
+                            <th>Remarks</th>
                         @endif
-                        <th>Remarks</th>
                     </thead>
                 </table>
             </div>
