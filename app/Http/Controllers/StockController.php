@@ -417,12 +417,21 @@ class StockController extends Controller
             ->first();
         $stock->status = 'returned';
         $stock->Save();
-
+        $item = Item::where('id', $stock->items_id)->first();
+        $customer = CustomerBranch::where('id', $stock->customer_branches_id)->first();
         $update = Stock::where('serial', $request->serial)
             ->where('status', 'in')
             ->update([
                 'status' => $stock->id
             ]);
+
+        $log = new UserLog;
+        $log->branch_id = auth()->user()->branch->id;
+        $log->branch = auth()->user()->branch->branch;
+        $log->activity = "SERVICE OUT $item->item(defective) with serial no. ".mb_strtoupper($request->serial)." to $customer->customer_branch." ;
+        $log->user_id = auth()->user()->id;
+        $log->fullname = auth()->user()->name.' '.auth()->user()->middlename.' '.auth()->user()->lastname;
+        $log->save();
 
         return response()->json($update);
     }
