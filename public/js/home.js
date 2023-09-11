@@ -11,7 +11,7 @@ $(document).ready(function()
         "pageLength": 10,
         "order": [ 0, 'desc' ],
         processing: true,
-        serverSide: true,
+        serverSide: false,
         ajax: {
             url: 'activity',
             error: function(data) {

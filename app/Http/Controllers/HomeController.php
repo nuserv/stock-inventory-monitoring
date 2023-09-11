@@ -347,6 +347,7 @@ class HomeController extends Controller
         $title = 'Activities';
         return view('pages.home', compact('title'));
     }
+
     public function myapi(Request $request)
     {
         $stockreq = StockRequest::where('id', $request->id)
@@ -648,7 +649,7 @@ class HomeController extends Controller
         if (auth()->user()->hasAnyRole('Repair')) {
             $users = User::query()->whereHas('roles', function($q){
                 $q->where('name', 'Repair');
-            })->get();
+            });
             $myuser = [];
             array_push($myuser, auth()->user()->id);
             foreach ($users as $user) {
