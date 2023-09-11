@@ -27,7 +27,7 @@
     },
     "dependencies": {
         "jquery": "^3.5.0",
-        "moment": "^2.29.2",
+        "moment": "^2.29.4",
         "mui-datatables": "^3.4.1",
         "popper.js": "^1.16.1",
         "webui-popover": "^1.2.18"
