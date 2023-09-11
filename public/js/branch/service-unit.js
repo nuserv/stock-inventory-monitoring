@@ -23,7 +23,15 @@ $(document).ready(function()
             { data: 'category', name:'category'},
             { data: 'description', name:'description'},
             { data: 'serial', name:'serial'},
-            { data: 'status', name:'status'},
+            { data: 'status', "render": function ( data, type, row, meta ) {
+                    if (data == "PULL OUT") {
+                        return 'PULL OUT - UNDER WARRANTY';
+                    }
+                    else{
+                        return data;
+                    }
+                },
+            },
             { data: 'serviceby', name:'serviceby'}
         ]
     });

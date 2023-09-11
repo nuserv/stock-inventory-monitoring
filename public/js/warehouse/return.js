@@ -29,7 +29,17 @@ $(document).ready(function()
             }
         },
         columns: [
-            { data: 'updated_at', name:'updated_at'},
+            {data: 'date',name: 'date',"width": "15%",
+                    render: function(data, type, row) {
+                        if (type === 'display' || type === 'filter') {
+                            var date = new Date(data);
+                            var formattedDateTime = date.toLocaleString('en-US', { month: 'short', day: '2-digit', year: 'numeric', hour: 'numeric', minute: 'numeric', second: 'numeric' });
+                            formattedDateTime = formattedDateTime.replace(' at', '');
+                            return '<span class="formatted-date">' + formattedDateTime + '</span>';
+                        }
+                        return data; // Return the original data for sorting and other purposes
+                    }
+                },
             { data: 'branch', name:'branch'},
             { data: 'return_no', name:'return_no'},
             { data: 'status', name:'status'}

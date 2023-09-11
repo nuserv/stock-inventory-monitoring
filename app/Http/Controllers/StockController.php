@@ -1276,7 +1276,7 @@ class StockController extends Controller
             $defective->items_id = $request->item;
             $defective->serial = mb_strtoupper($request->serial);
             $defective->status = 'For return';
-            $defective->remarks = 'Pull-out from '.$customer->customer_branch."($client->customer)";
+            $defective->remarks = 'PULL OUT - UNDER WARRANTY from '.$customer->customer_branch."($client->customer)";
             $defective->save();
         }
         else{
@@ -1294,7 +1294,7 @@ class StockController extends Controller
         $log->branch_id = auth()->user()->branch->id;
         $log->branch = auth()->user()->branch->branch;
         if ($request->purpose == "pull out") {
-            $log->activity = "SERVICE IN $item->item(S/N: ".mb_strtoupper($request->serial).") from $customer->customer_branch.";
+            $log->activity = "SERVICE IN - Pullout only $item->item(S/N: ".mb_strtoupper($request->serial).") from $customer->customer_branch.";
             $serviceout = new ServiceOut;
             $serviceout->branch_id = auth()->user()->branch->id;
             $serviceout->user_id = auth()->user()->id;

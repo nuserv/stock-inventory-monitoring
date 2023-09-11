@@ -18,6 +18,9 @@
                         <th>
                             SERIAL NUMBER
                         </th>
+                        <th>
+                            REMARKS
+                        </th>
                     </tr>
                 </thead>
             </table>

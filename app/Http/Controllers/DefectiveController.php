@@ -51,6 +51,21 @@ class DefectiveController extends Controller
 
     public function returnget()
     {
+        $returns = Retno::query()
+            ->wherein('returns_no.status', ['For receiving', 'Incomplete'])
+            ->get();
+        foreach ($returns as $return) {
+            $returnitem = Defective::query()
+                ->wherein('status', ['For receiving'])
+                ->where('return_no', $return->return_no)
+                ->count();
+            if ($returnitem == 0) {
+                $return->status = "Received";
+                $return->Save();
+                // dd($return);
+            }
+        }
+
         if (auth()->user()->hasanyrole('Repair')) {
             $return = Retno::query()
                 ->select('returns_no.updated_at', 'returns_no.status', 'return_no', 'branch', 'returns_no.status')
@@ -58,6 +73,9 @@ class DefectiveController extends Controller
                 ->join('branches', 'branches.id', 'branch_id')
                 ->get();
             return DataTables::of($return)
+                ->addColumn('date', function (Retno $return){
+                    return $return->updated_at;
+                })
                 ->addColumn('updated_at', function (Retno $return){
                     return Carbon::parse($return->updated_at->toFormattedDateString().' '.$return->updated_at->toTimeString())->isoFormat('lll');
                 })
@@ -230,7 +248,7 @@ class DefectiveController extends Controller
                     ->make(true);
             }
             $repaired = Defective::query()
-                ->select('defectives.updated_at', 'item', 'serial', 'category')
+                ->select('defectives.updated_at', 'item', 'serial', 'category', 'remarks')
                 ->where('status', 'Repaired')
                 ->join('items', 'items.id', 'items_id')
                 ->join('categories', 'categories.id', 'defectives.category_id')

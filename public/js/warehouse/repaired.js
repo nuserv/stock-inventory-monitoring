@@ -36,7 +36,8 @@ $(document).ready(function()
             { data: 'updated_at', name:'updated_at'},
             { data: 'category', name: 'category'},
             { data: 'item', name:'item'},
-            { data: 'serial', name:'serial'}
+            { data: 'serial', name:'serial'},
+            { data: 'remarks', name:'remarks'}
         ],
         buttons: {
             dom: {

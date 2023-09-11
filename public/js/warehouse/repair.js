@@ -37,7 +37,17 @@ $(document).ready(function() {
                 }
             ],
             columns: [
-                {data: 'date',name: 'date',"width": "15%"},
+                {data: 'updated_at',name: 'date',"width": "15%",
+                    render: function(data, type, row) {
+                        if (type === 'display' || type === 'filter') {
+                            var date = new Date(data);
+                            var formattedDateTime = date.toLocaleString('en-US', { month: 'short', day: '2-digit', year: 'numeric', hour: 'numeric', minute: 'numeric', second: 'numeric' });
+                            formattedDateTime = formattedDateTime.replace(' at', '');
+                            return '<span class="formatted-date">' + formattedDateTime + '</span>';
+                        }
+                        return data; // Return the original data for sorting and other purposes
+                    }
+                },
                 {data: 'branch',name: 'branch',"width": "10%"},
                 {data: 'category',name: 'category',"width": "10%"},
                 {data: 'item',name: 'item',"width": "16%"},
