@@ -428,7 +428,7 @@ class StockController extends Controller
         $log = new UserLog;
         $log->branch_id = auth()->user()->branch->id;
         $log->branch = auth()->user()->branch->branch;
-        $log->activity = "SERVICE OUT $item->item(defective) with serial no. ".mb_strtoupper($request->serial)." to $customer->customer_branch." ;
+        $log->activity = "SERVICE OUT $item->item with serial no. ".mb_strtoupper($request->serial)." to $customer->customer_branch." ;
         $log->user_id = auth()->user()->id;
         $log->fullname = auth()->user()->name.' '.auth()->user()->middlename.' '.auth()->user()->lastname;
         $log->save();
