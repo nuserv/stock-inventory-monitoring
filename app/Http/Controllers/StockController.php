@@ -413,6 +413,7 @@ class StockController extends Controller
     {
         // return $request->serial;
         $stock = Stock::where('serial', $request->old)
+            ->where('items_id', $request->items_id)
             ->where('status', 'pull out')
             ->first();
         $stock->status = 'returned';
@@ -420,6 +421,7 @@ class StockController extends Controller
         $item = Item::where('id', $stock->items_id)->first();
         $customer = CustomerBranch::where('id', $stock->customer_branches_id)->first();
         $update = Stock::where('serial', $request->serial)
+            ->where('items_id', $stock->items_id)
             ->where('status', 'in')
             ->update([
                 'status' => $stock->id

@@ -92,8 +92,8 @@ $(document).on("click", "#sUnitTable tr", function () {
                                 type: 'PUT',
                                 data: {
                                     serial: trdata.serial,
-                                    old:trdata.serial
-
+                                    old:trdata.serial,
+                                    items_id: trdata.items_id
                                 },
                                 success:function(data)
                                 {
@@ -148,7 +148,8 @@ $(document).on("click", "#sUnitTable tr", function () {
                                                 type: 'PUT',
                                                 data: {
                                                     serial: $('.swal2-select option:selected').text(),
-                                                    old:trdata.serial
+                                                    old:trdata.serial,
+                                                    items_id: trdata.items_id
                                                 },
                                                 success:function(data)
                                                 {
