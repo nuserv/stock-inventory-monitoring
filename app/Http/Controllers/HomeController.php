@@ -692,6 +692,8 @@ class HomeController extends Controller
     }
     public function service_units()
     {
+
+
         $users = User::all();
         return view('pages.service-units', compact('users'));
     }
