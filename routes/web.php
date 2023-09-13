@@ -132,6 +132,7 @@ Route::get('bitem', 'StockController@bitem')->middleware('ajax');
 Route::get('bserial/{id}', 'StockController@bserial')->middleware('ajax');
 Route::get('get_serial', 'StockController@get_serial');//->middleware('ajax');
 Route::get('service-unit', 'StockController@service')->name('index.service-unit');
+Route::get('service-monitoring', 'StockController@service_monitoring')->name('index.service-monitoring');
 Route::get('sUnit', 'StockController@serviceUnit');//->middleware('ajax');
 Route::get('checkpullout', 'StockController@checkpullout');//->middleware('ajax');
 Route::get('bill', 'StockController@bill');//->middleware('ajax');
@@ -296,3 +297,7 @@ Route::get('delreqdata', 'StockRequestController@delreqdata');//->middleware('aj
 
 Route::get('delete-approval', 'MailController@delapproval');//->middleware('ajax');
 Route::get('delreqapproved', 'MailController@delreqapproved');//->middleware('ajax');
+
+Route::get('get_customer_branch', 'CustomerController@get_customer_branch');
+Route::get('get_item', 'StockController@get_item');
+Route::get('get_user', 'UserController@get_user');

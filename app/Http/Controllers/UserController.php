@@ -236,6 +236,19 @@ class UserController extends Controller
         return response()->json(true);
         //return redirect('/login')->with('status', 'We sent you an activation code. Check your email and click on the link to verify.');
     }
+
+    public function get_user()
+    {
+        $data = User::selectRaw(
+                'id as user_id,
+                name as user_name,
+                middlename as user_middlename,
+                lastname as user_lastname'
+            )
+            ->get();
+        return DataTables::of($data)->make(true);
+    }
+
     public function update(Request $request, $id)
     {
         $validator = Validator::make($request->all(), [

@@ -26,6 +26,22 @@ class CustomerController extends Controller
         $title = 'Customers';
         return view('pages.customer', compact('title'));
     }
+
+    public function get_customer_branch()
+    {
+        $data = CustomerBranch::selectRaw(
+                'customer_branches.code as branch_code,
+                customers.code as customer_code,
+                customer_branch as branch_name,
+                customer_id,
+                customer as customer_name,
+                customer_branches.id as branch_id'
+            )
+            ->join('customers', 'customers.id', 'customer_id')
+            ->get();
+        return DataTables::of($data)->make(true);
+    }
+
     public function customertable()
     {
         $customer = Customer::all();

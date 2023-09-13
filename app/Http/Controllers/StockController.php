@@ -54,6 +54,20 @@ class StockController extends Controller
         $title = 'Pullout list';
         return view('pages.branch.pullout', compact('title'));
     }
+
+    public function get_item()
+    {
+        $data = Item::selectRaw(
+                'items.id as item_code,
+                item as item_name,
+                category_id,
+                category as category_name'
+            )
+            ->join('categories', 'categories.id', 'category_id')
+            ->get();
+        return DataTables::of($data)->make(true);
+    }
+
     public function pullitem(Request $request)
     {
         $pullout = Pullout::query()
@@ -308,6 +322,13 @@ class StockController extends Controller
         }
         return view('pages.service-unit', compact('title', 'categories', 'pull_categories'));
     }
+
+    public function service_monitoring()
+    {
+        $title = "Service Unit";
+        return view('pages.service-monitoring', compact('title'));
+    }
+
     public function delbill(Request $request)
     {
         $billable = Billable::where('branch_id', auth()->user()->branch->id)
@@ -462,6 +483,23 @@ class StockController extends Controller
             $stock = Stock::wherein('status', ['service unit', 'pull out'])
                     ->where('branch_id', 2)
                     ->get();
+        }
+        if (auth()->user()->hasanyrole('Editor')) {
+            $stock = Stock::wherein('status', 
+                            [
+                                'service unit',
+                                'pull out'
+                            ]
+                        )
+                        ->get();
+            return DataTables::of($stock)
+                ->addColumn('status', function (Stock $request){
+                    return strtoupper($request->status);
+                })
+                ->addColumn('serial', function (Stock $request){
+                    return mb_strtoupper($request->serial);
+                })
+                ->make(true);
         }
         return DataTables::of($stock)
         ->addColumn('date', function (Stock $request){

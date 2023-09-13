@@ -175,6 +175,11 @@
                         <a class="nav-link {{ Request::is('service-unit') ? 'active' : '' }}" href="{{ route('index.service-unit') }}">Service IN / OUT</a>
                     </li>
                 @endif
+                @if (\App\District::where('user_id', auth()->user()->id)->first() || auth()->user()->hasanyrole('Warehouse Manager', 'Manager', 'Editor', 'Warehouse Administrator'))
+                    <li class="nav-item">
+                        <a class="nav-link {{ Request::is('service-monitoring') ? 'active' : '' }}" href="{{ route('index.service-monitoring') }}">Service Monitoring</a>
+                    </li>
+                @endif
             @endif
         </ul>
         <ul class="nav">

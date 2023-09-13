@@ -336,6 +336,7 @@
             <script src="//cdn.datatables.net/plug-ins/1.10.11/sorting/date-eu.js" type="text/javascript"></script>
             <script src="/js/datetime.js"></script>
         @endauth
+        @yield('script')
         @if(Request::is('user'))
             <script src="{{asset('min/?f=js/warehouse/user.js')}}&version={{ \Illuminate\Support\Str::random(30) }}"></script>
         @endif
