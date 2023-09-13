@@ -327,10 +327,11 @@ class StockController extends Controller
     public function service_monitoring()
     {
         if (District::where('user_id', auth()->user()->id)->first() || auth()->user()->hasanyrole('Warehouse Manager', 'Manager', 'Editor', 'Warehouse Administrator')){
-            return redirect('/');
+            $title = "Service Unit";
+            return view('pages.service-monitoring', compact('title'));
         }
-        $title = "Service Unit";
-        return view('pages.service-monitoring', compact('title'));
+        return redirect('/');
+        
     }
 
     public function delbill(Request $request)
