@@ -12,9 +12,6 @@
                     Client & Branch Name
                 </th>
                 <th>
-                    Category
-                </th>
-                <th>
                     Item Description
                 </th>
                 <th>
@@ -22,6 +19,9 @@
                 </th>
                 <th>
                     Status
+                </th>
+                <th>
+                    Branch
                 </th>
                 <th>
                     Service By

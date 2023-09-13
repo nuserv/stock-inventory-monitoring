@@ -240,11 +240,14 @@ class UserController extends Controller
     public function get_user()
     {
         $data = User::selectRaw(
-                'id as user_id,
+                'users.id as user_id,
                 name as user_name,
                 middlename as user_middlename,
-                lastname as user_lastname'
+                lastname as user_lastname,
+                branch as branch_name'
+                
             )
+            ->join('branches', 'branches.id', 'branch_id')
             ->get();
         return DataTables::of($data)->make(true);
     }

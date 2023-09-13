@@ -98,14 +98,6 @@ $(document).ready(function()
                     return `<div style="white-space: normal; width: 250px;">${cell_value.toUpperCase()}</div>`;
                 }
             },
-            // { data: 'category', name:'category'},
-            {
-                data: null,
-                render: function(data, type, row, meta){
-                    var cell_value = fetchItem(row.items_id, 'category_name');
-                    return `<div style="white-space: normal; width: 250px;">${cell_value.toUpperCase()}</div>`;
-                }
-            },
             // { data: 'description', name:'description'},
             {
                 data: null,
@@ -123,6 +115,14 @@ $(document).ready(function()
                         return data;
                     }
                 },
+            },
+            // { data: 'client', name:'client'},
+            {
+                data: null,
+                render: function(data, type, row, meta){
+                    var cell_value = fetchUser(row.user_id, 'branch_name');
+                    return `<div style="white-space: normal; width: 250px;">${cell_value.toUpperCase()}</div>`;
+                }
             },
             // { data: 'serviceby', name:'serviceby'}
             {

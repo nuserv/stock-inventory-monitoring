@@ -484,12 +484,12 @@ class StockController extends Controller
         $stock = Stock::wherein('status', ['service unit', 'pull out'])
                     ->where('branch_id', auth()->user()->branch->id)
                     ->get();
-        if (auth()->user()->hasanyrole('Warehouse Manager', 'Encoder', 'Warehouse Administrator')) {
-            $stock = Stock::wherein('status', ['service unit', 'pull out'])
-                    ->where('branch_id', 2)
-                    ->get();
-        }
-        if (auth()->user()->hasanyrole('Editor')) {
+        // if (auth()->user()->hasanyrole('Warehouse Manager', 'Encoder', 'Warehouse Administrator')) {
+        //     $stock = Stock::wherein('status', ['service unit', 'pull out'])
+        //             ->where('branch_id', 2)
+        //             ->get();
+        // }
+        if (District::where('user_id', auth()->user()->id)->first() || auth()->user()->hasanyrole('Warehouse Manager', 'Manager', 'Editor', 'Warehouse Administrator')){
             $stock = Stock::wherein('status', 
                             [
                                 'service unit',
