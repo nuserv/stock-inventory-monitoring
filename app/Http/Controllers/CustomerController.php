@@ -76,6 +76,7 @@ class CustomerController extends Controller
             $data = CustomerBranch::query()->select('customer')->where('customer_branch', $request->branch)
                 ->join('customers', 'customers.id', 'customer_id')
                 ->first();
+                // return $data;
             return response()->json($data->customer);
         }
         if ($request->withclient == "no") {

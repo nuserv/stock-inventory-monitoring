@@ -1290,9 +1290,7 @@ class StockController extends Controller
             $defective->remarks = 'PULL OUT - UNDER WARRANTY from '.$customer->customer_branch."($client->customer)";
             $defective->save();
             $emailMessage = "The following units are service in pullout:\n\n";
-            foreach ($filenames as $filename) {
-                $emailMessage .= "- " . $item->item . 'with serial '. $request->serial . "\n";
-            }
+            $emailMessage .= "- " . $item->item . 'with serial '. $request->serial . "\n";
 
             // Send the email
             Mail::raw($emailMessage, function ($message) use ($item){

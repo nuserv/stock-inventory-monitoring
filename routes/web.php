@@ -148,7 +148,7 @@ Route::get('pcustomer-autocomplete', 'StockController@pautocompleteCustomer')->m
 Route::get('client-autocomplete', 'StockController@autocompleteClient')->middleware('ajax');
 Route::get('customer-autocomplete', 'StockController@autocompleteCustomer')->middleware('ajax');
 Route::get('customer-autocomplate', 'StockController@autocomplateCustomer')->middleware('ajax');
-Route::put('service-out', 'StockController@serviceOut')->middleware('ajax');
+Route::any('service-out', 'StockController@serviceOut');//->middleware('ajax');
 Route::put('pm-out', 'StockController@pmOut')->middleware('ajax');
 Route::post('pull-out', 'StockController@pullOut')->middleware('ajax');
 Route::post('upload', 'StockController@import')->name('stocks.upload');
