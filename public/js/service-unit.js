@@ -109,10 +109,10 @@ $(document).ready(function()
             { data: 'serial', name:'serial'},
             { data: 'status', "render": function ( data, type, row, meta ) {
                     if (data == "PULL OUT") {
-                        return 'PULL OUT - UNDER WARRANTY';
+                        return `<div style="white-space: normal; width: 100px;">${cell_value.toUpperCase()}</div>`;
                     }
                     else{
-                        return data;
+                        return `<div style="white-space: normal; width: 100px;">${data.toUpperCase()}</div>`;
                     }
                 },
             },
@@ -121,7 +121,7 @@ $(document).ready(function()
                 data: null,
                 render: function(data, type, row, meta){
                     var cell_value = fetchUser(row.user_id, 'branch_name');
-                    return `<div style="white-space: normal; width: 250px;">${cell_value.toUpperCase()}</div>`;
+                    return `<div style="white-space: normal; width: 100px;">${cell_value.toUpperCase()}</div>`;
                 }
             },
             // { data: 'serviceby', name:'serviceby'}
@@ -129,7 +129,7 @@ $(document).ready(function()
                 data: null,
                 render: function(data, type, row, meta){
                     var cell_value = fetchUser(row.user_id, 'user_name')+' '+fetchUser(row.user_id, 'user_middlename')+' '+fetchUser(row.user_id, 'user_lastname');
-                    return `<div style="white-space: normal; width: 250px;">${cell_value.toUpperCase()}</div>`;
+                    return `<div style="white-space: normal; width: 150px;">${cell_value.toUpperCase()}</div>`;
                 }
             },
         ],

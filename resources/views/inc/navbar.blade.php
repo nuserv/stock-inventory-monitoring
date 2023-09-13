@@ -170,11 +170,11 @@
                         </li>
                     @endif
                 @endif
-                @if(auth()->user()->hasanyrole('Warehouse Manager', 'Encoder', 'Warehouse Administrator'))
+                {{-- @if(auth()->user()->hasanyrole('Warehouse Manager', 'Encoder', 'Warehouse Administrator'))
                     <li class="nav-item">
                         <a class="nav-link {{ Request::is('service-unit') ? 'active' : '' }}" href="{{ route('index.service-unit') }}">Service IN / OUT</a>
                     </li>
-                @endif
+                @endif --}}
                 @if (\App\District::where('user_id', auth()->user()->id)->first() || auth()->user()->hasanyrole('Warehouse Manager', 'Manager', 'Editor', 'Warehouse Administrator'))
                     <li class="nav-item">
                         <a class="nav-link {{ Request::is('service-monitoring') ? 'active' : '' }}" href="{{ route('index.service-monitoring') }}">Service Monitoring</a>
@@ -183,9 +183,9 @@
             @endif
         </ul>
         <ul class="nav">
-            <li class="nav-item nohover" style="padding: 15px 0;">
+            {{-- <li class="nav-item nohover" style="padding: 15px 0;">
                 <a class="nav-link {{ Request::is('report-a-problem') ? 'active' : '' }}" href="{{ url('report-a-problem') }}" style="background-color: white; color:#0d1a80; font-size: 10px;border-radius: 5px;padding: 2px 0;">&nbsp;&nbsp;REPORT A PROBLEM&nbsp;&nbsp;</a>
-            </li>
+            </li> --}}
             <li class="nav-item" style="padding: 10px 0;">
                 <a href="{{route('logout')}}" class="nav-link"><b>Logout</b>&nbsp;&nbsp;<i class="fa fa-sign-out" aria-hidden="true"></i></a>
             </li>
