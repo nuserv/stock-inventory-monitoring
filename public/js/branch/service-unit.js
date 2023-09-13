@@ -18,7 +18,20 @@ $(document).ready(function()
         ajax: 'sUnit',
         
         columns: [
-            { data: 'date', name:'date'},
+            // { data: 'date', name:'date'},
+            {
+                data: 'updated_at',
+                render: function(data, type, row) {
+                    if (type === 'display' || type === 'filter') {
+                        var date = new Date(data);
+                        var formattedDateTime = date.toLocaleString('en-US', { month: 'short', day: '2-digit', year: 'numeric', hour: 'numeric', minute: 'numeric', second: 'numeric' });
+                        formattedDateTime = formattedDateTime.replace(' at', '');
+                        return '<div class="formatted-date" style="width:90px">' + formattedDateTime + '</div>';
+                    }
+                    return data; // Return the original data for sorting and other purposes
+                },
+                "width": "20%"
+            },
             { data: 'client', name:'client'},
             { data: 'category', name:'category'},
             { data: 'description', name:'description'},
