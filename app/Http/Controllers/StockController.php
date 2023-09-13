@@ -424,7 +424,8 @@ class StockController extends Controller
             ->where('items_id', $stock->items_id)
             ->where('status', 'in')
             ->update([
-                'status' => $stock->id
+                'status' => $stock->id,
+                'customer_branches_id' => $stock->customer_branches_id
             ]);
 
         $log = new UserLog;
