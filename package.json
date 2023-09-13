@@ -20,14 +20,14 @@
         "popper.js": "^1.12",
         "react": "^16.2.0",
         "react-dom": "^16.2.0",
-        "resolve-url-loader": "^2.3.1",
+        "resolve-url-loader": "^5.0.0",
         "sass": "^1.15.2",
         "sass-loader": "^7.1.0",
         "vue-template-compiler": "^2.6.12"
     },
     "dependencies": {
         "jquery": "^3.5.0",
-        "moment": "^2.29.2",
+        "moment": "^2.29.4",
         "mui-datatables": "^3.4.1",
         "popper.js": "^1.16.1",
         "webui-popover": "^1.2.18"
