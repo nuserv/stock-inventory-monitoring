@@ -5,6 +5,7 @@ var desc = '';
 var status = '';
 var trdata;
 var repdesc;
+let selectedOption;
 $(document).ready(function()
 {
     sunit = $('table.sUnitTable').DataTable({ 
@@ -57,7 +58,29 @@ $(document).on('click', '#out_Btn', function(){
 });
 
 $(document).on('click', '#in_Btn', function(){
-    $('#pull_unitModal').modal({backdrop: 'static', keyboard: false});
+    // $('#pull_unitModal').modal({backdrop: 'static', keyboard: false});
+    Swal.fire({
+        title: 'Please choose the option.',
+        input: 'select',
+        inputOptions: {
+            '': 'SELECT OPTION',
+            'WARRANTY': 'WARRANTY',
+            'SAME S/N': 'SAME S/N'
+        },
+        showCancelButton: true,
+        confirmButtonText: 'NEXT',
+        cancelButtonText: 'Cancel',
+        inputValidator: (value) => {
+            if (!value) {
+                return 'Please Select One!';
+            }
+        }
+    }).then((result) => {
+        if (result.isConfirmed) {
+            selectedOption = result.value;
+            $('#pull_unitModal').modal({backdrop: 'static', keyboard: false});
+        }
+    });
 });
 
 $(document).on('click', '.in-close', function(){

@@ -158,7 +158,8 @@ $(document).on('click', '.pull_out_sub_Btn', function(){
                                     purpose: 'pull out',
                                     serial: serial,
                                     customer: customer,
-                                    client: client
+                                    client: client,
+                                    remarks: selectedOption
                                 },
                                 error: function (data) {
                                     alert(data.responseText);

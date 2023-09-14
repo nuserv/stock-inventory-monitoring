@@ -1322,6 +1322,12 @@ class StockController extends Controller
             $stock->itemname = $item->item;
             $stock->serial = $request->serial;
             $stock->status = 'pull out';
+            if ($request->remarks == "WARRANTY") {
+                $stock->warranty = 1;
+            }
+            else{
+                $stock->warranty = 0;
+            }
             $stock->customer_branches_id = $request->customer;
             $stock->Save();
             $defective = new Defective;
@@ -1331,9 +1337,14 @@ class StockController extends Controller
             $defective->items_id = $request->item;
             $defective->serial = mb_strtoupper($request->serial);
             $defective->status = 'For return';
-            $defective->remarks = 'PULL OUT - UNDER WARRANTY from '.$customer->customer_branch."($client->customer)";
+            if ($request->remarks == "WARRANTY") {
+                $defective->remarks = 'PULL OUT - UNDER WARRANTY from '.$customer->customer_branch."($client->customer)";
+            }
+            else{
+                $defective->remarks = 'PULL OUT - SAME S/N from '.$customer->customer_branch."($client->customer)";
+            }
             $defective->save();
-            $emailMessage = "The following units are service in pullout:\n\n";
+            $emailMessage = "The following units are service in pullout - $request->remarks:\n\n";
             $emailMessage .= "- " . $item->item . 'with serial '. $request->serial . "\n";
 
             // Send the email

@@ -170,6 +170,7 @@ $(document).on("click", "#sUnitTable tbody tr", function () {
         if ($('#userlevel').val() != 'Head') {
             return false;
         }
+        
         $.ajax({
             url: '/checkpullout', // Modify the URL to match your route
             type: 'GET',
@@ -209,68 +210,79 @@ $(document).on("click", "#sUnitTable tbody tr", function () {
                     });
                 }
                 else{
-                    Swal.fire({
-                        title: 'Click on the SERVICE OUT button to release the item under warranty.',
-                        showCancelButton: true,
-                        confirmButtonText: 'Service Out',
-                        cancelButtonText: 'Cancel'
-                    }).then((result) => {
-                        if (result.isConfirmed) {
-                            $.ajax({
-                                url: '/get_serial', // Modify the URL to match your route
-                                type: 'GET',
-                                dataType: 'json',
-                                data:{
-                                    items_id: trdata.items_id
-                                },
-                                success: function (serialOptions) {
-                                    console.log(serialOptions);
-                                    // When the options are fetched successfully, show the Swal modal with the options
-                                    Swal.fire({
-                                        title: 'Please choose the SERIAL NO. of the item under warranty.',
-                                        input: 'select',
-                                        inputOptions: serialOptions,
-                                        showCancelButton: true,
-                                        confirmButtonText: 'Service Out',
-                                        cancelButtonText: 'Cancel',
-                                        inputValidator: (value) => {
-                                            if (!value) {
-                                                return 'Serial number is required!';
-                                            }
-                                        }
-                                    }).then((result) => {
-                                        if (result.isConfirmed) {
-                                            console.log($('.swal2-select option:selected').text())
-                                            $.ajax({
-                                                url: 'return_to_branch',
-                                                headers: {
-                                                    'X-CSRF-TOKEN': $('meta[name="ctok"]').attr('content')
-                                                },
-                                                dataType: 'json',
-                                                type: 'PUT',
-                                                data: {
-                                                    serial: $('.swal2-select option:selected').text(),
-                                                    old:trdata.serial,
-                                                    items_id: trdata.items_id
-                                                },
-                                                success:function(data)
-                                                {
-                                                    location.reload();
-                                                },
-                                                error: function (data) {
-                                                    alert(data.responseText);
+                    if (trdata.warranty == 0) {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Unit Not Found',
+                            text: 'The unit with the specified '+trdata.serial+' was not found.',
+                        });
+                        return false;
+                    }
+                    else{
+                     
+                        Swal.fire({
+                            title: 'Click on the SERVICE OUT button to release the item under warranty.',
+                            showCancelButton: true,
+                            confirmButtonText: 'Service Out',
+                            cancelButtonText: 'Cancel'
+                        }).then((result) => {
+                            if (result.isConfirmed) {
+                                $.ajax({
+                                    url: '/get_serial', // Modify the URL to match your route
+                                    type: 'GET',
+                                    dataType: 'json',
+                                    data:{
+                                        items_id: trdata.items_id
+                                    },
+                                    success: function (serialOptions) {
+                                        console.log(serialOptions);
+                                        // When the options are fetched successfully, show the Swal modal with the options
+                                        Swal.fire({
+                                            title: 'Please choose the SERIAL NO. of the item under warranty.',
+                                            input: 'select',
+                                            inputOptions: serialOptions,
+                                            showCancelButton: true,
+                                            confirmButtonText: 'Service Out',
+                                            cancelButtonText: 'Cancel',
+                                            inputValidator: (value) => {
+                                                if (!value) {
+                                                    return 'Serial number is required!';
                                                 }
-                                            });
-                                        }
-                                    });
-                                },
-                                error: function () {
-                                    // Handle the error case
-                                    Swal.fire('Error fetching serial options', '', 'error');
-                                }
-                            });
-                        }
-                    });
+                                            }
+                                        }).then((result) => {
+                                            if (result.isConfirmed) {
+                                                console.log($('.swal2-select option:selected').text())
+                                                $.ajax({
+                                                    url: 'return_to_branch',
+                                                    headers: {
+                                                        'X-CSRF-TOKEN': $('meta[name="ctok"]').attr('content')
+                                                    },
+                                                    dataType: 'json',
+                                                    type: 'PUT',
+                                                    data: {
+                                                        serial: $('.swal2-select option:selected').text(),
+                                                        old:trdata.serial,
+                                                        items_id: trdata.items_id
+                                                    },
+                                                    success:function(data)
+                                                    {
+                                                        location.reload();
+                                                    },
+                                                    error: function (data) {
+                                                        alert(data.responseText);
+                                                    }
+                                                });
+                                            }
+                                        });
+                                    },
+                                    error: function () {
+                                        // Handle the error case
+                                        Swal.fire('Error fetching serial options', '', 'error');
+                                    }
+                                });
+                            }
+                        });
+                    }
                 }
             },
             error: function () {
