@@ -100,7 +100,23 @@ class PreventiveController extends Controller
             if ($save) {
                 $pmbranch = PmBranches::query()->where('customer_branches_code', $code)->update(['Conversion'=>$date[2].'/'.$date[0].'/'.$date[1]]);
             }
-        }else{
+        }
+        else if ($request->type == 'N') {
+            $date = explode('/', $request->schedule);
+            $customer = CustomerBranch::where('customer_branch', $request->customer)->first();
+            $save = PmSched::create([
+                'branch_id' => auth()->user()->branch->id,
+                'user_id' => auth()->user()->id,
+                'customer_id' => $customer->id,
+                'schedule' => $date[2].'/'.$date[0].'/'.$date[1],
+                'Status' => "Newly Opened"
+            ]);
+            $code = $customer->code*1;
+            if ($save) {
+                $pmbranch = PmBranches::query()->where('customer_branches_code', $code)->update(['Conversion'=>$date[2].'/'.$date[0].'/'.$date[1]]);
+            }
+        }
+        else{
             $date = explode('/', $request->schedule);
             $customer = CustomerBranch::where('customer_branch', $request->customer)->first();
             $save = PmSched::create([

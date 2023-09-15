@@ -283,7 +283,7 @@ $(document).on('click', '#saveBtn', function () {
                                 customer: $('#customer').val(),
                                 customer_code: branchCode,
                                 fsrno: $('#fsrno').val(),
-                                type: 'P'
+                                type: $('#option').val()
                             },
                             success:function(data)
                             {
@@ -341,7 +341,7 @@ $(document).on('click', '#saveBtn', function () {
                                 customer: $('#customer').val(),
                                 customer_code: branchCode,
                                 fsrno: $('#fsrno').val(),
-                                type: 'P'
+                                type: $('#option').val()
                             },
                             success:function(data)
                             {

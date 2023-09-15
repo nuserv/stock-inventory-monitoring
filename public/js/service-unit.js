@@ -8,7 +8,8 @@ var repdesc, customer_branch_data, item_data, user_data;
 
 function fetchCustomerBranch(BranchCode, Column){
     var specificId = BranchCode;
-    var specificRow = customer_branch_data.find(row => parseInt(row.branch_code) === parseInt(specificId));
+    var specificRow = customer_branch_data.find(row => parseInt(row.branch_id) === parseInt(specificId));
+    // console.log(specificId+'--'+specificRow[Column])
     if(!specificRow){
         return '';
     }
@@ -31,7 +32,7 @@ function fetchItem(ItemCode, Column){
 function fetchUser(UserId, Column){
     var specificId = UserId;
     var specificRow = user_data.find(row => parseInt(row.user_id) === parseInt(specificId));
-    console.log(specificId+'--'+specificRow[Column])
+    // console.log(specificId+'--'+specificRow[Column])
     if(!specificRow){
         return '';
     }
@@ -67,6 +68,7 @@ $(document).ready(function()
             user_data = response.data;
         }
     });
+        
     sunit = $('table.sUnitTable').DataTable({ 
         "dom": 'flrtip',
         "language": {
@@ -94,7 +96,7 @@ $(document).ready(function()
             {
                 data: null,
                 render: function(data, type, row, meta){
-                    var cell_value = fetchCustomerBranch(row.branch_id, 'customer_name')+ '-' + fetchCustomerBranch(row.branch_id, 'branch_name');
+                    var cell_value = fetchCustomerBranch(row.customer_branches_id, 'customer_name')+ '-' + fetchCustomerBranch(row.customer_branches_id, 'branch_name');
                     return `<div style="white-space: normal; width: 250px;">${cell_value.toUpperCase()}</div>`;
                 }
             },
@@ -137,6 +139,7 @@ $(document).ready(function()
             $('#loading').hide();
         }
     });
+
     $('#in_sub_Btn').prop('disabled', true);
     $('#repserial').prop('disabled', true);
 });
