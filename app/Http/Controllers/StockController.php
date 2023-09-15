@@ -489,22 +489,33 @@ class StockController extends Controller
         //             ->where('branch_id', 2)
         //             ->get();
         // }
-        if (District::where('user_id', auth()->user()->id)->first() || auth()->user()->hasanyrole('Warehouse Manager', 'Manager', 'Editor', 'Warehouse Administrator')){
-            $stock = Stock::wherein('status', 
-                            [
-                                'service unit',
-                                'pull out'
-                            ]
-                        )
+        if (District::where('user_id', auth()->user()->id)->first()){
+            if (auth()->user()->id == 53) {
+                $stock = Stock::whereIn('status', ['service unit', 'pull out'])
+                        ->whereHas('branch.area', function ($query) {
+                            $query->whereIn('area_id', [1,2]);
+                        })
+                        ->with(['branch.area']) // Eager load the related models
                         ->get();
-            return DataTables::of($stock)
-                ->addColumn('status', function (Stock $request){
-                    return strtoupper($request->status);
-                })
-                ->addColumn('serial', function (Stock $request){
-                    return mb_strtoupper($request->serial);
-                })
-                ->make(true);
+                return DataTables::of($stock)->make(true);
+            }
+            $stock = Stock::whereIn('status', ['service unit', 'pull out'])
+                    ->whereHas('branch.area', function ($query) {
+                        $query->whereIn('area_id', auth()->user()->area_id);
+                    })
+                    ->with(['branch.area']) // Eager load the related models
+                    ->get();
+            return DataTables::of($stock)->make(true);
+        }
+        else if (auth()->user()->hasanyrole('Warehouse Manager', 'Manager', 'Editor', 'Warehouse Administrator')) {
+            $stock = Stock::wherein('stocks.status', 
+                        [
+                            'service unit',
+                            'pull out'
+                        ]
+                    )
+                    ->get();
+            return DataTables::of($stock)->make(true);
         }
         return DataTables::of($stock)
         ->addColumn('date', function (Stock $request){
