@@ -80,7 +80,7 @@ $(document).ready(function()
         ajax: 'sUnit',
         data:{
             type:'monitoring'
-        }
+        },
         columns: [
             {
                 data: 'updated_at',
