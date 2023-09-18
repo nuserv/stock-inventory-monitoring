@@ -479,44 +479,48 @@ class StockController extends Controller
         }
     }
 
-    public function serviceUnit()
+    public function serviceUnit(Request $request)
     {
-        $stock = Stock::wherein('status', ['service unit', 'pull out'])
-                    ->where('branch_id', auth()->user()->branch->id)
-                    ->get();
+        
         // if (auth()->user()->hasanyrole('Warehouse Manager', 'Encoder', 'Warehouse Administrator')) {
         //     $stock = Stock::wherein('status', ['service unit', 'pull out'])
         //             ->where('branch_id', 2)
         //             ->get();
         // }
-        if (District::where('user_id', auth()->user()->id)->first()){
-            if (auth()->user()->id == 53) {
+        if ($request->type == 'monitoring') {
+            if (District::where('user_id', auth()->user()->id)->first()){
+                if (auth()->user()->id == 53) {
+                    $stock = Stock::whereIn('status', ['service unit', 'pull out'])
+                            ->whereHas('branch.area', function ($query) {
+                                $query->whereIn('area_id', [1,2]);
+                            })
+                            ->with(['branch.area']) // Eager load the related models
+                            ->get();
+                    return DataTables::of($stock)->make(true);
+                }
                 $stock = Stock::whereIn('status', ['service unit', 'pull out'])
                         ->whereHas('branch.area', function ($query) {
-                            $query->whereIn('area_id', [1,2]);
+                            $query->whereIn('area_id', auth()->user()->area_id);
                         })
                         ->with(['branch.area']) // Eager load the related models
                         ->get();
                 return DataTables::of($stock)->make(true);
             }
-            $stock = Stock::whereIn('status', ['service unit', 'pull out'])
-                    ->whereHas('branch.area', function ($query) {
-                        $query->whereIn('area_id', auth()->user()->area_id);
-                    })
-                    ->with(['branch.area']) // Eager load the related models
-                    ->get();
-            return DataTables::of($stock)->make(true);
+            else if (auth()->user()->hasanyrole('Warehouse Manager', 'Manager', 'Editor', 'Warehouse Administrator')) {
+                $stock = Stock::wherein('stocks.status', 
+                            [
+                                'service unit',
+                                'pull out'
+                            ]
+                        )
+                        ->get();
+                return DataTables::of($stock)->make(true);
+            }
         }
-        else if (auth()->user()->hasanyrole('Warehouse Manager', 'Manager', 'Editor', 'Warehouse Administrator')) {
-            $stock = Stock::wherein('stocks.status', 
-                        [
-                            'service unit',
-                            'pull out'
-                        ]
-                    )
-                    ->get();
-            return DataTables::of($stock)->make(true);
-        }
+        $stock = Stock::wherein('status', ['service unit', 'pull out'])
+            ->where('branch_id', auth()->user()->branch->id)
+            ->get();
+            
         return DataTables::of($stock)
         ->addColumn('date', function (Stock $request){
             return Carbon::parse($request->updated_at->toFormattedDateString().' '.$request->updated_at->toTimeString())->isoFormat('lll');

@@ -78,6 +78,9 @@ $(document).ready(function()
         processing: false,
         serverSide: false,
         ajax: 'sUnit',
+        data:{
+            type:'monitoring'
+        }
         columns: [
             {
                 data: 'updated_at',
