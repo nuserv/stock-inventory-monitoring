@@ -77,10 +77,7 @@ $(document).ready(function()
         },
         processing: false,
         serverSide: false,
-        ajax: 'sUnit',
-        data:{
-            type:'monitoring'
-        },
+        ajax: 'serviceMonitoring',
         columns: [
             {
                 data: 'updated_at',

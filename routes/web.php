@@ -134,6 +134,7 @@ Route::get('get_serial', 'StockController@get_serial');//->middleware('ajax');
 Route::get('service-unit', 'StockController@service')->name('index.service-unit');
 Route::get('service-monitoring', 'StockController@service_monitoring')->name('index.service-monitoring');
 Route::get('sUnit', 'StockController@serviceUnit');//->middleware('ajax');
+Route::get('serviceMonitoring', 'StockController@serviceMonitoring');//->middleware('ajax');
 Route::get('checkpullout', 'StockController@checkpullout');//->middleware('ajax');
 Route::get('bill', 'StockController@bill');//->middleware('ajax');
 Route::any('delbill', 'StockController@delbill');//->middleware('ajax');
