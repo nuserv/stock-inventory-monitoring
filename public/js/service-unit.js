@@ -41,7 +41,14 @@ function fetchUser(UserId, Column){
     }
 }
 $('#loading').show();
-
+function getCurrentDate() {
+    var currentDate = new Date();
+    var formattedDate = currentDate.getFullYear() + '-' + padNumber(currentDate.getMonth() + 1) + '-' + padNumber(currentDate.getDate());
+    return formattedDate;
+}
+function padNumber(number) {
+    return (number < 10 ? '0' : '') + number;
+}
 $(document).ready(function()
 {
     $.ajax({
@@ -70,7 +77,15 @@ $(document).ready(function()
     });
         
     sunit = $('table.sUnitTable').DataTable({ 
-        "dom": 'flrtip',
+        "dom": 'Bflrtip',
+        buttons: [
+            { 
+                extend: 'excel',
+                className: 'excelButton', 
+                title: 'Service Monitoring -'+ getCurrentDate(),
+                text: 'Export'
+            }
+        ],
         "language": {
             "emptyTable": "No data found!",
             "processing": '<i class="fa fa-spinner fa-spin fa-3x fa-fw"></i><span class="sr-only">Searching...</span> '
