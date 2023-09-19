@@ -137,6 +137,13 @@ $(document).ready(function()
             {
                 data: null,
                 render: function(data, type, row, meta){
+                    var cell_value = fetchUser(row.user_id, 'area_name');
+                    return `<div style="white-space: normal; width: 100px;">${cell_value.toUpperCase()}</div>`;
+                }
+            },
+            {
+                data: null,
+                render: function(data, type, row, meta){
                     var cell_value = fetchUser(row.user_id, 'branch_name');
                     return `<div style="white-space: normal; width: 100px;">${cell_value.toUpperCase()}</div>`;
                 }

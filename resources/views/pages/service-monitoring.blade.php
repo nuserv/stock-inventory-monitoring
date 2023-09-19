@@ -21,6 +21,9 @@
                     Status
                 </th>
                 <th>
+                    Area
+                </th>
+                <th>
                     Branch
                 </th>
                 <th>

@@ -244,10 +244,11 @@ class UserController extends Controller
                 name as user_name,
                 middlename as user_middlename,
                 lastname as user_lastname,
-                branch as branch_name'
-                
+                branch as branch_name,
+                area as area_name'
             )
             ->join('branches', 'branches.id', 'branch_id')
+            ->join('areas', 'areas.id', 'users.area_id')
             ->get();
         return DataTables::of($data)->make(true);
     }
