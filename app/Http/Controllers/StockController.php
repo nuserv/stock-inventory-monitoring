@@ -483,29 +483,146 @@ class StockController extends Controller
     {
         if (District::where('user_id', auth()->user()->id)->first()){
             if (auth()->user()->id == 53) {
-                $stock = Stock::whereIn('status', ['service unit', 'pull out'])
+                $stock = Stock::select(
+                            'updated_at', 
+                            'customer_branches_id', 
+                            'items_id', 'serial', 
+                            'status', 
+                            'branch_id',
+                            'user_id',
+                        )
+                        ->whereIn('status', ['service unit', 'pull out'])
                         ->whereHas('branch.area', function ($query) {
                             $query->whereIn('area_id', [1,2]);
                         })
-                        ->with(['branch.area']) // Eager load the related models
+                        ->with([
+                            'branch' => function ($query) {
+                                $query->select('id', 'branch', 'area_id')
+                                ->with(
+                                    [
+                                        'area'=> function ($query) {
+                                            $query->select('id','area');
+                                        }
+                                    ]
+                                );
+                            }
+                        ])
+                        ->with([
+                            'user' => function ($query) {
+                                $query->selectraw("id, CONCAT(name,' ',lastname) as name");
+                            }
+                        ])
+                        ->with([
+                            'item' => function ($query) {
+                                $query->select('id', 'item');
+                            }
+                        ])
+                        ->with([
+                            'customerbranch' => function ($query) {
+                                $query->select('id', 'customer_id', 'customer_branch')
+                                ->with([
+                                    'customer' => function ($query) {
+                                        $query->select('id', 'customer');
+                                    }
+                                ]);
+                            }
+                        ])// Eager load the related models
                         ->get();
                 return DataTables::of($stock)->make(true);
             }
-            $stock = Stock::whereIn('status', ['service unit', 'pull out'])
+            $stock = Stock::select(
+                        'updated_at', 
+                        'customer_branches_id', 
+                        'items_id', 'serial', 
+                        'status', 
+                        'branch_id',
+                        'user_id',
+                    )
+                    ->whereIn('status', ['service unit', 'pull out'])
                     ->whereHas('branch.area', function ($query) {
                         $query->where('area_id', auth()->user()->area_id);
                     })
-                    ->with(['branch.area']) // Eager load the related models
+                    ->with([
+                        'branch' => function ($query) {
+                            $query->select('id', 'branch', 'area_id')
+                            ->with(
+                                [
+                                    'area'=> function ($query) {
+                                        $query->select('id','area');
+                                    }
+                                ]
+                            );
+                        }
+                    ])
+                    ->with([
+                        'user' => function ($query) {
+                            $query->selectraw("id, CONCAT(name,' ',lastname) as name");
+                        }
+                    ])
+                    ->with([
+                        'item' => function ($query) {
+                            $query->select('id', 'item');
+                        }
+                    ])
+                    ->with([
+                        'customerbranch' => function ($query) {
+                            $query->select('id', 'customer_id', 'customer_branch')
+                            ->with([
+                                'customer' => function ($query) {
+                                    $query->select('id', 'customer');
+                                }
+                            ]);
+                        }
+                    ])// Eager load the related models // Eager load the related models
                     ->get();
             return DataTables::of($stock)->make(true);
         }
         else if (auth()->user()->hasanyrole('Warehouse Manager', 'Manager', 'Editor', 'Warehouse Administrator')) {
-            $stock = Stock::wherein('stocks.status', 
+            $stock = Stock::select(
+                        'updated_at', 
+                        'customer_branches_id', 
+                        'items_id', 'serial', 
+                        'status', 
+                        'branch_id',
+                        'user_id',
+                    )
+                    ->wherein('stocks.status', 
                         [
                             'service unit',
                             'pull out'
                         ]
                     )
+                    ->with([
+                        'user' => function ($query) {
+                            $query->selectraw("id, CONCAT(name,' ',lastname) as name");
+                        }
+                    ])
+                    ->with([
+                        'branch' => function ($query) {
+                            $query->select('id', 'branch', 'area_id')
+                            ->with(
+                                [
+                                    'area'=> function ($query) {
+                                        $query->select('id','area');
+                                    }
+                                ]
+                            );
+                        }
+                    ])->with([
+                        'item' => function ($query) {
+                            $query->select('id', 'item');
+                        }
+                    ])
+                    ->with([
+                        'customerbranch' => function ($query) {
+                            $query->select('id', 'customer_id', 'customer_branch')
+                            ->with([
+                                'customer' => function ($query) {
+                                    $query->select('id', 'customer');
+                                }
+                            ]);
+                        }
+                    ])
                     ->get();
             return DataTables::of($stock)->make(true);
         }

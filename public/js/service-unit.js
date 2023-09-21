@@ -51,30 +51,30 @@ function padNumber(number) {
 }
 $(document).ready(function()
 {
-    $.ajax({
-        url: '/get_customer_branch',
-        method: 'GET',
-        async: false,
-        success: function(response){
-            customer_branch_data = response.data;
-        }
-    });
-    $.ajax({
-        url: '/get_item',
-        method: 'GET',
-        async: false,
-        success: function(response){
-            item_data = response.data;
-        }
-    });
-    $.ajax({
-        url: '/get_user',
-        method: 'GET',
-        async: false,
-        success: function(response){
-            user_data = response.data;
-        }
-    });
+    // $.ajax({
+    //     url: '/get_customer_branch',
+    //     method: 'GET',
+    //     async: false,
+    //     success: function(response){
+    //         customer_branch_data = response.data;
+    //     }
+    // });
+    // $.ajax({
+    //     url: '/get_item',
+    //     method: 'GET',
+    //     async: false,
+    //     success: function(response){
+    //         item_data = response.data;
+    //     }
+    // });
+    // $.ajax({
+    //     url: '/get_user',
+    //     method: 'GET',
+    //     async: false,
+    //     success: function(response){
+    //         user_data = response.data;
+    //     }
+    // });
         
     sunit = $('table.sUnitTable').DataTable({ 
         "dom": 'Bflrtip',
@@ -90,8 +90,8 @@ $(document).ready(function()
             "emptyTable": "No data found!",
             "processing": '<i class="fa fa-spinner fa-spin fa-3x fa-fw"></i><span class="sr-only">Searching...</span> '
         },
-        processing: false,
-        serverSide: false,
+        processing: true,
+        serverSide: true,
         ajax: 'serviceMonitoring',
         columns: [
             {
@@ -109,24 +109,28 @@ $(document).ready(function()
             },
             // { data: 'client', name:'client'},
             {
-                data: null,
+                data: 'customerbranch.customer_branch',
                 render: function(data, type, row, meta){
-                    var cell_value = fetchCustomerBranch(row.customer_branches_id, 'customer_name')+ '-' + fetchCustomerBranch(row.customer_branches_id, 'branch_name');
-                    return `<div style="white-space: normal; width: 250px;">${cell_value.toUpperCase()}</div>`;
+                    if(type === "sort" || type === 'type'){
+                        return data;
+                    }
+                    return `<div style="white-space: normal; width: 250px;">${row.customerbranch.customer.customer.toUpperCase()} - ${data.toUpperCase()}</div>`;
                 }
             },
             // { data: 'description', name:'description'},
             {
-                data: null,
+                data: 'item.item',
                 render: function(data, type, row, meta){
-                    var cell_value = fetchItem(row.items_id, 'item_name');
-                    return `<div style="white-space: normal; width: 250px;">${cell_value.toUpperCase()}</div>`;
+                    if(type === "sort" || type === 'type'){
+                        return data;
+                    }
+                    return `<div style="white-space: normal; width: 250px;">${data.toUpperCase()}</div>`;
                 }
             },
             { data: 'serial', name:'serial'},
             { data: 'status', "render": function ( data, type, row, meta ) {
                     if (data == "PULL OUT") {
-                        return `<div style="white-space: normal; width: 100px;">${cell_value.toUpperCase()}</div>`;
+                        return `<div style="white-space: normal; width: 100px;">${data.toUpperCase()}</div>`;
                     }
                     else{
                         return `<div style="white-space: normal; width: 100px;">${data.toUpperCase()}</div>`;
@@ -135,25 +139,34 @@ $(document).ready(function()
             },
             // { data: 'client', name:'client'},
             {
-                data: null,
+                data: 'branch.area.area',
                 render: function(data, type, row, meta){
-                    var cell_value = fetchUser(row.user_id, 'area_name');
-                    return `<div style="white-space: normal; width: 100px;">${cell_value.toUpperCase()}</div>`;
+                    if(type === "sort" || type === 'type'){
+                        return data;
+                    }
+                    // var cell_value = fetchUser(row.user_id, 'area_name');
+                    return `<div style="white-space: normal; width: 100px;">${data.toUpperCase()}</div>`;
                 }
             },
             {
-                data: null,
+                data: 'branch.branch',
                 render: function(data, type, row, meta){
-                    var cell_value = fetchUser(row.user_id, 'branch_name');
-                    return `<div style="white-space: normal; width: 100px;">${cell_value.toUpperCase()}</div>`;
+                    if(type === "sort" || type === 'type'){
+                        return data;
+                    }
+                    // var cell_value = fetchUser(row.user_id, 'branch_name');
+                    return `<div style="white-space: normal; width: 100px;">${data.toUpperCase()}</div>`;
                 }
             },
             // { data: 'serviceby', name:'serviceby'}
             {
-                data: null,
+                data: 'user.name',
                 render: function(data, type, row, meta){
-                    var cell_value = fetchUser(row.user_id, 'user_name')+' '+fetchUser(row.user_id, 'user_middlename')+' '+fetchUser(row.user_id, 'user_lastname');
-                    return `<div style="white-space: normal; width: 150px;">${cell_value.toUpperCase()}</div>`;
+                    if(type === "sort" || type === 'type'){
+                        return data;
+                    }
+                    // var cell_value = fetchUser(row.user_id, 'user_name')+' '+fetchUser(row.user_id, 'user_middlename')+' '+fetchUser(row.user_id, 'user_lastname');
+                    return `<div style="white-space: normal; width: 150px;">${data.toUpperCase()}</div>`;
                 }
             },
         ],
