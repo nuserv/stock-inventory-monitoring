@@ -4,17 +4,32 @@
 <div class="table-responsive">
     <span style="font-size:130%;color:#00127f"><b>
     @if (Carbon\Carbon::now() <= Carbon\Carbon::now()->firstOfQuarter()->add(7, 'day'))
-        @if (Carbon\Carbon::now()->quarter == 1)
-            4TH
-        @endif
-        @if (Carbon\Carbon::now()->quarter == 2)
-            1ST
-        @endif
-        @if (Carbon\Carbon::now()->quarter == 3)
-            2ND
-        @endif
-        @if (Carbon\Carbon::now()->quarter == 4)
-            3RD
+        @if ($pmbranches == 0)
+            @if (Carbon\Carbon::now()->quarter == 1)
+                1ST
+            @endif
+            @if (Carbon\Carbon::now()->quarter == 2)
+                2ND
+            @endif
+            @if (Carbon\Carbon::now()->quarter == 3)
+                3RD
+            @endif
+            @if (Carbon\Carbon::now()->quarter == 4)
+                4TH
+            @endif
+        @else
+            @if (Carbon\Carbon::now()->quarter == 1)
+                4TH
+            @endif
+            @if (Carbon\Carbon::now()->quarter == 2)
+                1ST
+            @endif
+            @if (Carbon\Carbon::now()->quarter == 3)
+                2ND
+            @endif
+            @if (Carbon\Carbon::now()->quarter == 4)
+                3RD
+            @endif
         @endif
     @else
         @if (Carbon\Carbon::now()->quarter == 1)
