@@ -89,7 +89,7 @@ class DefectiveController extends Controller
         if (auth()->user()->hasanyrole('Repair')) {
             $foraddstock = Defective::select('return_no')
                 ->where('status', 'For receiving')
-                ->where('category_id', 26)
+                ->where('category_id', '!=', 26)
                 ->get()->pluck('return_no');
             $return = Retno::query()
                 ->select('returns_no.updated_at', 'returns_no.status', 'return_no', 'branch', 'returns_no.status')
