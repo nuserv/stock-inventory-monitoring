@@ -663,7 +663,7 @@ class DefectiveController extends Controller
     }
     public function update(Request $request)
     {
-        if (auth()->user()->branch->branch != 'Warehouse') {
+        if (auth()->user()->branch->branch != 'Warehouse' && auth()->user()->id != 326) {
             $branch = Branch::where('id', auth()->user()->branch->id)->first();
             foreach ($request->id as $id) {
                 $updates = Defective::where('branch_id', auth()->user()->branch->id)
