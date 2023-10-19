@@ -238,7 +238,7 @@
             @include('modal.warehouse.repaired')
         @endif
         @if(Request::is('returnview'))
-            @if(auth()->user()->hasAnyrole('Repair'))
+            @if(auth()->user()->hasAnyrole('Repair') || auth()->user()->id == 326)
                 @include('modal.warehouse.return')
                 @include('modal.warehouse.serial')
             @endif
@@ -436,7 +436,7 @@
             @endif
         @endif
         @if(Request::is('returnview'))
-            @if (auth()->user()->hasanyrole('Repair'))
+            @if (auth()->user()->hasanyrole('Repair') || auth()->user()->id == 326)
                 <script src="{{asset('min/?f=js/warehouse/return.js')}}&version={{ \Illuminate\Support\Str::random(30) }}"></script>
             @endif
             @if (auth()->user()->hasanyrole('Head'))
@@ -444,7 +444,7 @@
             @endif
         @endif
         @if(Request::is('repaired-ware'))
-            @if (auth()->user()->hasanyrole('Repair'))
+            @if (auth()->user()->hasanyrole('Repair') || auth()->user()->id == 326)
                 <script src="{{asset('min/?f=js/warehouse/repaired.js')}}&version={{ \Illuminate\Support\Str::random(30) }}"></script>
             @endif
             @if (auth()->user()->hasanyrole('Warehouse Manager', 'Encoder'))
@@ -452,7 +452,7 @@
             @endif
         @endif
         @if(Request::is('repaired-list'))
-            @if (auth()->user()->hasanyrole('Repair'))
+            @if (auth()->user()->hasanyrole('Repair') || auth()->user()->id == 326)
                 <script src="{{asset('min/?f=js/warehouse/repairedlist.js')}}&version={{ \Illuminate\Support\Str::random(30) }}"></script>
             @endif
         @endif
@@ -525,10 +525,16 @@
                 <!--script src="{{asset('min/?f=js/pending.js')}}&version={{ \Illuminate\Support\Str::random(30) }}"></script-->
                 <script src="{{asset('min/?f=js/viewer.js')}}&version={{ \Illuminate\Support\Str::random(30) }}"></script>
             @endif
+            
         @endif
-
+        @if (Request::is('reprec') && auth()->user()->id == 326)
+            <script src="{{asset('min/?f=js/warehouse/repair.js')}}&version={{ \Illuminate\Support\Str::random(30) }}"></script>
+        @endif
         @if(Request::is('/') && !auth()->user()->hasanyrole('Repair', 'Warehouse Administrator', 'Viewer', 'Viewer PLSI', 'Viewer IDSI'))
             <script src="{{asset('min/?f=js/home.js')}}&version={{ \Illuminate\Support\Str::random(30) }}"></script>
+        @endif
+        @if (Request::is('/') && auth()->user()->id == 326)
+            <script src="{{asset('min/?f=js/warehouse/repair.js')}}&version={{ \Illuminate\Support\Str::random(30) }}"></script>
         @endif
         @if (Request::is('/') && auth()->user()->hasrole('Repair'))
             <script src="{{asset('min/?f=js/warehouse/repair.js')}}&version={{ \Illuminate\Support\Str::random(30) }}"></script>

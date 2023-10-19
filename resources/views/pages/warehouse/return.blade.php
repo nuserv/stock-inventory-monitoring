@@ -44,7 +44,7 @@
                 <th>
                     Status
                 </th>
-                @if(auth()->user()->hasAnyRole('Repair'))
+                @if(auth()->user()->hasAnyRole('Repair') || auth()->user()->id == 326)
                 <th>
                     Remarks
                 </th>

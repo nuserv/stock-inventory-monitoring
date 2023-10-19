@@ -47,6 +47,17 @@
                     </li>
                 @endif
             @endif
+            @if (auth()->user()->id == 326)
+                <li class="nav-item" style="margin-left:0px;margin-right:0px;">
+                    <a class="nav-link {{ Request::is('returnview') ? 'active' : '' }}" href="{{ url('/returnview') }}">Returns</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link {{ Request::is('reprec') ? 'active' : '' }}" href="{{ url('/reprec') }}">Received</a>
+                </li>
+                <li class="nav-item" style="margin-left:0px;margin-right:0px;">
+                    <a class="nav-link {{ Request::is('repaired-ware') ? 'active' : '' }}" href="{{ url('/repaired-ware') }}">Repaired</a>
+                </li>
+            @endif
             @if(auth()->user()->hasrole('Warehouse Administrator'))
                 <li class="nav-item" style="margin-left:0px;margin-right:0px;">
                     <a class="nav-link {{ Request::is('disposed') ? 'active' : '' }}" href="{{ url('/disposed') }}">Disposed</a>

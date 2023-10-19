@@ -56,6 +56,7 @@ Route::any('item-update', 'HomeController@itemsUpdate')->name('Update.items')->m
 
 
 Route::get('/', 'HomeController@index')->name('home.index');
+Route::get('/reprec', 'HomeController@index');
 Route::get('/pending', 'HomeController@pending')->name('home.request');
 //Route::get('/home', 'HomeController@index')->name('home.indexs');
 Route::get('/log', 'HomeController@log');

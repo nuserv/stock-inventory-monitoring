@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
-    @if(auth()->user()->hasanyrole('Repair'))
+    @if(auth()->user()->hasanyrole('Repair') || auth()->user()->id == 326)
         <div class="table" id="pulloutdiv">
             <table class="table-hover table repairedTable" id="repairedTable" style="font-size:80%">
                 <thead class="thead-dark">

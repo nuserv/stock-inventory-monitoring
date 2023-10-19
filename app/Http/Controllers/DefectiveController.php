@@ -65,11 +65,36 @@ class DefectiveController extends Controller
                 // dd($return);
             }
         }
+        if (auth()->user()->id == 326) {
+            $foraddstock = Defective::select('return_no')
+                ->where('status', 'For receiving')
+                ->where('category_id', 26)
+                ->get()->pluck('return_no');
+            $return = Retno::query()
+                ->select('returns_no.updated_at', 'returns_no.status', 'return_no', 'branch', 'returns_no.status')
+                ->wherein('return_no', $foraddstock)
+                ->wherein('returns_no.status', ['For receiving', 'Incomplete'])
+                ->join('branches', 'branches.id', 'branch_id')
+                ->get();
+            return DataTables::of($return)
+                ->addColumn('date', function (Retno $return){
+                    return $return->updated_at;
+                })
+                ->addColumn('updated_at', function (Retno $return){
+                    return Carbon::parse($return->updated_at->toFormattedDateString().' '.$return->updated_at->toTimeString())->isoFormat('lll');
+                })
+                ->make(true);
+        }
 
         if (auth()->user()->hasanyrole('Repair')) {
+            $foraddstock = Defective::select('return_no')
+                ->where('status', 'For receiving')
+                ->where('category_id', 26)
+                ->get()->pluck('return_no');
             $return = Retno::query()
                 ->select('returns_no.updated_at', 'returns_no.status', 'return_no', 'branch', 'returns_no.status')
                 ->wherein('returns_no.status', ['For receiving', 'Incomplete'])
+                ->wherein('return_no', $foraddstock)
                 ->join('branches', 'branches.id', 'branch_id')
                 ->get();
             return DataTables::of($return)
@@ -141,12 +166,29 @@ class DefectiveController extends Controller
 
     public function returnitem(Request $request)
     {
+        if (auth()->user()->id == 326) {
+            $return = Defective::query()
+            ->select('defectives.id', 'category', 'item', 'serial', 'items_id', 'name', 'remarks')
+            ->join('categories', 'categories.id', 'defectives.category_id')
+            ->join('items', 'items.id', 'items_id')
+            ->join('users', 'users.id', 'user_id')
+            ->wherein('defectives.status', ['For receiving'])
+            ->where('return_no', $request->retno)
+            ->where('defectives.category_id', 26)
+            ->get();
+            return DataTables::of($return)
+            ->addColumn('serial', function (Defective $data){
+                return strtoupper($data->serial);
+            })
+            ->make(true);
+        }
         $return = Defective::query()
             ->select('defectives.id', 'category', 'item', 'serial', 'items_id', 'name', 'remarks')
             ->join('categories', 'categories.id', 'defectives.category_id')
             ->join('items', 'items.id', 'items_id')
             ->join('users', 'users.id', 'user_id')
             ->wherein('defectives.status', ['For receiving'])
+            ->where('defectives.category_id', '!=', 26)
             ->where('return_no', $request->retno)
             ->get();
         return DataTables::of($return)
@@ -235,7 +277,7 @@ class DefectiveController extends Controller
                 })
                 ->make(true);
         }
-        if (auth()->user()->hasanyrole('Repair')) {
+        if (auth()->user()->hasanyrole('Repair') || auth()->user()->id == 326) {
             if ($request->list == 'list') {
                 $repaired = RepairedNo::query()
                 ->select('created_at', 'repaired_no', 'status')
@@ -488,6 +530,24 @@ class DefectiveController extends Controller
         //     ->join('branches', 'defectives.branch_id', '=', 'branches.id')
         //     ->get();
 
+        if (auth()->user()->id == 326) {
+            $data = Defective::query()->select('remarks', 'category', 'users.name', 'branches.branch', 'defectives.category_id', 'branches.id as branchid', 'defectives.updated_at', 'defectives.id as id', 'items.item', 'items.id as itemid', 'defectives.serial as serial', 'defectives.status as status')
+                ->wherein('defectives.status', ['For repair', 'Repaired', 'Conversion'])
+                ->where('defectives.category_id', 26)
+                ->join('items', 'defectives.items_id', 'items.id')
+                ->join('categories', 'categories.id', 'defectives.category_id')
+                ->join('branches', 'defectives.branch_id', 'branches.id')
+                ->join('users', 'users.id', 'defectives.user_id');
+            return DataTables::of($data)
+                ->addColumn('date', function (Defective $data){
+                    return Carbon::parse($data->updated_at->toFormattedDateString().' '.$data->updated_at->toTimeString())->isoFormat('lll');
+                })
+                ->addColumn('remarks', function (Defective $data){
+                    return strtoupper($data->remarks);
+                })
+                ->make(true);
+        }
+
         if (auth()->user()->branch->branch == 'Warehouse' && !auth()->user()->hasanyrole('Repair', 'Warehouse Administrator')) {
             $data = Defective::query()->select('remarks', 'category', 'users.name', 'branches.branch', 'defectives.category_id', 'branches.id as branchid', 'defectives.updated_at', 'defectives.id as id', 'items.item', 'items.id as itemid', 'defectives.serial as serial', 'defectives.status as status')
             ->where('defectives.status', 'Repaired')
@@ -500,6 +560,7 @@ class DefectiveController extends Controller
             ->wherein('defectives.status', ['For repair', 'Repaired', 'Conversion'])
                 ->join('items', 'defectives.items_id', 'items.id')
                 ->join('categories', 'categories.id', 'defectives.category_id')
+                ->where('defectives.category_id', '!=', 26)
                 ->join('branches', 'defectives.branch_id', 'branches.id')
                 ->join('users', 'users.id', 'defectives.user_id');
         }else if (auth()->user()->branch->branch == 'Main-Office'){

@@ -309,6 +309,9 @@ class HomeController extends Controller
             $title = "Pending";
             return view('pages.pending', compact('title'));
         }
+        if (auth()->user()->id == 326) {
+            return view('pages.warehouse.return', compact('title'));
+        }
 
         if (auth()->user()->hasanyrole('Viewer', 'Viewer PLSI', 'Viewer IDSI')) {
             return view('pages.home', compact('title'));
