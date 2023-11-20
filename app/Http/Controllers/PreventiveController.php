@@ -111,7 +111,8 @@ class PreventiveController extends Controller
             $code = $customer->code*1;
             if ($save) {
                 $pmbranch = PmBranches::query()->where('customer_branches_code', $code)->update([
-                    'Conversion'=>$date[2].'/'.$date[0].'/'.$date[1]
+                    'Conversion'=>$date[2].'/'.$date[0].'/'.$date[1],
+                    'quarter' => Carbon::parse($save->schedule)->quarter
                 ]);
             }
         }
@@ -128,7 +129,9 @@ class PreventiveController extends Controller
             $code = $customer->code*1;
             if ($save) {
                 $pmbranch = PmBranches::query()->where('customer_branches_code', $code)
-                ->update(['Conversion'=>$date[2].'/'.$date[0].'/'.$date[1]]);
+                ->update(['Conversion'=>$date[2].'/'.$date[0].'/'.$date[1],
+                    'quarter' => Carbon::parse($save->schedule)->quarter
+                ]);
             }
         }
         else{
