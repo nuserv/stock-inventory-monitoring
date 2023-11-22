@@ -30,6 +30,7 @@ class BackupInventoryExport implements FromCollection,WithHeadings,WithColumnWid
             ->join('categories', 'items.category_id', 'categories.id')
             ->where('branch_id', auth()->user()->branch->id)
             ->orderBy('category', 'ASC')
+            ->where('stocks.status', 'in')
             ->orderBy('item', 'ASC')
             ->get();
         }
@@ -45,6 +46,7 @@ class BackupInventoryExport implements FromCollection,WithHeadings,WithColumnWid
             ->join('categories', 'items.category_id', 'categories.id')
             ->groupBy('item')
             ->orderBy('category', 'ASC')
+            ->where('warehouses.status', 'in')
             ->orderBy('item', 'ASC')
             ->get();
     }
