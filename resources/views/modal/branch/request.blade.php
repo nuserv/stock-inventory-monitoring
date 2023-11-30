@@ -96,9 +96,7 @@
                         <th>Category</th>
                         <th>Description</th>
                         <th>Qty</th>
-                        @if(auth()->user()->hasrole('Head'))
-                            <th></th>
-                        @endif
+                        <th></th>
                     </thead>
                 </table>
                 <br>
