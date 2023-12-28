@@ -28,6 +28,9 @@
                 <li class="nav-item" style="margin-left:0px;margin-right:0px;">
                     <a class="nav-link {{ Request::is('unrepair') ? 'active' : '' }}" href="{{ url('/unrepair') }}">Unrepairable</a>
                 </li>
+                <li class="nav-item" style="margin-left:0px;margin-right:0px;">
+                    <a class="nav-link {{ Request::is('assembly') ? 'active' : '' }}" href="{{ url('/assembly') }}">Assembly</a>
+                </li>
             @endif
             
             @if(auth()->user()->hasanyrole('Viewer', 'Viewer PLSI', 'Viewer IDSI'))

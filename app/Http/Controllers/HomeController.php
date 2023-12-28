@@ -45,9 +45,19 @@ use Storage;
 
 class HomeController extends Controller
 {
+    private $originalMemoryLimit;
     public function __construct()
     {
         $this->middleware(['auth', 'verified']);
+        // Save the original memory limit
+        $this->originalMemoryLimit = ini_get('memory_limit');
+        // Set the increased memory limit
+        ini_set('memory_limit', '1G');
+    }
+    public function __destruct()
+    {
+        // Reset the memory limit to its original value when the object is destroyed
+        ini_set('memory_limit', $this->originalMemoryLimit);
     }
     public function report()
     {
@@ -561,126 +571,33 @@ class HomeController extends Controller
     }
     public function activity()
     {   
-        // if (auth()->user()->hasRole('Viewer PLSI')) {
-        //     $acts = UserLog::query()->get();
-        //     $act = [];
-        //     foreach ($acts as $acs) {
-        //         if(str_contains(strtolower($acs->activity), 'mercury drug')){
-        //             array_push($act, $acs);
-        //         }
-        //         if ($acs->service == "yes" && $acs->company == "PLSI") {
-        //             array_push($act, $acs);
-        //         }
-        //     }
-        // }
-        // if (auth()->user()->hasanyRole('Viewer IDSI', 'Viewer')) {
-        //     $acts = UserLog::query()
-        //         ->where('activity', 'not like', '%mercury drug%')
-        //         ->get();
-        //     $act = [];
-        //     foreach ($acts as $acs) {
-        //         if(str_contains($acs->activity, 'SERVICE OUT') || str_contains($acs->activity, 'SERVICE IN')){
-        //             array_push($act, $acs);
-        //         }
-        //         if(str_contains($acs->activity, 'REPLACED')){
-        //             array_push($act, $acs);
-        //         }
-        //         if ($acs->service == "yes" && $acs->company == "IDSI") {
-        //             array_push($act, $acs);
-        //         }
-        //         if ($acs->service == "yes" && $acs->company == "APSOFT") {
-        //             array_push($act, $acs);
-        //         }
-        //     }
-        // }
-        if (auth()->user()->hasAnyRole('Editor',  'Manager', 'Viewer IDSI', 'Viewer', 'Viewer PLSI')) {
+        if (auth()->user()->hasAnyRole('Warehouse Administrator', 'Editor',  'Manager', 'Viewer IDSI', 'Viewer', 'Viewer PLSI')) {
             $act = UserLog::query();
-                /*
-                ->take(1000)
-                ->get();*/
         }
         if (auth()->user()->hasAnyRole('Head',  'Warehouse Manager')) {
-            $myuser = [];
-            $user = User::query()->where('branch_id', auth()->user()->branch->id)->get();
-            foreach ($user as $user) {
-                $myuser[] = $user->id;
-            }
-            
+            $user = User::query()->where('branch_id', auth()->user()->branch->id)
+                ->pluck('id')->toArray();
             $act = Userlog::query()
-                ->wherein('user_id', $myuser);
-            //$act = UserLog::wherein('user_id', $myuser)->orderBy('id', 'desc')->take(1000)->get();
+                ->wherein('user_id', $user);
         }
-        if (auth()->user()->hasAnyRole('Warehouse Administrator')) {
-            $users = User::query()->whereHas('roles', function($q){
-                $q->where('name', 'Repair');
-            })->get();
-            $myuser = [];
-            array_push($myuser, auth()->user()->id);
-            foreach ($users as $user) {
-                $myuser[] = $user->id;
-            }
-            $$acts5 = User::query()->where('branch_id', 2)->get();
-            $logs = Userlog::query()
-                ->wherein('user_id', $myuser)->get();
-            $acts = Userlog::query()->where('activity', 'LIKE', 'RECEIVED REPAIRED%')->get();
-            $acts2 = Userlog::query()->where('activity', 'LIKE', '%buffer stock request%')->get();
-            $acts3 = Userlog::query()->where('activity', 'LIKE', 'RECEIVED%from Main Warehouse%')->get();
-            $acts4 = Userlog::query()->where('activity', 'LIKE', 'DELIVERED%to Warehouse%')->get();
-
-            //$act = UserLog::wherein('user_id', $myuser)->orderBy('id', 'desc')->take(1000)->get();
-            $act = [];
-            foreach ($logs as $log) {
-                $act[] = $log;
-            }
-            foreach ($acts as $acs) {
-                array_push($act, $acs);
-            }
-            foreach ($acts2 as $acs) {
-                array_push($act, $acs);
-            }
-            foreach ($acts3 as $acs) {
-                array_push($act, $acs);
-            }
-            foreach ($acts4 as $acs) {
-                array_push($act, $acs);
-            }
-            foreach ($acts5 as $acs) {
-                array_push($act, $acs);
-            }
-            $act = collect($act)->sortBy('id')->all();
-        }
+        
         if (auth()->user()->hasAnyRole('Repair')) {
-            $users = User::query()->whereHas('roles', function($q){
+
+            $repairUsers = User::whereHas('roles', function($q) {
                 $q->where('name', 'Repair');
-            });
-            $myuser = [];
-            array_push($myuser, auth()->user()->id);
-            foreach ($users as $user) {
-                $myuser[] = $user->id;
-            }
-            $logs = Userlog::query()
-                ->wherein('user_id', $myuser)->get();
-            $acts = Userlog::query()->where('activity', 'LIKE', 'RECEIVED REPAIRED%')->get();
-            //$act = UserLog::wherein('user_id', $myuser)->orderBy('id', 'desc')->take(1000)->get();
-            $act = [];
-            foreach ($logs as $log) {
-                $act[] = $log;
-            }
-            foreach ($acts as $acs) {
-                array_push($act, $acs);
-            }
-            $act = collect($act)->sortBy('id')->all();
+            })->pluck('id')->toArray();
+            
+            $act = Userlog::query()->select('id','created_at', 'fullname', 'branch', 'activity')
+                ->wherein('user_id', $repairUsers);
         }
         if (auth()->user()->hasAnyRole('Tech', 'Encoder')) {
             $act = UserLog::query()
                 ->where('user_id', auth()->user()->id);
         }
         if (auth()->user()->hasAnyRole('Main Warehouse Manager')) {
-           
             $logs = Userlog::query()
                 ->where('user_id', auth()->user()->id)->get();
             $acts = Userlog::query()->where('activity', 'LIKE', '%from Main Warehouse.')->get();
-            //$act = UserLog::wherein('user_id', $myuser)->orderBy('id', 'desc')->take(1000)->get();
             $act = [];
             foreach ($logs as $log) {
                 $act[] = $log;
@@ -695,8 +612,6 @@ class HomeController extends Controller
     }
     public function service_units()
     {
-
-
         $users = User::all();
         return view('pages.service-units', compact('users'));
     }

@@ -9,7 +9,12 @@ input[type=number]::-webkit-outer-spin-button {
     opacity: 1;
 
 }
-
+.bp{
+    font-weight: bold !important;
+    background-color: #0d1a80 !important;
+    border-color: #0d1a80 !important;
+    color: white !important;
+}
 input[type=number] {
     -moz-appearance: textfield;
 }

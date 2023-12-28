@@ -9,8 +9,8 @@ $(document).ready(function() {
             "language": {
                 "emptyTable": "No defective unit found!"
             },
-            processing: false,
-            serverSide: false,
+            processing: true,
+            serverSide: true,
             autoWidth: false,
             ajax: {
                 url: 'return-table',
@@ -48,9 +48,9 @@ $(document).ready(function() {
                         return data; // Return the original data for sorting and other purposes
                     }
                 },
-                {data: 'branch',name: 'branch',"width": "10%"},
-                {data: 'category',name: 'category',"width": "10%"},
-                {data: 'item',name: 'item',"width": "16%"},
+                {data: 'branches.branch',name: 'branches.branch',"width": "10%"},
+                {data: 'categories.category',name: 'categories.category',"width": "10%"},
+                {data: 'items.item',name: 'items.item',"width": "16%"},
                 {data: 'serial',name: 'serial',"width": "10%"},
                 {data: 'status',name: 'status',"width": "15%"},
                 {data: 'remarks',name: 'remarks',"width": "15%"}

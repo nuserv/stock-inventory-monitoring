@@ -106,6 +106,8 @@ Route::get('postable', 'DefectiveController@postable')->name('return.postable');
 Route::put('update-printer', 'DefectiveController@update_printer');
 
 
+
+
 Route::put('loandelete', 'LoanController@destroy')->middleware('ajax');
 Route::put('loanupdate', 'LoanController@stockUpdate')->middleware('ajax');
 Route::get('loanget', 'LoanController@getitem')->middleware('ajax');
@@ -303,3 +305,10 @@ Route::get('delreqapproved', 'MailController@delreqapproved');//->middleware('aj
 Route::get('get_customer_branch', 'CustomerController@get_customer_branch');
 Route::get('get_item', 'StockController@get_item');
 Route::get('get_user', 'UserController@get_user');
+Route::get('assembly', 'AssemblyController@assembly');
+Route::get('maintenance', 'MaintenanceController@maintenance');
+Route::get('fm_assembled', 'MaintenanceController@fm_assembled');
+Route::get('itemsAssembly', 'AssemblyController@itemsAssembly');
+Route::get('uomAssembly', 'AssemblyController@uomAssembly');
+Route::get('saveAssemblyItem', 'AssemblyController@saveAssemblyItem');
+
