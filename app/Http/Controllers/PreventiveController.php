@@ -61,6 +61,7 @@ class PreventiveController extends Controller
                     ->join('customer_branches', DB::raw('(code*1)'),DB::raw('(customer_branches_code*1)'))
                     ->where('customer_id', '1')
                     ->where('quarter', '!=', Carbon::now()->subquarter(1)->quarter)
+                    ->where('quarter', '!=', Carbon::now()->quarter)
                     ->where('branch_id', auth()->user()->branch->id)->count();
         }
         else{
