@@ -187,6 +187,7 @@ class PreventiveController extends Controller
                         ->join('branches', 'branches.id', 'branch_id')
                         ->join('areas', 'areas.id', 'area_id')
                         ->join('customer_branches', DB::raw('(code*1)'),DB::raw('(customer_branches_code*1)'))
+                        ->where('quarter', '!=', Carbon::now()->quarter)
                         ->where('customer_id', '1')
                         ->where('quarter', '!=', Carbon::now()->subquarter(1)->quarter)->get();
                     if ($pmbranches->count() == 0) {
@@ -218,6 +219,7 @@ class PreventiveController extends Controller
                         ->join('branches', 'branches.id', 'branch_id')
                         ->where('customer_id', '1')
                         ->where('quarter', '!=', Carbon::now()->subquarter(1)->quarter)
+                        ->where('quarter', '!=', Carbon::now()->quarter)
                         ->where('area_id', 5)->get();
                     if ($pmbranches->count() == 0) {
                         $pmbranches = PmBranches::query()
@@ -245,6 +247,7 @@ class PreventiveController extends Controller
                         ->join('branches', 'branches.id', 'branch_id')
                         ->where('customer_id', '1')
                         ->where('quarter', '!=', Carbon::now()->subquarter(1)->quarter)
+                        ->where('quarter', '!=', Carbon::now()->quarter)
                         ->where('area_id', 3)->get();
                     if ($pmbranches->count() == 0) {
                         $pmbranches = PmBranches::query()
@@ -272,6 +275,7 @@ class PreventiveController extends Controller
                         ->join('branches', 'branches.id', 'branch_id')
                         ->where('customer_id', '1')
                         ->where('quarter', '!=', Carbon::now()->subquarter(1)->quarter)
+                        ->where('quarter', '!=', Carbon::now()->quarter)
                         ->where('area_id', 4)->get();
                     if ($pmbranches->count() == 0) {
                         $pmbranches = PmBranches::query()
@@ -299,6 +303,7 @@ class PreventiveController extends Controller
                         ->join('customer_branches', DB::raw('(code*1)'),DB::raw('(customer_branches_code*1)'))
                         ->where('customer_id', '1')
                         ->where('quarter', '!=', Carbon::now()->subquarter(1)->quarter)
+                        ->where('quarter', '!=', Carbon::now()->quarter)
                         ->where('branch_id', auth()->user()->branch->id)->get();
                     if ($pmbranches->count() == 0) {
                         $pmbranches = PmBranches::query()
