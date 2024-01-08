@@ -558,8 +558,8 @@ class DefectiveController extends Controller
                     'defectives.updated_at', 
                     'defectives.id', 
                     'serial', 
-                    'status', 
-                    'items_id')
+                    'defectives.status', 
+                    'defectives.items_id')
                 ->wherein('defectives.status', ['For repair', 'Repaired', 'Conversion'])
                 ->with([
                     'items', 
