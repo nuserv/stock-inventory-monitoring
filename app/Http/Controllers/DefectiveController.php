@@ -554,9 +554,9 @@ class DefectiveController extends Controller
             $data = Defective::query()->select(
                     'remarks', 
                     'branch_id', 
-                    'category_id', 
-                    'updated_at', 
-                    'id', 
+                    'defectives.category_id', 
+                    'defectives.updated_at', 
+                    'defectives.id', 
                     'serial', 
                     'status', 
                     'items_id')
