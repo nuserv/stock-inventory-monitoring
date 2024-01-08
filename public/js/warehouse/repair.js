@@ -64,9 +64,10 @@ $(document).ready(function() {
     });
 });
 
-$(document).on("click", "#defectiveTable tr td:not(:nth-child(7))", function () {
+$(document).on("click", "#defectiveTable tbody tr td:not(:nth-child(7))", function () {
     var data = table.row(this).data();
-    if (data.item.includes("2NR Printer")) {
+    console.log(data);
+    if (data.items.item.includes("2NR Printer")) {
         itemid = data.itemid;
         dataid = data.id;
         $('#updateModal').modal({backdrop: 'static', keyboard: false});
