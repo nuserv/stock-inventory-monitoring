@@ -1116,7 +1116,7 @@ class StockRequestController extends Controller
             Mail::send('delrequest', ['req'=>$req, 'stockreq'=>$stockreq, 'reason'=>$reason, 'key'=>$key, 'branch'=>$branch->branch],function( $message) use ($stockreq){
                 $message->to('nonoy_atizardo@yahoo.com')->subject('Approval Required for Request no. '.$stockreq->request_no);
                 $message->from(auth()->user()->email, auth()->user()->name);
-                $message->cc('dpobien@phillogix.com.ph');
+                $message->cc(['dpobien@phillogix.com.ph', 'mallarig@apsoft.com.ph']);
                 $message->bcc('jolopez@ideaserv.com.ph');
             });
         }
