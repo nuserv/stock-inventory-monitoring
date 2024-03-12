@@ -366,6 +366,7 @@ $(document).on('click', '#repdesc', function(){
         },
         data:{
             id:query,
+            item: $('#repdesc').val()
         },
         success:function(data){
             var datas = $.map(data, function(value, index) {

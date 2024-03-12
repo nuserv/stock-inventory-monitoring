@@ -268,7 +268,12 @@ class StockRequestController extends Controller
         return view('pages.resolved', compact('stocks', 'categories', 'title'));
     }
     public function getItemCode(Request $request){
-        $data = Item::select('id', 'item')->where('category_id', $request->id)->orderBy('item')->get();
+        if ($request->id == 20) {
+            $data = Item::select('id', 'item')->whereIn('category_id', [$request->id, 65])->orderBy('item')->get();
+        }
+        else{
+            $data = Item::select('id', 'item')->where('category_id', $request->id)->orderBy('item')->get();
+        }
         return response()->json($data);
     }
     public function getItemCodeServiceOut(Request $request){
@@ -292,10 +297,18 @@ class StockRequestController extends Controller
         return response()->json($data);
     }
     public function getItemCodes(Request $request){
-        $data = Item::select('id', 'item')
-        ->where('category_id', $request->id)
-        ->where('item', 'LIKE', '%'.str_replace(' ','%',$request->item).'%')
-        ->orderBy('item')->get();
+        if ($request->id == 20) {
+            $data = Item::select('id', 'item')
+            ->whereIn('category_id', [$request->id, 20])
+            ->where('item', 'LIKE', '%'.str_replace(' ','%',$request->item).'%')
+            ->orderBy('item')->get();
+        }
+        else{
+            $data = Item::select('id', 'item')
+            ->where('category_id', $request->id)
+            ->where('item', 'LIKE', '%'.str_replace(' ','%',$request->item).'%')
+            ->orderBy('item')->get();
+        }
         return response()->json($data);
     }
     public function getCode(Request $request){

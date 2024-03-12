@@ -15,6 +15,9 @@ use App\Buffersend;
 use App\AddItem;
 use App\AddCategory;
 use App\Category;
+use App\RepairCategory;
+use App\RepairItem;
+use App\RepairStock;
 use App\District;
 use App\Pullno;
 use App\PmSched;
@@ -233,6 +236,31 @@ class StockController extends Controller
             return view('pages.stocks', compact('categories', 'service_units', 'customers', 'branches', 'title'));
         }
         return view('pages.stocks', compact('categories', 'service_units', 'customers', 'branches', 'title'));
+    }
+
+    public function repair_stocks()
+    {
+        if (!auth()->user()->hasanyrole( 'Repair')) {
+            return redirect('/');
+        }
+        $title = 'Stocks';
+        $categories = RepairCategory::orderBy('category')->get();
+        // $service_units = RepairStock::where('branch_id', auth()->user()->branch->id)
+        //     ->where('stocks.status', 'service unit')
+        //     ->join('categories', 'stocks.category_id', '=', 'categories.id')
+        //     ->get();
+        // $customers = RepairStock::where('branch_id', auth()->user()->branch->id)
+        //     ->where('stocks.status', 'service unit')
+        //     ->join('customer_branches', 'stocks.customer_branches_id', '=', 'customer_branches.id')
+        //     ->join('categories', 'stocks.category_id', '=', 'categories.id')
+        //     ->join('customers', 'customer_branches.customer_id', '=', 'customers.id')
+        //     ->join('items', 'stocks.items_id', '=', 'items.id')
+        //     ->get();
+        // $branches = Branch::where('area_id', auth()->user()->area->id)
+        //     ->orderBy('branch')
+        //     ->where('id', '!=', auth()->user()->branch->id)
+        //     ->get();
+        return view('pages.repair-stocks', compact('categories'));
     }
     
     public function category(Request $request){
@@ -1072,41 +1100,53 @@ class StockController extends Controller
     }
     public function addItem(Request $request)
     {
-        $add = new Item;
-        $add->category_id = $request->cat;
-        $add->item = ucwords($request->item);
-        $add->UOM = ucfirst($request->uom);
-        $add->n_a = 'no';
-        $add->serialize = 'YES';
-        $add->save();
-        $additem = new AddItem;
-        $additem->category_id = $request->cat;
-        $additem->item = ucwords($request->item);
-        $additem->UOM = ucfirst($request->uom);
-        $additem->n_a = 'no';
-        $additem->serialize = 'YES';
-        $additem->save();
-
-        $stocks = new Buffersend;
-        $stocks->item_id = $additem->id;
-        $stocks->user_id = auth()->user()->id;
-        $stocks->status = 'default';
-        $stocks->qty = '1';
-        $stocks->save();
-        WarehouseInitial::create([
-            'items_id'=>$add->id,
-            'qty'=>10
-        ]);
-        $branches = Branch::all();
-        foreach ($branches as $branchs) {
-            $initial = new Initial;
-            $initial->items_id = $add->id;
-            $initial->branch_id = $branchs->id;
-            $initial->qty = 5;
-            $data = $initial->save();
+        if ($request->user == 'repair') {
+            $add = new RepairItem;
+            $add->category_id = $request->cat;
+            $add->item = ucwords($request->item);
+            $add->UOM = ucfirst($request->uom);
+            $add->n_a = 'no';
+            $add->serialize = 'YES';
+            $add->save();
+            return response()->json($add);
         }
+        else{
+            $add = new Item;
+            $add->category_id = $request->cat;
+            $add->item = ucwords($request->item);
+            $add->UOM = ucfirst($request->uom);
+            $add->n_a = 'no';
+            $add->serialize = 'YES';
+            $add->save();
+            $additem = new AddItem;
+            $additem->category_id = $request->cat;
+            $additem->item = ucwords($request->item);
+            $additem->UOM = ucfirst($request->uom);
+            $additem->n_a = 'no';
+            $additem->serialize = 'YES';
+            $additem->save();
 
-        return response()->json($data);
+            $stocks = new Buffersend;
+            $stocks->item_id = $additem->id;
+            $stocks->user_id = auth()->user()->id;
+            $stocks->status = 'default';
+            $stocks->qty = '1';
+            $stocks->save();
+            WarehouseInitial::create([
+                'items_id'=>$add->id,
+                'qty'=>10
+            ]);
+            $branches = Branch::all();
+            foreach ($branches as $branchs) {
+                $initial = new Initial;
+                $initial->items_id = $add->id;
+                $initial->branch_id = $branchs->id;
+                $initial->qty = 5;
+                $data = $initial->save();
+            }
+
+            return response()->json($data);
+        }
     }
     public function pmservicein(Request $request)
     {
@@ -1239,12 +1279,20 @@ class StockController extends Controller
         return response()->json($data);
     }
     public function addCategory(Request $request){
-        $add = new Category;
-        $add->category = ucwords($request->cat);
-        $data = $add->save();
-        $add = new AddCategory;
-        $add->category = ucwords($request->cat);
-        return response()->json($data);
+        if ($request->user == 'repair') {
+            $add = new RepairCategory;
+            $add->category = ucwords($request->cat);
+            $data = $add->save();
+            return response()->json($data);
+        }
+        else{
+            $add = new Category;
+            $add->category = ucwords($request->cat);
+            $data = $add->save();
+            $add = new AddCategory;
+            $add->category = ucwords($request->cat);
+            return response()->json($data);
+        }
     }
     public function pulldetails(Request $request, $id)
     {   
@@ -1771,6 +1819,61 @@ class StockController extends Controller
             ->make(true);
         }
     }
+
+    public function repairshow(Request $request)
+    {
+        if ($request->data != 0) {
+            $category = RepairCategory::query()->get();
+            /*$stock = Warehouse::select('category_id', 'category', \DB::raw('SUM(CASE WHEN status = \'in\' THEN 1 ELSE 0 END) as quantity'))
+                ->join('categories', 'categories.id', '=', 'category_id')
+                ->groupBy('category')
+                ->get();*/
+            return Datatables::of($category)
+                ->addColumn('category_id', function (RepairCategory $request){
+                    return mb_strtoupper($request->id);
+                })
+                ->addColumn('category', function (RepairCategory $request){
+                    return mb_strtoupper($request->category);
+                })
+                ->addColumn('quantity', function (RepairCategory $request){
+                    $qty = RepairStock::where('category_id', $request->id)
+                            ->join('repair_items', 'repair_items.id', 'repair_stocks.item_id')
+                            ->count();
+                    return $qty;
+                })
+                ->make(true);
+        }else{
+            $items = RepairItem::query()
+                ->select('repair_items.*', 'category')
+                ->where('repair_categories.id', $request->category)
+                ->join('repair_categories', 'category_id', '=', 'repair_categories.id')
+                ->get();
+
+            // $stock = Warehouse::select('warehouses.id as myid', 'repair_items.UOM', 'warehouses.category_id','repair_items_id', \DB::raw('SUM(CASE WHEN status = \'in\' THEN 1 ELSE 0 END) as stockIN'), \DB::raw('SUM(CASE WHEN status = \'sent\' THEN 1 ELSE 0 END) as stockOUT'))
+            //     ->where('warehouses.category_id', $request->category)
+            //     ->join('repair_items', 'items_id', '=', 'repair_items.id')
+            //     ->groupBy('items_id')->get();
+
+            return DataTables::of($items)
+            ->addColumn('items_id', function (RepairItem $request){
+                return mb_strtoupper($request->id);
+            })
+            ->addColumn('category', function (RepairItem $request){
+                $cat = RepairCategory::find($request->category_id);
+                return mb_strtoupper($cat->category);
+            })
+            ->addColumn('description', function (RepairItem $request){
+                return mb_strtoupper($request->item);
+            })
+            ->addColumn('quantity', function (RepairItem $request){
+                $stockIN = RepairStock::query()->where('item_id', $request->id)
+                    ->where('status', 'in')->count();
+                return $stockIN;
+            })
+            ->make(true);
+        }
+    }
+
     public function update(Request $request)
     {
         $update = Stock::where('id', $request->id)->first();
