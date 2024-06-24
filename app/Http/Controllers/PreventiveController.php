@@ -107,6 +107,7 @@ class PreventiveController extends Controller
                 'user_id' => auth()->user()->id,
                 'customer_id' => $customer->id,
                 'schedule' => $date[2].'/'.$date[0].'/'.$date[1],
+                'fsrno' => $request->fsrno,
                 'Status' => "Conversion"
             ]);
             $code = $customer->code*1;
@@ -125,6 +126,7 @@ class PreventiveController extends Controller
                 'user_id' => auth()->user()->id,
                 'customer_id' => $customer->id,
                 'schedule' => $date[2].'/'.$date[0].'/'.$date[1],
+                'fsrno' => $request->fsrno,
                 'Status' => "Newly Opened"
             ]);
             $code = $customer->code*1;
@@ -423,7 +425,7 @@ class PreventiveController extends Controller
                         'code',
                         'customer_branches.customer_branch')
                     ->join('customer_branches', 'customer_branches.id', 'pm_sched.customer_id')
-                    ->where('pm_sched.Status', 'Completed')
+                    ->whereIn('pm_sched.Status', ['Completed', 'Conversion'])
                     ->whereDate('schedule', '>=', Carbon::now()->startOfQuarter())->get();
                 }else{
                     $sched = PmSched::query()->select(
@@ -431,7 +433,7 @@ class PreventiveController extends Controller
                         'code',
                         'customer_branches.customer_branch')
                     ->join('customer_branches', 'customer_branches.id', 'pm_sched.customer_id')
-                    ->where('pm_sched.Status', 'Completed')
+                    ->whereIn('pm_sched.Status', ['Completed', 'Conversion'])
                     ->whereDate('schedule', '>=', Carbon::now()->subquarter(2))->get();
                 }
             }else{
