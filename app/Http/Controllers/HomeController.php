@@ -14,6 +14,7 @@ use App\Mail\EmailForQueuing;
 use App\Exports\CdmExport;
 use Route;
 use Validator;
+use Curl;
 use App\User;
 use App\Cdm;
 use App\Bstock;
@@ -225,6 +226,31 @@ class HomeController extends Controller
     }
     public function index()
     {
+        $parameters = array(
+            'apikey' => '8db5ee227xxxxxxx0a7dd783044137b139dc', //Your API KEY
+            'number' => '09xxx0037xx', // receiver number
+            'message' => 'Thanks for registering. ',
+            'sendername' => ''
+        );
+        $response = Curl::to('https://api.semaphore.co/api/v4/otp')
+        ->withData($parameters)
+        ->asJson()
+        ->get();
+        dd($response);
+
+        // $response = Curl::to('https://api.semaphore.co/api/v4/messages')
+        //     ->withData($parameters)
+        //     ->asJson()
+        //     ->get();
+
+       
+
+        // $response = Curl::to('https://api.semaphore.co/api/v4/account/transactions')
+        //                 ->withData($parameters)
+        //                 ->asJson()
+        //                 ->get();
+
+
         // return false;
         // foreach (Item::all() as $key ) {
         //     if (!StockReq::where('id', $key->id)->first()) {
@@ -414,7 +440,7 @@ class HomeController extends Controller
     }
     public function initial($id)
     {
-        if ($id == 801) {
+        if ($id == 886) {
             $branches = Branch::all();
             foreach ($branches as $branchs) {
                 $initial = new Initial;
@@ -571,10 +597,10 @@ class HomeController extends Controller
     }
     public function activity()
     {   
-        if (auth()->user()->hasAnyRole('Warehouse Administrator', 'Editor',  'Manager', 'Viewer IDSI', 'Viewer', 'Viewer PLSI')) {
+        if (auth()->user()->hasAnyRole('Warehouse Manager','Warehouse Administrator', 'Editor',  'Manager', 'Viewer IDSI', 'Viewer', 'Viewer PLSI')) {
             $act = UserLog::query();
         }
-        if (auth()->user()->hasAnyRole('Head',  'Warehouse Manager')) {
+        if (auth()->user()->hasAnyRole('Head')) {
             $user = User::query()->where('branch_id', auth()->user()->branch->id)
                 ->pluck('id')->toArray();
             $act = Userlog::query()
