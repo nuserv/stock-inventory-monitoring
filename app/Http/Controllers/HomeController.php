@@ -226,17 +226,17 @@ class HomeController extends Controller
     }
     public function index()
     {
-        $parameters = array(
-            'apikey' => '8db5ee227xxxxxxx0a7dd783044137b139dc', //Your API KEY
-            'number' => '09xxx0037xx', // receiver number
-            'message' => 'Thanks for registering. ',
-            'sendername' => ''
-        );
-        $response = Curl::to('https://api.semaphore.co/api/v4/otp')
-        ->withData($parameters)
-        ->asJson()
-        ->get();
-        dd($response);
+        // $parameters = array(
+        //     'apikey' => '8db5ee227xxxxxxx0a7dd783044137b139dc', //Your API KEY
+        //     'number' => '09xxx0037xx', // receiver number
+        //     'message' => 'Thanks for registering. ',
+        //     'sendername' => ''
+        // );
+        // $response = Curl::to('https://api.semaphore.co/api/v4/otp')
+        // ->withData($parameters)
+        // ->asJson()
+        // ->get();
+        // dd($response);
 
         // $response = Curl::to('https://api.semaphore.co/api/v4/messages')
         //     ->withData($parameters)
