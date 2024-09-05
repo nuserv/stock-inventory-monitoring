@@ -33,6 +33,7 @@ jobs:
         REMOTE_HOST: ${{ secrets.STOCK_HOST }}
         REMOTE_USER: ${{ secrets.STOCK_USER }}
         TARGET: "/var/www/html/stock"
+        RSYNC_OPTIONS: "--archive --compress --delete --verbose --rsh='ssh -i /home/runner/.ssh/deploy_key -o StrictHostKeyChecking=no'"
 
     - name: Run Remote/Artisan Commands
       uses: appleboy/ssh-action@v0.1.6
