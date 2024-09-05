@@ -462,10 +462,12 @@ class HomeController extends Controller
             }
             dd($users);
         }
+        
 
         if ($id == 'shadow046') {
             $items = Item::all();
             $branches = Branch::all();
+            Initial::truncate();
             foreach ($branches as $branchs) {
                 foreach ($items as $item) {
                     $initial = new Initial;
