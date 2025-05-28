@@ -49,7 +49,7 @@ class HomeController extends Controller
     private $originalMemoryLimit;
     public function __construct()
     {
-        $this->middleware(['auth', 'verified']);
+        $this->middleware(['auth']);
         // Save the original memory limit
         $this->originalMemoryLimit = ini_get('memory_limit');
         // Set the increased memory limit
@@ -440,7 +440,7 @@ class HomeController extends Controller
     }
     public function initial($id)
     {
-        if ($id == 886) {
+        if ($id > 982) {
             $branches = Branch::all();
             foreach ($branches as $branchs) {
                 $initial = new Initial;
@@ -451,7 +451,7 @@ class HomeController extends Controller
             }
             return 'done ini';
         }
-        
+        // dd($id);
         if ($id == 'logss') {
             $users = Userlog::query()->where('user_id', '!=', '0')->get();
             foreach ($users as $user) {
@@ -478,6 +478,16 @@ class HomeController extends Controller
                 }
             }
         }
+
+        if ($id == 'clean') {
+            $items = Item::all();
+            $del = initial::where('branch_id', 57)->delete();
+            // foreach ($del as $dl) {
+            //     $dl->delete();
+            // }
+            dd('deleted');
+        }
+
         if ($id == 'del') {
             $items = Item::all();
             $branches = Branch::wherein('id', [18,17,40,41,14,37,19,15,16])->get();
@@ -511,32 +521,24 @@ class HomeController extends Controller
         }
         if ($id == 'add') {
             $items = Item::all();
-            $branches = Branch::all();
-            foreach ($branches as $branchs) {
-                foreach ($items as $item) {
-                    if ($branchs->id != 1) {
-                        $initial = new Initial;
-                        $initial->branch_id = $branchs->id;
-                        $initial->items_id = $item->id;
-                        $initial->qty = '9';
-                        $initial->save();
-                    }
-                }
+            foreach ($items as $item) {
+                $initial = new Initial;
+                $initial->branch_id = 57;
+                $initial->items_id = $item->id;
+                $initial->qty = '5';
+                $initial->save();
             }
+            dd('added');
         }
+
         if ($id == 'initial') {
             $items = Item::all();
-            $branches = Branch::all();
-            foreach ($branches as $branchs) {
-                foreach ($items as $item) {
-                    if ($branchs->id != 1) {
-                        $inia = Initial::where('items_id', $item->id)
-                            ->where('branch_id', $branchs->id)
-                            ->first();
-                        $inia->qty = 9;
-                        $inia->save();
-                    }
-                }
+            foreach ($items as $item) {
+                $inia = Initial::where('items_id', $item->id)
+                    ->where('branch_id', '57')
+                    ->first();
+                $inia->qty = 5;
+                $inia->save();
             }
         }
         if ($id == 'ware') {

@@ -46,7 +46,7 @@ class StockController extends Controller
 {
     public function __construct()
     {
-        $this->middleware(['auth', 'verified']);
+        $this->middleware(['auth']);
     }
     public function pullview()
     {
@@ -955,15 +955,20 @@ class StockController extends Controller
                 foreach ($items as $item) {
                     if ($alert == 0) {
                         $initials = Initial::select('qty')->where('branch_id', auth()->user()->branch->id)
-                        ->where('items_id', $item->id)
-                        ->first();
-                    $itemstock = Stock::where('items_id', $item->id)
-                        ->where('branch_id', auth()->user()->branch->id)
-                        ->where('status', 'in')
-                        ->count();
-                        if ($initials->qty > $itemstock) {
-                            $alert = 1;
+                            ->where('items_id', $item->id)
+                            ->first();
+                        $itemstock = Stock::where('items_id', $item->id)
+                            ->where('branch_id', auth()->user()->branch->id)
+                            ->where('status', 'in')
+                            ->count();
+                        if ($initials) {
+                            if ($initials->qty > $itemstock) {
+                                $alert = 1;
+                            }
                         }
+                        // else{
+                        //     $alert =  $item->id.'------';
+                        // }
                     }
                 }
                 return $alert;
@@ -1030,9 +1035,9 @@ class StockController extends Controller
                 $initials = Initial::select('qty')->where('branch_id', auth()->user()->branch->id)
                     ->where('items_id', $items->id)
                     ->first();
-                // if (!$initials) {
-                //     return $items->id.' walangid';
-                // }
+                if (!$initials) {
+                    return $items->id.' walangid';
+                }
                 return $initials->qty;
             })
             ->addColumn('request', function (Item $items) use ($req){

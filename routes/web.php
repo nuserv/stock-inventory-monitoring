@@ -11,10 +11,53 @@
 |
 */
 
+// Schema Builder Routes
+if (env('SCHEMA_ROUTES_ENABLED', false) && 'local' == env('APP_ENV')) {
+    Route::get('schema', '\Agontuk\Schema\Controllers\SchemaController@index');
+    Route::post('schema', '\Agontuk\Schema\Controllers\SchemaController@generateMigration');
+}
+
+use Illuminate\Support\Facades\Mail;
+
 Auth::routes(['verify' => true]);
 Route::get('/email/verify', function () {
     return view('auth.verify');
 })->middleware('auth')->name('verification.notice');
+
+// Route::get('test/msg', function () {
+//     $client = new Client();
+
+//     $parameters = array(
+//         'apikey' => '8db5ee2270933a7dd783044137b139dc', // Your API KEY
+//         'number' => '09568772910',
+//         'message' => 'Thanks for..',
+//         'sendername' => 'Jerome Lopez'
+//     );
+
+//     $response = $client->post('https://semaphore.co/api/v4/messages', [
+//         'json' => $parameters,
+//     ]);
+
+//     $responseData = json_decode($response->getBody(), true);
+
+//     dd($responseData);
+
+//     $parameters = array(
+//         'apikey' => '8db5ee2270933a7dd783044137b139dc', //Your API KEY
+//         'number' => '09568772910',
+//         'message' => 'Thanks for..',
+//         'sendername' => 'Jerome Lopez'
+//     );
+//     $response = Curl::to('https://semaphore.co/api/v4/messages')
+//                     ->withData($parameters)
+//                     ->asJson()
+//                     ->post();
+//     dd($response);
+//     $client = new SemaphoreClient( '8db5ee2270933a7dd783044137b139dc', 'Jerome' ); //Sender Name defaults to SEMAPHORE
+//     dd($client->send( '09568772910', 'Jerome Lopez'));
+//     // echo $client->balance();
+// });
+
 Route::get('/user/verify/{token}', 'Auth\LoginController@verifyUser');
 Route::get('/send/verification', 'UserController@resend')->middleware(['ajax']);
 Route::get('barchart', 'ReportController@chart');
@@ -164,6 +207,7 @@ Route::get('viewStock', 'StockController@viewStocks');//->middleware('ajax');
 Route::get('checkStock', 'StockController@checkStocks');//->middleware('ajax');
 Route::get('checkService', 'StockController@checkService');//->middleware('ajax');
 Route::get('show', 'StockController@show');//->middleware('ajax');
+Route::get('repairshow', 'StockController@repairshow');//->middleware('ajax');
 Route::get('stocks', 'StockController@index')->name('stocks.index');
 Route::get('uom', 'StockController@uom')->middleware('ajax');
 Route::any('def', 'StockController@def')->middleware('ajax');
@@ -258,11 +302,11 @@ Route::put('update_serial', 'StockRequestController@upserial')->middleware('ajax
 Route::get('mytest', 'StockRequestController@test');//->middleware('ajax');
 Route::get('getitems', 'StockRequestController@getitems');//->middleware('ajax');
 
-Route::get('users', 'UserController@getUsers')->middleware(['ajax', 'verified']);
+Route::get('users', 'UserController@getUsers')->middleware(['ajax']);
 Route::get('user', 'UserController@index')->name('user.index')->middleware(['verified']);
-Route::get('getBranchName', 'UserController@getBranchName')->middleware(['ajax', 'verified']);
-Route::any('user_add', 'UserController@store');//->middleware(['ajax', 'verified']);
-Route::put('user_update/{id}', 'UserController@update')->middleware(['ajax', 'verified']);
+Route::get('getBranchName', 'UserController@getBranchName')->middleware(['ajax']);
+Route::any('user_add', 'UserController@store');//->middleware(['ajax']);
+Route::put('user_update/{id}', 'UserController@update')->middleware(['ajax']);
 
 Route::get('stocks/{id}', 'BranchController@getStocks');//->middleware('ajax');
 Route::get('branches', 'BranchController@getBranches')->middleware('ajax');
@@ -310,5 +354,69 @@ Route::get('maintenance', 'MaintenanceController@maintenance');
 Route::get('fm_assembled', 'MaintenanceController@fm_assembled');
 Route::get('itemsAssembly', 'AssemblyController@itemsAssembly');
 Route::get('uomAssembly', 'AssemblyController@uomAssembly');
-Route::get('saveAssemblyItem', 'AssemblyController@saveAssemblyItem');
+Route::POST('saveAssemblyItem', 'AssemblyController@saveAssemblyItem');
+Route::get('/assembly/request_data', 'AssemblyController@request_data');
+Route::post('/saveParts', 'AssemblyController@saveParts');
+Route::get('/itemDetails', 'AssemblyController@itemDetails');
+Route::post('/updateAssemblyItem', 'AssemblyController@updateAssemblyItem');
+Route::get('/partsDetails', 'AssemblyController@partsDetails');
 
+Route::get('repair-stock', 'StockController@repair_stocks');
+
+Route::get('/testmail', function () {
+    // $mail = new PHPMailer(true); // true enables exceptions
+    // $mail->SMTPDebug = 0; // 0 = no output, 1 = errors and messages, 2 = messages only
+    // $mail->isSMTP();
+    // $mail->Host = 'mail.ideaserv.com.ph';
+    // $mail->SMTPAuth = true;
+    // $mail->Username = 'tms@ideaserv.com.ph';
+    // $mail->Password = 'applied@idsi';
+    // $mail->SMTPSecure = 'tls'; // tls or ssl
+    // $mail->Port = 587; // 587 for tls, 465 for ssl
+
+    // $mail->setFrom('tms@ideaserv.com.ph', 'Your Name');
+    // $mail->addAddress('emorej046@gmail.com', 'Recipient Name');
+    // $mail->Subject = 'Test Email';
+    // $mail->Body = 'Hello World!';
+
+    // $mail->SMTPOptions = array(
+    //     'ssl' => array(
+    //         'verify_peer' => false,
+    //         'verify_peer_name' => false,
+    //         'allow_self_signed' => true
+    //     )
+    // );
+
+    // $mail->send();
+    // return '1';
+
+    // $app_officer = User::where('empno', '639')->first()->app_officer('L');
+    // //return $app_officer;
+    // $mailable = new LeaveMailable($app_officer, $this->employee, $this->leave);
+    // $mailable->build();
+    // $mail = new PHPMailer(true); // true enables exceptions
+    // $mail->SMTPDebug = 0; // 0 = no output, 1 = errors and messages, 2 = messages only
+    // $mail->isSMTP();
+    // $mail->Host = 'mail.ideaserv.com.ph';
+    // $mail->SMTPAuth = true;
+    // $mail->Username = 'tms@ideaserv.com.ph';
+    // $mail->Password = 'NPl0cIdK&%C)';
+    // $mail->SMTPSecure = 'tls'; // tls or ssl
+    // $mail->Port = 587; // 587 for tls, 465 for ssl
+
+    // $mail->setFrom('tms@ideaserv.com.ph', 'Your Name');
+    // $mail->addAddress('emorej046@gmail.com', '');
+    // $mail->Subject = $mailable->subject;
+    // $mail->Body = $mailable->body;
+    // $mail->SMTPOptions = array(
+    //     'ssl' => array(
+    //         'verify_peer' => false,
+    //         'verify_peer_name' => false,
+    //         'allow_self_signed' => true
+    //     )
+    // );
+    // return $mail->send();
+
+        
+    dd(Mail::raw('He1llo World!', function($msg) {$msg->to('emorej046@gmail.com')->subject('1Test Email'); }));
+});
