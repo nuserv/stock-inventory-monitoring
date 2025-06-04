@@ -2029,6 +2029,12 @@ class StockRequestController extends Controller
                 $data = "not allowed";
             }
         }else{
+            //check if serial starts with za or ZA and if serial characters are below 7 then return allowed
+            if (strpos(strtolower($request->serial), 'za') === 0 && strlen($request->serial) < 7) {
+                $data = "allowed";
+                return response()->json($data);
+            }
+            
             $stock = Stock::where('serial', $request->serial)->where('status', 'in')->first();
             $def = Defective::where('serial', $request->serial)->wherein('status', ['For return', 'For add stock', 'For receiving', 'For repair', 'Repaired'])->first();
             $meron = 0;
@@ -2081,6 +2087,12 @@ class StockRequestController extends Controller
                 $data = "not allowed";
             }
         }else{
+            //check if serial starts with za or ZA and if serial characters are below 7 then return allowed
+            if (strpos(strtolower($request->serial), 'za') === 0 && strlen($request->serial) < 7) {
+                $data = "allowed";
+                return response()->json($data);
+            }
+            
             $stock = Stock::where('serial', $request->serial)->where('status', 'in')->first();
             $def = Defective::where('serial', $request->serial)->wherein('status', ['For return', 'For add stock', 'For receiving', 'For repair', 'Repaired'])->first();
             $meron = 0;
