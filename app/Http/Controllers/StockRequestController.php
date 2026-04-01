@@ -1723,7 +1723,7 @@ class StockRequestController extends Controller
             //     $message->to('jolopez@ideaserv.com.ph', auth()->user()->name)->subject
             //         ('BR no. '.$no);
             //     //$message->attachData($excel, 'BR No. '.$no.'.xlsx');
-            //     $message->from('noreply@ideaserv.com.ph', 'BSMS');
+            //     $message->from('noreply@phillogix.com.ph', 'BSMS');
             // });
 
             return response()->json($buffer);
@@ -1934,7 +1934,7 @@ class StockRequestController extends Controller
         //     $message->to('jolopez@ideaserv.com.ph', auth()->user()->name)->subject
         //         ('BR no. '.$no);
         //     //$message->attachData($excel, 'BR No. '.$no.'.xlsx');
-        //     $message->from('noreply@ideaserv.com.ph', 'BSMS');
+        //     $message->from('noreply@phillogix.com.ph', 'BSMS');
         // });
 
         return response()->json(true);

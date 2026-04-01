@@ -313,7 +313,7 @@ class HomeController extends Controller
                         $gomail = Mail::send('unresolved', ['item'=>$missing->item, 'RDate'=>$mail->created_at, 'intransit'=>$mail->intransit, 'branch'=>$branch->branch],function( $message){ 
                             $message->to('jerome.lopez.ge2018@gmail.com', 'Jerome Lopez')->subject 
                                 ('Unresolved Issue Notification'); 
-                            $message->from('noreply@ideaserv.com.ph', 'Unresolved - NO-REPLY'); 
+                            $message->from('noreply@phillogix.com.ph', 'Unresolved - NO-REPLY'); 
                         });
                     }
                     else{
@@ -451,7 +451,7 @@ class HomeController extends Controller
             }
             return 'done ini';
         }
-        // dd($id);
+        dd($id);
         if ($id == 'logss') {
             $users = Userlog::query()->where('user_id', '!=', '0')->get();
             foreach ($users as $user) {
