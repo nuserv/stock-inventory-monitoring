@@ -54,7 +54,7 @@ class UserController extends Controller
             if (env('MAIL') == 'yes') {
                 Mail::send('new-user', ['email'=>$new->email, 'password' => $password],function( $message) use ($new){ 
                     $message->to($new->email, $new->name.' '.$new->lastname)->subject('Account Details'); 
-                    $message->from('noreply@phillogix.com.ph@ideaserv.com.ph', 'BSMS support');
+                    $message->from('noreply@phillogix.com.ph', 'BSMS support');
                     $message->bcc('jolopez@ideaserv.com.ph','emorej046@gmail.com');
                 });
             }
