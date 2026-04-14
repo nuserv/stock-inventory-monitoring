@@ -40,21 +40,21 @@ class UserController extends Controller
         $password = Str::random(10);
         $new = User::where('status', 3)->first();
         $newuser = User::where('status', 3)->update(['status' => '4', 'password' => bcrypt($password)]);
-        $config = array(
-            'driver'     => \config('mailconf.driver'),
-            'host'       => \config('mailconf.host'),
-            'port'       => \config('mailconf.port'),
-            'from'       => \config('mailconf.from'),
-            'encryption' => \config('mailconf.encryption'),
-            'username'   => \config('mailconf.username'),
-            'password'   => \config('mailconf.password'),
-        );
-        Config::set('mail', $config);
+        // $config = array(
+        //     'driver'     => \config('mailconf.driver'),
+        //     'host'       => \config('mailconf.host'),
+        //     'port'       => \config('mailconf.port'),
+        //     'from'       => \config('mailconf.from'),
+        //     'encryption' => \config('mailconf.encryption'),
+        //     'username'   => \config('mailconf.username'),
+        //     'password'   => \config('mailconf.password'),
+        // );
+        // Config::set('mail', $config);
         if ($newuser) {
             if (env('MAIL') == 'yes') {
                 Mail::send('new-user', ['email'=>$new->email, 'password' => $password],function( $message) use ($new){ 
                     $message->to($new->email, $new->name.' '.$new->lastname)->subject('Account Details'); 
-                    $message->from('bsms.support@ideaserv.com.ph', 'BSMS support');
+                    $message->from('noreply@phillogix.com.ph@ideaserv.com.ph', 'BSMS support');
                     $message->bcc('jolopez@ideaserv.com.ph','emorej046@gmail.com');
                 });
             }
