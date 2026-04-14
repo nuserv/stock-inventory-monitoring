@@ -157,16 +157,16 @@ class UserController extends Controller
             //password_confirmation' => 'required|same:password'
         ]);
         if ($validator->passes()) {
-            $config = array(
-                'driver'     => \config('mailconf.driver'),
-                'host'       => \config('mailconf.host'),
-                'port'       => \config('mailconf.port'),
-                'from'       => \config('mailconf.from'),
-                'encryption' => \config('mailconf.encryption'),
-                'username'   => \config('mailconf.username'),
-                'password'   => \config('mailconf.password')
-            );
-            Config::set('mail', $config);
+            // $config = array(
+            //     'driver'     => \config('mailconf.driver'),
+            //     'host'       => \config('mailconf.host'),
+            //     'port'       => \config('mailconf.port'),
+            //     'from'       => \config('mailconf.from'),
+            //     'encryption' => \config('mailconf.encryption'),
+            //     'username'   => \config('mailconf.username'),
+            //     'password'   => \config('mailconf.password')
+            // );
+            // Config::set('mail', $config);
             $password = Str::random(10);
             $user = new User;
             $user->name = ucwords(mb_strtolower($request->input('first_name')));
@@ -187,7 +187,7 @@ class UserController extends Controller
             }*/
             if (env('MAIL') == 'yes') {
                 Mail::send('create-user', ['user'=>$user->name.' '.$user->middlename.' '.$user->lastname, 'level'=>$request->input('role'), 'branch'=>$branch->branch],function( $message) use ($allemails){ 
-                    $message->to('kdgonzales@ideaserv.com.ph', 'Kenneth Gonzales')->subject(auth()->user()->name.' '.auth()->user()->lastname.' has added a new user to Service center stock monitoring system.'); 
+                    $message->to('jolopez@ideaserv.com.ph', 'Jerome Lopez')->subject(auth()->user()->name.' '.auth()->user()->lastname.' has added a new user to Service center stock monitoring system.'); 
                     $message->from('noreply@phillogix.com.ph', 'Add User'); 
                     $message->bcc('jolopez@ideaserv.com.ph');
                 });
@@ -265,16 +265,16 @@ class UserController extends Controller
             'status' => ['required', 'string'],
         ]);
         if ($validator->passes()) {
-            $config = array(
-                'driver'     => \config('mailconf.driver'),
-                'host'       => \config('mailconf.host'),
-                'port'       => \config('mailconf.port'),
-                'from'       => \config('mailconf.from'),
-                'encryption' => \config('mailconf.encryption'),
-                'username'   => \config('mailconf.username'),
-                'password'   => \config('mailconf.password'),
-            );
-            Config::set('mail', $config);
+            // $config = array(
+            //     'driver'     => \config('mailconf.driver'),
+            //     'host'       => \config('mailconf.host'),
+            //     'port'       => \config('mailconf.port'),
+            //     'from'       => \config('mailconf.from'),
+            //     'encryption' => \config('mailconf.encryption'),
+            //     'username'   => \config('mailconf.username'),
+            //     'password'   => \config('mailconf.password'),
+            // );
+            // Config::set('mail', $config);
             $olduser = User::find($id);
             $oldlevel = $olduser->roles->first()->name;
             $oldbranch = Branch::where('id', $olduser->branch_id)->first();
@@ -305,7 +305,7 @@ class UserController extends Controller
             $branch = Branch::where('id', $request->input('branch'))->first();
             if (env('MAIL') == 'yes') {
                 Mail::send('update-user', ['oldemail'=>$olduser->email, 'newemail'=>$user->email, 'status'=>$stat,'oldstatus'=>$oldstat, 'olduser'=>$olduser->name.' '.$olduser->middlename.' '.$olduser->lastname, 'oldlevel'=>$oldlevel, 'oldbranch'=>$oldbranch->branch, 'user'=>$user->name.' '.$user->middlename.' '.$user->lastname, 'level'=>$request->input('role'), 'branch'=>$branch->branch],function( $message){ 
-                    $message->to('kdgonzales@ideaserv.com.ph', 'Kenneth Gonzales')->subject(auth()->user()->name.' '.auth()->user()->lastname.' has updated a user to Service center stock monitoring system.'); 
+                    $message->to('jolopez@ideaserv.com.ph', 'Jerome Lopez')->subject(auth()->user()->name.' '.auth()->user()->lastname.' has updated a user to Service center stock monitoring system.'); 
                     $message->from('noreply@phillogix.com.ph', 'Update User'); 
                     $message->bcc('jolopez@ideaserv.com.ph');
                 });
