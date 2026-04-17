@@ -1131,12 +1131,12 @@ class StockController extends Controller
             $additem->serialize = 'YES';
             $additem->save();
 
-            $stocks = new Buffersend;
-            $stocks->item_id = $additem->id;
-            $stocks->user_id = auth()->user()->id;
-            $stocks->status = 'default';
-            $stocks->qty = '1';
-            $stocks->save();
+            // $stocks = new Buffersend;
+            // $stocks->item_id = $additem->id;
+            // $stocks->user_id = auth()->user()->id;
+            // $stocks->status = 'default';
+            // $stocks->qty = '1';
+            // $stocks->save();
             WarehouseInitial::create([
                 'items_id'=>$add->id,
                 'qty'=>10
