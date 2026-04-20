@@ -492,6 +492,7 @@ class StockRequestController extends Controller
         $number = $today.'-'.$random;
         if ($this->barcodeNumberExists($number)) {
             return generateBarcodeNumber();
+            return 'ok';
         }
         return response()->json($number);
     }
@@ -1128,7 +1129,7 @@ class StockRequestController extends Controller
         if (env('MAIL') == 'yes') {
             Mail::send('delrequest', ['req'=>$req, 'stockreq'=>$stockreq, 'reason'=>$reason, 'key'=>$key, 'branch'=>$branch->branch],function( $message) use ($stockreq){
                 $message->to('nonoy_atizardo@yahoo.com')->subject('Approval Required for Request no. '.$stockreq->request_no);
-                $message->from(auth()->user()->email, auth()->user()->name);
+                $message->from('noreply@phillogix.com.ph', auth()->user()->name);
                 $message->cc(['dpobien@phillogix.com.ph', 'mallarig@apsoft.com.ph']);
                 $message->bcc('jolopez@ideaserv.com.ph');
             });
@@ -1507,7 +1508,7 @@ class StockRequestController extends Controller
                 $message->to(auth()->user()->email, auth()->user()->name)->subject
                     ('DR no. '.$no.'('.$branch->branch.')');
                 $message->attachData($excel, 'DR No. '.$no.'.xlsx');
-                $message->from(auth()->user()->email, auth()->user()->name.' '.auth()->user()->lastname);
+                // $message->from(auth()->user()->email, auth()->user()->name.' '.auth()->user()->lastname);
                 $message->bcc($bcc);
                 $message->cc($head->email);
             });
@@ -1723,7 +1724,7 @@ class StockRequestController extends Controller
             //     $message->to('jolopez@ideaserv.com.ph', auth()->user()->name)->subject
             //         ('BR no. '.$no);
             //     //$message->attachData($excel, 'BR No. '.$no.'.xlsx');
-            //     $message->from('noreply@phillogix.com.ph', 'BSMS');
+            //     $message->from('noreply@ideaserv.com.ph', 'BSMS');
             // });
 
             return response()->json($buffer);
@@ -1934,7 +1935,7 @@ class StockRequestController extends Controller
         //     $message->to('jolopez@ideaserv.com.ph', auth()->user()->name)->subject
         //         ('BR no. '.$no);
         //     //$message->attachData($excel, 'BR No. '.$no.'.xlsx');
-        //     $message->from('noreply@phillogix.com.ph', 'BSMS');
+        //     $message->from('noreply@ideaserv.com.ph', 'BSMS');
         // });
 
         return response()->json(true);

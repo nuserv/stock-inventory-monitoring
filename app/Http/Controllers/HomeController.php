@@ -151,17 +151,17 @@ class HomeController extends Controller
         if ($validator->passes()) {
             $user = auth()->user()->name.' '.auth()->user()->lastname;
             $branch = auth()->user()->branch->branch;
-            $email = auth()->user()->email;
-            $config = array(
-                'driver'     => env('MAIL_DRIVER', 'smtp'),
-                'host'       => env('MAIL_HOST', 'smtp.mailgun.org'),
-                'port'       => env('MAIL_PORT', 587),
-                'from'       => array('address' => 'bsms.support@ideaserv.com.ph', 'name' => 'support'),
-                'encryption' => env('MAIL_ENCRYPTION', 'tls'),
-                'username'   => env('BSMS_USERNAME'),
-                'password'   => env('BSMS_PASSWORD'),
-            );
-            Config::set('mail', $config);
+            $email = "noreply@phillogix.com.ph";
+            // $config = array(
+            //     'driver'     => env('MAIL_DRIVER', 'smtp'),
+            //     'host'       => env('MAIL_HOST', 'smtp.mailgun.org'),
+            //     'port'       => env('MAIL_PORT', 587),
+            //     'from'       => array('address' => 'bsms.support@ideaserv.com.ph', 'name' => 'support'),
+            //     'encryption' => env('MAIL_ENCRYPTION', 'tls'),
+            //     'username'   => env('BSMS_USERNAME'),
+            //     'password'   => env('BSMS_PASSWORD'),
+            // );
+            // Config::set('mail', $config);
             
             if (env('MAIL') == 'yes') {
                 $send = Mail::send('report-a-problem', 
@@ -196,22 +196,22 @@ class HomeController extends Controller
 
     public function responder()
     {
-        $config = array(
-            'driver'     => env('MAIL_DRIVER', 'smtp'),
-            'host'       => env('MAIL_HOST', 'smtp.mailgun.org'),
-            'port'       => env('MAIL_PORT', 587),
-            'from'       => array('address' => 'bsms.support@ideaserv.com.ph', 'name' => 'support'),
-            'encryption' => env('MAIL_ENCRYPTION', 'tls'),
-            'username'   => env('BSMS_USERNAME'),
-            'password'   => env('BSMS_PASSWORD'),
-        );
-        Config::set('mail', $config);
+        // $config = array(
+        //     'driver'     => env('MAIL_DRIVER', 'smtp'),
+        //     'host'       => env('MAIL_HOST', 'smtp.mailgun.org'),
+        //     'port'       => env('MAIL_PORT', 587),
+        //     'from'       => array('address' => 'bsms.support@ideaserv.com.ph', 'name' => 'support'),
+        //     'encryption' => env('MAIL_ENCRYPTION', 'tls'),
+        //     'username'   => env('BSMS_USERNAME'),
+        //     'password'   => env('BSMS_PASSWORD'),
+        // );
+        // Config::set('mail', $config);
         $email = auth()->user()->email;
         $name = auth()->user()->name. ' '. auth()->user()->lastname;
         if (env('MAIL') == 'yes') {
             $data = Mail::send('responder', function( $message) use($email, $name){ 
                 $message->to($email, $name)->subject('Report A Problem'); 
-                $message->from('bsms.support@ideaserv.com.ph', 'BSMS Support Team');
+                $message->from('noreply@phillogix.com.ph', 'BSMS Support Team');
             });
         }
         else{
@@ -335,7 +335,7 @@ class HomeController extends Controller
             if (env('MAIL') == 'yes') {
                 Mail::send('responder',['email'=>'email'], function( $message) use($email, $name){ 
                     $message->to($email, $name)->subject('Report A Problem'); 
-                    $message->from('bsms.support@ideaserv.com.ph', 'BSMS Support Team');
+                    $message->from('noreply@phillogix.com.ph', 'BSMS Support Team');
                 });
             }
             $responder->delete();
