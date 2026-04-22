@@ -459,7 +459,7 @@ class StockController extends Controller
 
     public function get_serial(Request $request)
     {
-        $serials = Stock::where('items_id', $request->items_id)->where('status', 'in')->get()->pluck('serial')->toArray();
+        $serials = Stock::where('items_id', $request->items_id)->where('branch_id', auth()->user()->branch->id)->where('status', 'in')->get()->pluck('serial')->toArray();
         return response()->json($serials);
     }
 
