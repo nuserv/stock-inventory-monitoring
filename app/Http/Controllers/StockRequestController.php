@@ -1509,7 +1509,7 @@ class StockRequestController extends Controller
                     ('DR no. '.$no.'('.$branch->branch.')');
                 $message->attachData($excel, 'DR No. '.$no.'.xlsx');
                 // $message->from(auth()->user()->email, auth()->user()->name.' '.auth()->user()->lastname);
-                $message->bcc($bcc);
+                // $message->bcc($bcc);
                 $message->cc($head->email);
             });
         }
