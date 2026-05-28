@@ -862,7 +862,7 @@ class StockRequestController extends Controller
                     strtoupper(optional($request->branch)->branch),
                     strtoupper($request->type),
                     strtoupper($request->status),
-                    $request->ticket_no,
+                    $request->ticket,
                 ]);
             }
 
