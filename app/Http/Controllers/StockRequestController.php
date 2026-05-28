@@ -814,6 +814,63 @@ class StockRequestController extends Controller
         })
         ->make(true);
     }
+
+
+    public function exportRequestsElseCsv()
+    {
+        $stock = StockRequest::whereIn('status', [
+                'PARTIAL SCHEDULED',
+                'PARTIAL IN TRANSIT',
+                'PARTIAL PENDING',
+                'PENDING',
+                'SCHEDULED',
+                'INCOMPLETE',
+                'RESCHEDULED',
+                'UNRESOLVED',
+                'PARTIAL',
+                'IN TRANSIT'
+            ])
+            ->where('stat', 'ACTIVE')
+            ->orderBy('id', 'desc')
+            ->get();
+
+        $filename = 'stock_request_' . date('Ymd_His') . '.csv';
+
+        $headers = [
+            'Content-Type' => 'text/csv',
+            'Content-Disposition' => "attachment; filename=\"$filename\"",
+        ];
+
+        $callback = function () use ($stock) {
+            $file = fopen('php://output', 'w');
+
+            fputcsv($file, [
+                'DATE',
+                'REQUESTED BY',
+                'REQUESTED NO.',
+                'BRANCH NAME',
+                'REQUEST TYPE',
+                'STATUS',
+                'TICKET NO.'
+            ]);
+
+            foreach ($stock as $request) {
+                fputcsv($file, [
+                    \Carbon\Carbon::parse($request->created_at)->isoFormat('lll'),
+                    strtoupper(optional($request->user)->name),
+                    $request->request_no,
+                    strtoupper(optional($request->branch)->branch),
+                    strtoupper($request->type),
+                    strtoupper($request->status),
+                    $request->ticket_no,
+                ]);
+            }
+
+            fclose($file);
+        };
+
+        return response()->stream($callback, 200, $headers);
+    }
     public function getResolved()
     {
         $user = auth()->user()->branch->id;
