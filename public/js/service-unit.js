@@ -5,6 +5,14 @@ var desc = '';
 var status = '';
 var trdata;
 var repdesc, customer_branch_data, item_data, user_data;
+var sUnitResizeTimer;
+
+function adjustSUnitTable()
+{
+    if (sunit) {
+        sunit.columns.adjust().draw(false);
+    }
+}
 
 function fetchCustomerBranch(BranchCode, Column){
     var specificId = BranchCode;
@@ -78,6 +86,7 @@ $(document).ready(function()
         
     sunit = $('table.sUnitTable').DataTable({ 
         "dom": 'Bflrtip',
+        autoWidth: false,
         buttons: [
             { 
                 extend: 'excel',
@@ -118,6 +127,15 @@ $(document).ready(function()
                 }
             },
             // { data: 'description', name:'description'},
+            {
+                data: 'ticket',
+                render: function(data, type, row, meta){
+                    if(type === "sort" || type === 'type'){
+                        return data;
+                    }
+                    return `<div style="white-space: normal; width: 120px;">${data ? data.toUpperCase() : ''}</div>`;
+                }
+            },
             {
                 data: 'item.item',
                 render: function(data, type, row, meta){
@@ -172,6 +190,12 @@ $(document).ready(function()
         ],
         "initComplete": function(settings, json) {
             $('#loading').hide();
+            adjustSUnitTable();
         }
     });
+});
+
+$(window).on('resize', function(){
+    clearTimeout(sUnitResizeTimer);
+    sUnitResizeTimer = setTimeout(adjustSUnitTable, 150);
 });

@@ -39,6 +39,7 @@ use App\Initial;
 use Mail;
 use App\Defective;
 use App\UserLog;
+use GuzzleHttp\Client;
 use DB;
 use Auth;
 
@@ -436,6 +437,9 @@ class StockController extends Controller
                 ->first();
             return ucwords(mb_strtolower($client->customer.' - '.$client->customer_branch));
         })
+        ->addColumn('ticket', function (Billable $request){
+            return mb_strtoupper((string) $request->ticket);
+        })
         ->addColumn('client_name', function (Billable $request){
             $client = CustomerBranch::select('customer_branch', 'customers.customer')
                 ->where('customer_branches.id', $request->customer_branch_id)
@@ -512,6 +516,7 @@ class StockController extends Controller
         if (District::where('user_id', auth()->user()->id)->first()){
             if (auth()->user()->id == 53) {
                 $stock = Stock::select(
+                            'id',
                             'updated_at', 
                             'customer_branches_id', 
                             'items_id', 'serial', 
@@ -556,9 +561,14 @@ class StockController extends Controller
                             }
                         ])// Eager load the related models
                         ->get();
-                return DataTables::of($stock)->make(true);
+                return DataTables::of($stock)
+                    ->addColumn('ticket', function (Stock $request){
+                        return $this->getServiceOutTicket($request->id);
+                    })
+                    ->make(true);
             }
             $stock = Stock::select(
+                        'id',
                         'updated_at', 
                         'customer_branches_id', 
                         'items_id', 'serial', 
@@ -603,10 +613,15 @@ class StockController extends Controller
                         }
                     ])// Eager load the related models // Eager load the related models
                     ->get();
-            return DataTables::of($stock)->make(true);
+            return DataTables::of($stock)
+                ->addColumn('ticket', function (Stock $request){
+                    return $this->getServiceOutTicket($request->id);
+                })
+                ->make(true);
         }
         else if (auth()->user()->hasanyrole('Warehouse Manager', 'Manager', 'Editor', 'Warehouse Administrator')) {
             $stock = Stock::select(
+                        'id',
                         'updated_at', 
                         'customer_branches_id', 
                         'items_id', 'serial', 
@@ -652,7 +667,11 @@ class StockController extends Controller
                         }
                     ])
                     ->get();
-            return DataTables::of($stock)->make(true);
+            return DataTables::of($stock)
+                ->addColumn('ticket', function (Stock $request){
+                    return $this->getServiceOutTicket($request->id);
+                })
+                ->make(true);
         }
     }
 
@@ -699,6 +718,9 @@ class StockController extends Controller
             //     return 'wala--'.$request->customer_branches_id;
             // }
             return ucwords(mb_strtolower($client->customer.' - '.$client->customer_branch));
+        })
+        ->addColumn('ticket', function (Stock $request){
+            return $this->getServiceOutTicket($request->id);
         })
         ->addColumn('client_name', function (Stock $request){
             $client = CustomerBranch::select('customer_branch', 'customers.customer')
@@ -1498,6 +1520,18 @@ class StockController extends Controller
     }
     public function serviceOut(Request $request)
     {
+        if ($request->purpose != "pull out" && !trim((string) $request->ticket)) {
+            return response()->json('Ticket Number is required. Hit Enter to verify.', 422);
+        }
+
+        $ticket = $this->normalizeServiceTicket($request->ticket);
+        if ($request->purpose != "pull out" && !$this->isCompleteServiceTicket($ticket)) {
+            return response()->json('Invalid Ticket Number format.', 422);
+        }
+        if ($request->purpose != "pull out" && !$this->getPowerformTicket($ticket)['valid']) {
+            return response()->json('Ticket Number not found.', 422);
+        }
+
         $item = Item::where('id', $request->item)->first();
         $customer = CustomerBranch::where('id', $request->customer)->first();
         $client = Customer::where('id', $customer->customer_id)->first();
@@ -1565,6 +1599,7 @@ class StockController extends Controller
             $serviceout->stocks_id = $stock->id;
             $serviceout->status = 'pull out';
             $serviceout->customer_branch_id = $request->customer;
+            $serviceout->ticket = $ticket;
             $serviceout->save();
         }
         else if ($request->purpose == "billable") {
@@ -1576,6 +1611,7 @@ class StockController extends Controller
             $serviceout->customer_branch_id = $request->customer;
             $serviceout->status = "For approval";
             $serviceout->stocks_id = $stock->id;
+            $serviceout->ticket = $ticket;
             $serviceout->save();
         }else{
             $log->activity = "SERVICE OUT $item->item(S/N: ".mb_strtoupper($request->serial).") to $customer->customer_branch.";
@@ -1583,7 +1619,9 @@ class StockController extends Controller
             $serviceout->branch_id = auth()->user()->branch->id;
             $serviceout->user_id = auth()->user()->id;
             $serviceout->items_id = $request->item;
+            $serviceout->stocks_id = $stock->id;
             $serviceout->customer_branch_id = $request->customer;
+            $serviceout->ticket = $ticket;
             $serviceout->save();
         }
         $log->user_id = auth()->user()->id;
@@ -1591,6 +1629,110 @@ class StockController extends Controller
         $log->save();
         $data = $stock->save();
         return response()->json($data);
+    }
+
+    private function getServiceOutTicket($stockId)
+    {
+        return ServiceOut::where('stocks_id', $stockId)->latest()->value('ticket') ?: '';
+    }
+
+    public function verifyServiceTicket(Request $request)
+    {
+        $ticket = $this->normalizeServiceTicket($request->ticket);
+
+        if (!$ticket) {
+            return response()->json([
+                'verified' => false,
+                'message' => 'Ticket Number is required. Hit Enter to verify.',
+            ], 422);
+        }
+
+        if (!$this->isCompleteServiceTicket($ticket)) {
+            return response()->json([
+                'verified' => false,
+                'message' => 'Complete the ticket number first.',
+            ], 422);
+        }
+
+        $powerformTicket = $this->getPowerformTicket($ticket);
+
+        if (!$powerformTicket['valid']) {
+            return response()->json([
+                'verified' => false,
+                'message' => 'Ticket Number not found.',
+            ], 404);
+        }
+
+        $ticketData = $powerformTicket['data'];
+
+        return response()->json([
+            'verified' => true,
+            'message' => 'Ticket verified.',
+            'task_number' => isset($ticketData['TaskNumber']) ? $ticketData['TaskNumber'] : $ticket,
+            'branch_code' => isset($ticketData['BranchCode']) ? $ticketData['BranchCode'] : null,
+            'branch_name' => isset($ticketData['BranchName']) ? $ticketData['BranchName'] : null,
+        ]);
+    }
+
+    private function getPowerformTicket($ticket)
+    {
+        if (!$ticket) {
+            return [
+                'valid' => false,
+                'data' => null,
+                'status' => null,
+            ];
+        }
+
+        try {
+            $client = new Client([
+                'timeout' => 8,
+                'http_errors' => false,
+            ]);
+
+            $response = $client->get('https://powerform.ideaserv.online/ticket', [
+                'query' => [
+                    'ticket' => $ticket,
+                    'stock' => 1,
+                ],
+            ]);
+
+            $status = $response->getStatusCode();
+            $data = json_decode((string) $response->getBody(), true);
+
+            return [
+                'valid' => $status >= 200 && $status < 300,
+                'data' => is_array($data) ? $data : null,
+                'status' => $status,
+            ];
+        } catch (\Exception $e) {
+            \Log::warning('Powerform ticket verification failed.', [
+                'ticket' => $ticket,
+                'message' => $e->getMessage(),
+            ]);
+
+            return [
+                'valid' => false,
+                'data' => null,
+                'status' => null,
+            ];
+        }
+    }
+
+    private function normalizeServiceTicket($ticket)
+    {
+        $ticket = preg_replace('/[^A-Z0-9]/', '', mb_strtoupper(trim((string) $ticket)));
+
+        if (preg_match('/^([A-Z]+)(\d{8})(.+)$/', $ticket, $matches)) {
+            return $matches[1].'-'.$matches[2].'-'.$matches[3];
+        }
+
+        return $ticket;
+    }
+
+    private function isCompleteServiceTicket($ticket)
+    {
+        return preg_match('/^[A-Z]{3}-\d{8}-\d{6}$/', $ticket) === 1;
     }
 
     public function pmOut(Request $request)

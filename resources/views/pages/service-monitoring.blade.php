@@ -2,7 +2,7 @@
 
 @section('content')
 <div class="table-responsive">
-    <table class="table-hover table sUnitTable w-100" id="sUnitTable" style="font-size:80%">
+    <table class="table-hover table sUnitTable w-100" id="sUnitTable" style="font-size:80%; width:100%">
         <thead class="thead-dark">
             <tr>
                 <th style="width:150px">
@@ -10,6 +10,9 @@
                 </th>
                 <th>
                     Client & Branch Name
+                </th>
+                <th>
+                    Ticket Number
                 </th>
                 <th>
                     Item Description

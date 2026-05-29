@@ -6,10 +6,20 @@ var status = '';
 var trdata;
 var repdesc;
 let selectedOption;
+var sUnitResizeTimer;
+
+function adjustSUnitTable()
+{
+    if (sunit) {
+        sunit.columns.adjust().draw(false);
+    }
+}
+
 $(document).ready(function()
 {
     sunit = $('table.sUnitTable').DataTable({ 
         "dom": 'flrtip',
+        autoWidth: false,
         "language": {
             "emptyTable": "No data found!",
             "processing": '<i class="fa fa-spinner fa-spin fa-3x fa-fw"></i><span class="sr-only">Searching...</span> '
@@ -34,6 +44,7 @@ $(document).ready(function()
                 "width": "20%"
             },
             { data: 'client', name:'client'},
+            { data: 'ticket', name:'ticket'},
             { data: 'category', name:'category'},
             { data: 'description', name:'description'},
             { data: 'serial', name:'serial'},
@@ -49,8 +60,14 @@ $(document).ready(function()
             { data: 'serviceby', name:'serviceby'}
         ]
     });
+    setTimeout(adjustSUnitTable, 100);
     $('#in_sub_Btn').prop('disabled', true);
     $('#repserial').prop('disabled', true);
+});
+
+$(window).on('resize', function(){
+    clearTimeout(sUnitResizeTimer);
+    sUnitResizeTimer = setTimeout(adjustSUnitTable, 150);
 });
 
 $(document).on('click', '#out_Btn', function(){

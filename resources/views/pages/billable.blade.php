@@ -17,6 +17,9 @@
                     CLIENT NAME
                 </th>
                 <th>
+                    TICKET NUMBER
+                </th>
+                <th>
                     ITEM DESCRIPTION
                 </th>
                 <th>

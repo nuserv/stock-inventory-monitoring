@@ -4,6 +4,228 @@ var outsub = 0;
 var r = 1;
 var y = 1;
 var clientselected = 'yes';
+var ticketVerified = false;
+var ticketChecking = false;
+var verifiedTicket = '';
+var ticketRequestId = 0;
+var ticketAutoFilledBranch = false;
+var serviceTicketPattern = /^[A-Z]{3}-\d{8}-\d{6}$/;
+
+function getTicketValue()
+{
+    return formatTicketValue($('#ticket').val());
+}
+
+function formatTicketValue(value)
+{
+    var raw = $.trim(value).toUpperCase().replace(/[^A-Z0-9]/g, '');
+    var match = raw.match(/^([A-Z]{0,3})(\d{0,8})(\d{0,6}).*$/);
+
+    if (!match) {
+        return raw;
+    }
+
+    var ticket = match[1];
+
+    if (match[2]) {
+        ticket += '-' + match[2];
+    }
+
+    if (match[2].length == 8 && match[3]) {
+        ticket += '-' + match[3];
+    }
+
+    return ticket;
+}
+
+function isCompleteTicket(ticket)
+{
+    return serviceTicketPattern.test(ticket);
+}
+
+function setTicketStatus(status, message)
+{
+    var icon = '<i class="fa fa-minus text-muted"></i>';
+    var textClass = 'text-muted';
+
+    if (status == 'checking') {
+        icon = '<i class="fa fa-spinner fa-spin text-primary"></i>';
+        textClass = 'text-primary';
+    } else if (status == 'valid') {
+        icon = '<i class="fa fa-check text-success"></i>';
+        textClass = 'text-success';
+    } else if (status == 'invalid') {
+        icon = '<i class="fa fa-times text-danger"></i>';
+        textClass = 'text-danger';
+    }
+
+    $('#ticket-status-icon').html(icon);
+    $('#ticket-status-message')
+        .removeClass('text-muted text-primary text-success text-danger')
+        .addClass(textClass)
+        .text(message);
+}
+
+function resetTicketVerification(message)
+{
+    ticketVerified = false;
+    ticketChecking = false;
+    verifiedTicket = '';
+    if (ticketAutoFilledBranch) {
+        $('#client').val('');
+        $('#customer').val('');
+        ticketAutoFilledBranch = false;
+    }
+    setTicketStatus('idle', message || 'Ticket Number is required. Hit Enter to verify.');
+    updateOutSubmitState();
+}
+
+function updateOutSubmitState()
+{
+    var canSubmit = $('#client').val() != '' && $('#customer').val() != '' && r != 1 && outsub <= 0 && ticketVerified && !ticketChecking;
+    $('#out_sub_Btn').prop('disabled', !canSubmit);
+}
+
+function verifyTicket()
+{
+    var ticket = getTicketValue();
+    ticketRequestId++;
+    var currentRequestId = ticketRequestId;
+
+    if (ticket == '') {
+        resetTicketVerification('Ticket Number is required. Hit Enter to verify.');
+        return false;
+    }
+
+    if (!isCompleteTicket(ticket)) {
+        resetTicketVerification('Complete the ticket number first. Hit Enter to verify.');
+        return false;
+    }
+
+    if (ticketVerified && verifiedTicket == ticket) {
+        updateOutSubmitState();
+        return true;
+    }
+
+    ticketVerified = false;
+    ticketChecking = true;
+    verifiedTicket = '';
+    $('#ticket').val(ticket);
+    setTicketStatus('checking', 'Checking ticket...');
+    updateOutSubmitState();
+
+    $.ajax({
+        url: 'verify-service-ticket',
+        type: 'get',
+        dataType: 'json',
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="ctok"]').attr('content')
+        },
+        data: {
+            ticket: ticket
+        },
+        success: function(data) {
+            if (currentRequestId != ticketRequestId) {
+                return;
+            }
+
+            ticketChecking = false;
+            ticketVerified = data.verified === true;
+            verifiedTicket = ticketVerified ? ticket : '';
+            setTicketStatus(ticketVerified ? 'valid' : 'invalid', data.message || (ticketVerified ? 'Ticket verified.' : 'Ticket Number not found.'));
+            if (ticketVerified && ticket.indexOf('PLS') === 0 && data.branch_code) {
+                autofillPlsBranch(data.branch_code);
+            }
+            updateOutSubmitState();
+        },
+        error: function(xhr) {
+            if (currentRequestId != ticketRequestId) {
+                return;
+            }
+
+            ticketChecking = false;
+            ticketVerified = false;
+            verifiedTicket = '';
+            var message = 'Unable to verify ticket.';
+
+            if (xhr.status == 404) {
+                message = 'Ticket Number not found.';
+            } else if (xhr.responseJSON && xhr.responseJSON.message) {
+                message = xhr.responseJSON.message;
+            }
+
+            setTicketStatus('invalid', message);
+            updateOutSubmitState();
+        }
+    });
+
+    return false;
+}
+
+function autofillPlsBranch(branchCode)
+{
+    $.ajax({
+        url: 'hint',
+        type: 'get',
+        dataType: 'json',
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="ctok"]').attr('content')
+        },
+        data: {
+            client: 'plsi',
+            branch: branchCode
+        },
+        success: function(data) {
+            if (data && data.found) {
+                $('#client').val(data.customer);
+                $('#customer').val(data.customer_branch);
+                ticketAutoFilledBranch = true;
+                $('#branchlist').fadeOut();
+                $('#clientlist').fadeOut();
+                setTicketStatus('valid', 'Ticket verified. Branch auto-selected.');
+            } else {
+                $('#customer').val('');
+                ticketAutoFilledBranch = false;
+                setTicketStatus('valid', 'Ticket verified. Branch code was not found locally.');
+            }
+
+            updateOutSubmitState();
+        },
+        error: function() {
+            $('#customer').val('');
+            ticketAutoFilledBranch = false;
+            setTicketStatus('valid', 'Ticket verified. Branch code was not found locally.');
+            updateOutSubmitState();
+        }
+    });
+}
+
+$(document).on('input', '#ticket', function(){
+    var ticket = getTicketValue();
+    $('#ticket').val(ticket);
+
+    if (ticketVerified && verifiedTicket == ticket) {
+        updateOutSubmitState();
+        return;
+    }
+
+    resetTicketVerification(ticket == '' ? 'Ticket Number is required. Hit Enter to verify.' : 'Ticket changed. Hit Enter to verify.');
+
+    if (isCompleteTicket(ticket)) {
+        verifyTicket();
+    }
+});
+
+$(document).on('focusout', '#ticket', function(){
+    verifyTicket();
+});
+
+$(document).on('keydown', '#ticket', function(e){
+    if (e.key === 'Enter' || e.keyCode == 13) {
+        e.preventDefault();
+        verifyTicket();
+    }
+});
 
 $(document).on('change', '.replacementdesc', function(){
     var count = $(this).attr('row_count');
@@ -31,6 +253,14 @@ $(document).on('change', '.replacementdesc', function(){
 $(document).on('click', '.out_sub_Btn', function(){
     if ($('#client').val() == "") {
         alert('Invalid Client Name!');
+        return false;
+    }
+    if ($.trim($('#ticket').val()) == "") {
+        alert('Ticket Number is required. Hit Enter to verify.');
+        return false;
+    }
+    if (!ticketVerified || verifiedTicket != getTicketValue()) {
+        alert('Please verify the Ticket Number first.');
         return false;
     }
     if (r == 1 || outsub > 0) {
@@ -83,7 +313,8 @@ $(document).on('click', '.out_sub_Btn', function(){
                                     purpose: 'service unit',
                                     serial: serial,
                                     customer: customer,
-                                    client: client
+                                    client: client,
+                                    ticket: $.trim($('#ticket').val()).toUpperCase()
                                 },
                                 error: function (data) {
                                     alert(data.responseText);
@@ -410,13 +641,9 @@ $(document).on('click', '.out_add_item', function(){
         r--;
     }
     if (r == 1) {
-        $('#out_sub_Btn').prop('disabled', true);
+        updateOutSubmitState();
     }else{
-        if ($('#client').val() == '') {
-            $('#out_sub_Btn').prop('disabled', true);
-        }else{
-            $('#out_sub_Btn').prop('disabled', false);
-        }
+        updateOutSubmitState();
     }
 });
 
@@ -732,6 +959,7 @@ $(document).on('click', '#pull_clientdiv', function () {
  });
 
 $(document).on('keyup', '#customer', function(){ 
+    ticketAutoFilledBranch = false;
     var withclient = 'no';
     var clientname = "";
     $('#clientlist').fadeOut();  
@@ -770,7 +998,7 @@ $(document).on('keyup', '#customer', function(){
                 console.log(ul);
                 $('#branchlist').fadeIn();  
                 $('#branchlist').html(ul);
-                $('#out_sub_Btn').prop('disabled', true);
+                updateOutSubmitState();
             }
         });
     }
@@ -853,6 +1081,7 @@ $(document).on('click', 'li', function(){
         });
     }
     else if (id == 'licustomer') {
+        ticketAutoFilledBranch = false;
         $('#customer').val($(this).text());  
         $('#branchlist').fadeOut();  
         $.ajax({
@@ -868,14 +1097,10 @@ $(document).on('click', 'li', function(){
             success:function(data){
                 if (data) {
                     $('#client').val(data);  
-                    if (r == 1 || outsub > 0) {
-                        $('#out_sub_Btn').prop('disabled', true);
-                    }else{
-                        $('#out_sub_Btn').prop('disabled', false);
-                    }
+                    updateOutSubmitState();
                 }else{
                     $('#client').val('');  
-                    $('#out_sub_Btn').prop('disabled', true);
+                    updateOutSubmitState();
                 }
             }
         });
@@ -894,7 +1119,7 @@ $(document).on('keyup', '#client', function(){
     var query = $(this).val();
     clientselected = 'no';
     $('#branchlist').fadeOut();  
-    $('#out_sub_Btn').prop('disabled', true);
+    updateOutSubmitState();
     var ul = '<ul class="dropdown-menu" style="display:block; position:relative;overflow: scroll;height: 13em;z-index: 200;">';
     if(query != ''){
         $.ajax({

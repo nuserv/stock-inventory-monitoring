@@ -88,6 +88,32 @@ class CustomerController extends Controller
     }
     public function hint(Request $request)
     {
+        if ($request->client == 'plsi') {
+            $branchCode = (int) $request->branch;
+            $data = CustomerBranch::query()
+                ->select('customer_branches.customer_branch', 'customers.customer')
+                ->join('customers', 'customers.id', 'customer_branches.customer_id')
+                ->where('customer_branches.customer_id', '1')
+                ->where(function ($query) use ($request, $branchCode) {
+                    $query->where('customer_branches.code', $request->branch)
+                        ->orWhere(DB::raw('(customer_branches.code*1)'), $branchCode);
+                })
+                ->where('customer_branches.status', 1)
+                ->first();
+
+            if (!$data) {
+                return response()->json([
+                    'found' => false,
+                    'message' => 'Client Branch not found for ticket branch code.',
+                ], 404);
+            }
+
+            return response()->json([
+                'found' => true,
+                'customer' => $data->customer,
+                'customer_branch' => $data->customer_branch,
+            ]);
+        }
         if ($request->client == 'yes') {
             $data = CustomerBranch::query()->select('customer')->where('customer_branch', $request->branch)
                 ->join('customers', 'customers.id', 'customer_id')

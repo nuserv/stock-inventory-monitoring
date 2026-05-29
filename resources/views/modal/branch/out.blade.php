@@ -31,6 +31,30 @@
                             </div>
                         </div>
                     </div>
+                    <div class="col-md-6 form-group row">
+                        <label class="col-md-6 col-form-label text-md-right">Client Branch Name:</label>
+                        <div class="col-md-6">
+                            <input type="text" style="color: black" class="form-control form-control-sm " id="customer" placeholder="client branch name" autocomplete="off">
+                            <div id="branchlist" style="position:absolute;z-index: 10000;">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row no-margin">
+                    <div class="col-md-6 form-group row">
+                        <label class="col-md-5 col-form-label text-md-right">Ticket Number:</label>
+                        <div class="col-md-7">
+                            <div class="input-group input-group-sm">
+                                <input type="text" style="color: black" class="form-control form-control-sm text-uppercase" id="ticket" placeholder="ticket number" autocomplete="off">
+                                <div class="input-group-append">
+                                    <span class="input-group-text" id="ticket-status-icon" style="min-width: 38px; justify-content: center;">
+                                        <i class="fa fa-minus text-muted"></i>
+                                    </span>
+                                </div>
+                            </div>
+                            <small id="ticket-status-message" class="form-text text-muted">Ticket Number is required. Hit Enter to verify.</small>
+                        </div>
+                    </div>
                     <!--div class="col-md-6 form-group row">
                         <label class="col-md-6 col-form-label text-md-right">Client Branch Name:</label>
                         <div class="col-md-6">
@@ -40,14 +64,14 @@
                             <input type="text" id="customer-id" value="" hidden>
                         </div>
                     </div-->
-                    <div class="col-md-6 form-group row">
+                    <!-- <div class="col-md-6 form-group row">
                         <label class="col-md-6 col-form-label text-md-right">Client Branch Name:</label>
                         <div class="col-md-6">
                             <input type="text" style="color: black" class="form-control form-control-sm " id="customer" placeholder="client branch name" autocomplete="off">
                             <div id="branchlist" style="position:absolute;z-index: 10000;">
                             </div>
                         </div>
-                    </div>
+                    </div> -->
                 </div>
             </div>
             <div class="modal-header" style="z-index: 100;">
