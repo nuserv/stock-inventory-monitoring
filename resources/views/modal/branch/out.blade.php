@@ -52,7 +52,7 @@
                                     </span>
                                 </div>
                             </div>
-                            <small id="ticket-status-message" class="form-text text-muted">Ticket Number is required. Hit Enter to verify.</small>
+                            <small id="ticket-status-message" class="form-text text-muted"></small>
                         </div>
                     </div>
                     <!--div class="col-md-6 form-group row">

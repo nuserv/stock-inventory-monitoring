@@ -45,6 +45,14 @@ use Auth;
 
 class StockController extends Controller
 {
+    const TICKET_MESSAGES = [
+        'required' => 'Enter a ticket number to verify.',
+        'invalidFormat' => 'Invalid Ticket Number format.',
+        'incomplete' => 'Enter the complete ticket number to verify.',
+        'notFound' => 'Ticket not found.',
+        'verified' => 'Ticket verified.',
+    ];
+
     public function __construct()
     {
         $this->middleware(['auth']);
@@ -1521,15 +1529,15 @@ class StockController extends Controller
     public function serviceOut(Request $request)
     {
         if ($request->purpose != "pull out" && !trim((string) $request->ticket)) {
-            return response()->json('Ticket Number is required. Hit Enter to verify.', 422);
+            return response()->json(self::TICKET_MESSAGES['required'], 422);
         }
 
         $ticket = $this->normalizeServiceTicket($request->ticket);
         if ($request->purpose != "pull out" && !$this->isCompleteServiceTicket($ticket)) {
-            return response()->json('Invalid Ticket Number format.', 422);
+            return response()->json(self::TICKET_MESSAGES['invalidFormat'], 422);
         }
         if ($request->purpose != "pull out" && !$this->getPowerformTicket($ticket)['valid']) {
-            return response()->json('Ticket Number not found.', 422);
+            return response()->json(self::TICKET_MESSAGES['notFound'], 422);
         }
 
         $item = Item::where('id', $request->item)->first();
@@ -1643,14 +1651,14 @@ class StockController extends Controller
         if (!$ticket) {
             return response()->json([
                 'verified' => false,
-                'message' => 'Ticket Number is required. Hit Enter to verify.',
+                'message' => self::TICKET_MESSAGES['required'],
             ], 422);
         }
 
         if (!$this->isCompleteServiceTicket($ticket)) {
             return response()->json([
                 'verified' => false,
-                'message' => 'Complete the ticket number first.',
+                'message' => self::TICKET_MESSAGES['incomplete'],
             ], 422);
         }
 
@@ -1659,7 +1667,7 @@ class StockController extends Controller
         if (!$powerformTicket['valid']) {
             return response()->json([
                 'verified' => false,
-                'message' => 'Ticket Number not found.',
+                'message' => self::TICKET_MESSAGES['notFound'],
             ], 404);
         }
 
@@ -1667,7 +1675,7 @@ class StockController extends Controller
 
         return response()->json([
             'verified' => true,
-            'message' => 'Ticket verified.',
+            'message' => self::TICKET_MESSAGES['verified'],
             'task_number' => isset($ticketData['TaskNumber']) ? $ticketData['TaskNumber'] : $ticket,
             'branch_code' => isset($ticketData['BranchCode']) ? $ticketData['BranchCode'] : null,
             'branch_name' => isset($ticketData['BranchName']) ? $ticketData['BranchName'] : null,

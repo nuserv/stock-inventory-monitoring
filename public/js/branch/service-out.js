@@ -10,6 +10,7 @@ var verifiedTicket = '';
 var ticketRequestId = 0;
 var ticketAutoFilledBranch = false;
 var serviceTicketPattern = /^[A-Z]{3}-\d{8}-\d{6}$/;
+var TICKET_MESSAGES = window.SERVICE_TICKET_MESSAGES;
 
 function getTicketValue()
 {
@@ -41,6 +42,12 @@ function formatTicketValue(value)
 function isCompleteTicket(ticket)
 {
     return serviceTicketPattern.test(ticket);
+}
+
+function hasLetterAfterTicketPrefix(value)
+{
+    var raw = $.trim(value).toUpperCase().replace(/[^A-Z0-9]/g, '');
+    return raw.length > 3 && /[A-Z]/.test(raw.substring(3));
 }
 
 function setTicketStatus(status, message)
@@ -76,7 +83,7 @@ function resetTicketVerification(message)
         $('#customer').val('');
         ticketAutoFilledBranch = false;
     }
-    setTicketStatus('idle', message || 'Ticket Number is required. Hit Enter to verify.');
+    setTicketStatus('idle', message || TICKET_MESSAGES.required);
     updateOutSubmitState();
 }
 
@@ -93,12 +100,12 @@ function verifyTicket()
     var currentRequestId = ticketRequestId;
 
     if (ticket == '') {
-        resetTicketVerification('Ticket Number is required. Hit Enter to verify.');
+        resetTicketVerification(TICKET_MESSAGES.required);
         return false;
     }
 
     if (!isCompleteTicket(ticket)) {
-        resetTicketVerification('Complete the ticket number first. Hit Enter to verify.');
+        resetTicketVerification(TICKET_MESSAGES.incomplete);
         return false;
     }
 
@@ -111,7 +118,7 @@ function verifyTicket()
     ticketChecking = true;
     verifiedTicket = '';
     $('#ticket').val(ticket);
-    setTicketStatus('checking', 'Checking ticket...');
+    setTicketStatus('checking', TICKET_MESSAGES.checking);
     updateOutSubmitState();
 
     $.ajax({
@@ -132,7 +139,7 @@ function verifyTicket()
             ticketChecking = false;
             ticketVerified = data.verified === true;
             verifiedTicket = ticketVerified ? ticket : '';
-            setTicketStatus(ticketVerified ? 'valid' : 'invalid', data.message || (ticketVerified ? 'Ticket verified.' : 'Ticket Number not found.'));
+            setTicketStatus(ticketVerified ? 'valid' : 'invalid', data.message || (ticketVerified ? TICKET_MESSAGES.verified : TICKET_MESSAGES.notFound));
             if (ticketVerified && ticket.indexOf('PLS') === 0 && data.branch_code) {
                 autofillPlsBranch(data.branch_code);
             }
@@ -146,10 +153,10 @@ function verifyTicket()
             ticketChecking = false;
             ticketVerified = false;
             verifiedTicket = '';
-            var message = 'Unable to verify ticket.';
+            var message = TICKET_MESSAGES.verifyFailed;
 
             if (xhr.status == 404) {
-                message = 'Ticket Number not found.';
+                message = TICKET_MESSAGES.notFound;
             } else if (xhr.responseJSON && xhr.responseJSON.message) {
                 message = xhr.responseJSON.message;
             }
@@ -182,11 +189,11 @@ function autofillPlsBranch(branchCode)
                 ticketAutoFilledBranch = true;
                 $('#branchlist').fadeOut();
                 $('#clientlist').fadeOut();
-                setTicketStatus('valid', 'Ticket verified. Branch auto-selected.');
+                setTicketStatus('valid', TICKET_MESSAGES.branchAutoSelected);
             } else {
                 $('#customer').val('');
                 ticketAutoFilledBranch = false;
-                setTicketStatus('valid', 'Ticket verified. Branch code was not found locally.');
+                setTicketStatus('valid', TICKET_MESSAGES.branchNotFound);
             }
 
             updateOutSubmitState();
@@ -194,13 +201,14 @@ function autofillPlsBranch(branchCode)
         error: function() {
             $('#customer').val('');
             ticketAutoFilledBranch = false;
-            setTicketStatus('valid', 'Ticket verified. Branch code was not found locally.');
+            setTicketStatus('valid', TICKET_MESSAGES.branchNotFound);
             updateOutSubmitState();
         }
     });
 }
 
 $(document).on('input', '#ticket', function(){
+    var rawTicket = $('#ticket').val();
     var ticket = getTicketValue();
     $('#ticket').val(ticket);
 
@@ -209,7 +217,13 @@ $(document).on('input', '#ticket', function(){
         return;
     }
 
-    resetTicketVerification(ticket == '' ? 'Ticket Number is required. Hit Enter to verify.' : 'Ticket changed. Hit Enter to verify.');
+    if (hasLetterAfterTicketPrefix(rawTicket) && !isCompleteTicket(ticket)) {
+        resetTicketVerification(TICKET_MESSAGES.numbersOnlyAfterPrefix);
+    } else if (rawTicket.indexOf('-') !== -1 && !isCompleteTicket(ticket)) {
+        resetTicketVerification(TICKET_MESSAGES.noDashNeeded);
+    } else {
+        resetTicketVerification(ticket == '' ? TICKET_MESSAGES.required : TICKET_MESSAGES.changed);
+    }
 
     if (isCompleteTicket(ticket)) {
         verifyTicket();
@@ -224,7 +238,15 @@ $(document).on('keydown', '#ticket', function(e){
     if (e.key === 'Enter' || e.keyCode == 13) {
         e.preventDefault();
         verifyTicket();
+    } else if ((e.key === '-' || e.keyCode == 189) && !isCompleteTicket(getTicketValue())) {
+        setTicketStatus('idle', TICKET_MESSAGES.noDashNeeded);
+    } else if (/^[a-zA-Z]$/.test(e.key || '') && getTicketValue().replace(/-/g, '').length >= 3 && !isCompleteTicket(getTicketValue())) {
+        setTicketStatus('idle', TICKET_MESSAGES.numbersOnlyAfterPrefix);
     }
+});
+
+$(function(){
+    setTicketStatus('idle', TICKET_MESSAGES.required);
 });
 
 $(document).on('change', '.replacementdesc', function(){
@@ -256,11 +278,11 @@ $(document).on('click', '.out_sub_Btn', function(){
         return false;
     }
     if ($.trim($('#ticket').val()) == "") {
-        alert('Ticket Number is required. Hit Enter to verify.');
+        alert(TICKET_MESSAGES.required);
         return false;
     }
     if (!ticketVerified || verifiedTicket != getTicketValue()) {
-        alert('Please verify the Ticket Number first.');
+        alert(TICKET_MESSAGES.verifyFirst);
         return false;
     }
     if (r == 1 || outsub > 0) {

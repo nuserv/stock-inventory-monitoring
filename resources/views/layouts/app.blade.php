@@ -22,6 +22,7 @@
                 @endif
             @endif
             <meta name="ctok" content="{{ csrf_token() }}">
+            <meta name="csrf-token" content="{{ csrf_token() }}">
         @endif
         @endauth
         @auth
@@ -380,6 +381,7 @@
             @endif
         @endif
         @if(Request::is('billable'))
+            <script src="{{asset('min/?f=js/branch/service-ticket-messages.js')}}&version={{ \Illuminate\Support\Str::random(30) }}"></script>
             <script src="{{asset('min/?f=js/branch/billable.js')}}&version={{ \Illuminate\Support\Str::random(30) }}"></script>
         @endif
         @if(Request::is('request/*'))
@@ -478,6 +480,7 @@
 
         @if(Request::is('service-unit'))
             <script src="{{asset('min/?f=js/branch/service-unit.js')}}&version={{ \Illuminate\Support\Str::random(30) }}"></script>
+            <script src="{{asset('min/?f=js/branch/service-ticket-messages.js')}}&version={{ \Illuminate\Support\Str::random(30) }}"></script>
             <script src="{{asset('min/?f=js/branch/service-out.js')}}&version={{ \Illuminate\Support\Str::random(30) }}"></script>
         @endif
 
