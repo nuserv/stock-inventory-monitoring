@@ -13,6 +13,10 @@ var ticketRequestId = 0;
 var ticketAutoFilledBranch = false;
 var serviceTicketPattern = /^[A-Z]{3}-\d{8}-\d{6}$/;
 var TICKET_MESSAGES = window.SERVICE_TICKET_MESSAGES;
+var ticketClientMap = {
+    PLS: 'plsi',
+    MCD: 'mcd'
+};
 
 function getTicketValue()
 {
@@ -142,8 +146,9 @@ function verifyTicket()
             ticketVerified = data.verified === true;
             verifiedTicket = ticketVerified ? ticket : '';
             setTicketStatus(ticketVerified ? 'valid' : 'invalid', data.message || (ticketVerified ? TICKET_MESSAGES.verified : TICKET_MESSAGES.notFound));
-            if (ticketVerified && ticket.indexOf('PLS') === 0 && data.branch_code) {
-                autofillPlsBranch(data.branch_code);
+            var ticketPrefix = ticket.substring(0, 3);
+            if (ticketVerified && ticketClientMap[ticketPrefix] && data.branch_code) {
+                autofillTicketBranch(ticketClientMap[ticketPrefix], data.branch_code);
             }
             updateOutSubmitState();
         },
@@ -171,7 +176,7 @@ function verifyTicket()
     return false;
 }
 
-function autofillPlsBranch(branchCode)
+function autofillTicketBranch(ticketClient, branchCode)
 {
     $.ajax({
         url: 'hint',
@@ -181,7 +186,7 @@ function autofillPlsBranch(branchCode)
             'X-CSRF-TOKEN': $('meta[name="ctok"]').attr('content')
         },
         data: {
-            client: 'plsi',
+            client: ticketClient,
             branch: branchCode
         },
         success: function(data) {

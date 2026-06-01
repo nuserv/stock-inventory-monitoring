@@ -88,12 +88,17 @@ class CustomerController extends Controller
     }
     public function hint(Request $request)
     {
-        if ($request->client == 'plsi') {
+        $ticketClientIds = [
+            'plsi' => 1,
+            'mcd' => 192,
+        ];
+
+        if (array_key_exists($request->client, $ticketClientIds)) {
             $branchCode = (int) $request->branch;
             $data = CustomerBranch::query()
                 ->select('customer_branches.customer_branch', 'customers.customer')
                 ->join('customers', 'customers.id', 'customer_branches.customer_id')
-                ->where('customer_branches.customer_id', '1')
+                ->where('customer_branches.customer_id', $ticketClientIds[$request->client])
                 ->where(function ($query) use ($request, $branchCode) {
                     $query->where('customer_branches.code', $request->branch)
                         ->orWhere(DB::raw('(customer_branches.code*1)'), $branchCode);
