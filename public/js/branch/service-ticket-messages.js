@@ -8,6 +8,7 @@ window.SERVICE_TICKET_MESSAGES = {
     verifyFailed: 'Unable to verify ticket. Please try again.',
     branchAutoSelected: 'Ticket verified. Please review the selected branch.',
     branchNotFound: 'Ticket verified. Please select the client branch.',
+    notRequiredForPm: 'Ticket not required for preventive maintenance.',
     noDashNeeded: 'Dashes are added automatically. Continue typing the ticket number.',
     numbersOnlyAfterPrefix: 'Use numbers after the 3-letter ticket prefix.',
     verifyFirst: 'Verify the ticket number before submitting.'
