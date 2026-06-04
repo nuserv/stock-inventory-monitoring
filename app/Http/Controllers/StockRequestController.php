@@ -716,9 +716,16 @@ class StockRequestController extends Controller
     {
         $query = $this->visibleStockRequestsQuery();
         $statuses = ['PENDING', 'SCHEDULED', 'IN TRANSIT', 'PARTIAL IN TRANSIT', 'PARTIAL PENDING', 'UNRESOLVED'];
-        $summary = [];
+        $summary = [
+            'PENDING_SERVICE' => (clone $query)->where('status', 'PENDING')->where('type', 'Service')->count(),
+            'PENDING_STOCK' => (clone $query)->where('status', 'PENDING')->where('type', 'Stock')->count(),
+        ];
 
         foreach ($statuses as $status) {
+            if ($status == 'PENDING') {
+                continue;
+            }
+
             $summary[$status] = (clone $query)->where('status', $status)->count();
         }
 

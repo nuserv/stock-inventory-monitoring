@@ -100,14 +100,15 @@
 
     <div class="stock-request-summary" id="stockRequestSummary" data-summary-url="{{ url('request-summary') }}">
         @foreach([
-            ['status' => 'PENDING', 'label' => 'PENDING', 'image' => 'Pending-Icon.png'],
+            ['key' => 'PENDING_SERVICE', 'status' => 'PENDING', 'type' => 'SERVICE', 'label' => 'PENDING SERVICE', 'image' => 'Pending-Service.png'],
+            ['key' => 'PENDING_STOCK', 'status' => 'PENDING', 'type' => 'STOCK', 'label' => 'PENDING STOCK', 'image' => 'Pending-Stock.png'],
             ['status' => 'SCHEDULED', 'label' => 'SCHEDULED', 'image' => 'Scheduled.png'],
             ['status' => 'IN TRANSIT', 'label' => 'IN-TRANSIT', 'image' => 'In-Transit.png'],
             ['status' => 'PARTIAL IN TRANSIT', 'label' => 'PARTIAL IN-TRANSIT', 'image' => 'Partial-In-Transit.png'],
             ['status' => 'PARTIAL PENDING', 'label' => 'PARTIAL PENDING', 'image' => 'Partial-Delivery.png'],
             ['status' => 'UNRESOLVED', 'label' => 'UNRESOLVED', 'image' => 'Unresolved.png'],
         ] as $summary)
-            <div class="stock-request-summary__item" data-status="{{ $summary['status'] }}" role="button" tabindex="0" title="Filter {{ $summary['label'] }}">
+            <div class="stock-request-summary__item" data-key="{{ $summary['key'] ?? $summary['status'] }}" data-status="{{ $summary['status'] }}" data-type="{{ $summary['type'] ?? '' }}" role="button" tabindex="0" title="Filter {{ $summary['label'] }}">
                 <img class="stock-request-summary__icon" src="{{ asset('images/'.$summary['image']) }}" alt="{{ $summary['label'] }}">
                 <span class="stock-request-summary__count">0</span>
                 <span class="stock-request-summary__label">{{ $summary['label'] }}</span>

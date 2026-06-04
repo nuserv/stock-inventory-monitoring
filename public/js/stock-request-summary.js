@@ -1,5 +1,5 @@
 (function ($) {
-    var activeStatus = '';
+    var activeFilterKey = '';
     var loadingTimer = null;
 
     function escapeRegex(value) {
@@ -14,18 +14,18 @@
         return $('table.requestTable').DataTable();
     }
 
-    function getStatusColumnIndex(dataTable) {
-        var statusIndex = null;
+    function getColumnIndex(dataTable, columnName) {
+        var columnIndex = null;
 
         dataTable.columns().every(function (index) {
             var headerText = $(this.header()).text().trim().toUpperCase();
 
-            if (headerText == 'STATUS') {
-                statusIndex = index;
+            if (headerText == columnName) {
+                columnIndex = index;
             }
         });
 
-        return statusIndex;
+        return columnIndex;
     }
 
     function showPageLoading() {
@@ -42,35 +42,43 @@
         }, 300);
     }
 
-    function applyStatusFilter(status, $item) {
+    function applyStatusFilter(status, requestType, filterKey) {
         var dataTable = getRequestTable();
         var statusColumnIndex;
+        var typeColumnIndex;
 
         if (!dataTable) {
             return;
         }
 
         showPageLoading();
-        statusColumnIndex = getStatusColumnIndex(dataTable);
+        statusColumnIndex = getColumnIndex(dataTable, 'STATUS');
+        typeColumnIndex = getColumnIndex(dataTable, 'REQUEST TYPE');
 
         if (statusColumnIndex === null) {
             clearPageLoading();
             return;
         }
 
-        if (activeStatus == status) {
-            activeStatus = '';
+        if (activeFilterKey == filterKey) {
+            activeFilterKey = '';
             dataTable.column(statusColumnIndex).search('', true, false);
+            if (typeColumnIndex !== null) {
+                dataTable.column(typeColumnIndex).search('', true, false);
+            }
         } else {
-            activeStatus = status;
+            activeFilterKey = filterKey;
             dataTable.column(statusColumnIndex).search('^' + escapeRegex(status) + '$', true, false);
+            if (typeColumnIndex !== null) {
+                dataTable.column(typeColumnIndex).search(requestType ? '^' + escapeRegex(requestType) + '$' : '', true, false);
+            }
         }
 
         $('#stockRequestSummary .stock-request-summary__item').removeClass('is-active');
 
-        if (activeStatus) {
+        if (activeFilterKey) {
             $('#stockRequestSummary .stock-request-summary__item').filter(function () {
-                return $(this).data('status') == activeStatus;
+                return $(this).data('key') == activeFilterKey;
             }).addClass('is-active');
         }
 
@@ -92,8 +100,8 @@
             success: function (data) {
                 $summary.find('.stock-request-summary__item').each(function () {
                     var $item = $(this);
-                    var status = $item.data('status');
-                    var count = data && data[status] ? data[status] : 0;
+                    var key = $item.data('key');
+                    var count = data && data[key] ? data[key] : 0;
 
                     $item.find('.stock-request-summary__count').text(count);
                 });
@@ -110,13 +118,13 @@
         showPageLoading();
 
         $('#stockRequestSummary').on('click', '.stock-request-summary__item', function () {
-            applyStatusFilter($(this).data('status'), $(this));
+            applyStatusFilter($(this).data('status'), $(this).data('type'), $(this).data('key'));
         });
 
         $('#stockRequestSummary').on('keydown', '.stock-request-summary__item', function (event) {
             if (event.key == 'Enter' || event.key == ' ') {
                 event.preventDefault();
-                applyStatusFilter($(this).data('status'), $(this));
+                applyStatusFilter($(this).data('status'), $(this).data('type'), $(this).data('key'));
             }
         });
 
