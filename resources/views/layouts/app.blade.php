@@ -413,6 +413,7 @@
                 <script src="{{asset('min/?f=js/branch/request.js')}}&version={{ \Illuminate\Support\Str::random(30) }}"></script>
                 <script src="{{asset('min/?f=js/branch/request2.js')}}&version={{ \Illuminate\Support\Str::random(30) }}"></script>
             @endif
+            <script src="{{asset('min/?f=js/stock-request-summary.js')}}&version={{ \Illuminate\Support\Str::random(30) }}"></script>
         @endif
         @if(Request::is('resolved'))
             <script src="{{asset('min/?f=js/resolved.js')}}&version={{ \Illuminate\Support\Str::random(30) }}"></script>

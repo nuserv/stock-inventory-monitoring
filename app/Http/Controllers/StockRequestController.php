@@ -669,6 +669,62 @@ class StockRequestController extends Controller
                 ->first();
         return response()->json($stock);
     }
+
+    private function visibleStockRequestsQuery()
+    {
+        $user = auth()->user()->branch->id;
+        $activeStatuses = ['PARTIAL SCHEDULED', 'PARTIAL IN TRANSIT', 'PARTIAL PENDING', 'PENDING', 'SCHEDULED', 'INCOMPLETE', 'RESCHEDULED', 'PARTIAL', 'IN TRANSIT'];
+        $activeStatusesWithUnresolved = array_merge($activeStatuses, ['UNRESOLVED']);
+
+        if (auth()->user()->branch->branch != 'Warehouse' && auth()->user()->branch->branch != 'Main-Office') {
+            $query = StockRequest::whereIn('status', $activeStatuses)
+                ->where('stat', 'ACTIVE');
+
+            if (auth()->user()->id != 153) {
+                $query->where('branch_id', $user);
+            }
+
+            return $query;
+        }
+
+        if (auth()->user()->hasRole('Editor', 'Manager')) {
+            return StockRequest::whereIn('status', $activeStatusesWithUnresolved)
+                ->where('stat', 'ACTIVE');
+        }
+
+        if (auth()->user()->id == 327 || auth()->user()->id == 326) {
+            $categoryIdArray = RequestedItem::select('request_no')->where('status', 'PENDING')
+                ->join('items', 'items.id', 'items_id')
+                ->where('category_id', 26)
+                ->get()
+                ->toArray();
+
+            $categoryIds = array_map(function ($category) {
+                return $category['request_no'];
+            }, $categoryIdArray);
+
+            return StockRequest::whereIn('request_no', $categoryIds)
+                ->whereIn('status', $activeStatusesWithUnresolved)
+                ->where('stat', 'ACTIVE');
+        }
+
+        return StockRequest::whereIn('status', $activeStatusesWithUnresolved)
+            ->where('stat', 'ACTIVE');
+    }
+
+    public function requestSummary()
+    {
+        $query = $this->visibleStockRequestsQuery();
+        $statuses = ['PENDING', 'SCHEDULED', 'IN TRANSIT', 'PARTIAL IN TRANSIT', 'PARTIAL PENDING', 'UNRESOLVED'];
+        $summary = [];
+
+        foreach ($statuses as $status) {
+            $summary[$status] = (clone $query)->where('status', $status)->count();
+        }
+
+        return response()->json($summary);
+    }
+
     public function getRequests()
     {
         $user = auth()->user()->branch->id;
