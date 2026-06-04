@@ -116,7 +116,7 @@
         @endforeach
     </div>
 
-    <table class="table-hover table requestTable" id="requestTable" style="font-size:80%">
+    <table class="table-hover table requestTable" id="requestTable" style="font-size:80%; width: 100%">
         <thead class="thead-dark">
             @if(auth()->user()->hasAnyrole('Warehouse Manager', 'Encoder', 'Editor', 'Manager', 'Warehouse Administrator'))
                 <tr>

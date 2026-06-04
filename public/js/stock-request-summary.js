@@ -1,6 +1,7 @@
 (function ($) {
     var activeFilterKey = '';
     var loadingTimer = null;
+    var resizeTimer = null;
 
     function escapeRegex(value) {
         return value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
@@ -12,6 +13,25 @@
         }
 
         return $('table.requestTable').DataTable();
+    }
+
+    function adjustRequestTable() {
+        var dataTable = getRequestTable();
+
+        if (!dataTable) {
+            return;
+        }
+
+        dataTable.columns.adjust();
+
+        if (dataTable.responsive && dataTable.responsive.recalc) {
+            dataTable.responsive.recalc();
+        }
+    }
+
+    function queueRequestTableAdjust() {
+        clearTimeout(resizeTimer);
+        resizeTimer = setTimeout(adjustRequestTable, 150);
     }
 
     function getColumnIndex(dataTable, columnName) {
@@ -133,7 +153,12 @@
         });
 
         $('table.requestTable').on('draw.dt', function () {
+            queueRequestTableAdjust();
             clearPageLoading();
+        });
+
+        $(window).on('resize.stockRequestSummary orientationchange.stockRequestSummary', function () {
+            queueRequestTableAdjust();
         });
 
         refreshStockRequestSummary();
