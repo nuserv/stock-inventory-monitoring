@@ -68,9 +68,6 @@ function setTicketStatus(status, message)
     } else if (status == 'invalid') {
         icon = '<i class="fa fa-times text-danger"></i>';
         textClass = 'text-danger';
-    } else if (status == 'waived') {
-        icon = '<i class="fa fa-check text-info"></i>';
-        textClass = 'text-info';
     }
 
     $('#ticket-status-icon').html(icon);
@@ -96,24 +93,12 @@ function resetTicketVerification(message)
 
 function updateOutSubmitState()
 {
-    var hasRequiredTicket = isPreventiveMaintenance() || (ticketVerified && !ticketChecking);
-    var canSubmit = $('#client').val() != '' && $('#customer').val() != '' && r != 1 && outsub <= 0 && hasRequiredTicket;
+    var canSubmit = $('#client').val() != '' && $('#customer').val() != '' && r != 1 && outsub <= 0 && ticketVerified && !ticketChecking;
     $('#out_sub_Btn').prop('disabled', !canSubmit);
-}
-
-function isPreventiveMaintenance()
-{
-    return $('#preventive_maintenance').is(':checked');
 }
 
 function verifyTicket()
 {
-    if (isPreventiveMaintenance()) {
-        setTicketStatus('waived', TICKET_MESSAGES.notRequiredForPm);
-        updateOutSubmitState();
-        return true;
-    }
-
     var ticket = getTicketValue();
     ticketRequestId++;
     var currentRequestId = ticketRequestId;
@@ -228,13 +213,6 @@ function autofillTicketBranch(ticketClient, branchCode)
 }
 
 $(document).on('input', '#ticket', function(){
-    if (isPreventiveMaintenance()) {
-        $('#ticket').val('');
-        setTicketStatus('waived', TICKET_MESSAGES.notRequiredForPm);
-        updateOutSubmitState();
-        return;
-    }
-
     var rawTicket = $('#ticket').val();
     var ticket = getTicketValue();
     $('#ticket').val(ticket);
@@ -276,21 +254,6 @@ $(function(){
     setTicketStatus('idle', TICKET_MESSAGES.required);
 });
 
-$(document).on('change', '#preventive_maintenance', function(){
-    if (isPreventiveMaintenance()) {
-        ticketVerified = false;
-        ticketChecking = false;
-        verifiedTicket = '';
-        $('#ticket').val('').prop('disabled', true);
-        setTicketStatus('waived', TICKET_MESSAGES.notRequiredForPm);
-    } else {
-        $('#ticket').prop('disabled', false);
-        resetTicketVerification(TICKET_MESSAGES.required);
-    }
-
-    updateOutSubmitState();
-});
-
 $(document).on('change', '.replacementdesc', function(){
     var count = $(this).attr('row_count');
     var id = $(this).val();
@@ -319,11 +282,11 @@ $(document).on('click', '.out_sub_Btn', function(){
         alert('Invalid Client Name!');
         return false;
     }
-    if (!isPreventiveMaintenance() && $.trim($('#ticket').val()) == "") {
+    if ($.trim($('#ticket').val()) == "") {
         alert(TICKET_MESSAGES.required);
         return false;
     }
-    if (!isPreventiveMaintenance() && (!ticketVerified || verifiedTicket != getTicketValue())) {
+    if (!ticketVerified || verifiedTicket != getTicketValue()) {
         alert(TICKET_MESSAGES.verifyFirst);
         return false;
     }
@@ -378,8 +341,7 @@ $(document).on('click', '.out_sub_Btn', function(){
                                     serial: serial,
                                     customer: customer,
                                     client: client,
-                                    ticket: isPreventiveMaintenance() ? '' : $.trim($('#ticket').val()).toUpperCase(),
-                                    preventive_maintenance: isPreventiveMaintenance() ? 1 : 0
+                                    ticket: $.trim($('#ticket').val()).toUpperCase()
                                 },
                                 error: function (data) {
                                     alert(data.responseText);

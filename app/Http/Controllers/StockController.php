@@ -1528,17 +1528,16 @@ class StockController extends Controller
     }
     public function serviceOut(Request $request)
     {
-        $isPreventiveMaintenance = $request->purpose != "billable" && filter_var($request->input('preventive_maintenance'), FILTER_VALIDATE_BOOLEAN);
-        $ticket = $isPreventiveMaintenance ? null : $this->normalizeServiceTicket($request->ticket);
+        $ticket = $this->normalizeServiceTicket($request->ticket);
 
-        if ($request->purpose != "pull out" && !$isPreventiveMaintenance && !trim((string) $request->ticket)) {
+        if ($request->purpose != "pull out" && !trim((string) $request->ticket)) {
             return response()->json(self::TICKET_MESSAGES['required'], 422);
         }
 
-        if ($request->purpose != "pull out" && !$isPreventiveMaintenance && !$this->isCompleteServiceTicket($ticket)) {
+        if ($request->purpose != "pull out" && !$this->isCompleteServiceTicket($ticket)) {
             return response()->json(self::TICKET_MESSAGES['invalidFormat'], 422);
         }
-        if ($request->purpose != "pull out" && !$isPreventiveMaintenance && !$this->getPowerformTicket($ticket)['valid']) {
+        if ($request->purpose != "pull out" && !$this->getPowerformTicket($ticket)['valid']) {
             return response()->json(self::TICKET_MESSAGES['notFound'], 422);
         }
 

@@ -55,15 +55,6 @@
                             <small id="ticket-status-message" class="form-text text-muted"></small>
                         </div>
                     </div>
-                    <div class="col-md-6 form-group row">
-                        <label class="col-md-6 col-form-label text-md-right">Ticket Option:</label>
-                        <div class="col-md-6 d-flex align-items-center">
-                            <div class="form-check">
-                                <input type="checkbox" class="form-check-input" id="preventive_maintenance">
-                                <label class="form-check-label" for="preventive_maintenance">Preventive Maintenance</label>
-                            </div>
-                        </div>
-                    </div>
                     <!--div class="col-md-6 form-group row">
                         <label class="col-md-6 col-form-label text-md-right">Client Branch Name:</label>
                         <div class="col-md-6">
