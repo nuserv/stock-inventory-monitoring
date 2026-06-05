@@ -31,12 +31,12 @@
                 <li class="nav-item" style="margin-left:0px;margin-right:0px;">
                     <a class="nav-link {{ Request::is('repair-stock') ? 'active' : '' }}" href="{{ url('/repair-stock') }}">Stocks</a>
                 </li>
-                <li class="nav-item" style="margin-left:0px;margin-right:0px;">
+                <!-- <li class="nav-item" style="margin-left:0px;margin-right:0px;">
                     <a class="nav-link {{ Request::is('assembly') ? 'active' : '' }}" href="{{ url('/assembly') }}">Assembly</a>
                 </li>
                 <li class="nav-item" style="margin-left:0px;margin-right:0px;">
                     <a class="nav-link {{ Request::is('maintenance') ? 'active' : '' }}" href="{{ url('/maintenance?tbl=assembleditems') }}">Assembly Maintenance</a>
-                </li>
+                </li> -->
             @endif
             
             @if(auth()->user()->hasanyrole('Viewer', 'Viewer PLSI', 'Viewer IDSI'))
