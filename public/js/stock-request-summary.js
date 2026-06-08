@@ -79,6 +79,22 @@
         }, 300);
     }
 
+    function bindPaginationLoading() {
+        $(document).on('click.stockRequestSummary', '#requestTable_paginate a', function () {
+            var $link = $(this);
+
+            if ($link.hasClass('disabled') || $link.hasClass('current')) {
+                return;
+            }
+
+            showPageLoading();
+        });
+
+        $(document).on('change.stockRequestSummary', 'select[name="requestTable_length"]', function () {
+            showPageLoading();
+        });
+    }
+
     function applyStatusFilter(status, requestType, filterKey) {
         var dataTable = getRequestTable();
         var statusColumnIndex;
@@ -153,6 +169,7 @@
 
     $(document).ready(function () {
         showPageLoading();
+        bindPaginationLoading();
 
         $('#stockRequestSummary').on('click', '.stock-request-summary__item', function () {
             applyStatusFilter($(this).data('status'), $(this).data('type'), $(this).data('key'));
