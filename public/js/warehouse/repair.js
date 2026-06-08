@@ -12,6 +12,7 @@ $(document).ready(function() {
             processing: true,
             serverSide: true,
             autoWidth: false,
+            "order": [[0, "desc"]],
             ajax: {
                 url: 'return-table',
                 error: function(data, error, errorThrown) {
