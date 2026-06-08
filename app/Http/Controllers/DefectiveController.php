@@ -28,6 +28,17 @@ use Mail;
 use Auth;
 class DefectiveController extends Controller
 {
+    private function applyRemarksFilter($dataTable)
+    {
+        return $dataTable
+            ->filterColumn('remarks', function ($query, $keyword) {
+                $query->whereRaw('UPPER(COALESCE(defectives.remarks, "")) LIKE ?', ['%' . strtoupper($keyword) . '%']);
+            })
+            ->editColumn('remarks', function (Defective $data) {
+                return strtoupper($data->remarks);
+            });
+    }
+
 
     public function __construct()
     {
@@ -520,12 +531,9 @@ class DefectiveController extends Controller
                 ->join('categories', 'categories.id', 'defectives.category_id')
                 ->join('branches', 'defectives.branch_id', 'branches.id')
                 ->join('users', 'users.id', 'defectives.user_id');
-            return DataTables::of($data)
+            return $this->applyRemarksFilter(DataTables::of($data))
                 ->addColumn('date', function (Defective $data){
                     return Carbon::parse($data->updated_at->toFormattedDateString().' '.$data->updated_at->toTimeString())->isoFormat('lll');
-                })
-                ->addColumn('remarks', function (Defective $data){
-                    return strtoupper($data->remarks);
                 })
                 ->make(true);
         }
@@ -567,12 +575,9 @@ class DefectiveController extends Controller
                     'branches'
                 ])
                 ->where('defectives.category_id', '!=', 26);
-            return DataTables::of($data)
+            return $this->applyRemarksFilter(DataTables::of($data))
                 ->addColumn('date', function (Defective $data){
                     return Carbon::parse($data->updated_at->toFormattedDateString().' '.$data->updated_at->toTimeString())->isoFormat('lll');
-                })
-                ->addColumn('remarks', function (Defective $data){
-                    return strtoupper($data->remarks);
                 })
                 ->make(true);
 
@@ -592,12 +597,9 @@ class DefectiveController extends Controller
             ->where('defectives.status', 'For return');
         }
         
-        return DataTables::of($data)
+        return $this->applyRemarksFilter(DataTables::of($data))
         ->addColumn('date', function (Defective $data){
             return Carbon::parse($data->updated_at->toFormattedDateString().' '.$data->updated_at->toTimeString())->isoFormat('lll');
-        })
-        ->addColumn('remarks', function (Defective $data){
-            return strtoupper($data->remarks);
         })
         ->make(true);
     }

@@ -21,9 +21,13 @@
                 <td>
                     <input type="text" class="form-control filter-input fl-4" data-column="4" />
                 </td>
+                @if(auth()->user()->hasAnyRole('Repair') || auth()->user()->id == 326)
                 <td>
-                    <input type="text" class="form-control filter-input fl-4" data-column="5" />
+                    <input type="text" class="form-control filter-input fl-5" data-column="5" />
+                </td><td>
+                    <input type="text" class="form-control filter-input fl-6" data-column="6" />
                 </td>
+                @endif
             </tr>
             <tr>
                 <th>
