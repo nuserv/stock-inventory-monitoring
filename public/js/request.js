@@ -700,7 +700,7 @@ $(document).on("click", ".intransitDetails tr", function() {
     }
 });
 $(document).on('click', '.close', function(){
-    window.location.href = 'request';
+    $('#requestModal').modal('hide');
 });
 $('#remarks_btn').prop('disabled', true);
 $(document).on('keypress', '#remarkstext', function(){

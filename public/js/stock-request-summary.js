@@ -34,6 +34,23 @@
         resizeTimer = setTimeout(adjustRequestTable, 150);
     }
 
+    function clearRequestModalQueryState() {
+        var url = new URL(window.location.href);
+
+        if (!url.searchParams.has('reqno')) {
+            return;
+        }
+
+        url.searchParams.delete('reqno');
+
+        if (!url.searchParams.toString()) {
+            window.history.replaceState({}, document.title, url.pathname);
+            return;
+        }
+
+        window.history.replaceState({}, document.title, url.pathname + '?' + url.searchParams.toString());
+    }
+
     function getColumnIndex(dataTable, columnName) {
         var columnIndex = null;
 
@@ -158,6 +175,11 @@
         });
 
         $(window).on('resize.stockRequestSummary orientationchange.stockRequestSummary', function () {
+            queueRequestTableAdjust();
+        });
+
+        $('#requestModal').on('hidden.bs.modal', function () {
+            clearRequestModalQueryState();
             queueRequestTableAdjust();
         });
 
