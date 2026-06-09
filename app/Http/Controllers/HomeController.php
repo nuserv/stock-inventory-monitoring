@@ -35,6 +35,7 @@ use App\Defective;
 use App\Customer;
 use App\CustomerBranch;
 use App\RepairedNo;
+use App\Retno;
 use App\Pullno;
 use DB;
 use App\UserLog;
@@ -392,6 +393,57 @@ class HomeController extends Controller
     public function log()
     {   
         $title = 'Activities';
+        if (auth()->user()->hasAnyRole('Repair') || auth()->user()->id == 326) {
+            $isSlaOnlyCategory = auth()->user()->id == 326;
+            $repairUsers = User::whereHas('roles', function ($q) {
+                $q->where('name', 'Repair');
+            })->pluck('id');
+
+            $receivedStatuses = ['For repair', 'Repaired', 'Conversion'];
+            $returnsQuery = Defective::query()->select('return_no')->where('status', 'For receiving');
+            $receivedQuery = Defective::query()->whereIn('status', $receivedStatuses);
+            $slaQuery = Defective::query()
+                ->whereIn('status', $receivedStatuses)
+                ->whereNotNull('remarks')
+                ->where('remarks', '!=', '');
+            $repairedQuery = Defective::query()->where('status', 'Repaired');
+            $unrepairableQuery = Defective::query()->whereIn('status', ['Unrepairable', 'Unrepairable approval']);
+
+            if ($isSlaOnlyCategory) {
+                $returnsQuery->where('category_id', 26);
+                $receivedQuery->where('category_id', 26);
+                $slaQuery->where('category_id', 26);
+                $repairedQuery->where('category_id', 26);
+                $unrepairableQuery->where('category_id', 26);
+            } else {
+                $returnsQuery->where('category_id', '!=', 26);
+                $receivedQuery->where('category_id', '!=', 26);
+                $slaQuery->where('category_id', '!=', 26);
+                $repairedQuery->where('category_id', '!=', 26);
+                $unrepairableQuery->where('category_id', '!=', 26);
+            }
+
+            $activityLogsCount = UserLog::whereIn('user_id', $repairUsers)->count();
+            $slaCount = $slaQuery->count();
+            $receivedCount = $receivedQuery->count();
+            $returnsCount = Retno::query()
+                ->whereIn('status', ['For receiving', 'Incomplete'])
+                ->whereIn('return_no', $returnsQuery->pluck('return_no'))
+                ->count();
+            $repairedCount = $repairedQuery->count();
+            $unrepairableCount = $unrepairableQuery->count();
+
+            return view('pages.home', compact(
+                'title',
+                'activityLogsCount',
+                'slaCount',
+                'receivedCount',
+                'returnsCount',
+                'repairedCount',
+                'unrepairableCount'
+            ));
+        }
+
         return view('pages.home', compact('title'));
     }
 
