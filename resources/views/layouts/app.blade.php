@@ -149,6 +149,11 @@
     <div id="loading"></div>
         @include('inc.header')
         @include('inc.navbar')
+        @auth
+            @if(auth()->user()->hasrole('Repair') || auth()->user()->id == 326)
+                @include('inc.repair-shortcuts')
+            @endif
+        @endauth
         @if(!Auth::guest())
             <input type="text" hidden id="level" value="{{ auth()->user()->roles->first()->name }}">
         @endif
