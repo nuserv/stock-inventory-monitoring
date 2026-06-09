@@ -60,8 +60,7 @@ $(document).on('change', '#resched', function(){
     }
 });
 $(document).on('click', '#closeBtn', function(){
-    $("#requestModal .close").click();
-
+    $('#requestModal').modal('hide');
 });
 
 $(document).on('click', '#prcBtn', function(){
