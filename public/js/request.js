@@ -2,8 +2,47 @@ var r = 1;
 var y = 1;
 var interval = null;
 var requestno;
+var originalRequestRemove = $.fn.remove;
+var requestModalSoftRemoveSelector = '#requestModal #printBtn, #requestModal #reqlabel, #requestModal #schedslabel, #requestModal #intransitlabel, #requestModal table.requestDetails, #requestModal table.schedDetails, #requestModal table.intransitDetails';
+
+function destroyRequestModalTables() {
+    ['table.requestDetails', 'table.schedDetails', 'table.intransitDetails'].forEach(function (selector) {
+        if ($.fn.DataTable.isDataTable(selector)) {
+            $(selector).DataTable().destroy();
+        }
+    });
+}
+
+function resetRequestModalState() {
+    destroyRequestModalTables();
+    $('#requestModal #printBtn').show().val('PRINT');
+    $('#requestModal #reqlabel').show();
+    $('#requestModal #schedslabel').show();
+    $('#requestModal #intransitlabel').show();
+    $('#requestModal table.requestDetails').show();
+    $('#requestModal table.schedDetails').show();
+    $('#requestModal table.intransitDetails').show();
+    $('#requestModal .notes').hide();
+    $('#requestModal #schedbyrow').hide();
+    $('#requestModal #intransitrow').hide();
+    $('#requestModal .sched').show();
+}
+
+$.fn.remove = function () {
+    if (this.length && this.filter(requestModalSoftRemoveSelector).length === this.length) {
+        this.hide();
+        return this;
+    }
+
+    return originalRequestRemove.apply(this, arguments);
+};
+
 $(document).ready(function()
 {
+    $('#requestModal').on('hidden.bs.modal', function () {
+        resetRequestModalState();
+    });
+
     var d = new Date();
     var hour = String(d.getHours()).padStart(2, '0') % 12 || 12
     var ampm = (String(d.getHours()).padStart(2, '0') < 12 || String(d.getHours()).padStart(2, '0') === 24) ? "AM" : "PM";

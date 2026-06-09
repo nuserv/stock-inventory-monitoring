@@ -12,8 +12,50 @@ var servicecat;
 var reqno;
 var checkrequest = 'wala';
 var reqstock, updateReq;
+var originalBranchRequestRemove = $.fn.remove;
+var branchRequestModalSoftRemoveSelector = '#requestModal #printBtn, #requestModal #reqlabel, #requestModal #schedslabel, #requestModal #intransitlabel, #requestModal table.requestDetails, #requestModal table.schedDetails, #requestModal table.intransitDetails';
+
+function destroyBranchRequestModalTables() {
+    ['table.requestDetails', 'table.schedDetails', 'table.intransitDetails'].forEach(function (selector) {
+        if ($.fn.DataTable.isDataTable(selector)) {
+            $(selector).DataTable().destroy();
+        }
+    });
+}
+
+function resetBranchRequestModalState() {
+    destroyBranchRequestModalTables();
+    $('#requestModal #printBtn').show().val('PRINT');
+    $('#requestModal #reqlabel').show();
+    $('#requestModal #schedslabel').show();
+    $('#requestModal #intransitlabel').show();
+    $('#requestModal table.requestDetails').show();
+    $('#requestModal table.schedDetails').show();
+    $('#requestModal table.intransitDetails').show();
+    $('#requestModal #addItemBtn').show();
+    $('#requestModal #not_rec_Btn').show();
+    $('#requestModal #msg').show();
+    $('#requestModal #del_Btn').show();
+    $('#requestModal #rec_Btn').show();
+    $('#requestModal #intransitrow').hide();
+    $('#requestModal .sched').show();
+}
+
+$.fn.remove = function () {
+    if (this.length && this.filter(branchRequestModalSoftRemoveSelector).length === this.length) {
+        this.hide();
+        return this;
+    }
+
+    return originalBranchRequestRemove.apply(this, arguments);
+};
+
 $(document).ready(function()
 {
+    $('#requestModal').on('hidden.bs.modal', function () {
+        resetBranchRequestModalState();
+    });
+
     var d = new Date();
     var hour = String(d.getHours()).padStart(2, '0') % 12 || 12
     var ampm = (String(d.getHours()).padStart(2, '0') < 12 || String(d.getHours()).padStart(2, '0') === 24) ? "AM" : "PM";
