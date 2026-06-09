@@ -2,7 +2,9 @@ var table;
 var sub = 0;
 var itemid;
 var dataid;
+var defectiveTableUrl;
 $(document).ready(function() {
+    defectiveTableUrl = $('#defectiveTableUrl').val() || 'return-table';
     table =
         $('table.defectiveTable').DataTable({ 
             "dom": 'lrtip',
@@ -14,7 +16,7 @@ $(document).ready(function() {
             autoWidth: false,
             "order": [[0, "desc"]],
             ajax: {
-                url: 'return-table',
+                url: defectiveTableUrl,
                 error: function(data, error, errorThrown) {
                     if(data.status == 401) {
                         window.location.href = '/login';

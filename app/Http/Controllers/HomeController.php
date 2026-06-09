@@ -224,6 +224,14 @@ class HomeController extends Controller
         $title = "Pending";
         return view('pages.pending', compact('title'));
     }
+
+    public function receivedRemarks()
+    {
+        $title = 'Service Center Stock Monitoring System';
+        $defectiveTableUrl = url('return-table-remarks');
+        return view('pages.warehouse.return', compact('title', 'defectiveTableUrl'));
+    }
+
     public function index()
     {
         // $parameters = array(

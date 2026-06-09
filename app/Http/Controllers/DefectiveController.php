@@ -609,6 +609,105 @@ class DefectiveController extends Controller
         ->make(true);
     }
 
+    public function tableRemarks()
+    {
+        if (auth()->user()->id == 326) {
+            $data = Defective::query()->select('remarks', 'category', 'users.name', 'branches.branch', 'defectives.category_id', 'branches.id as branchid', 'defectives.updated_at', 'defectives.id as id', 'items.item', 'items.id as itemid', 'defectives.serial as serial', 'defectives.status as status')
+                ->whereIn('defectives.status', ['For repair', 'Repaired', 'Conversion'])
+                ->where('defectives.category_id', 26)
+                ->whereNotNull('defectives.remarks')
+                ->where('defectives.remarks', '!=', '')
+                ->join('items', 'defectives.items_id', 'items.id')
+                ->join('categories', 'categories.id', 'defectives.category_id')
+                ->join('branches', 'defectives.branch_id', 'branches.id')
+                ->join('users', 'users.id', 'defectives.user_id')
+                ->orderByDesc('defectives.updated_at');
+            return $this->applyRemarksFilter(DataTables::of($data))
+                ->addColumn('date', function (Defective $data){
+                    return Carbon::parse($data->updated_at->toFormattedDateString().' '.$data->updated_at->toTimeString())->isoFormat('lll');
+                })
+                ->make(true);
+        }
+
+        if (auth()->user()->branch->branch == 'Warehouse' && !auth()->user()->hasAnyRole('Repair', 'Warehouse Administrator')) {
+            $data = Defective::query()->select(
+                    'remarks',
+                    'category',
+                    'users.name',
+                    'branches.branch',
+                    'defectives.category_id',
+                    'branches.id as branchid',
+                    'defectives.updated_at',
+                    'defectives.id as id',
+                    'items.item',
+                    'items.id as itemid',
+                    'defectives.serial as serial',
+                    'defectives.status as status'
+                )
+                ->where('defectives.status', 'Repaired')
+                ->whereNotNull('defectives.remarks')
+                ->where('defectives.remarks', '!=', '')
+                ->join('items', 'defectives.items_id', 'items.id')
+                ->join('categories', 'categories.id', 'defectives.category_id')
+                ->join('users', 'users.id', 'defectives.user_id')
+                ->join('branches', 'defectives.branch_id', 'branches.id')
+                ->orderByDesc('defectives.updated_at');
+        } else if (auth()->user()->branch->branch == 'Warehouse' && auth()->user()->hasRole('Repair')) {
+            $data = Defective::query()->select(
+                    'remarks',
+                    'branch_id',
+                    'defectives.category_id',
+                    'defectives.updated_at',
+                    'defectives.id',
+                    'serial',
+                    'defectives.status',
+                    'defectives.items_id'
+                )
+                ->whereIn('defectives.status', ['For repair', 'Repaired', 'Conversion'])
+                ->whereNotNull('defectives.remarks')
+                ->where('defectives.remarks', '!=', '')
+                ->with([
+                    'items',
+                    'categories',
+                    'branches'
+                ])
+                ->where('defectives.category_id', '!=', 26)
+                ->orderByDesc('updated_at');
+            return $this->applyRemarksFilter(DataTables::of($data))
+                ->addColumn('date', function (Defective $data){
+                    return Carbon::parse($data->updated_at->toFormattedDateString().' '.$data->updated_at->toTimeString())->isoFormat('lll');
+                })
+                ->make(true);
+
+        } else if (auth()->user()->branch->branch == 'Main-Office') {
+            $data = Defective::query()->select('remarks', 'category', 'users.name', 'branches.branch', 'defectives.category_id', 'branches.id as branchid', 'defectives.updated_at', 'defectives.id as id', 'items.item', 'items.id as itemid', 'defectives.serial as serial', 'defectives.status as status')
+                ->whereIn('defectives.status', ['Repaired', 'For Repair'])
+                ->whereNotNull('defectives.remarks')
+                ->where('defectives.remarks', '!=', '')
+                ->join('items', 'defectives.items_id', 'items.id')
+                ->join('categories', 'categories.id', 'defectives.category_id')
+                ->join('users', 'users.id', 'defectives.user_id')
+                ->join('branches', 'defectives.branch_id', 'branches.id')
+                ->orderByDesc('defectives.updated_at');
+        } else {
+            $data = Defective::query()->select('remarks', 'category', 'users.name', 'user_id','defectives.updated_at', 'defectives.category_id', 'defectives.branch_id as branchid', 'defectives.id as id', 'items.item', 'items.id as itemid', 'defectives.serial as serial', 'defectives.status as status')
+                ->where('defectives.branch_id', auth()->user()->branch->id)
+                ->join('items', 'defectives.items_id', 'items.id')
+                ->join('categories', 'categories.id', 'defectives.category_id')
+                ->join('users', 'users.id', 'defectives.user_id')
+                ->where('defectives.status', 'For return')
+                ->whereNotNull('defectives.remarks')
+                ->where('defectives.remarks', '!=', '')
+                ->orderByDesc('defectives.updated_at');
+        }
+
+        return $this->applyRemarksFilter(DataTables::of($data))
+            ->addColumn('date', function (Defective $data){
+                return Carbon::parse($data->updated_at->toFormattedDateString().' '.$data->updated_at->toTimeString())->isoFormat('lll');
+            })
+            ->make(true);
+    }
+
     public function update_printer(Request $request)
     {
         $defective = Defective::where('id', $request->id)->first();

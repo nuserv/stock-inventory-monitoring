@@ -19,6 +19,9 @@
                 <li class="nav-item">
                     <a class="nav-link {{ Request::is('/') ? 'active' : '' }}" href="{{ url('/') }}">Received</a>
                 </li>
+                <li class="nav-item">
+                    <a class="nav-link {{ Request::is('reprec-remarks') ? 'active' : '' }}" href="{{ route('home.received.remarks') }}">With Remarks</a>
+                </li>
                 <li class="nav-item" style="margin-left:0px;margin-right:0px;">
                     <a class="nav-link {{ Request::is('returnview') ? 'active' : '' }}" href="{{ url('/returnview') }}">Returns</a>
                 </li>
@@ -62,6 +65,9 @@
                 </li>
                 <li class="nav-item">
                     <a class="nav-link {{ Request::is('reprec') ? 'active' : '' }}" href="{{ url('/reprec') }}">Received</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link {{ Request::is('reprec-remarks') ? 'active' : '' }}" href="{{ route('home.received.remarks') }}">With Remarks</a>
                 </li>
                 <li class="nav-item" style="margin-left:0px;margin-right:0px;">
                     <a class="nav-link {{ Request::is('repaired-ware') ? 'active' : '' }}" href="{{ url('/repaired-ware') }}">Repaired</a>

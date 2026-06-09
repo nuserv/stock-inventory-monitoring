@@ -539,6 +539,9 @@
         @if (Request::is('reprec') && auth()->user()->id == 326)
             <script src="{{asset('min/?f=js/warehouse/repair.js')}}&version={{ \Illuminate\Support\Str::random(30) }}"></script>
         @endif
+        @if (Request::is('reprec-remarks') && (auth()->user()->hasanyrole('Repair') || auth()->user()->id == 326))
+            <script src="{{asset('min/?f=js/warehouse/repair.js')}}&version={{ \Illuminate\Support\Str::random(30) }}"></script>
+        @endif
         @if(Request::is('/') && !auth()->user()->hasanyrole('Repair', 'Warehouse Administrator', 'Viewer', 'Viewer PLSI', 'Viewer IDSI'))
             <script src="{{asset('min/?f=js/home.js')}}&version={{ \Illuminate\Support\Str::random(30) }}"></script>
         @endif

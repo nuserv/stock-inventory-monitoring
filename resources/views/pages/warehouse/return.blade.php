@@ -2,6 +2,7 @@
 
 @section('content')
 @include('modal.warehouse.update_item')
+<input type="hidden" id="defectiveTableUrl" value="{{ $defectiveTableUrl ?? url('return-table') }}">
 <div class="table-responsive">
     <table class="table-hover table defectiveTable" id="defectiveTable" style="width:100%;font-size:80%">
         <thead class="thead-dark">

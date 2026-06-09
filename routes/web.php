@@ -100,6 +100,7 @@ Route::any('item-update', 'HomeController@itemsUpdate')->name('Update.items')->m
 
 Route::get('/', 'HomeController@index')->name('home.index');
 Route::get('/reprec', 'HomeController@index');
+Route::get('/reprec-remarks', 'HomeController@receivedRemarks')->name('home.received.remarks');
 Route::get('/pending', 'HomeController@pending')->name('home.request');
 //Route::get('/home', 'HomeController@index')->name('home.indexs');
 Route::get('/log', 'HomeController@log');
@@ -233,6 +234,7 @@ Route::get('returnget', 'DefectiveController@returnget');//->middleware('ajax');
 Route::get('pullitem', 'StockController@pullitem');//->middleware('ajax');
 Route::get('repaireditem', 'DefectiveController@repaireditem');//->middleware('ajax');
 Route::get('returnitem', 'DefectiveController@returnitem');//->middleware('ajax');
+Route::get('return-table-remarks', 'DefectiveController@tableRemarks');//->middleware('ajax');
 Route::put('pullupdate', 'StockController@pullupdate')->middleware('ajax');
 Route::put('repairedupdate', 'DefectiveController@repairedupdate')->middleware('ajax');
 // Route::get('export', 'ImportController@export')->name('export');
