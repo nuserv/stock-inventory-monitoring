@@ -530,7 +530,8 @@ class DefectiveController extends Controller
                 ->join('items', 'defectives.items_id', 'items.id')
                 ->join('categories', 'categories.id', 'defectives.category_id')
                 ->join('branches', 'defectives.branch_id', 'branches.id')
-                ->join('users', 'users.id', 'defectives.user_id');
+                ->join('users', 'users.id', 'defectives.user_id')
+                ->orderByDesc('defectives.updated_at');
             return $this->applyRemarksFilter(DataTables::of($data))
                 ->addColumn('date', function (Defective $data){
                     return Carbon::parse($data->updated_at->toFormattedDateString().' '.$data->updated_at->toTimeString())->isoFormat('lll');
@@ -557,7 +558,8 @@ class DefectiveController extends Controller
                 ->join('items', 'defectives.items_id', 'items.id')
                 ->join('categories', 'categories.id', 'defectives.category_id')
                 ->join('users', 'users.id', 'defectives.user_id')
-                ->join('branches', 'defectives.branch_id', 'branches.id');
+                ->join('branches', 'defectives.branch_id', 'branches.id')
+                ->orderByDesc('defectives.updated_at');
         }else if (auth()->user()->branch->branch == 'Warehouse' && auth()->user()->hasrole('Repair')){
             $data = Defective::query()->select(
                     'remarks', 
@@ -574,7 +576,8 @@ class DefectiveController extends Controller
                     'categories',
                     'branches'
                 ])
-                ->where('defectives.category_id', '!=', 26);
+                ->where('defectives.category_id', '!=', 26)
+                ->orderByDesc('updated_at');
             return $this->applyRemarksFilter(DataTables::of($data))
                 ->addColumn('date', function (Defective $data){
                     return Carbon::parse($data->updated_at->toFormattedDateString().' '.$data->updated_at->toTimeString())->isoFormat('lll');
@@ -587,14 +590,16 @@ class DefectiveController extends Controller
                 ->join('items', 'defectives.items_id', 'items.id')
                 ->join('categories', 'categories.id', 'defectives.category_id')
                 ->join('users', 'users.id', 'defectives.user_id')
-                ->join('branches', 'defectives.branch_id', 'branches.id');
+                ->join('branches', 'defectives.branch_id', 'branches.id')
+                ->orderByDesc('defectives.updated_at');
         }else{
             $data = Defective::query()->select('remarks', 'category', 'users.name', 'user_id','defectives.updated_at', 'defectives.category_id', 'defectives.branch_id as branchid', 'defectives.id as id', 'items.item', 'items.id as itemid', 'defectives.serial as serial', 'defectives.status as status')
             ->where('defectives.branch_id', auth()->user()->branch->id)
             ->join('items', 'defectives.items_id', 'items.id')
             ->join('categories', 'categories.id', 'defectives.category_id')
             ->join('users', 'users.id', 'defectives.user_id')
-            ->where('defectives.status', 'For return');
+            ->where('defectives.status', 'For return')
+            ->orderByDesc('defectives.updated_at');
         }
         
         return $this->applyRemarksFilter(DataTables::of($data))

@@ -38,7 +38,7 @@ $(document).ready(function() {
                 }
             ],
             columns: [
-                {data: 'updated_at',name: 'date',"width": "15%",
+                {data: 'updated_at',name: 'updated_at',"width": "15%",
                     render: function(data, type, row) {
                         if (type === 'display' || type === 'filter') {
                             var date = new Date(data);
