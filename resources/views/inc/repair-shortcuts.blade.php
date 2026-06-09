@@ -1,6 +1,6 @@
 @php
     $isSlaOnlyCategory = auth()->user()->id == 326;
-    $receivedStatuses = ['For repair', 'Repaired', 'Conversion'];
+    $receivedStatuses = ['For repair', 'Conversion'];
 
     $returnsQuery = \App\Defective::query()
         ->select('return_no')

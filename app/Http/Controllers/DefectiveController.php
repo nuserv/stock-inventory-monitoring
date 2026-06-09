@@ -525,7 +525,7 @@ class DefectiveController extends Controller
 
         if (auth()->user()->id == 326) {
             $data = Defective::query()->select('remarks', 'category', 'users.name', 'branches.branch', 'defectives.category_id', 'branches.id as branchid', 'defectives.updated_at', 'defectives.id as id', 'items.item', 'items.id as itemid', 'defectives.serial as serial', 'defectives.status as status')
-                ->wherein('defectives.status', ['For repair', 'Repaired', 'Conversion'])
+                ->wherein('defectives.status', ['For repair', 'Conversion'])
                 ->where('defectives.category_id', 26)
                 ->join('items', 'defectives.items_id', 'items.id')
                 ->join('categories', 'categories.id', 'defectives.category_id')
@@ -570,7 +570,7 @@ class DefectiveController extends Controller
                     'serial', 
                     'defectives.status', 
                     'defectives.items_id')
-                ->wherein('defectives.status', ['For repair', 'Repaired', 'Conversion'])
+                ->wherein('defectives.status', ['For repair', 'Conversion'])
                 ->with([
                     'items', 
                     'categories',
@@ -586,7 +586,7 @@ class DefectiveController extends Controller
 
         }else if (auth()->user()->branch->branch == 'Main-Office'){
             $data = Defective::query()->select('remarks', 'category', 'users.name', 'branches.branch', 'defectives.category_id', 'branches.id as branchid', 'defectives.updated_at', 'defectives.id as id', 'items.item', 'items.id as itemid', 'defectives.serial as serial', 'defectives.status as status')
-                ->wherein('defectives.status', ['Repaired', 'For Repair'])
+                ->wherein('defectives.status', ['For Repair'])
                 ->join('items', 'defectives.items_id', 'items.id')
                 ->join('categories', 'categories.id', 'defectives.category_id')
                 ->join('users', 'users.id', 'defectives.user_id')
@@ -613,7 +613,7 @@ class DefectiveController extends Controller
     {
         if (auth()->user()->id == 326) {
             $data = Defective::query()->select('remarks', 'category', 'users.name', 'branches.branch', 'defectives.category_id', 'branches.id as branchid', 'defectives.updated_at', 'defectives.id as id', 'items.item', 'items.id as itemid', 'defectives.serial as serial', 'defectives.status as status')
-                ->whereIn('defectives.status', ['For repair', 'Repaired', 'Conversion'])
+                ->whereIn('defectives.status', ['For repair', 'Conversion'])
                 ->where('defectives.category_id', 26)
                 ->whereNotNull('defectives.remarks')
                 ->where('defectives.remarks', '!=', '')
@@ -663,7 +663,7 @@ class DefectiveController extends Controller
                     'defectives.status',
                     'defectives.items_id'
                 )
-                ->whereIn('defectives.status', ['For repair', 'Repaired', 'Conversion'])
+                ->whereIn('defectives.status', ['For repair', 'Conversion'])
                 ->whereNotNull('defectives.remarks')
                 ->where('defectives.remarks', '!=', '')
                 ->with([
@@ -681,7 +681,7 @@ class DefectiveController extends Controller
 
         } else if (auth()->user()->branch->branch == 'Main-Office') {
             $data = Defective::query()->select('remarks', 'category', 'users.name', 'branches.branch', 'defectives.category_id', 'branches.id as branchid', 'defectives.updated_at', 'defectives.id as id', 'items.item', 'items.id as itemid', 'defectives.serial as serial', 'defectives.status as status')
-                ->whereIn('defectives.status', ['Repaired', 'For Repair'])
+                ->whereIn('defectives.status', ['For Repair'])
                 ->whereNotNull('defectives.remarks')
                 ->where('defectives.remarks', '!=', '')
                 ->join('items', 'defectives.items_id', 'items.id')
