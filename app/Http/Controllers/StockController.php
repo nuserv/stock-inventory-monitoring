@@ -1521,6 +1521,13 @@ class StockController extends Controller
             ];
         }
 
+        if (!preg_match('/^[A-Z0-9\/\\\\]+$/', $normalizedSerial)) {
+            return [
+                'valid' => false,
+                'message' => 'Only letters, numbers, "/" and "\\" are allowed in the defective item serial number.',
+            ];
+        }
+
         if ($normalizedSerial === $normalizedReplacementSerial) {
             return [
                 'valid' => false,

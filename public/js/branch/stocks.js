@@ -707,11 +707,31 @@ $(document).on('click', '.repret_sub_Btn', function(){
             inputLabel: 'Enter the serial number of the defective item being replaced.',
             inputAttributes: {
                 autocapitalize: 'characters',
-                autocomplete: 'off'
+                autocomplete: 'off',
+                spellcheck: 'false'
+            },
+            didOpen: function () {
+                var input = Swal.getInput();
+
+                if (!input) {
+                    return;
+                }
+
+                input.addEventListener('input', function () {
+                    var sanitizedValue = input.value.toUpperCase().replace(/[^A-Z0-9\/\\]/g, '');
+
+                    if (input.value !== sanitizedValue) {
+                        input.value = sanitizedValue;
+                    }
+                });
             },
             inputValidator: function (value) {
                 if (!value || !$.trim(value)) {
                     return 'Defective item serial number is required.';
+                }
+
+                if (!/^[A-Z0-9\/\\]+$/.test($.trim(value).toUpperCase())) {
+                    return 'Only letters, numbers, "/" and "\\" are allowed.';
                 }
             },
             showCancelButton: true,
