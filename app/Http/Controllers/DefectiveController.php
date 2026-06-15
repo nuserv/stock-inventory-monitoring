@@ -334,7 +334,7 @@ class DefectiveController extends Controller
                     $message->to(auth()->user()->email, auth()->user()->name)->subject
                         ('RR no. '.$no);
                     $message->attachData($excel, 'RR No. '.$no.'.xlsx');
-                    $message->from('noreply@phillogix.com.ph', 'BSMS');
+                    // $message->from('noreply@phillogix.com.ph', 'BSMS');
                     $message->bcc($bcc);
                 });
             }
@@ -818,7 +818,7 @@ class DefectiveController extends Controller
                         $message->to(auth()->user()->email, auth()->user()->name)->subject
                             ('DDR No. '.$retno->return_no.' '.auth()->user()->branch->branch);
                         $message->attachData($excel, 'DDR No. '.$retno->return_no.'.xlsx');
-                        $message->from('noreply@phillogix.com.ph', 'BSMS');
+                        // // $message->from('noreply@phillogix.com.ph', 'BSMS');
                         $message->bcc($bcc);
                     });
                 }
@@ -830,7 +830,7 @@ class DefectiveController extends Controller
                         $message->to(auth()->user()->email, auth()->user()->name)->subject
                             ('CDR No. '.$retno->return_no);
                         $message->attachData($excel, 'CDR No. '.$retno->return_no.'.xlsx');
-                        $message->from('noreply@phillogix.com.ph', 'BSMS');
+                        // $message->from('noreply@phillogix.com.ph', 'BSMS');
                         $message->bcc($bcc);
                     });
                 }

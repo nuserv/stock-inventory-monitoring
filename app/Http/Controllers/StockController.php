@@ -202,7 +202,7 @@ class StockController extends Controller
                     $message->to(auth()->user()->email, auth()->user()->name)->subject
                         ('PR no. '.$no);
                     $message->attachData($excel, 'PR No. '.$no.'.xlsx');
-                    $message->from('noreply@phillogix.com.ph', 'BSMS');
+                    // $message->from('noreply@phillogix.com.ph', 'BSMS');
                     $message->bcc($bcc);
                 });
             }
@@ -411,7 +411,7 @@ class StockController extends Controller
                     $message->to(auth()->user()->email, auth()->user()->name)->subject
                         ('DR no. '.$no);
                     $message->attachData($excel, 'DR No. '.$no.'.xlsx');
-                    $message->from('noreply@phillogix.com.ph', 'BSMS');
+                    // $message->from('noreply@phillogix.com.ph', 'BSMS');
                     $message->bcc($bcc);
                 });
             }

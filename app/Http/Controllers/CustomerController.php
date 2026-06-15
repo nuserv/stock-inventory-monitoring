@@ -242,7 +242,7 @@ class CustomerController extends Controller
                 Mail::send('create-customer', ['customer'=> ucwords(mb_strtolower($request->input('customer_name'))), 'code'=> $request->input('customer_code')],function( $message){ 
                     $message->to('kdgonzales@ideaserv.com.ph', 'Kenneth Gonzales')->subject 
                         (auth()->user()->name.' '.auth()->user()->lastname.' has updated a user to Service center stock monitoring system.'); 
-                    $message->from('noreply@phillogix.com.ph', 'NO REPLY - Create Customer'); 
+                    // $message->from('noreply@phillogix.com.ph', 'NO REPLY - Create Customer'); 
                 });
             }
         }
@@ -268,7 +268,7 @@ class CustomerController extends Controller
                 Mail::send('create-customerbranch', ['sbu'=>$sbu->code,'address'=> $request->address,'phone'=>$request->number, 'customer'=> ucwords(mb_strtolower($request->bname)), 'code'=> $request->bcode],function( $message){ 
                     $message->to('kdgonzales@ideaserv.com.ph', 'Kenneth Gonzales')->subject 
                         (auth()->user()->name.' '.auth()->user()->lastname.' has updated a user to Service center stock monitoring system.'); 
-                    $message->from('noreply@phillogix.com.ph', 'NO REPLY - Create Customer Branch'); 
+                    // $message->from('noreply@phillogix.com.ph', 'NO REPLY - Create Customer Branch'); 
                 });
             }
         }
