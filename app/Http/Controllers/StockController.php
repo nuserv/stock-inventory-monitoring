@@ -1443,7 +1443,8 @@ class StockController extends Controller
         if ($request->replace == 1) {
             $validation = $this->validateRepairDefectiveSerialData(
                 $request->defective_serial,
-                $request->serial
+                $request->serial,
+                $request->items_id
             );
 
             if (!$validation['valid']) {
@@ -1528,13 +1529,6 @@ class StockController extends Controller
             ];
         }
 
-        if ($normalizedSerial === $normalizedReplacementSerial) {
-            return [
-                'valid' => false,
-                'message' => 'Defective item serial number must be different from the stock item serial number.',
-            ];
-        }
-
         if (in_array($normalizedSerial, ['N/A', 'N\\A'])) {
             $item = Item::where('id', $replacementItemId)->first();
 
@@ -1548,6 +1542,13 @@ class StockController extends Controller
             return [
                 'valid' => false,
                 'message' => 'N/A is not allowed for the selected item.',
+            ];
+        }
+
+        if ($normalizedSerial === $normalizedReplacementSerial) {
+            return [
+                'valid' => false,
+                'message' => 'Defective item serial number must be different from the stock item serial number.',
             ];
         }
 
