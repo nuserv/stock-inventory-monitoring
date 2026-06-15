@@ -134,6 +134,7 @@ Route::put('customer_add', 'CustomerController@update')->middleware('ajax');
 Route::post('cbranch_add', 'CustomerController@branchadd')->middleware('ajax');
 Route::put('cbranch_update', 'CustomerController@branchupdate')->middleware('ajax');
 Route::get('verifyserial', 'StockController@verifyserial');//->middleware('ajax');
+Route::get('validate-repair-defective-serial', 'StockController@validateRepairDefectiveSerial');//->middleware('ajax');
 
 
 

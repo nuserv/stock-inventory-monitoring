@@ -701,30 +701,84 @@ $(document).on('click', '.repret_sub_Btn', function(){
     if (repretrow.length == 0) {
         alert('Please Select Item!');
     }else{
-        console.log(repretrow);
-        $.ajax({
-            url: 'def',
-            headers: {
-                'X-CSRF-TOKEN': $('meta[name="ctok"]').attr('content')
+        Swal.fire({
+            title: 'Defective Item Serial Number',
+            input: 'text',
+            inputLabel: 'Enter the serial number of the defective item being replaced.',
+            inputAttributes: {
+                autocapitalize: 'characters',
+                autocomplete: 'off'
             },
-            dataType: 'json',
-            type: 'DELETE',
-            data: {
-                id: repretselected[0].id,
-                serial: repretselected[0].serial,
-                items_id: repretselected[0].items_id,
-                item: repretselected[0].item,
-                replace: 1,
-                repairitem: repretrow[0].item,
-                repairserial: repretrow[0].serial,
-                repairid:  repretrow[0].id
+            inputValidator: function (value) {
+                if (!value || !$.trim(value)) {
+                    return 'Defective item serial number is required.';
+                }
             },
-            success: function(){
-                location.reload(); 
-            },
-            error: function (data) {
-                alert(data.responseText);
+            showCancelButton: true,
+            confirmButtonText: 'Verify',
+            allowOutsideClick: false,
+            preConfirm: function (value) {
+                return $.ajax({
+                    url: 'validate-repair-defective-serial',
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="ctok"]').attr('content')
+                    },
+                    dataType: 'json',
+                    type: 'GET',
+                    data: {
+                        defective_serial: $.trim(value),
+                        replacement_serial: repretselected[0].serial,
+                        replacement_item_id: repretselected[0].items_id
+                    }
+                }).then(function (response) {
+                    return response.serial;
+                }).catch(function (xhr) {
+                    var message = 'Unable to verify defective item serial number.';
+
+                    if (xhr.responseJSON && xhr.responseJSON.message) {
+                        message = xhr.responseJSON.message;
+                    } else if (xhr.responseText) {
+                        message = xhr.responseText;
+                    }
+
+                    Swal.showValidationMessage(message);
+                });
             }
+        }).then(function (result) {
+            if (!result.isConfirmed) {
+                return;
+            }
+
+            $.ajax({
+                url: 'def',
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="ctok"]').attr('content')
+                },
+                dataType: 'json',
+                type: 'DELETE',
+                data: {
+                    id: repretselected[0].id,
+                    serial: repretselected[0].serial,
+                    items_id: repretselected[0].items_id,
+                    item: repretselected[0].item,
+                    replace: 1,
+                    repairitem: repretrow[0].item,
+                    repairserial: repretrow[0].serial,
+                    repairid:  repretrow[0].id,
+                    defective_serial: result.value
+                },
+                success: function(){
+                    location.reload(); 
+                },
+                error: function (data) {
+                    if (data.responseJSON && data.responseJSON.message) {
+                        alert(data.responseJSON.message);
+                        return;
+                    }
+
+                    alert(data.responseText);
+                }
+            });
         });
     }
 });

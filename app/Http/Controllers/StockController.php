@@ -1439,22 +1439,32 @@ class StockController extends Controller
     public function def(Request $request)
     {
         $def = Stock::where('id', $request->id)->where('serial', $request->serial)->where('status', 'in')->first();
-        $defective = new Defective;
-        $defective->branch_id = auth()->user()->branch->id;
-        $defective->user_id = auth()->user()->id;
-        $defective->category_id = $def->category_id;
-        $defective->items_id = $request->items_id;
-        $defective->serial = $request->serial;
-        $defective->status = 'For return';
-        $defective->save();
 
         if ($request->replace == 1) {
+            $validation = $this->validateRepairDefectiveSerialData(
+                $request->defective_serial,
+                $request->serial
+            );
+
+            if (!$validation['valid']) {
+                return response()->json($validation['message'], 422);
+            }
+
+            $defective = new Defective;
+            $defective->branch_id = auth()->user()->branch->id;
+            $defective->user_id = auth()->user()->id;
+            $defective->category_id = $def->category_id;
+            $defective->items_id = $request->items_id;
+            $defective->serial = $validation['serial'];
+            $defective->status = 'For return';
+            $defective->save();
+
             $log = new UserLog;
             $log->branch_id = auth()->user()->branch->id;
             $log->branch = auth()->user()->branch->branch;
             $log->user_id = auth()->user()->id;
             $log->fullname = auth()->user()->name.' '.auth()->user()->middlename.' '.auth()->user()->lastname;
-            $log->activity = "Use $request->item(S/N: $request->serial) to repair $request->repairitem(S/N: $request->repairserial).";
+            $log->activity = "Use $request->item(S/N: $request->serial) to repair $request->repairitem(S/N: $request->repairserial) and marked defective item S/N ".$validation['serial'].".";
             $log->save();
             $def->status = "use to $request->repairitem(S/N: ".mb_strtoupper($request->repairserial).")";
             $forrepair = Defective::select('serial', 'items.id as items_id', 'defectives.id as id', 'items.category_id')->where('defectives.id', $request->repairid)
@@ -1478,6 +1488,14 @@ class StockController extends Controller
             $log->save();
             $data = $def->save();
         }else{
+            $defective = new Defective;
+            $defective->branch_id = auth()->user()->branch->id;
+            $defective->user_id = auth()->user()->id;
+            $defective->category_id = $def->category_id;
+            $defective->items_id = $request->items_id;
+            $defective->serial = $request->serial;
+            $defective->status = 'For return';
+            $defective->save();
             $log = new UserLog;
             $log->branch_id = auth()->user()->branch->id;
             $log->branch = auth()->user()->branch->branch;
@@ -1489,6 +1507,107 @@ class StockController extends Controller
             $data = $def->save();
         }
         return response()->json($data);
+    }
+
+    private function validateRepairDefectiveSerialData($defectiveSerial, $replacementSerial = null, $replacementItemId = null)
+    {
+        $normalizedSerial = mb_strtoupper(trim((string) $defectiveSerial));
+        $normalizedReplacementSerial = mb_strtoupper(trim((string) $replacementSerial));
+
+        if (!$normalizedSerial) {
+            return [
+                'valid' => false,
+                'message' => 'Defective item serial number is required.',
+            ];
+        }
+
+        if ($normalizedSerial === $normalizedReplacementSerial) {
+            return [
+                'valid' => false,
+                'message' => 'Defective item serial number must be different from the stock item serial number.',
+            ];
+        }
+
+        if (in_array($normalizedSerial, ['N/A', 'N\\A'])) {
+            $item = Item::where('id', $replacementItemId)->first();
+
+            if ($item && $item->n_a == "yes") {
+                return [
+                    'valid' => true,
+                    'serial' => 'N/A',
+                ];
+            }
+
+            return [
+                'valid' => false,
+                'message' => 'N/A is not allowed for the selected item.',
+            ];
+        }
+
+        if (!preg_match('/\d/', $normalizedSerial)) {
+            return [
+                'valid' => false,
+                'message' => 'Defective item serial number must contain at least one number.',
+            ];
+        }
+
+        if (strpos(strtolower($normalizedSerial), 'za') === 0 && strlen($normalizedSerial) < 7) {
+            return [
+                'valid' => true,
+                'serial' => $normalizedSerial,
+            ];
+        }
+
+        $existingStock = Stock::query()
+            ->whereRaw('UPPER(serial) = ?', [$normalizedSerial])
+            ->where('status', 'in')
+            ->first();
+
+        if ($existingStock) {
+            return [
+                'valid' => false,
+                'message' => 'The defective item serial number already exists in stocks and is currently IN.',
+            ];
+        }
+
+        $existingDefective = Defective::query()
+            ->whereRaw('UPPER(serial) = ?', [$normalizedSerial])
+            ->wherein('status', ['For return', 'For add stock', 'For receiving', 'For repair', 'Repaired'])
+            ->first();
+
+        if ($existingDefective) {
+            return [
+                'valid' => false,
+                'message' => 'The defective item serial number already exists in defectives.',
+            ];
+        }
+
+        return [
+            'valid' => true,
+            'serial' => $normalizedSerial,
+        ];
+    }
+
+    public function validateRepairDefectiveSerial(Request $request)
+    {
+        $validation = $this->validateRepairDefectiveSerialData(
+            $request->defective_serial,
+            $request->replacement_serial,
+            $request->replacement_item_id
+        );
+
+        if (!$validation['valid']) {
+            return response()->json([
+                'valid' => false,
+                'message' => $validation['message'],
+            ], 422);
+        }
+
+        return response()->json([
+            'valid' => true,
+            'message' => 'Defective item serial number verified.',
+            'serial' => $validation['serial'],
+        ]);
     }
     public function loan(Request $request)
     {
