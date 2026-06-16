@@ -45,6 +45,12 @@ $(document).ready(function()
             { data: 'status', name:'status'}
         ]
     });
+
+    $('.filter-input').keyup(function() {
+        table.column($(this).data('column'))
+            .search($(this).val())
+            .draw();
+    });
     
 });
 
