@@ -1,5 +1,41 @@
 
 
+function collectWarehouseRequestSelections() {
+    var selections = {};
+
+    for (var q = 1; q <= w; q++) {
+        if (!$('#row' + q).is(':visible')) {
+            continue;
+        }
+
+        var itemId = $('#desc' + q).val();
+
+        if (!itemId) {
+            continue;
+        }
+
+        if (!selections[itemId]) {
+            selections[itemId] = {
+                item_id: itemId,
+                quantity: 0
+            };
+        }
+
+        if ($.inArray(q, uomarray) == -1) {
+            selections[itemId].quantity += 1;
+        } else {
+            var quantity = parseInt($('#inputqty' + q).val(), 10) || 0;
+            selections[itemId].quantity += quantity;
+        }
+    }
+
+    return Object.keys(selections).map(function (key) {
+        return selections[key];
+    }).filter(function (selection) {
+        return selection.quantity > 0;
+    });
+}
+
 $(document).on('click', '#intransitBtn', function(){
     $('#requestModal').toggle();
     $('loading').show();
@@ -101,6 +137,7 @@ $(document).on('click', '.sub_Btn', function(){
     if ($('#datesched').val()) {
         $('#sendModal').toggle();
         $('#loading').show();
+        var selectedItems = collectWarehouseRequestSelections();
         pending = 0;
         for(var q=1;q<=w;q++){
             if (q<=w) {
@@ -148,6 +185,37 @@ $(document).on('click', '.sub_Btn', function(){
                     }
                 }
             }
+        }
+        $.ajax({
+            url: 'validate-warehouse-request-stock',
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="ctok"]').attr('content')
+            },
+            dataType: 'json',
+            type: 'POST',
+            async: false,
+            data: {
+                items: JSON.stringify(selectedItems)
+            },
+            success: function () {
+            },
+            error: function (data) {
+                var message = 'Selected item(s) no longer have enough available warehouse stock.';
+
+                if (data.responseJSON && data.responseJSON.message) {
+                    message = data.responseJSON.message;
+                } else if (data.responseText) {
+                    message = data.responseText;
+                }
+
+                alert(message);
+                $('#sendModal').toggle();
+                $('#loading').hide();
+                pending = -1;
+            }
+        });
+        if (pending === -1) {
+            return false;
         }
         for(var q=1;q<=w;q++){
             if (q<=w) {
@@ -396,4 +464,3 @@ $(document).on('keyup', '.serial', function () {
     }
     
 });
-

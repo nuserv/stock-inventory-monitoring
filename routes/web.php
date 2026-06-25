@@ -263,6 +263,7 @@ Route::get('gen', 'StockRequestController@generateRandomNumber')->middleware('aj
 Route::get('getcatreq', 'StockRequestController@getCatReq')->middleware('ajax');
 Route::get('prepitem', 'StockRequestController@prepitem')->middleware('ajax');
 Route::put('update', 'StockRequestController@update')->middleware('ajax');
+Route::post('validate-warehouse-request-stock', 'StockRequestController@validateWarehouseRequestStock')->middleware('ajax');
 Route::put('intransit', 'StockRequestController@intransit')->middleware('ajax');
 Route::post('storerequest', 'StockRequestController@store')->middleware('ajax');
 Route::delete('remove', 'StockRequestController@dest')->middleware('ajax');

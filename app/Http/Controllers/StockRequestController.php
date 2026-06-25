@@ -516,6 +516,87 @@ class StockRequestController extends Controller
     {
         return response()->json(RequestedItem::select('quantity', 'id')->where('request_no', $request->reqno)->where('items_id', $request->itemid)->first());
     }
+
+    private function checkWarehouseRequestAvailability(array $selectedItems)
+    {
+        $requestedCounts = [];
+
+        foreach ($selectedItems as $selectedItem) {
+            $itemId = isset($selectedItem['item_id']) ? (int) $selectedItem['item_id'] : 0;
+            $quantity = isset($selectedItem['quantity']) ? (int) $selectedItem['quantity'] : 0;
+
+            if ($itemId <= 0 || $quantity <= 0) {
+                continue;
+            }
+
+            if (!isset($requestedCounts[$itemId])) {
+                $requestedCounts[$itemId] = 0;
+            }
+
+            $requestedCounts[$itemId] += $quantity;
+        }
+
+        if (empty($requestedCounts)) {
+            return [
+                'valid' => false,
+                'message' => 'No valid item was selected for submission.',
+            ];
+        }
+
+        $availableCounts = Warehouse::query()
+            ->select('items_id', \DB::raw('COUNT(*) as stock'))
+            ->where('status', 'in')
+            ->whereIn('items_id', array_keys($requestedCounts))
+            ->groupBy('items_id')
+            ->pluck('stock', 'items_id');
+
+        foreach ($requestedCounts as $itemId => $requestedQuantity) {
+            $availableQuantity = (int) ($availableCounts[$itemId] ?? 0);
+
+            if ($requestedQuantity > $availableQuantity) {
+                $item = Item::find($itemId);
+                $itemName = $item ? mb_strtoupper($item->item) : 'SELECTED ITEM';
+                $message = $itemName.' no longer has enough available warehouse stock. Requested: '.$requestedQuantity.', Available: '.$availableQuantity.'. Please refresh the request before submitting.';
+
+                if ($availableQuantity <= 0) {
+                    $message = $itemName.' has no available warehouse stock. The request cannot continue until stock is replenished.';
+                }
+
+                return [
+                    'valid' => false,
+                    'message' => $message,
+                ];
+            }
+        }
+
+        return [
+            'valid' => true,
+        ];
+    }
+
+    public function validateWarehouseRequestStock(Request $request)
+    {
+        $selectedItems = json_decode($request->items, true);
+
+        if (!is_array($selectedItems)) {
+            return response()->json([
+                'valid' => false,
+                'message' => 'Invalid selected items payload.',
+            ], 422);
+        }
+
+        $validation = $this->checkWarehouseRequestAvailability($selectedItems);
+
+        if (!$validation['valid']) {
+            return response()->json($validation, 422);
+        }
+
+        return response()->json([
+            'valid' => true,
+            'message' => 'Warehouse stock is still available for the selected items.',
+        ]);
+    }
+
     public function updateRequestDetails(Request $request, $id)
     {
         RequestedItem::where('request_no', $id)->where('items_id', $request->item)->decrement('pending', 1);
@@ -1749,9 +1830,33 @@ class StockRequestController extends Controller
                 $data = $reqno->save();
             }
         }else{
+            $validation = $this->checkWarehouseRequestAvailability([
+                [
+                    'item_id' => $request->item,
+                    'quantity' => 1,
+                ],
+            ]);
+
+            if (!$validation['valid']) {
+                return response()->json([
+                    'success' => false,
+                    'message' => $validation['message'],
+                ], 422);
+            }
+
             $item = Warehouse::where('status', 'in')
                 ->where('items_id', $request->item)
                 ->first();
+
+            if (!$item) {
+                $itemName = optional(Item::find($request->item))->item;
+
+                return response()->json([
+                    'success' => false,
+                    'message' => ($itemName ? mb_strtoupper($itemName) : 'Selected item').' no longer has available warehouse stock.',
+                ], 422);
+            }
+
                 $item->status = 'sent';
                 $item->request_no = $request->reqno;
                 $item->branch_id = $request->branchid;
