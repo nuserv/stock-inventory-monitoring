@@ -4,11 +4,11 @@ function collectWarehouseRequestSelections() {
     var selections = {};
 
     for (var q = 1; q <= w; q++) {
-        if (!$('#row' + q).is(':visible')) {
+        if (!$('#row' + q).length) {
             continue;
         }
 
-        var itemId = $('#desc' + q).val();
+        var itemId = $('#item' + q).val() || $('#desc' + q).val();
 
         if (!itemId) {
             continue;
@@ -135,9 +135,9 @@ $(document).on('click', '#intransitBtn', function(){
 
 $(document).on('click', '.sub_Btn', function(){
     if ($('#datesched').val()) {
+        var selectedItems = collectWarehouseRequestSelections();
         $('#sendModal').toggle();
         $('#loading').show();
-        var selectedItems = collectWarehouseRequestSelections();
         pending = 0;
         for(var q=1;q<=w;q++){
             if (q<=w) {
