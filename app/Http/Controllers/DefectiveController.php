@@ -199,7 +199,7 @@ class DefectiveController extends Controller
             ->join('items', 'items.id', 'items_id')
             ->join('users', 'users.id', 'user_id')
             ->wherein('defectives.status', ['For receiving'])
-            ->where('defectives.category_id', '!=', 26)
+            // ->where('defectives.category_id', '!=', 26)
             ->where('return_no', $request->retno)
             ->get();
         return DataTables::of($return)
