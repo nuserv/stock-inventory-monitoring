@@ -197,6 +197,60 @@ $(document).on('click', '.in_sub_Btn', function(){
                 }
             }else if ($('#intype').val() == 'replacement') {
                 if (desc != '' && $('#repserial').val() != "") {
+                    var repserial = $('#repserial').val();
+                    var serialAllowed = false;
+                    if (repserial.length >= 3) {
+                        if (repserial.toLowerCase().includes('n/a') || repserial.toLowerCase() == "n/a" || repserial.toLowerCase() == "faded" || repserial.toLowerCase() == "none") {
+                            $.ajax({
+                                url: 'checkserial',
+                                headers: {
+                                    'X-CSRF-TOKEN': $('meta[name="ctok"]').attr('content')
+                                },
+                                dataType: 'json',
+                                type: 'get',
+                                async: false,
+                                data: {
+                                    item: $('#repdesc').val(),
+                                    type: 'na'
+                                },
+                                success: function (data) {
+                                    serialAllowed = (data == "allowed");
+                                    if (!serialAllowed) {
+                                        alert('This item requires a valid serial number. If the item does not contain a serial number please contact the main office to generate a new one.');
+                                    }
+                                },
+                                error: function (data) {
+                                    alert(data.responseText);
+                                }
+                            });
+                        } else if (repserial.match(".*\\d.*")) {
+                            $.ajax({
+                                url: 'checkserial',
+                                headers: {
+                                    'X-CSRF-TOKEN': $('meta[name="ctok"]').attr('content')
+                                },
+                                dataType: 'json',
+                                type: 'get',
+                                async: false,
+                                data: {
+                                    serial: repserial,
+                                    type: 'check'
+                                },
+                                success: function (data) {
+                                    serialAllowed = (data == "allowed");
+                                    if (!serialAllowed) {
+                                        alert('The serial number you entered is already existing. Please check the serial number again.');
+                                    }
+                                },
+                                error: function (data) {
+                                    alert(data.responseText);
+                                }
+                            });
+                        }
+                    }
+                    if (!serialAllowed) {
+                        return false;
+                    }
                     $('#service-inModal').toggle();
                     $('#loading').show();
                     $.ajax({
