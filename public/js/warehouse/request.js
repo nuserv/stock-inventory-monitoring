@@ -658,6 +658,10 @@ $(document).ready(function()
             $('#prcBtn').show();
             $('.sched').show();
             $('#printBtn').hide();
+            $('#intransitrow').hide();
+            $('#intransitsched').val('');
+            $('#intransitlabel').hide();
+            $('table.intransitDetails').hide();
             $('#intransitBtn').show();
             $('#save_Btn').show();
             var trsched = new Date(trdata.sched);
@@ -804,8 +808,10 @@ $(document).ready(function()
             $('#printBtn').hide();
             console.log('test');
             //$('#unresolveBtn').hide();
-            $('#intransitlabel').remove();
-            $('table.intransitDetails').remove();
+            $('#intransitrow').hide();
+            $('#intransitsched').val('');
+            $('#intransitlabel').hide();
+            $('table.intransitDetails').hide();
             $('table.requestDetails').show();
             $('table.schedDetails').show();
             var partreq;
@@ -935,10 +941,12 @@ $(document).ready(function()
             $('#printBtn').hide();
             console.log('test2');
             //$('#unresolveBtn').hide();
+            $('#intransitrow').hide();
+            $('#intransitsched').val('');
             $('table.requestDetails').show();
             $('table.schedDetails').show();
             $('table.intransitDetails').hide();
-            $('#intransitlabel').remove();
+            $('#intransitlabel').hide();
             var partreq;
             Promise.all([partialrequest()]).then(() => { 
                 if (partreq == 0) {
@@ -1709,6 +1717,10 @@ $(document).ready(function()
             $('#prcBtn').show();
             $('.sched').show();
             $('#printBtn').hide();
+            $('#intransitrow').hide();
+            $('#intransitsched').val('');
+            $('#intransitlabel').hide();
+            $('table.intransitDetails').hide();
             $('#intransitBtn').show();
             $('#save_Btn').show();
             var trsched = new Date(trdata.sched);
@@ -1855,8 +1867,10 @@ $(document).ready(function()
             $('#printBtn').hide();
             console.log('test');
             //$('#unresolveBtn').hide();
-            $('#intransitlabel').remove();
-            $('table.intransitDetails').remove();
+            $('#intransitrow').hide();
+            $('#intransitsched').val('');
+            $('#intransitlabel').hide();
+            $('table.intransitDetails').hide();
             $('table.requestDetails').show();
             $('table.schedDetails').show();
             var partreq;
@@ -1986,10 +2000,12 @@ $(document).ready(function()
             $('#printBtn').hide();
             console.log('test2');
             //$('#unresolveBtn').hide();
+            $('#intransitrow').hide();
+            $('#intransitsched').val('');
             $('table.requestDetails').show();
             $('table.schedDetails').show();
             $('table.intransitDetails').hide();
-            $('#intransitlabel').remove();
+            $('#intransitlabel').hide();
             var partreq;
             Promise.all([partialrequest()]).then(() => { 
                 if (partreq == 0) {

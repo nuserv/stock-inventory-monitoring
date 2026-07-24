@@ -284,8 +284,10 @@ $(document).ready(function()
             }
         }else if (trdata.status == 'PARTIAL SCHEDULED' && (trdata.intransitval == '0' || !trdata.intransitval)) {
             $('#printBtn').hide();
-            $('#intransitlabel').remove();
-            $('table.intransitDetails').remove();
+            $('#intransitrow').hide();
+            $('#intransitsched').val('');
+            $('#intransitlabel').hide();
+            $('table.intransitDetails').hide();
             $('table.requestDetails').show();
             $('table.schedDetails').show();
             console.log('testingito');
@@ -398,10 +400,12 @@ $(document).ready(function()
             }
         }else if (trdata.status == 'PARTIAL SCHEDULED' && trdata.intransitval == '1') {
             $('#printBtn').hide();
+            $('#intransitrow').hide();
+            $('#intransitsched').val('');
             $('table.requestDetails').show();
             $('table.schedDetails').show();
             $('table.intransitDetails').hide();
-            $('#intransitlabel').remove();
+            $('#intransitlabel').hide();
             var partreq;
             Promise.all([partialrequest()]).then(() => { 
                 console.log('pasok');
