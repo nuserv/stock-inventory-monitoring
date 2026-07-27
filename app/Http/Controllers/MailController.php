@@ -4,12 +4,19 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Mail;
 use App\Branch;
+use App\BranchEmailAnnouncement;
+use App\BranchEmailAnnouncementBatch;
+use App\Jobs\SendBranchAnnouncementBatch;
 use App\StockRequest;
+use Illuminate\Support\Facades\DB;
 
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 
 class MailController extends Controller {
+   const BRANCH_ANNOUNCEMENT_CAMPAIGN = 'branch-dr-ddr-digital-copy-announcement-v1';
+   const BRANCH_ANNOUNCEMENT_BATCH_SIZE = 8;
+
    private function branchAnnouncementRecipients()
    {
       return Branch::query()
@@ -30,8 +37,12 @@ class MailController extends Controller {
    public function branchAnnouncement()
    {
       $recipients = $this->branchAnnouncementRecipients();
+      $announcement = BranchEmailAnnouncement::where(
+         'campaign_key',
+         self::BRANCH_ANNOUNCEMENT_CAMPAIGN
+      )->first();
 
-      return view('branch-email-announcement', compact('recipients'));
+      return view('branch-email-announcement', compact('recipients', 'announcement'));
    }
 
    public function sendBranchAnnouncement()
@@ -51,21 +62,98 @@ class MailController extends Controller {
          ], 422);
       }
 
-      Mail::send('emails.branch-dr-ddr-announcement', [], function ($message) use ($bcc) {
-         $message->to('jolopez@ideaserv.com.ph', 'Jerome Lopez')
-            ->bcc($bcc)
-            ->subject('DR and DDR Digital Copy Email Announcement');
-      });
+      $announcement = BranchEmailAnnouncement::where(
+         'campaign_key',
+         self::BRANCH_ANNOUNCEMENT_CAMPAIGN
+      )->first();
 
-      if (count(Mail::failures()) > 0) {
-         return response()->json([
-            'message' => 'The email server rejected one or more recipients.',
-         ], 502);
+      if ($announcement && in_array($announcement->status, ['queued', 'sending'])) {
+         return response()->json($this->announcementStatusPayload($announcement), 202);
       }
 
-      return response()->json([
-         'message' => 'Announcement sent to '.count($bcc).' branch email addresses via BCC.',
-      ]);
+      if ($announcement && $announcement->status === 'sent') {
+         return response()->json($this->announcementStatusPayload($announcement));
+      }
+
+      DB::transaction(function () use (&$announcement, $bcc) {
+         if (!$announcement) {
+            $chunks = array_chunk($bcc, self::BRANCH_ANNOUNCEMENT_BATCH_SIZE);
+            $announcement = BranchEmailAnnouncement::create([
+               'campaign_key' => self::BRANCH_ANNOUNCEMENT_CAMPAIGN,
+               'status' => 'queued',
+               'total_recipients' => count($bcc),
+               'total_batches' => count($chunks),
+            ]);
+
+            foreach ($chunks as $index => $recipients) {
+               $batch = BranchEmailAnnouncementBatch::create([
+                  'announcement_id' => $announcement->id,
+                  'batch_number' => $index + 1,
+                  'recipients' => $recipients,
+                  'recipient_count' => count($recipients),
+                  'status' => 'queued',
+               ]);
+
+               dispatch(new SendBranchAnnouncementBatch($batch->id));
+            }
+
+            return;
+         }
+
+         $failedBatches = $announcement->batches()
+            ->where('status', 'failed')
+            ->get();
+
+         $announcement->update([
+            'status' => 'queued',
+            'failed_batches' => 0,
+         ]);
+
+         foreach ($failedBatches as $batch) {
+            $batch->update([
+               'status' => 'queued',
+               'last_error' => null,
+            ]);
+            dispatch(new SendBranchAnnouncementBatch($batch->id));
+         }
+      });
+
+      return response()->json($this->announcementStatusPayload($announcement->fresh()), 202);
+   }
+
+   public function branchAnnouncementStatus()
+   {
+      $announcement = BranchEmailAnnouncement::where(
+         'campaign_key',
+         self::BRANCH_ANNOUNCEMENT_CAMPAIGN
+      )->first();
+
+      if (!$announcement) {
+         return response()->json([
+            'status' => 'ready',
+            'message' => 'Announcement is ready to send.',
+         ]);
+      }
+
+      return response()->json($this->announcementStatusPayload($announcement));
+   }
+
+   private function announcementStatusPayload(BranchEmailAnnouncement $announcement)
+   {
+      $messages = [
+         'queued' => 'Announcement queued for background sending.',
+         'sending' => 'Announcement is being sent in the background.',
+         'sent' => 'Announcement sent to '.$announcement->total_recipients.' branch email addresses.',
+         'failed' => $announcement->failed_batches.' email batch(es) failed. You can retry the failed batches.',
+      ];
+
+      return [
+         'status' => $announcement->status,
+         'message' => $messages[$announcement->status],
+         'completed_batches' => $announcement->completed_batches,
+         'total_batches' => $announcement->total_batches,
+         'failed_batches' => $announcement->failed_batches,
+      ];
    }
 
    public function basic_email() {

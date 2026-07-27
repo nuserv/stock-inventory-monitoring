@@ -1,0 +1,18 @@
+[Unit]
+Description=Stock branch announcement queue worker
+After=network-online.target mysql.service
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=www-data
+Group=www-data
+WorkingDirectory=/var/www/html/stock
+ExecStart=/usr/bin/php artisan queue:work database --queue=branch-announcements --sleep=3 --tries=3 --timeout=180
+Restart=always
+RestartSec=5
+KillSignal=SIGTERM
+TimeoutStopSec=190
+
+[Install]
+WantedBy=multi-user.target

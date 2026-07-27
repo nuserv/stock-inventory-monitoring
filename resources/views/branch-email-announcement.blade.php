@@ -12,6 +12,7 @@
         .message { padding: 12px; margin-bottom: 18px; border-radius: 4px; }
         .success { color: #155724; background: #d4edda; }
         .error { color: #721c24; background: #f8d7da; }
+        .pending { color: #856404; background: #fff3cd; }
         .preview { padding: 15px; border: 1px solid #ccc; background: #fafafa; }
         button { padding: 10px 18px; color: #fff; background: #1967d2; border: 0; border-radius: 4px; cursor: pointer; }
     </style>
@@ -52,46 +53,120 @@
     <button type="button" id="sendAnnouncement">Send announcement</button>
 
     <script>
-        document.getElementById('sendAnnouncement').addEventListener('click', function () {
-            var button = this;
+        (function () {
+            var button = document.getElementById('sendAnnouncement');
             var status = document.getElementById('sendStatus');
+            var statusUrl = '{{ route('branch-email-announcement.status') }}';
+            var initialStatus = @json($announcement ? $announcement->status : 'ready');
+            var pollTimer;
 
-            button.disabled = true;
-            button.textContent = 'Sending...';
-            status.className = 'message';
-            status.style.display = 'block';
-            status.textContent = 'Sending announcement...';
+            function showStatus(data) {
+                status.style.display = 'block';
+                status.textContent = data.message;
 
-            fetch(window.location.pathname, {
-                method: 'POST',
-                credentials: 'same-origin',
-                headers: {
-                    'Accept': 'application/json',
-                    'X-Requested-With': 'XMLHttpRequest',
-                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                if (data.total_batches) {
+                    status.textContent += ' (' + data.completed_batches + '/' +
+                        data.total_batches + ' batches completed)';
                 }
-            })
-            .then(function (response) {
-                return response.json().then(function (data) {
+
+                if (data.status === 'sent') {
+                    status.className = 'message success';
+                    button.disabled = true;
+                    button.textContent = 'Announcement sent';
+                    clearInterval(pollTimer);
+                    pollTimer = null;
+                    return;
+                }
+
+                if (data.status === 'failed') {
+                    status.className = 'message error';
+                    button.disabled = false;
+                    button.textContent = 'Retry failed batches';
+                    clearInterval(pollTimer);
+                    pollTimer = null;
+                    return;
+                }
+
+                if (data.status === 'queued' || data.status === 'sending') {
+                    status.className = 'message pending';
+                    button.disabled = true;
+                    button.textContent = data.status === 'queued' ? 'Queued' : 'Sending...';
+                    startPolling();
+                    return;
+                }
+
+                status.style.display = 'none';
+                button.disabled = false;
+                button.textContent = 'Send announcement';
+            }
+
+            function readJson(response) {
+                return response.json().catch(function () {
+                    throw new Error('The server returned an invalid response.');
+                }).then(function (data) {
                     if (!response.ok) {
                         throw new Error(data.message || 'Unable to send the announcement.');
                     }
-
                     return data;
                 });
-            })
-            .then(function (data) {
-                status.className = 'message success';
-                status.textContent = data.message;
-                button.textContent = 'Announcement sent';
-            })
-            .catch(function (error) {
-                status.className = 'message error';
-                status.textContent = error.message;
-                button.disabled = false;
-                button.textContent = 'Send announcement';
+            }
+
+            function refreshStatus() {
+                return fetch(statusUrl, {
+                    credentials: 'same-origin',
+                    headers: {
+                        'Accept': 'application/json',
+                        'X-Requested-With': 'XMLHttpRequest'
+                    }
+                }).then(readJson).then(showStatus);
+            }
+
+            function startPolling() {
+                if (!pollTimer) {
+                    pollTimer = setInterval(function () {
+                        refreshStatus().catch(function (error) {
+                            status.className = 'message error';
+                            status.textContent = error.message;
+                        });
+                    }, 5000);
+                }
+            }
+
+            button.addEventListener('click', function () {
+                button.disabled = true;
+                button.textContent = 'Queuing...';
+                status.className = 'message pending';
+                status.style.display = 'block';
+                status.textContent = 'Queuing announcement...';
+
+                fetch(window.location.pathname, {
+                    method: 'POST',
+                    credentials: 'same-origin',
+                    headers: {
+                        'Accept': 'application/json',
+                        'X-Requested-With': 'XMLHttpRequest',
+                        'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                    }
+                })
+                .then(readJson)
+                .then(showStatus)
+                .catch(function (error) {
+                    status.className = 'message error';
+                    status.textContent = error.message;
+                    button.disabled = false;
+                    button.textContent = 'Send announcement';
+                });
             });
-        });
+
+            if (initialStatus !== 'ready') {
+                refreshStatus().catch(function (error) {
+                    status.className = 'message error';
+                    status.style.display = 'block';
+                    status.textContent = error.message;
+                    button.disabled = false;
+                });
+            }
+        }());
     </script>
 </body>
 </html>

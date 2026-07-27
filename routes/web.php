@@ -357,6 +357,9 @@ Route::get('branch-email-announcement', 'MailController@branchAnnouncement')
 Route::post('branch-email-announcement', 'MailController@sendBranchAnnouncement')
     ->middleware('auth')
     ->name('branch-email-announcement.send');
+Route::get('branch-email-announcement/status', 'MailController@branchAnnouncementStatus')
+    ->middleware('auth')
+    ->name('branch-email-announcement.status');
 
 Route::get('get_customer_branch', 'CustomerController@get_customer_branch');
 Route::get('get_item', 'StockController@get_item');
