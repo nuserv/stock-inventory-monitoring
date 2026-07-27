@@ -19,13 +19,7 @@
 <body>
     <h1>Branch Email Announcement</h1>
 
-    @if (session('announcement_success'))
-        <div class="message success">{{ session('announcement_success') }}</div>
-    @endif
-
-    @if (session('announcement_error'))
-        <div class="message error">{{ session('announcement_error') }}</div>
-    @endif
+    <div id="sendStatus" class="message" style="display: none;"></div>
 
     <p>
         <strong>To:</strong> jolopez@ideaserv.com.ph<br>
@@ -55,10 +49,49 @@
         </tbody>
     </table>
 
-    <form method="POST" action="{{ route('branch-email-announcement.send') }}"
-          onsubmit="return confirm('Send this announcement to all listed branch emails?');">
-        @csrf
-        <button type="submit">Send announcement</button>
-    </form>
+    <button type="button" id="sendAnnouncement">Send announcement</button>
+
+    <script>
+        document.getElementById('sendAnnouncement').addEventListener('click', function () {
+            var button = this;
+            var status = document.getElementById('sendStatus');
+
+            button.disabled = true;
+            button.textContent = 'Sending...';
+            status.className = 'message';
+            status.style.display = 'block';
+            status.textContent = 'Sending announcement...';
+
+            fetch('{{ route('branch-email-announcement.send') }}', {
+                method: 'POST',
+                credentials: 'same-origin',
+                headers: {
+                    'Accept': 'application/json',
+                    'X-Requested-With': 'XMLHttpRequest',
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                }
+            })
+            .then(function (response) {
+                return response.json().then(function (data) {
+                    if (!response.ok) {
+                        throw new Error(data.message || 'Unable to send the announcement.');
+                    }
+
+                    return data;
+                });
+            })
+            .then(function (data) {
+                status.className = 'message success';
+                status.textContent = data.message;
+                button.textContent = 'Announcement sent';
+            })
+            .catch(function (error) {
+                status.className = 'message error';
+                status.textContent = error.message;
+                button.disabled = false;
+                button.textContent = 'Send announcement';
+            });
+        });
+    </script>
 </body>
 </html>

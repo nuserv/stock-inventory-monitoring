@@ -37,14 +37,18 @@ class MailController extends Controller {
    public function sendBranchAnnouncement()
    {
       if (env('MAIL') != 'yes') {
-         return redirect()->back()->with('announcement_error', 'Email sending is currently disabled.');
+         return response()->json([
+            'message' => 'Email sending is currently disabled.',
+         ], 503);
       }
 
       $recipients = $this->branchAnnouncementRecipients();
       $bcc = $recipients->pluck('email')->all();
 
       if (empty($bcc)) {
-         return redirect()->back()->with('announcement_error', 'No branch email recipients were found.');
+         return response()->json([
+            'message' => 'No branch email recipients were found.',
+         ], 422);
       }
 
       Mail::send('emails.branch-dr-ddr-announcement', [], function ($message) use ($bcc) {
@@ -54,13 +58,14 @@ class MailController extends Controller {
       });
 
       if (count(Mail::failures()) > 0) {
-         return redirect()->back()->with('announcement_error', 'The email server rejected one or more recipients.');
+         return response()->json([
+            'message' => 'The email server rejected one or more recipients.',
+         ], 502);
       }
 
-      return redirect()->back()->with(
-         'announcement_success',
-         'Announcement sent to '.count($bcc).' branch email addresses via BCC.'
-      );
+      return response()->json([
+         'message' => 'Announcement sent to '.count($bcc).' branch email addresses via BCC.',
+      ]);
    }
 
    public function basic_email() {
