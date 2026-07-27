@@ -56,7 +56,7 @@
         (function () {
             var button = document.getElementById('sendAnnouncement');
             var status = document.getElementById('sendStatus');
-            var statusUrl = '{{ route('branch-email-announcement.status') }}';
+            var statusUrl = window.location.pathname.replace(/\/+$/, '') + '/status';
             var initialStatus = @json($announcement ? $announcement->status : 'ready');
             var pollTimer;
 
