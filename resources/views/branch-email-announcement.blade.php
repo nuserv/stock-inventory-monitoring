@@ -19,12 +19,12 @@
 <body>
     <h1>Branch Email Announcement</h1>
 
-    @if (session('success'))
-        <div class="message success">{{ session('success') }}</div>
+    @if (session('announcement_success'))
+        <div class="message success">{{ session('announcement_success') }}</div>
     @endif
 
-    @if (session('error'))
-        <div class="message error">{{ session('error') }}</div>
+    @if (session('announcement_error'))
+        <div class="message error">{{ session('announcement_error') }}</div>
     @endif
 
     <p>
