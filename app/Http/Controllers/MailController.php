@@ -45,7 +45,7 @@ class MailController extends Controller {
       return view('branch-email-announcement', compact('recipients', 'announcement'));
    }
 
-   public function sendBranchAnnouncement()
+   public function sendBranchAnnouncement(Request $request)
    {
       if (env('MAIL') != 'yes') {
          return response()->json([
@@ -66,16 +66,22 @@ class MailController extends Controller {
          'campaign_key',
          self::BRANCH_ANNOUNCEMENT_CAMPAIGN
       )->first();
+      $resend = $request->boolean('resend');
 
       if ($announcement && in_array($announcement->status, ['queued', 'sending'])) {
          return response()->json($this->announcementStatusPayload($announcement), 202);
       }
 
-      if ($announcement && $announcement->status === 'sent') {
+      if ($announcement && $announcement->status === 'sent' && !$resend) {
          return response()->json($this->announcementStatusPayload($announcement));
       }
 
-      DB::transaction(function () use (&$announcement, $bcc) {
+      DB::transaction(function () use (&$announcement, $bcc, $resend) {
+         $announcement = BranchEmailAnnouncement::where(
+            'campaign_key',
+            self::BRANCH_ANNOUNCEMENT_CAMPAIGN
+         )->lockForUpdate()->first();
+
          if (!$announcement) {
             $chunks = array_chunk($bcc, self::BRANCH_ANNOUNCEMENT_BATCH_SIZE);
             $announcement = BranchEmailAnnouncement::create([
@@ -85,18 +91,30 @@ class MailController extends Controller {
                'total_batches' => count($chunks),
             ]);
 
-            foreach ($chunks as $index => $recipients) {
-               $batch = BranchEmailAnnouncementBatch::create([
-                  'announcement_id' => $announcement->id,
-                  'batch_number' => $index + 1,
-                  'recipients' => $recipients,
-                  'recipient_count' => count($recipients),
-                  'status' => 'queued',
-               ]);
+            $this->queueAnnouncementBatches($announcement, $chunks);
+            return;
+         }
 
-               dispatch(new SendBranchAnnouncementBatch($batch->id));
+         if (in_array($announcement->status, ['queued', 'sending'])) {
+            return;
+         }
+
+         if ($announcement->status === 'sent') {
+            if (!$resend) {
+               return;
             }
 
+            $chunks = array_chunk($bcc, self::BRANCH_ANNOUNCEMENT_BATCH_SIZE);
+            $announcement->batches()->delete();
+            $announcement->update([
+               'status' => 'queued',
+               'total_recipients' => count($bcc),
+               'total_batches' => count($chunks),
+               'completed_batches' => 0,
+               'failed_batches' => 0,
+               'sent_at' => null,
+            ]);
+            $this->queueAnnouncementBatches($announcement, $chunks);
             return;
          }
 
@@ -118,7 +136,13 @@ class MailController extends Controller {
          }
       });
 
-      return response()->json($this->announcementStatusPayload($announcement->fresh()), 202);
+      $announcement = $announcement->fresh();
+      $responseStatus = $announcement->status === 'sent' ? 200 : 202;
+
+      return response()->json(
+         $this->announcementStatusPayload($announcement),
+         $responseStatus
+      );
    }
 
    public function branchAnnouncementStatus()
@@ -154,6 +178,23 @@ class MailController extends Controller {
          'total_batches' => $announcement->total_batches,
          'failed_batches' => $announcement->failed_batches,
       ];
+   }
+
+   private function queueAnnouncementBatches(
+      BranchEmailAnnouncement $announcement,
+      array $chunks
+   ) {
+      foreach ($chunks as $index => $recipients) {
+         $batch = BranchEmailAnnouncementBatch::create([
+            'announcement_id' => $announcement->id,
+            'batch_number' => $index + 1,
+            'recipients' => $recipients,
+            'recipient_count' => count($recipients),
+            'status' => 'queued',
+         ]);
+
+         dispatch(new SendBranchAnnouncementBatch($batch->id));
+      }
    }
 
    public function basic_email() {

@@ -58,9 +58,11 @@
             var status = document.getElementById('sendStatus');
             var statusUrl = window.location.pathname.replace(/\/+$/, '') + '/status';
             var initialStatus = @json($announcement ? $announcement->status : 'ready');
+            var currentStatus = initialStatus;
             var pollTimer;
 
             function showStatus(data) {
+                currentStatus = data.status;
                 status.style.display = 'block';
                 status.textContent = data.message;
 
@@ -71,8 +73,8 @@
 
                 if (data.status === 'sent') {
                     status.className = 'message success';
-                    button.disabled = true;
-                    button.textContent = 'Announcement sent';
+                    button.disabled = false;
+                    button.textContent = 'Send announcement again';
                     clearInterval(pollTimer);
                     pollTimer = null;
                     return;
@@ -133,6 +135,16 @@
             }
 
             button.addEventListener('click', function () {
+                var resend = currentStatus === 'sent';
+
+                if (resend && !window.confirm(
+                    'This announcement was already sent. Send it again to all branch recipients?'
+                )) {
+                    return;
+                }
+
+                var formData = new FormData();
+                formData.append('resend', resend ? '1' : '0');
                 button.disabled = true;
                 button.textContent = 'Queuing...';
                 status.className = 'message pending';
@@ -142,6 +154,7 @@
                 fetch(window.location.pathname, {
                     method: 'POST',
                     credentials: 'same-origin',
+                    body: formData,
                     headers: {
                         'Accept': 'application/json',
                         'X-Requested-With': 'XMLHttpRequest',
@@ -154,7 +167,8 @@
                     status.className = 'message error';
                     status.textContent = error.message;
                     button.disabled = false;
-                    button.textContent = 'Send announcement';
+                    button.textContent = resend ?
+                        'Send announcement again' : 'Send announcement';
                 });
             });
 
