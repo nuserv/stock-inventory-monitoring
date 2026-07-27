@@ -43,6 +43,10 @@ class Branch extends Model
     public function notificationEmail()
     {
         $localPart = preg_replace('/[^a-z0-9]/', '', strtolower($this->branch));
+        $aliases = [
+            'gensantos' => 'gensan',
+        ];
+        $localPart = $aliases[$localPart] ?? $localPart;
 
         return $localPart.'@ideaserv.com.ph';
     }
