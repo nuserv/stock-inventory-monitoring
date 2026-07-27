@@ -351,6 +351,12 @@ Route::get('delreqdata', 'StockRequestController@delreqdata');//->middleware('aj
 
 Route::get('delete-approval', 'MailController@delapproval');//->middleware('ajax');
 Route::get('delreqapproved', 'MailController@delreqapproved');//->middleware('ajax');
+Route::get('branch-email-announcement', 'MailController@branchAnnouncement')
+    ->middleware(['auth', 'admin'])
+    ->name('branch-email-announcement');
+Route::post('branch-email-announcement', 'MailController@sendBranchAnnouncement')
+    ->middleware(['auth', 'admin'])
+    ->name('branch-email-announcement.send');
 
 Route::get('get_customer_branch', 'CustomerController@get_customer_branch');
 Route::get('get_item', 'StockController@get_item');
