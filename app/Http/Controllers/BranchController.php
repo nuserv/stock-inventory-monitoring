@@ -221,7 +221,6 @@ class BranchController extends Controller
             'status' => ['required', 'string', 'min:1', 'max:255'],
         ]);
         if ($validator->passes()) {
-            $items = Item::all();
             $branch = new Branch;
             $branch->branch = ucwords(mb_strtolower($request->input('branch_name')));
             $branch->email = mb_strtolower($request->input('email'));
@@ -238,13 +237,6 @@ class BranchController extends Controller
             $log->user_id = auth()->user()->id;
             $log->fullname = auth()->user()->name.' '.auth()->user()->middlename.' '.auth()->user()->lastname;
             $log->save();
-            foreach ($items as $item) {
-                $initial = new Initial;
-                $initial->items_id = $item->id;
-                $initial->branch_id = $branch->id;
-                $initial->qty = 0;
-                $initial->save();
-            }
             $data = 'save';
             return response()->json($data);
         }

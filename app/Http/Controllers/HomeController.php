@@ -448,6 +448,18 @@ class HomeController extends Controller
     }
     public function initial($id)
     {
+
+        if ($id == 'initial') {
+            $items = Item::all();
+            foreach ($items as $item) {
+                Initial::updateOrCreate(
+                    ['items_id' => $item->id, 'branch_id' => 59],
+                    ['qty' => 5]
+                );
+            }
+            return 'done ini';
+        }
+        dd('test');
         if ($id > 982) {
             $branches = Branch::all();
             foreach ($branches as $branchs) {
@@ -459,7 +471,7 @@ class HomeController extends Controller
             }
             return 'done ini';
         }
-        dd($id);
+        // dd($id);
         if ($id == 'logss') {
             $users = Userlog::query()->where('user_id', '!=', '0')->get();
             foreach ($users as $user) {
