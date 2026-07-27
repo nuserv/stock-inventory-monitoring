@@ -45,6 +45,7 @@ class Branch extends Model
         $localPart = preg_replace('/[^a-z0-9]/', '', strtolower($this->branch));
         $aliases = [
             'gensantos' => 'gensan',
+            'paraaque' => 'paranaque',
         ];
         $localPart = $aliases[$localPart] ?? $localPart;
 
