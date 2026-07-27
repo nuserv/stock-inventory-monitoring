@@ -39,6 +39,12 @@ class Branch extends Model
     {
         return $this->belongsTo(Area::class, 'area_id', 'id');
     }
-    
+
+    public function notificationEmail()
+    {
+        $localPart = preg_replace('/[^a-z0-9]/', '', strtolower($this->branch));
+
+        return $localPart.'@ideaserv.com.ph';
+    }
+
 }
- 

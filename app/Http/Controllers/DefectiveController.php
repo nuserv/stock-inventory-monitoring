@@ -810,12 +810,13 @@ class DefectiveController extends Controller
             $retno->return_no = $request->ret;
             $retno->save();
             $bcc = \config('email.bcc');
+            $branchEmail = $branch->notificationEmail();
             if (auth()->user()->branch->branch != "Conversion") {
                 $excel = Excel::raw(new ExcelExport($request->ret, 'DDR'), BaseExcel::XLSX);
                 $data = array('office'=> $branch->branch, 'return_no'=>$retno->return_no, 'dated'=>$retno->created_at);
                 if (env('MAIL') == 'yes') {
-                    Mail::send('returncopy', $data, function($message) use($excel, $retno, $bcc) {
-                        $message->to(auth()->user()->email, auth()->user()->name)->subject
+                    Mail::send('returncopy', $data, function($message) use($excel, $retno, $bcc, $branch, $branchEmail) {
+                        $message->to($branchEmail, $branch->branch)->subject
                             ('DDR No. '.$retno->return_no.' '.auth()->user()->branch->branch);
                         $message->attachData($excel, 'DDR No. '.$retno->return_no.'.xlsx');
                         // // $message->from('noreply@phillogix.com.ph', 'BSMS');

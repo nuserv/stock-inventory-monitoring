@@ -1688,9 +1688,7 @@ class StockRequestController extends Controller
         }
         $no = $request->reqno;
         $branch = Branch::where('id', $reqno->branch_id)->first();
-        $head = User::whereHas('roles', function($role) {
-            $role->where('name', '=', 'Head');
-        })->where('branch_id', $reqno->branch_id)->where('status', 1)->first();
+        $branchEmail = $branch->notificationEmail();
         $bcc = \config('email.bcc');
         $excel = Excel::raw(new ExcelExport($request->reqno, 'DSR'), BaseExcel::XLSX);
         $data = array('office'=> $branch->branch, 'return_no'=>$request->reqno, 'dated'=>Carbon::now()->toDateTimeString());
@@ -1705,13 +1703,13 @@ class StockRequestController extends Controller
         // );
         // Config::set('mail', $config);
         if (env('MAIL') == 'yes') {
-            Mail::send('del', $data, function($message) use($excel, $no, $bcc, $head, $branch) {
+            Mail::send('del', $data, function($message) use($excel, $no, $bcc, $branch, $branchEmail) {
                 $message->to(auth()->user()->email, auth()->user()->name)->subject
                     ('DR no. '.$no.'('.$branch->branch.')');
                 $message->attachData($excel, 'DR No. '.$no.'.xlsx');
                 // $message->from(auth()->user()->email, auth()->user()->name.' '.auth()->user()->lastname);
                 // $message->bcc($bcc);
-                $message->cc($head->email);
+                $message->cc($branchEmail);
             });
         }
         if(count(Mail::failures()) > 0){
