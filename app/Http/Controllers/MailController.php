@@ -3,12 +3,66 @@
 namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Mail;
+use App\Branch;
 use App\StockRequest;
 
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 
 class MailController extends Controller {
+   private function branchAnnouncementRecipients()
+   {
+      return Branch::query()
+         ->whereNotIn('branch', ['Warehouse', 'Main-Office', 'Ups Team'])
+         ->where('branch', 'not like', 'Test%')
+         ->orderBy('branch')
+         ->get()
+         ->map(function ($branch) {
+            return [
+               'branch' => $branch->branch,
+               'email' => $branch->notificationEmail(),
+            ];
+         })
+         ->unique('email')
+         ->values();
+   }
+
+   public function branchAnnouncement()
+   {
+      $recipients = $this->branchAnnouncementRecipients();
+
+      return view('branch-email-announcement', compact('recipients'));
+   }
+
+   public function sendBranchAnnouncement()
+   {
+      if (env('MAIL') != 'yes') {
+         return redirect()->back()->with('error', 'Email sending is currently disabled.');
+      }
+
+      $recipients = $this->branchAnnouncementRecipients();
+      $bcc = $recipients->pluck('email')->all();
+
+      if (empty($bcc)) {
+         return redirect()->back()->with('error', 'No branch email recipients were found.');
+      }
+
+      Mail::send('emails.branch-dr-ddr-announcement', [], function ($message) use ($bcc) {
+         $message->to('jolopez@ideaserv.com.ph', 'Jerome Lopez')
+            ->bcc($bcc)
+            ->subject('DR and DDR Digital Copy Email Announcement');
+      });
+
+      if (count(Mail::failures()) > 0) {
+         return redirect()->back()->with('error', 'The email server rejected one or more recipients.');
+      }
+
+      return redirect()->back()->with(
+         'success',
+         'Announcement sent to '.count($bcc).' branch email addresses via BCC.'
+      );
+   }
+
    public function basic_email() {
       $name = array('name'=>"Virat Gandhi");
       /*Mail::send(['text'=>'mail'], $name, function($message) {
