@@ -62,7 +62,7 @@
             status.style.display = 'block';
             status.textContent = 'Sending announcement...';
 
-            fetch('{{ route('branch-email-announcement.send') }}', {
+            fetch(window.location.pathname, {
                 method: 'POST',
                 credentials: 'same-origin',
                 headers: {
