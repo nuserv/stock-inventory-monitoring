@@ -16,7 +16,7 @@ use App\Http\Controllers\Controller;
 class MailController extends Controller {
    const BRANCH_ANNOUNCEMENT_CAMPAIGN = 'branch-dr-ddr-digital-copy-announcement-v1';
    const BRANCH_ANNOUNCEMENT_BATCH_SIZE = 1;
-   const BRANCH_ANNOUNCEMENT_BATCH_DELAY_SECONDS = 300;
+   const BRANCH_ANNOUNCEMENT_BATCH_DELAY_SECONDS = 30;
 
    private function branchAnnouncementRecipients()
    {
