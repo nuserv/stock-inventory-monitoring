@@ -114,7 +114,7 @@ class HomeController extends Controller
         $log->user_id = auth()->user()->id;
         $log->fullname = auth()->user()->name.' '.auth()->user()->middlename.' '.auth()->user()->lastname;
         $data = $log->save();
-        if (env('MAIL') == 'yes') {
+        if (!config('email.disabled')) {
             Mail::raw('Update '.$items->item.' to '.$item->item.'.', function ($message) use ($items){
                 $message->to('emorej046@gmail.com');
                 $message->subject('Update123 '.$items->item);
@@ -163,7 +163,7 @@ class HomeController extends Controller
             // );
             // Config::set('mail', $config);
             
-            if (env('MAIL') == 'yes') {
+            if (!config('email.disabled')) {
                 $send = Mail::send('report-a-problem', 
                     [
                     'branch'=>auth()->user()->branch->branch,
@@ -208,7 +208,7 @@ class HomeController extends Controller
         // Config::set('mail', $config);
         $email = auth()->user()->email;
         $name = auth()->user()->name. ' '. auth()->user()->lastname;
-        if (env('MAIL') == 'yes') {
+        if (!config('email.disabled')) {
             $data = Mail::send('responder', function( $message) use($email, $name){ 
                 $message->to($email, $name)->subject('Report A Problem'); 
                 // $message->from('noreply@phillogix.com.ph', 'BSMS Support Team');
@@ -317,7 +317,7 @@ class HomeController extends Controller
                 foreach ($items as $item) {
                     $missing = Item::where('id', $item->items_id)->first();
                     $email = 'jerome.lopez.ge2018@gmail.com';
-                    if (env('MAIL') == 'yes') {
+                    if (!config('email.disabled')) {
                         $gomail = Mail::send('unresolved', ['item'=>$missing->item, 'RDate'=>$mail->created_at, 'intransit'=>$mail->intransit, 'branch'=>$branch->branch],function( $message){ 
                             $message->to('jerome.lopez.ge2018@gmail.com', 'Jerome Lopez')->subject 
                                 ('Unresolved Issue Notification'); 
@@ -340,7 +340,7 @@ class HomeController extends Controller
         if ($responder) {
             $email = $responder->email;
             $name = $responder->name. ' '. $responder->lastname;
-            if (env('MAIL') == 'yes') {
+            if (!config('email.disabled')) {
                 Mail::send('responder',['email'=>'email'], function( $message) use($email, $name){ 
                     $message->to($email, $name)->subject('Report A Problem'); 
                     // $message->from('noreply@phillogix.com.ph', 'BSMS Support Team');

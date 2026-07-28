@@ -42,6 +42,19 @@ class SendBranchAnnouncementBatch implements ShouldQueue
             return;
         }
 
+        if (config('email.disabled')) {
+            $batch->update(['status' => 'queued']);
+            BranchEmailAnnouncement::where('id', $batch->announcement_id)
+                ->where('status', 'sending')
+                ->update(['status' => 'queued']);
+
+            dispatch(
+                (new self($batch->id))
+                    ->delay($this->retryAfter)
+            );
+            return;
+        }
+
         $batch->update([
             'status' => 'sending',
             'attempts' => $batch->attempts + 1,

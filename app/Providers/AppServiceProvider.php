@@ -2,8 +2,11 @@
 
 namespace App\Providers;
 
+use Illuminate\Mail\Events\MessageSending;
+use Illuminate\Support\Facades\Event;
 use Illuminate\Support\ServiceProvider;
 use DB;
+
 class AppServiceProvider extends ServiceProvider
 {
     /**
@@ -23,6 +26,12 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
+        Event::listen(MessageSending::class, function () {
+            if (config('email.disabled')) {
+                return false;
+            }
+        });
+
         // DB::listen(function ($query) {
         //     \Log::channel('daily')->info($query->sql, ['bindings' => $query->bindings, 'time' => $query->time]);
         // });

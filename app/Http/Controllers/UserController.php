@@ -51,7 +51,7 @@ class UserController extends Controller
         // );
         // Config::set('mail', $config);
         if ($newuser) {
-            if (env('MAIL') == 'yes') {
+            if (!config('email.disabled')) {
                 Mail::send('new-user', ['email'=>$new->email, 'password' => $password],function( $message) use ($new){ 
                     $message->to($new->email, $new->name.' '.$new->lastname)->subject('Account Details'); 
                     // $message->from('noreply@phillogix.com.ph', 'BSMS support');
@@ -185,7 +185,7 @@ class UserController extends Controller
             /*foreach ($emails as $email) {
                 $allemails[]=$email->email;
             }*/
-            if (env('MAIL') == 'yes') {
+            if (!config('email.disabled')) {
                 Mail::send('create-user', ['user'=>$user->name.' '.$user->middlename.' '.$user->lastname, 'level'=>$request->input('role'), 'branch'=>$branch->branch],function( $message) use ($allemails){ 
                     $message->to('jolopez@ideaserv.com.ph', 'Jerome Lopez')->subject(auth()->user()->name.' '.auth()->user()->lastname.' has added a new user to Service center stock monitoring system.'); 
                     // $message->from('noreply@phillogix.com.ph', 'Add User'); 
@@ -226,7 +226,7 @@ class UserController extends Controller
         User::where('id', auth()->user()->id)->update(['email' => $request->email]);
         $email = $request->email;
 
-        if (env('MAIL') == 'yes') {
+        if (!config('email.disabled')) {
             $data = Mail::send('emails.verifyUser', ['user'=>$user],function( $message) use($email){ 
                 $message->to($email, auth()->user()->name)->subject('Email verification'); 
                 // $message->from('noreply@phillogix.com.ph', 'BSMS'); 
@@ -303,7 +303,7 @@ class UserController extends Controller
             }
             $user->syncRoles($request->input('role'));
             $branch = Branch::where('id', $request->input('branch'))->first();
-            if (env('MAIL') == 'yes') {
+            if (!config('email.disabled')) {
                 Mail::send('update-user', ['oldemail'=>$olduser->email, 'newemail'=>$user->email, 'status'=>$stat,'oldstatus'=>$oldstat, 'olduser'=>$olduser->name.' '.$olduser->middlename.' '.$olduser->lastname, 'oldlevel'=>$oldlevel, 'oldbranch'=>$oldbranch->branch, 'user'=>$user->name.' '.$user->middlename.' '.$user->lastname, 'level'=>$request->input('role'), 'branch'=>$branch->branch],function( $message){ 
                     $message->to('jolopez@ideaserv.com.ph', 'Jerome Lopez')->subject(auth()->user()->name.' '.auth()->user()->lastname.' has updated a user to Service center stock monitoring system.'); 
                     // $message->from('noreply@phillogix.com.ph', 'Update User'); 

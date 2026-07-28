@@ -48,7 +48,7 @@ class MailController extends Controller {
 
    public function sendBranchAnnouncement(Request $request)
    {
-      if (env('MAIL') != 'yes') {
+      if (config('email.disabled')) {
          return response()->json([
             'message' => 'Email sending is currently disabled.',
          ], 503);
@@ -266,7 +266,7 @@ class MailController extends Controller {
    }
    public function attachment_email() {
       $data = array('name'=>"Virat Gandhi");
-      if (env('MAIL') == 'yes') {
+      if (!config('email.disabled')) {
          Mail::send('mail', $data, function($message) {
             $message->to('abc@gmail.com', 'Tutorials Point')->subject
                ('Laravel Testing Mail with Attachment');

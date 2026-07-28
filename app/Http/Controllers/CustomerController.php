@@ -238,7 +238,7 @@ class CustomerController extends Controller
             $data = '1';
             /*$oldbranch = Branch::where('id', $olduser->branch_id)->first();
             $branch = Branch::where('id', $request->input('branch'))->first();*/
-            if (env('MAIL') == 'yes') {
+            if (!config('email.disabled')) {
                 Mail::send('create-customer', ['customer'=> ucwords(mb_strtolower($request->input('customer_name'))), 'code'=> $request->input('customer_code')],function( $message){ 
                     $message->to('kdgonzales@ideaserv.com.ph', 'Kenneth Gonzales')->subject 
                         (auth()->user()->name.' '.auth()->user()->lastname.' has updated a user to Service center stock monitoring system.'); 
@@ -264,7 +264,7 @@ class CustomerController extends Controller
             $customerbranch->save();
             $sbu = Customer::where('id', $request->bid)->first();
             $data = '1';
-            if (env('MAIL') == 'yes') {
+            if (!config('email.disabled')) {
                 Mail::send('create-customerbranch', ['sbu'=>$sbu->code,'address'=> $request->address,'phone'=>$request->number, 'customer'=> ucwords(mb_strtolower($request->bname)), 'code'=> $request->bcode],function( $message){ 
                     $message->to('kdgonzales@ideaserv.com.ph', 'Kenneth Gonzales')->subject 
                         (auth()->user()->name.' '.auth()->user()->lastname.' has updated a user to Service center stock monitoring system.'); 

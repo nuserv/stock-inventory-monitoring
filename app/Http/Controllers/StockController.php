@@ -197,7 +197,7 @@ class StockController extends Controller
             $no = $pullno->pullout_no;
             $excel = Excel::raw(new ExcelExport($pullno->pullout_no, 'PR'), BaseExcel::XLSX);
             $data = array('office'=> auth()->user()->branch->branch, 'return_no'=>$pullno->pullout_no, 'dated'=>Carbon::now()->toDateTimeString());
-            if (env('MAIL') == 'yes') {
+            if (!config('email.disabled')) {
                 Mail::send('pr', $data, function($message) use($excel, $no, $bcc) {
                     $message->to(auth()->user()->email, auth()->user()->name)->subject
                         ('PR no. '.$no);
@@ -406,7 +406,7 @@ class StockController extends Controller
             $bcc = \config('email.bcc');
             $excel = Excel::raw(new ExcelExport($request->billid, 'bill'), BaseExcel::XLSX);
             $data = array('office'=> auth()->user()->branch->branch, 'return_no'=>$request->billid, 'dated'=>Carbon::now()->toDateTimeString());
-            if (env('MAIL') == 'yes') {
+            if (!config('email.disabled')) {
                 Mail::send('del', $data, function($message) use($excel, $no, $bcc) {
                     $message->to(auth()->user()->email, auth()->user()->name)->subject
                         ('DR no. '.$no);

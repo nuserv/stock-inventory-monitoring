@@ -25,7 +25,7 @@ class ForgotPasswordController extends Controller
         DB::table('password_resets')->insert(
             ['email' => $request->email, 'token' => $token, 'created_at' => Carbon::now()]
         );
-        if (env('MAIL') == 'yes') {
+        if (!config('email.disabled')) {
 
             Mail::send('auth.verify', ['token' => $token], function($message) use($request){
                 $message->to($request->email);

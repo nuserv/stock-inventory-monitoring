@@ -329,7 +329,7 @@ class DefectiveController extends Controller
             $no = $repaired->repaired_no;
             $excel = Excel::raw(new ExcelExport($repaired->repaired_no, 'RR'), BaseExcel::XLSX);
             $data = array('office'=> auth()->user()->branch->branch, 'return_no'=>$repaired->repaired_no, 'dated'=>Carbon::now()->toDateTimeString());
-            if (env('MAIL') == 'yes') {
+            if (!config('email.disabled')) {
                 Mail::send('rr', $data, function($message) use($excel, $no, $bcc) {
                     $message->to(auth()->user()->email, auth()->user()->name)->subject
                         ('RR no. '.$no);
@@ -814,7 +814,7 @@ class DefectiveController extends Controller
             if (auth()->user()->branch->branch != "Conversion") {
                 $excel = Excel::raw(new ExcelExport($request->ret, 'DDR'), BaseExcel::XLSX);
                 $data = array('office'=> $branch->branch, 'return_no'=>$retno->return_no, 'dated'=>$retno->created_at);
-                if (env('MAIL') == 'yes') {
+                if (!config('email.disabled')) {
                     Mail::send('returncopy', $data, function($message) use($excel, $retno, $bcc, $branch, $branchEmail) {
                         $message->to($branchEmail, $branch->branch)->subject
                             ('DDR No. '.$retno->return_no.' '.auth()->user()->branch->branch);
@@ -826,7 +826,7 @@ class DefectiveController extends Controller
             }else{
                 $excel = Excel::raw(new ExcelExport($request->ret.'/'.$updates->drno, 'CDR'), BaseExcel::XLSX);
                 $data = array('office'=> $branch->branch, 'return_no'=>$retno->return_no, 'dated'=>$retno->created_at);
-                if (env('MAIL') == 'yes') {
+                if (!config('email.disabled')) {
                     Mail::send('returncopy', $data, function($message) use($excel, $retno, $bcc) {
                         $message->to(auth()->user()->email, auth()->user()->name)->subject
                             ('CDR No. '.$retno->return_no);

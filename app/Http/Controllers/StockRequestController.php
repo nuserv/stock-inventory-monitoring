@@ -1327,7 +1327,7 @@ class StockRequestController extends Controller
         //     'password'   => \config('mailconf.password'),
         // );
         // Config::set('mail', $config);
-        if (env('MAIL') == 'yes') {
+        if (!config('email.disabled')) {
             Mail::send('delrequest', ['req'=>$req, 'stockreq'=>$stockreq, 'reason'=>$reason, 'key'=>$key, 'branch'=>$branch->branch],function( $message) use ($stockreq){
                 $message->to('nonoy_atizardo@yahoo.com')->subject('Approval Required for Request no. '.$stockreq->request_no);
                 $message->from('noreply@phillogix.com.ph', auth()->user()->name);
@@ -1702,7 +1702,7 @@ class StockRequestController extends Controller
         //     'password'   => \config('mailconf.password'),
         // );
         // Config::set('mail', $config);
-        if (env('MAIL') == 'yes') {
+        if (!config('email.disabled')) {
             Mail::send('del', $data, function($message) use($excel, $no, $bcc, $branch, $branchEmail) {
                 $message->to(auth()->user()->email, auth()->user()->name)->subject
                     ('DR no. '.$no.'('.$branch->branch.')');
