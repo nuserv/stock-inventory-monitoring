@@ -1171,16 +1171,8 @@ class StockController extends Controller
                 'items_id'=>$add->id,
                 'qty'=>10
             ]);
-            $branches = Branch::all();
-            foreach ($branches as $branchs) {
-                $initial = new Initial;
-                $initial->items_id = $add->id;
-                $initial->branch_id = $branchs->id;
-                $initial->qty = 5;
-                $data = $initial->save();
-            }
 
-            return response()->json($data);
+            return response()->json(true);
         }
     }
     public function pmservicein(Request $request)
