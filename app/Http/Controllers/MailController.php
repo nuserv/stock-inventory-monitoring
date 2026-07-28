@@ -15,7 +15,7 @@ use App\Http\Controllers\Controller;
 
 class MailController extends Controller {
    const BRANCH_ANNOUNCEMENT_CAMPAIGN = 'branch-dr-ddr-digital-copy-announcement-v1';
-   const BRANCH_ANNOUNCEMENT_BATCH_SIZE = 24;
+   const BRANCH_ANNOUNCEMENT_BATCH_SIZE = 1;
    const BRANCH_ANNOUNCEMENT_BATCH_DELAY_SECONDS = 300;
 
    private function branchAnnouncementRecipients()
@@ -77,7 +77,14 @@ class MailController extends Controller {
          return response()->json($this->announcementStatusPayload($announcement));
       }
 
-      DB::transaction(function () use (&$announcement, $bcc, $resend) {
+      $batchToDispatchId = null;
+
+      DB::transaction(function () use (
+         &$announcement,
+         &$batchToDispatchId,
+         $bcc,
+         $resend
+      ) {
          $announcement = BranchEmailAnnouncement::where(
             'campaign_key',
             self::BRANCH_ANNOUNCEMENT_CAMPAIGN
@@ -92,7 +99,10 @@ class MailController extends Controller {
                'total_batches' => count($chunks),
             ]);
 
-            $this->queueAnnouncementBatches($announcement, $chunks);
+            $batchToDispatchId = $this->createAnnouncementBatches(
+               $announcement,
+               $chunks
+            );
             return;
          }
 
@@ -115,30 +125,59 @@ class MailController extends Controller {
                'failed_batches' => 0,
                'sent_at' => null,
             ]);
-            $this->queueAnnouncementBatches($announcement, $chunks);
+            $batchToDispatchId = $this->createAnnouncementBatches(
+               $announcement,
+               $chunks
+            );
             return;
          }
 
          $failedBatches = $announcement->batches()
             ->where('status', 'failed')
             ->get();
+         $failedRecipients = $failedBatches
+            ->pluck('recipients')
+            ->flatten()
+            ->values()
+            ->all();
+         $nextBatchNumber = $announcement->batches()->max('batch_number') + 1;
+
+         $announcement->batches()
+            ->where('status', 'failed')
+            ->delete();
 
          $announcement->update([
             'status' => 'queued',
             'failed_batches' => 0,
          ]);
 
-         foreach ($failedBatches as $index => $batch) {
-            $batch->update([
+         $retryChunks = array_chunk(
+            $failedRecipients,
+            self::BRANCH_ANNOUNCEMENT_BATCH_SIZE
+         );
+
+         foreach ($retryChunks as $index => $recipients) {
+            $batch = BranchEmailAnnouncementBatch::create([
+               'announcement_id' => $announcement->id,
+               'batch_number' => $nextBatchNumber + $index,
+               'recipients' => $recipients,
+               'recipient_count' => count($recipients),
                'status' => 'queued',
-               'last_error' => null,
             ]);
-            dispatch(
-               (new SendBranchAnnouncementBatch($batch->id))
-                  ->delay($index * self::BRANCH_ANNOUNCEMENT_BATCH_DELAY_SECONDS)
-            );
+
+            if ($batchToDispatchId === null) {
+               $batchToDispatchId = $batch->id;
+            }
          }
+
+         $announcement->update([
+            'total_batches' => $announcement->batches()->count(),
+         ]);
       });
+
+      if ($batchToDispatchId !== null) {
+         dispatch(new SendBranchAnnouncementBatch($batchToDispatchId));
+      }
 
       $announcement = $announcement->fresh();
       $responseStatus = $announcement->status === 'sent' ? 200 : 202;
@@ -184,10 +223,12 @@ class MailController extends Controller {
       ];
    }
 
-   private function queueAnnouncementBatches(
+   private function createAnnouncementBatches(
       BranchEmailAnnouncement $announcement,
       array $chunks
    ) {
+      $firstBatchId = null;
+
       foreach ($chunks as $index => $recipients) {
          $batch = BranchEmailAnnouncementBatch::create([
             'announcement_id' => $announcement->id,
@@ -197,11 +238,12 @@ class MailController extends Controller {
             'status' => 'queued',
          ]);
 
-         dispatch(
-            (new SendBranchAnnouncementBatch($batch->id))
-               ->delay($index * self::BRANCH_ANNOUNCEMENT_BATCH_DELAY_SECONDS)
-         );
+         if ($firstBatchId === null) {
+            $firstBatchId = $batch->id;
+         }
       }
+
+      return $firstBatchId;
    }
 
    public function basic_email() {

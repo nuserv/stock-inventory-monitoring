@@ -4,6 +4,7 @@ namespace App\Jobs;
 
 use App\BranchEmailAnnouncement;
 use App\BranchEmailAnnouncementBatch;
+use App\Http\Controllers\MailController;
 use Exception;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -52,10 +53,16 @@ class SendBranchAnnouncementBatch implements ShouldQueue
             ->update(['status' => 'sending']);
 
         $recipients = $batch->recipients;
+        $recipient = reset($recipients);
 
-        Mail::send('emails.branch-dr-ddr-announcement', [], function ($message) use ($recipients) {
-            $message->to('jolopez@ideaserv.com.ph', 'Jerome Lopez')
-                ->bcc($recipients)
+        if (!$recipient || count($recipients) !== 1) {
+            throw new RuntimeException(
+                'Announcement jobs must contain exactly one recipient.'
+            );
+        }
+
+        Mail::send('emails.branch-dr-ddr-announcement', [], function ($message) use ($recipient) {
+            $message->bcc($recipient)
                 ->subject('DR and DDR Digital Copy Email Announcement');
         });
 
@@ -63,11 +70,11 @@ class SendBranchAnnouncementBatch implements ShouldQueue
             throw new RuntimeException('The email server rejected one or more recipients.');
         }
 
-        DB::transaction(function () {
+        $nextBatchId = DB::transaction(function () {
             $batch = BranchEmailAnnouncementBatch::lockForUpdate()->findOrFail($this->batchId);
 
             if ($batch->status === 'sent') {
-                return;
+                return null;
             }
 
             $batch->update([
@@ -86,7 +93,23 @@ class SendBranchAnnouncementBatch implements ShouldQueue
             }
 
             $announcement->save();
+
+            if ($announcement->status === 'sent') {
+                return null;
+            }
+
+            return $announcement->batches()
+                ->where('status', 'queued')
+                ->orderBy('batch_number')
+                ->value('id');
         });
+
+        if ($nextBatchId !== null) {
+            dispatch(
+                (new self($nextBatchId))
+                    ->delay(MailController::BRANCH_ANNOUNCEMENT_BATCH_DELAY_SECONDS)
+            );
+        }
     }
 
     public function failed(Exception $exception)

@@ -17,7 +17,7 @@ class SendBranchAnnouncementBatchTest extends TestCase
         $this->assertSame(3, $job->tries);
         $this->assertSame(180, $job->timeout);
         $this->assertSame(300, $job->retryAfter);
-        $this->assertSame(24, MailController::BRANCH_ANNOUNCEMENT_BATCH_SIZE);
+        $this->assertSame(1, MailController::BRANCH_ANNOUNCEMENT_BATCH_SIZE);
         $this->assertSame(300, MailController::BRANCH_ANNOUNCEMENT_BATCH_DELAY_SECONDS);
     }
 }
