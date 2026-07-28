@@ -61,10 +61,19 @@ class SendBranchAnnouncementBatch implements ShouldQueue
             );
         }
 
-        Mail::send('emails.branch-dr-ddr-announcement', [], function ($message) use ($recipient) {
-            $message->to($recipient)
-                ->subject('DR and DDR Digital Copy Email Announcement');
-        });
+        try {
+            Mail::send('emails.branch-dr-ddr-announcement', [], function ($message) use ($recipient) {
+                $message->to($recipient)
+                    ->subject('DR and DDR Digital Copy Email Announcement');
+            });
+        } catch (Exception $exception) {
+            if ($exception->getCode() >= 500) {
+                $this->fail($exception);
+                return;
+            }
+
+            throw $exception;
+        }
 
         if (count(Mail::failures()) > 0) {
             throw new RuntimeException('The email server rejected one or more recipients.');
@@ -116,11 +125,11 @@ class SendBranchAnnouncementBatch implements ShouldQueue
     {
         $message = mb_substr($exception->getMessage(), 0, 1000);
 
-        DB::transaction(function () use ($message) {
+        $nextBatchId = DB::transaction(function () use ($message) {
             $batch = BranchEmailAnnouncementBatch::lockForUpdate()->find($this->batchId);
 
             if (!$batch || $batch->status === 'sent' || $batch->status === 'failed') {
-                return;
+                return null;
             }
 
             $batch->update([
@@ -132,10 +141,29 @@ class SendBranchAnnouncementBatch implements ShouldQueue
                 ->find($batch->announcement_id);
 
             if ($announcement) {
-                $announcement->status = 'failed';
                 $announcement->failed_batches++;
+
+                $processedBatches = $announcement->completed_batches
+                    + $announcement->failed_batches;
+                $announcement->status = $processedBatches >= $announcement->total_batches
+                    ? 'failed'
+                    : 'sending';
                 $announcement->save();
+
+                return $announcement->batches()
+                    ->where('status', 'queued')
+                    ->orderBy('batch_number')
+                    ->value('id');
             }
+
+            return null;
         });
+
+        if ($nextBatchId !== null) {
+            dispatch(
+                (new self($nextBatchId))
+                    ->delay(MailController::BRANCH_ANNOUNCEMENT_BATCH_DELAY_SECONDS)
+            );
+        }
     }
 }
