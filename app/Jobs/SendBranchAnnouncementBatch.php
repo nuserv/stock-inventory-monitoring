@@ -62,7 +62,7 @@ class SendBranchAnnouncementBatch implements ShouldQueue
         }
 
         Mail::send('emails.branch-dr-ddr-announcement', [], function ($message) use ($recipient) {
-            $message->bcc($recipient)
+            $message->to($recipient)
                 ->subject('DR and DDR Digital Copy Email Announcement');
         });
 
