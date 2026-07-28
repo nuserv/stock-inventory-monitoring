@@ -15,7 +15,8 @@ use App\Http\Controllers\Controller;
 
 class MailController extends Controller {
    const BRANCH_ANNOUNCEMENT_CAMPAIGN = 'branch-dr-ddr-digital-copy-announcement-v1';
-   const BRANCH_ANNOUNCEMENT_BATCH_SIZE = 8;
+   const BRANCH_ANNOUNCEMENT_BATCH_SIZE = 24;
+   const BRANCH_ANNOUNCEMENT_BATCH_DELAY_SECONDS = 300;
 
    private function branchAnnouncementRecipients()
    {
@@ -127,12 +128,15 @@ class MailController extends Controller {
             'failed_batches' => 0,
          ]);
 
-         foreach ($failedBatches as $batch) {
+         foreach ($failedBatches as $index => $batch) {
             $batch->update([
                'status' => 'queued',
                'last_error' => null,
             ]);
-            dispatch(new SendBranchAnnouncementBatch($batch->id));
+            dispatch(
+               (new SendBranchAnnouncementBatch($batch->id))
+                  ->delay($index * self::BRANCH_ANNOUNCEMENT_BATCH_DELAY_SECONDS)
+            );
          }
       });
 
@@ -193,7 +197,10 @@ class MailController extends Controller {
             'status' => 'queued',
          ]);
 
-         dispatch(new SendBranchAnnouncementBatch($batch->id));
+         dispatch(
+            (new SendBranchAnnouncementBatch($batch->id))
+               ->delay($index * self::BRANCH_ANNOUNCEMENT_BATCH_DELAY_SECONDS)
+         );
       }
    }
 
