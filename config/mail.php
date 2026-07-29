@@ -16,7 +16,9 @@ return [
     |
     */
 
-    'driver' => env('MAIL_DRIVER', 'smtp'),
+    'driver' => env('MAIL_POOL_ENABLED', false)
+        ? 'smtp_pool'
+        : env('MAIL_DRIVER', 'smtp'),
 
     /*
     |--------------------------------------------------------------------------
@@ -87,6 +89,44 @@ return [
     'username' => env('MAIL_USERNAME'),
 
     'password' => env('MAIL_PASSWORD'),
+
+    /*
+    |--------------------------------------------------------------------------
+    | Rotating SMTP Account Pool
+    |--------------------------------------------------------------------------
+    |
+    | All accounts use the host, port, encryption, and stream settings above.
+    | Incomplete slots are ignored. A 451 response temporarily cools down the
+    | affected account so another configured account can handle the message.
+    |
+    */
+
+    'pool' => [
+        'enabled' => env('MAIL_POOL_ENABLED', false),
+        'cooldown_seconds' => env('MAIL_POOL_451_COOLDOWN_SECONDS', 300),
+        'accounts' => [
+            1 => [
+                'username' => env('MAIL_POOL_1_USERNAME'),
+                'password' => env('MAIL_POOL_1_PASSWORD'),
+                'from_address' => env('MAIL_POOL_1_FROM_ADDRESS'),
+            ],
+            2 => [
+                'username' => env('MAIL_POOL_2_USERNAME'),
+                'password' => env('MAIL_POOL_2_PASSWORD'),
+                'from_address' => env('MAIL_POOL_2_FROM_ADDRESS'),
+            ],
+            3 => [
+                'username' => env('MAIL_POOL_3_USERNAME'),
+                'password' => env('MAIL_POOL_3_PASSWORD'),
+                'from_address' => env('MAIL_POOL_3_FROM_ADDRESS'),
+            ],
+            4 => [
+                'username' => env('MAIL_POOL_4_USERNAME'),
+                'password' => env('MAIL_POOL_4_PASSWORD'),
+                'from_address' => env('MAIL_POOL_4_FROM_ADDRESS'),
+            ],
+        ],
+    ],
 
     /*
     |--------------------------------------------------------------------------

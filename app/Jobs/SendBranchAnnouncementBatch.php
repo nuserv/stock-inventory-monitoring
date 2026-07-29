@@ -23,7 +23,7 @@ class SendBranchAnnouncementBatch implements ShouldQueue
 
     public $timeout = 180;
 
-    public $retryAfter = 300;
+    public $retryAfter = 60;
 
     private $batchId;
 

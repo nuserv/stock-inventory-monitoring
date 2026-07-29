@@ -2,9 +2,12 @@
 
 namespace App\Providers;
 
+use App\Mail\Transport\RotatingSmtpTransport;
+use App\Mail\MailPoolAccountRepository;
 use Illuminate\Mail\Events\MessageSending;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\ServiceProvider;
+use Psr\Log\LoggerInterface;
 use DB;
 
 class AppServiceProvider extends ServiceProvider
@@ -16,7 +19,18 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        //
+        $this->app->extend('swift.transport', function ($manager, $app) {
+            $manager->extend('smtp_pool', function ($app) {
+                return new RotatingSmtpTransport(
+                    $app->make(MailPoolAccountRepository::class),
+                    $app['config']->get('mail'),
+                    null,
+                    $app->make(LoggerInterface::class)
+                );
+            });
+
+            return $manager;
+        });
     }
 
     /**

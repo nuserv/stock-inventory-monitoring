@@ -3,13 +3,22 @@
 namespace Tests\Feature;
 
 use Illuminate\Mail\Events\MessageSending;
+use Illuminate\Mail\Transport\ArrayTransport;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Mail;
+use Swift_Mailer;
 use Swift_Message;
 use Tests\TestCase;
 
 class MailDisableTest extends TestCase
 {
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        Mail::setSwiftMailer(new Swift_Mailer(new ArrayTransport()));
+    }
+
     public function testMailIsEnabledWhenTheDisableFlagIsFalse()
     {
         config(['email.disabled' => false]);
