@@ -13,4 +13,11 @@ class BranchNotificationEmailTest extends TestCase
 
         $this->assertSame('cavite@ideaserv.com.ph', $branch->notificationEmail());
     }
+
+    public function testCagayanDeOroUsesTheCdoEmailAlias()
+    {
+        $branch = new Branch(['branch' => 'Cagayan De Oro']);
+
+        $this->assertSame('cdo@ideaserv.com.ph', $branch->notificationEmail());
+    }
 }
