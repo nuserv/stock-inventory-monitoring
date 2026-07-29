@@ -47,6 +47,7 @@ class Branch extends Model
             'anabucavite' => 'cavite',
             'cagayandeoro' => 'cdo',
             'gensantos' => 'gensan',
+            'legazpi' => 'legaspi',
             'paraaque' => 'paranaque',
         ];
         $localPart = $aliases[$localPart] ?? $localPart;

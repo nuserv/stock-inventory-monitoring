@@ -20,4 +20,11 @@ class BranchNotificationEmailTest extends TestCase
 
         $this->assertSame('cdo@ideaserv.com.ph', $branch->notificationEmail());
     }
+
+    public function testLegazpiUsesTheLegaspiEmailAlias()
+    {
+        $branch = new Branch(['branch' => 'Legazpi']);
+
+        $this->assertSame('legaspi@ideaserv.com.ph', $branch->notificationEmail());
+    }
 }
