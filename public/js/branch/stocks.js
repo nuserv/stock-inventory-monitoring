@@ -710,6 +710,12 @@ $(document).on('click', '.repret_sub_Btn', function(){
                 autocomplete: 'off',
                 spellcheck: 'false'
             },
+            // Bootstrap 4 traps focus inside #replace-return. SweetAlert is
+            // appended to <body>, so the trap can prevent its input from
+            // receiving focus on some browsers.
+            willOpen: function () {
+                $(document).off('focusin.bs.modal');
+            },
             didOpen: function () {
                 var input = Swal.getInput();
 
@@ -717,6 +723,7 @@ $(document).on('click', '.repret_sub_Btn', function(){
                     return;
                 }
 
+                input.focus();
                 input.addEventListener('input', function () {
                     var sanitizedValue = input.value.toUpperCase().replace(/[^A-Z0-9\/\\]/g, '');
 
@@ -763,6 +770,16 @@ $(document).on('click', '.repret_sub_Btn', function(){
 
                     Swal.showValidationMessage(message);
                 });
+            },
+            didClose: function () {
+                var replaceReturnModal = $('#replace-return');
+                var modalInstance = replaceReturnModal.data('bs.modal');
+
+                if (replaceReturnModal.hasClass('show') &&
+                    modalInstance &&
+                    typeof modalInstance._enforceFocus === 'function') {
+                    modalInstance._enforceFocus();
+                }
             }
         }).then(function (result) {
             if (!result.isConfirmed) {
