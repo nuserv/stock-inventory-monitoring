@@ -268,12 +268,12 @@ class StockRequestController extends Controller
         return view('pages.resolved', compact('stocks', 'categories', 'title'));
     }
     public function getItemCode(Request $request){
-        if ($request->id == 65) {
-            $data = Item::select('id', 'item')->whereIn('category_id', [$request->id, 20])->orderBy('item')->get();
-        }
-        else{
-            $data = Item::select('id', 'item')->where('category_id', $request->id)->orderBy('item')->get();
-        }
+        $categoryIds = $this->replacementCategoryIds($request->id);
+        $data = Item::select('id', 'item')
+            ->whereIn('category_id', $categoryIds)
+            ->orderBy('item')
+            ->get();
+
         return response()->json($data);
     }
     public function getItemCodeServiceOut(Request $request){
@@ -297,19 +297,33 @@ class StockRequestController extends Controller
         return response()->json($data);
     }
     public function getItemCodes(Request $request){
-        if ($request->id == 65) {
-            $data = Item::select('id', 'item')
-            ->whereIn('category_id', [$request->id, 20])
+        $categoryIds = $this->replacementCategoryIds($request->id);
+        $data = Item::select('id', 'item')
+            ->whereIn('category_id', $categoryIds)
             ->where('item', 'LIKE', '%'.str_replace(' ','%',$request->item).'%')
             ->orderBy('item')->get();
-        }
-        else{
-            $data = Item::select('id', 'item')
-            ->where('category_id', $request->id)
-            ->where('item', 'LIKE', '%'.str_replace(' ','%',$request->item).'%')
-            ->orderBy('item')->get();
-        }
+
         return response()->json($data);
+    }
+
+    private function replacementCategoryIds($categoryId)
+    {
+        $categoryId = (int) $categoryId;
+        $powerSupplyCategoryIds = Category::query()
+            ->whereIn(\DB::raw('UPPER(TRIM(category))'), [
+                'POWER SUPPLY',
+                'POWER ADAPTER',
+                'POWER ADAPTOR',
+            ])
+            ->pluck('id')
+            ->map(function ($id) {
+                return (int) $id;
+            })
+            ->all();
+
+        return in_array($categoryId, $powerSupplyCategoryIds, true)
+            ? $powerSupplyCategoryIds
+            : [$categoryId];
     }
     public function getCode(Request $request){
         $initials = Initial::where('branch_id', auth()->user()->branch->id)
