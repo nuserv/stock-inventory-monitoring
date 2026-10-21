@@ -67,6 +67,7 @@ $(document).on('click', '#pmTable tbody tr', function () {
     $('#branchesDiv').show();
     $('#head-title').html('UPDATE PM BRANCH')
     $('#subBtn').val('UPDATE');
+    $('#closedStoreBtn').show();
     $('#PmModal').modal('show');
 });
 
@@ -80,11 +81,56 @@ $(document).on('click', '#addPMBtn', function () {
     $('#head-title').html('ADD PM BRANCH')
     $('#subBtn').val('ADD');
     $('#subBtn').prop('disabled', true);
+    $('#closedStoreBtn').hide();
     $('#branches').val('')
     $('#customer_name').val('')
     $('#customer_code').val('');
     $('#customer_code').prop('readonly', false);
     $('#PmModal').modal('show');
+});
+
+$(document).on('click', '#closedStoreBtn', function () {
+    var customerName = $('#customer_name').val();
+
+    Swal.fire({
+        title: 'Closed Store?',
+        text: 'Sigurado ka bang closed na ang ' + customerName + '? Tatanggalin ito sa PM Schedule.',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#d33',
+        cancelButtonColor: '#6c757d',
+        confirmButtonText: 'Yes, closed na',
+        cancelButtonText: 'Cancel'
+    }).then((result) => {
+        if (!result.isConfirmed) {
+            return;
+        }
+
+        $('#closedStoreBtn').prop('disabled', true);
+
+        $.ajax({
+            url: 'pm-branch/' + encodeURIComponent(branchCode),
+            type: 'DELETE',
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="ctok"]').attr('content')
+            },
+            success: function () {
+                $('#PmModal').modal('hide');
+                table.ajax.reload(null, false);
+                Swal.fire('Closed Store', customerName + ' was removed from the PM Schedule.', 'success');
+            },
+            error: function (data) {
+                var message = data.responseJSON && data.responseJSON.message
+                    ? data.responseJSON.message
+                    : 'Unable to remove the store from the PM Schedule.';
+
+                Swal.fire('Delete Failed', message, 'error');
+            },
+            complete: function () {
+                $('#closedStoreBtn').prop('disabled', false);
+            }
+        });
+    });
 });
 
 

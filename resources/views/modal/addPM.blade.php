@@ -35,6 +35,7 @@
                         </div>
                     </div>
                     <div class="modal-footer">
+                        <button type="button" id="closedStoreBtn" class="btn btn-danger mr-auto" style="display:none;">CLOSED STORE</button>
                         <input id="subBtn" class="btn btn-primary" value="ADD" disabled>
                     </div>
                 </form>

@@ -70,6 +70,23 @@ class PreventiveController extends Controller
         return view('pages.schedule', compact('areas', 'pmbranches'));
     }
 
+    public function destroyPmBranch($code)
+    {
+        abort_unless(auth()->user()->hasanyrole('Manager', 'Editor'), 403);
+
+        $deleted = PmBranches::query()
+            ->where(DB::raw('(customer_branches_code*1)'), (int) $code)
+            ->delete();
+
+        if (!$deleted) {
+            return response()->json([
+                'message' => 'PM branch was not found or was already removed.',
+            ], 404);
+        }
+
+        return response()->json(['deleted' => true]);
+    }
+
     public function checkfsr(Request $request)
     {
         $fsr = PmSched::query()->where('fsrno', $request->fsrno)->first();

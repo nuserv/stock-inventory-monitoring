@@ -66,6 +66,7 @@ Route::get('barchart', 'ReportController@chart');
 Route::get('schedule', 'PreventiveController@index')->name('index.schedule');
 Route::post('schedule', 'PreventiveController@Store');
 Route::get('scheduled', 'PreventiveController@show');
+Route::delete('pm-branch/{code}', 'PreventiveController@destroyPmBranch');
 Route::get('pmlist', 'PreventiveController@list');
 Route::get('pmlistdata', 'PreventiveController@data');
 Route::get('export', 'PreventiveController@ExportData');
