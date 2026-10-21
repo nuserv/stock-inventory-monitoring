@@ -815,7 +815,7 @@ class StockRequestController extends Controller
                 ->where('stat', 'ACTIVE');
         }
 
-        if (auth()->user()->id == 606) {
+        if (in_array(auth()->user()->id, [606, 40, 608]) && auth()->user()->hasanyrole('Viewer')) {
             $categoryIdArray = RequestedItem::select('request_no')->where('status', 'PENDING')
                 ->join('items', 'items.id', 'items_id')
                 ->where('category_id', 116)
