@@ -309,21 +309,33 @@ class StockRequestController extends Controller
     private function replacementCategoryIds($categoryId)
     {
         $categoryId = (int) $categoryId;
-        $powerSupplyCategoryIds = Category::query()
-            ->whereIn(\DB::raw('UPPER(TRIM(category))'), [
+        $replacementCategoryGroups = [
+            [
                 'POWER SUPPLY',
                 'POWER ADAPTER',
                 'POWER ADAPTOR',
-            ])
-            ->pluck('id')
-            ->map(function ($id) {
-                return (int) $id;
-            })
-            ->all();
+            ],
+            [
+                'HARD DISK DRIVE',
+                'SOLID STATE DRIVE (SSD CARD)',
+            ],
+        ];
 
-        return in_array($categoryId, $powerSupplyCategoryIds, true)
-            ? $powerSupplyCategoryIds
-            : [$categoryId];
+        foreach ($replacementCategoryGroups as $categoryNames) {
+            $categoryIds = Category::query()
+                ->whereIn(\DB::raw('UPPER(TRIM(category))'), $categoryNames)
+                ->pluck('id')
+                ->map(function ($id) {
+                    return (int) $id;
+                })
+                ->all();
+
+            if (in_array($categoryId, $categoryIds, true)) {
+                return $categoryIds;
+            }
+        }
+
+        return [$categoryId];
     }
     public function getCode(Request $request){
         $initials = Initial::where('branch_id', auth()->user()->branch->id)
