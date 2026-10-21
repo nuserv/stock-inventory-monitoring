@@ -815,7 +815,7 @@ class StockRequestController extends Controller
                 ->where('stat', 'ACTIVE');
         }
 
-        if (in_array(auth()->user()->id, [606, 40, 608]) && auth()->user()->hasanyrole('Viewer')) {
+        if (auth()->user()->id == 606) {
             $categoryIdArray = RequestedItem::select('request_no')->where('status', 'PENDING')
                 ->join('items', 'items.id', 'items_id')
                 ->where('category_id', 116)
@@ -892,28 +892,19 @@ class StockRequestController extends Controller
                 ->where('stat', 'ACTIVE')
                 ->get();
         }
-        else if (in_array(auth()->user()->id, [606, 40, 608]) && auth()->user()->hasanyrole('Viewer')) {
-
-            $category_id = RequestedItem::select('requested_items.request_no')
-                ->join('items', 'items.id', '=', 'requested_items.items_id')
-                ->where('requested_items.status', 'PENDING')
-                ->where('items.category_id', 116)
-                ->pluck('requested_items.request_no')
+        else if(in_array(auth()->user()->id, [606, 40, 608]) && auth()->user()->hasanyrole('Viewer')){
+            $category_id_array = RequestedItem::select('request_no')->where('status', 'PENDING')
+                ->join('items', 'items.id', 'items_id')
+                ->where('category_id', 116)
+                ->get()
                 ->toArray();
 
-            $stock = StockRequest::whereIn('request_no', $category_id)
-                ->whereIn('status', [
-                    'PARTIAL SCHEDULED',
-                    'PARTIAL IN TRANSIT',
-                    'PARTIAL PENDING',
-                    'PENDING',
-                    'SCHEDULED',
-                    'INCOMPLETE',
-                    'RESCHEDULED',
-                    'UNRESOLVED',
-                    'PARTIAL',
-                    'IN TRANSIT'
-                ])
+            $category_id = array_map(function($category){
+                return $category['request_no'];
+            }, $category_id_array);
+
+            $stock = StockRequest::wherein('request_no',$category_id)
+                ->wherein('status',  ['PARTIAL SCHEDULED', 'PARTIAL IN TRANSIT', 'PARTIAL PENDING', 'PENDING', 'SCHEDULED', 'INCOMPLETE', 'RESCHEDULED', 'UNRESOLVED', 'PARTIAL', 'IN TRANSIT'])
                 ->where('stat', 'ACTIVE')
                 ->get();
         }
