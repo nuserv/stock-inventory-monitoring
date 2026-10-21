@@ -799,10 +799,26 @@ class StockRequestController extends Controller
                 ->where('stat', 'ACTIVE');
         }
 
-        if (auth()->user()->id == 327 || auth()->user()->id == 326) {
+        if (auth()->user()->id == 326) {
             $categoryIdArray = RequestedItem::select('request_no')->where('status', 'PENDING')
                 ->join('items', 'items.id', 'items_id')
                 ->where('category_id', 26)
+                ->get()
+                ->toArray();
+
+            $categoryIds = array_map(function ($category) {
+                return $category['request_no'];
+            }, $categoryIdArray);
+
+            return StockRequest::whereIn('request_no', $categoryIds)
+                ->whereIn('status', $activeStatusesWithUnresolved)
+                ->where('stat', 'ACTIVE');
+        }
+
+        if (auth()->user()->id == 606) {
+            $categoryIdArray = RequestedItem::select('request_no')->where('status', 'PENDING')
+                ->join('items', 'items.id', 'items_id')
+                ->where('category_id', 116)
                 ->get()
                 ->toArray();
 
