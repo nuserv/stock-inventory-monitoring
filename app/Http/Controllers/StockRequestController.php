@@ -892,7 +892,23 @@ class StockRequestController extends Controller
                 ->where('stat', 'ACTIVE')
                 ->get();
         }
-        else if(auth()->user()->id == 606){
+        else if(auth()->user()->id == 606 && auth()->user()->role == 'Viewer'){
+            $category_id_array = RequestedItem::select('request_no')->where('status', 'PENDING')
+                ->join('items', 'items.id', 'items_id')
+                ->where('category_id', 116)
+                ->get()
+                ->toArray();
+
+            $category_id = array_map(function($category){
+                return $category['request_no'];
+            }, $category_id_array);
+
+            $stock = StockRequest::wherein('request_no',$category_id)
+                ->wherein('status',  ['PARTIAL SCHEDULED', 'PARTIAL IN TRANSIT', 'PARTIAL PENDING', 'PENDING', 'SCHEDULED', 'INCOMPLETE', 'RESCHEDULED', 'UNRESOLVED', 'PARTIAL', 'IN TRANSIT'])
+                ->where('stat', 'ACTIVE')
+                ->get();
+        }
+        else if(auth()->user()->id == 40 && auth()->user()->role == 'Viewer'){
             $category_id_array = RequestedItem::select('request_no')->where('status', 'PENDING')
                 ->join('items', 'items.id', 'items_id')
                 ->where('category_id', 116)
