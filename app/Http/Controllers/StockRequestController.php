@@ -909,13 +909,14 @@ class StockRequestController extends Controller
                 ->get();
         }
         else{
+        dd('here');
+
             $stock = StockRequest::wherein('status',  ['PARTIAL SCHEDULED', 'PARTIAL IN TRANSIT', 'PARTIAL PENDING', 'PENDING', 'SCHEDULED', 'INCOMPLETE', 'RESCHEDULED', 'UNRESOLVED', 'PARTIAL', 'IN TRANSIT'])
                 ->where('stat', 'ACTIVE')
                 ->orderBy('id', 'desc')
                 ->get();
             //dd($stock);
         }
-        dd('here');
         return DataTables::of($stock)
         ->setRowData([
             'data-id' => '{{ $request_no }}',
