@@ -892,7 +892,7 @@ class StockRequestController extends Controller
                 ->where('stat', 'ACTIVE')
                 ->get();
         }
-        else if(auth()->user()->id == 40){
+        else if(auth()->user()->id == 467){
             $category_id_array = RequestedItem::select('request_no')->where('status', 'PENDING')
                 ->join('items', 'items.id', 'items_id')
                 ->where('category_id', 116)
@@ -909,7 +909,6 @@ class StockRequestController extends Controller
                 ->get();
         }
         else{
-        dd(auth()->user()->id);
             $stock = StockRequest::wherein('status',  ['PARTIAL SCHEDULED', 'PARTIAL IN TRANSIT', 'PARTIAL PENDING', 'PENDING', 'SCHEDULED', 'INCOMPLETE', 'RESCHEDULED', 'UNRESOLVED', 'PARTIAL', 'IN TRANSIT'])
                 ->where('stat', 'ACTIVE')
                 ->orderBy('id', 'desc')
