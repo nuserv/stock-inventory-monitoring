@@ -816,7 +816,6 @@ class StockRequestController extends Controller
         }
 
         if (auth()->user()->id == 606) {
-            dd('here2');
             $categoryIdArray = RequestedItem::select('request_no')->where('status', 'PENDING')
                 ->join('items', 'items.id', 'items_id')
                 ->where('category_id', 116)
@@ -894,7 +893,6 @@ class StockRequestController extends Controller
                 ->get();
         }
         else if(auth()->user()->id == 40){
-            dd('here');
             $category_id_array = RequestedItem::select('request_no')->where('status', 'PENDING')
                 ->join('items', 'items.id', 'items_id')
                 ->where('category_id', 116)
@@ -917,6 +915,7 @@ class StockRequestController extends Controller
                 ->get();
             //dd($stock);
         }
+        dd('here');
         return DataTables::of($stock)
         ->setRowData([
             'data-id' => '{{ $request_no }}',
