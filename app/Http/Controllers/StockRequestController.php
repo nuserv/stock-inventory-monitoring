@@ -909,8 +909,7 @@ class StockRequestController extends Controller
                 ->get();
         }
         else{
-        dd('here');
-
+        dd(auth()->user()->id);
             $stock = StockRequest::wherein('status',  ['PARTIAL SCHEDULED', 'PARTIAL IN TRANSIT', 'PARTIAL PENDING', 'PENDING', 'SCHEDULED', 'INCOMPLETE', 'RESCHEDULED', 'UNRESOLVED', 'PARTIAL', 'IN TRANSIT'])
                 ->where('stat', 'ACTIVE')
                 ->orderBy('id', 'desc')
