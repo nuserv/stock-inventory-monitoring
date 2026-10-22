@@ -35,8 +35,8 @@ $(document).ready(function()
             else if ($('#userid').val() == 327) {
                 
             }
-            else if ($('#userid').val() == 606) {
-                // Document Viewer: the backend already limits this user to Document requests.
+            else if (['40', '467', '606', '608'].includes($('#userid').val())) {
+                // Document Viewers: the backend already limits these users to Document requests.
             }
             else if ($('#userlevel').val() == "Viewer IDSI") {
                 if (aData.client == "MERCURY DRUG") {
